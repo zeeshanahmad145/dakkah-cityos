@@ -69,7 +69,10 @@ All custom code lives in `apps/backend/src/` — completely separate from Medusa
 - **Seeded Verticals (27):** Booking, Healthcare, Restaurant, Travel, Event Ticketing, Freelance, Grocery, Automotive, Fitness, Financial Product, Advertising, Parking, Utilities, Legal, Government, Crowdfunding, Auction, Classified, Charity, Education, Real Estate, Pet Service, Affiliate, Warranty, Rental, Insurance, Social Commerce
 - **Seeded Infrastructure (17):** Persona, Governance, Wallet, Notification Preferences, CMS Content, Volume Pricing, Tax Config, Region Zone, Subscription, Quote, Insurance Plans, Membership, Digital Product, Promotion Extensions, Loyalty, Report, Vendor
 - **Seeded Sub-Entities (18):** Menu, Menu Item, Table Reservation, Kitchen Order, Room Type, Room, Medical Record, Lab Order, Prescription, Citizen Profile, Service Request, Fine, Damage Claim, Stock Alert, Loyalty Account, Dispute, Ride Request, Shuttle Route
-- **Image Policy:** ALL images use Replit Object Storage bucket paths (`/platform/storage/serve?path=...`). Zero Unsplash URLs remain in the database.
+- **Seeded Ancillary (9):** Credit Line, Dashboard, Proposal, Quote Item, Shipping Rate, Tenant POI, Wallet Transaction, Reservation Hold, Subscription Discount
+- **Image Policy:** ALL images use Replit Object Storage bucket paths (`/platform/storage/serve?path=...`). Zero Unsplash URLs remain in the database. Comprehensive DB-wide scan verified across ALL tables with image columns and metadata JSONB fields.
+- **Image Columns Populated:** ad_creative, agent_profile, attorney_profile, charity_org, cityos_store, course, event, live_stream, membership_tier, menu_item, pet_profile, practitioner, restaurant (logo+banner), reward, reward_tier, service_provider (avatar), tenant (logo+favicon), trainer_profile, vendor (logo+banner), venue
+- **Image Metadata Populated:** auction_listing, classified_listing, class_schedule, crowdfund_campaign, digital_asset, donation_campaign, gift_card_ext, gig_listing, insurance_product, loan_product, parking_zone, product_bundle, property_listing, rental_product, service_product, social_post, subscription_plan, vehicle_listing, warranty_plan
 - **Known ORM Issue:** Loyalty program `tier_config` field encounters ORM metadata caching issue on re-seed; existing data has valid tier_config
 
 ### Database Enum Constraints
