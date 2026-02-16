@@ -221,14 +221,12 @@ const IMAGE_CATALOG: Record<string, string[]> = {
   ],
 }
 
-export function getImage(category: string, index: number, width = 800): string {
-  const images = IMAGE_CATALOG[category] || IMAGE_CATALOG.electronics
-  const id = images[index % images.length]
-  return `https://images.unsplash.com/photo-${id}?w=${width}&q=80&fit=crop`
+export function getImage(category: string, index: number, _width = 800): string {
+  return getBucketImageUrl(category, index, false)
 }
 
 export function getThumb(category: string, index: number): string {
-  return getImage(category, index, 400)
+  return getBucketThumb(category, index)
 }
 
 export function sarPrice(amount: number): number {
@@ -430,11 +428,8 @@ export function getMultipleImages(
   startIndex: number,
   count: number
 ): { url: string }[] {
-  const results: { url: string }[] = []
-  for (let i = 0; i < count; i++) {
-    results.push({ url: getImage(category, startIndex + i) })
-  }
-  return results
+  const indices = Array.from({ length: count }, (_, i) => startIndex + i)
+  return getBucketImages(category, indices)
 }
 
 export async function preUploadCategoryImages(
@@ -450,11 +445,7 @@ export async function preUploadCategoryImages(
 
   logger.info("  Bucket available, pre-uploading category images...")
 
-  const categoriesToUpload = [
-    "electronics", "fashion", "food", "grocery", "home",
-    "beauty", "automotive", "healthcare", "fitness",
-    "education", "pets", "digital",
-  ]
+  const categoriesToUpload = Object.keys(IMAGE_CATALOG)
 
   let uploaded = 0
   let failed = 0

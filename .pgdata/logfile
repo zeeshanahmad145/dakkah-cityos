@@ -312,3 +312,5 @@
 2026-02-16 18:38:12.920 UTC [8510] STATEMENT:  
 	SELECT t.tablename, (SELECT count(*) FROM public."" || t.tablename || "") 
 	FROM pg_tables t WHERE t.schemaname='public' LIMIT 5;
+2026-02-16 18:42:50.554 UTC [2121] LOG:  checkpoint starting: time
+2026-02-16 18:43:10.720 UTC [2121] LOG:  checkpoint complete: wrote 196 buffers (1.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=19.947 s, sync=0.057 s, total=20.167 s; sync files=46, longest=0.013 s, average=0.002 s; distance=1336 kB, estimate=1336 kB; lsn=0/29A4600, redo lsn=0/29A45C8
