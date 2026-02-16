@@ -77,7 +77,7 @@ args = "bash /home/runner/workspace/start.sh"
 waitForPort = 5000
 
 [deployment]
-deploymentTarget = "vm"
+deploymentTarget = "cloudrun"
 run = ["bash", "scripts/start-production.sh"]
 build = ["bash", "scripts/build-production.sh"]
 
