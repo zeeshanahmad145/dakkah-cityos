@@ -48,14 +48,9 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
   log("║     DAKKAH CITYOS — SEED ALL WITH IMAGES                   ║")
   log("╚══════════════════════════════════════════════════════════════╝")
 
-  // ━━━ PHASE 1: PRE-UPLOAD ALL CATEGORY IMAGES ━━━
-  log("\n━━━ PHASE 1: PRE-UPLOAD ALL CATEGORY IMAGES ━━━")
-  try {
-    await preUploadCategoryImages(logger)
-    log("  ✓ Image pre-upload phase complete")
-  } catch (err: any) {
-    logError("Image Pre-Upload", err)
-  }
+  // ━━━ PHASE 1: IMAGE URLS ━━━
+  log("\n━━━ PHASE 1: IMAGE URLS (using bucket path references) ━━━")
+  log("  ✓ Image URLs configured via getImage()/getThumb() — no download needed")
 
   // ━━━ PHASE 2: SEED VERTICALS (27 modules) ━━━
   log("\n━━━ PHASE 2: SEED VERTICALS (27 modules) ━━━")
@@ -92,6 +87,13 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
         id: T,
         name: "Dakkah CityOS",
         handle: "dakkah",
+        slug: "dakkah",
+        residency_zone: "sa-central",
+        default_locale: "en",
+        supported_locales: ["en", "ar", "fr"],
+        timezone: "Asia/Riyadh",
+        default_currency: "sar",
+        date_format: "DD/MM/YYYY",
         is_active: true,
         domain: "dakkah.sa",
         logo_url: getThumb("vendor", 0),
@@ -107,9 +109,9 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
     const svc = resolveAny("persona", "personaModuleService")
     if (!svc) { log("  ⚠ Persona service not found, skipping") } else {
       const data = [
-        { tenant_id: T, name: "Consumer", handle: "consumer", type: "consumer", description: "End-user shopping persona", is_default: true, is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Vendor", handle: "vendor", type: "vendor", description: "Marketplace seller persona", is_default: false, is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Admin", handle: "admin", type: "admin", description: "Platform administrator persona", is_default: false, is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Consumer", handle: "consumer", slug: "consumer", category: "consumer", description: "End-user shopping persona", is_default: true, is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Vendor", handle: "vendor", slug: "vendor", category: "business", description: "Marketplace seller persona", is_default: false, is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Admin", handle: "admin", slug: "admin", category: "platform", description: "Platform administrator persona", is_default: false, is_active: true, metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createPersonas", "create"])
       log("  ✓ Persona: 3 personas created (consumer, vendor, admin)")
@@ -147,9 +149,9 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
     const svc = resolveAny("wallet", "walletModuleService")
     if (!svc) { log("  ⚠ Wallet service not found, skipping") } else {
       const data = [
-        { tenant_id: T, owner_type: "customer", owner_id: "cus_seed_01", currency_code: "sar", balance: sarPrice(500), name: "Customer Wallet 1", is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, owner_type: "customer", owner_id: "cus_seed_02", currency_code: "sar", balance: sarPrice(1200), name: "Customer Wallet 2", is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, owner_type: "vendor", owner_id: "ven_seed_01", currency_code: "sar", balance: sarPrice(8500), name: "Vendor Wallet 1", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_01", currency_code: "sar", balance: sarPrice(500), name: "Customer Wallet 1", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_02", currency_code: "sar", balance: sarPrice(1200), name: "Customer Wallet 2", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "ven_seed_01", currency_code: "sar", balance: sarPrice(8500), name: "Vendor Wallet 1", is_active: true, metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createWallets", "create"])
       log("  ✓ Wallet: 3 wallets created")
@@ -161,11 +163,11 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
     const svc = resolveAny("notificationPreferences", "notification_preferences", "notification-preferences", "notificationPreferencesModuleService")
     if (!svc) { log("  ⚠ Notification Preferences service not found, skipping") } else {
       const data = [
-        { tenant_id: T, user_id: "cus_seed_01", channel: "email", category: "order_updates", is_enabled: true, metadata: { seeded: true } },
-        { tenant_id: T, user_id: "cus_seed_01", channel: "sms", category: "promotions", is_enabled: false, metadata: { seeded: true } },
-        { tenant_id: T, user_id: "cus_seed_01", channel: "push", category: "order_updates", is_enabled: true, metadata: { seeded: true } },
-        { tenant_id: T, user_id: "cus_seed_02", channel: "email", category: "order_updates", is_enabled: true, metadata: { seeded: true } },
-        { tenant_id: T, user_id: "cus_seed_02", channel: "email", category: "promotions", is_enabled: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_01", channel: "email", event_type: "order_updates", is_enabled: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_01", channel: "sms", event_type: "promotions", is_enabled: false, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_01", channel: "push", event_type: "order_updates", is_enabled: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_02", channel: "email", event_type: "order_updates", is_enabled: true, metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_02", channel: "email", event_type: "promotions", is_enabled: true, metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createNotificationPreferences", "createNotificationPreferencess", "create"])
       log("  ✓ Notification Preferences: 5 preferences created")
@@ -220,12 +222,12 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
     const svc = resolveAny("volumePricing", "volume_pricing", "volume-pricing", "volumePricingModuleService")
     if (!svc) { log("  ⚠ Volume Pricing service not found, skipping") } else {
       const data = [
-        { tenant_id: T, product_id: "prod_seed_01", min_quantity: 10, max_quantity: 49, price: sarPrice(90), currency_code: "sar", discount_percentage: 10, metadata: { seeded: true } },
-        { tenant_id: T, product_id: "prod_seed_01", min_quantity: 50, max_quantity: 99, price: sarPrice(80), currency_code: "sar", discount_percentage: 20, metadata: { seeded: true } },
-        { tenant_id: T, product_id: "prod_seed_01", min_quantity: 100, max_quantity: null, price: sarPrice(70), currency_code: "sar", discount_percentage: 30, metadata: { seeded: true } },
-        { tenant_id: T, product_id: "prod_seed_02", min_quantity: 5, max_quantity: 24, price: sarPrice(180), currency_code: "sar", discount_percentage: 5, metadata: { seeded: true } },
-        { tenant_id: T, product_id: "prod_seed_02", min_quantity: 25, max_quantity: null, price: sarPrice(160), currency_code: "sar", discount_percentage: 15, metadata: { seeded: true } },
-        { tenant_id: T, product_id: "prod_seed_03", min_quantity: 20, max_quantity: null, price: sarPrice(45), currency_code: "sar", discount_percentage: 10, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_01", volume_pricing_id: "vp_seed_01", min_quantity: 10, max_quantity: 49, price: sarPrice(90), currency_code: "sar", discount_percentage: 10, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_01", volume_pricing_id: "vp_seed_01", min_quantity: 50, max_quantity: 99, price: sarPrice(80), currency_code: "sar", discount_percentage: 20, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_01", volume_pricing_id: "vp_seed_01", min_quantity: 100, max_quantity: null, price: sarPrice(70), currency_code: "sar", discount_percentage: 30, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_02", volume_pricing_id: "vp_seed_02", min_quantity: 5, max_quantity: 24, price: sarPrice(180), currency_code: "sar", discount_percentage: 5, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_02", volume_pricing_id: "vp_seed_02", min_quantity: 25, max_quantity: null, price: sarPrice(160), currency_code: "sar", discount_percentage: 15, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_03", volume_pricing_id: "vp_seed_03", min_quantity: 20, max_quantity: null, price: sarPrice(45), currency_code: "sar", discount_percentage: 10, metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createVolumePricingTiers", "createVolumePricings", "create"])
       log("  ✓ Volume Pricing: 6 tiers created for 3 products")
@@ -331,16 +333,19 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
       expiresAt.setDate(expiresAt.getDate() + 30)
       const data = [{
         tenant_id: T,
+        quote_number: "Q-SEED-001",
         title: "B2B Office Supplies Bulk Order",
         customer_id: "cus_seed_01",
-        company_name: "Saudi Tech Solutions",
+        company_id: "comp_seed_01",
         contact_email: "procurement@sauditech.sa",
         contact_phone: "+966112223344",
-        status: "pending",
+        status: "draft",
         currency_code: "sar",
         subtotal: sarPrice(25000),
+        discount_total: 0,
+        tax_total: sarPrice(3750),
+        shipping_total: 0,
         total: sarPrice(28750),
-        tax_amount: sarPrice(3750),
         items: [
           { product_id: "prod_seed_01", title: "Laptop Dell XPS 15", quantity: 10, unit_price: sarPrice(1500), total: sarPrice(15000) },
           { product_id: "prod_seed_02", title: "Monitor 27inch 4K", quantity: 10, unit_price: sarPrice(800), total: sarPrice(8000) },
@@ -425,6 +430,7 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
           currency_code: "sar",
           interval: "month",
           tier: "silver",
+          tier_level: 1,
           benefits: ["5% discount on all purchases", "Free standard shipping", "Early access to sales"],
           is_active: true,
           thumbnail: getThumb("fashion", 0),
@@ -439,6 +445,7 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
           currency_code: "sar",
           interval: "month",
           tier: "gold",
+          tier_level: 2,
           benefits: ["10% discount on all purchases", "Free express shipping", "Priority customer support", "Exclusive member events", "Birthday bonus"],
           is_active: true,
           thumbnail: getThumb("fashion", 1),
@@ -453,6 +460,7 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
           currency_code: "sar",
           interval: "month",
           tier: "platinum",
+          tier_level: 3,
           benefits: ["15% discount on all purchases", "Free same-day delivery", "Dedicated concierge", "VIP events access", "Free returns", "Exclusive products", "Annual gift box"],
           is_active: true,
           thumbnail: getThumb("fashion", 2),
@@ -471,19 +479,16 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
       const data = [{
         tenant_id: T,
         name: "Dakkah Rewards",
-        handle: "dakkah-rewards",
         description: "Earn points on every purchase and redeem for discounts, free shipping, and exclusive rewards",
         currency_code: "sar",
         points_per_currency: 1,
-        min_redemption_points: 100,
-        point_value: 0.01,
-        tiers: [
+        is_active: true,
+        tier_config: [
           { name: "Bronze", min_points: 0, multiplier: 1.0, benefits: ["1x points earning"] },
           { name: "Silver", min_points: 1000, multiplier: 1.5, benefits: ["1.5x points earning", "Free shipping on orders over 100 SAR"] },
           { name: "Gold", min_points: 5000, multiplier: 2.0, benefits: ["2x points earning", "Free shipping", "Early sale access"] },
           { name: "Platinum", min_points: 15000, multiplier: 3.0, benefits: ["3x points earning", "Free express shipping", "VIP events", "Birthday bonus points"] },
         ],
-        is_active: true,
         metadata: { seeded: true },
       }]
       await tryCreate(svc, data, ["createLoyaltyPrograms", "createLoyaltys", "create"])

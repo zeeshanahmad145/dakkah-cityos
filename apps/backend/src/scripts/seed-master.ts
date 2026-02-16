@@ -8,10 +8,12 @@ export default async function seedMaster(args: ExecArgs) {
   logger.info("╔══════════════════════════════════════════════════════════════╗")
   logger.info("║     DAKKAH CITYOS — MASTER SEED                            ║")
   logger.info("╚══════════════════════════════════════════════════════════════╝")
-  logger.info("  Note: Run 'npx medusa exec ./src/scripts/upload-media.ts'")
-  logger.info("  separately to upload images to cloud storage bucket")
 
   const startTime = Date.now()
+
+  logger.info("\n━━━ PHASE 0: UPLOAD IMAGES TO BUCKET STORAGE ━━━")
+  const { preUploadCategoryImages } = require("./seed-utils")
+  await preUploadCategoryImages(logger)
 
   logger.info("\n━━━ PHASE 1: CORE INFRASTRUCTURE ━━━")
   const seedCore = require("./seed-core").default
@@ -32,6 +34,10 @@ export default async function seedMaster(args: ExecArgs) {
   logger.info("\n━━━ PHASE 5: VERTICAL MODULES ━━━")
   const seedVerticals = require("./seed-verticals").default
   await seedVerticals(args, ctx)
+
+  logger.info("\n━━━ PHASE 6: INFRASTRUCTURE MODULES ━━━")
+  const seedAllWithImages = require("./seed-all-with-images").default
+  await seedAllWithImages(args)
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
   logger.info(`\n✅ Master seed completed in ${elapsed}s`)

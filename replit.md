@@ -49,6 +49,37 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 ### Code Separation from Medusa
 All custom code lives in `apps/backend/src/` — completely separate from Medusa's `node_modules/@medusajs/`. No patches, no forks, no modifications to Medusa source code. All modules use Medusa's official extension pattern.
 
+## Recent Changes (2026-02-16)
+
+### Security Dependency Updates
+- Updated all vulnerable packages via pnpm overrides in root package.json
+- Fixed 132 TypeScript compilation errors across 40+ files
+
+### Image Migration to Object Storage
+- All product/service image references migrated from Unsplash URLs to Replit Object Storage bucket paths
+- `seed-utils.ts`: `getImage()` and `getThumb()` return `/platform/storage/serve?path=...` URLs
+- Storage endpoint: `/platform/storage/serve` serves images from bucket `replit-objstore-9ae4a2f3-0592-42b1-908d-b04c0c0e79c4`
+
+### Seed Data Infrastructure
+- **Seed Scripts:**
+  - `seed-verticals.ts` — Seeds 27 vertical modules with Saudi-themed data
+  - `seed-all-with-images.ts` — Master seed: verticals + 17 infrastructure modules
+  - `seed-utils.ts` — Centralized image URLs, Saudi pricing helpers, city/phone generators
+  - `seed-master.ts` — Core Medusa data (products, categories, regions, etc.)
+- **Seeded Verticals (27):** Booking, Healthcare, Restaurant, Travel, Event Ticketing, Freelance, Grocery, Automotive, Fitness, Financial Product, Advertising, Parking, Utilities, Legal, Government, Crowdfunding, Auction, Classified, Charity, Education, Real Estate, Pet Service, Affiliate, Warranty, Rental, Insurance, Social Commerce
+- **Seeded Infrastructure (14):** Persona, Governance, Wallet, Notification Preferences, CMS Content, Volume Pricing, Tax Config, Region Zone, Subscription, Quote, Insurance Plans, Membership, Digital Product, Promotion Extensions
+- **Known Model-DB Drift:** Tenant (`tenant_type`, `scope_tier` columns pending migration) and Loyalty (`status` column) have schema drift; models define columns not yet in DB migration history
+
+### Database Enum Constraints
+- `booking.location_type`: `in_person`, `virtual`, `customer_location`
+- `event.status`: `draft`, `published`, `live`, `completed`, `cancelled`
+- `event.event_type`: `concert`, `conference`, `workshop`, `sports`, `festival`, `webinar`, `meetup`, `other`
+- `ad_campaign.campaign_type`: `sponsored_listing`, `banner`, `search`, `social`, `email`
+- `classified_listing.listing_type`: `sell`, `buy`, `trade`, `free`, `wanted`
+- `classified_listing.condition`: `new`, `like_new`, `good`, `fair`, `poor`
+- `quote.status`: `draft`, `submitted`, `under_review`, `approved`, `rejected`, `accepted`, `declined`, `expired`
+- `persona.category`: `consumer`, `creator`, `business`, `cityops`, `platform`
+
 ## External Dependencies
 - **Database:** PostgreSQL
 - **Frontend Framework:** TanStack Start, React

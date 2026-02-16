@@ -314,3 +314,41 @@
 	FROM pg_tables t WHERE t.schemaname='public' LIMIT 5;
 2026-02-16 18:42:50.554 UTC [2121] LOG:  checkpoint starting: time
 2026-02-16 18:43:10.720 UTC [2121] LOG:  checkpoint complete: wrote 196 buffers (1.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=19.947 s, sync=0.057 s, total=20.167 s; sync files=46, longest=0.013 s, average=0.002 s; distance=1336 kB, estimate=1336 kB; lsn=0/29A4600, redo lsn=0/29A45C8
+2026-02-16 19:12:51.300 UTC [2121] LOG:  checkpoint starting: time
+2026-02-16 19:12:51.775 UTC [2121] LOG:  checkpoint complete: wrote 1 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.101 s, sync=0.072 s, total=0.475 s; sync files=1, longest=0.072 s, average=0.072 s; distance=1 kB, estimate=1203 kB; lsn=0/29A4D98, redo lsn=0/29A4D60
+2026-02-16 19:14:37.008 UTC [15846] FATAL:  database "heliumdb" does not exist
+2026-02-16 19:15:18.943 UTC [16169] ERROR:  relation "healthcare_provider" does not exist at character 106
+2026-02-16 19:15:18.943 UTC [16169] STATEMENT:  
+	SELECT 'booking' as module, COUNT(*) FROM booking
+	UNION ALL SELECT 'healthcare_provider', COUNT(*) FROM healthcare_provider
+	UNION ALL SELECT 'restaurant', COUNT(*) FROM restaurant
+	UNION ALL SELECT 'travel_package', COUNT(*) FROM travel_package
+	UNION ALL SELECT 'event', COUNT(*) FROM event
+	UNION ALL SELECT 'freelance_gig', COUNT(*) FROM freelance_gig
+	UNION ALL SELECT 'grocery_store', COUNT(*) FROM grocery_store
+	UNION ALL SELECT 'automotive_service', COUNT(*) FROM automotive_service
+	UNION ALL SELECT 'fitness_facility', COUNT(*) FROM fitness_facility
+	UNION ALL SELECT 'financial_product', COUNT(*) FROM financial_product
+	UNION ALL SELECT 'ad_campaign', COUNT(*) FROM ad_campaign
+	UNION ALL SELECT 'parking_location', COUNT(*) FROM parking_location
+	UNION ALL SELECT 'utility_service', COUNT(*) FROM utility_service
+	UNION ALL SELECT 'legal_service', COUNT(*) FROM legal_service
+	UNION ALL SELECT 'gov_service', COUNT(*) FROM gov_service
+	UNION ALL SELECT 'crowdfunding_campaign', COUNT(*) FROM crowdfunding_campaign
+	UNION ALL SELECT 'auction_item', COUNT(*) FROM auction_item
+	UNION ALL SELECT 'classified_listing', COUNT(*) FROM classified_listing
+	UNION ALL SELECT 'charity_campaign', COUNT(*) FROM charity_campaign
+	UNION ALL SELECT 'education_course', COUNT(*) FROM education_course
+	UNION ALL SELECT 'real_estate_property', COUNT(*) FROM real_estate_property
+	UNION ALL SELECT 'pet_service', COUNT(*) FROM pet_service
+	UNION ALL SELECT 'affiliate_program', COUNT(*) FROM affiliate_program
+	UNION ALL SELECT 'warranty_plan', COUNT(*) FROM warranty_plan
+	UNION ALL SELECT 'rental_item', COUNT(*) FROM rental_item
+	UNION ALL SELECT 'insurance_plan', COUNT(*) FROM insurance_plan
+	UNION ALL SELECT 'live_stream', COUNT(*) FROM live_stream
+	ORDER BY module;
+2026-02-16 19:16:36.418 UTC [16375] FATAL:  database "heliumdb" does not exist
+2026-02-16 19:17:51.874 UTC [2121] LOG:  checkpoint starting: time
+2026-02-16 19:17:54.295 UTC [2121] LOG:  checkpoint complete: wrote 23 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.305 s, sync=0.087 s, total=2.421 s; sync files=15, longest=0.057 s, average=0.006 s; distance=113 kB, estimate=1094 kB; lsn=0/29C11B0, redo lsn=0/29C1178
+2026-02-16 19:21:46.149 UTC [17519] FATAL:  database "heliumdb" does not exist
+2026-02-16 19:24:32.141 UTC [18147] FATAL:  database "heliumdb" does not exist
