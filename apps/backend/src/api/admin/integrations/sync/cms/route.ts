@@ -32,11 +32,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const erpnextApiSecret = process.env.ERPNEXT_API_SECRET
 
     if (!payloadUrl || !payloadApiKey) {
-      return res.status(400).json({ error: "Payload CMS not configured (missing PAYLOAD_CMS_URL_DEV/PAYLOAD_CMS_URL or PAYLOAD_API_KEY)" })
+      return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
     }
 
     if (!erpnextUrl || !erpnextApiKey || !erpnextApiSecret) {
-      return res.status(400).json({ error: "ERPNext not configured (missing ERPNEXT_URL_DEV, ERPNEXT_API_KEY, or ERPNEXT_API_SECRET)" })
+      return res.status(503).json({ success: false, message: "Service not configured", service: "erpnext" })
     }
 
     const startTime = Date.now()

@@ -10,6 +10,10 @@ function verifyFleetbaseSignature(payload: string, signature: string, secret: st
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  if (!process.env.FLEETBASE_API_KEY && !process.env.FLEETBASE_URL_DEV) {
+    return res.status(503).json({ success: false, message: "Service not configured", service: "fleetbase" })
+  }
+
   try {
     const secret = process.env.FLEETBASE_WEBHOOK_SECRET
     if (secret) {

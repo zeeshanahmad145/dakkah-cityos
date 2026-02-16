@@ -25,6 +25,10 @@ async function handleDeliveryCompleted(data: any, correlationId: string) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
 
+  if (!process.env.FLEETBASE_API_KEY && !process.env.FLEETBASE_URL_DEV) {
+    return res.status(503).json({ success: false, message: "Service not configured", service: "fleetbase" })
+  }
+
   try {
     const secret = process.env.FLEETBASE_WEBHOOK_SECRET
     if (secret) {

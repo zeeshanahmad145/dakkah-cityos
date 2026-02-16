@@ -57,6 +57,10 @@ async function handleInvoicePaymentFailed(data: any, correlationId: string) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
 
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return res.status(503).json({ success: false, message: "Service not configured", service: "stripe" })
+  }
+
   try {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
     let stripeEvent: any

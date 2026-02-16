@@ -34,21 +34,17 @@ class TenantModuleService extends MedusaService({
   // ============ Tenant Lookup ============
 
   async retrieveTenantBySlug(slug: string) {
-    const tenants = await this.listTenants({
-      slug,
-      status: ["active", "trial"],
-    }) as any
+    const tenants = await this.listTenants({ slug }) as any
     const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean)
-    return list[0] || null
+    const filtered = list.filter((t: any) => t.status === "active" || t.status === "trial")
+    return filtered[0] || null
   }
 
   async retrieveTenantByDomain(domain: string) {
-    const tenants = await this.listTenants({
-      domain,
-      status: ["active", "trial"],
-    }) as any
+    const tenants = await this.listTenants({ domain }) as any
     const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean)
-    return list[0] || null
+    const filtered = list.filter((t: any) => t.status === "active" || t.status === "trial")
+    return filtered[0] || null
   }
 
   async retrieveTenantByHandle(handle: string) {

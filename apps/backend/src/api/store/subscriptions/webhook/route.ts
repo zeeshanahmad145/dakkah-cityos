@@ -11,7 +11,7 @@ export async function POST(
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
   if (!stripeSecretKey) {
-    return res.status(400).json({ message: "Stripe is not configured" })
+    return res.status(503).json({ success: false, message: "Service not configured", service: "stripe" })
   }
 
   const stripe = require("stripe")(stripeSecretKey)

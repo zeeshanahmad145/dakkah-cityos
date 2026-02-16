@@ -346,7 +346,7 @@ export class CMSHierarchySyncEngine {
   }
 }
 
-export function createHierarchySyncEngine(config?: Partial<CMSSyncConfig>): CMSHierarchySyncEngine {
+export function createHierarchySyncEngine(config?: Partial<CMSSyncConfig>): CMSHierarchySyncEngine | null {
   const fullConfig: CMSSyncConfig = {
     payloadUrl: config?.payloadUrl || process.env.PAYLOAD_CMS_URL_DEV || "",
     payloadApiKey: config?.payloadApiKey || process.env.PAYLOAD_API_KEY || "",
@@ -354,6 +354,16 @@ export function createHierarchySyncEngine(config?: Partial<CMSSyncConfig>): CMSH
     erpnextApiKey: config?.erpnextApiKey || process.env.ERPNEXT_API_KEY || "",
     erpnextApiSecret: config?.erpnextApiSecret || process.env.ERPNEXT_API_SECRET || "",
     tenantId: config?.tenantId || process.env.DEFAULT_TENANT_ID || "system",
+  }
+
+  if (!fullConfig.payloadUrl || !fullConfig.payloadApiKey) {
+    logger.info("[CMSHierarchySync] Payload CMS not configured, skipping engine creation")
+    return null
+  }
+
+  if (!fullConfig.erpnextUrl || !fullConfig.erpnextApiKey || !fullConfig.erpnextApiSecret) {
+    logger.info("[CMSHierarchySync] ERPNext not configured, skipping engine creation")
+    return null
   }
 
   return new CMSHierarchySyncEngine(fullConfig)

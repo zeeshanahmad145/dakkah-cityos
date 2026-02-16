@@ -397,3 +397,137 @@
 2026-02-16 20:47:40.905 UTC [1551] FATAL:  database "heliumdb" does not exist
 2026-02-16 20:48:11.729 UTC [1783] FATAL:  database "heliumdb" does not exist
 2026-02-16 21:15:58.109 UTC [5697] FATAL:  database "heliumdb" does not exist
+2026-02-16 21:36:11.946 UTC [200] LOG:  starting PostgreSQL 16.10 on x86_64-pc-linux-gnu, compiled by clang version 19.1.7, 64-bit
+2026-02-16 21:36:11.948 UTC [200] LOG:  listening on IPv6 address "::1", port 5433
+2026-02-16 21:36:11.949 UTC [200] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-02-16 21:36:11.952 UTC [200] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-02-16 21:36:11.958 UTC [203] LOG:  database system was interrupted; last known up at 2026-02-16 20:41:57 UTC
+2026-02-16 21:36:12.102 UTC [203] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-02-16 21:36:12.114 UTC [203] LOG:  redo starts at 0/29C1628
+2026-02-16 21:36:12.114 UTC [203] LOG:  invalid record length at 0/29C1660: expected at least 24, got 0
+2026-02-16 21:36:12.114 UTC [203] LOG:  redo done at 0/29C1628 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-02-16 21:36:12.128 UTC [201] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-02-16 21:36:12.150 UTC [201] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.005 s, total=0.032 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB; lsn=0/29C1660, redo lsn=0/29C1660
+2026-02-16 21:36:12.154 UTC [200] LOG:  database system is ready to accept connections
+2026-02-16 21:36:38.191 UTC [522] LOG:  invalid length of startup packet
+2026-02-16 21:36:38.216 UTC [523] LOG:  invalid length of startup packet
+2026-02-16 21:36:38.226 UTC [524] LOG:  invalid length of startup packet
+2026-02-16 21:36:38.234 UTC [525] LOG:  invalid length of startup packet
+2026-02-16 21:37:31.934 UTC [702] LOG:  invalid length of startup packet
+2026-02-16 21:37:31.948 UTC [703] LOG:  invalid length of startup packet
+2026-02-16 21:37:31.971 UTC [704] LOG:  invalid length of startup packet
+2026-02-16 21:37:31.980 UTC [705] LOG:  invalid length of startup packet
+2026-02-16 21:38:32.692 UTC [1090] LOG:  invalid length of startup packet
+2026-02-16 21:38:32.697 UTC [1091] LOG:  invalid length of startup packet
+2026-02-16 21:38:32.701 UTC [1092] LOG:  invalid length of startup packet
+2026-02-16 21:38:32.707 UTC [1093] LOG:  invalid length of startup packet
+2026-02-16 21:39:34.285 UTC [1372] LOG:  invalid length of startup packet
+2026-02-16 21:39:34.289 UTC [1373] LOG:  invalid length of startup packet
+2026-02-16 21:39:34.293 UTC [1374] LOG:  invalid length of startup packet
+2026-02-16 21:39:34.297 UTC [1375] LOG:  invalid length of startup packet
+2026-02-16 21:40:35.628 UTC [1693] LOG:  invalid length of startup packet
+2026-02-16 21:40:35.632 UTC [1694] LOG:  invalid length of startup packet
+2026-02-16 21:40:35.635 UTC [1695] LOG:  invalid length of startup packet
+2026-02-16 21:40:35.639 UTC [1696] LOG:  invalid length of startup packet
+2026-02-16 21:41:36.726 UTC [1857] LOG:  invalid length of startup packet
+2026-02-16 21:41:36.730 UTC [1858] LOG:  invalid length of startup packet
+2026-02-16 21:41:36.734 UTC [1859] LOG:  invalid length of startup packet
+2026-02-16 21:41:36.737 UTC [1860] LOG:  invalid length of startup packet
+2026-02-16 21:42:38.232 UTC [1863] LOG:  invalid length of startup packet
+2026-02-16 21:42:38.235 UTC [1864] LOG:  invalid length of startup packet
+2026-02-16 21:42:38.239 UTC [1865] LOG:  invalid length of startup packet
+2026-02-16 21:42:38.242 UTC [1866] LOG:  invalid length of startup packet
+2026-02-16 21:43:39.315 UTC [1876] LOG:  invalid length of startup packet
+2026-02-16 21:43:39.318 UTC [1877] LOG:  invalid length of startup packet
+2026-02-16 21:43:39.321 UTC [1878] LOG:  invalid length of startup packet
+2026-02-16 21:43:39.324 UTC [1879] LOG:  invalid length of startup packet
+2026-02-16 21:44:40.166 UTC [1896] LOG:  invalid length of startup packet
+2026-02-16 21:44:40.170 UTC [1897] LOG:  invalid length of startup packet
+2026-02-16 21:44:40.173 UTC [1898] LOG:  invalid length of startup packet
+2026-02-16 21:44:40.176 UTC [1899] LOG:  invalid length of startup packet
+2026-02-16 21:45:41.305 UTC [1903] LOG:  invalid length of startup packet
+2026-02-16 21:45:41.310 UTC [1904] LOG:  invalid length of startup packet
+2026-02-16 21:45:41.314 UTC [1905] LOG:  invalid length of startup packet
+2026-02-16 21:45:41.317 UTC [1906] LOG:  invalid length of startup packet
+2026-02-16 21:46:42.236 UTC [1909] LOG:  invalid length of startup packet
+2026-02-16 21:46:42.239 UTC [1910] LOG:  invalid length of startup packet
+2026-02-16 21:46:42.243 UTC [1911] LOG:  invalid length of startup packet
+2026-02-16 21:46:42.246 UTC [1912] LOG:  invalid length of startup packet
+2026-02-16 21:47:43.033 UTC [1917] LOG:  invalid length of startup packet
+2026-02-16 21:47:43.037 UTC [1918] LOG:  invalid length of startup packet
+2026-02-16 21:47:43.040 UTC [1919] LOG:  invalid length of startup packet
+2026-02-16 21:47:43.044 UTC [1920] LOG:  invalid length of startup packet
+2026-02-16 21:48:44.213 UTC [1923] LOG:  invalid length of startup packet
+2026-02-16 21:48:44.220 UTC [1924] LOG:  invalid length of startup packet
+2026-02-16 21:48:44.223 UTC [1925] LOG:  invalid length of startup packet
+2026-02-16 21:48:44.227 UTC [1926] LOG:  invalid length of startup packet
+2026-02-16 21:49:45.283 UTC [1929] LOG:  invalid length of startup packet
+2026-02-16 21:49:45.287 UTC [1930] LOG:  invalid length of startup packet
+2026-02-16 21:49:45.290 UTC [1931] LOG:  invalid length of startup packet
+2026-02-16 21:49:45.293 UTC [1932] LOG:  invalid length of startup packet
+2026-02-16 21:50:46.596 UTC [1935] LOG:  invalid length of startup packet
+2026-02-16 21:50:46.601 UTC [1936] LOG:  invalid length of startup packet
+2026-02-16 21:50:46.605 UTC [1937] LOG:  invalid length of startup packet
+2026-02-16 21:50:46.608 UTC [1938] LOG:  invalid length of startup packet
+2026-02-16 21:51:48.228 UTC [1941] LOG:  invalid length of startup packet
+2026-02-16 21:51:48.233 UTC [1942] LOG:  invalid length of startup packet
+2026-02-16 21:51:48.236 UTC [1943] LOG:  invalid length of startup packet
+2026-02-16 21:51:48.240 UTC [1944] LOG:  invalid length of startup packet
+2026-02-16 21:52:49.163 UTC [2096] LOG:  invalid length of startup packet
+2026-02-16 21:52:49.167 UTC [2097] LOG:  invalid length of startup packet
+2026-02-16 21:52:49.171 UTC [2098] LOG:  invalid length of startup packet
+2026-02-16 21:52:49.174 UTC [2099] LOG:  invalid length of startup packet
+2026-02-16 21:53:50.156 UTC [2218] LOG:  invalid length of startup packet
+2026-02-16 21:53:50.160 UTC [2219] LOG:  invalid length of startup packet
+2026-02-16 21:53:50.163 UTC [2220] LOG:  invalid length of startup packet
+2026-02-16 21:53:50.167 UTC [2221] LOG:  invalid length of startup packet
+2026-02-16 21:54:51.174 UTC [2334] LOG:  invalid length of startup packet
+2026-02-16 21:54:51.178 UTC [2335] LOG:  invalid length of startup packet
+2026-02-16 21:54:51.181 UTC [2336] LOG:  invalid length of startup packet
+2026-02-16 21:54:51.184 UTC [2337] LOG:  invalid length of startup packet
+2026-02-16 21:55:52.244 UTC [2530] LOG:  invalid length of startup packet
+2026-02-16 21:55:52.248 UTC [2531] LOG:  invalid length of startup packet
+2026-02-16 21:55:52.252 UTC [2532] LOG:  invalid length of startup packet
+2026-02-16 21:55:52.255 UTC [2533] LOG:  invalid length of startup packet
+2026-02-16 21:56:53.147 UTC [2685] LOG:  invalid length of startup packet
+2026-02-16 21:56:53.150 UTC [2686] LOG:  invalid length of startup packet
+2026-02-16 21:56:53.153 UTC [2687] LOG:  invalid length of startup packet
+2026-02-16 21:56:53.156 UTC [2688] LOG:  invalid length of startup packet
+2026-02-16 21:57:53.721 UTC [2807] LOG:  invalid length of startup packet
+2026-02-16 21:57:53.730 UTC [2808] LOG:  invalid length of startup packet
+2026-02-16 21:57:53.736 UTC [2809] LOG:  invalid length of startup packet
+2026-02-16 21:57:53.744 UTC [2810] LOG:  invalid length of startup packet
+2026-02-16 21:58:40.336 UTC [3027] LOG:  invalid length of startup packet
+2026-02-16 21:58:40.341 UTC [3029] LOG:  invalid length of startup packet
+2026-02-16 21:58:40.345 UTC [3031] LOG:  invalid length of startup packet
+2026-02-16 21:58:40.349 UTC [3032] LOG:  invalid length of startup packet
+2026-02-16 21:58:40.370 UTC [3039] FATAL:  database "heliumdb" does not exist
+2026-02-16 21:59:04.730 UTC [3280] FATAL:  database "heliumdb" does not exist
+2026-02-16 22:00:04.521 UTC [3658] FATAL:  database "heliumdb" does not exist
+2026-02-16 22:03:37.247 UTC [426] LOG:  starting PostgreSQL 16.10 on x86_64-pc-linux-gnu, compiled by clang version 19.1.7, 64-bit
+2026-02-16 22:03:37.252 UTC [426] LOG:  listening on IPv6 address "::1", port 5433
+2026-02-16 22:03:37.253 UTC [426] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-02-16 22:03:37.256 UTC [426] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-02-16 22:03:37.261 UTC [429] LOG:  database system was interrupted; last known up at 2026-02-16 21:36:12 UTC
+2026-02-16 22:03:37.321 UTC [429] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-02-16 22:03:37.341 UTC [429] LOG:  redo starts at 0/29C16D8
+2026-02-16 22:03:37.343 UTC [429] LOG:  invalid record length at 0/29C1710: expected at least 24, got 0
+2026-02-16 22:03:37.343 UTC [429] LOG:  redo done at 0/29C16D8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-02-16 22:03:37.367 UTC [427] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-02-16 22:03:37.398 UTC [427] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.007 s, total=0.046 s; sync files=2, longest=0.004 s, average=0.004 s; distance=0 kB, estimate=0 kB; lsn=0/29C1710, redo lsn=0/29C1710
+2026-02-16 22:03:37.405 UTC [426] LOG:  database system is ready to accept connections
+2026-02-16 22:03:43.485 UTC [506] LOG:  invalid length of startup packet
+2026-02-16 22:03:43.489 UTC [507] LOG:  invalid length of startup packet
+2026-02-16 22:03:43.496 UTC [508] LOG:  invalid length of startup packet
+2026-02-16 22:03:43.512 UTC [509] LOG:  invalid length of startup packet
+2026-02-16 22:04:45.376 UTC [1218] LOG:  invalid length of startup packet
+2026-02-16 22:04:45.380 UTC [1219] LOG:  invalid length of startup packet
+2026-02-16 22:04:45.383 UTC [1220] LOG:  invalid length of startup packet
+2026-02-16 22:04:45.387 UTC [1221] LOG:  invalid length of startup packet
+2026-02-16 22:13:57.312 UTC [426] LOG:  received fast shutdown request
+2026-02-16 22:13:57.337 UTC [426] LOG:  aborting any active transactions
+2026-02-16 22:13:57.342 UTC [426] LOG:  background worker "logical replication launcher" (PID 432) exited with exit code 1
+2026-02-16 22:13:57.342 UTC [427] LOG:  shutting down
+2026-02-16 22:13:57.356 UTC [427] LOG:  checkpoint starting: shutdown immediate
+2026-02-16 22:13:57.481 UTC [427] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.139 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=0 kB; lsn=0/29C17C0, redo lsn=0/29C17C0
+2026-02-16 22:13:57.485 UTC [426] LOG:  database system is shut down

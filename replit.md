@@ -49,7 +49,19 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 ### Code Separation from Medusa
 All custom code lives in `apps/backend/src/` — completely separate from Medusa's `node_modules/@medusajs/`. No patches, no forks, no modifications to Medusa source code. All modules use Medusa's official extension pattern.
 
+## Database Configuration
+- Uses Replit-provided PostgreSQL (heliumdb) via DATABASE_URL environment variable
+- Medusa backend connects via `process.env.DATABASE_URL` in medusa-config.ts
+- 203 MikroORM migrations applied; all seed data lives in heliumdb
+- No local PostgreSQL instance required; start.sh uses Replit database directly
+
 ## Recent Changes (2026-02-16)
+
+### Database Connection Fix
+- Fixed critical database mismatch: start.sh was starting local PostgreSQL (port 5433, medusadb) while all seed data existed in Replit-provided database (heliumdb)
+- Removed local PostgreSQL setup from start.sh — now uses Replit DATABASE_URL directly
+- Added .pgdata to .gitignore
+- All 60+ modules of seed data now accessible through Medusa ORM
 
 ### Security Dependency Updates
 - Updated all vulnerable packages via pnpm overrides in root package.json

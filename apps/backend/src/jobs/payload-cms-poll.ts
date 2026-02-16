@@ -32,6 +32,11 @@ export default async function payloadCmsPollJob(container: MedusaContainer) {
       erpnextApiSecret,
     })
 
+    if (!engine) {
+      logger.info("[PayloadCMSPoll] CMS sync engine not available, skipping poll")
+      return
+    }
+
     const results = await engine.syncAll()
 
     let totalSynced = 0

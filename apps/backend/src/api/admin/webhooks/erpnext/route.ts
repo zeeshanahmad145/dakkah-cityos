@@ -5,6 +5,10 @@ import { handleApiError } from "../../../../lib/api-error-handler"
 const logger = createLogger("api:admin/webhooks")
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  if (!process.env.ERPNEXT_API_KEY || !process.env.ERPNEXT_URL_DEV) {
+    return res.status(503).json({ success: false, message: "Service not configured", service: "erpnext" })
+  }
+
   try {
     const secret = process.env.ERPNEXT_WEBHOOK_SECRET
     if (secret) {

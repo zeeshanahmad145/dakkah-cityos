@@ -5,6 +5,10 @@ import { handleApiError } from "../../../../lib/api-error-handler"
 const logger = createLogger("api:admin/webhooks")
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  if (!process.env.PAYLOAD_CMS_URL_DEV && !process.env.PAYLOAD_CMS_URL) {
+    return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
+  }
+
   try {
     const secret = process.env.PAYLOAD_WEBHOOK_SECRET
     if (secret) {
