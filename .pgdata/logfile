@@ -300,3 +300,15 @@
 2026-02-16 16:57:48.402 UTC [2121] LOG:  checkpoint starting: end-of-recovery immediate wait
 2026-02-16 16:57:48.486 UTC [2121] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.075 s, total=0.088 s; sync files=2, longest=0.072 s, average=0.038 s; distance=0 kB, estimate=0 kB; lsn=0/28562D0, redo lsn=0/28562D0
 2026-02-16 16:57:48.490 UTC [2120] LOG:  database system is ready to accept connections
+2026-02-16 18:37:53.736 UTC [8466] ERROR:  column "tablename" does not exist at character 9
+2026-02-16 18:37:53.736 UTC [8466] STATEMENT:  
+	SELECT tablename, n_live_tup 
+	FROM pg_stat_user_tables 
+	WHERE schemaname='public' AND n_live_tup > 0 
+	ORDER BY tablename;
+2026-02-16 18:38:03.644 UTC [8489] ERROR:  column "tablename" does not exist at character 8
+2026-02-16 18:38:03.644 UTC [8489] STATEMENT:  SELECT tablename, n_live_tup FROM pg_stat_user_tables WHERE schemaname='public' AND n_live_tup > 0 ORDER BY tablename;
+2026-02-16 18:38:12.920 UTC [8510] ERROR:  zero-length delimited identifier at or near """" at character 51
+2026-02-16 18:38:12.920 UTC [8510] STATEMENT:  
+	SELECT t.tablename, (SELECT count(*) FROM public."" || t.tablename || "") 
+	FROM pg_tables t WHERE t.schemaname='public' LIMIT 5;
