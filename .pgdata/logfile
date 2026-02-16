@@ -352,3 +352,44 @@
 2026-02-16 19:17:54.295 UTC [2121] LOG:  checkpoint complete: wrote 23 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=2.305 s, sync=0.087 s, total=2.421 s; sync files=15, longest=0.057 s, average=0.006 s; distance=113 kB, estimate=1094 kB; lsn=0/29C11B0, redo lsn=0/29C1178
 2026-02-16 19:21:46.149 UTC [17519] FATAL:  database "heliumdb" does not exist
 2026-02-16 19:24:32.141 UTC [18147] FATAL:  database "heliumdb" does not exist
+2026-02-16 20:12:33.588 UTC [20112] LOG:  could not receive data from client: Connection reset by peer
+2026-02-16 20:12:33.588 UTC [20111] LOG:  could not receive data from client: Connection reset by peer
+2026-02-16 20:12:33.588 UTC [20109] LOG:  could not receive data from client: Connection reset by peer
+2026-02-16 20:12:33.589 UTC [20109] LOG:  unexpected EOF on client connection with an open transaction
+2026-02-16 20:12:33.588 UTC [20110] LOG:  could not receive data from client: Connection reset by peer
+2026-02-16 20:12:33.589 UTC [20110] LOG:  unexpected EOF on client connection with an open transaction
+2026-02-16 20:12:33.588 UTC [20107] LOG:  could not receive data from client: Connection reset by peer
+2026-02-16 20:12:33.589 UTC [20107] LOG:  unexpected EOF on client connection with an open transaction
+2026-02-16 20:12:33.589 UTC [20111] LOG:  unexpected EOF on client connection with an open transaction
+2026-02-16 20:12:33.588 UTC [20108] LOG:  could not receive data from client: Connection reset by peer
+2026-02-16 20:12:33.592 UTC [20108] LOG:  unexpected EOF on client connection with an open transaction
+2026-02-16 20:19:18.265 UTC [24587] FATAL:  database "heliumdb" does not exist
+2026-02-16 20:28:15.889 UTC [474] LOG:  starting PostgreSQL 16.10 on x86_64-pc-linux-gnu, compiled by clang version 19.1.7, 64-bit
+2026-02-16 20:28:15.958 UTC [474] LOG:  listening on IPv6 address "::1", port 5433
+2026-02-16 20:28:15.960 UTC [474] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-02-16 20:28:15.964 UTC [474] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-02-16 20:28:15.972 UTC [478] LOG:  database system was interrupted; last known up at 2026-02-16 19:17:54 UTC
+2026-02-16 20:28:17.283 UTC [478] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-02-16 20:28:17.298 UTC [478] LOG:  redo starts at 0/29C1178
+2026-02-16 20:28:17.298 UTC [478] LOG:  invalid record length at 0/29C1260: expected at least 24, got 0
+2026-02-16 20:28:17.298 UTC [478] LOG:  redo done at 0/29C1228 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-02-16 20:28:17.468 UTC [476] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-02-16 20:28:17.581 UTC [476] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.005 s, total=0.129 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB; lsn=0/29C1260, redo lsn=0/29C1260
+2026-02-16 20:28:17.585 UTC [474] LOG:  database system is ready to accept connections
+2026-02-16 20:29:39.324 UTC [860] FATAL:  database "heliumdb" does not exist
+2026-02-16 20:31:58.696 UTC [1231] FATAL:  database "heliumdb" does not exist
+2026-02-16 20:33:17.681 UTC [476] LOG:  checkpoint starting: time
+2026-02-16 20:33:17.902 UTC [476] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.101 s, sync=0.090 s, total=0.221 s; sync files=2, longest=0.080 s, average=0.045 s; distance=0 kB, estimate=0 kB; lsn=0/29C1500, redo lsn=0/29C14C8
+2026-02-16 20:41:56.155 UTC [205] LOG:  starting PostgreSQL 16.10 on x86_64-pc-linux-gnu, compiled by clang version 19.1.7, 64-bit
+2026-02-16 20:41:56.246 UTC [205] LOG:  listening on IPv6 address "::1", port 5433
+2026-02-16 20:41:56.248 UTC [205] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-02-16 20:41:56.252 UTC [205] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-02-16 20:41:56.372 UTC [209] LOG:  database system was interrupted; last known up at 2026-02-16 20:33:17 UTC
+2026-02-16 20:41:57.235 UTC [209] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-02-16 20:41:57.364 UTC [209] LOG:  redo starts at 0/29C14C8
+2026-02-16 20:41:57.364 UTC [209] LOG:  invalid record length at 0/29C15B0: expected at least 24, got 0
+2026-02-16 20:41:57.364 UTC [209] LOG:  redo done at 0/29C1578 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-02-16 20:41:57.371 UTC [207] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-02-16 20:41:57.512 UTC [207] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.006 s, total=0.143 s; sync files=2, longest=0.003 s, average=0.003 s; distance=0 kB, estimate=0 kB; lsn=0/29C15B0, redo lsn=0/29C15B0
+2026-02-16 20:41:57.516 UTC [205] LOG:  database system is ready to accept connections
+2026-02-16 20:42:26.509 UTC [368] FATAL:  database "heliumdb" does not exist

@@ -62,13 +62,15 @@ All custom code lives in `apps/backend/src/` — completely separate from Medusa
 
 ### Seed Data Infrastructure
 - **Seed Scripts:**
-  - `seed-verticals.ts` — Seeds 27 vertical modules with Saudi-themed data
-  - `seed-all-with-images.ts` — Master seed: verticals + 17 infrastructure modules
+  - `seed-verticals.ts` — Seeds 27 vertical modules with Saudi-themed data and bucket storage images
+  - `seed-all-with-images.ts` — Master seed: verticals + 31 infrastructure/sub-entity modules with images
   - `seed-utils.ts` — Centralized image URLs, Saudi pricing helpers, city/phone generators
   - `seed-master.ts` — Core Medusa data (products, categories, regions, etc.)
 - **Seeded Verticals (27):** Booking, Healthcare, Restaurant, Travel, Event Ticketing, Freelance, Grocery, Automotive, Fitness, Financial Product, Advertising, Parking, Utilities, Legal, Government, Crowdfunding, Auction, Classified, Charity, Education, Real Estate, Pet Service, Affiliate, Warranty, Rental, Insurance, Social Commerce
-- **Seeded Infrastructure (14):** Persona, Governance, Wallet, Notification Preferences, CMS Content, Volume Pricing, Tax Config, Region Zone, Subscription, Quote, Insurance Plans, Membership, Digital Product, Promotion Extensions
-- **Known Model-DB Drift:** Tenant (`tenant_type`, `scope_tier` columns pending migration) and Loyalty (`status` column) have schema drift; models define columns not yet in DB migration history
+- **Seeded Infrastructure (17):** Persona, Governance, Wallet, Notification Preferences, CMS Content, Volume Pricing, Tax Config, Region Zone, Subscription, Quote, Insurance Plans, Membership, Digital Product, Promotion Extensions, Loyalty, Report, Vendor
+- **Seeded Sub-Entities (18):** Menu, Menu Item, Table Reservation, Kitchen Order, Room Type, Room, Medical Record, Lab Order, Prescription, Citizen Profile, Service Request, Fine, Damage Claim, Stock Alert, Loyalty Account, Dispute, Ride Request, Shuttle Route
+- **Image Policy:** ALL images use Replit Object Storage bucket paths (`/platform/storage/serve?path=...`). Zero Unsplash URLs remain in the database.
+- **Known ORM Issue:** Loyalty program `tier_config` field encounters ORM metadata caching issue on re-seed; existing data has valid tier_config
 
 ### Database Enum Constraints
 - `booking.location_type`: `in_person`, `virtual`, `customer_location`

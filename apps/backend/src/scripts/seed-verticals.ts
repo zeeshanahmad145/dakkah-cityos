@@ -68,9 +68,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("healthcare")
     if (!svc) { log("  ⚠ Healthcare service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "King Faisal Specialist Hospital", type: "hospital", city: "Riyadh", specialties: ["cardiology", "oncology", "neurology"], rating: 4.8, is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Saudi German Hospital", type: "hospital", city: "Jeddah", specialties: ["orthopedics", "pediatrics", "dermatology"], rating: 4.5, is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Dr. Sulaiman Al Habib Medical Group", type: "clinic", city: "Riyadh", specialties: ["general", "dentistry", "ophthalmology"], rating: 4.7, is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "King Faisal Specialist Hospital", type: "hospital", city: "Riyadh", specialties: ["cardiology", "oncology", "neurology"], rating: 4.8, is_active: true, thumbnail: getThumb("healthcare", 0), photo_url: getImage("healthcare", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Saudi German Hospital", type: "hospital", city: "Jeddah", specialties: ["orthopedics", "pediatrics", "dermatology"], rating: 4.5, is_active: true, thumbnail: getThumb("healthcare", 1), photo_url: getImage("healthcare", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Dr. Sulaiman Al Habib Medical Group", type: "clinic", city: "Riyadh", specialties: ["general", "dentistry", "ophthalmology"], rating: 4.7, is_active: true, thumbnail: getThumb("healthcare", 2), photo_url: getImage("healthcare", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createHealthcareProviders", "createHealthcares", "create"])
       log("  ✓ Healthcare: 3 providers seeded")
@@ -141,9 +141,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("freelance")
     if (!svc) { log("  ⚠ Freelance service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, title: "Web Development", description: "Full-stack web application development", category: "development", price_from: sarPrice(2000), delivery_days: 14, freelancer_name: "Ahmed Al-Rashid", metadata: { seeded: true } },
-        { tenant_id: T, title: "Arabic Translation", description: "Professional Arabic-English translation", category: "translation", price_from: sarPrice(300), delivery_days: 3, freelancer_name: "Fatima Al-Harbi", metadata: { seeded: true } },
-        { tenant_id: T, title: "Graphic Design", description: "Brand identity and marketing materials", category: "design", price_from: sarPrice(800), delivery_days: 7, freelancer_name: "Omar Badr", metadata: { seeded: true } },
+        { tenant_id: T, title: "Web Development", description: "Full-stack web application development", category: "development", price_from: sarPrice(2000), delivery_days: 14, freelancer_name: "Ahmed Al-Rashid", thumbnail: getThumb("freelance", 0), portfolio_urls: [getImage("freelance", 0)], metadata: { seeded: true } },
+        { tenant_id: T, title: "Arabic Translation", description: "Professional Arabic-English translation", category: "translation", price_from: sarPrice(300), delivery_days: 3, freelancer_name: "Fatima Al-Harbi", thumbnail: getThumb("freelance", 1), portfolio_urls: [getImage("freelance", 1)], metadata: { seeded: true } },
+        { tenant_id: T, title: "Graphic Design", description: "Brand identity and marketing materials", category: "design", price_from: sarPrice(800), delivery_days: 7, freelancer_name: "Omar Badr", thumbnail: getThumb("freelance", 2), portfolio_urls: [getImage("freelance", 2)], metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createFreelanceGigs", "createFreelances", "create"])
       log("  ✓ Freelance: 3 gigs seeded")
@@ -169,9 +169,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("automotive")
     if (!svc) { log("  ⚠ Automotive service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Oil Change Service", type: "service", price: sarPrice(120), duration_minutes: 30, description: "Full synthetic oil change with filter", metadata: { seeded: true } },
-        { tenant_id: T, name: "Tire Replacement", type: "service", price: sarPrice(800), duration_minutes: 45, description: "Set of 4 tires with balancing and alignment", metadata: { seeded: true } },
-        { tenant_id: T, name: "Car Detailing Premium", type: "service", price: sarPrice(350), duration_minutes: 120, description: "Interior and exterior deep cleaning and polish", metadata: { seeded: true } },
+        { tenant_id: T, name: "Oil Change Service", type: "service", price: sarPrice(120), duration_minutes: 30, description: "Full synthetic oil change with filter", thumbnail: getThumb("automotive", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Tire Replacement", type: "service", price: sarPrice(800), duration_minutes: 45, description: "Set of 4 tires with balancing and alignment", thumbnail: getThumb("automotive", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Car Detailing Premium", type: "service", price: sarPrice(350), duration_minutes: 120, description: "Interior and exterior deep cleaning and polish", thumbnail: getThumb("automotive", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createAutomotiveServices", "createAutomotives", "create"])
       log("  ✓ Automotive: 3 services seeded")
@@ -183,9 +183,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("fitness")
     if (!svc) { log("  ⚠ Fitness service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Fitness Time Gym", type: "gym", city: "Riyadh", membership_price: sarPrice(250), facilities: ["weights", "cardio", "pool", "sauna"], metadata: { seeded: true } },
-        { tenant_id: T, name: "Leejam Sports", type: "gym", city: "Jeddah", membership_price: sarPrice(300), facilities: ["weights", "cardio", "group_classes", "spa"], metadata: { seeded: true } },
-        { tenant_id: T, name: "Body Masters", type: "gym", city: "Dammam", membership_price: sarPrice(200), facilities: ["weights", "cardio", "boxing", "yoga"], metadata: { seeded: true } },
+        { tenant_id: T, name: "Fitness Time Gym", type: "gym", city: "Riyadh", membership_price: sarPrice(250), facilities: ["weights", "cardio", "pool", "sauna"], thumbnail: getThumb("fitness", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Leejam Sports", type: "gym", city: "Jeddah", membership_price: sarPrice(300), facilities: ["weights", "cardio", "group_classes", "spa"], thumbnail: getThumb("fitness", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Body Masters", type: "gym", city: "Dammam", membership_price: sarPrice(200), facilities: ["weights", "cardio", "boxing", "yoga"], thumbnail: getThumb("fitness", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createFitnessFacilities", "createFitnesss", "create"])
       log("  ✓ Fitness: 3 facilities seeded")
@@ -197,9 +197,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveAny("financialProduct", "financial_product")
     if (!svc) { log("  ⚠ Financial Product service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Murabaha Personal Finance", type: "personal_finance", min_amount: 5000, max_amount: 500000, currency_code: "sar", rate_min: 3.5, rate_max: 7.0, metadata: { seeded: true } },
-        { tenant_id: T, name: "SME Business Financing", type: "business_finance", min_amount: 50000, max_amount: 5000000, currency_code: "sar", rate_min: 4.0, rate_max: 8.5, metadata: { seeded: true } },
-        { tenant_id: T, name: "Home Ijara", type: "mortgage", min_amount: 200000, max_amount: 3000000, currency_code: "sar", rate_min: 2.5, rate_max: 5.0, metadata: { seeded: true } },
+        { tenant_id: T, name: "Murabaha Personal Finance", type: "personal_finance", min_amount: 5000, max_amount: 500000, currency_code: "sar", rate_min: 3.5, rate_max: 7.0, thumbnail: getThumb("financial", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "SME Business Financing", type: "business_finance", min_amount: 50000, max_amount: 5000000, currency_code: "sar", rate_min: 4.0, rate_max: 8.5, thumbnail: getThumb("financial", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Home Ijara", type: "mortgage", min_amount: 200000, max_amount: 3000000, currency_code: "sar", rate_min: 2.5, rate_max: 5.0, thumbnail: getThumb("financial", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createFinancialProducts", "create"])
       log("  ✓ Financial Product: 3 products seeded")
@@ -225,9 +225,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("parking")
     if (!svc) { log("  ⚠ Parking service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "King Fahd Road Parking", city: "Riyadh", capacity: 500, hourly_rate: sarPrice(10), type: "covered", metadata: { seeded: true } },
-        { tenant_id: T, name: "Olaya Towers Parking", city: "Riyadh", capacity: 300, hourly_rate: sarPrice(15), type: "covered", metadata: { seeded: true } },
-        { tenant_id: T, name: "Mall of Dhahran Parking", city: "Dhahran", capacity: 1200, hourly_rate: sarPrice(5), type: "open", metadata: { seeded: true } },
+        { tenant_id: T, name: "King Fahd Road Parking", city: "Riyadh", capacity: 500, hourly_rate: sarPrice(10), type: "covered", thumbnail: getThumb("parking", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Olaya Towers Parking", city: "Riyadh", capacity: 300, hourly_rate: sarPrice(15), type: "covered", thumbnail: getThumb("parking", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Mall of Dhahran Parking", city: "Dhahran", capacity: 1200, hourly_rate: sarPrice(5), type: "open", thumbnail: getThumb("parking", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createParkingLocations", "createParkings", "create"])
       log("  ✓ Parking: 3 locations seeded")
@@ -239,9 +239,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("utilities")
     if (!svc) { log("  ⚠ Utilities service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Electricity Bill Payment", provider: "Saudi Electricity Company", type: "electricity", is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Water Bill Payment", provider: "National Water Company", type: "water", is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Internet Subscription", provider: "STC", type: "internet", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Electricity Bill Payment", provider: "Saudi Electricity Company", type: "electricity", is_active: true, thumbnail: getThumb("home", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Water Bill Payment", provider: "National Water Company", type: "water", is_active: true, thumbnail: getThumb("home", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Internet Subscription", provider: "STC", type: "internet", is_active: true, thumbnail: getThumb("home", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createUtilityServices", "createUtilitiess", "create"])
       log("  ✓ Utilities: 3 services seeded")
@@ -253,9 +253,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("legal")
     if (!svc) { log("  ⚠ Legal service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Contract Review", type: "review", price: sarPrice(1500), description: "Comprehensive legal contract review", estimated_days: 3, metadata: { seeded: true } },
-        { tenant_id: T, name: "Business Registration", type: "registration", price: sarPrice(3000), description: "Saudi CR and business license registration", estimated_days: 14, metadata: { seeded: true } },
-        { tenant_id: T, name: "Trademark Filing", type: "trademark", price: sarPrice(2500), description: "Saudi and GCC trademark filing and protection", estimated_days: 30, metadata: { seeded: true } },
+        { tenant_id: T, name: "Contract Review", type: "review", price: sarPrice(1500), description: "Comprehensive legal contract review", estimated_days: 3, thumbnail: getThumb("legal", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Business Registration", type: "registration", price: sarPrice(3000), description: "Saudi CR and business license registration", estimated_days: 14, thumbnail: getThumb("legal", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Trademark Filing", type: "trademark", price: sarPrice(2500), description: "Saudi and GCC trademark filing and protection", estimated_days: 30, thumbnail: getThumb("legal", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createLegalServices", "createLegals", "create"])
       log("  ✓ Legal: 3 services seeded")
@@ -267,9 +267,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("government")
     if (!svc) { log("  ⚠ Government service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Business License Application", type: "license", department: "Ministry of Commerce", processing_days: 7, fee: sarPrice(1000), metadata: { seeded: true } },
-        { tenant_id: T, name: "Visa Processing", type: "visa", department: "Ministry of Interior", processing_days: 14, fee: sarPrice(2000), metadata: { seeded: true } },
-        { tenant_id: T, name: "Vehicle Registration", type: "registration", department: "Muroor Traffic Department", processing_days: 1, fee: sarPrice(150), metadata: { seeded: true } },
+        { tenant_id: T, name: "Business License Application", type: "license", department: "Ministry of Commerce", processing_days: 7, fee: sarPrice(1000), thumbnail: getThumb("government", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Visa Processing", type: "visa", department: "Ministry of Interior", processing_days: 14, fee: sarPrice(2000), thumbnail: getThumb("government", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Vehicle Registration", type: "registration", department: "Muroor Traffic Department", processing_days: 1, fee: sarPrice(150), thumbnail: getThumb("government", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createGovernmentServices", "createGovernments", "create"])
       log("  ✓ Government: 3 services seeded")
@@ -328,9 +328,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("charity")
     if (!svc) { log("  ⚠ Charity service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Ramadan Food Drive", description: "Providing iftar meals to families in need", goal_amount: 100000, raised_amount: 67000, currency_code: "sar", is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Orphan Support Program", description: "Education and care for orphaned children", goal_amount: 250000, raised_amount: 142000, currency_code: "sar", is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Mosque Renovation Fund", description: "Restoring historic mosques across Saudi Arabia", goal_amount: 500000, raised_amount: 210000, currency_code: "sar", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Ramadan Food Drive", description: "Providing iftar meals to families in need", goal_amount: 100000, raised_amount: 67000, currency_code: "sar", is_active: true, thumbnail: getThumb("charity", 0), images: [getImage("charity", 0)], metadata: { seeded: true } },
+        { tenant_id: T, name: "Orphan Support Program", description: "Education and care for orphaned children", goal_amount: 250000, raised_amount: 142000, currency_code: "sar", is_active: true, thumbnail: getThumb("charity", 1), images: [getImage("charity", 1)], metadata: { seeded: true } },
+        { tenant_id: T, name: "Mosque Renovation Fund", description: "Restoring historic mosques across Saudi Arabia", goal_amount: 500000, raised_amount: 210000, currency_code: "sar", is_active: true, thumbnail: getThumb("charity", 2), images: [getImage("charity", 2)], metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createCharityCampaigns", "createCharitys", "create"])
       log("  ✓ Charity: 3 campaigns seeded")
@@ -370,9 +370,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveAny("petService", "pet_service", "pet-service")
     if (!svc) { log("  ⚠ Pet Service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Pet Grooming", type: "grooming", price: sarPrice(150), duration_minutes: 60, description: "Full grooming: bath, haircut, nail trim", metadata: { seeded: true } },
-        { tenant_id: T, name: "Veterinary Checkup", type: "veterinary", price: sarPrice(200), duration_minutes: 30, description: "Comprehensive pet health examination", metadata: { seeded: true } },
-        { tenant_id: T, name: "Pet Boarding", type: "boarding", price: sarPrice(100), duration_minutes: 1440, description: "Overnight pet boarding with care and feeding", metadata: { seeded: true } },
+        { tenant_id: T, name: "Pet Grooming", type: "grooming", price: sarPrice(150), duration_minutes: 60, description: "Full grooming: bath, haircut, nail trim", thumbnail: getThumb("pets", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Veterinary Checkup", type: "veterinary", price: sarPrice(200), duration_minutes: 30, description: "Comprehensive pet health examination", thumbnail: getThumb("pets", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Pet Boarding", type: "boarding", price: sarPrice(100), duration_minutes: 1440, description: "Overnight pet boarding with care and feeding", thumbnail: getThumb("pets", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createPetServices", "create"])
       log("  ✓ Pet Service: 3 services seeded")
@@ -384,8 +384,8 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("affiliate")
     if (!svc) { log("  ⚠ Affiliate service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Dakkah Referral Program", email: "referrals@dakkah.com", affiliate_type: "partner", commission_rate: 5, commission_type: "percentage", payout_method: "bank_transfer", status: "active", metadata: { seeded: true } },
-        { tenant_id: T, name: "Influencer Partner Program", email: "influencers@dakkah.com", affiliate_type: "influencer", commission_rate: 10, commission_type: "percentage", payout_method: "bank_transfer", status: "active", metadata: { seeded: true } },
+        { tenant_id: T, name: "Dakkah Referral Program", email: "referrals@dakkah.com", affiliate_type: "partner", commission_rate: 5, commission_type: "percentage", payout_method: "bank_transfer", status: "active", logo_url: getThumb("vendor", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Influencer Partner Program", email: "influencers@dakkah.com", affiliate_type: "influencer", commission_rate: 10, commission_type: "percentage", payout_method: "bank_transfer", status: "active", logo_url: getThumb("vendor", 1), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createAffiliatePrograms", "createAffiliates", "create"])
       log("  ✓ Affiliate: 2 programs seeded")
@@ -397,9 +397,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("warranty")
     if (!svc) { log("  ⚠ Warranty service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, name: "Electronics 2-Year Extended", plan_type: "extended", duration_months: 24, price: sarPrice(299), currency_code: "sar", coverage: { type: "electronics", parts: true, labor: true }, description: "Extended warranty for all electronics", metadata: { seeded: true } },
-        { tenant_id: T, name: "Home Appliance 3-Year", plan_type: "extended", duration_months: 36, price: sarPrice(499), currency_code: "sar", coverage: { type: "appliance", parts: true, labor: true }, description: "Full coverage for home appliances", metadata: { seeded: true } },
-        { tenant_id: T, name: "Premium All-in-One", plan_type: "premium", duration_months: 24, price: sarPrice(799), currency_code: "sar", coverage: { type: "comprehensive", parts: true, labor: true, accidental: true }, description: "Premium coverage for all product categories", metadata: { seeded: true } },
+        { tenant_id: T, name: "Electronics 2-Year Extended", plan_type: "extended", duration_months: 24, price: sarPrice(299), currency_code: "sar", coverage: { type: "electronics", parts: true, labor: true }, description: "Extended warranty for all electronics", thumbnail: getThumb("electronics", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Home Appliance 3-Year", plan_type: "extended", duration_months: 36, price: sarPrice(499), currency_code: "sar", coverage: { type: "appliance", parts: true, labor: true }, description: "Full coverage for home appliances", thumbnail: getThumb("electronics", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Premium All-in-One", plan_type: "premium", duration_months: 24, price: sarPrice(799), currency_code: "sar", coverage: { type: "comprehensive", parts: true, labor: true, accidental: true }, description: "Premium coverage for all product categories", thumbnail: getThumb("electronics", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createWarrantyPlans", "createWarrantys", "create"])
       log("  ✓ Warranty: 3 plans seeded")
@@ -411,9 +411,9 @@ export default async function seedVerticals({ container }: ExecArgs, ctx: SeedCo
     const svc = resolveService("rental")
     if (!svc) { log("  ⚠ Rental service not found, skipping"); } else {
       const data = [
-        { tenant_id: T, product_id: ctx?.productIds?.[0] || "prod_placeholder", rental_type: "daily", base_price: sarPrice(500), currency_code: "sar", deposit_amount: sarPrice(5000), min_duration: 1, max_duration: 30, is_available: true, metadata: { seeded: true } },
-        { tenant_id: T, product_id: ctx?.productIds?.[1] || "prod_placeholder", rental_type: "daily", base_price: sarPrice(200), currency_code: "sar", deposit_amount: sarPrice(2000), min_duration: 1, max_duration: 14, is_available: true, metadata: { seeded: true } },
-        { tenant_id: T, product_id: ctx?.productIds?.[2] || "prod_placeholder", rental_type: "daily", base_price: sarPrice(1000), currency_code: "sar", deposit_amount: sarPrice(3000), min_duration: 1, max_duration: 7, is_available: true, metadata: { seeded: true } },
+        { tenant_id: T, product_id: ctx?.productIds?.[0] || "prod_placeholder", rental_type: "daily", base_price: sarPrice(500), currency_code: "sar", deposit_amount: sarPrice(5000), min_duration: 1, max_duration: 30, is_available: true, thumbnail: getThumb("rental", 0), metadata: { seeded: true } },
+        { tenant_id: T, product_id: ctx?.productIds?.[1] || "prod_placeholder", rental_type: "daily", base_price: sarPrice(200), currency_code: "sar", deposit_amount: sarPrice(2000), min_duration: 1, max_duration: 14, is_available: true, thumbnail: getThumb("rental", 1), metadata: { seeded: true } },
+        { tenant_id: T, product_id: ctx?.productIds?.[2] || "prod_placeholder", rental_type: "daily", base_price: sarPrice(1000), currency_code: "sar", deposit_amount: sarPrice(3000), min_duration: 1, max_duration: 7, is_available: true, thumbnail: getThumb("rental", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createRentalProducts", "createRentals", "create"])
       log("  ✓ Rental: 3 items seeded")

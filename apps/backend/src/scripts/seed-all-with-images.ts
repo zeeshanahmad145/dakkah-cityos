@@ -88,15 +88,18 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
         name: "Dakkah CityOS",
         handle: "dakkah",
         slug: "dakkah",
-        residency_zone: "sa-central",
+        residency_zone: "GCC",
         default_locale: "en",
         supported_locales: ["en", "ar", "fr"],
         timezone: "Asia/Riyadh",
         default_currency: "sar",
         date_format: "DD/MM/YYYY",
-        is_active: true,
+        status: "active",
+        subscription_tier: "enterprise",
+        scope_tier: "mega",
         domain: "dakkah.sa",
         logo_url: getThumb("vendor", 0),
+        favicon_url: getThumb("vendor", 1),
         metadata: { seeded: true },
       }]
       await tryCreate(svc, data, ["createTenants", "create"])
@@ -109,9 +112,9 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
     const svc = resolveAny("persona", "personaModuleService")
     if (!svc) { log("  ⚠ Persona service not found, skipping") } else {
       const data = [
-        { tenant_id: T, name: "Consumer", handle: "consumer", slug: "consumer", category: "consumer", description: "End-user shopping persona", is_default: true, is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Vendor", handle: "vendor", slug: "vendor", category: "business", description: "Marketplace seller persona", is_default: false, is_active: true, metadata: { seeded: true } },
-        { tenant_id: T, name: "Admin", handle: "admin", slug: "admin", category: "platform", description: "Platform administrator persona", is_default: false, is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Consumer", handle: "consumer", slug: "consumer", category: "consumer", description: "End-user shopping persona", is_default: true, is_active: true, avatar_url: getImage("vendor", 0), metadata: { seeded: true } },
+        { tenant_id: T, name: "Vendor", handle: "vendor", slug: "vendor", category: "business", description: "Marketplace seller persona", is_default: false, is_active: true, avatar_url: getImage("vendor", 1), metadata: { seeded: true } },
+        { tenant_id: T, name: "Admin", handle: "admin", slug: "admin", category: "platform", description: "Platform administrator persona", is_default: false, is_active: true, avatar_url: getImage("vendor", 2), metadata: { seeded: true } },
       ]
       await tryCreate(svc, data, ["createPersonas", "create"])
       log("  ✓ Persona: 3 personas created (consumer, vendor, admin)")
@@ -289,6 +292,7 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
           features: ["5 product listings", "Basic analytics", "Email support"],
           is_active: true,
           trial_days: 14,
+          thumbnail: getThumb("digital", 0),
           metadata: { seeded: true, tier: "basic" },
         },
         {
@@ -303,6 +307,7 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
           features: ["Unlimited listings", "Advanced analytics", "Priority support", "Custom branding", "API access"],
           is_active: true,
           trial_days: 7,
+          thumbnail: getThumb("digital", 1),
           metadata: { seeded: true, tier: "premium" },
         },
         {
@@ -317,6 +322,7 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
           features: ["Everything in Premium", "Dedicated account manager", "SLA guarantee", "White-label options", "Custom integrations", "Bulk operations"],
           is_active: true,
           trial_days: 30,
+          thumbnail: getThumb("digital", 2),
           metadata: { seeded: true, tier: "enterprise" },
         },
       ]
@@ -483,12 +489,15 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
         currency_code: "sar",
         points_per_currency: 1,
         is_active: true,
-        tier_config: [
-          { name: "Bronze", min_points: 0, multiplier: 1.0, benefits: ["1x points earning"] },
-          { name: "Silver", min_points: 1000, multiplier: 1.5, benefits: ["1.5x points earning", "Free shipping on orders over 100 SAR"] },
-          { name: "Gold", min_points: 5000, multiplier: 2.0, benefits: ["2x points earning", "Free shipping", "Early sale access"] },
-          { name: "Platinum", min_points: 15000, multiplier: 3.0, benefits: ["3x points earning", "Free express shipping", "VIP events", "Birthday bonus points"] },
-        ],
+        status: "active",
+        tier_config: {
+          tiers: [
+            { name: "Bronze", min_points: 0, multiplier: 1.0, benefits: ["1x points earning"] },
+            { name: "Silver", min_points: 1000, multiplier: 1.5, benefits: ["1.5x points earning", "Free shipping on orders over 100 SAR"] },
+            { name: "Gold", min_points: 5000, multiplier: 2.0, benefits: ["2x points earning", "Free shipping", "Early sale access"] },
+            { name: "Platinum", min_points: 15000, multiplier: 3.0, benefits: ["3x points earning", "Free express shipping", "VIP events", "Birthday bonus points"] },
+          ],
+        },
         metadata: { seeded: true },
       }]
       await tryCreate(svc, data, ["createLoyaltyPrograms", "createLoyaltys", "create"])
@@ -659,6 +668,252 @@ export default async function seedAllWithImages({ container }: ExecArgs) {
       log("  ✓ Promotion Ext: 3 promotions created")
     }
   } catch (err: any) { logError("Promotion Ext", err) }
+
+  // ━━━ PHASE 4: EMPTY MODULE SEED DATA ━━━
+  log("\n━━━ PHASE 4: EMPTY MODULE SEED DATA ━━━")
+
+  // ── MENU / MENU ITEM ──
+  try {
+    const svc = resolveAny("restaurant", "menu", "menuModuleService")
+    if (!svc) { log("  ⚠ Menu service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, name: "Al Baik Menu", restaurant_id: "rest_seed_01", menu_type: "regular", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Nusret Menu", restaurant_id: "rest_seed_02", menu_type: "dinner", is_active: true, metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createMenus", "create"])
+      log("  ✓ Menu: 2 menus with 7 items created")
+    }
+  } catch (err: any) { logError("Menu", err) }
+
+  // ── TABLE RESERVATION ──
+  try {
+    const svc = resolveAny("restaurant", "tableReservation", "table_reservation", "tableReservationModuleService")
+    if (!svc) { log("  ⚠ Table Reservation service not found, skipping") } else {
+      const futureDate = new Date()
+      futureDate.setDate(futureDate.getDate() + 7)
+      const data = [
+        { tenant_id: T, restaurant_id: "rest_seed_01", customer_name: "Ahmed Al-Rashid", customer_email: "ahmed@dakkah.sa", customer_phone: "+966501234567", party_size: 4, reservation_date: futureDate.toISOString(), time_slot: "19:00", status: "confirmed", notes: "Window seat preferred", metadata: { seeded: true } },
+        { tenant_id: T, restaurant_id: "rest_seed_02", customer_name: "Fatima Al-Harbi", customer_email: "fatima@dakkah.sa", customer_phone: "+966509876543", party_size: 2, reservation_date: futureDate.toISOString(), time_slot: "20:30", status: "confirmed", notes: "Anniversary dinner", metadata: { seeded: true } },
+        { tenant_id: T, restaurant_id: "rest_seed_03", customer_name: "Omar Badr", customer_email: "omar@dakkah.sa", customer_phone: "+966505551234", party_size: 6, reservation_date: futureDate.toISOString(), time_slot: "21:00", status: "pending", notes: "Business dinner", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createTableReservations", "create"])
+      log("  ✓ Table Reservation: 3 reservations created")
+    }
+  } catch (err: any) { logError("Table Reservation", err) }
+
+  // ── KITCHEN ORDER ──
+  try {
+    const svc = resolveAny("restaurant", "kitchenOrder", "kitchen_order", "kitchenOrderModuleService")
+    if (!svc) { log("  ⚠ Kitchen Order service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, restaurant_id: "rest_seed_01", order_id: "ord_seed_01", status: "preparing", priority: "normal", items: [{ name: "Broasted Chicken Meal", quantity: 2 }, { name: "Shrimp Meal", quantity: 1 }], notes: "Extra garlic sauce", estimated_prep_time: 15, metadata: { seeded: true } },
+        { tenant_id: T, restaurant_id: "rest_seed_02", order_id: "ord_seed_02", status: "received", priority: "rush", items: [{ name: "Ottoman Steak", quantity: 1 }, { name: "Lokum Steak", quantity: 1 }], notes: "Medium rare", estimated_prep_time: 30, metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createKitchenOrders", "create"])
+      log("  ✓ Kitchen Order: 2 orders created")
+    }
+  } catch (err: any) { logError("Kitchen Order", err) }
+
+  // ── ROOM TYPE / ROOM ──
+  try {
+    const svc = resolveAny("travel", "roomType", "room_type", "roomTypeModuleService")
+    if (!svc) { log("  ⚠ Room Type service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, property_id: "prop_seed_01", name: "Standard Room", description: "Comfortable room with city view", max_occupancy: 2, base_price: sarPrice(450), currency_code: "sar", amenities: ["wifi", "tv", "minibar", "safe"], images: [getImage("travel", 0)], is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", name: "Deluxe Room", description: "Spacious room with premium furnishings and balcony", max_occupancy: 3, base_price: sarPrice(850), currency_code: "sar", amenities: ["wifi", "tv", "minibar", "safe", "balcony", "bathtub"], images: [getImage("travel", 1)], is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", name: "Royal Suite", description: "Luxurious suite with separate living area and panoramic views", max_occupancy: 4, base_price: sarPrice(2500), currency_code: "sar", amenities: ["wifi", "tv", "minibar", "safe", "balcony", "bathtub", "living_room", "butler_service"], images: [getImage("travel", 2)], is_active: true, metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createRoomTypes", "create"])
+      log("  ✓ Room Type: 3 types created (Standard, Deluxe, Suite)")
+    }
+  } catch (err: any) { logError("Room Type", err) }
+
+  try {
+    const svc = resolveAny("travel", "room", "roomModuleService")
+    if (!svc) { log("  ⚠ Room service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, property_id: "prop_seed_01", room_number: "101", floor: "1", room_type_id: "rt_seed_01", status: "available", metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", room_number: "102", floor: "1", room_type_id: "rt_seed_01", status: "available", metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", room_number: "201", floor: "2", room_type_id: "rt_seed_02", status: "available", metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", room_number: "202", floor: "2", room_type_id: "rt_seed_02", status: "occupied", metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", room_number: "301", floor: "3", room_type_id: "rt_seed_03", status: "available", metadata: { seeded: true } },
+        { tenant_id: T, property_id: "prop_seed_01", room_number: "302", floor: "3", room_type_id: "rt_seed_03", status: "maintenance", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createRooms", "create"])
+      log("  ✓ Room: 6 rooms created")
+    }
+  } catch (err: any) { logError("Room", err) }
+
+  // ── MEDICAL RECORD ──
+  try {
+    const svc = resolveAny("healthcare", "medicalRecord", "medical_record", "medicalRecordModuleService")
+    if (!svc) { log("  ⚠ Medical Record service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, patient_id: "cus_seed_01", practitioner_id: "hp_seed_01", record_type: "consultation", title: "Routine Health Checkup", description: "Routine health checkup - all vitals normal", recorded_at: new Date(), metadata: { seeded: true } },
+        { tenant_id: T, patient_id: "cus_seed_02", practitioner_id: "hp_seed_02", record_type: "lab_result", title: "Annual Blood Work Results", description: "Blood work results within normal range", recorded_at: new Date(), metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createMedicalRecords", "create"])
+      log("  ✓ Medical Record: 2 records created")
+    }
+  } catch (err: any) { logError("Medical Record", err) }
+
+  // ── LAB ORDER ──
+  try {
+    const svc = resolveAny("healthcare", "labOrder", "lab_order", "labOrderModuleService")
+    if (!svc) { log("  ⚠ Lab Order service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, patient_id: "cus_seed_01", practitioner_id: "hp_seed_01", order_number: "LAB-SEED-001", tests: ["CBC", "lipid_panel", "glucose"], status: "results_ready", priority: "routine", metadata: { seeded: true } },
+        { tenant_id: T, patient_id: "cus_seed_02", practitioner_id: "hp_seed_02", order_number: "LAB-SEED-002", tests: ["thyroid_panel", "vitamin_d", "iron"], status: "ordered", priority: "routine", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createLabOrders", "create"])
+      log("  ✓ Lab Order: 2 orders created")
+    }
+  } catch (err: any) { logError("Lab Order", err) }
+
+  // ── PRESCRIPTION ──
+  try {
+    const svc = resolveAny("healthcare", "prescription", "prescriptionModuleService")
+    if (!svc) { log("  ⚠ Prescription service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, patient_id: "cus_seed_01", practitioner_id: "hp_seed_01", prescription_number: "RX-SEED-001", medications: [{ name: "Metformin 500mg", dosage: "1 tablet twice daily", duration_days: 90 }], status: "issued", issued_at: new Date(), valid_until: new Date(Date.now() + 90 * 86400000), metadata: { seeded: true } },
+        { tenant_id: T, patient_id: "cus_seed_02", practitioner_id: "hp_seed_02", prescription_number: "RX-SEED-002", medications: [{ name: "Vitamin D3 5000IU", dosage: "1 capsule daily", duration_days: 180 }], status: "issued", issued_at: new Date(), valid_until: new Date(Date.now() + 180 * 86400000), metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createPrescriptions", "create"])
+      log("  ✓ Prescription: 2 prescriptions created")
+    }
+  } catch (err: any) { logError("Prescription", err) }
+
+  // ── CITIZEN PROFILE ──
+  try {
+    const svc = resolveAny("government", "citizenProfile", "citizen_profile", "citizenProfileModuleService")
+    if (!svc) { log("  ⚠ Citizen Profile service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, national_id: "1234567890", full_name: "Ahmed Al-Rashid", email: "ahmed@dakkah.sa", phone: "+966501234567", metadata: { seeded: true } },
+        { tenant_id: T, national_id: "9876543210", full_name: "Fatima Al-Harbi", email: "fatima@dakkah.sa", phone: "+966509876543", metadata: { seeded: true } },
+        { tenant_id: T, national_id: "5555555555", full_name: "Omar Badr", email: "omar@dakkah.sa", phone: "+966505551234", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createCitizenProfiles", "create"])
+      log("  ✓ Citizen Profile: 3 profiles created")
+    }
+  } catch (err: any) { logError("Citizen Profile", err) }
+
+  // ── SERVICE REQUEST ──
+  try {
+    const svc = resolveAny("government", "serviceRequest", "service_request", "serviceRequestModuleService")
+    if (!svc) { log("  ⚠ Service Request service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, citizen_id: "cit_seed_01", reference_number: "SR-SEED-001", request_type: "maintenance", title: "Pothole repair on King Fahd Road", description: "Large pothole near intersection causing traffic issues", status: "submitted", priority: "high", photos: [getImage("government", 0)], metadata: { seeded: true } },
+        { tenant_id: T, citizen_id: "cit_seed_02", reference_number: "SR-SEED-002", request_type: "complaint", title: "Broken streetlight on Tahlia Street", description: "Streetlight not functioning for 3 days", status: "in_progress", priority: "medium", photos: [getImage("government", 1)], metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createServiceRequests", "create"])
+      log("  ✓ Service Request: 2 requests created")
+    }
+  } catch (err: any) { logError("Service Request", err) }
+
+  // ── FINE ──
+  try {
+    const svc = resolveAny("government", "fine", "fineModuleService")
+    if (!svc) { log("  ⚠ Fine service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, citizen_id: "cit_seed_01", fine_number: "FN-SEED-001", fine_type: "traffic", description: "Exceeding speed limit by 20 km/h on highway", amount: sarPrice(500), currency_code: "sar", status: "issued", issued_at: new Date(), due_date: new Date(Date.now() + 30 * 86400000), metadata: { seeded: true } },
+        { tenant_id: T, citizen_id: "cit_seed_02", fine_number: "FN-SEED-002", fine_type: "parking", description: "Parking in no-parking zone near Al Faisaliah Tower", amount: sarPrice(150), currency_code: "sar", status: "paid", issued_at: new Date(Date.now() - 15 * 86400000), due_date: new Date(Date.now() + 15 * 86400000), paid_at: new Date(Date.now() - 10 * 86400000), metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createFines", "create"])
+      log("  ✓ Fine: 2 fines created")
+    }
+  } catch (err: any) { logError("Fine", err) }
+
+  // ── REPORT ──
+  try {
+    const svc = resolveAny("government", "report", "reportModuleService")
+    if (!svc) { log("  ⚠ Report service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, citizen_id: "cit_seed_01", report_number: "RPT-SEED-001", type: "incident", title: "Noise complaint in residential area", description: "Excessive construction noise after 10 PM in Al Malqa district", status: "submitted", priority: "medium", city: "Riyadh", metadata: { seeded: true } },
+        { tenant_id: T, citizen_id: "cit_seed_02", report_number: "RPT-SEED-002", type: "suggestion", title: "Request for public park improvements", description: "Suggesting addition of walking paths and lighting in Al Corniche park", status: "under_review", priority: "low", city: "Jeddah", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createReports", "create"])
+      log("  ✓ Report: 2 reports created")
+    }
+  } catch (err: any) { logError("Report", err) }
+
+  // ── DAMAGE CLAIM ──
+  try {
+    const svc = resolveAny("rental", "damageClaim", "damage_claim", "damageClaimModuleService")
+    if (!svc) { log("  ⚠ Damage Claim service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, agreement_id: "rent_seed_01", description: "Minor scratch on front bumper during rental period", estimated_cost: sarPrice(800), currency_code: "sar", status: "filed", evidence_urls: [getImage("rental", 0)], metadata: { seeded: true } },
+        { tenant_id: T, agreement_id: "rent_seed_02", description: "Cracked side mirror from parking incident", estimated_cost: sarPrice(1200), currency_code: "sar", status: "approved", evidence_urls: [getImage("rental", 1)], metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createDamageClaims", "create"])
+      log("  ✓ Damage Claim: 2 claims created")
+    }
+  } catch (err: any) { logError("Damage Claim", err) }
+
+  // ── STOCK ALERT ──
+  try {
+    const svc = resolveAny("inventoryExtension", "inventory_extension", "stockAlert", "stock_alert", "stockAlertModuleService")
+    if (!svc) { log("  ⚠ Stock Alert service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, product_id: "prod_seed_01", variant_id: "var_seed_01", alert_type: "low_stock", threshold: 10, current_quantity: 5, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_02", variant_id: "var_seed_02", alert_type: "out_of_stock", threshold: 5, current_quantity: 0, is_resolved: false, metadata: { seeded: true } },
+        { tenant_id: T, product_id: "prod_seed_03", variant_id: "var_seed_03", alert_type: "low_stock", threshold: 15, current_quantity: 8, metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createStockAlerts", "create"])
+      log("  ✓ Stock Alert: 3 alerts created")
+    }
+  } catch (err: any) { logError("Stock Alert", err) }
+
+  // ── LOYALTY ACCOUNT ──
+  try {
+    const svc = resolveAny("loyalty", "loyaltyAccount", "loyalty_account", "loyaltyAccountModuleService")
+    if (!svc) { log("  ⚠ Loyalty Account service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, customer_id: "cus_seed_01", program_id: "lp_seed_01", points_balance: 2500, tier: "Silver", lifetime_points: 3200, status: "active", metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_02", program_id: "lp_seed_01", points_balance: 8750, tier: "Gold", lifetime_points: 12000, status: "active", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createLoyaltyAccounts", "create"])
+      log("  ✓ Loyalty Account: 2 accounts created")
+    }
+  } catch (err: any) { logError("Loyalty Account", err) }
+
+  // ── DISPUTE ──
+  try {
+    const svc = resolveAny("dispute", "disputeModuleService")
+    if (!svc) { log("  ⚠ Dispute service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, order_id: "ord_seed_01", customer_id: "cus_seed_01", dispute_number: "DSP-SEED-001", type: "product_not_received", title: "Order not delivered after 7 days", description: "I placed an order 7 days ago and the tracking shows it was delivered but I never received it", status: "open", priority: "high", amount: sarPrice(850), currency_code: "sar", metadata: { seeded: true } },
+        { tenant_id: T, order_id: "ord_seed_02", customer_id: "cus_seed_02", dispute_number: "DSP-SEED-002", type: "product_damaged", title: "Received damaged electronics item", description: "The laptop screen was cracked when I opened the package. Packaging appeared damaged during shipping", status: "under_review", priority: "medium", amount: sarPrice(4500), currency_code: "sar", metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createDisputes", "create"])
+      log("  ✓ Dispute: 2 disputes created")
+    }
+  } catch (err: any) { logError("Dispute", err) }
+
+  // ── RIDE REQUEST ──
+  try {
+    const svc = resolveAny("travel", "rideRequest", "ride_request", "rideRequestModuleService")
+    if (!svc) { log("  ⚠ Ride Request service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, customer_id: "cus_seed_01", pickup_location: "King Fahd Road, Riyadh", dropoff_location: "KAFD District, Riyadh", ride_type: "standard", status: "completed", fare: sarPrice(45), currency_code: "sar", distance_km: 12.5, duration_minutes: 18, requested_at: new Date().toISOString(), metadata: { seeded: true } },
+        { tenant_id: T, customer_id: "cus_seed_02", pickup_location: "Jeddah Corniche", dropoff_location: "King Abdulaziz International Airport, Jeddah", ride_type: "premium", status: "requested", fare: sarPrice(120), currency_code: "sar", distance_km: 28, duration_minutes: 35, requested_at: new Date().toISOString(), metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createRideRequests", "create"])
+      log("  ✓ Ride Request: 2 requests created")
+    }
+  } catch (err: any) { logError("Ride Request", err) }
+
+  // ── SHUTTLE ROUTE ──
+  try {
+    const svc = resolveAny("travel", "shuttleRoute", "shuttle_route", "shuttleRouteModuleService")
+    if (!svc) { log("  ⚠ Shuttle Route service not found, skipping") } else {
+      const data = [
+        { tenant_id: T, name: "Airport Express - Riyadh", description: "Direct shuttle from KAFD to King Khalid International Airport", route_code: "SH-RUH-001", stops: ["KAFD District", "Olaya Street", "Exit 5", "King Khalid Airport Terminal 1"], departure_times: ["06:00", "08:00", "10:00", "14:00", "18:00", "22:00"], fare: sarPrice(75), currency_code: "sar", is_active: true, metadata: { seeded: true } },
+        { tenant_id: T, name: "Jeddah Corniche Loop", description: "Scenic shuttle along Jeddah Corniche waterfront", route_code: "SH-JED-001", stops: ["North Corniche", "Jeddah Waterfront", "Al Balad", "South Corniche", "Red Sea Mall"], departure_times: ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"], fare: sarPrice(25), currency_code: "sar", is_active: true, metadata: { seeded: true } },
+      ]
+      await tryCreate(svc, data, ["createShuttleRoutes", "create"])
+      log("  ✓ Shuttle Route: 2 routes created")
+    }
+  } catch (err: any) { logError("Shuttle Route", err) }
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
   log(`\n✅ Seed All With Images completed in ${elapsed}s`)
