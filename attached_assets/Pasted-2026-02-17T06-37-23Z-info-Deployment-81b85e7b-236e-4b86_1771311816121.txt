@@ -1,0 +1,132 @@
+2026-02-17T06:37:23Z info: Deployment: 81b85e7b-236e-4b86-91ec-78f24a32d259
+2026-02-17T06:37:23Z info: Running Security Scan
+2026-02-17T06:37:24Z info: Security Scan Complete
+2026-02-17T06:37:24Z info: Connecting to builder
+2026-02-17T06:37:25Z info: Builder connected
+2026-02-17T06:37:26Z info: Installing packages
+--> pnpm install
+
+Scope: all 9 workspace projects
+
+
+   ╭──────────────────────────────────────────╮
+   │                                          │
+   │   Update available! 10.12.3 → 10.29.3.   │
+   │   Changelog: https://pnpm.io/v/10.29.3   │
+   │     To update, run: pnpm add -g pnpm     │
+   │                                          │
+   ╰──────────────────────────────────────────╯
+
+
+Lockfile is up to date, resolution step is skipped
+
+Already up to date
+
+Done in 7.2s using pnpm v10.12.3
+
+2026-02-17T06:37:36Z info: Starting Build
+========================================
+  Dakkah CityOS Commerce — Build
+========================================
+[1/2] Building backend...
+
+
+> backend@0.0.1 build /home/runner/workspace/apps/backend
+> medusa build
+
+
+[2026-02-17T06:37:42.313Z] [INFO] [env-validation] [EnvValidation] Checking environment variables...
+
+[2026-02-17T06:37:42.314Z] [INFO] [env-validation] [EnvValidation] 12 optional variable(s) not set (features will be limited)
+
+info:    Starting build...
+
+info:    Compiling backend source...
+
+info:    Removing existing ".medusa/server" folder
+
+info:    Compiling frontend source...
+
+info:    Backend build completed successfully (32.19s)
+
+info:    Frontend build completed successfully (55.60s)
+
+  ✓ Backend built
+
+[2/2] Building storefront...
+
+
+> storefront@ build /home/runner/workspace/apps/storefront
+> vite build
+
+
+vite v7.3.1 building client environment for production...
+
+Generated route tree in 3993ms
+
+transforming...
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+✓ 2502 modules transformed.
+
+rendering chunks...
+
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/utils/env.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/bookings/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/purchase-orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/lib/api/unified-client.ts, /home/runner/workspace/apps/storefront/src/lib/context/auth-context.tsx, /home/runner/workspace/apps/storefront/src/lib/hooks/use-campaigns.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-cms.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-companies.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-content.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-digital-products.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-payments.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-platform-context.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-reviews.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-subscriptions.ts, /home/runner/workspace/apps/storefront/src/lib/utils/sdk.ts, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.return.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.billing.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/affiliate/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/blog/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/$serviceHandle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/business/approvals.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/campaigns/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/categories/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment-shop/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/credit/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/crowdfunding/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/d
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/data/regions.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant.$locale.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/pages/product.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/cart.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/checkout.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/products/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/__root.tsx, dynamic import will not move module into another chunk.
+
+
+computing gzip size...
+
+.tanstack/start/build/client-dist/.vite/manifest.json                                241.39 kB │ gzip:  16.80 kB
+
+.tanstack/start/build/client-dist/assets/rtl-CFTvojR3.css                              0.54 kB │ gzip:   0.18 kB
+.tanstack/start/build/client-dist/assets/app-MYNxNCn0.css                            161.30 kB │ gzip:  20.83 kB
+.tanstack/start/build/client-dist/assets/index-DtqBFgK5.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-rrnUF981.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-B0-9TnmF.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-8solrUmu.js                             0.04 kB │ gzip:   0.06 kB
+
+.tanstack/start/build/client-dist/assets/index-DCrkzMOW.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-f3Qu8E09.js                             0.04 kB │ gzip:   0.06 kB
+
+.tanstack/start/build/client-dist/assets/loyalty-BixSEbIH.js                           4.01 kB │ gzip:   1.85 kB
+
+transforming...
+
+✓ 1332 modules transformed.
+
+rendering chunks...
+
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/data/regions.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant.$locale.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/pages/product.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/cart.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/checkout.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/products/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/__root.tsx, dynamic import will not move module into another chunk.
+
+
+[plugin vite:css-post] Sourcemap is likely to be incorrect: a plugin (vite:css-post) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help
+
+✓ built in 22.20s
+
+[nitro] ✔ Generated public .output/public
+
+[nitro] ℹ Building Nitro Server (preset: node-listener, compatibility date: 2024-11-19)
+
+[nitro] ✔ Nitro Server built
+
+[nitro] ✔ Client and Server bundles for TanStack Start have been successfully built.
+
+  ✓ Storefront built
+
+========================================
+  Build complete!
+========================================
+
+2026-02-17T06:40:10Z info: Pushing pid1 binary layer...
+2026-02-17T06:40:15Z info: Pushing Repl layer...
+2026-02-17T06:40:15Z info: Pushing hosting layer...
+2026-02-17T06:40:17Z info: Created hosting layer
+2026-02-17T06:40:22Z info: Created pid1 binary layer
+2026-02-17T06:41:47Z info: Connecting to builder
+2026-02-17T06:41:48Z info: Builder connected
+2026-02-17T06:41:49Z info: Installing packages
