@@ -33,7 +33,7 @@ cd /home/runner/workspace/apps/storefront
 echo "Starting storefront..."
 if [ -d ".output" ]; then
   echo "Found production build, starting with node..."
-  NODE_OPTIONS="--max-old-space-size=1024" exec node .output/server/index.mjs
+  PORT=5000 HOST=0.0.0.0 NITRO_PORT=5000 NITRO_HOST=0.0.0.0 NODE_OPTIONS="--max-old-space-size=1024" exec node .output/server/index.mjs
 else
   echo "Production build not found, starting in dev mode..."
   NODE_OPTIONS="--max-old-space-size=1024" exec npx vite dev --host 0.0.0.0 --port 5000 --strictPort

@@ -16,6 +16,20 @@ pnpm build
 echo "  ✓ Storefront built"
 
 echo ""
+echo "Verifying build outputs..."
+if [ -d "/home/runner/workspace/apps/backend/.medusa" ]; then
+  echo "  ✓ Backend .medusa/ exists"
+else
+  echo "  ✗ WARNING: Backend .medusa/ missing"
+fi
+
+if [ -f "/home/runner/workspace/apps/storefront/.output/server/index.mjs" ]; then
+  echo "  ✓ Storefront .output/server/index.mjs exists"
+else
+  echo "  ✗ WARNING: Storefront .output/ missing"
+fi
+
+echo ""
 echo "========================================"
 echo "  Build complete!"
 echo "========================================"

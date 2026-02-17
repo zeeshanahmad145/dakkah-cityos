@@ -55,7 +55,23 @@ All custom code lives in `apps/backend/src/` — completely separate from Medusa
 - 203 MikroORM migrations applied; all seed data lives in heliumdb
 - No local PostgreSQL instance required; start.sh uses Replit database directly
 
-## Recent Changes (2026-02-16)
+## Recent Changes (2026-02-17)
+
+### Deployment Fix — "pid1 binary layer" Timeout Resolution
+- **Root cause:** Deployment used `cloudrun` (autoscale) target which requires fast cold starts — incompatible with Medusa 60+ module initialization (3-5 min startup)
+- **Fix 1:** Changed deployment target from `cloudrun` to `vm` (always-running, supports slow-starting stateful apps)
+- **Fix 2:** Rewrote `scripts/start-production.sh` with instant health responder pattern:
+  1. Lightweight Node.js HTTP server binds port 5000 immediately (passes health check)
+  2. Medusa backend boots on port 9000 in background (up to 4 min)
+  3. Health responder killed after backend ready
+  4. Storefront starts on port 5173 (Nitro SSR or server.mjs wrapper)
+  5. Production proxy (`prod-proxy.js`) takes over port 5000, routing API→backend, UI→storefront
+- **Fix 3:** Increased Medusa memory from 512MB to 1024MB (`--max-old-space-size=1024`)
+- **Fix 4:** Updated `scripts/build-production.sh` with build output verification
+- **Fix 5:** Fixed `server.mjs` default port to 5173 (production uses proxy, dev uses direct 5000)
+- **Production Architecture:** proxy on :5000 → backend on :9000 + storefront on :5173
+
+### Previous Changes (2026-02-16)
 
 ### Database Connection Fix
 - Fixed critical database mismatch: start.sh was starting local PostgreSQL (port 5433, medusadb) while all seed data existed in Replit-provided database (heliumdb)
