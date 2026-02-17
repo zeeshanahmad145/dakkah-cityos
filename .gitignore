@@ -14,3 +14,13 @@ dist/
 build/
 .DS_Store
 .pgdata
+.medusa
+.output
+.cache
+.medusa/
+.output/
+.turbo/
+.cache/
+node_modules/
+*.log
+.pgdata/
