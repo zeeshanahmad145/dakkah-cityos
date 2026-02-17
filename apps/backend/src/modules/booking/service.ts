@@ -23,6 +23,38 @@ class BookingModuleService extends MedusaService({
   BookingItem,
   BookingReminder,
 }) {
+  // ============ Explicitly declare auto-generated methods for TS compiler ============
+  
+  // Availabilities
+  declare listAvailabilities: any;
+  declare createAvailabilities: any;
+  declare updateAvailabilities: any;
+  declare deleteAvailabilities: any;
+  
+  // Availability Exceptions
+  declare listAvailabilityExceptions: any;
+  declare createAvailabilityExceptions: any;
+  declare updateAvailabilityExceptions: any;
+  declare deleteAvailabilityExceptions: any;
+
+  // Bookings
+  declare listBookings: any;
+  declare retrieveBooking: any;
+  declare createBookings: any;
+  declare updateBookings: any;
+  declare deleteBookings: any;
+
+  // Booking Items
+  declare createBookingItems: any;
+
+  // Booking Reminders
+  declare listBookingReminders: any;
+  declare createBookingReminders: any;
+  declare updateBookingReminders: any;
+
+  // Service Products
+  declare retrieveServiceProduct: any;
+
   // ============ Booking Number Generation ============
 
   /**
@@ -125,7 +157,7 @@ class BookingModuleService extends MedusaService({
     ownerId: string,
     date: Date
   ): Promise<any | null> {
-    const availabilities = await (this as any).listAvailabilities({
+    const availabilities = await this.listAvailabilities({
       owner_type: ownerType,
       owner_id: ownerId,
       is_active: true,
@@ -262,7 +294,7 @@ class BookingModuleService extends MedusaService({
     const bookingNumber = await this.generateBookingNumber();
 
     // Create booking
-    const booking = await (this as any).createBookings({
+    const booking = await this.createBookings({
       booking_number: bookingNumber,
       tenant_id: data.tenantId,
       customer_id: data.customerId,
@@ -282,7 +314,7 @@ class BookingModuleService extends MedusaService({
     });
 
     // Create booking item
-    await (this as any).createBookingItems({
+    await this.createBookingItems({
       booking_id: booking.id,
       service_product_id: data.serviceProductId,
       title: "Service",
@@ -309,7 +341,7 @@ class BookingModuleService extends MedusaService({
       throw new Error("Booking is not in pending status");
     }
 
-    const updated = await (this as any).updateBookings({
+    const updated = await this.updateBookings({
       id: bookingId,
       status: "confirmed",
       confirmed_at: new Date(),
@@ -328,7 +360,7 @@ class BookingModuleService extends MedusaService({
       throw new Error("Booking must be confirmed before check-in");
     }
 
-    return await (this as any).updateBookings({
+    return await this.updateBookings({
       id: bookingId,
       status: "checked_in",
       checked_in_at: new Date(),
@@ -345,7 +377,7 @@ class BookingModuleService extends MedusaService({
       throw new Error("Booking cannot be completed from current status");
     }
 
-    return await (this as any).updateBookings({
+    return await this.updateBookings({
       id: bookingId,
       status: "completed",
       completed_at: new Date(),
@@ -379,7 +411,7 @@ class BookingModuleService extends MedusaService({
       cancellationFee = Number(booking.total) * 0.5; // 50% fee example
     }
 
-    const updated = await (this as any).updateBookings({
+    const updated = await this.updateBookings({
       id: bookingId,
       status: "cancelled",
       cancelled_at: new Date(),
@@ -441,14 +473,14 @@ class BookingModuleService extends MedusaService({
     });
 
     // Update original booking
-    await (this as any).updateBookings({
+    await this.updateBookings({
       id: bookingId,
       status: "rescheduled",
       rescheduled_to_id: newBooking.id,
     });
 
     // Update new booking
-    await (this as any).updateBookings({
+    await this.updateBookings({
       id: newBooking.id,
       rescheduled_from_id: bookingId,
       reschedule_count: (originalBooking.reschedule_count || 0) + 1,
@@ -467,7 +499,7 @@ class BookingModuleService extends MedusaService({
       throw new Error("Only confirmed bookings can be marked as no-show");
     }
 
-    return await (this as any).updateBookings({
+    return await this.updateBookings({
       id: bookingId,
       status: "no_show",
     });
@@ -494,7 +526,7 @@ class BookingModuleService extends MedusaService({
 
       // Only schedule if in the future
       if (scheduledFor > new Date()) {
-        await (this as any).createBookingReminders({
+        await this.createBookingReminders({
           booking_id: bookingId,
           reminder_type: reminder.type,
           send_before_minutes: reminder.minutes,
@@ -518,7 +550,7 @@ class BookingModuleService extends MedusaService({
     const reminderList = Array.isArray(reminders) ? reminders : [reminders].filter(Boolean);
 
     for (const reminder of reminderList) {
-      await (this as any).updateBookingReminders({
+      await this.updateBookingReminders({
         id: reminder.id,
         status: "cancelled",
       });

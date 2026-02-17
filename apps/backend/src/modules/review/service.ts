@@ -1,10 +1,16 @@
-// @ts-nocheck
 import { MedusaService } from "@medusajs/framework/utils"
 import { Review } from "./models/review"
 
 class ReviewModuleService extends MedusaService({
   Review,
 }) {
+  // ============ Explicitly declare auto-generated methods for TS compiler ============
+  declare listReviews: any;
+  declare retrieveReview: any;
+  declare createReviews: any;
+  declare updateReviews: any;
+  declare deleteReviews: any;
+
   async createReview(data: {
     rating: number
     title?: string
@@ -118,7 +124,7 @@ class ReviewModuleService extends MedusaService({
   }
 
   async approveReview(reviewId: string) {
-    return this.updateReviews({ id: reviewId }, { is_approved: true })
+    return this.updateReviews({ id: reviewId, is_approved: true })
   }
 
   async rejectReview(reviewId: string) {
@@ -128,8 +134,7 @@ class ReviewModuleService extends MedusaService({
   async markHelpful(reviewId: string) {
     const review = await this.retrieveReview(reviewId)
     return this.updateReviews(
-      { id: reviewId },
-      { helpful_count: (review.helpful_count || 0) + 1 }
+      { id: reviewId, helpful_count: (review.helpful_count || 0) + 1 }
     )
   }
 
@@ -198,8 +203,8 @@ class ReviewModuleService extends MedusaService({
     const needsModeration = flagCount >= 3
 
     await this.updateReviews(
-      { id: reviewId },
-      {
+      { 
+        id: reviewId,
         metadata: {
           ...(review.metadata || {}),
           flags: updatedFlags,

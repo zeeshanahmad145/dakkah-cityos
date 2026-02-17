@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { MedusaService } from "@medusajs/framework/utils"
 import { Invoice } from "./models/invoice"
 import { InvoiceItem } from "./models/invoice-item"
@@ -7,6 +6,18 @@ class InvoiceModuleService extends MedusaService({
   Invoice,
   InvoiceItem,
 }) {
+  // ============ Explicitly declare auto-generated methods for TS compiler ============
+  declare listInvoices: any;
+  declare retrieveInvoice: any;
+  declare createInvoices: any;
+  declare updateInvoices: any;
+  declare deleteInvoices: any;
+
+  declare listInvoiceItems: any;
+  declare createInvoiceItems: any;
+  declare updateInvoiceItems: any;
+  declare deleteInvoiceItems: any;
+
   /**
    * Generate a unique invoice number
    */
