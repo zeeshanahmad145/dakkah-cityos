@@ -20,7 +20,7 @@ BACKEND_PID=$!
 
 echo "Starting storefront on port 5000..."
 cd /home/runner/workspace/apps/storefront
-PORT=5000 HOST=0.0.0.0 NITRO_PORT=5000 NITRO_HOST=0.0.0.0 NODE_ENV=production node .output/server/index.mjs &
+PORT=5000 HOST=0.0.0.0 NODE_ENV=production node server.mjs &
 STOREFRONT_PID=$!
 
 wait $STOREFRONT_PID

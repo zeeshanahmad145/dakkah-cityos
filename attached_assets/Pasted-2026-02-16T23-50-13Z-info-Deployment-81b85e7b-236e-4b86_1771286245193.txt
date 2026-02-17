@@ -1,0 +1,175 @@
+2026-02-16T23:50:13Z info: Deployment: 81b85e7b-236e-4b86-91ec-78f24a32d259
+2026-02-16T23:50:13Z info: Running Security Scan
+2026-02-16T23:51:06Z info: Security Scan Complete
+2026-02-16T23:51:06Z info: Connecting to builder
+2026-02-16T23:51:06Z info: Builder connected
+2026-02-16T23:51:08Z info: Installing packages
+Scope: all 9 workspace projects
+
+Lockfile is up to date, resolution step is skipped
+
+Already up to date
+
+
+   ╭──────────────────────────────────────────╮
+   │                                          │
+   │   Update available! 10.12.3 → 10.29.3.   │
+   │   Changelog: https://pnpm.io/v/10.29.3   │
+   │     To update, run: pnpm add -g pnpm     │
+   │                                          │
+   ╰──────────────────────────────────────────╯
+
+
+Done in 5s using pnpm v10.12.3
+
+2026-02-16T23:51:14Z info: Starting Build
+========================================
+  Dakkah CityOS Commerce — Build
+========================================
+[1/2] Building backend...
+
+
+> backend@0.0.1 build /home/runner/workspace/apps/backend
+> medusa build
+
+
+[2026-02-16T23:51:19.764Z] [INFO] [env-validation] [EnvValidation] Checking environment variables...
+
+[2026-02-16T23:51:19.765Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_API_KEY — Payment processing disabled
+[2026-02-16T23:51:19.766Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_WEBHOOK_SECRET — Webhook verification disabled
+[2026-02-16T23:51:19.766Z] [WARN] [env-validation] [EnvValidation] Not set: SENDGRID_API_KEY — Email notifications disabled
+[2026-02-16T23:51:19.766Z] [WARN] [env-validation] [EnvValidation] Not set: PAYLOAD_API_KEY — CMS hierarchy sync disabled
+
+[2026-02-16T23:51:19.766Z] [INFO] [env-validation] [EnvValidation] 12 optional variable(s) not set (features will be limited)
+
+info:    redisUrl not found. A fake redis instance will be used.
+
+info:    Starting build...
+
+info:    Compiling backend source...
+info:    Removing existing ".medusa/server" folder
+
+info:    Compiling frontend source...
+
+info:    Backend build completed successfully (29.27s)
+
+info:    Frontend build completed successfully (49.37s)
+
+  ✓ Backend built
+[2/2] Building storefront...
+
+
+> storefront@ build /home/runner/workspace/apps/storefront
+> vite build
+
+
+vite v7.3.1 building client environment for production...
+
+Generated route tree in 3554ms
+
+transforming...
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+✓ 2502 modules transformed.
+
+rendering chunks...
+
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/utils/env.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/bookings/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/purchase-orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/lib/api/unified-client.ts, /home/runner/workspace/apps/storefront/src/lib/context/auth-context.tsx, /home/runner/workspace/apps/storefront/src/lib/hooks/use-campaigns.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-cms.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-companies.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-content.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-digital-products.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-payments.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-platform-context.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-reviews.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-subscriptions.ts, /home/runner/workspace/apps/storefront/src/lib/utils/sdk.ts, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.return.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.billing.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/affiliate/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/blog/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/$serviceHandle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/business/approvals.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/campaigns/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/categories/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment-shop/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/credit/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/crowdfunding/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/d
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/data/regions.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant.$locale.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/pages/product.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/cart.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/checkout.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/products/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/__root.tsx, dynamic import will not move module into another chunk.
+
+
+computing gzip size...
+
+.tanstack/start/build/client-dist/.vite/manifest.json                                241.39 kB │ gzip:  16.80 kB
+
+.tanstack/start/build/client-dist/assets/rtl-CFTvojR3.css                              0.54 kB │ gzip:   0.18 kB
+.tanstack/start/build/client-dist/assets/app-MYNxNCn0.css                            161.30 kB │ gzip:  20.83 kB
+.tanstack/start/build/client-dist/assets/index-DtqBFgK5.js                             0.04 kB │ gzip:   0.06 kB
+
+.tanstack/start/build/client-dist/assets/payouts-817NDlCg.js                           0.27 kB │ gzip:   0.21 kB
+.tanstack/start/build/client-dist/assets/index-jv4CZKDe.js                             0.27 kB │ gzip:   0.21 kB
+.tanstack/start/build/client-dist/assets/label-DAVC7dIC.js                             0.30 kB │ gzip:   0.23 kB
+.tanstack/start/build/client-dist/assets/new-DIcRmbmM.js                               0.32 kB │ gzip:   0.24 kB
+.tanstack/start/build/client-dist/assets/use-platform-context-B1befMkI.js              0.34 kB │ gzip:   0.27 kB
+.tanstack/start/build/client-dist/assets/use-orders-Dwp0EJIo.js                        0.37 kB │ gzip:   0.24 kB
+.tanstack/start/build/client-dist/assets/checkout-CuJQcc8q.js                          0.52 kB │ gzip:   0.35 kB
+
+.tanstack/start/build/client-dist/assets/media-BJQVcOg_.js                             1.14 kB │ gzip:   0.60 kB
+.tanstack/start/build/client-dist/assets/status-badge-D9CK_7mp.js                      1.14 kB │ gzip:   0.52 kB
+.tanstack/start/build/client-dist/assets/_tenant._locale-DovFp_IM.js                   1.17 kB │ gzip:   0.52 kB
+.tanstack/start/build/client-dist/assets/pencil-square-Bb7U7EPs.js                     1.19 kB │ gzip:   0.67 kB
+.tanstack/start/build/client-dist/assets/navigation-BimUxEWQ.js                        1.20 kB │ gzip:   0.61 kB
+.tanstack/start/build/client-dist/assets/chevron-left-CsrYp4UQ.js                      1.21 kB │ gzip:   0.63 kB
+.tanstack/start/build/client-dist/assets/use-companies-Dsnx6ep6.js                     1.23 kB │ gzip:   0.47 kB
+.tanstack/start/build/client-dist/assets/arrow-path-DuKNRnl9.js                        1.24 kB │ gzip:   0.67 kB
+.tanstack/start/build/client-dist/assets/clock-B7FMQ7xR.js                             1.24 kB │ gzip:   0.68 kB
+.tanstack/start/build/client-dist/assets/document-text-jpaJuWWN.js                     1.25 kB │ gzip:   0.68 kB
+.tanstack/start/build/client-dist/assets/buildings-BIv6da8b.js                         1.28 kB │ gzip:   0.71 kB
+.tanstack/start/build/client-dist/assets/squares-plus-BI-kwGuS.js                      1.28 kB │ gzip:   0.67 kB
+.tanstack/start/build/client-dist/assets/add-to-wishlist-button-DUEJRoOa.js            1.30 kB │ gzip:   0.73 kB
+.tanstack/start/build/client-dist/assets/currency-dollar-8fq4FqWf.js                   1.35 kB │ gzip:   0.75 kB
+.tanstack/start/build/client-dist/assets/users-ftdrsc_9.js                             1.37 kB │ gzip:   0.73 kB
+.tanstack/start/build/client-dist/assets/use-payments-B83L-j_A.js                      1.39 kB │ gzip:   0.69 kB
+.tanstack/start/build/client-dist/assets/quotes-2OIOgMIf.js                            1.40 kB │ gzip:   0.61 kB
+.tanstack/start/build/client-dist/assets/truck-fast-Bn5yfwK1.js                        1.41 kB │ gzip:   0.76 kB
+.tanstack/start/build/client-dist/assets/metrics-zNcs_1C0.js                           1.52 kB │ gzip:   0.83 kB
+.tanstack/start/build/client-dist/assets/condition-grader-dRsMeNSx.js                  1.54 kB │ gzip:   0.65 kB
+.tanstack/start/build/client-dist/assets/use-bookings-D5KXlWCw.js                      1.58 kB │ gzip:   0.64 kB
+
+.tanstack/start/build/client-dist/assets/wishlists-y8KFNNLq.js                         2.93 kB │ gzip:   1.15 kB
+.tanstack/start/build/client-dist/assets/_slug-Cu2lz9fz.js                             3.02 kB │ gzip:   1.41 kB
+.tanstack/start/build/client-dist/assets/bnpl-options-DlyualRw.js                      3.05 kB │ gzip:   1.16 kB
+.tanstack/start/build/client-dist/assets/use-checkout-BaKNQJ2a.js                      3.07 kB │ gzip:   0.91 kB
+.tanstack/start/build/client-dist/assets/digital-products-CDXJ4B_d.js                  3.12 kB │ gzip:   1.27 kB
+
+.tanstack/start/build/client-dist/assets/quotes-4kM0BjqA.js                            4.27 kB │ gzip:   1.97 kB
+.tanstack/start/build/client-dist/assets/promotions-CdL_pevb.js                        4.28 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/bookings-BT8GR0oF.js                          4.29 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/vendors-BN0V06D9.js                           4.29 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/crowdfunding-hFIMn7dw.js                      4.30 kB │ gzip:   1.95 kB
+.tanstack/start/build/client-dist/assets/menu-display-block-C4F5FdMf.js                4.31 kB │ gzip:   1.71 kB
+.tanstack/start/build/client-dist/assets/parking-A9NmmPVu.js                           4.31 kB │ gzip:   1.43 kB
+
+.tanstack/start/build/client-dist/assets/invoices-CYIGROwR.js                          4.32 kB │ gzip:   2.00 kB
+.tanstack/start/build/client-dist/assets/map-block-MPX3iKya.js                         4.34 kB │ gzip:   1.44 kB
+.tanstack/start/build/client-dist/assets/flash-deals-CcV5lMWE.js                       4.34 kB │ gzip:   1.96 kB
+.tanstack/start/build/client-dist/assets/flash-sales-CgKZpPb7.js                       4.34 kB │ gzip:   1.96 kB
+.tanstack/start/build/client-dist/assets/inventory-extension-eV32rAa7.js               4.37 kB │ gzip:   1.42 kB
+
+.tanstack/start/build/client-dist/assets/_id-BLMQtl8k.js                               7.97 kB │ gzip:   2.28 kB
+.tanstack/start/build/client-dist/assets/settings-DJ3JThnL.js                          7.98 kB │ gzip:   2.51 kB
+
+transforming...
+
+✓ 1332 modules transformed.
+
+rendering chunks...
+
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/data/regions.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant.$locale.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/pages/product.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/cart.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/checkout.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/products/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/__root.tsx, dynamic import will not move module into another chunk.
+
+
+[plugin vite:css-post] Sourcemap is likely to be incorrect: a plugin (vite:css-post) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help
+
+✓ built in 19.23s
+
+[nitro] ✔ Generated public .output/public
+
+[nitro] ℹ Building Nitro Server (preset: node-listener, compatibility date: 2024-11-19)
+
+[nitro] ✔ Nitro Server built
+
+  ✓ Storefront built
+
+========================================
+  Build complete!
+========================================
+
+2026-02-16T23:53:26Z info: Pushing pid1 binary layer...
+2026-02-16T23:53:31Z info: Pushing Repl layer...
+2026-02-16T23:53:31Z info: Pushing hosting layer...
+2026-02-16T23:53:32Z info: Created hosting layer
+2026-02-16T23:53:37Z info: Created pid1 binary layer
