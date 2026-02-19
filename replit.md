@@ -114,7 +114,7 @@ All custom code lives in `apps/backend/src/` — completely separate from Medusa
 - `persona.category`: `consumer`, `creator`, `business`, `cityops`, `platform`
 
 ### Confluence Documentation
-- **Space:** Software Development (98310) — 193 Confluence pages (1 homepage + 22 section indexes + 170 child pages)
+- **Space:** Software Development (98310) — 196 Confluence pages (1 homepage + 22 section indexes + 173 child pages)
 - **Structure file:** `docs/Dakkah_Medusa_Commerce_Engine_Documentation_Structure.md`
 - **Verified metrics:** 61 modules, 489 API routes, 30 workflow files, 38 subscribers, 38 links, 41 seed scripts, 76 CMS block types, 64 module + 139 Medusa core = 203 total migrations, 349 storefront routes, 6 prod-proxy API prefixes
 
