@@ -1,6 +1,15 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updateInvoiceSchema = z.object({
+  due_date: z.string().optional(),
+  payment_terms: z.string().optional(),
+  payment_terms_days: z.number().optional(),
+  notes: z.string().optional(),
+  internal_notes: z.string().optional(),
+}).passthrough()
 
 // GET /admin/invoices/:id - Get invoice detail
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -53,6 +62,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 // PUT /admin/invoices/:id - Update invoice
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
+  const parsed = updateInvoiceSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const invoiceModule = req.scope.resolve("invoice")
   const { id } = req.params
   
@@ -62,13 +76,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     payment_terms_days,
     notes,
     internal_notes,
-  } = req.body as {
-    due_date?: string
-    payment_terms?: string
-    payment_terms_days?: number
-    notes?: string
-    internal_notes?: string
-  }
+  } = parsed.data
   
   const updateData: Record<string, unknown> = { id }
   if (due_date) updateData.due_date = new Date(due_date)

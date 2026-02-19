@@ -1,5 +1,18 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const giftCardPostSchema = z.object({
+  code: z.string().optional(),
+  amount: z.number().optional(),
+  cart_id: z.string().optional(),
+  recipient_email: z.string().optional(),
+  recipient_name: z.string().optional(),
+  sender_name: z.string().optional(),
+  sender_email: z.string().optional(),
+  message: z.string().optional(),
+  tenant_id: z.string().optional(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { limit = "20", offset = "0", tenant_id, code } = req.query as Record<string, string | undefined>
@@ -33,20 +46,19 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const { code, amount, cart_id, recipient_email, recipient_name, sender_name, sender_email, message, tenant_id } =
-    req.body as {
-      code?: string
-      amount?: number
-      cart_id?: string
-      recipient_email?: string
-      recipient_name?: string
-      sender_name?: string
-      sender_email?: string
-      message?: string
-      tenant_id?: string
+  try {
+    const customerId = (req as any).auth_context?.actor_id
+    if (!customerId) {
+      return res.status(401).json({ message: "Authentication required" })
     }
 
-  try {
+    const parsed = giftCardPostSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
+    const { code, amount, cart_id, recipient_email, recipient_name, sender_name, sender_email, message, tenant_id } = parsed.data
+
     const moduleService = req.scope.resolve("promotionExt") as any
 
     if (code) {
@@ -111,4 +123,3 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   } catch (error: any) {
     handleApiError(res, error, "STORE-GIFT-CARDS")}
 }
-

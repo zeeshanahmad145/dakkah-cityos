@@ -1,6 +1,14 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateDiscountSchema = z.object({
+  usage_limit: z.number().optional(),
+  valid_from: z.string().optional(),
+  valid_until: z.string().optional(),
+  status: z.enum(["active", "disabled"]).optional(),
+}).passthrough()
 
 // GET - Get subscription discount by ID
 export async function GET(
@@ -50,17 +58,16 @@ export async function PUT(
 ) {
   try {
     const { id } = req.params
+    const parsed = updateDiscountSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
     const {
       usage_limit,
       valid_from,
       valid_until,
       status
-    } = req.body as {
-      usage_limit?: number
-      valid_from?: string
-      valid_until?: string
-      status?: "active" | "disabled"
-    }
+    } = parsed.data
 
     const subscriptionService = req.scope.resolve("subscriptionModuleService")
 

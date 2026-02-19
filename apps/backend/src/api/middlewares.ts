@@ -1,5 +1,8 @@
 import { defineMiddlewares } from "@medusajs/medusa"
 import type { MedusaNextFunction, MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { storeRateLimiter, adminRateLimiter } from "./middleware/rate-limiter"
+import { requestLogger } from "./middleware/request-logger"
+import { securityHeaders } from "./middleware/security-headers"
 
 function storeCorsMiddleware(req: MedusaRequest, res: MedusaResponse, next: MedusaNextFunction) {
   const origin = req.headers.origin
@@ -45,6 +48,14 @@ export default defineMiddlewares({
     {
       matcher: "/store/bookings/**",
       middlewares: [storeCorsMiddleware],
+    },
+    {
+      matcher: "/store/*",
+      middlewares: [securityHeaders, requestLogger, storeRateLimiter],
+    },
+    {
+      matcher: "/admin/*",
+      middlewares: [securityHeaders, requestLogger, adminRateLimiter],
     },
   ],
 })

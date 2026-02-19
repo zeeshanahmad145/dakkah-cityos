@@ -67,7 +67,15 @@ const auditHierarchyChangeStep = createStep(
       tenant_id: input.tenantId,
       timestamp: new Date(),
     })
-    return new StepResponse({ auditEntry: entry })
+    return new StepResponse({ auditEntry: entry }, { auditEntryId: entry.id })
+  },
+  async (compensationData: { auditEntryId: string } | undefined, { container }) => {
+    if (!compensationData?.auditEntryId) return
+    try {
+      const auditModule = container.resolve("audit") as any
+      await auditModule.deleteAuditEntries(compensationData.auditEntryId)
+    } catch (error) {
+    }
   }
 )
 

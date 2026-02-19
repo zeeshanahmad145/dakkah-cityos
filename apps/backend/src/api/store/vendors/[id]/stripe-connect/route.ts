@@ -1,8 +1,13 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
-// GET - Get Stripe Connect status for vendor
+const stripeConnectSchema = z.object({
+  return_url: z.string().optional(),
+  refresh_url: z.string().optional(),
+})
+
 export async function GET(
   req: MedusaRequest,
   res: MedusaResponse
@@ -30,13 +35,22 @@ export async function GET(
   })
 }
 
-// POST - Create Stripe Connect account and get onboarding link
 export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
 ) {
+  const customerId = (req as any).auth_context?.actor_id
+  if (!customerId) {
+    return res.status(401).json({ message: "Authentication required" })
+  }
+
+  const parsed = stripeConnectSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const { id } = req.params
-  const { return_url, refresh_url } = req.body as { return_url: string; refresh_url: string }
+  const { return_url, refresh_url } = parsed.data
   const query = req.scope.resolve("query")
   const vendorService = req.scope.resolve("vendorModuleService")
 
@@ -52,7 +66,6 @@ export async function POST(
 
   const vendor = vendors[0]
 
-  // Check if Stripe is configured
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
   if (!stripeSecretKey) {
     return res.status(400).json({ 
@@ -65,7 +78,6 @@ export async function POST(
 
     let stripeAccountId = vendor.stripe_account_id
 
-    // Create Stripe Connect account if not exists
     if (!stripeAccountId) {
       const account = await stripe.accounts.create({
         type: "express",
@@ -81,7 +93,6 @@ export async function POST(
 
       stripeAccountId = account.id
 
-      // Save Stripe account ID to vendor
       await vendorService.updateVendors({
         selector: { id },
         data: { stripe_account_id: stripeAccountId }
@@ -95,7 +106,6 @@ export async function POST(
       })
     }
 
-    // Create account link for onboarding
     const accountLink = await stripe.accountLinks.create({
       account: stripeAccountId,
       refresh_url: refresh_url || `${process.env.STORE_URL}/vendor/onboarding/refresh`,
@@ -110,4 +120,3 @@ export async function POST(
   } catch (error: any) {
     handleApiError(res, error, "STORE-VENDORS-ID-STRIPE-CONNECT")}
 }
-

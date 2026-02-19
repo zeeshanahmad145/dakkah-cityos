@@ -1,5 +1,15 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createNotificationPreferenceSchema = z.object({
+  tenant_id: z.string().min(1).optional(),
+  channel: z.string().min(1).optional(),
+  event_type: z.string().min(1).optional(),
+  enabled: z.boolean().optional(),
+  frequency: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -23,9 +33,14 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     if (!customerId) {
       return res.status(401).json({ message: "Authentication required" })
     }
-    const item = await service.createNotificationPreferences({ ...(req.body as any), customer_id: customerId })
+
+    const parsed = createNotificationPreferenceSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
+    const item = await service.createNotificationPreferences({ ...parsed.data, customer_id: customerId })
     res.status(201).json({ item })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-NOTIFICATION-PREFERENCES")}
 }
-

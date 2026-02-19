@@ -1,5 +1,15 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const approveQuoteSchema = z.object({
+  quoted_price: z.number().optional(),
+  custom_discount_percentage: z.number().optional(),
+  custom_discount_amount: z.number().optional(),
+  discount_reason: z.string().optional(),
+  valid_until: z.string().optional(),
+  internal_notes: z.string().optional(),
+}).passthrough()
 
 // POST /admin/quotes/:id/approve
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
@@ -7,6 +17,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const quoteModule = req.scope.resolve("quote")
     const { id } = req.params
   
+    const parsed = approveQuoteSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const { 
       quoted_price,
       custom_discount_percentage,
@@ -14,14 +29,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       discount_reason,
       valid_until,
       internal_notes,
-    } = req.body as {
-      quoted_price?: number
-      custom_discount_percentage?: number
-      custom_discount_amount?: number
-      discount_reason?: string
-      valid_until?: string
-      internal_notes?: string
-    }
+    } = parsed.data
   
     // Set default validity of 30 days if not provided
     const defaultValidUntil = new Date()

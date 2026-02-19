@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { createIntegrationOrchestrator } from "../../../../integrations/orchestrator/index"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
@@ -7,30 +8,22 @@ const logger = createLogger("api:admin/integrations")
 const VALID_SYSTEMS = ["payload", "erpnext", "fleetbase", "waltid", "stripe"]
 const VALID_ENTITY_TYPES = ["product", "tenant", "store", "customer", "order", "node", "vendor"]
 
+const syncSchema = z.object({
+  system: z.enum(["payload", "erpnext", "fleetbase", "waltid", "stripe"]),
+  entity_type: z.enum(["product", "tenant", "store", "customer", "order", "node", "vendor"]),
+  entity_id: z.string().optional(),
+  direction: z.enum(["outbound", "inbound"]).optional(),
+  tenant_id: z.string().optional(),
+}).passthrough()
+
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const { system, entity_type, entity_id, direction } = req.body as {
-      system: string
-      entity_type: string
-      entity_id?: string
-      direction?: "outbound" | "inbound"
+    const parsed = syncSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
 
-    if (!system || !entity_type) {
-      return res.status(400).json({ error: "system and entity_type are required" })
-    }
-
-    if (!VALID_SYSTEMS.includes(system)) {
-      return res.status(400).json({
-        error: `Invalid system. Must be one of: ${VALID_SYSTEMS.join(", ")}`,
-      })
-    }
-
-    if (!VALID_ENTITY_TYPES.includes(entity_type)) {
-      return res.status(400).json({
-        error: `Invalid entity_type. Must be one of: ${VALID_ENTITY_TYPES.join(", ")}`,
-      })
-    }
+    const { system, entity_type, entity_id, direction } = parsed.data
 
     logger.info(`[IntegrationSync] Manual sync triggered: ${system}/${entity_type}/${entity_id || "all"}`)
 
@@ -49,7 +42,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         direction: direction || "outbound",
         triggered_by: "admin",
       }, {
-        tenantId: (req.body as any)?.tenant_id,
+        tenantId: parsed.data.tenant_id,
         source: "admin-manual-sync",
       })
 

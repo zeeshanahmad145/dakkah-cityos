@@ -1,7 +1,10 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const confirmBookingSchema = z.object({}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
@@ -14,6 +17,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const bookingService = req.scope.resolve("booking")
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
   
+  const parsed = confirmBookingSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   try {
     const { data: bookings } = await query.graph({
       entity: "booking",

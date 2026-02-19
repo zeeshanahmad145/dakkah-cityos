@@ -23,7 +23,20 @@ const requestReturnStep = createStep(
       return_method: input.returnMethod,
       created_at: new Date(),
     }
-    return new StepResponse({ returnRequest })
+    return new StepResponse({ returnRequest }, { returnRequest })
+  },
+  async (compensationData: { returnRequest: any } | undefined, { container }) => {
+    if (!compensationData?.returnRequest) return
+    try {
+      const orderModule = container.resolve("order") as any
+      if (compensationData.returnRequest.id) {
+        await orderModule.updateOrders({
+          id: compensationData.returnRequest.order_id,
+          metadata: { return_canceled: true },
+        })
+      }
+    } catch (error) {
+    }
   }
 )
 
@@ -48,7 +61,17 @@ const processRefundStep = createStep(
       status: "refunded",
       refunded_at: new Date(),
     }
-    return new StepResponse({ refund })
+    return new StepResponse({ refund }, { refund })
+  },
+  async (compensationData: { refund: any } | undefined, { container }) => {
+    if (!compensationData?.refund) return
+    try {
+      const paymentModule = container.resolve("payment") as any
+      if (compensationData.refund.id) {
+        await paymentModule.cancelRefund(compensationData.refund.id)
+      }
+    } catch (error) {
+    }
   }
 )
 
@@ -60,7 +83,17 @@ const restockItemsStep = createStep(
       quantity: item.quantity,
       restocked: true,
     }))
-    return new StepResponse({ restocked })
+    return new StepResponse({ restocked }, { restocked })
+  },
+  async (compensationData: { restocked: any[] } | undefined, { container }) => {
+    if (!compensationData?.restocked?.length) return
+    try {
+      const inventoryModule = container.resolve("inventory") as any
+      for (const item of compensationData.restocked) {
+        await inventoryModule.adjustInventory(item.line_item_id, -item.quantity)
+      }
+    } catch (error) {
+    }
   }
 )
 

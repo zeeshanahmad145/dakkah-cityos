@@ -19,7 +19,7 @@ const createSchema = z.object({
   skill_tags: z.array(z.string()).optional(),
   portfolio_urls: z.array(z.string()).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

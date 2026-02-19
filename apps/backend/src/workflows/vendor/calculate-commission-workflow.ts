@@ -26,9 +26,13 @@ const calculateCommissionStep = createStep(
 
     return new StepResponse({ transaction }, { transaction })
   },
-  async ({ transaction }: { transaction: any }, { container }) => {
-    const commissionModule = container.resolve("commission") as any
-    await commissionModule.deleteCommissionTransactions(transaction.id)
+  async (compensationData: { transaction: any } | undefined, { container }) => {
+    if (!compensationData?.transaction?.id) return
+    try {
+      const commissionModule = container.resolve("commission") as any
+      await commissionModule.deleteCommissionTransactions(compensationData.transaction.id)
+    } catch (error) {
+    }
   }
 )
 

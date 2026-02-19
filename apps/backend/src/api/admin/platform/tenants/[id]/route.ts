@@ -57,14 +57,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       logo_url: z.string().url("Must be a valid URL").optional(),
       settings: z.record(z.string(), z.any()).optional(),
       metadata: z.record(z.string(), z.any()).optional(),
-    })
+    }).passthrough()
 
     const parsed = updateTenantSchema.safeParse(req.body)
     if (!parsed.success) {
-      return res.status(400).json({
-        error: "Validation Error",
-        message: (parsed.error as any).issues,
-      })
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
     const validatedData = parsed.data
 

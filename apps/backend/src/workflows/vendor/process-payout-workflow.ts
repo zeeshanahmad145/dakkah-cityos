@@ -72,9 +72,13 @@ const createPayoutStep = createStep(
 
     return new StepResponse({ payout }, { payout })
   },
-  async ({ payout }: { payout: any }, { container }) => {
-    const payoutModule = container.resolve("payout") as any
-    await payoutModule.deletePayouts(payout.id)
+  async (compensationData: { payout: any } | undefined, { container }) => {
+    if (!compensationData?.payout?.id) return
+    try {
+      const payoutModule = container.resolve("payout") as any
+      await payoutModule.deletePayouts(compensationData.payout.id)
+    } catch (error) {
+    }
   }
 )
 
@@ -101,17 +105,20 @@ const markTransactionsPaidStep = createStep(
 
     return new StepResponse({ updated: true }, { transactionIds: input.transactionIds })
   },
-  async ({ transactionIds }: { transactionIds: string[] }, { container }) => {
-    const commissionModule = container.resolve("commission") as any
-    
-    await commissionModule.updateCommissionTransactions(
-      transactionIds.map(id => ({
-        id,
-        payout_id: null,
-        payout_status: "unpaid",
-        paid_at: null,
-      }))
-    )
+  async (compensationData: { transactionIds: string[] } | undefined, { container }) => {
+    if (!compensationData?.transactionIds?.length) return
+    try {
+      const commissionModule = container.resolve("commission") as any
+      await commissionModule.updateCommissionTransactions(
+        compensationData.transactionIds.map(id => ({
+          id,
+          payout_id: null,
+          payout_status: "unpaid",
+          paid_at: null,
+        }))
+      )
+    } catch (error) {
+    }
   }
 )
 

@@ -1,5 +1,16 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updateAvailabilitySchema = z.object({
+  weekly_schedule: z.any().optional(),
+  timezone: z.string().optional(),
+  effective_from: z.string().optional(),
+  effective_to: z.string().optional(),
+  slot_duration_minutes: z.number().optional(),
+  slot_increment_minutes: z.number().optional(),
+  is_active: z.boolean().optional(),
+}).passthrough()
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
@@ -34,6 +45,11 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
     const { id } = req.params
     const bookingService = req.scope.resolve("booking")
   
+    const parsed = updateAvailabilitySchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       weekly_schedule,
       timezone,
@@ -42,15 +58,7 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
       slot_duration_minutes,
       slot_increment_minutes,
       is_active,
-    } = req.body as {
-      weekly_schedule?: Record<string, Array<{ start: string; end: string }>>
-      timezone?: string
-      effective_from?: string
-      effective_to?: string
-      slot_duration_minutes?: number
-      slot_increment_minutes?: number
-      is_active?: boolean
-    }
+    } = parsed.data
   
     const updateData: Record<string, any> = {}
     if (weekly_schedule !== undefined) updateData.weekly_schedule = weekly_schedule

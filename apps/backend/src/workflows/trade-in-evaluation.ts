@@ -27,7 +27,13 @@ const submitTradeInStep = createStep(
       status: "submitted",
       submitted_at: new Date(),
     }
-    return new StepResponse({ submission })
+    return new StepResponse({ submission }, { customerId: input.customerId })
+  },
+  async (compensationData: { customerId: string } | undefined) => {
+    if (!compensationData?.customerId) return
+    try {
+    } catch (error) {
+    }
   }
 )
 
@@ -65,7 +71,14 @@ const generateOfferStep = createStep(
       valid_until: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       status: "pending_acceptance",
     }
-    return new StepResponse({ offer })
+    return new StepResponse({ offer }, { customerId: input.customerId, offer })
+  },
+  async (compensationData: { customerId: string; offer: any } | undefined) => {
+    if (!compensationData?.customerId) return
+    try {
+      compensationData.offer.status = "cancelled"
+    } catch (error) {
+    }
   }
 )
 

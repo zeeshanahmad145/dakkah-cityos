@@ -1,5 +1,10 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const declineQuoteSchema = z.object({
+  reason: z.string().optional(),
+})
 
 /**
  * POST /store/quotes/:id/decline
@@ -9,7 +14,13 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
     const { id } = req.params;
-    const { reason } = req.body as { reason?: string };
+
+    const parsed = declineQuoteSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues });
+    }
+
+    const { reason } = parsed.data;
 
     if (!req.auth_context?.actor_id) {
       return res.status(401).json({ message: "Unauthorized" });

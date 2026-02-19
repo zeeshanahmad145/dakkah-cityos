@@ -1,5 +1,10 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const cancelBookingSchema = z.object({
+  reason: z.string().optional(),
+})
 
 /**
  * POST /store/bookings/:id/cancel
@@ -14,7 +19,13 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   }
   
   const customerId = req.auth_context.actor_id
-  const { reason } = req.body as Record<string, any>
+
+  const parsed = cancelBookingSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
+  const { reason } = parsed.data
   
   try {
     const booking = await bookingModule.retrieveBooking(id)

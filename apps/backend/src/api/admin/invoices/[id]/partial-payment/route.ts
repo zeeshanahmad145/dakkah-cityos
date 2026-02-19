@@ -1,6 +1,14 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const partialPaymentSchema = z.object({
+  amount: z.number().positive("Payment amount must be greater than 0"),
+  payment_method: z.string(),
+  reference: z.string().optional(),
+  notes: z.string().optional(),
+}).passthrough()
 
 // POST - Record partial payment on invoice
 export async function POST(
@@ -8,18 +16,13 @@ export async function POST(
   res: MedusaResponse
 ) {
   try {
-    const { id } = req.params
-    const { 
-      amount, 
-      payment_method,
-      reference,
-      notes 
-    } = req.body as { 
-      amount: number
-      payment_method: string
-      reference?: string
-      notes?: string
+    const parsed = partialPaymentSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const { id } = req.params
+    const { amount, payment_method, reference, notes } = parsed.data
 
     const query = req.scope.resolve("query")
     const invoiceService = req.scope.resolve("invoiceModuleService")

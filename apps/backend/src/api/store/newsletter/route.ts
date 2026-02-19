@@ -1,12 +1,19 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
 
-export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const { email, tenant_id } = req.body as { email: string; tenant_id: string }
+const newsletterSubscribeSchema = z.object({
+  email: z.string().min(1),
+  tenant_id: z.string().min(1),
+})
 
-  if (!email || !tenant_id) {
-    return res.status(400).json({ message: "email and tenant_id are required" })
+export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  const parsed = newsletterSubscribeSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+
+  const { email, tenant_id } = parsed.data
 
   try {
     const notifService = req.scope.resolve("notificationPreferences") as any
@@ -36,4 +43,3 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   } catch (error: any) {
     handleApiError(res, error, "STORE-NEWSLETTER")}
 }
-

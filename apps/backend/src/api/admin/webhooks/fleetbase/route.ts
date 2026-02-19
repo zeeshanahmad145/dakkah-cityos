@@ -9,6 +9,7 @@ function verifyFleetbaseSignature(payload: string, signature: string, secret: st
   return computed === signature
 }
 
+// Webhook payloads validated by signature verification
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   if (!process.env.FLEETBASE_API_KEY && !process.env.FLEETBASE_URL_DEV) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "fleetbase" })

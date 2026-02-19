@@ -1,11 +1,27 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateExceptionSchema = z.object({
+  exception_type: z.enum(["time_off", "holiday", "special_hours", "blocked"]).optional(),
+  start_date: z.string().optional(),
+  end_date: z.string().optional(),
+  all_day: z.boolean().optional(),
+  special_hours: z.array(z.object({ start: z.string(), end: z.string() })).optional(),
+  title: z.string().optional(),
+  reason: z.string().optional(),
+}).passthrough()
 
 export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { exceptionId } = req.params
     const bookingService = req.scope.resolve("booking")
   
+    const parsed = updateExceptionSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       exception_type,
       start_date,
@@ -14,15 +30,7 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
       special_hours,
       title,
       reason,
-    } = req.body as {
-      exception_type?: "time_off" | "holiday" | "special_hours" | "blocked"
-      start_date?: string
-      end_date?: string
-      all_day?: boolean
-      special_hours?: Array<{ start: string; end: string }>
-      title?: string
-      reason?: string
-    }
+    } = parsed.data
   
     const updateData: Record<string, any> = {}
     if (exception_type !== undefined) updateData.exception_type = exception_type

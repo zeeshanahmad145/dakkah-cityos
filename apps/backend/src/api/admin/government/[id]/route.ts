@@ -16,7 +16,7 @@ const updateSchema = z.object({
   resolved_at: z.string().optional(),
   photos: z.any().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

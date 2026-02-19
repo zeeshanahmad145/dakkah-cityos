@@ -1,5 +1,23 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const createTaxExemptionSchema = z.object({
+  certificate_number: z.string(),
+  certificate_type: z.string(),
+  issuing_state: z.string().optional(),
+  expiration_date: z.string().optional(),
+  document_url: z.string().optional(),
+  exempt_categories: z.array(z.string()).optional(),
+  notes: z.string().optional(),
+}).passthrough()
+
+const updateTaxExemptionSchema = z.object({
+  exemption_id: z.string(),
+  status: z.enum(["pending", "verified", "expired", "rejected"]),
+  verified_by: z.string().optional(),
+  notes: z.string().optional(),
+}).passthrough()
 
 // Get tax exemptions for a company
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -37,6 +55,10 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve("query")
   const companyModuleService = req.scope.resolve("companyModuleService") as any
   const { id } = req.params
+  const parsed = createTaxExemptionSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
   const {
     certificate_number,
     certificate_type,
@@ -45,15 +67,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     document_url,
     exempt_categories,
     notes,
-  } = req.body as {
-    certificate_number: string
-    certificate_type: string // e.g., "resale", "nonprofit", "government"
-    issuing_state?: string
-    expiration_date?: string
-    document_url?: string
-    exempt_categories?: string[] // product categories exempt from tax
-    notes?: string
-  }
+  } = parsed.data
   
   // Get current company metadata
   const { data: [company] } = await query.graph({
@@ -102,17 +116,16 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve("query")
   const companyModuleService = req.scope.resolve("companyModuleService") as any
   const { id } = req.params
+  const parsed = updateTaxExemptionSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
   const {
     exemption_id,
     status,
     verified_by,
     notes,
-  } = req.body as {
-    exemption_id: string
-    status: "pending" | "verified" | "expired" | "rejected"
-    verified_by?: string
-    notes?: string
-  }
+  } = parsed.data
   
   const { data: [company] } = await query.graph({
     entity: "company",

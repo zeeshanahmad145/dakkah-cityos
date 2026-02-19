@@ -1,5 +1,12 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateSpendingLimitSchema = z.object({
+  user_id: z.string(),
+  spending_limit: z.number().optional(),
+  can_approve: z.boolean().optional(),
+}).passthrough()
 
 // Get spending limits for company users
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -51,11 +58,11 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
     const companyModuleService = req.scope.resolve("companyModuleService") as any
     const { id } = req.params
-    const { user_id, spending_limit, can_approve } = req.body as {
-      user_id: string
-      spending_limit?: number
-      can_approve?: boolean
+    const parsed = updateSpendingLimitSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { user_id, spending_limit, can_approve } = parsed.data
   
     const updateData: Record<string, any> = { id: user_id }
     if (spending_limit !== undefined) updateData.spending_limit = spending_limit.toString()

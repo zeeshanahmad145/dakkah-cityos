@@ -163,12 +163,15 @@ const createSubscriptionStep = createStep(
       }))
     );
     
-    return new StepResponse({ subscription, items: subscriptionItems }, { subscription });
+    return new StepResponse({ subscription, items: subscriptionItems }, { subscriptionId: subscription.id });
   },
-  async ({ subscription }: { subscription: Record<string, unknown> }, { container }) => {
-    // Rollback: delete subscription
-    const subscriptionModule = container.resolve("subscription") as any;
-    await subscriptionModule.deleteSubscriptions(subscription.id);
+  async (compensationData: { subscriptionId: string }, { container }) => {
+    if (!compensationData?.subscriptionId) return
+    try {
+      const subscriptionModule = container.resolve("subscription") as any;
+      await subscriptionModule.deleteSubscriptions(compensationData.subscriptionId);
+    } catch (error) {
+    }
   }
 );
 
@@ -177,7 +180,7 @@ const activateSubscriptionStep = createStep(
   "activate-subscription",
   async ({ subscription, skipActivation }: { subscription: Record<string, unknown>; skipActivation: boolean }, { container }) => {
     if (skipActivation) {
-      return new StepResponse({ subscription });
+      return new StepResponse({ subscription }, { subscriptionId: String(subscription.id), wasActivated: false });
     }
     
     const subscriptionModule = container.resolve("subscription") as any;
@@ -227,7 +230,21 @@ const activateSubscriptionStep = createStep(
       total: subscription.total,
     });
     
-    return new StepResponse({ subscription: updated });
+    return new StepResponse({ subscription: updated }, { subscriptionId: String(subscription.id), wasActivated: !skipActivation });
+  },
+  async (compensationData: { subscriptionId: string; wasActivated: boolean }, { container }) => {
+    if (!compensationData?.subscriptionId || !compensationData.wasActivated) return
+    try {
+      const subscriptionModule = container.resolve("subscription") as any;
+      await subscriptionModule.updateSubscriptions({
+        id: compensationData.subscriptionId,
+        status: "draft",
+        start_date: null,
+        current_period_start: null,
+        current_period_end: null,
+      });
+    } catch (error) {
+    }
   }
 );
 

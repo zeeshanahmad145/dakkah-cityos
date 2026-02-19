@@ -16,7 +16,7 @@ const createSchema = z.object({
   tenant_id: z.string().nullable().optional(),
   status: z.enum(["active", "inactive"]).optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const moduleService = req.scope.resolve("governance") as any

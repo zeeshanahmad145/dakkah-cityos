@@ -4,6 +4,7 @@ import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
 const logger = createLogger("api:admin/webhooks")
 
+// Webhook payloads validated by signature verification
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   if (!process.env.PAYLOAD_CMS_URL_DEV && !process.env.PAYLOAD_CMS_URL) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })

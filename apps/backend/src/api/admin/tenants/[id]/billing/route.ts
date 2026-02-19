@@ -1,5 +1,13 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateBillingSchema = z.object({
+  plan: z.string().optional(),
+  billing_email: z.string().optional(),
+  billing_cycle: z.string().optional(),
+  payment_method: z.any().optional(),
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve("query")
@@ -80,12 +88,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   const tenantService = req.scope.resolve("tenantModuleService") as any
   const { id } = req.params
-  const { plan, billing_email, billing_cycle, payment_method } = req.body as {
-    plan?: string
-    billing_email?: string
-    billing_cycle?: string
-    payment_method?: any
+  const parsed = updateBillingSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+  const { plan, billing_email, billing_cycle, payment_method } = parsed.data
   
   // Update tenant billing (would use proper tenant billing service)
   try {

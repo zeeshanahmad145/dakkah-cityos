@@ -1,5 +1,11 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const rescheduleBookingSchema = z.object({
+  new_start_time: z.string().min(1),
+  new_provider_id: z.string().optional(),
+})
 
 /**
  * POST /store/bookings/:id/reschedule
@@ -14,11 +20,13 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   }
   
   const customerId = req.auth_context.actor_id
-  const { new_start_time, new_provider_id } = req.body as Record<string, any>
-  
-  if (!new_start_time) {
-    return res.status(400).json({ message: "new_start_time is required" })
+
+  const parsed = rescheduleBookingSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+
+  const { new_start_time, new_provider_id } = parsed.data
   
   try {
     const booking = await bookingModule.retrieveBooking(id)

@@ -1,6 +1,11 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const applyEarlyPaymentSchema = z.object({
+  apply_discount: z.boolean(),
+}).passthrough()
 
 /**
  * Early Payment Discount Calculator and Application
@@ -135,8 +140,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
+    const parsed = applyEarlyPaymentSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const { id } = req.params
-    const { apply_discount } = req.body as { apply_discount: boolean }
+    const { apply_discount } = parsed.data
     
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
 

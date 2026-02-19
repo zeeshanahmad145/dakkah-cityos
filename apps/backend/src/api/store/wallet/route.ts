@@ -1,5 +1,13 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const walletTopUpSchema = z.object({
+  amount: z.number().positive(),
+  currency_code: z.string().optional(),
+  tenant_id: z.string().min(1),
+  payment_method: z.string().optional(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context?.actor_id
@@ -79,20 +87,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Authentication required" })
   }
 
-  const { amount, currency_code = "usd", tenant_id, payment_method } = req.body as {
-    amount: number
-    currency_code?: string
-    tenant_id: string
-    payment_method?: string
+  const parsed = walletTopUpSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
 
-  if (!amount || !tenant_id) {
-    return res.status(400).json({ message: "amount and tenant_id are required" })
-  }
-
-  if (amount <= 0) {
-    return res.status(400).json({ message: "Amount must be greater than 0" })
-  }
+  const { amount, currency_code = "usd", tenant_id, payment_method } = parsed.data
 
   try {
     const promotionExt = req.scope.resolve("promotionExt") as any

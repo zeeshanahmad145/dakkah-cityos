@@ -19,7 +19,7 @@ const StartDynamicWorkflowSchema = z.object({
       locale: z.string().optional(),
     })
     .optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

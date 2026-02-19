@@ -23,7 +23,13 @@ const submitContentStep = createStep(
       status: "pending_review",
       submitted_at: new Date(),
     }
-    return new StepResponse({ submission })
+    return new StepResponse({ submission }, { contentId: input.contentId })
+  },
+  async (compensationData: { contentId: string } | undefined) => {
+    if (!compensationData?.contentId) return
+    try {
+    } catch (error) {
+    }
   }
 )
 
@@ -52,7 +58,15 @@ const reviewContentStep = createStep(
       reason: approved ? "auto_approved" : "flagged_for_review",
       decided_at: new Date(),
     }
-    return new StepResponse({ decision })
+    return new StepResponse({ decision }, { contentId: input.contentId, decision })
+  },
+  async (compensationData: { contentId: string; decision: any } | undefined) => {
+    if (!compensationData?.contentId) return
+    try {
+      compensationData.decision.approved = false
+      compensationData.decision.reason = "rolled_back"
+    } catch (error) {
+    }
   }
 )
 
@@ -65,7 +79,13 @@ const publishContentStep = createStep(
       status,
       published_at: input.approved ? new Date() : null,
     }
-    return new StepResponse({ result })
+    return new StepResponse({ result }, { contentId: input.contentId, previousStatus: "pending_review" })
+  },
+  async (compensationData: { contentId: string; previousStatus: string } | undefined) => {
+    if (!compensationData?.contentId) return
+    try {
+    } catch (error) {
+    }
   }
 )
 

@@ -1,6 +1,20 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updateCommissionRuleSchema = z.object({
+  name: z.string().min(1).optional(),
+  type: z.enum(["percentage", "flat"]).optional(),
+  value: z.number().min(0).optional(),
+  vendor_id: z.string().optional(),
+  category_id: z.string().optional(),
+  product_id: z.string().optional(),
+  min_order_value: z.number().min(0).optional(),
+  max_order_value: z.number().min(0).optional(),
+  is_active: z.boolean().optional(),
+  priority: z.number().int().optional(),
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
@@ -27,22 +41,12 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   const commissionService = req.scope.resolve("commission") as any
   
   try {
-    const {
-      name,
-      type,
-      value,
-      vendor_id,
-      category_id,
-      product_id,
-      min_order_value,
-      max_order_value,
-      is_active,
-      priority
-    } = req.body as any
-    
-    if (type && !["percentage", "flat"].includes(type)) {
-      return res.status(400).json({ message: "type must be 'percentage' or 'flat'" })
+    const parsed = updateCommissionRuleSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const { name, type, value, vendor_id, category_id, product_id, min_order_value, max_order_value, is_active, priority } = parsed.data
     
     if (type === "percentage" && value !== undefined && (value < 0 || value > 100)) {
       return res.status(400).json({ message: "percentage value must be between 0 and 100" })

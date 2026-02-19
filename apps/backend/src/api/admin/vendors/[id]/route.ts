@@ -10,7 +10,7 @@ const updateVendorSchema = z.object({
   status: z.enum(["onboarding", "active", "inactive", "suspended", "terminated"]).optional(),
   commissionRate: z.number().min(0).max(100).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(
   req: MedusaRequest,

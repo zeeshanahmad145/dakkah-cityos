@@ -1,6 +1,15 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updateQuoteSchema = z.object({
+  custom_discount_percentage: z.number().optional(),
+  custom_discount_amount: z.number().optional(),
+  discount_reason: z.string().optional(),
+  valid_until: z.string().optional(),
+  internal_notes: z.string().optional(),
+}).passthrough()
 
 // GET /admin/quotes/:id
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -61,19 +70,18 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     const quoteModule = req.scope.resolve("quote")
     const { id } = req.params
   
+    const parsed = updateQuoteSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       custom_discount_percentage,
       custom_discount_amount,
       discount_reason,
       valid_until,
       internal_notes,
-    } = req.body as {
-      custom_discount_percentage?: number
-      custom_discount_amount?: number
-      discount_reason?: string
-      valid_until?: string
-      internal_notes?: string
-    }
+    } = parsed.data
   
     const updateData: Record<string, unknown> = { id }
     if (custom_discount_percentage !== undefined) updateData.custom_discount_percentage = custom_discount_percentage

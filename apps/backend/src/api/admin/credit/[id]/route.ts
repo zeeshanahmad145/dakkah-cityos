@@ -10,7 +10,7 @@ const updateSchema = z.object({
   status: z.enum(["active", "suspended", "closed"]).optional(),
   tenant_id: z.string().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

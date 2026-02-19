@@ -14,7 +14,7 @@ const updateSchema = z.object({
   ends_at: z.string().optional(),
   tenant_id: z.string().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -32,9 +32,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("volumeDeals") as any
     const { id } = req.params
-    const validation = updateSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await mod.updateVolumeDeals({ id, ...validation.data })
+    const parsed = updateSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await mod.updateVolumeDeals({ id, ...parsed.data })
     return res.json({ item })
 
   } catch (error: any) {

@@ -5,7 +5,7 @@ import { handleApiError } from "../../../../../lib/api-error-handler"
 
 const approveVendorSchema = z.object({
   notes: z.string().optional(),
-})
+}).passthrough()
 
 export async function POST(
   req: MedusaRequest,

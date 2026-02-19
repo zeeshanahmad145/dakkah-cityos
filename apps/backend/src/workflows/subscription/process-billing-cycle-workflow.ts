@@ -65,6 +65,9 @@ const markCycleProcessingStep = createStep(
   async ({ cycle }: { cycle: any }, { container }) => {
     const subscriptionModule = container.resolve("subscription") as any;
     
+    const previousStatus = cycle.status;
+    const previousAttemptCount = cycle.attempt_count || 0;
+    
     const updated = await subscriptionModule.updateBillingCycles({
       id: cycle.id,
       status: "processing",
@@ -72,7 +75,19 @@ const markCycleProcessingStep = createStep(
       last_attempt_at: new Date(),
     });
     
-    return new StepResponse({ updatedCycle: updated });
+    return new StepResponse({ updatedCycle: updated }, { cycleId: cycle.id, previousStatus, previousAttemptCount });
+  },
+  async (compensationData: { cycleId: string; previousStatus: string; previousAttemptCount: number } | undefined, { container }) => {
+    if (!compensationData?.cycleId) return;
+    try {
+      const subscriptionModule = container.resolve("subscription") as any;
+      await subscriptionModule.updateBillingCycles({
+        id: compensationData.cycleId,
+        status: compensationData.previousStatus,
+        attempt_count: compensationData.previousAttemptCount,
+      });
+    } catch (error) {
+    }
   }
 );
 
@@ -117,13 +132,14 @@ const createOrderFromSubscriptionStep = createStep(
       },
     });
     
-    return new StepResponse({ cart });
+    return new StepResponse({ cart }, { cart });
   },
-  async ({ cart }: { cart: any }, { container }) => {
-    // Compensation: delete cart on failure
-    const cartModule = container.resolve("cart") as any;
-    if (cart?.id) {
-      await cartModule.deleteCarts(cart.id);
+  async (compensationData: { cart: any } | undefined, { container }) => {
+    if (!compensationData?.cart?.id) return;
+    try {
+      const cartModule = container.resolve("cart") as any;
+      await cartModule.deleteCarts(compensationData.cart.id);
+    } catch (error) {
     }
   }
 );
@@ -142,7 +158,7 @@ const processSubscriptionPaymentStep = createStep(
         payment_status: "paid",
         payment_method: "simulated",
         payment_id: null 
-      });
+      }, { payment_id: null });
     }
     
     const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
@@ -160,7 +176,7 @@ const processSubscriptionPaymentStep = createStep(
         payment_method: null,
         payment_id: null,
         error: "No saved payment method" 
-      });
+      }, { payment_id: null });
     }
     
     try {
@@ -188,14 +204,14 @@ const processSubscriptionPaymentStep = createStep(
           payment_status: "paid",
           payment_method: paymentMethodId,
           payment_id: paymentIntent.id 
-        });
+        }, { payment_id: paymentIntent.id });
       } else {
         logger.warn(`Payment status ${paymentIntent.status} for subscription ${subscription.id}`);
         return new StepResponse({ 
           payment_status: "pending",
           payment_method: paymentMethodId,
           payment_id: paymentIntent.id 
-        });
+        }, { payment_id: paymentIntent.id });
       }
     } catch (error: any) {
       logger.error(`Payment failed for subscription ${subscription.id}: ${error.message}`);
@@ -207,10 +223,20 @@ const processSubscriptionPaymentStep = createStep(
           payment_method: paymentMethodId,
           payment_id: null,
           error: error.message 
-        });
+        }, { payment_id: null });
       }
       
       throw error;
+    }
+  },
+  async (compensationData: { payment_id: string | null } | undefined, { container }) => {
+    if (!compensationData?.payment_id) return;
+    try {
+      const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+      if (!stripeSecretKey) return;
+      const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
+      await stripe.refunds.create({ payment_intent: compensationData.payment_id });
+    } catch (error) {
     }
   }
 );
@@ -295,7 +321,21 @@ const completeBillingCycleStep = createStep(
       success: isPaid,
       cycle: updatedCycle,
       payment_status 
-    });
+    }, { cycleId: cycle.id, subscriptionId: subscription.id, isPaid, previousCycleStatus: cycle.status });
+  },
+  async (compensationData: { cycleId: string; subscriptionId: string; isPaid: boolean; previousCycleStatus: string } | undefined, { container }) => {
+    if (!compensationData?.cycleId) return;
+    try {
+      const subscriptionModule = container.resolve("subscription") as any;
+      await subscriptionModule.updateBillingCycles({
+        id: compensationData.cycleId,
+        status: compensationData.previousCycleStatus,
+        paid_at: null,
+        order_id: null,
+        payment_id: null,
+      });
+    } catch (error) {
+    }
   }
 );
 

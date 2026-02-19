@@ -16,7 +16,7 @@ const createSchema = z.object({
   estimated_days_max: z.number().optional(),
   is_active: z.boolean().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -34,9 +34,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("shippingExtension") as any
-    const validation = createSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await mod.createShippingRates(validation.data)
+    const parsed = createSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await mod.createShippingRates(parsed.data)
     return res.status(201).json({ item })
 
   } catch (error: any) {

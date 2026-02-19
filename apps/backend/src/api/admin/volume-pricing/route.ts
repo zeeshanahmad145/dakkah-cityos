@@ -1,7 +1,31 @@
 // @ts-nocheck
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createVolumePricingSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  applies_to: z.string(),
+  target_id: z.string().optional(),
+  pricing_type: z.string(),
+  company_id: z.string().optional(),
+  company_tier: z.string().optional(),
+  priority: z.number().optional(),
+  status: z.string().optional(),
+  starts_at: z.string().optional(),
+  ends_at: z.string().optional(),
+  tiers: z.array(z.object({
+    min_quantity: z.number(),
+    max_quantity: z.number().optional(),
+    discount_percentage: z.number().optional(),
+    discount_amount: z.number().optional(),
+    fixed_price: z.number().optional(),
+    currency_code: z.string().optional(),
+  }).passthrough()),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 // GET /admin/volume-pricing - List all volume pricing rules
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -77,6 +101,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const volumePricingModule = req.scope.resolve("volumePricing")
   
+    const parsed = createVolumePricingSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       name,
       description,
@@ -91,28 +120,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       ends_at,
       tiers,
       metadata,
-    } = req.body as {
-      name: string
-      description?: string
-      applies_to: string
-      target_id?: string
-      pricing_type: string
-      company_id?: string
-      company_tier?: string
-      priority?: number
-      status?: string
-      starts_at?: string
-      ends_at?: string
-      tiers: Array<{
-        min_quantity: number
-        max_quantity?: number
-        discount_percentage?: number
-        discount_amount?: number
-        fixed_price?: number
-        currency_code?: string
-      }>
-      metadata?: Record<string, unknown>
-    }
+    } = parsed.data
   
     // Create the rule
     const rule = await volumePricingModule.createVolumePricings({

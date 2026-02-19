@@ -20,7 +20,7 @@ const createSubscriptionSchema = z.object({
     })
   ),
   metadata: z.record(z.string(), z.unknown()).optional(),
-});
+}).passthrough();
 
 // GET /admin/subscriptions - List subscriptions
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -60,11 +60,14 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const tenantId = extReq.tenant?.id;
     const storeId = extReq.store?.id;
   
-    const validatedData = createSubscriptionSchema.parse(req.body);
+    const parsed = createSubscriptionSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues });
+    }
   
     const { result } = await createSubscriptionWorkflow(req.scope).run({
       input: {
-        ...validatedData,
+        ...parsed.data,
         tenant_id: tenantId || "",
         store_id: storeId,
       },

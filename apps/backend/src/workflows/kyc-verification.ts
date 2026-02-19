@@ -25,7 +25,13 @@ const submitDocumentsStep = createStep(
       status: "submitted",
       submitted_at: new Date(),
     }
-    return new StepResponse({ submission })
+    return new StepResponse({ submission }, { vendorId: input.vendorId, documentId: input.documentId })
+  },
+  async (compensationData: { vendorId: string; documentId: string } | undefined) => {
+    if (!compensationData?.vendorId) return
+    try {
+    } catch (error) {
+    }
   }
 )
 
@@ -62,7 +68,13 @@ const decideKycStep = createStep(
       risk_level: input.riskLevel,
       decided_at: new Date(),
     }
-    return new StepResponse({ decision })
+    return new StepResponse({ decision }, { vendorId: input.vendorId, previousStatus: "submitted" })
+  },
+  async (compensationData: { vendorId: string; previousStatus: string } | undefined) => {
+    if (!compensationData?.vendorId) return
+    try {
+    } catch (error) {
+    }
   }
 )
 

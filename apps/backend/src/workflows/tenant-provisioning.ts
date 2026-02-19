@@ -25,11 +25,15 @@ const createTenantStep = createStep(
       plan: input.plan,
       status: "provisioning",
     })
-    return new StepResponse({ tenant }, { tenant })
+    return new StepResponse({ tenant }, { tenantId: tenant.id })
   },
-  async ({ tenant }: { tenant: any }, { container }) => {
-    const tenantModule = container.resolve("tenant") as any
-    await tenantModule.deleteTenants(tenant.id)
+  async (compensationData: { tenantId: string }, { container }) => {
+    if (!compensationData?.tenantId) return
+    try {
+      const tenantModule = container.resolve("tenant") as any
+      await tenantModule.deleteTenants(compensationData.tenantId)
+    } catch (error) {
+    }
   }
 )
 
@@ -69,7 +73,19 @@ const configureTenantStep = createStep(
       status: "active",
       configured_at: new Date(),
     })
-    return new StepResponse({ tenant: configured })
+    return new StepResponse({ tenant: configured }, { tenantId: input.tenantId })
+  },
+  async (compensationData: { tenantId: string }, { container }) => {
+    if (!compensationData?.tenantId) return
+    try {
+      const tenantModule = container.resolve("tenant") as any
+      await tenantModule.updateTenants({
+        id: compensationData.tenantId,
+        status: "provisioning",
+        configured_at: null,
+      })
+    } catch (error) {
+    }
   }
 )
 

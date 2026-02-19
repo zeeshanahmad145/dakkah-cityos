@@ -38,11 +38,15 @@ const reserveTicketsStep = createStep(
       quantity: input.quantity,
       expires_at: new Date(Date.now() + 15 * 60 * 1000),
     })
-    return new StepResponse({ reservation }, { reservation })
+    return new StepResponse({ reservation }, { reservationId: reservation.id })
   },
-  async ({ reservation }: { reservation: any }, { container }) => {
-    const eventModule = container.resolve("eventTicketing") as any
-    await eventModule.cancelReservation(reservation.id)
+  async (compensationData: { reservationId: string }, { container }) => {
+    if (!compensationData?.reservationId) return
+    try {
+      const eventModule = container.resolve("eventTicketing") as any
+      await eventModule.cancelReservation(compensationData.reservationId)
+    } catch (error) {
+    }
   }
 )
 

@@ -9,7 +9,7 @@ const updateSubscriptionSchema = z.object({
   billing_interval: z.enum(["daily", "weekly", "monthly", "quarterly", "yearly"]).optional(),
   billing_interval_count: z.number().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-});
+}).passthrough();
 
 // GET /admin/subscriptions/:id - Get subscription
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -51,7 +51,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       return res.status(404).json({ message: "Subscription not found" });
     }
   
-    const validatedData = updateSubscriptionSchema.parse(req.body);
+    const parsed = updateSubscriptionSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues });
+    }
+    const validatedData = parsed.data;
   
     // Handle status changes
     const updateData: any = { ...validatedData };

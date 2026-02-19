@@ -14,7 +14,7 @@ const updateSchema = z.object({
   bio: z.string().optional(),
   social_links: z.any().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

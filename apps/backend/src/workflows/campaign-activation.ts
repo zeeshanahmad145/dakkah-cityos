@@ -28,7 +28,14 @@ const createCampaignStep = createStep(
       status: "draft",
       created_at: new Date(),
     }
-    return new StepResponse({ campaign })
+    return new StepResponse({ campaign }, { campaign })
+  },
+  async (compensationData: { campaign: any } | undefined) => {
+    if (!compensationData?.campaign) return
+    try {
+      compensationData.campaign.status = "cancelled"
+    } catch (error) {
+    }
   }
 )
 
@@ -41,7 +48,14 @@ const scheduleCampaignStep = createStep(
       end_date: new Date(input.endDate),
       status: "scheduled",
     }
-    return new StepResponse({ campaign: scheduled })
+    return new StepResponse({ campaign: scheduled }, { campaign: input.campaign })
+  },
+  async (compensationData: { campaign: any } | undefined) => {
+    if (!compensationData?.campaign) return
+    try {
+      compensationData.campaign.status = "draft"
+    } catch (error) {
+    }
   }
 )
 
@@ -54,7 +68,14 @@ const activateCampaignStep = createStep(
       promotion_ids: input.promotionIds || [],
       activated_at: new Date(),
     }
-    return new StepResponse({ campaign: activated })
+    return new StepResponse({ campaign: activated }, { campaign: input.campaign })
+  },
+  async (compensationData: { campaign: any } | undefined) => {
+    if (!compensationData?.campaign) return
+    try {
+      compensationData.campaign.status = "scheduled"
+    } catch (error) {
+    }
   }
 )
 

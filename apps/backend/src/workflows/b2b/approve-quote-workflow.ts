@@ -46,7 +46,20 @@ const applyDiscountStep = createStep(
         input.discount_reason
       );
     }
-    return new StepResponse({ discountApplied: true });
+    return new StepResponse({ discountApplied: true }, { quoteId: input.quote_id, hadDiscount: !!(input.custom_discount_percentage || input.custom_discount_amount) });
+  },
+  async (compensationData: { quoteId: string; hadDiscount: boolean }, { container }) => {
+    if (!compensationData?.quoteId || !compensationData.hadDiscount) return
+    try {
+      const quoteService = container.resolve("quote") as any;
+      await quoteService.applyCustomDiscount(
+        compensationData.quoteId,
+        undefined,
+        undefined,
+        undefined
+      );
+    } catch (error) {
+    }
   }
 );
 
@@ -54,6 +67,7 @@ const applyDiscountStep = createStep(
 const updateQuoteStatusStep = createStep(
   "update-quote-status",
   async ({ input, quote }: { input: ApproveQuoteInput; quote: Record<string, unknown> }, { container }) => {
+    const previousStatus = quote.status as string;
     const quoteService = container.resolve("quote") as Record<string, unknown>;
     
     const validUntil = input.valid_days
@@ -69,7 +83,22 @@ const updateQuoteStatusStep = createStep(
       valid_until: validUntil,
     });
 
-    return new StepResponse({ approvedQuote });
+    return new StepResponse({ approvedQuote }, { quoteId: input.quote_id, previousStatus });
+  },
+  async (compensationData: { quoteId: string; previousStatus: string }, { container }) => {
+    if (!compensationData?.quoteId) return
+    try {
+      const quoteService = container.resolve("quote") as any;
+      await quoteService.updateQuotes({
+        id: compensationData.quoteId,
+        status: compensationData.previousStatus,
+        reviewed_by: null,
+        reviewed_at: null,
+        valid_from: null,
+        valid_until: null,
+      });
+    } catch (error) {
+    }
   }
 );
 

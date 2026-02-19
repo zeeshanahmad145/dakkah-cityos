@@ -12,7 +12,7 @@ const createSchema = z.object({
   location: z.any().nullable().optional(),
   status: z.enum(["active", "inactive", "maintenance"]).optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -32,9 +32,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("node") as any
-    const validation = createSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await moduleService.createNodeWithValidation(validation.data)
+    const parsed = createSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await moduleService.createNodeWithValidation(parsed.data)
     return res.status(201).json({ item })
 
   } catch (error: any) {

@@ -17,7 +17,7 @@ const updateSchema = z.object({
   extend_minutes: z.number().optional(),
   status: z.enum(["draft", "scheduled", "active", "ended", "cancelled"]).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

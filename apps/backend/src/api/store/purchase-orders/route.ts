@@ -1,5 +1,25 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const purchaseOrderItemSchema = z.object({
+  product_id: z.string().min(1),
+  variant_id: z.string().optional(),
+  title: z.string().min(1),
+  sku: z.string().optional(),
+  quantity: z.number().min(1),
+  unit_price: z.union([z.string(), z.number()]),
+})
+
+const createPurchaseOrderSchema = z.object({
+  company_id: z.string().min(1),
+  po_number: z.string().optional(),
+  shipping_address_id: z.string().optional(),
+  billing_address_id: z.string().optional(),
+  items: z.array(purchaseOrderItemSchema).optional(),
+  notes: z.string().optional(),
+  requested_delivery_date: z.string().optional(),
+})
 
 /**
  * GET /store/purchase-orders
@@ -49,6 +69,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   }
   
   const customerId = req.auth_context.actor_id
+
+  const parsed = createPurchaseOrderSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const {
     company_id,
     po_number,
@@ -57,11 +83,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     items,
     notes,
     requested_delivery_date,
-  } = req.body as Record<string, any>
-  
-  if (!company_id) {
-    return res.status(400).json({ message: "company_id is required" })
-  }
+  } = parsed.data
   
   try {
     // Verify customer belongs to company

@@ -1,16 +1,23 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const changePlanSchema = z.object({
+  new_plan_id: z.string(),
+  prorate: z.boolean().optional(),
+}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve("query")
     const subscriptionService = req.scope.resolve("subscriptionModuleService") as any
     const { id } = req.params
-    const { new_plan_id, prorate } = req.body as {
-      new_plan_id: string
-      prorate?: boolean
+    const parsed = changePlanSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { new_plan_id, prorate } = parsed.data
   
     // Get current subscription
     const { data: [subscription] } = await query.graph({

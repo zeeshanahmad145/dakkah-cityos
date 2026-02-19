@@ -45,11 +45,15 @@ const createCompanyStep = createStep(
       requires_approval: true,
     });
 
-    return new StepResponse({ company, input }, { company });
+    return new StepResponse({ company, input }, { companyId: company.id });
   },
-  async ({ company }: { company: Record<string, unknown> }, { container }) => {
-    const companyService = container.resolve("company") as any;
-    await companyService.deleteCompanies(company.id);
+  async (compensationData: { companyId: string }, { container }) => {
+    if (!compensationData?.companyId) return
+    try {
+      const companyService = container.resolve("company") as any;
+      await companyService.deleteCompanies(compensationData.companyId);
+    } catch (error) {
+    }
   }
 );
 
@@ -67,7 +71,15 @@ const addCompanyAdminStep = createStep(
       joined_at: new Date(),
     });
 
-    return new StepResponse({ companyUser });
+    return new StepResponse({ companyUser }, { companyUserId: companyUser.id });
+  },
+  async (compensationData: { companyUserId: string }, { container }) => {
+    if (!compensationData?.companyUserId) return
+    try {
+      const companyService = container.resolve("company") as any;
+      await companyService.deleteCompanyUsers(compensationData.companyUserId);
+    } catch (error) {
+    }
   }
 );
 

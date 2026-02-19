@@ -1,5 +1,13 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateCommissionTierSchema = z.object({
+  name: z.string().min(1).optional(),
+  min_revenue: z.number().min(0).optional(),
+  max_revenue: z.number().min(0).optional(),
+  rate: z.number().min(0).max(100).optional(),
+}).passthrough()
 
 // GET - Get commission tier by ID
 export async function GET(
@@ -33,18 +41,14 @@ export async function PUT(
 ) {
   try {
     const { id } = req.params
-    const { name, min_revenue, max_revenue, rate } = req.body as {
-      name?: string
-      min_revenue?: number
-      max_revenue?: number
-      rate?: number
+    const parsed = updateCommissionTierSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const { name, min_revenue, max_revenue, rate } = parsed.data
 
     const commissionService = req.scope.resolve("commissionModuleService") as any
-
-    if (rate !== undefined && (rate < 0 || rate > 100)) {
-      return res.status(400).json({ message: "Rate must be between 0 and 100" })
-    }
 
     await commissionService.updateCommissionTiers({
       selector: { id },

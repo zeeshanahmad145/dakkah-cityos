@@ -24,7 +24,7 @@ const createSchema = z.object({
   min_order_amount: z.number().nullable().optional(),
   delivery_fee: z.number().nullable().optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const moduleService = req.scope.resolve("restaurant") as any
@@ -35,9 +35,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const moduleService = req.scope.resolve("restaurant") as any
-  const validation = createSchema.safeParse(req.body)
-  if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-  const item = await moduleService.createRestaurants(validation.data)
+  const parsed = createSchema.safeParse(req.body)
+  if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  const item = await moduleService.createRestaurants(parsed.data)
   return res.status(201).json({ item })
 }
 

@@ -1,7 +1,12 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updatePaymentMethodSchema = z.object({
+  payment_method_id: z.string().min(1),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
@@ -61,16 +66,18 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
-  const { payment_method_id } = req.body
   const customerId = req.auth_context?.actor_id
   
   if (!customerId) {
     return res.status(401).json({ message: "Unauthorized" })
   }
-  
-  if (!payment_method_id) {
-    return res.status(400).json({ message: "payment_method_id is required" })
+
+  const parsed = updatePaymentMethodSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+
+  const { payment_method_id } = parsed.data
   
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
   const subscriptionService = req.scope.resolve("subscription")

@@ -1,6 +1,14 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const rescheduleSchema = z.object({
+  new_scheduled_at: z.string(),
+  new_provider_id: z.string().optional(),
+  notify_customer: z.boolean().optional(),
+  reason: z.string().optional(),
+}).passthrough()
 
 // POST - Admin reschedule booking
 export async function POST(
@@ -8,17 +16,16 @@ export async function POST(
   res: MedusaResponse
 ) {
   const { id } = req.params
+  const parsed = rescheduleSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
   const { 
     new_scheduled_at, 
     new_provider_id,
     notify_customer,
     reason 
-  } = req.body as { 
-    new_scheduled_at: string
-    new_provider_id?: string
-    notify_customer?: boolean
-    reason?: string
-  }
+  } = parsed.data
 
   const query = req.scope.resolve("query")
   const bookingService = req.scope.resolve("bookingModuleService")

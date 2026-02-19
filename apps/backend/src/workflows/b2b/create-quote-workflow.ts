@@ -87,11 +87,15 @@ const createQuoteStep = createStep(
       valid_until: validUntil,
     });
 
-    return new StepResponse({ quote }, { quote });
+    return new StepResponse({ quote }, { quoteId: quote.id });
   },
-  async ({ quote }: { quote: Record<string, unknown> }, { container }) => {
-    const quoteService = container.resolve("quote") as any;
-    await quoteService.deleteQuotes(quote.id);
+  async (compensationData: { quoteId: string }, { container }) => {
+    if (!compensationData?.quoteId) return
+    try {
+      const quoteService = container.resolve("quote") as any;
+      await quoteService.deleteQuotes(compensationData.quoteId);
+    } catch (error) {
+    }
   }
 );
 
@@ -127,7 +131,17 @@ const createQuoteItemsStep = createStep(
       items.push(quoteItem);
     }
 
-    return new StepResponse({ items });
+    return new StepResponse({ items }, { itemIds: items.map((i: Record<string, unknown>) => i.id as string) });
+  },
+  async (compensationData: { itemIds: string[] }, { container }) => {
+    if (!compensationData?.itemIds?.length) return
+    try {
+      const quoteService = container.resolve("quote") as any;
+      for (const itemId of compensationData.itemIds) {
+        await quoteService.deleteQuoteItems(itemId);
+      }
+    } catch (error) {
+    }
   }
 );
 

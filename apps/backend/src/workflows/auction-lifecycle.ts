@@ -28,11 +28,15 @@ const createAuctionStep = createStep(
       end_time: new Date(input.endTime),
       status: "draft",
     })
-    return new StepResponse({ auction }, { auction })
+    return new StepResponse({ auction }, { auctionId: auction.id })
   },
-  async ({ auction }: { auction: any }, { container }) => {
-    const auctionModule = container.resolve("auction") as any
-    await auctionModule.deleteAuctions(auction.id)
+  async (compensationData: { auctionId: string } | undefined, { container }) => {
+    if (!compensationData?.auctionId) return
+    try {
+      const auctionModule = container.resolve("auction") as any
+      await auctionModule.deleteAuctions(compensationData.auctionId)
+    } catch (error) {
+    }
   }
 )
 
@@ -45,7 +49,18 @@ const openAuctionStep = createStep(
       status: "active",
       opened_at: new Date(),
     })
-    return new StepResponse({ auction: opened })
+    return new StepResponse({ auction: opened }, { auctionId: input.auctionId, previousStatus: "draft" })
+  },
+  async (compensationData: { auctionId: string; previousStatus: string } | undefined, { container }) => {
+    if (!compensationData?.auctionId) return
+    try {
+      const auctionModule = container.resolve("auction") as any
+      await auctionModule.updateAuctions({
+        id: compensationData.auctionId,
+        status: compensationData.previousStatus,
+      })
+    } catch (error) {
+    }
   }
 )
 
@@ -58,7 +73,18 @@ const closeAuctionStep = createStep(
       status: "closed",
       closed_at: new Date(),
     })
-    return new StepResponse({ auction: closed })
+    return new StepResponse({ auction: closed }, { auctionId: input.auctionId, previousStatus: "active" })
+  },
+  async (compensationData: { auctionId: string; previousStatus: string } | undefined, { container }) => {
+    if (!compensationData?.auctionId) return
+    try {
+      const auctionModule = container.resolve("auction") as any
+      await auctionModule.updateAuctions({
+        id: compensationData.auctionId,
+        status: compensationData.previousStatus,
+      })
+    } catch (error) {
+    }
   }
 )
 

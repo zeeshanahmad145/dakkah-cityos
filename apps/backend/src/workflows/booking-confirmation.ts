@@ -28,11 +28,15 @@ const reserveSlotStep = createStep(
       status: "reserved",
       notes: input.notes,
     })
-    return new StepResponse({ booking }, { booking })
+    return new StepResponse({ booking }, { bookingId: booking.id })
   },
-  async ({ booking }: { booking: any }, { container }) => {
-    const bookingModule = container.resolve("booking") as any
-    await bookingModule.deleteBookings(booking.id)
+  async (compensationData: { bookingId: string }, { container }) => {
+    if (!compensationData?.bookingId) return
+    try {
+      const bookingModule = container.resolve("booking") as any
+      await bookingModule.deleteBookings(compensationData.bookingId)
+    } catch (error) {
+    }
   }
 )
 
@@ -45,7 +49,19 @@ const confirmBookingStep = createStep(
       status: "confirmed",
       confirmed_at: new Date(),
     })
-    return new StepResponse({ booking: confirmed })
+    return new StepResponse({ booking: confirmed }, { bookingId: input.bookingId })
+  },
+  async (compensationData: { bookingId: string }, { container }) => {
+    if (!compensationData?.bookingId) return
+    try {
+      const bookingModule = container.resolve("booking") as any
+      await bookingModule.updateBookings({
+        id: compensationData.bookingId,
+        status: "reserved",
+        confirmed_at: null,
+      })
+    } catch (error) {
+    }
   }
 )
 

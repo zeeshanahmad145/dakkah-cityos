@@ -1,5 +1,21 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createTradeInSchema = z.object({
+  tenant_id: z.string().min(1),
+  listing_id: z.string().optional(),
+  make: z.string().min(1),
+  model_name: z.string().min(1),
+  year: z.number(),
+  mileage_km: z.number(),
+  condition: z.string().min(1),
+  vin: z.string().optional(),
+  description: z.string().optional(),
+  photos: z.array(z.string()).optional(),
+  currency_code: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context?.actor_id
@@ -61,6 +77,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Authentication required" })
   }
 
+  const parsed = createTradeInSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const {
     tenant_id,
     listing_id,
@@ -74,26 +95,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     photos,
     currency_code = "usd",
     metadata,
-  } = req.body as {
-    tenant_id: string
-    listing_id?: string
-    make: string
-    model_name: string
-    year: number
-    mileage_km: number
-    condition: string
-    vin?: string
-    description?: string
-    photos?: string[]
-    currency_code?: string
-    metadata?: Record<string, unknown>
-  }
-
-  if (!tenant_id || !make || !model_name || !year || !mileage_km || !condition) {
-    return res.status(400).json({
-      message: "tenant_id, make, model_name, year, mileage_km, and condition are required",
-    })
-  }
+  } = parsed.data
 
   try {
     const automotiveService = req.scope.resolve("automotive") as any
@@ -119,4 +121,3 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   } catch (error: any) {
     handleApiError(res, error, "STORE-TRADE-IN")}
 }
-

@@ -1,5 +1,23 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createBookingSchema = z.object({
+  customer_id: z.string().optional(),
+  provider_id: z.string().optional(),
+  service_product_id: z.string().optional(),
+  order_id: z.string().optional(),
+  status: z.string().optional(),
+  starts_at: z.string().optional(),
+  ends_at: z.string().optional(),
+  timezone: z.string().optional(),
+  customer_name: z.string().optional(),
+  customer_email: z.string().optional(),
+  customer_phone: z.string().optional(),
+  notes: z.string().optional(),
+  internal_notes: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -64,7 +82,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const bookingModuleService = req.scope.resolve("bookingModuleService") as any
   
-    const booking = await bookingModuleService.createBookings(req.body)
+    const parsed = createBookingSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const booking = await bookingModuleService.createBookings(parsed.data)
   
     res.status(201).json({ booking })
 

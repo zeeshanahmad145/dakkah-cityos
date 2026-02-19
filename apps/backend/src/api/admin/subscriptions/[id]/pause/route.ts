@@ -1,15 +1,22 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const pauseSubscriptionSchema = z.object({
+  reason: z.string().optional(),
+  resume_date: z.string().optional(),
+}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve("query")
     const subscriptionService = req.scope.resolve("subscriptionModuleService") as any
     const { id } = req.params
-    const { reason, resume_date } = req.body as {
-      reason?: string
-      resume_date?: string
+    const parsed = pauseSubscriptionSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { reason, resume_date } = parsed.data
   
     const { data: [subscription] } = await query.graph({
       entity: "subscription",

@@ -26,11 +26,15 @@ const submitApplicationStep = createStep(
       status: "onboarding",
       verification_status: "pending",
     })
-    return new StepResponse({ vendor }, { vendor })
+    return new StepResponse({ vendor }, { vendorId: vendor.id })
   },
-  async ({ vendor }: { vendor: any }, { container }) => {
-    const vendorModule = container.resolve("vendor") as any
-    await vendorModule.deleteVendors(vendor.id)
+  async (compensationData: { vendorId: string }, { container }) => {
+    if (!compensationData?.vendorId) return
+    try {
+      const vendorModule = container.resolve("vendor") as any
+      await vendorModule.deleteVendors(compensationData.vendorId)
+    } catch (error) {
+    }
   }
 )
 
@@ -43,6 +47,17 @@ const verifyDocumentsStep = createStep(
       verification_status: "documents_verified",
     })
     return new StepResponse({ verified: true }, { vendorId: input.vendorId })
+  },
+  async (compensationData: { vendorId: string }, { container }) => {
+    if (!compensationData?.vendorId) return
+    try {
+      const vendorModule = container.resolve("vendor") as any
+      await vendorModule.updateVendors({
+        id: compensationData.vendorId,
+        verification_status: "pending",
+      })
+    } catch (error) {
+    }
   }
 )
 
@@ -54,7 +69,15 @@ const setupVendorStoreStep = createStep(
       vendor_id: input.vendorId,
       tenant_id: input.tenantId,
     })
-    return new StepResponse({ store }, { store })
+    return new StepResponse({ store }, { storeId: store.id })
+  },
+  async (compensationData: { storeId: string }, { container }) => {
+    if (!compensationData?.storeId) return
+    try {
+      const storeModule = container.resolve("store") as any
+      await storeModule.deleteStores(compensationData.storeId)
+    } catch (error) {
+    }
   }
 )
 

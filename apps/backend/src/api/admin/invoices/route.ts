@@ -1,6 +1,29 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createInvoiceSchema = z.object({
+  company_id: z.string(),
+  customer_id: z.string().optional(),
+  issue_date: z.string(),
+  due_date: z.string(),
+  period_start: z.string().optional(),
+  period_end: z.string().optional(),
+  payment_terms: z.string().optional(),
+  payment_terms_days: z.number().optional(),
+  currency_code: z.string().optional(),
+  notes: z.string().optional(),
+  items: z.array(z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    order_id: z.string().optional(),
+    order_display_id: z.string().optional(),
+    quantity: z.number(),
+    unit_price: z.number(),
+  })),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 // GET /admin/invoices - List all invoices
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -66,6 +89,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 // POST /admin/invoices - Create a new invoice
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
+    const parsed = createInvoiceSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const invoiceModule = req.scope.resolve("invoice")
   
     const {
@@ -81,27 +109,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       notes,
       items,
       metadata,
-    } = req.body as {
-      company_id: string
-      customer_id?: string
-      issue_date: string
-      due_date: string
-      period_start?: string
-      period_end?: string
-      payment_terms?: string
-      payment_terms_days?: number
-      currency_code?: string
-      notes?: string
-      items: Array<{
-        title: string
-        description?: string
-        order_id?: string
-        order_display_id?: string
-        quantity: number
-        unit_price: number
-      }>
-      metadata?: Record<string, unknown>
-    }
+    } = parsed.data
   
     const result = await invoiceModule.createInvoiceWithItems({
       company_id,

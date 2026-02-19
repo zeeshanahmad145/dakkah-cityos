@@ -14,7 +14,7 @@ const createSchema = z.object({
   status: z.enum(["active", "redeemed", "expired", "disabled"]).optional(),
   tenant_id: z.string(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

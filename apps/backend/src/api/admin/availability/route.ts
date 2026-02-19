@@ -1,5 +1,18 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createAvailabilitySchema = z.object({
+  owner_type: z.enum(["provider", "service", "resource"]),
+  owner_id: z.string(),
+  schedule_type: z.enum(["weekly_recurring", "custom"]).optional(),
+  weekly_schedule: z.any().optional(),
+  timezone: z.string().optional(),
+  effective_from: z.string().optional(),
+  effective_to: z.string().optional(),
+  slot_duration_minutes: z.number().optional(),
+  slot_increment_minutes: z.number().optional(),
+}).passthrough()
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
@@ -33,6 +46,11 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
     const query = req.scope.resolve("query")
     const bookingService = req.scope.resolve("booking")
   
+    const parsed = createAvailabilitySchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       owner_type,
       owner_id,
@@ -43,17 +61,7 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
       effective_to,
       slot_duration_minutes,
       slot_increment_minutes,
-    } = req.body as {
-      owner_type: "provider" | "service" | "resource"
-      owner_id: string
-      schedule_type?: "weekly_recurring" | "custom"
-      weekly_schedule?: Record<string, Array<{ start: string; end: string }>>
-      timezone?: string
-      effective_from?: string
-      effective_to?: string
-      slot_duration_minutes?: number
-      slot_increment_minutes?: number
-    }
+    } = parsed.data
   
     const availability = await bookingService.createAvailabilities([{
       owner_type,

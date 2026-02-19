@@ -26,7 +26,17 @@ const prepareOrderForDispatchStep = createStep(
       status: "pending_assignment",
       created_at: new Date(),
     }
-    return new StepResponse({ dispatchRequest })
+    return new StepResponse({ dispatchRequest }, { dispatchRequest })
+  },
+  async (compensationData: { dispatchRequest: any } | undefined, { container }) => {
+    if (!compensationData?.dispatchRequest) return
+    try {
+      const fulfillmentModule = container.resolve("fulfillment") as any
+      if (compensationData.dispatchRequest.id) {
+        await fulfillmentModule.cancelFulfillment(compensationData.dispatchRequest.id)
+      }
+    } catch (error) {
+    }
   }
 )
 
@@ -52,7 +62,20 @@ const assignDriverStep = createStep(
       status: "assigned",
       assigned_at: new Date(),
     }
-    return new StepResponse({ assignment })
+    return new StepResponse({ assignment }, { assignment })
+  },
+  async (compensationData: { assignment: any } | undefined, { container }) => {
+    if (!compensationData?.assignment) return
+    try {
+      const fulfillmentModule = container.resolve("fulfillment") as any
+      if (compensationData.assignment.id) {
+        await fulfillmentModule.updateFulfillment(compensationData.assignment.id, {
+          status: "unassigned",
+          driver_id: null,
+        })
+      }
+    } catch (error) {
+    }
   }
 )
 
@@ -66,7 +89,17 @@ const initializeTrackingStep = createStep(
       status: "in_transit",
       started_at: new Date(),
     }
-    return new StepResponse({ tracking })
+    return new StepResponse({ tracking }, { tracking })
+  },
+  async (compensationData: { tracking: any } | undefined, { container }) => {
+    if (!compensationData?.tracking) return
+    try {
+      const fulfillmentModule = container.resolve("fulfillment") as any
+      if (compensationData.tracking.tracking_id) {
+        await fulfillmentModule.cancelFulfillment(compensationData.tracking.tracking_id)
+      }
+    } catch (error) {
+    }
   }
 )
 

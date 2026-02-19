@@ -1,5 +1,15 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createReviewSchema = z.object({
+  rating: z.number().min(1).max(5),
+  title: z.string().optional(),
+  content: z.string().min(1),
+  product_id: z.string().optional(),
+  vendor_id: z.string().optional(),
+  order_id: z.string().optional(),
+})
 
 // POST /store/reviews - Create a new review
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
@@ -10,18 +20,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Authentication required" })
   }
 
-  const { rating, title, content, product_id, vendor_id, order_id } = req.body as {
-    rating: number
-    title?: string
-    content: string
-    product_id?: string
-    vendor_id?: string
-    order_id?: string
+  const parsed = createReviewSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
 
-  if (!rating || !content) {
-    return res.status(400).json({ message: "Rating and content are required" })
-  }
+  const { rating, title, content, product_id, vendor_id, order_id } = parsed.data
 
   if (!product_id && !vendor_id) {
     return res.status(400).json({ message: "Product ID or Vendor ID is required" })

@@ -1,6 +1,19 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const createDiscountSchema = z.object({
+  code: z.string(),
+  type: z.enum(["percentage", "fixed", "trial_days"]),
+  value: z.number(),
+  plan_id: z.string().optional(),
+  usage_limit: z.number().optional(),
+  valid_from: z.string().optional(),
+  valid_until: z.string().optional(),
+  first_payment_only: z.boolean().optional(),
+  duration_months: z.number().optional(),
+}).passthrough()
 
 // GET - List subscription discount codes
 export async function GET(
@@ -52,6 +65,10 @@ export async function POST(
   res: MedusaResponse
 ) {
   try {
+    const parsed = createDiscountSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
     const {
       code,
       type,
@@ -62,17 +79,7 @@ export async function POST(
       valid_until,
       first_payment_only,
       duration_months
-    } = req.body as {
-      code: string
-      type: "percentage" | "fixed" | "trial_days"
-      value: number
-      plan_id?: string
-      usage_limit?: number
-      valid_from?: string
-      valid_until?: string
-      first_payment_only?: boolean
-      duration_months?: number
-    }
+    } = parsed.data
 
     const subscriptionService = req.scope.resolve("subscriptionModuleService")
     const query = req.scope.resolve("query")

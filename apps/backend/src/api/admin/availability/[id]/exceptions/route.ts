@@ -1,5 +1,18 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const createExceptionSchema = z.object({
+  exception_type: z.enum(["time_off", "holiday", "special_hours", "blocked"]),
+  start_date: z.string(),
+  end_date: z.string(),
+  all_day: z.boolean().optional(),
+  special_hours: z.array(z.object({ start: z.string(), end: z.string() })).optional(),
+  title: z.string().optional(),
+  reason: z.string().optional(),
+  is_recurring: z.boolean().optional(),
+  recurrence_rule: z.string().optional(),
+}).passthrough()
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
@@ -23,6 +36,11 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
     const { id } = req.params
     const bookingService = req.scope.resolve("booking") as any
   
+    const parsed = createExceptionSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       exception_type,
       start_date,
@@ -33,17 +51,7 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
       reason,
       is_recurring,
       recurrence_rule,
-    } = req.body as {
-      exception_type: "time_off" | "holiday" | "special_hours" | "blocked"
-      start_date: string
-      end_date: string
-      all_day?: boolean
-      special_hours?: Array<{ start: string; end: string }>
-      title?: string
-      reason?: string
-      is_recurring?: boolean
-      recurrence_rule?: string
-    }
+    } = parsed.data
   
     const exception = await bookingService.createAvailabilityExceptions([{
       availability_id: id,

@@ -1,12 +1,22 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const holdPayoutSchema = z.object({
+  reason: z.string().optional(),
+}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
+    const parsed = holdPayoutSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const query = req.scope.resolve("query")
     const payoutService = req.scope.resolve("payoutModuleService") as any
     const { id } = req.params
-    const { reason } = req.body as { reason?: string }
+    const { reason } = parsed.data
   
     const { data: [payout] } = await query.graph({
       entity: "payout",

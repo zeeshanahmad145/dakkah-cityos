@@ -15,7 +15,7 @@ This project is a Medusa.js e-commerce monorepo designed for multi-tenancy and i
 The project utilizes a Turborepo monorepo structure, incorporating a Medusa.js v2 backend API, a TanStack Start + React storefront, shared TypeScript contracts, design tokens, theme providers, and a component type system.
 
 ### Backend
-The backend offers modularity for CityOS features including tenant management, a 5-level node hierarchy (CITY→DISTRICT→ZONE→FACILITY→ASSET), policy inheritance-based governance, a persona system, a CMS-compatible event outbox, and i18n. It supports multi-vendor marketplaces, subscriptions, B2B, bookings, promotions, and specialized services. Key design principles include multi-tenant isolation, RBAC, persona precedence, and residency zones. The API includes 489 endpoints with centralized error handling and structured logging.
+The backend offers modularity for CityOS features including tenant management, a 5-level node hierarchy (CITY→DISTRICT→ZONE→FACILITY→ASSET), policy inheritance-based governance, a persona system, a CMS-compatible event outbox, and i18n. It supports multi-vendor marketplaces, subscriptions, B2B, bookings, promotions, and specialized services. Key design principles include multi-tenant isolation, RBAC, persona precedence, and residency zones. The API includes 489 endpoints with centralized error handling and structured logging. All custom code lives in `apps/backend/src/`, adhering to Medusa's official extension pattern without modifying its core.
 
 ### Storefront
 The storefront, built with TanStack Start and React, provides SSR, dynamic routing, and file-based routing. It features a centralized design system with a robust provider chain, tenant-scoped routes, and a comprehensive Payload CMS-compatible block system with 76 block types across 45 vertical detail pages. UI adheres to mobile-first responsive design, utilizes design tokens, and supports i18n with logical CSS properties for RTL/LTR. All public routes include SEO meta tags and accessibility features, and all 65 detail pages have SSR loaders.
@@ -30,7 +30,7 @@ The system distinguishes between verticals requiring product variants (e.g., Pro
 A local CMS registry defines 27 commerce verticals and additional pages, supporting `countryCode` and `regionZone`. Backend endpoints provide Payload-compatible responses, and a CMS Hierarchy Sync Engine synchronizes 8 collections from Payload CMS to ERPNext.
 
 ### Integration Layer
-All cross-system integration occurs via Temporal Cloud workflows, ensuring durability, retries, saga patterns, and observability. This includes PostgreSQL-backed sync tracking, webhook endpoints with signature verification for Stripe, ERPNext, Fleetbase, and Payload CMS, and an outbox processor with circuit breakers and rate limiters. An auto-sync scheduler manages synchronization and cleanup.
+All cross-system integration occurs via Temporal Cloud workflows, ensuring durability, retries, saga patterns, and observability. This includes PostgreSQL-backed sync tracking, webhook endpoints with signature verification for Stripe, ERPNext, Fleetbase, and Payload CMS, and an outbox processor with circuit breakers and rate limiters.
 
 ### Authentication and API Usage
 JWT-based authentication is used for the customer SDK. All tenant/governance/node API calls must use `sdk.client.fetch()` for automatic `VITE_MEDUSA_PUBLISHABLE_KEY` inclusion. Authenticated routes are protected with granular access control via `RoleGuard` based on a 10-role RBAC system.
@@ -46,77 +46,8 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 - **Temporal Cloud (Workflow Orchestration):** Workflow execution, task queues, dynamic AI agent workflows, event outbox.
 - **Walt.id (Decentralized Digital Identity):** DID management, verifiable credentials, wallet integration.
 
-### Code Separation from Medusa
-All custom code lives in `apps/backend/src/` — completely separate from Medusa's `node_modules/@medusajs/`. No patches, no forks, no modifications to Medusa source code. All modules use Medusa's official extension pattern.
-
-## Database Configuration
-- Uses Replit-provided PostgreSQL (heliumdb) via DATABASE_URL environment variable
-- Medusa backend connects via `process.env.DATABASE_URL` in medusa-config.ts
-- 203 MikroORM migrations applied; all seed data lives in heliumdb
-- No local PostgreSQL instance required; start.sh uses Replit database directly
-
-## Recent Changes (2026-02-17)
-
-### Deployment Fix — "pid1 binary layer" Timeout Resolution
-- **Root cause:** Deployment used `cloudrun` (autoscale) target which requires fast cold starts — incompatible with Medusa 60+ module initialization (3-5 min startup)
-- **Fix 1:** Changed deployment target from `cloudrun` to `vm` (always-running, supports slow-starting stateful apps)
-- **Fix 2:** Rewrote `scripts/start-production.sh` with instant health responder pattern:
-  1. Lightweight Node.js HTTP server binds port 5000 immediately (passes health check)
-  2. Medusa backend boots on port 9000 in background (up to 4 min)
-  3. Health responder killed after backend ready
-  4. Storefront starts on port 5173 (Nitro SSR or server.mjs wrapper)
-  5. Production proxy (`prod-proxy.js`) takes over port 5000, routing API→backend, UI→storefront
-- **Fix 3:** Increased Medusa memory from 512MB to 1024MB (`--max-old-space-size=1024`)
-- **Fix 4:** Updated `scripts/build-production.sh` with build output verification
-- **Fix 5:** Fixed `server.mjs` default port to 5173 (production uses proxy, dev uses direct 5000)
-- **Production Architecture:** proxy on :5000 → backend on :9000 + storefront on :5173
-
-### Previous Changes (2026-02-16)
-
-### Database Connection Fix
-- Fixed critical database mismatch: start.sh was starting local PostgreSQL (port 5433, medusadb) while all seed data existed in Replit-provided database (heliumdb)
-- Removed local PostgreSQL setup from start.sh — now uses Replit DATABASE_URL directly
-- Added .pgdata to .gitignore
-- All 60+ modules of seed data now accessible through Medusa ORM
-
-### Security Dependency Updates
-- Updated all vulnerable packages via pnpm overrides in root package.json
-- Fixed 132 TypeScript compilation errors across 40+ files
-
-### Image Migration to Object Storage
-- All product/service image references migrated from Unsplash URLs to Replit Object Storage bucket paths
-- `seed-utils.ts`: `getImage()` and `getThumb()` return `/platform/storage/serve?path=...` URLs
-- Storage endpoint: `/platform/storage/serve` serves images from bucket `replit-objstore-9ae4a2f3-0592-42b1-908d-b04c0c0e79c4`
-
-### Seed Data Infrastructure
-- **Seed Scripts:**
-  - `seed-verticals.ts` — Seeds 27 vertical modules with Saudi-themed data and bucket storage images
-  - `seed-all-with-images.ts` — Master seed: verticals + 31 infrastructure/sub-entity modules with images
-  - `seed-utils.ts` — Centralized image URLs, Saudi pricing helpers, city/phone generators
-  - `seed-master.ts` — Core Medusa data (products, categories, regions, etc.)
-- **Seeded Verticals (27):** Booking, Healthcare, Restaurant, Travel, Event Ticketing, Freelance, Grocery, Automotive, Fitness, Financial Product, Advertising, Parking, Utilities, Legal, Government, Crowdfunding, Auction, Classified, Charity, Education, Real Estate, Pet Service, Affiliate, Warranty, Rental, Insurance, Social Commerce
-- **Seeded Infrastructure (17):** Persona, Governance, Wallet, Notification Preferences, CMS Content, Volume Pricing, Tax Config, Region Zone, Subscription, Quote, Insurance Plans, Membership, Digital Product, Promotion Extensions, Loyalty, Report, Vendor
-- **Seeded Sub-Entities (18):** Menu, Menu Item, Table Reservation, Kitchen Order, Room Type, Room, Medical Record, Lab Order, Prescription, Citizen Profile, Service Request, Fine, Damage Claim, Stock Alert, Loyalty Account, Dispute, Ride Request, Shuttle Route
-- **Seeded Ancillary (9):** Credit Line, Dashboard, Proposal, Quote Item, Shipping Rate, Tenant POI, Wallet Transaction, Reservation Hold, Subscription Discount
-- **Image Policy:** ALL images use Replit Object Storage bucket paths (`/platform/storage/serve?path=...`). Zero Unsplash URLs remain in the database. Comprehensive DB-wide scan verified across ALL tables with image columns and metadata JSONB fields.
-- **Image Columns Populated:** ad_creative, agent_profile, attorney_profile, charity_org, cityos_store, course, event, live_stream, membership_tier, menu_item, pet_profile, practitioner, restaurant (logo+banner), reward, reward_tier, service_provider (avatar), tenant (logo+favicon), trainer_profile, vendor (logo+banner), venue
-- **Image Metadata Populated:** auction_listing, classified_listing, class_schedule, crowdfund_campaign, digital_asset, donation_campaign, gift_card_ext, gig_listing, insurance_product, loan_product, parking_zone, product_bundle, property_listing, rental_product, service_product, social_post, subscription_plan, vehicle_listing, warranty_plan
-- **Known ORM Issue:** Loyalty program `tier_config` field encounters ORM metadata caching issue on re-seed; existing data has valid tier_config
-
-### Database Enum Constraints
-- `booking.location_type`: `in_person`, `virtual`, `customer_location`
-- `event.status`: `draft`, `published`, `live`, `completed`, `cancelled`
-- `event.event_type`: `concert`, `conference`, `workshop`, `sports`, `festival`, `webinar`, `meetup`, `other`
-- `ad_campaign.campaign_type`: `sponsored_listing`, `banner`, `search`, `social`, `email`
-- `classified_listing.listing_type`: `sell`, `buy`, `trade`, `free`, `wanted`
-- `classified_listing.condition`: `new`, `like_new`, `good`, `fair`, `poor`
-- `quote.status`: `draft`, `submitted`, `under_review`, `approved`, `rejected`, `accepted`, `declined`, `expired`
-- `persona.category`: `consumer`, `creator`, `business`, `cityops`, `platform`
-
-### Confluence Documentation
-- **Space:** Software Development (98310) — 196 Confluence pages (1 homepage + 22 section indexes + 173 child pages)
-- **Structure file:** `docs/Dakkah_Medusa_Commerce_Engine_Documentation_Structure.md`
-- **Verified metrics:** 61 modules, 489 API routes, 30 workflow files, 38 subscribers, 38 links, 41 seed scripts, 76 CMS block types, 64 module + 139 Medusa core = 203 total migrations, 349 storefront routes, 6 prod-proxy API prefixes
+### Database Configuration
+The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` environment variable. Medusa backend connects via `process.env.DATABASE_URL` in `medusa-config.ts`. All 203 MikroORM migrations are applied, and all seed data lives in heliumdb. No local PostgreSQL instance is required.
 
 ## External Dependencies
 - **Database:** PostgreSQL

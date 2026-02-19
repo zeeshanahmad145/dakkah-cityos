@@ -3,6 +3,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
 // POST - Handle Stripe subscription webhooks
+// Webhook payloads validated by Stripe signature verification
 export async function POST(
   req: MedusaRequest,
   res: MedusaResponse

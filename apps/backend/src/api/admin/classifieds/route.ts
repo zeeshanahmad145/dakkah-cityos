@@ -22,7 +22,7 @@ const createSchema = z.object({
   status: z.enum(["draft", "active", "sold", "expired", "flagged", "removed"]).optional(),
   expires_at: z.string().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const mod = req.scope.resolve("classified") as any

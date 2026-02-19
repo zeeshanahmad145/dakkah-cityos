@@ -33,11 +33,15 @@ const creditPointsStep = createStep(
       source: "order",
       reference_id: input.orderId,
     })
-    return new StepResponse({ transaction }, { transaction })
+    return new StepResponse({ transaction }, { transactionId: transaction.id })
   },
-  async ({ transaction }: { transaction: any }, { container }) => {
-    const loyaltyModule = container.resolve("loyalty") as any
-    await loyaltyModule.deleteLoyaltyTransactions(transaction.id)
+  async (compensationData: { transactionId: string } | undefined, { container }) => {
+    if (!compensationData?.transactionId) return
+    try {
+      const loyaltyModule = container.resolve("loyalty") as any
+      await loyaltyModule.deleteLoyaltyTransactions(compensationData.transactionId)
+    } catch (error) {
+    }
   }
 )
 

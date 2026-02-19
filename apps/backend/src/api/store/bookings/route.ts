@@ -1,5 +1,17 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createBookingSchema = z.object({
+  service_id: z.string().min(1),
+  provider_id: z.string().optional(),
+  start_time: z.string().min(1),
+  attendee_count: z.number().optional(),
+  customer_name: z.string().optional(),
+  customer_email: z.string().min(1),
+  customer_phone: z.string().optional(),
+  customer_notes: z.string().optional(),
+})
 
 /**
  * GET /store/bookings
@@ -61,6 +73,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   }
   
   const customerId = req.auth_context.actor_id
+
+  const parsed = createBookingSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const {
     service_id,
     provider_id,
@@ -70,13 +88,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     customer_email,
     customer_phone,
     customer_notes,
-  } = req.body as Record<string, any>
-  
-  if (!service_id || !start_time || !customer_email) {
-    return res.status(400).json({
-      message: "service_id, start_time, and customer_email are required",
-    })
-  }
+  } = parsed.data
   
   try {
     const booking = await bookingModule.createBooking({

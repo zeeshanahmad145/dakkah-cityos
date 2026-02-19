@@ -1,9 +1,31 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
-// POST /store/vendors/register - Register as a new vendor
+const vendorRegisterSchema = z.object({
+  company_name: z.string().min(1),
+  business_email: z.string().min(1),
+  phone: z.string().optional(),
+  website: z.string().optional(),
+  description: z.string().optional(),
+  business_type: z.string().optional(),
+  tax_id: z.string().optional(),
+  address: z.record(z.string(), z.unknown()).optional(),
+  bank_account: z.record(z.string(), z.unknown()).optional(),
+  contact_person: z.record(z.string(), z.unknown()).optional(),
+  product_categories: z.array(z.string()).optional(),
+  expected_volume: z.string().optional(),
+  existing_sales_channels: z.array(z.string()).optional(),
+  agree_to_terms: z.literal(true),
+})
+
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  const parsed = vendorRegisterSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const {
     company_name,
     business_email,
@@ -19,32 +41,21 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     expected_volume,
     existing_sales_channels,
     agree_to_terms,
-  } = req.body as any
-
-  if (!agree_to_terms) {
-    return res.status(400).json({ message: "You must agree to the terms and conditions" })
-  }
-
-  if (!company_name || !business_email) {
-    return res.status(400).json({ message: "Company name and email are required" })
-  }
+  } = parsed.data
 
   const vendorModule = req.scope.resolve("vendor")
 
   try {
-    // Generate handle from company name
     const handle = company_name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "")
 
-    // Check if handle already exists
     const existingVendors = await vendorModule.listVendors({ handle })
     if (existingVendors.length > 0) {
       return res.status(400).json({ message: "A vendor with this name already exists" })
     }
 
-    // Create vendor with pending status
     const vendor = await vendorModule.createVendors({
       name: company_name,
       handle,
@@ -67,7 +78,6 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       },
     })
 
-    // Emit event for admin notification
     const eventBus = req.scope.resolve("event_bus")
     await eventBus.emit("vendor.application_submitted", {
       vendor_id: vendor.id,
@@ -88,4 +98,3 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   } catch (error: any) {
     return handleApiError(res, error, "STORE-VENDORS-REGISTER")}
 }
-

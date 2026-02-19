@@ -43,7 +43,17 @@ const createPurchaseOrderStep = createStep(
       status: "pending",
       created_at: new Date(),
     }
-    return new StepResponse({ purchaseOrder })
+    return new StepResponse({ purchaseOrder }, { purchaseOrder })
+  },
+  async (compensationData: { purchaseOrder: any } | undefined, { container }) => {
+    if (!compensationData?.purchaseOrder) return
+    try {
+      const orderModule = container.resolve("order") as any
+      if (compensationData.purchaseOrder.id) {
+        await orderModule.cancelOrder(compensationData.purchaseOrder.id)
+      }
+    } catch (error) {
+    }
   }
 )
 
