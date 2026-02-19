@@ -1,7 +1,18 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updateVendorProductSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  vendor_sku: z.string().optional(),
+  vendor_cost: z.number().optional(),
+  inventory_quantity: z.number().optional(),
+  variants: z.array(z.record(z.string(), z.unknown())).optional(),
+  images: z.array(z.record(z.string(), z.unknown())).optional(),
+}).passthrough()
 
 // GET /vendor/products/:productId - Get vendor product details
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -72,6 +83,12 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   }
 
   const { productId } = req.params
+
+  const parsed = updateVendorProductSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const { 
     title, 
     description, 
@@ -80,7 +97,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     inventory_quantity,
     variants,
     images,
-  } = req.body as any
+  } = parsed.data
 
   const vendorModule = req.scope.resolve("vendor")
   const productModule = req.scope.resolve("product")

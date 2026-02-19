@@ -88,7 +88,7 @@ const logCompanyCreationStep = createStep(
   "log-company-creation",
   async ({ company }: { company: Record<string, unknown> }, { container }) => {
     logger.info(`Company created: ${company.name} (${company.id}) - Status: pending approval`);
-    return new StepResponse({ logged: true });
+    return new StepResponse({ logged: true }, null);
   }
 );
 

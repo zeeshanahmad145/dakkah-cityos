@@ -4,7 +4,11 @@ import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
-const confirmBookingSchema = z.object({}).passthrough()
+// Confirm may accept optional confirmation_code and metadata
+const confirmBookingSchema = z.object({
+  confirmation_code: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params

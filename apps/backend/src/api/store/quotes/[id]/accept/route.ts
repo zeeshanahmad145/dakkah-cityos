@@ -2,7 +2,11 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
-const acceptQuoteSchema = z.object({})
+// Accept may include optional notes/metadata
+const acceptQuoteSchema = z.object({
+  notes: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 /**
  * POST /store/quotes/:id/accept

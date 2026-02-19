@@ -2,7 +2,11 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
-const submitQuoteSchema = z.object({})
+// Submit action has no required body fields; notes/metadata accepted via passthrough
+const submitQuoteSchema = z.object({
+  notes: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 /**
  * GET /store/quotes/:id

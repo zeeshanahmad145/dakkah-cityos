@@ -4,7 +4,11 @@ import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
-const resumeSubscriptionSchema = z.object({}).passthrough()
+// No required body fields for resume; reason/metadata accepted via passthrough
+const resumeSubscriptionSchema = z.object({
+  reason: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params

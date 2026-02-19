@@ -1,0 +1,158 @@
+jest.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
+  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
+  WorkflowResponse: jest.fn((data) => data),
+}))
+
+const mockContainer = (overrides: Record<string, any> = {}) => ({
+  resolve: jest.fn((name: string) => overrides[name] || {}),
+})
+
+describe("Order Fulfillment Workflow – Integration", () => {
+  let validateOrderStep: any
+  let allocateInventoryStep: any
+  let createShipmentStep: any
+
+  beforeAll(async () => {
+    await import("../../../src/workflows/order-fulfillment.js")
+    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const calls = createStep.mock.calls
+    validateOrderStep = calls.find((c: any) => c[0] === "validate-order-step")?.[1]
+    allocateInventoryStep = calls.find((c: any) => c[0] === "allocate-inventory-step")?.[1]
+    createShipmentStep = calls.find((c: any) => c[0] === "create-shipment-step")?.[1]
+  })
+
+  const validInput = {
+    orderId: "order_01",
+    items: [{ lineItemId: "li_01", quantity: 2 }, { lineItemId: "li_02", quantity: 1 }],
+    shippingMethod: "standard",
+    warehouseId: "wh_01",
+  }
+
+  describe("end-to-end workflow execution", () => {
+    it("should execute all steps in sequence for a valid order", async () => {
+      const retrieveOrder = jest.fn().mockResolvedValue({ id: "order_01", status: "pending" })
+      const createReservationItems = jest.fn().mockResolvedValue([{ id: "alloc_01" }, { id: "alloc_02" }])
+      const createFulfillment = jest.fn().mockResolvedValue({ id: "ship_01", status: "created" })
+
+      const container = mockContainer({
+        order: { retrieveOrder },
+        inventory: { createReservationItems },
+        fulfillment: { createFulfillment },
+      })
+
+      const orderResult = await validateOrderStep(validInput, { container })
+      expect(orderResult.order.id).toBe("order_01")
+
+      const allocResult = await allocateInventoryStep(validInput, { container })
+      expect(allocResult.allocations).toHaveLength(2)
+
+      const shipResult = await createShipmentStep(validInput, { container })
+      expect(shipResult.shipment.id).toBe("ship_01")
+    })
+
+    it("should stop workflow when order validation fails", async () => {
+      const container = mockContainer({
+        order: { retrieveOrder: jest.fn().mockResolvedValue(null) },
+      })
+
+      await expect(validateOrderStep(validInput, { container })).rejects.toThrow("Order order_01 not found")
+    })
+  })
+
+  describe("step failure with compensation", () => {
+    it("should compensate inventory allocation when shipment creation fails", async () => {
+      const deleteReservationItems = jest.fn().mockResolvedValue(undefined)
+      const allocations = [{ id: "alloc_01" }, { id: "alloc_02" }]
+      const container = mockContainer({
+        inventory: {
+          createReservationItems: jest.fn().mockResolvedValue(allocations),
+          deleteReservationItems,
+        },
+        fulfillment: { createFulfillment: jest.fn().mockRejectedValue(new Error("Carrier unavailable")) },
+      })
+
+      const allocResult = await allocateInventoryStep(validInput, { container })
+      expect(allocResult.__compensation).toEqual({ allocations })
+
+      await expect(createShipmentStep(validInput, { container })).rejects.toThrow("Carrier unavailable")
+
+      const compensateFn = allocateInventoryStep.compensate
+      await compensateFn(allocResult.__compensation, { container })
+      expect(deleteReservationItems).toHaveBeenCalledTimes(2)
+      expect(deleteReservationItems).toHaveBeenCalledWith("alloc_01")
+      expect(deleteReservationItems).toHaveBeenCalledWith("alloc_02")
+    })
+
+    it("should compensate shipment when a later error occurs", async () => {
+      const cancelFulfillment = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({
+        fulfillment: {
+          createFulfillment: jest.fn().mockResolvedValue({ id: "ship_01" }),
+          cancelFulfillment,
+        },
+      })
+
+      const shipResult = await createShipmentStep(validInput, { container })
+      expect(shipResult.__compensation).toEqual({ shipmentId: "ship_01" })
+
+      const compensateFn = createShipmentStep.compensate
+      await compensateFn(shipResult.__compensation, { container })
+      expect(cancelFulfillment).toHaveBeenCalledWith("ship_01")
+    })
+
+    it("should handle compensation gracefully when compensationData is undefined", async () => {
+      const container = mockContainer({
+        inventory: { deleteReservationItems: jest.fn() },
+      })
+
+      const compensateFn = allocateInventoryStep.compensate
+      await expect(compensateFn(undefined, { container })).resolves.not.toThrow()
+    })
+
+    it("should handle compensation gracefully when allocations array is empty", async () => {
+      const deleteReservationItems = jest.fn()
+      const container = mockContainer({
+        inventory: { deleteReservationItems },
+      })
+
+      const compensateFn = allocateInventoryStep.compensate
+      await compensateFn({ allocations: [] }, { container })
+      expect(deleteReservationItems).not.toHaveBeenCalled()
+    })
+  })
+
+  describe("state verification after compensation", () => {
+    it("should leave no orphaned reservations after full compensation", async () => {
+      const deleteReservationItems = jest.fn().mockResolvedValue(undefined)
+      const allocations = [{ id: "alloc_01" }]
+      const container = mockContainer({
+        inventory: { deleteReservationItems },
+      })
+
+      await allocateInventoryStep.compensate({ allocations }, { container })
+      expect(deleteReservationItems).toHaveBeenCalledWith("alloc_01")
+    })
+
+    it("should leave no orphaned fulfillments after shipment compensation", async () => {
+      const cancelFulfillment = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({
+        fulfillment: { cancelFulfillment },
+      })
+
+      await createShipmentStep.compensate({ shipmentId: "ship_01" }, { container })
+      expect(cancelFulfillment).toHaveBeenCalledWith("ship_01")
+    })
+
+    it("should not throw when compensation service call fails", async () => {
+      const container = mockContainer({
+        inventory: { deleteReservationItems: jest.fn().mockRejectedValue(new Error("Already deleted")) },
+      })
+
+      await expect(
+        allocateInventoryStep.compensate({ allocations: [{ id: "alloc_01" }] }, { container })
+      ).resolves.not.toThrow()
+    })
+  })
+})

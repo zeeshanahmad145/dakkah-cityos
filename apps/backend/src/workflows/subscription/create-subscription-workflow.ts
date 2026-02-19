@@ -54,7 +54,7 @@ const validateSubscriptionDataStep = createStep(
       throw new Error("One or more product variants not found");
     }
     
-    return new StepResponse({ variants });
+    return new StepResponse({ variants }, null);
   }
 );
 
@@ -110,7 +110,7 @@ const calculateSubscriptionAmountsStep = createStep(
     return new StepResponse({
       items,
       amounts: { subtotal, tax_total, total, currency_code },
-    });
+    }, null);
   }
 );
 

@@ -28,7 +28,7 @@ const generateQuoteNumberStep = createStep(
   async (input: CreateQuoteInput, { container }) => {
     const quoteService = container.resolve("quote") as any;
     const quoteNumber = await quoteService.generateQuoteNumber();
-    return new StepResponse({ quoteNumber, input });
+    return new StepResponse({ quoteNumber, input }, null);
   }
 );
 
@@ -58,7 +58,7 @@ const getProductInfoStep = createStep(
       });
     }
 
-    return new StepResponse({ products });
+    return new StepResponse({ products }, null);
   }
 );
 
@@ -151,7 +151,7 @@ const calculateQuoteTotalsStep = createStep(
   async ({ quote }: { quote: Record<string, unknown> }, { container }) => {
     const quoteService = container.resolve("quote") as any;
     await quoteService.calculateQuoteTotals(quote.id as string);
-    return new StepResponse({ success: true });
+    return new StepResponse({ success: true }, null);
   }
 );
 

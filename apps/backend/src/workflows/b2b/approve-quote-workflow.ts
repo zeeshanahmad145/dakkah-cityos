@@ -28,7 +28,7 @@ const validateQuoteStep = createStep(
       throw new Error(`Cannot approve quote with status: ${quote.status}`);
     }
 
-    return new StepResponse({ quote, input });
+    return new StepResponse({ quote, input }, null);
   }
 );
 
@@ -135,12 +135,15 @@ const sendNotificationStep = createStep(
         logger.info("quote-approved-event", `Quote approved event emitted for ${approvedQuote.quote_number}`);
       }
       
-      return new StepResponse({ notificationSent: true });
+      return new StepResponse({ notificationSent: true }, null);
     } catch (error) {
       // Log error but don't fail the workflow - notification is not critical
       logger.error("quote-notification-failed", `Failed to send notification for quote ${approvedQuote.quote_number}`, { error });
-      return new StepResponse({ notificationSent: false, error: (error as Error).message });
+      return new StepResponse({ notificationSent: false, error: (error as Error).message }, null);
     }
+  },
+  async (compensationData: null) => {
+    return
   }
 );
 

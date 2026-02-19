@@ -1,7 +1,14 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+// No required body fields; payout is calculated from unpaid commissions
+const requestPayoutSchema = z.object({
+  notes: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 // POST /vendor/payouts/request - Request a payout
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
@@ -11,6 +18,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const vendorId = (req as any).vendor_id
   if (!vendorId) {
     return res.status(401).json({ message: "Vendor authentication required" })
+  }
+
+  const parsed = requestPayoutSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
 
   // Get unpaid approved commissions

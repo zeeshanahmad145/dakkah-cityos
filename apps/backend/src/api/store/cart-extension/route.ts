@@ -26,6 +26,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  // Auth required: cart extensions are customer-specific operations
+  // Note: this could be relaxed for anonymous carts if needed
+  const customerId = (req as any).auth_context?.actor_id
+  if (!customerId) {
+    return res.status(401).json({ message: "Authentication required" })
+  }
+
   const cartExtensionService = req.scope.resolve("cartExtension")
 
   const parsed = cartExtensionSchema.safeParse(req.body)

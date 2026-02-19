@@ -19,7 +19,7 @@ const fetchPaymentRecordsStep = createStep(
     const payments = await paymentModule.listPayments({
       created_at: { $gte: new Date(input.dateFrom), $lte: new Date(input.dateTo) },
     })
-    return new StepResponse({ payments, count: payments.length })
+    return new StepResponse({ payments, count: payments.length }, null)
   }
 )
 
@@ -32,7 +32,7 @@ const matchTransactionsStep = createStep(
       match_confidence: 1.0,
     }))
     const unmatched = matched.filter((m: any) => !m.matched)
-    return new StepResponse({ matched, unmatchedCount: unmatched.length })
+    return new StepResponse({ matched, unmatchedCount: unmatched.length }, null)
   }
 )
 
@@ -45,7 +45,17 @@ const reconcileStep = createStep(
       status: "completed",
       reconciled_at: new Date(),
     }
-    return new StepResponse({ reconciliation })
+    return new StepResponse({ reconciliation }, { tenantId: input.tenantId, reconciliation })
+  },
+  async (compensationData: { tenantId: string; reconciliation: any } | null, { container }) => {
+    if (!compensationData) return
+    try {
+      const paymentModule = container.resolve("payment") as any
+      if (paymentModule.reverseReconciliation) {
+        await paymentModule.reverseReconciliation(compensationData.tenantId, compensationData.reconciliation)
+      }
+    } catch (error) {
+    }
   }
 )
 
@@ -58,7 +68,17 @@ const generateReportStep = createStep(
       status: input.reconciliation.status,
       generated_at: new Date(),
     }
-    return new StepResponse({ report })
+    return new StepResponse({ report }, { report })
+  },
+  async (compensationData: { report: any } | null, { container }) => {
+    if (!compensationData) return
+    try {
+      const paymentModule = container.resolve("payment") as any
+      if (paymentModule.deleteReconciliationReport) {
+        await paymentModule.deleteReconciliationReport(compensationData.report)
+      }
+    } catch (error) {
+    }
   }
 )
 

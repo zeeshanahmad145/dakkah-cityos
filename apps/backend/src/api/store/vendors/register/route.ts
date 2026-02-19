@@ -21,6 +21,11 @@ const vendorRegisterSchema = z.object({
 })
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  const customerId = (req as any).auth_context?.actor_id
+  if (!customerId) {
+    return res.status(401).json({ message: "Authentication required" })
+  }
+
   const parsed = vendorRegisterSchema.safeParse(req.body)
   if (!parsed.success) {
     return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
