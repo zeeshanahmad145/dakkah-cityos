@@ -627,3 +627,8 @@ Verified metrics from direct codebase inspection using `find`, `grep`, and `wc` 
 | Section 18 index (round 2) | 77 CMS blocks in stats | 76 CMS blocks (verified count) | Updated Confluence page 56262857 |
 | Section 20 index (round 2) | 8 child pages | 9 child pages (added 20.9 Build Verification) | Updated Confluence page 56688758 |
 | Section 22 index (round 2) | 23 workflows, 42 seeds, 77 blocks | 30 workflows, 41 seeds, 76 blocks; 11 child pages aligned | Updated Confluence page 55935079 |
+| Page 13.1 (round 3) | Order Links (2 files) | Order Links (3 files) — 3 entries listed | Updated Confluence page 57409733 |
+| Page 13.2 (round 3) | Customer Links (12 files), Vendor Links (4 files) | Customer Links (14 files), Vendor Links (5 files) | Updated Confluence page 56950886 |
+| Page 12.3 (round 3) | Total: 19 subscriber files | Total: 23 subscriber files (5+7+7+4) | Updated Confluence page 56557667 |
+| Page 13.4 (round 3) | Link Categories missing Cart row | Added Cart Links: 1 — total now sums to 38 | Updated Confluence page 56131803 |
+| Page 20.5 (round 3) | 2 routing rules (/api/*, /admin/*) | 6 API prefixes matching prod-proxy.js source | Updated Confluence page 57409753 |
