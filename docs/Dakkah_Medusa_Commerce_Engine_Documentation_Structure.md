@@ -4,33 +4,33 @@
 
 ## Documentation Status: COMPLETE
 
-All 227 Confluence pages across 22 sections have been created and populated with verified technical content extracted from the TypeScript source files. Content covers 61 custom modules, 489 API routes, 30 workflows, 38 subscribers, 38 links, 27 verticals, and all infrastructure, integration, deployment, and reference documentation.
+All 193 Confluence pages (1 homepage + 22 section indexes + 170 child pages) across 22 sections have been created and populated with verified technical content extracted from the TypeScript source files. Content covers 61 custom modules, 489 API routes, 30 workflow files, 38 subscribers, 38 links, 27 verticals, 76 CMS block types, and all infrastructure, integration, deployment, and reference documentation.
 
-| Section | Pages | Status |
-|---------|-------|--------|
-| 1. Platform Overview | 5 | Complete |
+| Section | Child Pages | Status |
+|---------|-------------|--------|
+| 1. Platform Overview | 7 | Complete |
 | 2. Module System | 5 | Complete |
-| 3. Core Commerce | 8 | Complete |
-| 4. Verticals — Marketplace | 8 | Complete |
+| 3. Core Commerce | 11 | Complete |
+| 4. Verticals — Marketplace | 7 | Complete |
 | 5. Verticals — Services | 8 | Complete |
-| 6. Verticals — Finance | 8 | Complete |
-| 7. Verticals — Content | 8 | Complete |
-| 8. Verticals — Civic | 8 | Complete |
-| 9. Multi-Vendor | 6 | Complete |
+| 6. Verticals — Finance | 6 | Complete |
+| 7. Verticals — Content | 6 | Complete |
+| 8. Verticals — Civic | 9 | Complete |
+| 9. Multi-Vendor | 9 | Complete |
 | 10. API Layer | 8 | Complete |
 | 11. Workflows | 8 | Complete |
 | 12. Subscribers | 5 | Complete |
 | 13. Links | 4 | Complete |
 | 14. Infrastructure | 13 | Complete |
 | 15. Integration Layer | 10 | Complete |
-| 16. Database | 5 | Complete |
-| 17. Seed Data | 8 | Complete |
-| 18. Storefront | 12 | Complete |
+| 16. Database | 7 | Complete |
+| 17. Seed Data | 7 | Complete |
+| 18. Storefront | 10 | Complete |
 | 19. Auth & RBAC | 5 | Complete |
 | 20. Deployment | 9 | Complete |
 | 21. Testing | 5 | Complete |
 | 22. Appendices | 11 | Complete |
-| **Total** | **227** | **All Complete** |
+| **Total** | **170 child + 23 index = 193** | **All Complete** |
 
 **Companion Space:** Software Development (`98310`) — Payload CMS documentation
 **Cross-Link:** Section 25 (Commerce — Medusa Integration) in Payload docs links here
@@ -67,13 +67,13 @@ All 227 Confluence pages across 22 sections have been created and populated with
 
 | Directory | Purpose |
 |-----------|---------|
-| `apps/backend/` | Medusa v2 backend — 61 custom modules, 489 API routes, 38 subscribers, 23 workflows, 38 links |
+| `apps/backend/` | Medusa v2 backend — 61 custom modules, 489 API routes, 38 subscribers, 30 workflow files, 38 links |
 | `apps/backend/src/modules/` | 61 custom MikroORM modules (verticals, infrastructure, commerce extensions) |
 | `apps/backend/src/api/` | Custom API layer — admin (237), store (163), vendor (68), platform (16), webhooks (4), health (1) |
 | `apps/backend/src/subscribers/` | 38 event subscribers (order, booking, payment, subscription lifecycle) |
-| `apps/backend/src/workflows/` | 23 Medusa workflows (fulfillment, sync, provisioning, disputes, auctions) |
+| `apps/backend/src/workflows/` | 30 Medusa workflow files (fulfillment, sync, provisioning, disputes, auctions, B2B, vendor, subscription) |
 | `apps/backend/src/links/` | 38 module link definitions (cross-module entity relationships) |
-| `apps/backend/src/scripts/` | 42 seed & utility scripts |
+| `apps/backend/src/scripts/` | 41 seed & utility scripts |
 | `apps/backend/src/lib/` | Shared libraries — integrations, storage, monitoring, middleware, platform |
 | `apps/storefront/` | TanStack Start + React storefront — 349 routes (legacy, migrating to Payload CMS) |
 | `apps/orchestrator/` | Temporal Cloud orchestrator — workflow definitions, activities |
@@ -84,7 +84,7 @@ All 227 Confluence pages across 22 sections have been created and populated with
 
 ## Progress Dashboard
 
-**Overall: 170 / 170 pages (100%) — ALL SECTIONS COMPLETE**
+**Overall: 170 / 170 child pages (100%) — ALL SECTIONS COMPLETE (193 total with indexes)**
 
 | # | Section | Page ID | Progress | Status |
 |---|---------|---------|----------|--------|
@@ -339,7 +339,7 @@ All 227 Confluence pages across 22 sections have been created and populated with
 | 18.1 | Storefront Architecture | 57278625 | `DONE` | TanStack Start + React |
 | 18.2 | Route Registry (349 Routes) | 56131841 | `DONE` | All route files |
 | 18.3 | Design System | 56459468 | `DONE` | Design tokens, theme provider |
-| 18.4 | CMS Block System (77 Blocks) | 56361256 | `DONE` | Block type definitions |
+| 18.4 | CMS Block System (76 Blocks) | 56361256 | `DONE` | `storefront/src/components/blocks/block-registry.ts` |
 | 18.5 | SSR Loaders (65 Pages) | 57606324 | `DONE` | Server loaders |
 | 18.6 | Vendor Portal (73 Pages) | 56131860 | `DONE` | Vendor dashboard |
 | 18.7 | Manage Pages (45 CRUD Configs) | 56525153 | `DONE` | Admin management |
@@ -409,7 +409,7 @@ Each section index page includes:
 - Cross-references to Payload CMS documentation sections
 - Source file attribution
 
-### Child Pages Per Section (170 child pages across 22 sections)
+### Child Pages Per Section (170 child pages + 22 section indexes + 1 homepage = 193 total)
 
 | Section | Child Pages | Topic Areas |
 |---------|-------------|-------------|
@@ -552,3 +552,61 @@ Topics that span both the Medusa space and the Payload CMS space:
 | `classified_listing` | `condition` | `new`, `like_new`, `good`, `fair`, `poor` |
 | `quote` | `status` | `draft`, `submitted`, `under_review`, `approved`, `rejected`, `accepted`, `declined`, `expired` |
 | `persona` | `category` | `consumer`, `creator`, `business`, `cityops`, `platform` |
+
+## Appendix E — Codebase Audit Log (February 19, 2026)
+
+Verified metrics from direct codebase inspection using `find`, `grep`, and `wc` commands:
+
+| Metric | Verified Count | Source Command |
+|--------|---------------|----------------|
+| Custom modules | 61 | `ls apps/backend/src/modules/ \| wc -l` |
+| API route files | 489 | `find apps/backend/src/api -name "route.ts" \| wc -l` |
+| Admin routes | 237 | `find apps/backend/src/api/admin -name "route.ts" \| wc -l` |
+| Store routes | 163 | `find apps/backend/src/api/store -name "route.ts" \| wc -l` |
+| Vendor routes | 68 | `find apps/backend/src/api/vendor -name "route.ts" \| wc -l` |
+| Platform routes | 16 | `find apps/backend/src/api/platform -name "route.ts" \| wc -l` |
+| Webhook routes | 4 | `find apps/backend/src/api/webhooks -name "route.ts" \| wc -l` |
+| Health route | 1 | `find apps/backend/src/api/health -name "route.ts" \| wc -l` |
+| Event subscribers | 38 | `find apps/backend/src/subscribers -name "*.ts" \| wc -l` |
+| Workflow files | 30 | `find apps/backend/src/workflows -name "*.ts" \| wc -l` |
+| Module links | 38 | `find apps/backend/src/links -name "*.ts" \| wc -l` |
+| Seed/utility scripts | 41 | `find apps/backend/src/scripts -name "*.ts" \| wc -l` |
+| Module migrations | 64 | `find apps/backend/src/modules -name "Migration*.ts" \| wc -l` |
+| Total applied migrations | 203 | 64 module + 139 Medusa core |
+| Storefront route files | 349 | `find apps/storefront/src/routes -name "*.tsx" -o -name "*.ts" \| wc -l` |
+| CMS block types | 76 | Counted entries in `block-registry.ts` BLOCK_REGISTRY object |
+| Prod-proxy API prefixes | 6 | `/platform`, `/store`, `/admin`, `/commerce`, `/auth`, `/webhooks` |
+
+### Module Categories (61 total)
+
+| Category | Count | Modules |
+|----------|-------|---------|
+| Verticals | 27 | advertising, affiliate, auction, automotive, booking, charity, classified, crowdfunding, education, event-ticketing, financial-product, fitness, freelance, government, grocery, healthcare, insurance, legal, parking, pet-service, real-estate, rental, restaurant, social-commerce, travel, utilities, warranty |
+| Infrastructure | 15 | analytics, audit, cms-content, governance, i18n, loyalty, node, notification-preferences, persona, region-zone, store, tax-config, tenant, volume-pricing, wallet |
+| Commerce Core | 10 | cart-extension, channel, commission, company, dispute, inventory-extension, invoice, payout, quote, subscription |
+| Extensions | 5 | digital-product, membership, promotion-ext, shipping-extension, trade-in |
+| Cross-Cutting | 4 | events, review, vendor, wishlist |
+
+### Key File Paths
+
+| Reference | Actual Path |
+|-----------|-------------|
+| CMS Block Registry | `apps/storefront/src/components/blocks/block-registry.ts` |
+| Medusa Config | `apps/backend/medusa-config.ts` |
+| Production Proxy | `prod-proxy.js` |
+| Production Start | `scripts/start-production.sh` |
+| Production Build | `scripts/build-production.sh` |
+| Seed Utilities | `apps/backend/src/scripts/seed-utils.ts` |
+
+### Corrections Applied
+
+| Item | Was | Corrected To | Reason |
+|------|-----|-------------|--------|
+| Total Confluence pages | 227 | 193 | Counted 170 child + 22 index + 1 homepage |
+| Workflow files | 23 | 30 | Includes subdirectory files (b2b/3, subscription/3, vendor/4) |
+| Seed scripts | 42 | 41 | Verified via find command |
+| CMS block types | 77 | 76 | Counted BLOCK_REGISTRY entries |
+| API endpoints (replit.md) | 486 | 489 | Verified via route file count |
+| Prod-proxy prefixes | 4 documented | 6 actual | Added `/commerce` and `/auth` |
+| CMS registry path | `app/lib/cms-registry.ts` | `src/components/blocks/block-registry.ts` | Verified actual file location |
+| Migration breakdown | "203 migrations" | 64 module + 139 Medusa core = 203 | Clarified composition |
