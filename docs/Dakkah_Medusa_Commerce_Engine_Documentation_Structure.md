@@ -10,16 +10,16 @@
 | Section | Title | Page ID |
 |---------|-------|---------|
 | Homepage | Medusa Commerce Engine — Documentation | 56393848 |
-| 1 | Platform Overview and Architecture | 56262754 |
-| 2 | Module System and Configuration | 56262763 |
-| 3 | Core Commerce Extensions | 56262772 |
-| 4 | Vertical Modules — Marketplace and Listings | 56262781 |
-| 5 | Vertical Modules — Services and Bookings | 56262790 |
-| 6 | Vertical Modules — Finance and Insurance | 56262799 |
-| 7 | Vertical Modules — Content and Social | 56262808 |
-| 8 | Vertical Modules — Civic and Specialized | 56262817 |
-| 9 | Multi-Vendor Architecture | 56393877 |
-| 10 | Custom API Layer | 56393886 |
+| 1 | Platform Overview and Architecture | 56655970 |
+| 2 | Module System and Configuration | 56098897 |
+| 3 | Core Commerce Extensions | 56885411 |
+| 4 | Vertical Modules — Marketplace and Listings | 56557648 |
+| 5 | Vertical Modules — Services and Bookings | 56164472 |
+| 6 | Vertical Modules — Finance and Insurance | 56066149 |
+| 7 | Vertical Modules — Content and Social | 57049229 |
+| 8 | Vertical Modules — Civic and Specialized | 56524941 |
+| 9 | Multi-Vendor Architecture | 56524960 |
+| 10 | Custom API Layer | 55738509 |
 | 11 | Workflows | 56230026 |
 | 12 | Event Subscribers | 56230045 |
 | 13 | Module Links | 56918056 |
@@ -58,28 +58,28 @@
 
 | # | Section | Page ID | Progress | Status |
 |---|---------|---------|----------|--------|
-| 1 | Platform Overview & Architecture | 56262754 | 8/8 (100%) | DONE |
-| 2 | Module System & Configuration | 56262763 | 6/6 (100%) | DONE |
-| 3 | Core Commerce Extensions | 56262772 | 12/12 (100%) | DONE |
-| 4 | Vertical Modules — Marketplace & Listings | 56262781 | 8/8 (100%) | DONE |
-| 5 | Vertical Modules — Services & Bookings | 56262790 | 8/8 (100%) | DONE |
-| 6 | Vertical Modules — Finance & Insurance | 56262799 | 7/7 (100%) | DONE |
-| 7 | Vertical Modules — Content & Social | 56262808 | 7/7 (100%) | DONE |
-| 8 | Vertical Modules — Civic & Specialized | 56262817 | 10/10 (100%) | DONE |
-| 9 | Multi-Vendor Architecture | 56393877 | 10/10 (100%) | DONE |
-| 10 | Custom API Layer | 56393886 | 12/12 (100%) | DONE |
+| 1 | Platform Overview & Architecture | 56655970 | 7/7 (100%) | DONE |
+| 2 | Module System & Configuration | 56098897 | 5/5 (100%) | DONE |
+| 3 | Core Commerce Extensions | 56885411 | 11/11 (100%) | DONE |
+| 4 | Vertical Modules — Marketplace & Listings | 56557648 | 7/7 (100%) | DONE |
+| 5 | Vertical Modules — Services & Bookings | 56164472 | 8/8 (100%) | DONE |
+| 6 | Vertical Modules — Finance & Insurance | 56066149 | 6/6 (100%) | DONE |
+| 7 | Vertical Modules — Content & Social | 57049229 | 6/6 (100%) | DONE |
+| 8 | Vertical Modules — Civic & Specialized | 56524941 | 9/9 (100%) | DONE |
+| 9 | Multi-Vendor Architecture | 56524960 | 9/9 (100%) | DONE |
+| 10 | Custom API Layer | 55738509 | 8/8 (100%) | DONE |
 | 11 | Workflows | 56230026 | 8/8 (100%) | DONE |
-| 12 | Event Subscribers | 56230045 | 10/10 (100%) | DONE |
-| 13 | Module Links | 56918056 | 9/9 (100%) | DONE |
-| 14 | Infrastructure Modules | 55804342 | 14/14 (100%) | DONE |
-| 15 | Integration Layer | 56230064 | 11/11 (100%) | DONE |
-| 16 | Database & Migrations | 56098919 | 8/8 (100%) | DONE |
-| 17 | Seed Data & Scripts | 56262837 | 8/8 (100%) | DONE |
-| 18 | Storefront Application | 56262857 | 11/11 (100%) | DONE |
-| 19 | Authentication & RBAC | 56983650 | 6/6 (100%) | DONE |
+| 12 | Event Subscribers | 56230045 | 5/5 (100%) | DONE |
+| 13 | Module Links | 56918056 | 4/4 (100%) | DONE |
+| 14 | Infrastructure Modules | 55804342 | 13/13 (100%) | DONE |
+| 15 | Integration Layer | 56230064 | 10/10 (100%) | DONE |
+| 16 | Database & Migrations | 56098919 | 7/7 (100%) | DONE |
+| 17 | Seed Data & Scripts | 56262837 | 7/7 (100%) | DONE |
+| 18 | Storefront Application | 56262857 | 10/10 (100%) | DONE |
+| 19 | Authentication & RBAC | 56983650 | 5/5 (100%) | DONE |
 | 20 | Deployment & DevOps | 56688758 | 9/9 (100%) | DONE |
-| 21 | Testing & Quality | 56262876 | 6/6 (100%) | DONE |
-| 22 | Appendices & Reference | 55935079 | 12/12 (100%) | DONE |
+| 21 | Testing & Quality | 56262876 | 5/5 (100%) | DONE |
+| 22 | Appendices & Reference | 55935079 | 11/11 (100%) | DONE |
 
 > `DONE` = Created with content · `PARTIAL` = Needs updating · `TODO` = Not yet created · `PLANNED` = Feature not yet in code · `EXISTING` = Pre-existing page
 
@@ -87,293 +87,285 @@
 
 ## Detailed Section Child Pages
 
-### 1. Platform Overview & Architecture (Page ID: 56262754)
+### 1. Platform Overview & Architecture (Page ID: 56655970)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 1.1 | Vision: Headless Commerce for CityOS | `TODO` | `replit.md`, `medusa-config.ts` |
-| 1.2 | System Architecture & Boundary Diagram | `TODO` | Architecture overview |
-| 1.3 | Technology Stack Reference | `TODO` | `package.json` files |
-| 1.4 | Monorepo Structure (Turborepo + pnpm) | `TODO` | `turbo.json`, workspace config |
-| 1.5 | Medusa v2 Extension Pattern | `TODO` | `apps/backend/src/modules/*/index.ts` |
-| 1.6 | System Responsibility Split | `TODO` | Medusa vs Payload vs ERPNext vs Fleetbase |
-| 1.7 | Glossary & Terminology | `TODO` | All docs |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 1.1 | Vision: Headless Commerce for CityOS | 57049268 | `DONE` | `replit.md`, `medusa-config.ts` |
+| 1.2 | System Architecture and Boundary Diagram | 57475133 | `DONE` | Architecture overview |
+| 1.3 | Medusa Technology Stack Reference | 56557705 | `DONE` | `package.json` files |
+| 1.4 | Monorepo Structure (Turborepo and pnpm) | 56098939 | `DONE` | `turbo.json`, workspace config |
+| 1.5 | Medusa v2 Extension Pattern | 56688802 | `DONE` | `apps/backend/src/modules/*/index.ts` |
+| 1.6 | System Responsibility Split | 57114806 | `DONE` | Medusa vs Payload vs ERPNext vs Fleetbase |
+| 1.7 | Glossary and Terminology | 56819760 | `DONE` | All docs |
 
-### 2. Module System & Configuration (Page ID: 56262763)
+### 2. Module System & Configuration (Page ID: 56098897)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 2.1 | Medusa Configuration (`medusa-config.ts`) | `TODO` | `apps/backend/medusa-config.ts` |
-| 2.2 | Module Registry (61 Modules) | `TODO` | All module `index.ts` files |
-| 2.3 | Module Anatomy (Models, Service, Index, Migrations) | `TODO` | Module structure pattern |
-| 2.4 | Module Keys & Resolution | `TODO` | `medusa-config.ts` keys |
-| 2.5 | Conditional Module Loading | `TODO` | Stripe, SendGrid, Meilisearch |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 2.1 | Medusa Configuration (medusa-config.ts) | 57606246 | `DONE` | `apps/backend/medusa-config.ts` |
+| 2.2 | Module Registry (61 Modules) | 57507902 | `DONE` | All module `index.ts` files |
+| 2.3 | Module Anatomy (Models, Service, Index, Migrations) | 57278547 | `DONE` | Module structure pattern |
+| 2.4 | Module Keys and Resolution | 56033301 | `DONE` | `medusa-config.ts` keys |
+| 2.5 | Conditional Module Loading | 56426597 | `DONE` | Stripe, SendGrid, Meilisearch |
 
-### 3. Core Commerce Extensions (Page ID: 56262772)
+### 3. Core Commerce Extensions (Page ID: 56885411)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 3.1 | Cart Extension Module | `TODO` | `modules/cart-extension/` |
-| 3.2 | Shipping Extension Module | `TODO` | `modules/shipping-extension/` |
-| 3.3 | Inventory Extension Module | `TODO` | `modules/inventory-extension/` |
-| 3.4 | Tax Configuration Module | `TODO` | `modules/tax-config/` |
-| 3.5 | Volume Pricing Module | `TODO` | `modules/volume-pricing/` |
-| 3.6 | Promotion Extension Module | `TODO` | `modules/promotion-ext/` |
-| 3.7 | Invoice Module | `TODO` | `modules/invoice/` |
-| 3.8 | Payout Module | `TODO` | `modules/payout/` |
-| 3.9 | Review Module | `TODO` | `modules/review/` |
-| 3.10 | Wishlist Module | `TODO` | `modules/wishlist/` |
-| 3.11 | Trade-In Module | `TODO` | `modules/trade-in/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 3.1 | Cart Extension Module | 57245875 | `DONE` | `modules/cart-extension/` |
+| 3.2 | Shipping Extension Module | 57475153 | `DONE` | `modules/shipping-extension/` |
+| 3.3 | Inventory Extension Module | 56361179 | `DONE` | `modules/inventory-extension/` |
+| 3.4 | Tax Configuration Module | 55967826 | `DONE` | `modules/tax-config/` |
+| 3.5 | Volume Pricing Module | 56262915 | `DONE` | `modules/volume-pricing/` |
+| 3.6 | Promotion Extension Module | 57213029 | `DONE` | `modules/promotion-ext/` |
+| 3.7 | Invoice Module | 57606266 | `DONE` | `modules/invoice/` |
+| 3.8 | Payout Module | 56787084 | `DONE` | `modules/payout/` |
+| 3.9 | Review Module | 56066188 | `DONE` | `modules/review/` |
+| 3.10 | Wishlist Module | 56918076 | `DONE` | `modules/wishlist/` |
+| 3.11 | Trade-In Module | 57081957 | `DONE` | `modules/trade-in/` |
 
-### 4. Marketplace & Listings Verticals (Page ID: 56262781)
+### 4. Marketplace & Listings Verticals (Page ID: 56557648)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 4.1 | Auction Module | `TODO` | `modules/auction/` |
-| 4.2 | Classified Module | `TODO` | `modules/classified/` |
-| 4.3 | Real Estate Module | `TODO` | `modules/real-estate/` |
-| 4.4 | Automotive Module | `TODO` | `modules/automotive/` |
-| 4.5 | Rental Module | `TODO` | `modules/rental/` |
-| 4.6 | Digital Product Module | `TODO` | `modules/digital-product/` |
-| 4.7 | Crowdfunding Module | `TODO` | `modules/crowdfunding/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 4.1 | Auction Module | 56230085 | `DONE` | `modules/auction/` |
+| 4.2 | Classified Module | 57081976 | `DONE` | `modules/classified/` |
+| 4.3 | Real Estate Module | 56983689 | `DONE` | `modules/real-estate/` |
+| 4.4 | Automotive Module | 56819782 | `DONE` | `modules/automotive/` |
+| 4.5 | Rental Module | 57475172 | `DONE` | `modules/rental/` |
+| 4.6 | Digital Product Module | 56000612 | `DONE` | `modules/digital-product/` |
+| 4.7 | Crowdfunding Module | 57245895 | `DONE` | `modules/crowdfunding/` |
 
-### 5. Services & Bookings Verticals (Page ID: 56262790)
+### 5. Services & Bookings Verticals (Page ID: 56164472)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 5.1 | Booking Module | `TODO` | `modules/booking/` |
-| 5.2 | Restaurant Module | `TODO` | `modules/restaurant/` |
-| 5.3 | Healthcare Module | `TODO` | `modules/healthcare/` |
-| 5.4 | Travel Module | `TODO` | `modules/travel/` |
-| 5.5 | Event Ticketing Module | `TODO` | `modules/event-ticketing/` |
-| 5.6 | Freelance Module | `TODO` | `modules/freelance/` |
-| 5.7 | Fitness Module | `TODO` | `modules/fitness/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 5.1 | Booking Module | 56000631 | `DONE` | `modules/booking/` |
+| 5.2 | Healthcare Module | 56164492 | `DONE` | `modules/healthcare/` |
+| 5.3 | Restaurant Module | 57475191 | `DONE` | `modules/restaurant/` |
+| 5.4 | Travel Module | 55967845 | `DONE` | `modules/travel/` |
+| 5.5 | Event Ticketing Module | 56885449 | `DONE` | `modules/event-ticketing/` |
+| 5.6 | Freelance / Gig Module | 57540652 | `DONE` | `modules/freelance/` |
+| 5.7 | Fitness Module | 57114827 | `DONE` | `modules/fitness/` |
+| 5.8 | Pet Services Module | 56885469 | `DONE` | `modules/pet-service/` |
 
-### 6. Finance & Insurance Verticals (Page ID: 56262799)
+### 6. Finance & Insurance Verticals (Page ID: 56066149)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 6.1 | Financial Product Module | `TODO` | `modules/financial-product/` |
-| 6.2 | Insurance Module | `TODO` | `modules/insurance/` |
-| 6.3 | Subscription Module | `TODO` | `modules/subscription/` |
-| 6.4 | Wallet Module | `TODO` | `modules/wallet/` |
-| 6.5 | Loyalty Module | `TODO` | `modules/loyalty/` |
-| 6.6 | Membership Module | `TODO` | `modules/membership/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 6.1 | Financial Product Module | 56721467 | `DONE` | `modules/financial-product/` |
+| 6.2 | Insurance Module | 57475210 | `DONE` | `modules/insurance/` |
+| 6.3 | Subscription Module | 55967864 | `DONE` | `modules/subscription/` |
+| 6.4 | Wallet Module | 56918095 | `DONE` | `modules/wallet/` |
+| 6.5 | Loyalty Module | 56590399 | `DONE` | `modules/loyalty/` |
+| 6.6 | Membership Module | 57114846 | `DONE` | `modules/membership/` |
 
-### 7. Content & Social Verticals (Page ID: 56262808)
+### 7. Content & Social Verticals (Page ID: 57049229)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 7.1 | Social Commerce Module | `TODO` | `modules/social-commerce/` |
-| 7.2 | Affiliate Module | `TODO` | `modules/affiliate/` |
-| 7.3 | Advertising Module | `TODO` | `modules/advertising/` |
-| 7.4 | Education Module | `TODO` | `modules/education/` |
-| 7.5 | Charity Module | `TODO` | `modules/charity/` |
-| 7.6 | Grocery Module | `TODO` | `modules/grocery/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 7.1 | Social Commerce Module | 57376869 | `DONE` | `modules/social-commerce/` |
+| 7.2 | Affiliate Module | 57540671 | `DONE` | `modules/affiliate/` |
+| 7.3 | Advertising Module | 57409695 | `DONE` | `modules/advertising/` |
+| 7.4 | Education Module | 57540690 | `DONE` | `modules/education/` |
+| 7.5 | Charity Module | 57278567 | `DONE` | `modules/charity/` |
+| 7.6 | Grocery Module | 56524998 | `DONE` | `modules/grocery/` |
 
-### 8. Civic & Specialized Verticals (Page ID: 56262817)
+### 8. Civic & Specialized Verticals (Page ID: 56524941)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 8.1 | Government Module | `TODO` | `modules/government/` |
-| 8.2 | Legal Module | `TODO` | `modules/legal/` |
-| 8.3 | Utilities Module | `TODO` | `modules/utilities/` |
-| 8.4 | Parking Module | `TODO` | `modules/parking/` |
-| 8.5 | Pet Service Module | `TODO` | `modules/pet-service/` |
-| 8.6 | Warranty Module | `TODO` | `modules/warranty/` |
-| 8.7 | Quote Module | `TODO` | `modules/quote/` |
-| 8.8 | Company / B2B Module | `TODO` | `modules/company/` |
-| 8.9 | Dispute Module | `TODO` | `modules/dispute/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 8.1 | Government Module | 56525017 | `DONE` | `modules/government/` |
+| 8.2 | Legal Module | 57147492 | `DONE` | `modules/legal/` |
+| 8.3 | Utilities Module | 56819802 | `DONE` | `modules/utilities/` |
+| 8.4 | Parking Module | 56361198 | `DONE` | `modules/parking/` |
+| 8.5 | Pet Service Module | 56426617 | `DONE` | `modules/pet-service/` |
+| 8.6 | Warranty Module | 56426636 | `DONE` | `modules/warranty/` |
+| 8.7 | Quote Module | 56361217 | `DONE` | `modules/quote/` |
+| 8.8 | Company / B2B Module | 57049289 | `DONE` | `modules/company/` |
+| 8.9 | Dispute Module | 56623245 | `DONE` | `modules/dispute/` |
 
-### 9. Multi-Vendor Architecture (Page ID: 56393877)
+### 9. Multi-Vendor Architecture (Page ID: 56524960)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 9.1 | Vendor Module | `TODO` | `modules/vendor/` |
-| 9.2 | Vendor-Product Junction | `TODO` | `VendorProduct` model |
-| 9.3 | Vendor Order & Order Splitting | `TODO` | `VendorOrder` model |
-| 9.4 | Commission Module | `TODO` | `modules/commission/` |
-| 9.5 | Marketplace Listings | `TODO` | `MarketplaceListing` model |
-| 9.6 | Vendor Analytics | `TODO` | `VendorAnalytics` model |
-| 9.7 | Vendor Portal API (68 routes) | `TODO` | `api/vendor/` |
-| 9.8 | Vendor Portal Frontend (73 pages) | `TODO` | `storefront/vendor/` |
-| 9.9 | Vendor Onboarding Workflow | `TODO` | `workflows/vendor-onboarding.ts` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 9.1 | Vendor Module | 56098959 | `DONE` | `modules/vendor/` |
+| 9.2 | Vendor-Product Junction | 56721486 | `DONE` | `VendorProduct` model |
+| 9.3 | Vendor Order and Order Splitting | 57213048 | `DONE` | `VendorOrder` model |
+| 9.4 | Commission Module | 55738568 | `DONE` | `modules/commission/` |
+| 9.5 | Payout Module | 56098978 | `DONE` | `modules/payout/` |
+| 9.6 | Vendor Portal (73 Dashboard Pages) | 56492152 | `DONE` | `storefront/vendor/` |
+| 9.7 | Vendor Onboarding Flow | 55804361 | `DONE` | `workflows/vendor-onboarding.ts` |
+| 9.8 | Vendor Analytics and Reporting | 56950866 | `DONE` | `VendorAnalytics` model |
+| 9.9 | Vendor Review and Rating System | 56131784 | `DONE` | Review model |
 
-### 10. Custom API Layer (Page ID: 56393886)
+### 10. Custom API Layer (Page ID: 55738509)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 10.1 | Admin API (237 routes) | `TODO` | `api/admin/` |
-| 10.2 | Store API (163 routes) | `TODO` | `api/store/` |
-| 10.3 | Vendor API (68 routes) | `TODO` | `api/vendor/` |
-| 10.4 | Platform API (16 routes) | `TODO` | `api/platform/` |
-| 10.5 | Webhook Endpoints (4 providers) | `TODO` | `api/webhooks/` |
-| 10.6 | Health Check Endpoint | `TODO` | `api/health/` |
-| 10.7 | API Route Conventions & Patterns | `TODO` | Route structure patterns |
-| 10.8 | Admin Route Reference by Vertical | `TODO` | Admin routes grouped by vertical |
-| 10.9 | Store Route Reference by Vertical | `TODO` | Store routes grouped by vertical |
-| 10.10 | Vendor Route Reference by Vertical | `TODO` | Vendor routes grouped by vertical |
-| 10.11 | Error Handling & Validation | `TODO` | `lib/api-error-handler.ts` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 10.1 | Admin API Routes | 57114865 | `DONE` | `api/admin/` |
+| 10.2 | Store API Routes | 57409714 | `DONE` | `api/store/` |
+| 10.3 | Vendor API Routes | 56426655 | `DONE` | `api/vendor/` |
+| 10.4 | Platform API Routes | 56098997 | `DONE` | `api/platform/` |
+| 10.5 | Webhook Routes | 56983709 | `DONE` | `api/webhooks/` |
+| 10.6 | API Middlewares | 57147512 | `DONE` | `api/middlewares.ts` |
+| 10.7 | API Route Conventions | 56525036 | `DONE` | Route structure patterns |
+| 10.8 | Route Count Summary (489 Routes) | 55738587 | `DONE` | Route summary |
 
 ### 11. Workflows (Page ID: 56230026)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 11.1 | Workflow Architecture | `TODO` | Medusa workflow pattern |
-| 11.2 | Order Workflows | `TODO` | `workflows/order-fulfillment.ts`, etc. |
-| 11.3 | Vendor Workflows | `TODO` | `workflows/vendor/`, `vendor-onboarding.ts` |
-| 11.4 | Subscription Workflows | `TODO` | `workflows/subscription/` |
-| 11.5 | Integration Sync Workflows | `TODO` | `workflows/hierarchy-sync.ts`, `product-sync.ts` |
-| 11.6 | Vertical Workflows | `TODO` | `workflows/auction-lifecycle.ts`, etc. |
-| 11.7 | Event Outbox | `TODO` | `modules/events/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 11.1 | Order Fulfillment Workflows | 56393870 | `DONE` | `workflows/order-fulfillment.ts`, etc. |
+| 11.2 | Vendor Operation Workflows | 56688822 | `DONE` | `workflows/vendor/` |
+| 11.3 | Subscription Lifecycle Workflows | 57606286 | `DONE` | `workflows/subscription/` |
+| 11.4 | Integration Sync Workflows | 57245914 | `DONE` | `workflows/hierarchy-sync.ts`, `product-sync.ts` |
+| 11.5 | Vertical-Specific Workflows | 56852601 | `DONE` | `workflows/auction-lifecycle.ts`, etc. |
+| 11.6 | Notification Workflows | 56262934 | `DONE` | `workflows/notification/` |
+| 11.7 | Governance and CityOS Workflows | 57081995 | `DONE` | CityOS governance workflows |
+| 11.8 | Workflow Architecture and Patterns | 57082014 | `DONE` | Medusa workflow pattern |
 
 ### 12. Event Subscribers (Page ID: 56230045)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 12.1 | Subscriber Architecture | `TODO` | Subscriber pattern |
-| 12.2 | Order Lifecycle Subscribers | `TODO` | `subscribers/order-*.ts` |
-| 12.3 | Booking Lifecycle Subscribers | `TODO` | `subscribers/booking-*.ts` |
-| 12.4 | Subscription Lifecycle Subscribers | `TODO` | `subscribers/subscription-*.ts` |
-| 12.5 | Vendor Lifecycle Subscribers | `TODO` | `subscribers/vendor-*.ts` |
-| 12.6 | Payment Lifecycle Subscribers | `TODO` | `subscribers/payment-*.ts` |
-| 12.7 | Quote Lifecycle Subscribers | `TODO` | `subscribers/quote-*.ts` |
-| 12.8 | B2B & Integration Subscribers | `TODO` | `subscribers/company-*.ts`, `integration-sync-*.ts` |
-| 12.9 | Analytics Subscribers | `TODO` | `subscribers/product-updated-analytics.ts` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 12.1 | Order Event Subscribers | 57376888 | `DONE` | `subscribers/order-*.ts` |
+| 12.2 | Vendor Event Subscribers | 57016523 | `DONE` | `subscribers/vendor-*.ts` |
+| 12.3 | Vertical Event Subscribers | 56557667 | `DONE` | Various vertical subscribers |
+| 12.4 | Integration Sync Subscribers | 56656009 | `DONE` | `subscribers/integration-sync-*.ts` |
+| 12.5 | Subscriber Architecture and Patterns | 56525076 | `DONE` | Subscriber pattern |
 
 ### 13. Module Links (Page ID: 56918056)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 13.1 | Link Architecture | `TODO` | `defineLink` pattern |
-| 13.2 | Customer Links (12) | `TODO` | `links/customer-*.ts` |
-| 13.3 | Product Links (10) | `TODO` | `links/product-*.ts` |
-| 13.4 | Order Links (3) | `TODO` | `links/order-*.ts` |
-| 13.5 | Vendor Links (5) | `TODO` | `links/vendor-*.ts` |
-| 13.6 | Cart & Inventory Links | `TODO` | `links/cart-*.ts`, `links/inventory-*.ts` |
-| 13.7 | Company Links | `TODO` | `links/company-*.ts` |
-| 13.8 | Tenant & Node Links | `TODO` | `links/tenant-*.ts`, `links/node-*.ts` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 13.1 | Core Commerce Links | 57409733 | `DONE` | `links/product-*.ts`, `links/order-*.ts` |
+| 13.2 | Vertical Module Links | 56950886 | `DONE` | Vertical-specific links |
+| 13.3 | CityOS Infrastructure Links | 56426674 | `DONE` | `links/tenant-*.ts`, `links/node-*.ts` |
+| 13.4 | Link Architecture and Complete Registry | 56131803 | `DONE` | `defineLink` pattern |
 
 ### 14. Infrastructure Modules (Page ID: 55804342)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 14.1 | Tenant Module | `TODO` | `modules/tenant/` |
-| 14.2 | Node Hierarchy Module | `TODO` | `modules/node/` |
-| 14.3 | Governance Module | `TODO` | `modules/governance/` |
-| 14.4 | Persona Module | `TODO` | `modules/persona/` |
-| 14.5 | Store Module (CityOS) | `TODO` | `modules/store/` |
-| 14.6 | Channel Module | `TODO` | `modules/channel/` |
-| 14.7 | Region Zone Module | `TODO` | `modules/region-zone/` |
-| 14.8 | i18n Module | `TODO` | `modules/i18n/` |
-| 14.9 | Notification Preferences | `TODO` | `modules/notification-preferences/` |
-| 14.10 | Analytics Module | `TODO` | `modules/analytics/` |
-| 14.11 | Audit Module | `TODO` | `modules/audit/` |
-| 14.12 | Events Module | `TODO` | `modules/events/` |
-| 14.13 | CMS Content Module | `TODO` | `modules/cms-content/` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 14.1 | Tenant Module | 56131822 | `DONE` | `modules/tenant/` |
+| 14.2 | Node Hierarchy Module | 57278606 | `DONE` | `modules/node/` |
+| 14.3 | Governance Module | 56688841 | `DONE` | `modules/governance/` |
+| 14.4 | Persona Module | 56164511 | `DONE` | `modules/persona/` |
+| 14.5 | Store Module (CityOS) | 56066227 | `DONE` | `modules/store/` |
+| 14.6 | Region Zone Module | 57016542 | `DONE` | `modules/region-zone/` |
+| 14.7 | Notification Preferences Module | 56525096 | `DONE` | `modules/notification-preferences/` |
+| 14.8 | Wallet Module | 56852639 | `DONE` | Infrastructure wallet |
+| 14.9 | Loyalty Module | 56852659 | `DONE` | Infrastructure loyalty |
+| 14.10 | Report and Analytics Module | 56230104 | `DONE` | `modules/analytics/` |
+| 14.11 | CMS Content Module | 57507921 | `DONE` | `modules/cms-content/` |
+| 14.12 | Tax Configuration Module | 56393889 | `DONE` | `modules/tax-config/` |
+| 14.13 | Volume Pricing and Promotion Extensions | 55804381 | `DONE` | `modules/volume-pricing/`, `modules/promotion-ext/` |
 
 ### 15. Integration Layer (Page ID: 56230064)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 15.1 | Integration Architecture | `TODO` | `lib/integrations/` |
-| 15.2 | Payload CMS Integration | `TODO` | `lib/integrations/payload-cms-spec.ts` |
-| 15.3 | ERPNext Integration | `TODO` | `lib/integrations/erpnext-spec.ts` |
-| 15.4 | Fleetbase Integration | `TODO` | `lib/integrations/fleetbase-spec.ts` |
-| 15.5 | Stripe Webhooks | `TODO` | `api/webhooks/stripe/` |
-| 15.6 | Temporal Cloud Client | `TODO` | `lib/temporal-client.ts` |
-| 15.7 | Walt.id (Digital Identity) | `TODO` | `lib/integrations/waltid-spec.ts` |
-| 15.8 | Webhook Security | `TODO` | Signature verification |
-| 15.9 | Outbox Processor | `TODO` | `lib/platform/outbox-processor.ts` |
-| 15.10 | Sync Tracker | `TODO` | `lib/platform/sync-tracker.ts` |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 15.1 | Integration Architecture | 57213067 | `DONE` | `lib/integrations/` |
+| 15.2 | Payload CMS Integration | 56033321 | `DONE` | `lib/integrations/payload-cms-spec.ts` |
+| 15.3 | ERPNext Integration | 56066246 | `DONE` | `lib/integrations/erpnext-spec.ts` |
+| 15.4 | Fleetbase Integration | 56819841 | `DONE` | `lib/integrations/fleetbase-spec.ts` |
+| 15.5 | Stripe Webhooks | 55738606 | `DONE` | `api/webhooks/stripe/` |
+| 15.6 | Temporal Cloud Client | 56426694 | `DONE` | `lib/temporal-client.ts` |
+| 15.7 | Walt.id Digital Identity | 57540709 | `DONE` | `lib/integrations/waltid-spec.ts` |
+| 15.8 | Webhook Security | 56262973 | `DONE` | Signature verification |
+| 15.9 | Outbox Processor | 55935100 | `DONE` | `lib/platform/outbox-processor.ts` |
+| 15.10 | Sync Tracker | 57245934 | `DONE` | `lib/platform/sync-tracker.ts` |
 
 ### 16. Database & Migrations (Page ID: 56098919)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 16.1 | Database Architecture | `TODO` | PostgreSQL + MikroORM |
-| 16.2 | MikroORM Patterns | `TODO` | Entity/model conventions |
-| 16.3 | Migration System | `TODO` | MikroORM migrations |
-| 16.4 | Module Migration Registry | `TODO` | 203 migrations |
-| 16.5 | Schema Reference | `TODO` | Full table listing |
-| 16.6 | Enum Constraints | `TODO` | All enum columns |
-| 16.7 | JSONB Fields | `TODO` | Metadata/config fields |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 16.1 | Database Architecture | 56459449 | `DONE` | PostgreSQL + MikroORM |
+| 16.2 | MikroORM Patterns | 57016561 | `DONE` | Entity/model conventions |
+| 16.3 | Migration System | 57606305 | `DONE` | MikroORM migrations |
+| 16.4 | Module Migration Registry | 56230123 | `DONE` | 203 migrations |
+| 16.5 | Enum Constraints Reference | 56164530 | `DONE` | All enum columns |
+| 16.6 | Seed Data Infrastructure | 56525115 | `DONE` | Seed data overview |
+| 16.7 | JSONB Field Patterns | 56918114 | `DONE` | Metadata/config fields |
 
 ### 17. Seed Data & Scripts (Page ID: 56262837)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 17.1 | Seed Architecture | `TODO` | Master scripts, execution order |
-| 17.2 | Core Data Seeds | `TODO` | `seed-master.ts` |
-| 17.3 | Vertical Seeds (27) | `TODO` | `seed-verticals.ts` |
-| 17.4 | Infrastructure Seeds (17) | `TODO` | Infrastructure seed scripts |
-| 17.5 | Sub-Entity Seeds (18) | `TODO` | Sub-entity seed scripts |
-| 17.6 | Seed Utilities | `TODO` | `seed-utils.ts` |
-| 17.7 | Image Policy & Object Storage | `TODO` | Bucket paths, zero Unsplash |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 17.1 | Seed Architecture | 57507940 | `DONE` | Master scripts, execution order |
+| 17.2 | Core Data Seeds | 56393908 | `DONE` | `seed-master.ts` |
+| 17.3 | Vertical Seeds (27 Modules) | 56787103 | `DONE` | `seed-verticals.ts` |
+| 17.4 | Infrastructure Seeds (17 Modules) | 57540730 | `DONE` | Infrastructure seed scripts |
+| 17.5 | Sub-Entity and Ancillary Seeds | 57114904 | `DONE` | Sub-entity seed scripts |
+| 17.6 | Seed Utilities | 56918133 | `DONE` | `seed-utils.ts` |
+| 17.7 | Image Policy and Object Storage | 56525134 | `DONE` | Bucket paths, zero Unsplash |
 
 ### 18. Storefront Application (Page ID: 56262857)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 18.1 | Storefront Architecture | `DONE` | TanStack Start + React |
-| 18.2 | Route Registry (349 routes) | `DONE` | All route files |
-| 18.3 | Design System | `DONE` | Design tokens, theme provider |
-| 18.4 | CMS Block System (77 blocks) | `DONE` | Block type definitions |
-| 18.5 | SSR Loaders (65 pages) | `DONE` | Server loaders |
-| 18.6 | Vendor Portal (73 pages) | `DONE` | Vendor dashboard |
-| 18.7 | Manage Pages (45 CRUD configs) | `DONE` | Admin management |
-| 18.8 | Authentication Flow | `DONE` | JWT, SDK, RoleGuard |
-| 18.9 | i18n and RTL Support | `DONE` | en/fr/ar, logical CSS |
-| 18.10 | SEO and Accessibility | `DONE` | Meta tags, ARIA |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 18.1 | Storefront Architecture | 57278625 | `DONE` | TanStack Start + React |
+| 18.2 | Route Registry (349 Routes) | 56131841 | `DONE` | All route files |
+| 18.3 | Design System | 56459468 | `DONE` | Design tokens, theme provider |
+| 18.4 | CMS Block System (77 Blocks) | 56361256 | `DONE` | Block type definitions |
+| 18.5 | SSR Loaders (65 Pages) | 57606324 | `DONE` | Server loaders |
+| 18.6 | Vendor Portal (73 Pages) | 56131860 | `DONE` | Vendor dashboard |
+| 18.7 | Manage Pages (45 CRUD Configs) | 56525153 | `DONE` | Admin management |
+| 18.8 | Authentication Flow | 56000669 | `DONE` | JWT, SDK, RoleGuard |
+| 18.9 | i18n and RTL Support | 55935119 | `DONE` | en/fr/ar, logical CSS |
+| 18.10 | SEO and Accessibility | 56721505 | `DONE` | Meta tags, ARIA |
 
 ### 19. Authentication & RBAC (Page ID: 56983650)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 19.1 | Authentication Architecture | `DONE` | JWT, sessions |
-| 19.2 | 10-Role RBAC System | `DONE` | Role hierarchy |
-| 19.3 | API Key Management | `DONE` | Publishable/secret keys |
-| 19.4 | Route Protection Patterns | `DONE` | Middleware, RoleGuard |
-| 19.5 | Vendor Authentication | `DONE` | Vendor JWT |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 19.1 | Authentication Architecture | 57278645 | `DONE` | JWT, sessions |
+| 19.2 | 10-Role RBAC System | 57475229 | `DONE` | Role hierarchy |
+| 19.3 | API Key Management | 56721524 | `DONE` | Publishable/secret keys |
+| 19.4 | Route Protection Patterns | 57213086 | `DONE` | Middleware, RoleGuard |
+| 19.5 | Vendor Authentication | 55738625 | `DONE` | Vendor JWT |
 
 ### 20. Deployment & DevOps (Page ID: 56688758)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 20.1 | Development Setup | `DONE` | `start.sh` |
-| 20.2 | Production Build Pipeline | `DONE` | `build-production.sh` |
-| 20.3 | Production Architecture | `DONE` | Health responder pattern |
-| 20.4 | VM Deployment Strategy | `DONE` | VM vs autoscale |
-| 20.5 | Production Proxy | `DONE` | `prod-proxy.js` |
-| 20.6 | Environment Variables | `DONE` | Complete reference |
-| 20.7 | Monorepo Structure | `DONE` | Turborepo + pnpm |
-| 20.8 | Object Storage | `DONE` | Replit Object Storage |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 20.1 | Development Setup | 56262992 | `DONE` | `start.sh` |
+| 20.2 | Production Build | 57606343 | `DONE` | `build-production.sh` |
+| 20.3 | Production Architecture | 57082035 | `DONE` | Health responder pattern |
+| 20.4 | VM Deployment Strategy | 56230142 | `DONE` | VM vs autoscale |
+| 20.5 | Production Proxy | 57409753 | `DONE` | `prod-proxy.js` |
+| 20.6 | Environment Variables | 55935138 | `DONE` | Complete reference |
+| 20.7 | Monorepo Structure | 57606362 | `DONE` | Turborepo + pnpm |
+| 20.8 | Object Storage | 57016581 | `DONE` | Replit Object Storage |
+| 20.9 | Build Verification and CI | 56099016 | `DONE` | `build-production.sh` |
 
 ### 21. Testing & Quality (Page ID: 56262876)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 21.1 | Testing Strategy | `DONE` | Multi-layer testing |
-| 21.2 | TypeScript Compilation | `DONE` | `tsconfig.json`, contracts |
-| 21.3 | Code Quality Standards | `DONE` | Conventions, separation |
-| 21.4 | Database Integrity | `DONE` | Migrations, enums, validation |
-| 21.5 | Dependency Security | `DONE` | pnpm overrides |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 21.1 | Testing Strategy | 57475248 | `DONE` | Multi-layer testing |
+| 21.2 | TypeScript Compilation | 56819860 | `DONE` | `tsconfig.json`, contracts |
+| 21.3 | Code Quality Standards | 55738644 | `DONE` | Conventions, separation |
+| 21.4 | Database Integrity | 57245953 | `DONE` | Migrations, enums, validation |
+| 21.5 | Dependency Security | 56459487 | `DONE` | pnpm overrides |
 
 ### 22. Appendices & Reference (Page ID: 55935079)
 
-| # | Page Title | Status | Source |
-|---|-----------|--------|--------|
-| 22.1 | Full Module Registry (61 Modules) | `DONE` | All modules |
-| 22.2 | API Route Index (489 Routes) | `DONE` | All API routes |
-| 22.3 | Database Table Index | `DONE` | All tables |
-| 22.4 | Seed Data Reference | `DONE` | All seed scripts |
-| 22.5 | CMS Cross-Reference Map | `DONE` | CMS mapping |
-| 22.6 | Vertical Feature Matrix | `DONE` | Feature comparison |
-| 22.7 | Integration Endpoint Reference | `DONE` | Webhooks, APIs |
-| 22.8 | Node Hierarchy Reference | `DONE` | 5-level hierarchy |
-| 22.9 | Persona System Reference | `DONE` | 6-axis personas |
-| 22.10 | Governance Chain Reference | `DONE` | 4-level chain |
-| 22.11 | Glossary & Acronyms | `DONE` | Terms, abbreviations |
+| # | Page Title | Page ID | Status | Source |
+|---|-----------|---------|--------|--------|
+| 22.1 | Full Module Registry (61 Modules) | 57049308 | `DONE` | All modules |
+| 22.2 | API Route Index (489 Routes) | 57507980 | `DONE` | All API routes |
+| 22.3 | Database Table Index | 56590419 | `DONE` | All tables |
+| 22.4 | Seed Data Reference | 56000688 | `DONE` | All seed scripts |
+| 22.5 | CMS Cross-Reference Map | 57245972 | `DONE` | CMS mapping |
+| 22.6 | Vertical Feature Matrix | 56983748 | `DONE` | Feature comparison |
+| 22.7 | Integration Endpoint Reference | 56393927 | `DONE` | Webhooks, APIs |
+| 22.8 | Node Hierarchy Reference | 56950925 | `DONE` | 5-level hierarchy |
+| 22.9 | Persona System Reference | 56164588 | `DONE` | 6-axis personas |
+| 22.10 | Governance Chain Reference | 56164607 | `DONE` | 4-level chain |
+| 22.11 | Glossary and Acronyms | 56295523 | `DONE` | Terms, abbreviations |
 
 ---
 
@@ -382,12 +374,12 @@
 Each section index page includes:
 - Tier classification and status tracking
 - Purpose/overview paragraph
-- Child pages table with numbered sub-pages and TODO status
+- Child pages table with numbered sub-pages and DONE status
 - Summary tables (module registry, API routes, link definitions, etc.)
 - Cross-references to Payload CMS documentation sections
 - Source file attribution
 
-### Child Pages Per Section (148 planned sub-pages)
+### Child Pages Per Section (170 child pages across 22 sections)
 
 | Section | Child Pages | Topic Areas |
 |---------|-------------|-------------|
@@ -395,24 +387,24 @@ Each section index page includes:
 | 2 | 5 | Config, module registry, anatomy, keys, conditional loading |
 | 3 | 11 | Cart, shipping, inventory, tax, volume pricing, promotion, invoice, payout, review, wishlist, trade-in |
 | 4 | 7 | Auction, classified, real estate, automotive, rental, digital product, crowdfunding |
-| 5 | 7 | Booking, restaurant, healthcare, travel, event ticketing, freelance, fitness |
+| 5 | 8 | Booking, healthcare, restaurant, travel, event ticketing, freelance, fitness, pet services |
 | 6 | 6 | Financial product, insurance, subscription, wallet, loyalty, membership |
 | 7 | 6 | Social commerce, affiliate, advertising, education, charity, grocery |
 | 8 | 9 | Government, legal, utilities, parking, pet service, warranty, quote, B2B, dispute |
-| 9 | 9 | Vendor module, junction table, order splitting, commission, listings, analytics, portal API, portal UI, onboarding |
-| 10 | 11 | Admin API, store API, vendor API, platform API, webhooks, health, conventions, route refs (admin/store/vendor), errors |
-| 11 | 7 | Architecture, order workflows, vendor workflows, subscription, integration sync, vertical workflows, outbox |
-| 12 | 8 | Architecture, order/booking/subscription/vendor/quote/B2B/integration/analytics subscribers |
-| 13 | 8 | Architecture, customer/product/order/vendor/cart/inventory/company links |
-| 14 | 13 | Tenant, node hierarchy, governance, persona, store, channel, region zone, i18n, notifications, analytics, audit, events, CMS |
+| 9 | 9 | Vendor module, vendor-product junction, order splitting, commission, payout, vendor portal, onboarding, analytics, reviews |
+| 10 | 8 | Admin API, store API, vendor API, platform API, webhooks, middlewares, conventions, route summary |
+| 11 | 8 | Order fulfillment, vendor operations, subscription lifecycle, integration sync, vertical workflows, notifications, governance, architecture |
+| 12 | 5 | Order subscribers, vendor subscribers, vertical subscribers, integration sync subscribers, architecture |
+| 13 | 4 | Core commerce links, vertical module links, CityOS infrastructure links, link architecture |
+| 14 | 13 | Tenant, node hierarchy, governance, persona, store, region zone, notifications, wallet, loyalty, analytics, CMS content, tax config, volume pricing |
 | 15 | 10 | Architecture, Payload CMS, ERPNext, Fleetbase, Stripe, Temporal, Walt.id, webhook security, outbox, sync |
-| 16 | 7 | Architecture, MikroORM patterns, migration system, registry, schema ref, enums, JSONB |
+| 16 | 7 | Architecture, MikroORM patterns, migration system, registry, enums, seed data infra, JSONB |
 | 17 | 7 | Architecture, core seeds, vertical seeds, infrastructure seeds, sub-entity seeds, utilities, image policy |
 | 18 | 10 | Architecture, routes, design system, CMS blocks, SSR loaders, vendor portal, manage pages, auth, i18n, SEO |
 | 19 | 5 | Auth architecture, RBAC roles, API keys, route protection, vendor auth |
-| 20 | 8 | Dev setup, production build, production architecture, VM strategy, proxy, health checks, env vars, monitoring |
-| 21 | 5 | TypeScript contracts, type safety, code quality, testing, error handling |
-| 22 | 11 | API routes, module registry, links, subscribers, workflows, migrations, env vars, CMS cross-ref, ERPNext, Fleetbase, changelog |
+| 20 | 9 | Dev setup, production build, production architecture, VM strategy, proxy, env vars, monorepo, object storage, build verification |
+| 21 | 5 | Testing strategy, TypeScript compilation, code quality, database integrity, dependency security |
+| 22 | 11 | Module registry, API route index, database tables, seed data, CMS cross-ref, vertical matrix, integration endpoints, node hierarchy, persona system, governance chain, glossary |
 
 ---
 
