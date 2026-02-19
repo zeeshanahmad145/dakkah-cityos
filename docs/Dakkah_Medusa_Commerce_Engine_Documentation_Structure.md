@@ -450,15 +450,15 @@ Complete list of all custom Medusa modules with model counts:
 | 4 | `auction` | `auction` | AuctionListing, Bid, AutoBidRule, AuctionEscrow, AuctionResult | Marketplace |
 | 5 | `audit` | `audit` | AuditLog | Infrastructure |
 | 6 | `automotive` | `automotive` | VehicleListing, VehicleService, TestDrive, PartCatalog, TradeIn | Marketplace |
-| 7 | `booking` | `booking` | Booking, Availability, ServiceProduct, ServiceProvider, Reminder | Services |
+| 7 | `booking` | `booking` | Booking, BookingItem, ServiceProduct, ServiceProvider, Availability, AvailabilityException, BookingReminder | Services |
 | 8 | `cart-extension` | `cartExtension` | CartMetadata | Core Extension |
 | 9 | `channel` | `channel` | SalesChannelMapping | Infrastructure |
 | 10 | `charity` | `charity` | CharityOrg, DonationCampaign, Donation, ImpactReport | Content & Social |
 | 11 | `classified` | `classified` | ClassifiedListing, ListingCategory, ListingFlag, ListingImage, ListingOffer | Marketplace |
 | 12 | `cms-content` | `cmsContent` | CmsPage, CmsNavigation | Infrastructure |
 | 13 | `commission` | `commission` | CommissionRule, CommissionTransaction | Multi-Vendor |
-| 14 | `company` | `company` | Company, CompanyUser, PurchaseOrder, PurchaseOrderItem, ApprovalWorkflow, PaymentTerms, TaxExemption | B2B |
-| 15 | `crowdfunding` | `crowdfunding` | Campaign, Pledge, Backer, CampaignUpdate, RewardTier | Marketplace |
+| 14 | `company` | `company` | Company, CompanyUser, PurchaseOrder, PurchaseOrderItem, ApprovalWorkflow, ApprovalRequest, ApprovalAction, PaymentTerms, TaxExemption | B2B |
+| 15 | `crowdfunding` | `crowdfunding` | CrowdfundCampaign, Pledge, Backer, CampaignUpdate, RewardTier | Marketplace |
 | 16 | `digital-product` | `digitalProduct` | DigitalAsset, DownloadLicense | Core Extension |
 | 17 | `dispute` | `dispute` | Dispute, DisputeMessage | Core Extension |
 | 18 | `education` | `education` | Course, Lesson, Quiz, Assignment, Enrollment, Certificate | Content & Social |
@@ -466,22 +466,22 @@ Complete list of all custom Medusa modules with model counts:
 | 20 | `event-ticketing` | `eventTicketing` | Event, Venue, TicketType, Ticket, SeatMap, CheckIn | Services |
 | 21 | `financial-product` | `financialProduct` | LoanProduct, LoanApplication, InsuranceProduct, InsurancePolicy, InvestmentPlan | Finance |
 | 22 | `fitness` | `fitness` | TrainerProfile, ClassSchedule, ClassBooking, GymMembership, WellnessPlan | Services |
-| 23 | `freelance` | `freelance` | GigListing, Proposal, Milestone, FreelancerProfile (via seed) | Services |
-| 24 | `governance` | `governance` | Governance models | Infrastructure |
-| 25 | `government` | `government` | CitizenProfile, ServiceRequest, Fine (via seed) | Civic |
-| 26 | `grocery` | `grocery` | Grocery-specific models | Content & Social |
-| 27 | `healthcare` | `healthcare` | Practitioner, MedicalRecord, LabOrder, Prescription (via seed) | Services |
-| 28 | `i18n` | `i18n` | i18n models | Infrastructure |
-| 29 | `insurance` | `insurance` | Insurance plans and policies | Finance |
-| 30 | `inventory-extension` | `inventoryExtension` | Stock alert models | Core Extension |
-| 31 | `invoice` | `invoice` | Invoice models | Core Extension |
-| 32 | `legal` | `legal` | AttorneyProfile, legal services | Civic |
-| 33 | `loyalty` | `loyalty` | Loyalty program, accounts, tier_config | Finance |
-| 34 | `membership` | `membership` | Membership tiers | Finance |
-| 35 | `node` | `node` | Node hierarchy models | Infrastructure |
-| 36 | `notification-preferences` | `notificationPreferences` | Notification preference models | Infrastructure |
-| 37 | `parking` | `parking` | ParkingZone | Civic |
-| 38 | `payout` | `payout` | Payout models | Multi-Vendor |
+| 23 | `freelance` | `freelance` | GigListing, Proposal, Milestone, FreelanceContract, FreelanceDispute, TimeLog | Services |
+| 24 | `governance` | `governance` | GovernanceAuthority | Infrastructure |
+| 25 | `government` | `government` | CitizenProfile, ServiceRequest, Fine, MunicipalLicense, Permit | Civic |
+| 26 | `grocery` | `grocery` | FreshProduct, DeliverySlot, BatchTracking, SubstitutionRule | Content & Social |
+| 27 | `healthcare` | `healthcare` | Practitioner, MedicalRecord, LabOrder, Prescription, HealthcareAppointment, InsuranceClaim, PharmacyProduct | Services |
+| 28 | `i18n` | `i18n` | Translation | Infrastructure |
+| 29 | `insurance` | `insurance` | InsuranceClaim, InsurancePolicy | Finance |
+| 30 | `inventory-extension` | `inventoryExtension` | ReservationHold, StockAlert, WarehouseTransfer | Core Extension |
+| 31 | `invoice` | `invoice` | Invoice, InvoiceItem | Core Extension |
+| 32 | `legal` | `legal` | AttorneyProfile, LegalConsultation, LegalCase, RetainerAgreement | Civic |
+| 33 | `loyalty` | `loyalty` | LoyaltyProgram, LoyaltyAccount, PointTransaction | Finance |
+| 34 | `membership` | `membership` | Membership, MembershipTier, PointsLedger, Redemption, Reward | Finance |
+| 35 | `node` | `node` | Node | Infrastructure |
+| 36 | `notification-preferences` | `notificationPreferences` | NotificationPreference | Infrastructure |
+| 37 | `parking` | `parking` | ParkingZone, ParkingSession, RideRequest, ShuttleRoute | Civic |
+| 38 | `payout` | `payout` | Payout, PayoutTransactionLink | Multi-Vendor |
 | 39 | `persona` | `persona` | Persona, PersonaAssignment | Infrastructure |
 | 40 | `pet-service` | `petService` | PetProfile, VetAppointment, GroomingBooking, PetProduct | Civic |
 | 41 | `promotion-ext` | `promotionExt` | CustomerSegment, GiftCardExt, ProductBundle, Referral | Core Extension |
@@ -494,13 +494,13 @@ Complete list of all custom Medusa modules with model counts:
 | 48 | `shipping-extension` | `shippingExtension` | CarrierConfig, ShippingRate | Core Extension |
 | 49 | `social-commerce` | `socialCommerce` | SocialPost, SocialShare, LiveStream, LiveProduct, GroupBuy | Content & Social |
 | 50 | `store` | `store` | Store (CityOS extension) | Infrastructure |
-| 51 | `subscription` | `subscription` | SubscriptionPlan, Subscription, SubscriptionItem, BillingCycle, SubscriptionEvent | Finance |
+| 51 | `subscription` | `subscription` | Subscription, SubscriptionPlan, SubscriptionItem, SubscriptionEvent, SubscriptionPause, SubscriptionDiscount, BillingCycle | Finance |
 | 52 | `tax-config` | `taxConfig` | TaxRule, TaxExemption | Core Extension |
-| 53 | `tenant` | `tenant` | Tenant, TenantUser, TenantSettings, TenantBilling, TenantPoi, TenantRelationship, ServiceChannel | Infrastructure |
+| 53 | `tenant` | `tenant` | Tenant, TenantUser, TenantSettings, TenantBilling, TenantUsageRecord, TenantInvoice, TenantPOI, TenantRelationship, ServiceChannel | Infrastructure |
 | 54 | `trade-in` | `tradeIn` | TradeInRequest, TradeInOffer | Core Extension |
 | 55 | `travel` | `travel` | Property, RoomType, Room, Reservation, RatePlan, GuestProfile, Amenity | Services |
 | 56 | `utilities` | `utilities` | UtilityAccount, UtilityBill, MeterReading, UsageRecord | Civic |
-| 57 | `vendor` | `vendor` | Vendor, VendorProduct, VendorOrder, VendorUser, VendorAnalytics, MarketplaceListing | Multi-Vendor |
+| 57 | `vendor` | `vendor` | Vendor, VendorUser, VendorProduct, VendorOrder, VendorOrderItem, MarketplaceListing, VendorAnalyticsSnapshot, VendorPerformanceMetric | Multi-Vendor |
 | 58 | `volume-pricing` | `volumePricing` | VolumePricing, VolumePricingTier | Core Extension |
 | 59 | `wallet` | `wallet` | Wallet, WalletTransaction | Finance |
 | 60 | `warranty` | `warranty` | WarrantyPlan, WarrantyClaim, RepairOrder, ServiceCenter, SparePart | Marketplace |
@@ -632,3 +632,10 @@ Verified metrics from direct codebase inspection using `find`, `grep`, and `wc` 
 | Page 12.3 (round 3) | Total: 19 subscriber files | Total: 23 subscriber files (5+7+7+4) | Updated Confluence page 56557667 |
 | Page 13.4 (round 3) | Link Categories missing Cart row | Added Cart Links: 1 — total now sums to 38 | Updated Confluence page 56131803 |
 | Page 20.5 (round 3) | 2 routing rules (/api/*, /admin/*) | 6 API prefixes matching prod-proxy.js source | Updated Confluence page 57409753 |
+| Section 4 index (round 6) | Child page statuses "TODO" | All 7 child pages marked "VERIFIED" | Updated Confluence page 56557648 |
+| Section 5 index (round 6) | booking 5, healthcare 4, restaurant 8, freelance 4 | booking 7, healthcare 7, restaurant 7, freelance 6 — full model lists | Updated Confluence page 56164472 |
+| Section 6 index (round 6) | subscription 5/6, vague insurance/loyalty/membership | subscription 7, insurance 2, loyalty 3, membership 5 — full model lists | Updated Confluence page 56066149 |
+| Section 7 index (round 6) | Grocery "Grocery-specific models" | Grocery 4 (FreshProduct, DeliverySlot, BatchTracking, SubstitutionRule) | Updated Confluence page 57049229 |
+| Section 8 index (round 6) | government 3, legal vague, parking vague, company 7 | government 5, legal 4, parking 4, company 9 — full model lists | Updated Confluence page 56524941 |
+| Appendix A (round 7) | 16 vague/incorrect model entries | All 61 modules now have explicit model names matching source | Updated structure file |
+| Section 14 index (round 7) | tenant 3, governance GovernancePolicy, persona 1, loyalty 2 | tenant 9, governance GovernanceAuthority, persona 2 (PersonaAssignment), loyalty 3 (PointTransaction) | Updated Confluence page 55804342 |
