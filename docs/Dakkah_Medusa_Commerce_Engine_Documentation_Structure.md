@@ -30,7 +30,7 @@ All 193 Confluence pages (1 homepage + 22 section indexes + 170 child pages) acr
 | 20. Deployment | 9 | Complete |
 | 21. Testing | 5 | Complete |
 | 22. Appendices | 11 | Complete |
-| **Total** | **170 child + 23 index = 193** | **All Complete** |
+| **Total** | **170 child + 22 indexes + 1 homepage = 193** | **All Complete** |
 
 **Companion Space:** Software Development (`98310`) — Payload CMS documentation
 **Cross-Link:** Section 25 (Commerce — Medusa Integration) in Payload docs links here
@@ -610,3 +610,11 @@ Verified metrics from direct codebase inspection using `find`, `grep`, and `wc` 
 | Prod-proxy prefixes | 4 documented | 6 actual | Added `/commerce` and `/auth` |
 | CMS registry path | `app/lib/cms-registry.ts` | `src/components/blocks/block-registry.ts` | Verified actual file location |
 | Migration breakdown | "203 migrations" | 64 module + 139 Medusa core = 203 | Clarified composition |
+| Homepage workflows | 23 | 30 | Updated Confluence page 56393848 |
+| Homepage seeds | 42 | 41 | Updated Confluence page 56393848 |
+| Homepage migrations | 64+ | 203 (64+139) | Updated Confluence page 56393848 |
+| Homepage section table | Stale names/counts | Correct 22-section structure | Updated Confluence page 56393848 |
+| Section 11 index | 23 workflows, 14 in registry | 30 workflows, all 30 listed | Updated Confluence page 56230026 |
+| Section 12 index | 9 child pages listed | 5 child pages (actual) | Updated Confluence page 56230045 |
+| Section 13 index | 8 child pages, 30 links | 4 child pages, 38 links | Updated Confluence page 56918056 |
+| Section 17 index | 42 scripts | 41 scripts with full registry | Updated Confluence page 56262837 |
