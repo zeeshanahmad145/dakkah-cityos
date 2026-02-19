@@ -86,4 +86,4 @@ run = ["bash", "scripts/start-production.sh"]
 build = ["bash", "scripts/build-production.sh"]
 
 [objectStorage]
-defaultBucketID = "replit-objstore-9ae4a2f3-0592-42b1-908d-b04c0c0e79c4"
+defaultBucketID = "replit-objstore-d0367ca5-bb93-42b5-b2e7-53122f51e3cb"
