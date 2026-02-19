@@ -1,9 +1,37 @@
 # Dakkah CityOS — Medusa Commerce Engine Documentation Plan
 
-**Space:** Medusa Commerce Engine (NEW) · **Homepage:** TBD · **Updated:** February 19, 2026
+**Space:** Software Development (`98310`) · **Homepage:** [Medusa Commerce Engine](https://dakkah.atlassian.net/wiki/spaces/SD/pages/56393848) · **Updated:** February 19, 2026
 
 **Companion Space:** Software Development (`98310`) — Payload CMS documentation
 **Cross-Link:** Section 25 (Commerce — Medusa Integration) in Payload docs links here
+
+**Confluence Page IDs:**
+
+| Section | Title | Page ID |
+|---------|-------|---------|
+| Homepage | Medusa Commerce Engine — Documentation | 56393848 |
+| 1 | Platform Overview and Architecture | 56262754 |
+| 2 | Module System and Configuration | 56262763 |
+| 3 | Core Commerce Extensions | 56262772 |
+| 4 | Vertical Modules — Marketplace and Listings | 56262781 |
+| 5 | Vertical Modules — Services and Bookings | 56262790 |
+| 6 | Vertical Modules — Finance and Insurance | 56262799 |
+| 7 | Vertical Modules — Content and Social | 56262808 |
+| 8 | Vertical Modules — Civic and Specialized | 56262817 |
+| 9 | Multi-Vendor Architecture | 56393877 |
+| 10 | Custom API Layer | 56393886 |
+| 11 | Workflows | 56230026 |
+| 12 | Event Subscribers | 56230045 |
+| 13 | Module Links | 56918056 |
+| 14 | Infrastructure Modules | 55804342 |
+| 15 | Integration Layer | 56230064 |
+| 16 | Database and Migrations | 56098919 |
+| 17 | Seed Data and Scripts | 56262837 |
+| 18 | Storefront Application | 56262857 |
+| 19 | Authentication and RBAC | 56983650 |
+| 20 | Deployment and DevOps | 56688758 |
+| 21 | Testing and Quality | 56262876 |
+| 22 | Appendices and Reference | 55935079 |
 
 **Codebase Layout**
 
@@ -26,623 +54,365 @@
 
 ## Progress Dashboard
 
-**Overall: 0 / 170 pages (0%) — NEW SPACE**
+**Overall: 22 / 170 pages (13%) — All Section Index Pages Created**
 
-| # | Section | Progress | Status |
-|---|---------|----------|--------|
-| 1 | Platform Overview & Architecture | 0/8 (0%) | Not started |
-| 2 | Module System & Configuration | 0/6 (0%) | Not started |
-| 3 | Core Commerce Extensions | 0/12 (0%) | Not started |
-| 4 | Vertical Modules — Marketplace & Listings | 0/8 (0%) | Not started |
-| 5 | Vertical Modules — Services & Bookings | 0/8 (0%) | Not started |
-| 6 | Vertical Modules — Finance & Insurance | 0/7 (0%) | Not started |
-| 7 | Vertical Modules — Content & Social | 0/7 (0%) | Not started |
-| 8 | Vertical Modules — Civic & Specialized | 0/10 (0%) | Not started |
-| 9 | Multi-Vendor Architecture | 0/10 (0%) | Not started |
-| 10 | Custom API Layer | 0/12 (0%) | Not started |
-| 11 | Event Subscribers & Workflows | 0/10 (0%) | Not started |
-| 12 | Module Links & Entity Relationships | 0/6 (0%) | Not started |
-| 13 | Middleware & Security | 0/7 (0%) | Not started |
-| 14 | Integration Bridges | 0/10 (0%) | Not started |
-| 15 | Database, Migrations & Seed Data | 0/9 (0%) | Not started |
-| 16 | Object Storage & Media Serving | 0/6 (0%) | Not started |
-| 17 | Platform API & CMS Registry | 0/6 (0%) | Not started |
-| 18 | Storefront (Legacy) | 0/10 (0%) | Not started |
-| 19 | Shared Packages | 0/6 (0%) | Not started |
-| 20 | Deployment & DevOps | 0/8 (0%) | Not started |
-| 21 | Orchestrator — Temporal Cloud | 0/7 (0%) | Not started |
-| 22 | Cross-Reference Map & Glossary | 0/4 (0%) | Not started |
+| # | Section | Page ID | Progress | Status |
+|---|---------|---------|----------|--------|
+| 1 | Platform Overview & Architecture | 56262754 | 1/8 (13%) | Index DONE |
+| 2 | Module System & Configuration | 56262763 | 1/6 (17%) | Index DONE |
+| 3 | Core Commerce Extensions | 56262772 | 1/12 (8%) | Index DONE |
+| 4 | Vertical Modules — Marketplace & Listings | 56262781 | 1/8 (13%) | Index DONE |
+| 5 | Vertical Modules — Services & Bookings | 56262790 | 1/8 (13%) | Index DONE |
+| 6 | Vertical Modules — Finance & Insurance | 56262799 | 1/7 (14%) | Index DONE |
+| 7 | Vertical Modules — Content & Social | 56262808 | 1/7 (14%) | Index DONE |
+| 8 | Vertical Modules — Civic & Specialized | 56262817 | 1/10 (10%) | Index DONE |
+| 9 | Multi-Vendor Architecture | 56393877 | 1/10 (10%) | Index DONE |
+| 10 | Custom API Layer | 56393886 | 1/12 (8%) | Index DONE |
+| 11 | Workflows | 56230026 | 1/8 (13%) | Index DONE |
+| 12 | Event Subscribers | 56230045 | 1/10 (10%) | Index DONE |
+| 13 | Module Links | 56918056 | 1/9 (11%) | Index DONE |
+| 14 | Infrastructure Modules | 55804342 | 1/14 (7%) | Index DONE |
+| 15 | Integration Layer | 56230064 | 1/11 (9%) | Index DONE |
+| 16 | Database & Migrations | 56098919 | 1/8 (13%) | Index DONE |
+| 17 | Seed Data & Scripts | 56262837 | 1/8 (13%) | Index DONE |
+| 18 | Storefront Application | 56262857 | 1/11 (9%) | Index DONE |
+| 19 | Authentication & RBAC | 56983650 | 1/6 (17%) | Index DONE |
+| 20 | Deployment & DevOps | 56688758 | 1/9 (11%) | Index DONE |
+| 21 | Testing & Quality | 56262876 | 1/6 (17%) | Index DONE |
+| 22 | Appendices & Reference | 55935079 | 1/12 (8%) | Index DONE |
 
 > `DONE` = Created with content · `PARTIAL` = Needs updating · `TODO` = Not yet created · `PLANNED` = Feature not yet in code · `EXISTING` = Pre-existing page
 
 ---
 
-## Tier 1 — Platform Foundations
+## Detailed Section Child Pages
 
-### 1. Platform Overview & Architecture
+### 1. Platform Overview & Architecture (Page ID: 56262754)
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 1.0 | **Platform Overview & Architecture** (index) | `TODO` | — |
-| 1.1 | Vision: Headless Commerce for CityOS | `TODO` | — |
-| 1.2 | System Architecture & Boundary Diagram | `TODO` | — |
-| 1.3 | Technology Stack Reference | `TODO` | — |
-| 1.4 | Monorepo Structure (Turborepo + pnpm) | `TODO` | — |
-| 1.5 | Medusa v2 Extension Pattern | `TODO` | — |
-| 1.6 | System Responsibility Split | `TODO` | — |
-| 1.7 | Glossary & Terminology | `TODO` | — |
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 1.1 | Vision: Headless Commerce for CityOS | `TODO` | `replit.md`, `medusa-config.ts` |
+| 1.2 | System Architecture & Boundary Diagram | `TODO` | Architecture overview |
+| 1.3 | Technology Stack Reference | `TODO` | `package.json` files |
+| 1.4 | Monorepo Structure (Turborepo + pnpm) | `TODO` | `turbo.json`, workspace config |
+| 1.5 | Medusa v2 Extension Pattern | `TODO` | `apps/backend/src/modules/*/index.ts` |
+| 1.6 | System Responsibility Split | `TODO` | Medusa vs Payload vs ERPNext vs Fleetbase |
+| 1.7 | Glossary & Terminology | `TODO` | All docs |
 
-- `medusa-config.ts`, `turbo.json`, `package.json` (root + `apps/backend/`)
-- `apps/backend/src/lib/env-validation.ts`, `apps/backend/src/lib/config.ts`
-- `replit.md` (architecture overview)
+### 2. Module System & Configuration (Page ID: 56262763)
 
-**Key content:**
-- Medusa as headless commerce engine vs. Payload CMS (frontend/CMS) vs. ERPNext (ERP) vs. Fleetbase (logistics)
-- 61 custom modules, 489 API routes, 38 subscribers, 23 workflows, 38 links
-- Extension pattern: all custom code in `apps/backend/src/`, zero modifications to Medusa source
-- Turborepo workspace layout: `apps/backend`, `apps/storefront`, `apps/orchestrator`, `packages/*`
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 2.1 | Medusa Configuration (`medusa-config.ts`) | `TODO` | `apps/backend/medusa-config.ts` |
+| 2.2 | Module Registry (61 Modules) | `TODO` | All module `index.ts` files |
+| 2.3 | Module Anatomy (Models, Service, Index, Migrations) | `TODO` | Module structure pattern |
+| 2.4 | Module Keys & Resolution | `TODO` | `medusa-config.ts` keys |
+| 2.5 | Conditional Module Loading | `TODO` | Stripe, SendGrid, Meilisearch |
 
-### 2. Module System & Configuration
+### 3. Core Commerce Extensions (Page ID: 56262772)
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 2.0 | **Module System & Configuration** (index) | `TODO` | — |
-| 2.1 | Medusa Configuration (`medusa-config.ts`) | `TODO` | — |
-| 2.2 | Module Registry (61 Modules) | `TODO` | — |
-| 2.3 | Module Anatomy (Models, Service, Index, Migrations) | `TODO` | — |
-| 2.4 | Module Keys & Resolution | `TODO` | — |
-| 2.5 | Conditional Module Loading (Stripe, SendGrid, Meilisearch) | `TODO` | — |
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 3.1 | Cart Extension Module | `TODO` | `modules/cart-extension/` |
+| 3.2 | Shipping Extension Module | `TODO` | `modules/shipping-extension/` |
+| 3.3 | Inventory Extension Module | `TODO` | `modules/inventory-extension/` |
+| 3.4 | Tax Configuration Module | `TODO` | `modules/tax-config/` |
+| 3.5 | Volume Pricing Module | `TODO` | `modules/volume-pricing/` |
+| 3.6 | Promotion Extension Module | `TODO` | `modules/promotion-ext/` |
+| 3.7 | Invoice Module | `TODO` | `modules/invoice/` |
+| 3.8 | Payout Module | `TODO` | `modules/payout/` |
+| 3.9 | Review Module | `TODO` | `modules/review/` |
+| 3.10 | Wishlist Module | `TODO` | `modules/wishlist/` |
+| 3.11 | Trade-In Module | `TODO` | `modules/trade-in/` |
 
-- `apps/backend/medusa-config.ts` — full module registration with keys and options
-- `apps/backend/src/modules/*/index.ts` — module entry points
-- `apps/backend/src/modules/*/service.ts` — module service classes
-- `apps/backend/src/modules/*/models/*.ts` — MikroORM entity models
+### 4. Marketplace & Listings Verticals (Page ID: 56262781)
 
-**Key content:**
-- Module registration in `medusa-config.ts` with `resolve`, `key`, `options` pattern
-- `isQueryable: true` flag for queryable modules
-- Conditional providers: Stripe payment (requires `STRIPE_API_KEY`), SendGrid notifications (requires `SENDGRID_API_KEY`), Meilisearch search (requires `MEILISEARCH_HOST`)
-- Admin panel at `/commerce/admin` with Vite HMR and allowed hosts configuration
-- CORS configuration: `STORE_CORS`, `ADMIN_CORS`, `AUTH_CORS`
-- JWT and cookie secrets
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 4.1 | Auction Module | `TODO` | `modules/auction/` |
+| 4.2 | Classified Module | `TODO` | `modules/classified/` |
+| 4.3 | Real Estate Module | `TODO` | `modules/real-estate/` |
+| 4.4 | Automotive Module | `TODO` | `modules/automotive/` |
+| 4.5 | Rental Module | `TODO` | `modules/rental/` |
+| 4.6 | Digital Product Module | `TODO` | `modules/digital-product/` |
+| 4.7 | Crowdfunding Module | `TODO` | `modules/crowdfunding/` |
 
----
+### 5. Services & Bookings Verticals (Page ID: 56262790)
 
-## Tier 2 — Core Commerce Extensions
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 5.1 | Booking Module | `TODO` | `modules/booking/` |
+| 5.2 | Restaurant Module | `TODO` | `modules/restaurant/` |
+| 5.3 | Healthcare Module | `TODO` | `modules/healthcare/` |
+| 5.4 | Travel Module | `TODO` | `modules/travel/` |
+| 5.5 | Event Ticketing Module | `TODO` | `modules/event-ticketing/` |
+| 5.6 | Freelance Module | `TODO` | `modules/freelance/` |
+| 5.7 | Fitness Module | `TODO` | `modules/fitness/` |
 
-### 3. Core Commerce Extensions
+### 6. Finance & Insurance Verticals (Page ID: 56262799)
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 3.0 | **Core Commerce Extensions** (index) | `TODO` | — |
-| 3.1 | Cart Extension Module | `TODO` | — |
-| 3.2 | Shipping Extension Module | `TODO` | — |
-| 3.3 | Inventory Extension Module | `TODO` | — |
-| 3.4 | Tax Configuration Module | `TODO` | — |
-| 3.5 | Volume Pricing Module | `TODO` | — |
-| 3.6 | Promotion Extension Module | `TODO` | — |
-| 3.7 | Invoice Module | `TODO` | — |
-| 3.8 | Payout Module | `TODO` | — |
-| 3.9 | Review Module | `TODO` | — |
-| 3.10 | Wishlist Module | `TODO` | — |
-| 3.11 | Trade-In Module | `TODO` | — |
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 6.1 | Financial Product Module | `TODO` | `modules/financial-product/` |
+| 6.2 | Insurance Module | `TODO` | `modules/insurance/` |
+| 6.3 | Subscription Module | `TODO` | `modules/subscription/` |
+| 6.4 | Wallet Module | `TODO` | `modules/wallet/` |
+| 6.5 | Loyalty Module | `TODO` | `modules/loyalty/` |
+| 6.6 | Membership Module | `TODO` | `modules/membership/` |
 
-- `apps/backend/src/modules/cart-extension/` — `CartMetadata` model
-- `apps/backend/src/modules/shipping-extension/` — `CarrierConfig`, `ShippingRate` models
-- `apps/backend/src/modules/inventory-extension/` — stock alerts
-- `apps/backend/src/modules/tax-config/` — `TaxRule`, `TaxExemption` models
-- `apps/backend/src/modules/volume-pricing/` — `VolumePricing`, `VolumePricingTier` models
-- `apps/backend/src/modules/promotion-ext/` — `CustomerSegment`, `GiftCardExt`, `ProductBundle`, `Referral` models
-- `apps/backend/src/modules/invoice/` — invoice generation
-- `apps/backend/src/modules/payout/` — vendor payout processing
-- `apps/backend/src/modules/review/` — `Review` model
-- `apps/backend/src/modules/wishlist/` — `Wishlist`, `WishlistItem` models
-- `apps/backend/src/modules/trade-in/` — `TradeInRequest`, `TradeInOffer` models
+### 7. Content & Social Verticals (Page ID: 56262808)
 
----
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 7.1 | Social Commerce Module | `TODO` | `modules/social-commerce/` |
+| 7.2 | Affiliate Module | `TODO` | `modules/affiliate/` |
+| 7.3 | Advertising Module | `TODO` | `modules/advertising/` |
+| 7.4 | Education Module | `TODO` | `modules/education/` |
+| 7.5 | Charity Module | `TODO` | `modules/charity/` |
+| 7.6 | Grocery Module | `TODO` | `modules/grocery/` |
 
-## Tier 3 — Vertical Modules (27 Verticals)
+### 8. Civic & Specialized Verticals (Page ID: 56262817)
 
-### 4. Vertical Modules — Marketplace & Listings
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 8.1 | Government Module | `TODO` | `modules/government/` |
+| 8.2 | Legal Module | `TODO` | `modules/legal/` |
+| 8.3 | Utilities Module | `TODO` | `modules/utilities/` |
+| 8.4 | Parking Module | `TODO` | `modules/parking/` |
+| 8.5 | Pet Service Module | `TODO` | `modules/pet-service/` |
+| 8.6 | Warranty Module | `TODO` | `modules/warranty/` |
+| 8.7 | Quote Module | `TODO` | `modules/quote/` |
+| 8.8 | Company / B2B Module | `TODO` | `modules/company/` |
+| 8.9 | Dispute Module | `TODO` | `modules/dispute/` |
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 4.0 | **Marketplace & Listings Verticals** (index) | `TODO` | — |
-| 4.1 | Auction Module | `TODO` | — |
-| 4.2 | Classified Module | `TODO` | — |
-| 4.3 | Real Estate Module | `TODO` | — |
-| 4.4 | Automotive Module | `TODO` | — |
-| 4.5 | Rental Module | `TODO` | — |
-| 4.6 | Digital Product Module | `TODO` | — |
-| 4.7 | Crowdfunding Module | `TODO` | — |
+### 9. Multi-Vendor Architecture (Page ID: 56393877)
 
-- `apps/backend/src/modules/auction/` — `AuctionListing`, `Bid`, `AutoBidRule`, `AuctionEscrow`, `AuctionResult` models
-- `apps/backend/src/modules/classified/` — `ClassifiedListing`, `ListingCategory`, `ListingFlag`, `ListingImage`, `ListingOffer` models
-- `apps/backend/src/modules/real-estate/` — `PropertyListing`, `AgentProfile`, `LeaseAgreement`, `PropertyDocument`, `PropertyValuation`, `ViewingAppointment` models
-- `apps/backend/src/modules/automotive/` — `VehicleListing`, `VehicleService`, `TestDrive`, `PartCatalog`, `TradeIn` models
-- `apps/backend/src/modules/rental/` — `RentalProduct`, `RentalAgreement`, `RentalPeriod`, `RentalReturn`, `DamageClaim` models
-- `apps/backend/src/modules/digital-product/` — `DigitalAsset`, `DownloadLicense` models
-- `apps/backend/src/modules/crowdfunding/` — `Campaign`, `Pledge`, `Backer`, `CampaignUpdate`, `RewardTier` models
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 9.1 | Vendor Module | `TODO` | `modules/vendor/` |
+| 9.2 | Vendor-Product Junction | `TODO` | `VendorProduct` model |
+| 9.3 | Vendor Order & Order Splitting | `TODO` | `VendorOrder` model |
+| 9.4 | Commission Module | `TODO` | `modules/commission/` |
+| 9.5 | Marketplace Listings | `TODO` | `MarketplaceListing` model |
+| 9.6 | Vendor Analytics | `TODO` | `VendorAnalytics` model |
+| 9.7 | Vendor Portal API (68 routes) | `TODO` | `api/vendor/` |
+| 9.8 | Vendor Portal Frontend (73 pages) | `TODO` | `storefront/vendor/` |
+| 9.9 | Vendor Onboarding Workflow | `TODO` | `workflows/vendor-onboarding.ts` |
 
-**Enum constraints:**
-- `classified_listing.listing_type`: `sell`, `buy`, `trade`, `free`, `wanted`
-- `classified_listing.condition`: `new`, `like_new`, `good`, `fair`, `poor`
+### 10. Custom API Layer (Page ID: 56393886)
 
-### 5. Vertical Modules — Services & Bookings
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 10.1 | Admin API (237 routes) | `TODO` | `api/admin/` |
+| 10.2 | Store API (163 routes) | `TODO` | `api/store/` |
+| 10.3 | Vendor API (68 routes) | `TODO` | `api/vendor/` |
+| 10.4 | Platform API (16 routes) | `TODO` | `api/platform/` |
+| 10.5 | Webhook Endpoints (4 providers) | `TODO` | `api/webhooks/` |
+| 10.6 | Health Check Endpoint | `TODO` | `api/health/` |
+| 10.7 | API Route Conventions & Patterns | `TODO` | Route structure patterns |
+| 10.8 | Admin Route Reference by Vertical | `TODO` | Admin routes grouped by vertical |
+| 10.9 | Store Route Reference by Vertical | `TODO` | Store routes grouped by vertical |
+| 10.10 | Vendor Route Reference by Vertical | `TODO` | Vendor routes grouped by vertical |
+| 10.11 | Error Handling & Validation | `TODO` | `lib/api-error-handler.ts` |
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 5.0 | **Services & Bookings Verticals** (index) | `TODO` | — |
-| 5.1 | Booking Module | `TODO` | — |
-| 5.2 | Restaurant Module | `TODO` | — |
-| 5.3 | Healthcare Module | `TODO` | — |
-| 5.4 | Travel Module | `TODO` | — |
-| 5.5 | Event Ticketing Module | `TODO` | — |
-| 5.6 | Freelance Module | `TODO` | — |
-| 5.7 | Fitness Module | `TODO` | — |
+### 11. Workflows (Page ID: 56230026)
 
-- `apps/backend/src/modules/booking/` — `Booking`, `Availability`, `ServiceProduct`, `ServiceProvider`, `Reminder` models
-- `apps/backend/src/modules/restaurant/` — `Restaurant`, `Menu`, `MenuItem`, `ModifierGroup`, `Modifier`, `TableReservation`, `KitchenOrder` models
-- `apps/backend/src/modules/healthcare/` — `Practitioner`, `MedicalRecord`, `LabOrder`, `Prescription` models (in seed data)
-- `apps/backend/src/modules/travel/` — `Property`, `RoomType`, `Room`, `Reservation`, `RatePlan`, `GuestProfile`, `Amenity` models
-- `apps/backend/src/modules/event-ticketing/` — `Event`, `Venue`, `TicketType`, `Ticket`, `SeatMap`, `CheckIn` models
-- `apps/backend/src/modules/freelance/` — `GigListing`, `Proposal`, `Milestone`, `FreelancerProfile` models (in seed data)
-- `apps/backend/src/modules/fitness/` — `TrainerProfile`, `ClassSchedule`, `ClassBooking`, `GymMembership`, `WellnessPlan` models
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 11.1 | Workflow Architecture | `TODO` | Medusa workflow pattern |
+| 11.2 | Order Workflows | `TODO` | `workflows/order-fulfillment.ts`, etc. |
+| 11.3 | Vendor Workflows | `TODO` | `workflows/vendor/`, `vendor-onboarding.ts` |
+| 11.4 | Subscription Workflows | `TODO` | `workflows/subscription/` |
+| 11.5 | Integration Sync Workflows | `TODO` | `workflows/hierarchy-sync.ts`, `product-sync.ts` |
+| 11.6 | Vertical Workflows | `TODO` | `workflows/auction-lifecycle.ts`, etc. |
+| 11.7 | Event Outbox | `TODO` | `modules/events/` |
 
-**Enum constraints:**
-- `booking.location_type`: `in_person`, `virtual`, `customer_location`
-- `event.status`: `draft`, `published`, `live`, `completed`, `cancelled`
-- `event.event_type`: `concert`, `conference`, `workshop`, `sports`, `festival`, `webinar`, `meetup`, `other`
+### 12. Event Subscribers (Page ID: 56230045)
 
-### 6. Vertical Modules — Finance & Insurance
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 12.1 | Subscriber Architecture | `TODO` | Subscriber pattern |
+| 12.2 | Order Lifecycle Subscribers | `TODO` | `subscribers/order-*.ts` |
+| 12.3 | Booking Lifecycle Subscribers | `TODO` | `subscribers/booking-*.ts` |
+| 12.4 | Subscription Lifecycle Subscribers | `TODO` | `subscribers/subscription-*.ts` |
+| 12.5 | Vendor Lifecycle Subscribers | `TODO` | `subscribers/vendor-*.ts` |
+| 12.6 | Payment Lifecycle Subscribers | `TODO` | `subscribers/payment-*.ts` |
+| 12.7 | Quote Lifecycle Subscribers | `TODO` | `subscribers/quote-*.ts` |
+| 12.8 | B2B & Integration Subscribers | `TODO` | `subscribers/company-*.ts`, `integration-sync-*.ts` |
+| 12.9 | Analytics Subscribers | `TODO` | `subscribers/product-updated-analytics.ts` |
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 6.0 | **Finance & Insurance Verticals** (index) | `TODO` | — |
-| 6.1 | Financial Product Module | `TODO` | — |
-| 6.2 | Insurance Module | `TODO` | — |
-| 6.3 | Subscription Module | `TODO` | — |
-| 6.4 | Wallet Module | `TODO` | — |
-| 6.5 | Loyalty Module | `TODO` | — |
-| 6.6 | Membership Module | `TODO` | — |
+### 13. Module Links (Page ID: 56918056)
 
-- `apps/backend/src/modules/financial-product/` — `LoanProduct`, `LoanApplication`, `InsuranceProduct`, `InsurancePolicy`, `InvestmentPlan` models
-- `apps/backend/src/modules/insurance/` — insurance plans and policies
-- `apps/backend/src/modules/subscription/` — `SubscriptionPlan`, `Subscription`, `SubscriptionItem`, `BillingCycle`, `SubscriptionEvent` models
-- `apps/backend/src/modules/wallet/` — `Wallet`, `WalletTransaction` models
-- `apps/backend/src/modules/loyalty/` — loyalty programs, accounts, tier_config
-- `apps/backend/src/modules/membership/` — membership tiers and management
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 13.1 | Link Architecture | `TODO` | `defineLink` pattern |
+| 13.2 | Customer Links (12) | `TODO` | `links/customer-*.ts` |
+| 13.3 | Product Links (10) | `TODO` | `links/product-*.ts` |
+| 13.4 | Order Links (3) | `TODO` | `links/order-*.ts` |
+| 13.5 | Vendor Links (5) | `TODO` | `links/vendor-*.ts` |
+| 13.6 | Cart & Inventory Links | `TODO` | `links/cart-*.ts`, `links/inventory-*.ts` |
+| 13.7 | Company Links | `TODO` | `links/company-*.ts` |
+| 13.8 | Tenant & Node Links | `TODO` | `links/tenant-*.ts`, `links/node-*.ts` |
 
-### 7. Vertical Modules — Content & Social
+### 14. Infrastructure Modules (Page ID: 55804342)
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 7.0 | **Content & Social Verticals** (index) | `TODO` | — |
-| 7.1 | Social Commerce Module | `TODO` | — |
-| 7.2 | Affiliate Module | `TODO` | — |
-| 7.3 | Advertising Module | `TODO` | — |
-| 7.4 | Education Module | `TODO` | — |
-| 7.5 | Charity Module | `TODO` | — |
-| 7.6 | Grocery Module | `TODO` | — |
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 14.1 | Tenant Module | `TODO` | `modules/tenant/` |
+| 14.2 | Node Hierarchy Module | `TODO` | `modules/node/` |
+| 14.3 | Governance Module | `TODO` | `modules/governance/` |
+| 14.4 | Persona Module | `TODO` | `modules/persona/` |
+| 14.5 | Store Module (CityOS) | `TODO` | `modules/store/` |
+| 14.6 | Channel Module | `TODO` | `modules/channel/` |
+| 14.7 | Region Zone Module | `TODO` | `modules/region-zone/` |
+| 14.8 | i18n Module | `TODO` | `modules/i18n/` |
+| 14.9 | Notification Preferences | `TODO` | `modules/notification-preferences/` |
+| 14.10 | Analytics Module | `TODO` | `modules/analytics/` |
+| 14.11 | Audit Module | `TODO` | `modules/audit/` |
+| 14.12 | Events Module | `TODO` | `modules/events/` |
+| 14.13 | CMS Content Module | `TODO` | `modules/cms-content/` |
 
-- `apps/backend/src/modules/social-commerce/` — `SocialPost`, `SocialShare`, `LiveStream`, `LiveProduct`, `GroupBuy` models
-- `apps/backend/src/modules/affiliate/` — `Affiliate`, `ReferralLink`, `ClickTracking`, `AffiliateCommission`, `InfluencerCampaign` models
-- `apps/backend/src/modules/advertising/` — `AdAccount`, `AdCampaign`, `AdCreative`, `AdPlacement`, `ImpressionLog` models
-- `apps/backend/src/modules/education/` — `Course`, `Lesson`, `Quiz`, `Assignment`, `Enrollment`, `Certificate` models
-- `apps/backend/src/modules/charity/` — `CharityOrg`, `DonationCampaign`, `Donation`, `ImpactReport` models
-- `apps/backend/src/modules/grocery/` — grocery-specific models
+### 15. Integration Layer (Page ID: 56230064)
 
-**Enum constraints:**
-- `ad_campaign.campaign_type`: `sponsored_listing`, `banner`, `search`, `social`, `email`
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 15.1 | Integration Architecture | `TODO` | `lib/integrations/` |
+| 15.2 | Payload CMS Integration | `TODO` | `lib/integrations/payload-cms-spec.ts` |
+| 15.3 | ERPNext Integration | `TODO` | `lib/integrations/erpnext-spec.ts` |
+| 15.4 | Fleetbase Integration | `TODO` | `lib/integrations/fleetbase-spec.ts` |
+| 15.5 | Stripe Webhooks | `TODO` | `api/webhooks/stripe/` |
+| 15.6 | Temporal Cloud Client | `TODO` | `lib/temporal-client.ts` |
+| 15.7 | Walt.id (Digital Identity) | `TODO` | `lib/integrations/waltid-spec.ts` |
+| 15.8 | Webhook Security | `TODO` | Signature verification |
+| 15.9 | Outbox Processor | `TODO` | `lib/platform/outbox-processor.ts` |
+| 15.10 | Sync Tracker | `TODO` | `lib/platform/sync-tracker.ts` |
 
-### 8. Vertical Modules — Civic & Specialized
+### 16. Database & Migrations (Page ID: 56098919)
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 8.0 | **Civic & Specialized Verticals** (index) | `TODO` | — |
-| 8.1 | Government Module | `TODO` | — |
-| 8.2 | Legal Module | `TODO` | — |
-| 8.3 | Utilities Module | `TODO` | — |
-| 8.4 | Parking Module | `TODO` | — |
-| 8.5 | Pet Service Module | `TODO` | — |
-| 8.6 | Warranty Module | `TODO` | — |
-| 8.7 | Quote Module | `TODO` | — |
-| 8.8 | Company / B2B Module | `TODO` | — |
-| 8.9 | Dispute Module | `TODO` | — |
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 16.1 | Database Architecture | `TODO` | PostgreSQL + MikroORM |
+| 16.2 | MikroORM Patterns | `TODO` | Entity/model conventions |
+| 16.3 | Migration System | `TODO` | MikroORM migrations |
+| 16.4 | Module Migration Registry | `TODO` | 203 migrations |
+| 16.5 | Schema Reference | `TODO` | Full table listing |
+| 16.6 | Enum Constraints | `TODO` | All enum columns |
+| 16.7 | JSONB Fields | `TODO` | Metadata/config fields |
 
-- `apps/backend/src/modules/government/` — `CitizenProfile`, `ServiceRequest`, `Fine` models (in seed data)
-- `apps/backend/src/modules/legal/` — `AttorneyProfile`, legal services
-- `apps/backend/src/modules/utilities/` — `UtilityAccount`, `UtilityBill`, `MeterReading`, `UsageRecord` models
-- `apps/backend/src/modules/parking/` — `ParkingZone`, parking management
-- `apps/backend/src/modules/pet-service/` — `PetProfile`, `VetAppointment`, `GroomingBooking`, `PetProduct` models
-- `apps/backend/src/modules/warranty/` — `WarrantyPlan`, `WarrantyClaim`, `RepairOrder`, `ServiceCenter`, `SparePart` models
-- `apps/backend/src/modules/quote/` — `Quote`, `QuoteItem` models
-- `apps/backend/src/modules/company/` — `Company`, `CompanyUser`, `PurchaseOrder`, `PurchaseOrderItem`, `ApprovalWorkflow`, `PaymentTerms`, `TaxExemption` models
-- `apps/backend/src/modules/dispute/` — `Dispute`, `DisputeMessage` models
+### 17. Seed Data & Scripts (Page ID: 56262837)
 
-**Enum constraints:**
-- `quote.status`: `draft`, `submitted`, `under_review`, `approved`, `rejected`, `accepted`, `declined`, `expired`
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 17.1 | Seed Architecture | `TODO` | Master scripts, execution order |
+| 17.2 | Core Data Seeds | `TODO` | `seed-master.ts` |
+| 17.3 | Vertical Seeds (27) | `TODO` | `seed-verticals.ts` |
+| 17.4 | Infrastructure Seeds (17) | `TODO` | Infrastructure seed scripts |
+| 17.5 | Sub-Entity Seeds (18) | `TODO` | Sub-entity seed scripts |
+| 17.6 | Seed Utilities | `TODO` | `seed-utils.ts` |
+| 17.7 | Image Policy & Object Storage | `TODO` | Bucket paths, zero Unsplash |
 
----
+### 18. Storefront Application (Page ID: 56262857)
 
-## Tier 4 — Multi-Vendor Architecture
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 18.1 | Storefront Architecture | `TODO` | TanStack Start + React |
+| 18.2 | Route Registry (349 routes) | `TODO` | All route files |
+| 18.3 | Design System | `TODO` | Design tokens, theme provider |
+| 18.4 | CMS Block System (77 blocks) | `TODO` | Block type definitions |
+| 18.5 | SSR Loaders (65 pages) | `TODO` | Server loaders |
+| 18.6 | Vendor Portal (73 pages) | `TODO` | Vendor dashboard |
+| 18.7 | Manage Pages (45 CRUD configs) | `TODO` | Admin management |
+| 18.8 | Authentication Flow | `TODO` | JWT, SDK, RoleGuard |
+| 18.9 | i18n and RTL Support | `TODO` | en/fr/ar, logical CSS |
+| 18.10 | SEO and Accessibility | `TODO` | Meta tags, ARIA |
 
-### 9. Multi-Vendor Architecture
+### 19. Authentication & RBAC (Page ID: 56983650)
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 9.0 | **Multi-Vendor Architecture** (index) | `TODO` | — |
-| 9.1 | Vendor Module | `TODO` | — |
-| 9.2 | Vendor-Product Junction (`VendorProduct`) | `TODO` | — |
-| 9.3 | Vendor Order & Order Splitting | `TODO` | — |
-| 9.4 | Commission Module | `TODO` | — |
-| 9.5 | Marketplace Listings | `TODO` | — |
-| 9.6 | Vendor Analytics | `TODO` | — |
-| 9.7 | Vendor Portal API (68 routes) | `TODO` | — |
-| 9.8 | Vendor Portal Frontend (75 pages) | `TODO` | — |
-| 9.9 | Vendor Onboarding Workflow | `TODO` | — |
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 19.1 | Authentication Architecture | `TODO` | JWT, sessions |
+| 19.2 | 10-Role RBAC System | `TODO` | Role hierarchy |
+| 19.3 | API Key Management | `TODO` | Publishable/secret keys |
+| 19.4 | Route Protection Patterns | `TODO` | Middleware, RoleGuard |
+| 19.5 | Vendor Authentication | `TODO` | Vendor JWT |
 
-- `apps/backend/src/modules/vendor/` — `Vendor`, `VendorProduct`, `VendorOrder`, `VendorUser`, `VendorAnalytics`, `MarketplaceListing` models
-- `apps/backend/src/modules/commission/` — `CommissionRule`, `CommissionTransaction` models
-- `apps/backend/src/api/vendor/` — 68 vendor API routes (products, orders, payouts, disputes, analytics, all 27 verticals)
-- `apps/storefront/src/routes/$tenant/$locale/vendor/` — 75 vendor portal frontend pages
-- `apps/backend/src/subscribers/vendor-approved.ts`, `vendor-suspended.ts`, `vendor-order-split.ts`
-- `apps/backend/src/workflows/vendor/`, `vendor-onboarding.ts`
-- `apps/backend/src/links/vendor-commission.ts`, `vendor-freelance.ts`, `vendor-payout.ts`, `vendor-restaurant.ts`, `vendor-store.ts`
+### 20. Deployment & DevOps (Page ID: 56688758)
 
----
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 20.1 | Development Setup | `TODO` | `start.sh` |
+| 20.2 | Production Build | `TODO` | `build-production.sh` |
+| 20.3 | Production Architecture | `TODO` | Health responder pattern |
+| 20.4 | VM Deployment Strategy | `TODO` | VM vs autoscale |
+| 20.5 | Production Proxy | `TODO` | `prod-proxy.js` |
+| 20.6 | Health Check Patterns | `TODO` | Readiness probes |
+| 20.7 | Environment Variables | `TODO` | Complete reference |
+| 20.8 | Monitoring and Logging | `TODO` | Structured logging |
 
-## Tier 5 — Custom API Layer
+### 21. Testing & Quality (Page ID: 56262876)
 
-### 10. Custom API Layer
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 21.1 | TypeScript Contracts | `TODO` | `packages/contracts/` |
+| 21.2 | Type Safety Patterns | `TODO` | MikroORM types |
+| 21.3 | Code Quality Standards | `TODO` | ESLint, Prettier |
+| 21.4 | Testing Strategy | `TODO` | Unit/integration tests |
+| 21.5 | Error Handling Patterns | `TODO` | MedusaError types |
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 10.0 | **Custom API Layer** (index) | `TODO` | — |
-| 10.1 | Admin API (237 routes) | `TODO` | — |
-| 10.2 | Store API (163 routes) | `TODO` | — |
-| 10.3 | Vendor API (68 routes) | `TODO` | — |
-| 10.4 | Platform API (16 routes) | `TODO` | — |
-| 10.5 | Webhook Endpoints (4 providers) | `TODO` | — |
-| 10.6 | Health Check Endpoint | `TODO` | — |
-| 10.7 | API Route Conventions & Patterns | `TODO` | — |
-| 10.8 | Admin Route Reference by Vertical | `TODO` | — |
-| 10.9 | Store Route Reference by Vertical | `TODO` | — |
-| 10.10 | Vendor Route Reference by Vertical | `TODO` | — |
-| 10.11 | Error Handling & Validation | `TODO` | — |
+### 22. Appendices & Reference (Page ID: 55935079)
 
-- `apps/backend/src/api/admin/` — 237 routes across 90+ directories (advertising, affiliates, auctions, audit, automotive, availability, b2b, bookings, bundles, cart-extension, channels, charities, classifieds, cms, commission-rules, commissions, companies, consignments, credit, crowdfunding, digital-products, disputes, dropshipping, education, events, event-ticketing, financial-products, fitness, flash-deals, flash-sales, freelance, gift-cards, governance, government, grocery, healthcare, i18n, insurance, integrations, inventory-ext, invoices, legal, loyalty, memberships, metrics, newsletter, nodes, notification-preferences, parking, payouts, personas, pet-services, platform, pricing-tiers, print-on-demand, products, promotion-ext, purchase-orders, quotes, real-estate, region-zones, rentals, restaurants, reviews, service-providers, settings, shipping-ext, social-commerce, subscriptions, tax-config, temporal, tenant, trade-ins, travel, try-before-you-buy, utilities, vendors, volume-deals, volume-pricing, warranties, webhooks, white-label, wishlists)
-- `apps/backend/src/api/store/` — 163 routes across 70+ directories (customer-facing endpoints for all verticals)
-- `apps/backend/src/api/vendor/` — 68 routes (vendor-specific CRUD for all verticals)
-- `apps/backend/src/api/platform/` — 16 routes (capabilities, cms, context, storage, tenants, vendors)
-- `apps/backend/src/api/webhooks/` — 4 webhook receivers (Stripe, ERPNext, Fleetbase, Payload CMS)
-- `apps/backend/src/api/health/` — health check endpoint
-- `apps/backend/src/lib/api-error-handler.ts`, `apps/backend/src/lib/validation.ts`
-
----
-
-## Tier 6 — Event System & Workflows
-
-### 11. Event Subscribers & Workflows
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 11.0 | **Event Subscribers & Workflows** (index) | `TODO` | — |
-| 11.1 | Subscriber Architecture | `TODO` | — |
-| 11.2 | Order Lifecycle Subscribers | `TODO` | — |
-| 11.3 | Booking Lifecycle Subscribers | `TODO` | — |
-| 11.4 | Payment Lifecycle Subscribers | `TODO` | — |
-| 11.5 | Subscription Lifecycle Subscribers | `TODO` | — |
-| 11.6 | Vendor Lifecycle Subscribers | `TODO` | — |
-| 11.7 | Workflow Architecture | `TODO` | — |
-| 11.8 | Commerce Workflows (23 definitions) | `TODO` | — |
-| 11.9 | Events Module & Outbox | `TODO` | — |
-
-**38 Subscribers:**
-- **Order:** `order-placed.ts`, `order-shipped.ts`, `order-cancelled.ts`, `order-returned.ts`
-- **Booking:** `booking-created.ts`, `booking-confirmed.ts`, `booking-completed.ts`, `booking-cancelled.ts`, `booking-checked-in.ts`
-- **Payment:** `payment-authorized.ts`, `payment-captured.ts`, `payment-failed.ts`, `payment-refunded.ts`
-- **Subscription:** `subscription-created.ts`, `subscription-cancelled.ts`, `subscription-paused.ts`, `subscription-resumed.ts`, `subscription-payment-failed.ts`, `subscription-plan-changed.ts`, `subscription-renewal-upcoming.ts`
-- **Vendor:** `vendor-approved.ts`, `vendor-suspended.ts`, `vendor-order-split.ts`
-- **Other:** `cart-metadata-sync.ts`, `company-created.ts`, `customer-created.ts`, `customer-notification-preferences.ts`, `integration-sync-subscriber.ts`, `inventory-stock-alert.ts`, `payout-completed.ts`, `payout-failed.ts`, `product-updated-analytics.ts`, `purchase-order-submitted.ts`, `quote-accepted.ts`, `quote-approved.ts`, `quote-declined.ts`, `review-created.ts`, `temporal-event-bridge.ts`
-
-**23 Workflows:**
-- `auction-lifecycle.ts`, `b2b/`, `booking-confirmation.ts`, `campaign-activation.ts`, `commission-calculation.ts`, `content-moderation.ts`, `dispute-resolution.ts`, `event-ticketing.ts`, `fleet-dispatch.ts`, `hierarchy-sync.ts`, `inventory-replenishment.ts`, `kyc-verification.ts`, `loyalty-reward.ts`, `order-fulfillment.ts`, `payment-reconciliation.ts`, `product-sync.ts`, `return-processing.ts`, `subscription/`, `subscription-renewal.ts`, `tenant-provisioning.ts`, `trade-in-evaluation.ts`, `vendor/`, `vendor-onboarding.ts`
-
-- `apps/backend/src/modules/events/` — `EventOutbox` model (CMS-compatible event outbox)
-
-### 12. Module Links & Entity Relationships
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 12.0 | **Module Links & Entity Relationships** (index) | `TODO` | — |
-| 12.1 | Customer Links (12 relationships) | `TODO` | — |
-| 12.2 | Product Links (10 relationships) | `TODO` | — |
-| 12.3 | Order & Commerce Links (5 relationships) | `TODO` | — |
-| 12.4 | Vendor Links (5 relationships) | `TODO` | — |
-| 12.5 | Tenant & Node Links (6 relationships) | `TODO` | — |
-
-**38 Link Definitions:**
-- **Customer → Extensions:** `customer-company`, `customer-donation`, `customer-insurance`, `customer-loyalty`, `customer-membership`, `customer-notification-preference`, `customer-referral`, `customer-subscription`, `customer-tax-exemption`, `customer-trade-in`, `customer-vehicle`, `customer-wallet`, `customer-wishlist`
-- **Product → Verticals:** `product-auction`, `product-classified`, `product-course`, `product-digital-asset`, `product-event`, `product-product-bundle`, `product-rental`, `product-review`, `product-trade-in`, `product-warranty`
-- **Order → Extensions:** `order-dispute`, `order-insurance`, `order-vendor`
-- **Vendor → Extensions:** `vendor-commission`, `vendor-freelance`, `vendor-payout`, `vendor-restaurant`, `vendor-store`
-- **Tenant/Node:** `tenant-node`, `tenant-store`
-- **Commerce:** `booking-customer`, `cart-cart-metadata`, `company-invoice`, `inventory-stock-alert`, `node-governance`
+| # | Page Title | Status | Source |
+|---|-----------|--------|--------|
+| 22.1 | Complete API Route Reference (489) | `TODO` | All API routes |
+| 22.2 | Complete Module Registry (61) | `TODO` | All modules |
+| 22.3 | Complete Link Registry (38) | `TODO` | All links |
+| 22.4 | Complete Subscriber Catalog (38) | `TODO` | All subscribers |
+| 22.5 | Complete Workflow Catalog (23) | `TODO` | All workflows |
+| 22.6 | Complete Migration Log (203) | `TODO` | All migrations |
+| 22.7 | Environment Variable Reference | `TODO` | All env vars |
+| 22.8 | Payload CMS Cross-Reference Index | `TODO` | Section mapping |
+| 22.9 | ERPNext Sync Field Mapping | `TODO` | Field mappings |
+| 22.10 | Fleetbase Integration Reference | `TODO` | Geo/logistics API |
+| 22.11 | Changelog | `TODO` | Version history |
 
 ---
 
-## Tier 7 — Middleware & Security
+## Section Structure Summary
 
-### 13. Middleware & Security
+Each section index page includes:
+- Tier classification and status tracking
+- Purpose/overview paragraph
+- Child pages table with numbered sub-pages and TODO status
+- Summary tables (module registry, API routes, link definitions, etc.)
+- Cross-references to Payload CMS documentation sections
+- Source file attribution
 
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 13.0 | **Middleware & Security** (index) | `TODO` | — |
-| 13.1 | Middleware Configuration (`middlewares.ts`) | `TODO` | — |
-| 13.2 | CORS Middleware | `TODO` | — |
-| 13.3 | Tenant Context Middleware | `TODO` | — |
-| 13.4 | Node Context Middleware | `TODO` | — |
-| 13.5 | Platform Context Middleware | `TODO` | — |
-| 13.6 | Scope Guards | `TODO` | — |
+### Child Pages Per Section (148 planned sub-pages)
 
-- `apps/backend/src/api/middlewares.ts` — route-level middleware registration with `defineMiddlewares`
-- `apps/backend/src/api/middlewares/` — `index.ts`, `tenant-context.ts`, `node-context.ts`, `platform-context.ts`, `scope-guards.ts`
-- `apps/backend/src/lib/middleware/` — shared middleware utilities
-- `apps/backend/src/lib/tenant-scoping.ts` — tenant isolation enforcement
-
----
-
-## Tier 8 — Integration Bridges
-
-### 14. Integration Bridges
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 14.0 | **Integration Bridges** (index) | `TODO` | — |
-| 14.1 | Integration Architecture | `TODO` | — |
-| 14.2 | Payload CMS Integration | `TODO` | — |
-| 14.3 | ERPNext Integration | `TODO` | — |
-| 14.4 | Fleetbase Integration | `TODO` | — |
-| 14.5 | Stripe Webhooks | `TODO` | — |
-| 14.6 | Temporal Cloud Client | `TODO` | — |
-| 14.7 | Walt.id (Digital Identity) Spec | `TODO` | — |
-| 14.8 | Outbox Processor & Circuit Breakers | `TODO` | — |
-| 14.9 | Sync Tracker | `TODO` | — |
-
-- `apps/backend/src/lib/integrations/` — `erpnext-spec.ts`, `fleetbase-spec.ts`, `payload-cms-spec.ts`, `temporal-spec.ts`, `waltid-spec.ts`
-- `apps/backend/src/api/webhooks/` — `stripe/route.ts`, `erpnext/route.ts`, `fleetbase/route.ts`, `payload-cms/route.ts`
-- `apps/backend/src/lib/temporal-client.ts`, `temporal-activities.ts`, `dynamic-workflow-client.ts`
-- `apps/backend/src/lib/platform/outbox-processor.ts`, `sync-tracker.ts`
-- `apps/backend/src/subscribers/integration-sync-subscriber.ts`, `temporal-event-bridge.ts`
-
-**Cross-links to Payload CMS docs:**
-- Section 25 (Commerce — Medusa Integration) in Payload docs: `medusaClient.ts`, `commerceAccessControl.ts`, `eventBridge.ts`, `nodeMapping.ts`, `poiProductSync.ts`
-- Section 27 (ERP — ERPNext Integration): BFF routes, webhooks
-- Section 28 (Logistics — Fleetbase Integration): BFF routes, webhooks
-
----
-
-## Tier 9 — Database & Seed Data
-
-### 15. Database, Migrations & Seed Data
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 15.0 | **Database, Migrations & Seed Data** (index) | `TODO` | — |
-| 15.1 | Database Architecture (PostgreSQL / Replit Neon) | `TODO` | — |
-| 15.2 | MikroORM Entity Conventions | `TODO` | — |
-| 15.3 | Migration History (64+ module migrations) | `TODO` | — |
-| 15.4 | Enum Constraints Reference | `TODO` | — |
-| 15.5 | Seed Data Infrastructure | `TODO` | — |
-| 15.6 | Seed Scripts Reference (42 scripts) | `TODO` | — |
-| 15.7 | Saudi Arabia Market Data | `TODO` | — |
-| 15.8 | Image & Media Seed Policy | `TODO` | — |
-
-- `apps/backend/src/modules/*/migrations/` — 64+ MikroORM migration files
-- `apps/backend/src/scripts/` — 42 seed and utility scripts
-- `apps/backend/src/scripts/seed-utils.ts` — centralized image URLs (`getImage()`, `getThumb()`), Saudi pricing helpers, city/phone generators
-- `apps/backend/src/scripts/seed-verticals.ts` (+ parts 1–7) — seeds 27 vertical modules with Saudi-themed data
-- `apps/backend/src/scripts/seed-all-with-images.ts` — master seed: verticals + 31 infrastructure/sub-entity modules
-- `apps/backend/src/scripts/seed-master.ts` — core Medusa data (products, categories, regions)
-
-**42 Seed Scripts:**
-- `seed.ts`, `seed-all.ts`, `seed-all-services.ts`, `seed-all-with-images.ts`, `seed-catalog.ts`, `seed-commerce.ts`, `seed-companies.ts`, `seed-complete.ts`, `seed-core.ts`, `seed-default-tenant.ts`, `seed-fix-remaining.ts`, `seed-master.ts`, `seed-multi-tenant.ts`, `seed-platform.ts`, `seed-products-rich.ts`, `seed-saudi-arabia.ts`, `seed-saudi-data.ts`, `seed-saudi-fresh.ts`, `seed-saudi-products.ts`, `seed-services.ts`, `seed-subscriptions.ts`, `seed-utils.ts`, `seed-vendors.ts`, `seed-verticals.ts` (+ parts 1–7), `seed-volume-pricing.ts`, `setup-defaults.ts`, `setup-saudi-sales-channel.ts`, `test-seed.ts`
-- **Utilities:** `db-verify.ts`, `fix-remaining-thumbnails.ts`, `fix-thumbnails.ts`, `migrate-images-and-seed-gaps.sql`, `migrate-images-to-bucket.ts`, `update-product-images.ts`, `upload-media.ts`
-
-**Image Policy:** All images use Replit Object Storage bucket paths (`/platform/storage/serve?path=...`). Zero Unsplash URLs.
-
----
-
-## Tier 10 — Object Storage & Media
-
-### 16. Object Storage & Media Serving
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 16.0 | **Object Storage & Media Serving** (index) | `TODO` | — |
-| 16.1 | Object Storage Service | `TODO` | — |
-| 16.2 | Object ACL & Access Control | `TODO` | — |
-| 16.3 | Storage Serve Endpoint | `TODO` | — |
-| 16.4 | Upload Buffer Endpoint | `TODO` | — |
-| 16.5 | Image Migration from Unsplash to Bucket | `TODO` | — |
-
-- `apps/backend/src/lib/storage/objectStorage.ts` — Replit Object Storage client
-- `apps/backend/src/lib/storage/objectAcl.ts` — access control for stored objects
-- `apps/backend/src/lib/storage/index.ts` — storage exports
-- `apps/backend/src/api/platform/storage/serve/route.ts` — serves images from bucket `replit-objstore-9ae4a2f3-0592-42b1-908d-b04c0c0e79c4`
-- `apps/backend/src/api/platform/storage/route.ts` — storage management endpoint
-- `apps/backend/src/api/platform/storage/upload-buffer/route.ts` — buffered upload endpoint
-
----
-
-## Tier 11 — Platform API & CMS Registry
-
-### 17. Platform API & CMS Registry
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 17.0 | **Platform API & CMS Registry** (index) | `TODO` | — |
-| 17.1 | CMS Registry (27 Verticals + Pages) | `TODO` | — |
-| 17.2 | CMS Navigation API | `TODO` | — |
-| 17.3 | CMS Page Resolution | `TODO` | — |
-| 17.4 | Platform Context Endpoint | `TODO` | — |
-| 17.5 | Capabilities Endpoint | `TODO` | — |
-
-- `apps/backend/src/lib/platform/cms-registry.ts` — defines 27 commerce verticals + additional pages, supports `countryCode` and `regionZone`
-- `apps/backend/src/lib/platform/registry.ts` — platform service registry
-- `apps/backend/src/lib/platform/helpers.ts` — platform utilities
-- `apps/backend/src/lib/platform/index.ts` — platform exports
-- `apps/backend/src/api/platform/cms/` — `navigation/`, `navigations/`, `pages/`, `resolve/`, `verticals/` routes
-- `apps/backend/src/api/platform/context/route.ts` — tenant/node context resolution
-- `apps/backend/src/api/platform/capabilities/route.ts` — capability/RBAC query
-- `apps/backend/src/modules/cms-content/` — `CmsPage`, `CmsNavigation` models
-
----
-
-## Tier 12 — Infrastructure Modules
-
-### Note: Infrastructure Modules
-
-These modules provide cross-cutting platform capabilities rather than commerce verticals:
-
-| Module | Models | Purpose |
-|--------|--------|---------|
-| `tenant` | `Tenant`, `TenantUser`, `TenantSettings`, `TenantBilling`, `TenantPoi`, `TenantRelationship`, `ServiceChannel` | Multi-tenant isolation & configuration |
-| `store` | `Store` (CityOS extension) | Extended store metadata |
-| `node` | Node hierarchy models | 5-level node hierarchy (CITY→DISTRICT→ZONE→FACILITY→ASSET) |
-| `governance` | Governance models | Policy inheritance, compliance |
-| `persona` | `Persona`, `PersonaAssignment` | 6-axis persona system |
-| `channel` | `SalesChannelMapping` | Multi-channel distribution |
-| `region-zone` | `RegionZoneMapping` | Geographic region/zone configuration |
-| `i18n` | i18n models | Internationalization (en/fr/ar + RTL) |
-| `notification-preferences` | Notification preference models | Per-customer notification settings |
-| `analytics` | `AnalyticsEvent`, `Dashboard`, `Report` | Business intelligence & reporting |
-| `audit` | `AuditLog` | Audit trail |
-| `events` | `EventOutbox` | CMS-compatible event outbox pattern |
-| `cms-content` | `CmsPage`, `CmsNavigation` | Local CMS content mirror |
-
-These modules are documented in their respective sections (Sections 2, 13, 17) rather than receiving individual vertical pages.
-
----
-
-## Tier 13 — Storefront (Legacy)
-
-### 18. Storefront (Legacy — Migration to Payload CMS)
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 18.0 | **Storefront (Legacy)** (index) | `TODO` | — |
-| 18.1 | TanStack Start + React Architecture | `TODO` | — |
-| 18.2 | Route Architecture (349 routes) | `TODO` | — |
-| 18.3 | Customer Account Pages (30 pages) | `TODO` | — |
-| 18.4 | Vertical Detail Pages (65+ pages) | `TODO` | — |
-| 18.5 | Manage Dashboard (101 pages) | `TODO` | — |
-| 18.6 | Vendor Portal (75 pages) | `TODO` | — |
-| 18.7 | B2B Portal | `TODO` | — |
-| 18.8 | Component Library | `TODO` | — |
-| 18.9 | Migration Plan to Payload CMS Frontend | `TODO` | — |
-
-- `apps/storefront/` — TanStack Start + React application
-- `apps/storefront/src/routes/$tenant/$locale/` — tenant-scoped, locale-aware routing (349 total route files)
-- `apps/storefront/src/routes/$tenant/$locale/account/` — 30 customer account pages (orders, subscriptions, bookings, wallet, loyalty, wishlist, disputes, invoices, etc.)
-- `apps/storefront/src/routes/$tenant/$locale/manage/` — 101 admin management pages (all verticals + infrastructure)
-- `apps/storefront/src/routes/$tenant/$locale/vendor/` — 75 vendor portal pages (products, orders, payouts, all verticals)
-- `apps/storefront/src/components/` — 100+ shared components (auth, cart, checkout, blocks, commerce, etc.)
-- `apps/storefront/vite.config.ts`, `tailwind.config.js`, `tsconfig.json`
-
-**Storefront Vertical Categories (80+ route directories):**
-account, affiliate, apps, auctions, automotive, b2b, blog, bookings, bundles, business, campaigns, cart, categories, charity, checkout, classifieds, compare, consignment, credit, crowdfunding, digital, dropshipping, education, events, event-ticketing, financial, fitness, flash-deals, freelance, gift-cards, government, grocery, healthcare, help, insurance, legal, loyalty-program, manage, marketplace, memberships, newsletter, order, parking, pet-services, places, print-on-demand, products, quotes, real-estate, rentals, restaurants, returns, social-commerce, subscriptions, trade-in, travel, try-before-you-buy, vendor, vendors, verify, volume-deals, wallet, warranties, white-label, wishlist
-
----
-
-## Tier 14 — Shared Packages
-
-### 19. Shared Packages
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 19.0 | **Shared Packages** (index) | `TODO` | — |
-| 19.1 | `cityos-contracts` — TypeScript Contracts | `TODO` | — |
-| 19.2 | `cityos-design-tokens` — Design Token Definitions | `TODO` | — |
-| 19.3 | `cityos-design-system` — CSS Generator | `TODO` | — |
-| 19.4 | `cityos-design-runtime` — Runtime Token Resolution | `TODO` | — |
-| 19.5 | `lodash-set-safe` — Safe Deep Set Utility | `TODO` | — |
-
-- `packages/cityos-contracts/` — shared TypeScript type definitions and interfaces
-- `packages/cityos-design-tokens/` — design token definitions (colors, spacing, typography)
-- `packages/cityos-design-system/` — CSS generator and design utilities
-- `packages/cityos-design-runtime/` — runtime design token resolution and theme application
-- `packages/lodash-set-safe/` — safe deep object setter (CJS + ESM)
-
----
-
-## Tier 15 — Deployment & DevOps
-
-### 20. Deployment & DevOps
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 20.0 | **Deployment & DevOps** (index) | `TODO` | — |
-| 20.1 | Development Startup (`start.sh`) | `TODO` | — |
-| 20.2 | Production Build (`build-production.sh`) | `TODO` | — |
-| 20.3 | Production Startup (`start-production.sh`) | `TODO` | — |
-| 20.4 | Production Proxy (`prod-proxy.js`) | `TODO` | — |
-| 20.5 | Replit VM Configuration | `TODO` | — |
-| 20.6 | Environment Variables & Secrets | `TODO` | — |
-| 20.7 | Health Responder Pattern | `TODO` | — |
-
-- `start.sh` — development startup (Medusa backend on :9000, storefront on :5000)
-- `scripts/build-production.sh` — production build pipeline
-- `scripts/start-production.sh` — production startup with health responder pattern
-- `prod-proxy.js` — production proxy on :5000 routing API→:9000, UI→:5173
-- `.replit` — Replit deployment configuration (VM target)
-
-**Production Architecture:**
-1. Lightweight HTTP server binds :5000 immediately (passes health check)
-2. Medusa backend boots on :9000 (up to 4 min, `--max-old-space-size=1024`)
-3. Health responder killed after backend ready
-4. Storefront starts on :5173 (Nitro SSR or `server.mjs` wrapper)
-5. `prod-proxy.js` takes over :5000, routing API→backend, UI→storefront
-
----
-
-## Tier 16 — Orchestrator
-
-### 21. Orchestrator — Temporal Cloud
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 21.0 | **Orchestrator — Temporal Cloud** (index) | `TODO` | — |
-| 21.1 | Orchestrator Architecture | `TODO` | — |
-| 21.2 | Temporal Client Configuration | `TODO` | — |
-| 21.3 | Temporal Activities | `TODO` | — |
-| 21.4 | Dynamic Workflow Client | `TODO` | — |
-| 21.5 | Event Dispatcher | `TODO` | — |
-| 21.6 | Monitoring & Metrics | `TODO` | — |
-
-- `apps/orchestrator/` — standalone Temporal Cloud orchestrator app
-- `apps/backend/src/lib/temporal-client.ts` — Temporal client for backend
-- `apps/backend/src/lib/temporal-activities.ts` — activity definitions
-- `apps/backend/src/lib/dynamic-workflow-client.ts` — dynamic workflow dispatch
-- `apps/backend/src/lib/event-dispatcher.ts` — cross-system event dispatch
-- `apps/backend/src/lib/monitoring/` — `logger.ts`, `metrics.ts`
-
-**Cross-links to Payload CMS docs:**
-- Section 26 (Workflow Engine — Temporal) in Payload docs
-
----
-
-## Tier 17 — Cross-Reference & Glossary
-
-### 22. Cross-Reference Map & Glossary
-
-| # | Page Title | Status | Page ID |
-|---|-----------|--------|---------|
-| 22.0 | **Cross-Reference Map** (index) | `TODO` | — |
-| 22.1 | Medusa ↔ Payload CMS Cross-Reference | `TODO` | — |
-| 22.2 | Module → API Route → Subscriber → Workflow Map | `TODO` | — |
-| 22.3 | Glossary & Terminology | `TODO` | — |
+| Section | Child Pages | Topic Areas |
+|---------|-------------|-------------|
+| 1 | 7 | Vision, architecture, tech stack, monorepo, extension pattern, responsibility split, glossary |
+| 2 | 5 | Config, module registry, anatomy, keys, conditional loading |
+| 3 | 11 | Cart, shipping, inventory, tax, volume pricing, promotion, invoice, payout, review, wishlist, trade-in |
+| 4 | 7 | Auction, classified, real estate, automotive, rental, digital product, crowdfunding |
+| 5 | 7 | Booking, restaurant, healthcare, travel, event ticketing, freelance, fitness |
+| 6 | 6 | Financial product, insurance, subscription, wallet, loyalty, membership |
+| 7 | 6 | Social commerce, affiliate, advertising, education, charity, grocery |
+| 8 | 9 | Government, legal, utilities, parking, pet service, warranty, quote, B2B, dispute |
+| 9 | 9 | Vendor module, junction table, order splitting, commission, listings, analytics, portal API, portal UI, onboarding |
+| 10 | 11 | Admin API, store API, vendor API, platform API, webhooks, health, conventions, route refs (admin/store/vendor), errors |
+| 11 | 7 | Architecture, order workflows, vendor workflows, subscription, integration sync, vertical workflows, outbox |
+| 12 | 8 | Architecture, order/booking/subscription/vendor/quote/B2B/integration/analytics subscribers |
+| 13 | 8 | Architecture, customer/product/order/vendor/cart/inventory/company links |
+| 14 | 13 | Tenant, node hierarchy, governance, persona, store, channel, region zone, i18n, notifications, analytics, audit, events, CMS |
+| 15 | 10 | Architecture, Payload CMS, ERPNext, Fleetbase, Stripe, Temporal, Walt.id, webhook security, outbox, sync |
+| 16 | 7 | Architecture, MikroORM patterns, migration system, registry, schema ref, enums, JSONB |
+| 17 | 7 | Architecture, core seeds, vertical seeds, infrastructure seeds, sub-entity seeds, utilities, image policy |
+| 18 | 10 | Architecture, routes, design system, CMS blocks, SSR loaders, vendor portal, manage pages, auth, i18n, SEO |
+| 19 | 5 | Auth architecture, RBAC roles, API keys, route protection, vendor auth |
+| 20 | 8 | Dev setup, production build, production architecture, VM strategy, proxy, health checks, env vars, monitoring |
+| 21 | 5 | TypeScript contracts, type safety, code quality, testing, error handling |
+| 22 | 11 | API routes, module registry, links, subscribers, workflows, migrations, env vars, CMS cross-ref, ERPNext, Fleetbase, changelog |
 
 ---
 
@@ -732,24 +502,21 @@ Topics that span both the Medusa space and the Payload CMS space:
 
 | Concept | Medusa Space (Primary) | Payload CMS Space (Reference) |
 |---------|------------------------|-------------------------------|
-| Commerce Engine | §1 Platform Overview | §25 Commerce — Medusa Integration |
-| Multi-Tenancy | §2.1, §13.3 Tenant Middleware | §2 Multi-Tenancy & Node Hierarchy |
-| RBAC & Governance | §13 Middleware & Security | §3 Security & RBAC, §4 Governance |
-| Vertical Modules (27) | §4–§8 Vertical Modules | §14 Domain Package System (37 domains) |
-| Multi-Vendor | §9 Multi-Vendor Architecture | §25.5 POI Product Sync |
-| API Layer | §10 Custom API Layer | §23 API Architecture (BFF layer) |
-| Event System | §11 Subscribers & Workflows | §30 Event-Driven Architecture |
-| Payload CMS Sync | §14.2 Payload CMS Integration | §25.3 Commerce Event Bridge |
-| ERPNext Sync | §14.3 ERPNext Integration | §27 ERP — ERPNext Integration |
-| Fleetbase Sync | §14.4 Fleetbase Integration | §28 Logistics — Fleetbase Integration |
-| Temporal Workflows | §21 Orchestrator | §26 Workflow Engine — Temporal |
-| Database | §15 Database & Migrations | §18 Database & Data Model |
-| Object Storage | §16 Object Storage | §16 Storage Architecture |
-| Design System | §19 Shared Packages | §13 Design System & Theming |
-| Storefront | §18 Storefront (Legacy) | §37 Frontend Architecture |
-| Deployment | §20 Deployment & DevOps | §38 DevOps & Deployment |
-| Persona System | §2 Module System (persona module) | §21 Multi-Axis Persona System |
-| POI System | §17 Platform CMS Registry | §20 POI Spatial Identity Engine |
+| Commerce Engine | S1 Platform Overview | S25 Commerce — Medusa Integration |
+| Multi-Tenancy | S14 Infrastructure | S2 Multi-Tenancy & Node Hierarchy |
+| RBAC & Governance | S19 Authentication & RBAC | S3 Security & RBAC, S4 Governance |
+| Vertical Modules (27) | S3-S8 Vertical Modules | S14 Domain Package System (37 domains) |
+| Multi-Vendor | S9 Multi-Vendor Architecture | S25.5 POI Product Sync |
+| API Layer | S10 Custom API Layer | S23 API Architecture (BFF layer) |
+| Event System | S11-S12 Workflows & Subscribers | S30 Event-Driven Architecture |
+| Payload CMS Sync | S15 Integration Layer | S25.3 Commerce Event Bridge |
+| ERPNext Sync | S15 Integration Layer | S27 ERP — ERPNext Integration |
+| Fleetbase Sync | S15 Integration Layer | S28 Logistics — Fleetbase Integration |
+| Temporal Workflows | S11 Workflows | S26 Workflow Engine — Temporal |
+| Database | S16 Database & Migrations | S18 Database & Data Model |
+| Storefront | S18 Storefront Application | S37 Frontend Architecture |
+| Deployment | S20 Deployment & DevOps | S38 DevOps & Deployment |
+| Persona System | S14 Infrastructure (persona) | S21 Multi-Axis Persona System |
 
 ## Appendix D — Enum Constraints Reference
 
@@ -763,66 +530,3 @@ Topics that span both the Medusa space and the Payload CMS space:
 | `classified_listing` | `condition` | `new`, `like_new`, `good`, `fair`, `poor` |
 | `quote` | `status` | `draft`, `submitted`, `under_review`, `approved`, `rejected`, `accepted`, `declined`, `expired` |
 | `persona` | `category` | `consumer`, `creator`, `business`, `cityops`, `platform` |
-
-## Appendix E — Page Template
-
-Each detail page should follow this standard structure:
-
-```
-# [Section#] — [Page Title]
-
-**Status:** `TODO` | `DONE` | `PARTIAL`
-**Source:** `apps/backend/src/modules/[module]/...`
-
-## Overview
-One-paragraph description of what this module/feature does.
-
-## Data Model
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| id | string | Yes | Primary key |
-| ... | ... | ... | ... |
-
-## Service Methods
-
-| Method | Parameters | Returns | Description |
-|--------|-----------|---------|-------------|
-| list | filters, config | [Entity][] | List with pagination |
-| ... | ... | ... | ... |
-
-## API Endpoints
-
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| GET | /admin/[resource] | Admin | List all |
-| POST | /admin/[resource] | Admin | Create new |
-| GET | /store/[resource] | Store | Customer-facing list |
-| ... | ... | ... | ... |
-
-## Subscribers
-
-| Event | Handler | Description |
-|-------|---------|-------------|
-| [entity].created | handle[Entity]Created | ... |
-
-## Workflows
-
-| Workflow | Trigger | Steps | Description |
-|----------|---------|-------|-------------|
-| [workflow-name] | [event] | ... | ... |
-
-## Links (Entity Relationships)
-
-| Link | From | To | Type | Description |
-|------|------|-----|------|-------------|
-| product-[entity] | Product | [Entity] | 1:1 | Links product to ... |
-
-## Cross-References
-- Payload CMS: §[N] — [Related Section]
-- Related Modules: §[N] — [Module Name]
-
----
-_Source:_ `apps/backend/src/modules/[module]/`
-_Parent:_ §[N] — [Section Name]
-```
