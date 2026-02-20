@@ -1,0 +1,640 @@
+~/workspace$ cd ~/workspace/apps/backend && npx medusa db:migrate
+[2026-02-20T10:45:42.142Z] [INFO] [env-validation] [EnvValidation] Checking environment variables...
+[2026-02-20T10:45:42.143Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_API_KEY — Payment processing disabled
+[2026-02-20T10:45:42.143Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_WEBHOOK_SECRET — Webhook verification disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: SENDGRID_API_KEY — Email notifications disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: PAYLOAD_CMS_URL_DEV — CMS hierarchy sync disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: PAYLOAD_API_KEY — CMS hierarchy sync disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_URL_DEV — ERPNext sync disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_API_KEY — ERPNext sync disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_API_SECRET — ERPNext sync disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: TEMPORAL_ADDRESS — Workflow orchestration disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: FLEETBASE_API_KEY — Logistics/geo features disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: WALTID_API_KEY — Digital identity features disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: REDIS_URL — Using in-memory fallback (not production-ready)
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: MEILISEARCH_HOST — Search functionality disabled
+[2026-02-20T10:45:42.144Z] [WARN] [env-validation] [EnvValidation] Not set: SENTRY_DSN — Error monitoring disabled
+[2026-02-20T10:45:42.144Z] [INFO] [env-validation] [EnvValidation] 14 optional variable(s) not set (features will be limited)
+info:    redisUrl not found. A fake redis instance will be used.
+info:    No link to load from /home/runner/workspace/node_modules/.pnpm/@medusajs+draft-order@2.11.4-snapshot-20251107212527_@medusajs+admin-sdk@2.11.4-snapsho_fa8becd5cc97688840f05528c9b0c166/node_modules/@medusajs/draft-order/.medusa/server/src/links. skipped.
+info:    Running migrations...
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: stock_location
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: inventory
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: product
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: pricing
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: promotion
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: customer
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: sales_channel
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: cart
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: region
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: api_key
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: store
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: tax
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: currency
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: payment
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: order
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: settings
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: auth
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: auth
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: auth
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: user
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: fulfillment
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: fulfillment
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: fulfillment
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: notification
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: notification
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: notification
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: cache
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: event_bus
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: workflows
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: locking
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: file
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: file
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: file
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: tenant
+info:      ● Migrating Migration20260216192031
+error:   Failed with error Migration Migration20260216192031 (up) failed: Original error: CREATE INDEX IF NOT EXISTS "IDX_service_channel_poi_id" ON "service_channel" ("poi_id") WHERE deleted_at IS NULL; - column "poi_id" does not exist
+error:   Migration Migration20260216192031 (up) failed: Original error: CREATE INDEX IF NOT EXISTS "IDX_service_channel_poi_id" ON "service_channel" ("poi_id") WHERE deleted_at IS NULL; - column "poi_id" does not exist
+MigrationError: Migration Migration20260216192031 (up) failed: Original error: CREATE INDEX IF NOT EXISTS "IDX_service_channel_poi_id" ON "service_channel" ("poi_id") WHERE deleted_at IS NULL; - column "poi_id" does not exist
+    at /home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:261:17
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Umzug.runCommand (/home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:210:14)
+    at async CustomDBMigrator.runInTransaction (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/Migrator.js:332:21)
+    at async PostgreSqlConnection.transactional (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+knex@6.4.16_@mikro-orm+core@6.4.16_pg@8.16.0/node_modules/@mikro-orm/knex/AbstractSqlConnection.js:58:25)
+    at async Migrations.run (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/migrations/index.ts:138:19)
+    at async AsyncFunction.<anonymous> (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/modules-sdk/migration-scripts/migration-up.ts:48:22)
+    at async runMigrations (/home/runner/workspace/node_modules/.pnpm/@medusajs+modules-sdk@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/modules-sdk/src/loaders/utils/load-internal.ts:492:9)
+    at async Function.migrateUp (/home/runner/workspace/node_modules/.pnpm/@medusajs+modules-sdk@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/modules-sdk/src/medusa-module.ts:834:9)
+    at async run (/home/runner/workspace/node_modules/.pnpm/@medusajs+modules-sdk@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/modules-sdk/src/medusa-app.ts:555:9) {
+  cause: InvalidFieldNameException: CREATE INDEX IF NOT EXISTS "IDX_service_channel_poi_id" ON "service_channel" ("poi_id") WHERE deleted_at IS NULL; - column "poi_id" does not exist
+      at PostgreSqlExceptionConverter.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+postgresql@6.4.16_@mikro-orm+core@6.4.16/node_modules/@mikro-orm/postgresql/PostgreSqlExceptionConverter.js:42:24)
+      at PostgreSqlDriver.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:351:54)
+      at /home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:355:24
+      at processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Function.runSerial (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/utils/Utils.js:720:22)
+      at async connection.transactional.ctx (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:29:17)
+      at async PostgreSqlConnection.transactional (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+knex@6.4.16_@mikro-orm+core@6.4.16_pg@8.16.0/node_modules/@mikro-orm/knex/AbstractSqlConnection.js:58:25)
+      at async MigrationRunner.run (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:26:13)
+      at async createMigrationHandler (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/dal/mikro-orm/custom-db-migrator.ts:36:7)
+      at async /home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:259:11
+  
+      at Parser.parseErrorMessage (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:369:69)
+      at Parser.handlePacket (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:187:21)
+      at Parser.parse (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:102:30)
+      at Socket.<anonymous> (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/index.ts:7:48)
+      at Socket.emit (node:events:524:28)
+      at Socket.emit (node:domain:489:12)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Socket.Readable.push (node:internal/streams/readable:392:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:191:23) {
+    code: '42703',
+    errno: undefined,
+    sqlState: undefined,
+    sqlMessage: undefined,
+    errmsg: undefined,
+    length: 96,
+    severity: 'ERROR',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'indexcmds.c',
+    line: '1894',
+    routine: 'ComputeIndexAttrs'
+  },
+  jse_cause: InvalidFieldNameException: CREATE INDEX IF NOT EXISTS "IDX_service_channel_poi_id" ON "service_channel" ("poi_id") WHERE deleted_at IS NULL; - column "poi_id" does not exist
+      at PostgreSqlExceptionConverter.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+postgresql@6.4.16_@mikro-orm+core@6.4.16/node_modules/@mikro-orm/postgresql/PostgreSqlExceptionConverter.js:42:24)
+      at PostgreSqlDriver.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:351:54)
+      at /home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:355:24
+      at processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Function.runSerial (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/utils/Utils.js:720:22)
+      at async connection.transactional.ctx (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:29:17)
+      at async PostgreSqlConnection.transactional (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+knex@6.4.16_@mikro-orm+core@6.4.16_pg@8.16.0/node_modules/@mikro-orm/knex/AbstractSqlConnection.js:58:25)
+      at async MigrationRunner.run (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:26:13)
+      at async createMigrationHandler (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/dal/mikro-orm/custom-db-migrator.ts:36:7)
+      at async /home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:259:11
+  
+      at Parser.parseErrorMessage (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:369:69)
+      at Parser.handlePacket (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:187:21)
+      at Parser.parse (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:102:30)
+      at Socket.<anonymous> (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/index.ts:7:48)
+      at Socket.emit (node:events:524:28)
+      at Socket.emit (node:domain:489:12)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Socket.Readable.push (node:internal/streams/readable:392:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:191:23) {
+    code: '42703',
+    errno: undefined,
+    sqlState: undefined,
+    sqlMessage: undefined,
+    errmsg: undefined,
+    length: 96,
+    severity: 'ERROR',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'indexcmds.c',
+    line: '1894',
+    routine: 'ComputeIndexAttrs'
+  },
+  migration: {
+    direction: 'up',
+    name: 'Migration20260216192031',
+    path: '/home/runner/workspace/apps/backend/src/modules/tenant/migrations/Migration20260216192031.ts',
+    context: {}
+  }
+}
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: node
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: governance
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: persona
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: cityosStore
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: vendor
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: commission
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: payout
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: subscription
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: company
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: quote
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: volumePricing
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: booking
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: review
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: invoice
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: eventOutbox
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: audit
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: i18n
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: channel
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: regionZone
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: promotionExt
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: digitalProduct
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: auction
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: rental
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: restaurant
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: eventTicketing
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: classified
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: affiliate
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: warranty
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: freelance
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: travel
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: realEstate
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: membership
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: crowdfunding
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: socialCommerce
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: grocery
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: automotive
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: healthcare
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: education
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: charity
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: financialProduct
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: advertising
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: parking
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: utilities
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: government
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: petService
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: fitness
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: legal
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: analytics
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: cartExtension
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: cmsContent
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: dispute
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: inventoryExtension
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: loyalty
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: notificationPreferences
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: shippingExtension
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: taxConfig
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: wishlist
+info:      ● Migrating Migration20260213180002
+error:   Failed with error Migration Migration20260213180002 (up) failed: Original error: CREATE INDEX IF NOT EXISTS "IDX_wishlist_visibility" ON "wishlist" ("visibility") WHERE deleted_at IS NULL; - column "visibility" does not exist
+error:   Migration Migration20260213180002 (up) failed: Original error: CREATE INDEX IF NOT EXISTS "IDX_wishlist_visibility" ON "wishlist" ("visibility") WHERE deleted_at IS NULL; - column "visibility" does not exist
+MigrationError: Migration Migration20260213180002 (up) failed: Original error: CREATE INDEX IF NOT EXISTS "IDX_wishlist_visibility" ON "wishlist" ("visibility") WHERE deleted_at IS NULL; - column "visibility" does not exist
+    at /home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:261:17
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Umzug.runCommand (/home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:210:14)
+    at async CustomDBMigrator.runInTransaction (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/Migrator.js:332:21)
+    at async PostgreSqlConnection.transactional (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+knex@6.4.16_@mikro-orm+core@6.4.16_pg@8.16.0/node_modules/@mikro-orm/knex/AbstractSqlConnection.js:58:25)
+    at async Migrations.run (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/migrations/index.ts:138:19)
+    at async AsyncFunction.<anonymous> (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/modules-sdk/migration-scripts/migration-up.ts:48:22)
+    at async runMigrations (/home/runner/workspace/node_modules/.pnpm/@medusajs+modules-sdk@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/modules-sdk/src/loaders/utils/load-internal.ts:492:9)
+    at async Function.migrateUp (/home/runner/workspace/node_modules/.pnpm/@medusajs+modules-sdk@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/modules-sdk/src/medusa-module.ts:834:9)
+    at async run (/home/runner/workspace/node_modules/.pnpm/@medusajs+modules-sdk@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/modules-sdk/src/medusa-app.ts:555:9) {
+  cause: InvalidFieldNameException: CREATE INDEX IF NOT EXISTS "IDX_wishlist_visibility" ON "wishlist" ("visibility") WHERE deleted_at IS NULL; - column "visibility" does not exist
+      at PostgreSqlExceptionConverter.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+postgresql@6.4.16_@mikro-orm+core@6.4.16/node_modules/@mikro-orm/postgresql/PostgreSqlExceptionConverter.js:42:24)
+      at PostgreSqlDriver.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:351:54)
+      at /home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:355:24
+      at processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Function.runSerial (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/utils/Utils.js:720:22)
+      at async connection.transactional.ctx (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:29:17)
+      at async PostgreSqlConnection.transactional (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+knex@6.4.16_@mikro-orm+core@6.4.16_pg@8.16.0/node_modules/@mikro-orm/knex/AbstractSqlConnection.js:58:25)
+      at async MigrationRunner.run (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:26:13)
+      at async createMigrationHandler (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/dal/mikro-orm/custom-db-migrator.ts:36:7)
+      at async /home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:259:11
+  
+      at Parser.parseErrorMessage (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:369:69)
+      at Parser.handlePacket (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:187:21)
+      at Parser.parse (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:102:30)
+      at Socket.<anonymous> (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/index.ts:7:48)
+      at Socket.emit (node:events:524:28)
+      at Socket.emit (node:domain:489:12)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Socket.Readable.push (node:internal/streams/readable:392:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:191:23) {
+    code: '42703',
+    errno: undefined,
+    sqlState: undefined,
+    sqlMessage: undefined,
+    errmsg: undefined,
+    length: 100,
+    severity: 'ERROR',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'indexcmds.c',
+    line: '1894',
+    routine: 'ComputeIndexAttrs'
+  },
+  jse_cause: InvalidFieldNameException: CREATE INDEX IF NOT EXISTS "IDX_wishlist_visibility" ON "wishlist" ("visibility") WHERE deleted_at IS NULL; - column "visibility" does not exist
+      at PostgreSqlExceptionConverter.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+postgresql@6.4.16_@mikro-orm+core@6.4.16/node_modules/@mikro-orm/postgresql/PostgreSqlExceptionConverter.js:42:24)
+      at PostgreSqlDriver.convertException (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:351:54)
+      at /home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/drivers/DatabaseDriver.js:355:24
+      at processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Function.runSerial (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+core@6.4.16/node_modules/@mikro-orm/core/utils/Utils.js:720:22)
+      at async connection.transactional.ctx (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:29:17)
+      at async PostgreSqlConnection.transactional (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+knex@6.4.16_@mikro-orm+core@6.4.16_pg@8.16.0/node_modules/@mikro-orm/knex/AbstractSqlConnection.js:58:25)
+      at async MigrationRunner.run (/home/runner/workspace/node_modules/.pnpm/@mikro-orm+migrations@6.4.16_@mikro-orm+core@6.4.16_@types+node@20.0.0_pg@8.16.3/node_modules/@mikro-orm/migrations/MigrationRunner.js:26:13)
+      at async createMigrationHandler (/home/runner/workspace/node_modules/.pnpm/@medusajs+utils@2.11.4-snapshot-20251107212527_@types+node@20.0.0_express@4.21.2/node_modules/@medusajs/utils/src/dal/mikro-orm/custom-db-migrator.ts:36:7)
+      at async /home/runner/workspace/node_modules/.pnpm/umzug@3.8.2_@types+node@20.0.0/node_modules/umzug/src/umzug.ts:259:11
+  
+      at Parser.parseErrorMessage (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:369:69)
+      at Parser.handlePacket (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:187:21)
+      at Parser.parse (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/parser.ts:102:30)
+      at Socket.<anonymous> (/home/runner/workspace/node_modules/.pnpm/pg-protocol@1.10.3/node_modules/pg-protocol/src/index.ts:7:48)
+      at Socket.emit (node:events:524:28)
+      at Socket.emit (node:domain:489:12)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Socket.Readable.push (node:internal/streams/readable:392:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:191:23) {
+    code: '42703',
+    errno: undefined,
+    sqlState: undefined,
+    sqlMessage: undefined,
+    errmsg: undefined,
+    length: 100,
+    severity: 'ERROR',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'indexcmds.c',
+    line: '1894',
+    routine: 'ComputeIndexAttrs'
+  },
+  migration: {
+    direction: 'up',
+    name: 'Migration20260213180002',
+    path: '/home/runner/workspace/apps/backend/src/modules/wishlist/migrations/Migration20260213180002.ts',
+    context: {}
+  }
+}
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: wallet
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: tradeIn
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    
+info:    MODULE: insurance
+info:    Skipped. Database is up-to-date for module.
+info:    --------------------------------------------------------------------------------------------------------------
+info:    Migrations completed
+info:    --------------------------------------------------------------------------------------------------------------
+info:    Syncing links...
+info:    Database already up-to-date
+info:    --------------------------------------------------------------------------------------------------------------
+[2026-02-20T10:45:50.954Z] [INFO] [env-validation] [EnvValidation] Checking environment variables...
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_API_KEY — Payment processing disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_WEBHOOK_SECRET — Webhook verification disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: SENDGRID_API_KEY — Email notifications disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: PAYLOAD_CMS_URL_DEV — CMS hierarchy sync disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: PAYLOAD_API_KEY — CMS hierarchy sync disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_URL_DEV — ERPNext sync disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_API_KEY — ERPNext sync disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_API_SECRET — ERPNext sync disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: TEMPORAL_ADDRESS — Workflow orchestration disabled
+[2026-02-20T10:45:50.955Z] [WARN] [env-validation] [EnvValidation] Not set: FLEETBASE_API_KEY — Logistics/geo features disabled
+[2026-02-20T10:45:50.956Z] [WARN] [env-validation] [EnvValidation] Not set: WALTID_API_KEY — Digital identity features disabled
+[2026-02-20T10:45:50.956Z] [WARN] [env-validation] [EnvValidation] Not set: REDIS_URL — Using in-memory fallback (not production-ready)
+[2026-02-20T10:45:50.956Z] [WARN] [env-validation] [EnvValidation] Not set: MEILISEARCH_HOST — Search functionality disabled
+[2026-02-20T10:45:50.956Z] [WARN] [env-validation] [EnvValidation] Not set: SENTRY_DSN — Error monitoring disabled
+[2026-02-20T10:45:50.956Z] [INFO] [env-validation] [EnvValidation] 14 optional variable(s) not set (features will be limited)
+info:    redisUrl not found. A fake redis instance will be used.
+info:    No link to load from /home/runner/workspace/node_modules/.pnpm/@medusajs+draft-order@2.11.4-snapshot-20251107212527_@medusajs+admin-sdk@2.11.4-snapsho_fa8becd5cc97688840f05528c9b0c166/node_modules/@medusajs/draft-order/.medusa/server/src/links. skipped.
+warn:    Local Event Bus installed. This is not recommended for production.
+info:    Locking module: Using "in-memory" as default.
+info:    No pending migration scripts to execute
+~/.../apps/backend$ 
