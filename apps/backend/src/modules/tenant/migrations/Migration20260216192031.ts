@@ -5,6 +5,20 @@ export class Migration20260216192031 extends Migration {
   override async up(): Promise<void> {
     this.addSql(`alter table if exists "tenant_relationship" drop constraint if exists "tenant_relationship_host_tenant_id_vendor_tenant_id_unique";`);
     this.addSql(`create table if not exists "service_channel" ("id" text not null, "tenant_id" text not null, "poi_id" text null, "name" text not null, "slug" text not null, "channel_type" text check ("channel_type" in ('in_store', 'online', 'delivery', 'pickup', 'drive_through', 'curbside', 'appointment', 'telemedicine', 'home_service', 'subscription_box', 'wholesale', 'auction', 'rental')) not null default 'online', "is_active" boolean not null default true, "capabilities" jsonb null, "operating_hours" jsonb null, "fulfillment_type" text check ("fulfillment_type" in ('instant', 'scheduled', 'on_demand', 'standard', 'custom')) not null default 'standard', "min_order_amount" numeric null, "max_order_amount" numeric null, "delivery_fee" numeric null, "supported_payment_methods" jsonb null, "priority" integer not null default 0, "metadata" jsonb null, "raw_min_order_amount" jsonb null, "raw_max_order_amount" jsonb null, "raw_delivery_fee" jsonb null, "created_at" timestamptz not null default now(), "updated_at" timestamptz not null default now(), "deleted_at" timestamptz null, constraint "service_channel_pkey" primary key ("id"));`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "poi_id" text null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "slug" text null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "channel_type" text null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "capabilities" jsonb null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "operating_hours" jsonb null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "fulfillment_type" text null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "min_order_amount" numeric null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "max_order_amount" numeric null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "delivery_fee" numeric null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "supported_payment_methods" jsonb null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "priority" integer null default 0;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "raw_min_order_amount" jsonb null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "raw_max_order_amount" jsonb null;`);
+    this.addSql(`ALTER TABLE "service_channel" ADD COLUMN IF NOT EXISTS "raw_delivery_fee" jsonb null;`);
     this.addSql(`CREATE INDEX IF NOT EXISTS "IDX_service_channel_deleted_at" ON "service_channel" ("deleted_at") WHERE deleted_at IS NULL;`);
     this.addSql(`CREATE INDEX IF NOT EXISTS "IDX_service_channel_tenant_id" ON "service_channel" ("tenant_id") WHERE deleted_at IS NULL;`);
     this.addSql(`CREATE INDEX IF NOT EXISTS "IDX_service_channel_poi_id" ON "service_channel" ("poi_id") WHERE deleted_at IS NULL;`);
