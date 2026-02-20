@@ -635,17 +635,29 @@ module.exports = defineConfig({
     {
       resolve: "./src/modules/wallet",
       key: "wallet",
-      options: {},
+      options: {
+        definition: {
+          isQueryable: true
+        }
+      },
     },
     {
       resolve: "./src/modules/trade-in",
       key: "tradeIn",
-      options: {},
+      options: {
+        definition: {
+          isQueryable: true
+        }
+      },
     },
     {
       resolve: "./src/modules/insurance",
       key: "insurance",
-      options: {},
+      options: {
+        definition: {
+          isQueryable: true
+        }
+      },
     },
   ],
 });

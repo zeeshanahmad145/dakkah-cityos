@@ -5,12 +5,18 @@ import {
   StepResponse,
 } from "@medusajs/framework/workflows-sdk"
 
+type TicketSelection = {
+  ticket_type_id: string
+  quantity: number
+}
+
 type EventTicketingInput = {
   eventId: string
   customerId: string
   ticketType: string
   quantity: number
   seatPreferences?: string[]
+  tickets?: TicketSelection[]
 }
 
 const selectTicketsStep = createStep(
@@ -23,7 +29,17 @@ const selectTicketsStep = createStep(
       quantity: input.quantity,
     })
     if (!availability.available) throw new Error("Tickets not available")
-    return new StepResponse({ availability })
+
+    let ticketTypes: any[] = []
+    try {
+      if (eventModule.listTicketTypes) {
+        ticketTypes = await eventModule.listTicketTypes({ event_id: input.eventId })
+      }
+    } catch (error) {
+      ticketTypes = []
+    }
+
+    return new StepResponse({ availability, ticketTypes })
   }
 )
 
@@ -47,6 +63,33 @@ const reserveTicketsStep = createStep(
       await eventModule.cancelReservation(compensationData.reservationId)
     } catch (error) {
     }
+  }
+)
+
+const calculateTicketAmountStep = createStep(
+  "calculate-ticket-amount-step",
+  async (input: { tickets?: TicketSelection[]; ticketTypes: any[]; ticketType: string; quantity: number; availability: any }) => {
+    let totalAmount = 0
+
+    if (input.tickets && input.tickets.length > 0 && input.ticketTypes.length > 0) {
+      totalAmount = input.tickets.reduce((sum: number, t: TicketSelection) => {
+        const ticketType = input.ticketTypes.find((tt: any) => tt.id === t.ticket_type_id)
+        return sum + (ticketType?.price || 0) * t.quantity
+      }, 0)
+    } else if (input.ticketTypes.length > 0) {
+      const matchingType = input.ticketTypes.find((tt: any) =>
+        tt.id === input.ticketType || tt.name === input.ticketType || tt.type === input.ticketType
+      )
+      totalAmount = (matchingType?.price || 0) * input.quantity
+    } else if (input.availability?.price) {
+      totalAmount = input.availability.price * input.quantity
+    }
+
+    if (totalAmount <= 0) {
+      throw new Error("Unable to calculate ticket amount: no valid pricing found")
+    }
+
+    return new StepResponse({ totalAmount })
   }
 )
 
@@ -80,9 +123,20 @@ const issueTicketsStep = createStep(
 export const eventTicketingWorkflow = createWorkflow(
   "event-ticketing-workflow",
   (input: EventTicketingInput) => {
-    const { availability } = selectTicketsStep(input)
+    const { availability, ticketTypes } = selectTicketsStep(input)
     const { reservation } = reserveTicketsStep(input)
-    const { payment } = processTicketPaymentStep({ reservationId: reservation.id, customerId: input.customerId, amount: 0 })
+    const { totalAmount } = calculateTicketAmountStep({
+      tickets: input.tickets,
+      ticketTypes,
+      ticketType: input.ticketType,
+      quantity: input.quantity,
+      availability,
+    })
+    const { payment } = processTicketPaymentStep({
+      reservationId: reservation.id,
+      customerId: input.customerId,
+      amount: totalAmount,
+    })
     const { tickets } = issueTicketsStep({ reservationId: reservation.id, eventId: input.eventId, quantity: input.quantity })
     return new WorkflowResponse({ reservation, payment, tickets })
   }

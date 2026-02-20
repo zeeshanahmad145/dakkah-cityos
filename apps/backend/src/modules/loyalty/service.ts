@@ -215,6 +215,137 @@ class LoyaltyModuleService extends MedusaService({
     return Math.floor(amount * pointsPerUnit * multiplier)
   }
 
+  async checkTierUpgrade(customerId: string): Promise<{
+    currentTier: string | null
+    newTier: string | null
+    upgraded: boolean
+    pointsInPeriod: number
+  }> {
+    const accounts = await this.listLoyaltyAccounts({ customer_id: customerId }) as any
+    const accountList = Array.isArray(accounts) ? accounts : [accounts].filter(Boolean)
+
+    if (accountList.length === 0) {
+      throw new Error("No loyalty account found for this customer")
+    }
+
+    const account = accountList[0]
+    const program = await this.retrieveLoyaltyProgram(account.program_id)
+
+    const twelveMonthsAgo = new Date()
+    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12)
+
+    const transactions = await this.listPointTransactions({ account_id: account.id, type: "earn" }) as any
+    const txList = Array.isArray(transactions) ? transactions : [transactions].filter(Boolean)
+
+    const pointsInPeriod = txList
+      .filter((tx: any) => new Date(tx.created_at) >= twelveMonthsAgo)
+      .reduce((sum: number, tx: any) => sum + Number(tx.points || 0), 0)
+
+    const currentTier = account.tier
+
+    if (!program.tiers || !Array.isArray(program.tiers)) {
+      return { currentTier, newTier: currentTier, upgraded: false, pointsInPeriod }
+    }
+
+    const tiers = program.tiers as Array<{ name: string; min_points: number }>
+    const sortedTiers = [...tiers].sort((a, b) => b.min_points - a.min_points)
+
+    let newTier: string | null = null
+    for (const tier of sortedTiers) {
+      if (pointsInPeriod >= tier.min_points) {
+        newTier = tier.name
+        break
+      }
+    }
+
+    const upgraded = newTier !== currentTier && newTier !== null
+    if (upgraded) {
+      await (this as any).updateLoyaltyAccounts({ id: account.id, tier: newTier })
+    }
+
+    return { currentTier, newTier, upgraded, pointsInPeriod }
+  }
+
+  async applyEarningMultiplier(customerId: string, basePoints: number, campaignId?: string): Promise<{
+    basePoints: number
+    multiplier: number
+    totalPoints: number
+    campaignId?: string
+  }> {
+    if (basePoints <= 0) {
+      throw new Error("Base points must be greater than zero")
+    }
+
+    const accounts = await this.listLoyaltyAccounts({ customer_id: customerId }) as any
+    const accountList = Array.isArray(accounts) ? accounts : [accounts].filter(Boolean)
+
+    if (accountList.length === 0) {
+      throw new Error("No loyalty account found for this customer")
+    }
+
+    const account = accountList[0]
+    let multiplier = 1.0
+
+    const tierMultipliers: Record<string, number> = {
+      bronze: 1.0,
+      silver: 1.25,
+      gold: 1.5,
+      platinum: 2.0,
+      diamond: 3.0,
+    }
+
+    if (account.tier) {
+      multiplier = tierMultipliers[account.tier.toLowerCase()] || 1.0
+    }
+
+    if (campaignId) {
+      multiplier *= 2.0
+    }
+
+    const totalPoints = Math.floor(basePoints * multiplier)
+
+    return { basePoints, multiplier, totalPoints, campaignId }
+  }
+
+  async processReferralBonus(referrerId: string, referredId: string): Promise<{
+    referrerBonus: any
+    referredBonus: any
+    bonusPoints: number
+  }> {
+    const referrerAccounts = await this.listLoyaltyAccounts({ customer_id: referrerId }) as any
+    const referrerList = Array.isArray(referrerAccounts) ? referrerAccounts : [referrerAccounts].filter(Boolean)
+
+    const referredAccounts = await this.listLoyaltyAccounts({ customer_id: referredId }) as any
+    const referredList = Array.isArray(referredAccounts) ? referredAccounts : [referredAccounts].filter(Boolean)
+
+    if (referrerList.length === 0) {
+      throw new Error("Referrer does not have a loyalty account")
+    }
+    if (referredList.length === 0) {
+      throw new Error("Referred customer does not have a loyalty account")
+    }
+
+    const bonusPoints = 500
+
+    const referrerBonus = await this.earnPoints({
+      accountId: referrerList[0].id,
+      points: bonusPoints,
+      referenceType: "referral",
+      referenceId: referredId,
+      description: `Referral bonus for referring customer ${referredId}`,
+    })
+
+    const referredBonus = await this.earnPoints({
+      accountId: referredList[0].id,
+      points: Math.floor(bonusPoints / 2),
+      referenceType: "referral",
+      referenceId: referrerId,
+      description: `Welcome bonus from referral by customer ${referrerId}`,
+    })
+
+    return { referrerBonus, referredBonus, bonusPoints }
+  }
+
   async getOrCreateAccount(programId: string, customerId: string, tenantId: string) {
     const existing = await this.listLoyaltyAccounts({
       program_id: programId,

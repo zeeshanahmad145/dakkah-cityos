@@ -98,6 +98,55 @@ class AuctionModuleService extends MedusaService({
     , bidList[0])
   }
 
+  async getAuctionWithBids(auctionId: string): Promise<any> {
+    const auction = await this.retrieveAuctionListing(auctionId) as any
+    const bids = await this.listBids({ auction_id: auctionId }) as any
+    const bidList = Array.isArray(bids) ? bids : [bids].filter(Boolean)
+
+    const sortedBids = bidList.sort((a: any, b: any) => Number(b.amount) - Number(a.amount))
+
+    return {
+      ...auction,
+      bids: sortedBids,
+      totalBids: sortedBids.length,
+      highestBid: sortedBids.length > 0 ? Number(sortedBids[0].amount) : null,
+      lowestBid: sortedBids.length > 0 ? Number(sortedBids[sortedBids.length - 1].amount) : null,
+    }
+  }
+
+  async checkAntiSniping(auctionId: string, bidTime: Date): Promise<{ extended: boolean; newEndTime?: Date }> {
+    const auction = await this.retrieveAuctionListing(auctionId) as any
+    const endTime = new Date(auction.ends_at)
+    const bidDate = new Date(bidTime)
+
+    const fiveMinutes = 5 * 60 * 1000
+    const timeRemaining = endTime.getTime() - bidDate.getTime()
+
+    if (timeRemaining > 0 && timeRemaining <= fiveMinutes) {
+      const newEndTime = new Date(endTime.getTime() + fiveMinutes)
+      await (this as any).updateAuctionListings({
+        id: auctionId,
+        ends_at: newEndTime,
+      })
+      return { extended: true, newEndTime }
+    }
+
+    return { extended: false }
+  }
+
+  async validateBidIncrement(auctionId: string, bidAmount: number): Promise<{ valid: boolean; minimumBid: number; currentPrice: number }> {
+    const auction = await this.retrieveAuctionListing(auctionId) as any
+    const currentPrice = Number(auction.current_price || auction.starting_price || 0)
+    const minimumIncrement = currentPrice * 0.05
+    const minimumBid = Math.round((currentPrice + minimumIncrement) * 100) / 100
+
+    return {
+      valid: bidAmount >= minimumBid,
+      minimumBid,
+      currentPrice,
+    }
+  }
+
   /** Check if an auction is currently active and accepting bids */
   async isAuctionActive(auctionId: string): Promise<boolean> {
     const auction = await this.retrieveAuctionListing(auctionId)

@@ -4,6 +4,7 @@ import { storeRateLimiter, adminRateLimiter } from "./middleware/rate-limiter"
 import { requestLogger } from "./middleware/request-logger"
 import { securityHeaders } from "./middleware/security-headers"
 import { requireCustomerAuth } from "./middleware/require-customer-auth"
+import { adminContextMiddleware } from "./middleware/admin-context"
 
 function storeCorsMiddleware(req: MedusaRequest, res: MedusaResponse, next: MedusaNextFunction) {
   const origin = req.headers.origin
@@ -56,7 +57,7 @@ export default defineMiddlewares({
     },
     {
       matcher: "/admin/*",
-      middlewares: [securityHeaders, requestLogger, adminRateLimiter],
+      middlewares: [securityHeaders, requestLogger, adminRateLimiter, adminContextMiddleware],
     },
 
     // Financial routes

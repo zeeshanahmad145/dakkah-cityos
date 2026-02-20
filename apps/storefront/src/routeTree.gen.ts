@@ -317,6 +317,7 @@ import { Route as TenantLocaleBusinessApprovalsRouteImport } from './routes/$ten
 import { Route as TenantLocaleBundlesIdRouteImport } from './routes/$tenant/$locale/bundles/$id'
 import { Route as TenantLocaleBookingsConfirmationRouteImport } from './routes/$tenant/$locale/bookings/confirmation'
 import { Route as TenantLocaleBookingsServiceHandleRouteImport } from './routes/$tenant/$locale/bookings/$serviceHandle'
+import { Route as TenantLocaleBookingsIdRouteImport } from './routes/$tenant/$locale/bookings/$id'
 import { Route as TenantLocaleBlogSlugRouteImport } from './routes/$tenant/$locale/blog/$slug'
 import { Route as TenantLocaleB2bRegisterRouteImport } from './routes/$tenant/$locale/b2b/register'
 import { Route as TenantLocaleB2bDashboardRouteImport } from './routes/$tenant/$locale/b2b/dashboard'
@@ -2121,6 +2122,11 @@ const TenantLocaleBookingsServiceHandleRoute =
     path: '/bookings/$serviceHandle',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
+const TenantLocaleBookingsIdRoute = TenantLocaleBookingsIdRouteImport.update({
+  id: '/bookings/$id',
+  path: '/bookings/$id',
+  getParentRoute: () => TenantLocaleRoute,
+} as any)
 const TenantLocaleBlogSlugRoute = TenantLocaleBlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -2435,6 +2441,7 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/b2b/dashboard': typeof TenantLocaleB2bDashboardRoute
   '/$tenant/$locale/b2b/register': typeof TenantLocaleB2bRegisterRoute
   '/$tenant/$locale/blog/$slug': typeof TenantLocaleBlogSlugRoute
+  '/$tenant/$locale/bookings/$id': typeof TenantLocaleBookingsIdRoute
   '/$tenant/$locale/bookings/$serviceHandle': typeof TenantLocaleBookingsServiceHandleRoute
   '/$tenant/$locale/bookings/confirmation': typeof TenantLocaleBookingsConfirmationRoute
   '/$tenant/$locale/bundles/$id': typeof TenantLocaleBundlesIdRoute
@@ -2783,6 +2790,7 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/b2b/dashboard': typeof TenantLocaleB2bDashboardRoute
   '/$tenant/$locale/b2b/register': typeof TenantLocaleB2bRegisterRoute
   '/$tenant/$locale/blog/$slug': typeof TenantLocaleBlogSlugRoute
+  '/$tenant/$locale/bookings/$id': typeof TenantLocaleBookingsIdRoute
   '/$tenant/$locale/bookings/$serviceHandle': typeof TenantLocaleBookingsServiceHandleRoute
   '/$tenant/$locale/bookings/confirmation': typeof TenantLocaleBookingsConfirmationRoute
   '/$tenant/$locale/bundles/$id': typeof TenantLocaleBundlesIdRoute
@@ -3133,6 +3141,7 @@ export interface FileRoutesById {
   '/$tenant/$locale/b2b/dashboard': typeof TenantLocaleB2bDashboardRoute
   '/$tenant/$locale/b2b/register': typeof TenantLocaleB2bRegisterRoute
   '/$tenant/$locale/blog/$slug': typeof TenantLocaleBlogSlugRoute
+  '/$tenant/$locale/bookings/$id': typeof TenantLocaleBookingsIdRoute
   '/$tenant/$locale/bookings/$serviceHandle': typeof TenantLocaleBookingsServiceHandleRoute
   '/$tenant/$locale/bookings/confirmation': typeof TenantLocaleBookingsConfirmationRoute
   '/$tenant/$locale/bundles/$id': typeof TenantLocaleBundlesIdRoute
@@ -3485,6 +3494,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/b2b/dashboard'
     | '/$tenant/$locale/b2b/register'
     | '/$tenant/$locale/blog/$slug'
+    | '/$tenant/$locale/bookings/$id'
     | '/$tenant/$locale/bookings/$serviceHandle'
     | '/$tenant/$locale/bookings/confirmation'
     | '/$tenant/$locale/bundles/$id'
@@ -3833,6 +3843,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/b2b/dashboard'
     | '/$tenant/$locale/b2b/register'
     | '/$tenant/$locale/blog/$slug'
+    | '/$tenant/$locale/bookings/$id'
     | '/$tenant/$locale/bookings/$serviceHandle'
     | '/$tenant/$locale/bookings/confirmation'
     | '/$tenant/$locale/bundles/$id'
@@ -4182,6 +4193,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/b2b/dashboard'
     | '/$tenant/$locale/b2b/register'
     | '/$tenant/$locale/blog/$slug'
+    | '/$tenant/$locale/bookings/$id'
     | '/$tenant/$locale/bookings/$serviceHandle'
     | '/$tenant/$locale/bookings/confirmation'
     | '/$tenant/$locale/bundles/$id'
@@ -6640,6 +6652,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleBookingsServiceHandleRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
+    '/$tenant/$locale/bookings/$id': {
+      id: '/$tenant/$locale/bookings/$id'
+      path: '/bookings/$id'
+      fullPath: '/$tenant/$locale/bookings/$id'
+      preLoaderRoute: typeof TenantLocaleBookingsIdRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
     '/$tenant/$locale/blog/$slug': {
       id: '/$tenant/$locale/blog/$slug'
       path: '/blog/$slug'
@@ -7069,6 +7088,7 @@ interface TenantLocaleRouteChildren {
   TenantLocaleB2bDashboardRoute: typeof TenantLocaleB2bDashboardRoute
   TenantLocaleB2bRegisterRoute: typeof TenantLocaleB2bRegisterRoute
   TenantLocaleBlogSlugRoute: typeof TenantLocaleBlogSlugRoute
+  TenantLocaleBookingsIdRoute: typeof TenantLocaleBookingsIdRoute
   TenantLocaleBookingsServiceHandleRoute: typeof TenantLocaleBookingsServiceHandleRoute
   TenantLocaleBookingsConfirmationRoute: typeof TenantLocaleBookingsConfirmationRoute
   TenantLocaleBundlesIdRoute: typeof TenantLocaleBundlesIdRoute
@@ -7412,6 +7432,7 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleB2bDashboardRoute: TenantLocaleB2bDashboardRoute,
   TenantLocaleB2bRegisterRoute: TenantLocaleB2bRegisterRoute,
   TenantLocaleBlogSlugRoute: TenantLocaleBlogSlugRoute,
+  TenantLocaleBookingsIdRoute: TenantLocaleBookingsIdRoute,
   TenantLocaleBookingsServiceHandleRoute:
     TenantLocaleBookingsServiceHandleRoute,
   TenantLocaleBookingsConfirmationRoute: TenantLocaleBookingsConfirmationRoute,

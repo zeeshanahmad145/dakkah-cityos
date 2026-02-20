@@ -212,6 +212,108 @@ class EventTicketingModuleService extends MedusaService({
     return await this.retrieveTicket(ticketId)
   }
 
+  async selectSeat(eventId: string, seatId: string, customerId: string): Promise<any> {
+    if (!eventId || !seatId || !customerId) {
+      throw new Error("Event ID, seat ID, and customer ID are required")
+    }
+
+    const event = await this.retrieveEvent(eventId) as any
+    if (event.status !== "published" && event.status !== "active") {
+      throw new Error("Event is not available for seat selection")
+    }
+
+    const existingTickets = await this.listTickets({ event_id: eventId, seat_id: seatId }) as any
+    const ticketList = Array.isArray(existingTickets) ? existingTickets : [existingTickets].filter(Boolean)
+    const conflicting = ticketList.filter((t: any) => t.status === "reserved" || t.status === "issued" || t.status === "used")
+
+    if (conflicting.length > 0) {
+      throw new Error("Seat is already reserved or sold")
+    }
+
+    const ticketCode = `TK-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
+    const ticket = await (this as any).createTickets({
+      event_id: eventId,
+      customer_id: customerId,
+      seat_id: seatId,
+      ticket_code: ticketCode,
+      status: "reserved",
+      reserved_at: new Date(),
+    })
+
+    return ticket
+  }
+
+  async processRefund(ticketId: string, reason?: string): Promise<{
+    ticketId: string
+    refundType: string
+    refundPercentage: number
+    reason: string
+  }> {
+    const ticket = await this.retrieveTicket(ticketId) as any
+
+    if (ticket.status === "cancelled" || ticket.status === "used") {
+      throw new Error("Ticket cannot be refunded")
+    }
+
+    const event = await this.retrieveEvent(ticket.event_id) as any
+    const eventDate = new Date(event.start_date)
+    const now = new Date()
+    const hoursUntilEvent = (eventDate.getTime() - now.getTime()) / (1000 * 60 * 60)
+
+    let refundType: string
+    let refundPercentage: number
+
+    if (hoursUntilEvent > 72) {
+      refundType = "full"
+      refundPercentage = 100
+    } else if (hoursUntilEvent > 24) {
+      refundType = "partial"
+      refundPercentage = 50
+    } else {
+      refundType = "none"
+      refundPercentage = 0
+    }
+
+    await (this as any).updateTickets({
+      id: ticketId,
+      status: "cancelled",
+      cancelled_at: new Date(),
+      cancellation_reason: reason || "Refund requested",
+      refund_type: refundType,
+      refund_percentage: refundPercentage,
+    })
+
+    return { ticketId, refundType, refundPercentage, reason: reason || "Refund requested" }
+  }
+
+  async joinWaitlist(eventId: string, ticketTypeId: string, customerId: string): Promise<any> {
+    if (!eventId || !ticketTypeId || !customerId) {
+      throw new Error("Event ID, ticket type ID, and customer ID are required")
+    }
+
+    const event = await this.retrieveEvent(eventId) as any
+    if (event.status !== "published" && event.status !== "active") {
+      throw new Error("Event is not available")
+    }
+
+    const capacity = await this.getEventCapacity(eventId)
+    if (capacity.available > 0) {
+      throw new Error("Tickets are still available - no need to join waitlist")
+    }
+
+    const ticketCode = `WL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
+    const waitlistEntry = await (this as any).createTickets({
+      event_id: eventId,
+      ticket_type_id: ticketTypeId,
+      customer_id: customerId,
+      ticket_code: ticketCode,
+      status: "waitlisted",
+      waitlisted_at: new Date(),
+    })
+
+    return waitlistEntry
+  }
+
   /** Get event capacity and availability */
   async getEventCapacity(eventId: string): Promise<{ total: number; sold: number; reserved: number; available: number }> {
     const event = await this.retrieveEvent(eventId) as any

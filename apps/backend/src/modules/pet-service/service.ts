@@ -123,6 +123,73 @@ class PetServiceModuleService extends MedusaService({
     }
   }
 
+  async bookPetService(petId: string, serviceType: string, date: Date): Promise<any> {
+    if (!petId || !serviceType) {
+      throw new Error("Pet ID and service type are required")
+    }
+
+    const pet = await this.retrievePetProfile(petId) as any
+
+    if (serviceType === "boarding") {
+      const vaccinations = await this.trackVaccinations(petId)
+      const now = new Date()
+      const validVaccinations = vaccinations.filter((v: any) => {
+        if (!v.nextDue) return true
+        return new Date(v.nextDue) > now
+      })
+
+      if (vaccinations.length === 0 || validVaccinations.length === 0) {
+        throw new Error("Pet must have up-to-date vaccinations for boarding services")
+      }
+    }
+
+    const booking = await (this as any).createGroomingBookings({
+      pet_id: petId,
+      service_type: serviceType,
+      scheduled_date: new Date(date),
+      status: "scheduled",
+      pet_name: pet.name,
+      owner_id: pet.owner_id,
+      booked_at: new Date(),
+    })
+
+    return booking
+  }
+
+  async updateVaccinationRecord(petId: string, vaccination: {
+    vaccineName: string
+    dateAdministered: Date
+    expiryDate?: Date
+    veterinarian?: string
+    notes?: string
+  }): Promise<any> {
+    if (!vaccination.vaccineName || !vaccination.dateAdministered) {
+      throw new Error("Vaccine name and date administered are required")
+    }
+
+    const pet = await this.retrievePetProfile(petId) as any
+
+    const expiryDate = vaccination.expiryDate || (() => {
+      const d = new Date(vaccination.dateAdministered)
+      d.setFullYear(d.getFullYear() + 1)
+      return d
+    })()
+
+    const record = await (this as any).createVetAppointments({
+      pet_id: petId,
+      visit_type: "vaccination",
+      appointment_date: new Date(vaccination.dateAdministered),
+      treatment: vaccination.vaccineName,
+      notes: vaccination.notes || `${vaccination.vaccineName} vaccination`,
+      next_due_date: expiryDate,
+      vet_name: vaccination.veterinarian || null,
+      status: "completed",
+      owner_id: pet.owner_id,
+    })
+
+    return record
+  }
+
   async calculateServiceCost(serviceType: string, petSize: string, duration: number): Promise<{
     serviceType: string
     basePrice: number

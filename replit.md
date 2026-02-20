@@ -51,29 +51,71 @@ The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` en
 
 ## Recent Changes (2026-02-20)
 
-### Deep Audit & Remediation — Full 6-Sprint Plan Compliance
-All items from the detailed implementation plan have been verified and corrected across two remediation rounds:
+### Comprehensive 7-Sprint Gap Remediation
+Full deep-dive audit identified and remediated all gaps across 8 areas:
 
-- **Sprint 1A (24/24 routes):** All store mutation routes have auth checks. Centralized `requireCustomerAuth` middleware in `middlewares.ts` provides defense-in-depth. IDOR fix on subscription checkout (uses auth_context.actor_id, not body-supplied customer_id).
-- **Sprint 1B (48/48 routes):** All store mutation routes have Zod validation. No-body action endpoints use `.strict()` to reject unexpected payloads. Routes with body fields use properly typed schemas.
-- **Sprint 2 (30/30 workflows):** All workflows have compensation on mutating steps. Read-only steps explicitly return `StepResponse(result, null)`. All compensation is idempotent (try/catch + null guards).
-- **Sprint 3 (2/2 modules):** Insurance and trade-in migration files match model definitions.
-- **Sprint 4 (4/4 items):** Centralized auth middleware, differentiated rate limits (30/min store, 5/min checkout, 10/min wallet, 3/min newsletter), request logger with redaction + correlation IDs, security headers.
-- **Sprint 5 (30 test files):** Integration tests across workflows (5), services (4), isolation (3), auth (3). Plus unit tests and store integration tests.
-- **Sprint 6 (215 routes):** 211 admin + 4 vendor routes with Zod validation.
+#### Sprint 1 — Critical Infrastructure
+- Insurance & trade-in migrations verified (tables: ins_policy, ins_claim, trade_in_request, trade_in_offer)
+- Admin context middleware (`apps/backend/src/api/middleware/admin-context.ts`) — injects tenantId/storeId/locale for all admin routes
+- Module query config: wallet, tradeIn, insurance now have `definition: { isQueryable: true }`
+
+#### Sprint 2 — Workflow Implementation (6 workflows fixed)
+- KYC verification: real document validation (types, sizes, expiry) + scoring algorithm (doc completeness 30pts, business age 20pts, identity 30pts, address 20pts) + rejection path
+- Fleet dispatch: uses FleetbaseService `getAvailableDrivers()` + `assignDriver()` with manual queue fallback
+- Payment reconciliation: real matching by amount (±0.01), reference ID, date proximity (<24hrs) with confidence scoring
+- Tenant provisioning: creates default store config, roles (owner/admin/manager/staff), plan-based settings
+- Event ticketing: calculates real ticket pricing from ticket types and quantities
+- Auction lifecycle: validates reserve price, minimum increment (5%), anti-sniping, winner determination
+
+#### Sprint 3 — Vertical Service Depth (15 services deepened)
+**Tier 1 (Financial):** Insurance (premium calc, claims adjudication, policy lifecycle, prorated cancellation), Auction (bid validation, anti-sniping, reserve price, winner determination), Wallet (balance locking, transfers, statements, freeze)
+**Tier 2 (Key Verticals):** Restaurant (menu availability, order routing, prep time estimation, status state machine), Real Estate (Haversine geo-filtering, mortgage calc, viewing scheduling), Loyalty (points expiry, tier upgrade, earning multipliers, referral bonuses), Event Ticketing (seat selection, ticket transfer, time-based refunds, waitlist)
+**Tier 3 (Supporting):** Healthcare (insurance verification, prescriptions), Freelance (proposals, milestone payments, tiered fees), Education (enrollment, progress tracking), Fitness (class booking, late-cancel fees), Parking (time-based pricing, spot reservation), Pet Service (vaccination checks, booking), Charity (donations, tax deductions), Legal (case lifecycle, status state machine)
+
+#### Sprint 4 — Missing Admin CRUD Routes (7 routes created)
+- `/admin/bookings/route.ts` — list/create with tenant scoping
+- `/admin/subscriptions/route.ts` — list/create with plan/status filters
+- `/admin/commissions/route.ts` — list/create commission rules
+- `/admin/invoices/route.ts` — list/create with overdue filter
+- `/admin/wallet/route.ts` — list wallets, admin credit/debit
+- `/admin/insurance/route.ts` — list/create policies
+- `/admin/auctions/route.ts` — list/create auctions
+
+#### Sprint 5 — Webhook Handler Implementation
+- ERPNext: inventory sync (product lookup by SKU), invoice status updates (payment confirmation), payment entry recording, stock reconciliation (±5 unit auto-adjust threshold)
+- Fleetbase: delivery status mapping (dispatched→shipped, delivered→delivered), driver assignment metadata, route/ETA updates, delivery completion with proof storage + Temporal event dispatch
+
+#### Sprint 6 — Storefront Custom Module Integration
+- Custom API client (`apps/storefront/src/lib/custom-api.ts`) — 100+ typed functions for all 27+ verticals
+- Booking detail page with status badges, cancel functionality, breadcrumb navigation
+- All 8 key vertical page sets verified (bookings, subscriptions, auctions, rentals, digital products, event ticketing, freelance + detail pages)
+
+#### Sprint 7 — Test Infrastructure (22 new test files, ~230 total)
+- Integration tests: booking lifecycle (12 tests), subscription lifecycle (15 tests), wallet operations (15 tests), auction bidding (14 tests)
+- Unit tests: 15 files covering insurance, auction, wallet, restaurant, real-estate, loyalty, event-ticketing, healthcare, freelance, education, fitness, parking, charity, legal, pet-service (152 tests)
+- E2E tests: store purchase flow (7 tests), vendor onboarding (5 tests), admin management (7 tests)
+
+### Prior Remediation (6-Sprint Security Plan)
+- Sprint 1A/1B: All store mutation routes have auth checks + Zod validation
+- Sprint 2: All workflows have compensation on mutating steps
+- Sprint 4: Centralized auth middleware, differentiated rate limits, request logger, security headers
+- Sprint 6: 211 admin + 4 vendor routes with Zod validation
 
 ### Middleware Infrastructure
 - Auth: `apps/backend/src/api/middleware/require-customer-auth.ts`
+- Admin context: `apps/backend/src/api/middleware/admin-context.ts` — tenant/store/locale injection
 - Rate limiter: `apps/backend/src/api/middleware/rate-limiter.ts` — differentiated per-route limits
 - Request logger: `apps/backend/src/api/middleware/request-logger.ts` — redaction, correlation IDs
 - Security headers: `apps/backend/src/api/middleware/security-headers.ts`
 
-### Test Infrastructure (207 total test files)
+### Test Infrastructure (~230 total test files)
 - `tests/integration/workflows/` (5 files) — compensation verification
-- `tests/integration/services/` (4 files) — financial accuracy
+- `tests/integration/services/` (8 files) — financial accuracy + lifecycle tests
 - `tests/integration/isolation/` (3 files) — multi-tenant isolation
 - `tests/integration/auth/` (3 files) — auth boundaries
+- `tests/unit/services/` (15 files) — vertical module service logic
 - `tests/unit/workflows/` (8 files) — workflow unit tests
+- `tests/e2e/` (3 files) — end-to-end flow tests
 - `tests/integration/` (7 files) — store/admin integration tests
 
 ## External Dependencies

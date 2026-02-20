@@ -126,6 +126,88 @@ class RestaurantModuleService extends MedusaService({
     return reservation
   }
 
+  async checkMenuAvailability(menuId: string, orderTime: Date): Promise<{
+    available: boolean
+    mealPeriod: string
+    availableItems: any[]
+  }> {
+    const time = new Date(orderTime)
+    const hours = time.getHours()
+
+    let mealPeriod: string
+    if (hours >= 6 && hours < 11) {
+      mealPeriod = "breakfast"
+    } else if (hours >= 11 && hours < 16) {
+      mealPeriod = "lunch"
+    } else if (hours >= 16 && hours < 22) {
+      mealPeriod = "dinner"
+    } else {
+      mealPeriod = "closed"
+    }
+
+    if (mealPeriod === "closed") {
+      return { available: false, mealPeriod, availableItems: [] }
+    }
+
+    const items = await this.listMenuItems({ menu_id: menuId, is_available: true }) as any
+    const itemList = Array.isArray(items) ? items : [items].filter(Boolean)
+
+    const availableItems = itemList.filter((item: any) => {
+      if (!item.meal_period) return true
+      return item.meal_period === mealPeriod || item.meal_period === "all_day"
+    })
+
+    return { available: availableItems.length > 0, mealPeriod, availableItems }
+  }
+
+  async routeOrder(orderId: string, orderType: string): Promise<any> {
+    const validTypes = ["dine_in", "takeout", "delivery"]
+    if (!validTypes.includes(orderType)) {
+      throw new Error(`Invalid order type. Must be one of: ${validTypes.join(", ")}`)
+    }
+
+    const order = await this.retrieveKitchenOrder(orderId) as any
+
+    const queuePriority: Record<string, number> = {
+      dine_in: 2,
+      takeout: 1,
+      delivery: 3,
+    }
+
+    return await (this as any).updateKitchenOrders({
+      id: orderId,
+      order_type: orderType,
+      queue_priority: queuePriority[orderType],
+      routed_at: new Date(),
+      status: order.status === "pending" ? "confirmed" : order.status,
+    })
+  }
+
+  async estimatePreparationTime(items: Array<{ menuItemId: string; quantity: number }>): Promise<{
+    estimatedMinutes: number
+    itemBreakdown: Array<{ menuItemId: string; prepTime: number }>
+  }> {
+    if (!items || items.length === 0) {
+      return { estimatedMinutes: 0, itemBreakdown: [] }
+    }
+
+    const itemBreakdown: Array<{ menuItemId: string; prepTime: number }> = []
+    let maxPrepTime = 0
+
+    for (const item of items) {
+      const menuItem = await this.retrieveMenuItem(item.menuItemId) as any
+      const baseTime = Number(menuItem.prep_time || 10)
+      const itemTime = baseTime + (item.quantity > 1 ? (item.quantity - 1) * Math.ceil(baseTime * 0.3) : 0)
+      itemBreakdown.push({ menuItemId: item.menuItemId, prepTime: itemTime })
+      maxPrepTime = Math.max(maxPrepTime, itemTime)
+    }
+
+    const totalParallelTime = maxPrepTime + Math.ceil(items.length * 2)
+    const estimatedMinutes = Math.max(5, totalParallelTime)
+
+    return { estimatedMinutes, itemBreakdown }
+  }
+
   async updateMenuPricing(menuItemId: string, newPrice: number): Promise<any> {
     if (newPrice <= 0) {
       throw new Error("Price must be greater than zero")

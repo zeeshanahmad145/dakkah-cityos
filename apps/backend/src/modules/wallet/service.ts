@@ -112,6 +112,73 @@ class WalletModuleService extends MedusaService({ Wallet, WalletTransaction }) {
     })
   }
 
+  async transferBetweenWallets(fromId: string, toId: string, amount: number, reference?: string): Promise<{
+    debitTransaction: any
+    creditTransaction: any
+    amount: number
+  }> {
+    if (amount <= 0) {
+      throw new Error("Transfer amount must be greater than zero")
+    }
+
+    const sourceWallet = await this.retrieveWallet(fromId)
+    const destWallet = await this.retrieveWallet(toId)
+
+    if (sourceWallet.status !== "active") {
+      throw new Error("Source wallet is not active")
+    }
+    if (destWallet.status !== "active") {
+      throw new Error("Destination wallet is not active")
+    }
+    if (Number(sourceWallet.balance) < amount) {
+      throw new Error("Insufficient balance in source wallet")
+    }
+
+    const debitTransaction = await this.debitWallet(fromId, amount, `Transfer to wallet ${toId}`, reference)
+    const creditTransaction = await this.creditWallet(toId, amount, `Transfer from wallet ${fromId}`, reference)
+
+    return { debitTransaction, creditTransaction, amount }
+  }
+
+  async getStatement(walletId: string, startDate: Date, endDate: Date): Promise<{
+    walletId: string
+    startDate: Date
+    endDate: Date
+    openingBalance: number
+    closingBalance: number
+    transactions: any[]
+  }> {
+    const wallet = await this.retrieveWallet(walletId)
+    const transactions = await this.listWalletTransactions(
+      { wallet_id: walletId },
+      { order: { created_at: "ASC" } }
+    ) as any
+    const txList = Array.isArray(transactions) ? transactions : [transactions].filter(Boolean)
+
+    const filteredTx = txList.filter((tx: any) => {
+      const txDate = new Date(tx.created_at)
+      return txDate >= new Date(startDate) && txDate <= new Date(endDate)
+    })
+
+    const priorTx = txList.filter((tx: any) => new Date(tx.created_at) < new Date(startDate))
+    const openingBalance = priorTx.length > 0 ? Number(priorTx[priorTx.length - 1].balance_after || 0) : 0
+
+    let runningBalance = openingBalance
+    const transactionsWithBalance = filteredTx.map((tx: any) => {
+      runningBalance = Number(tx.balance_after || runningBalance)
+      return { ...tx, running_balance: runningBalance }
+    })
+
+    return {
+      walletId,
+      startDate,
+      endDate,
+      openingBalance,
+      closingBalance: runningBalance,
+      transactions: transactionsWithBalance,
+    }
+  }
+
   async getTransactionHistory(walletId: string, options?: { limit?: number; offset?: number }): Promise<any[]> {
     const transactions = await this.listWalletTransactions(
       { wallet_id: walletId },

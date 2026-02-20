@@ -124,6 +124,71 @@ class RealEstateModuleService extends MedusaService({
     }
   }
 
+  async searchProperties(filters: {
+    lat?: number
+    lng?: number
+    radiusKm?: number
+    minPrice?: number
+    maxPrice?: number
+    bedrooms?: number
+    propertyType?: string
+    status?: string
+  }): Promise<any[]> {
+    const queryFilters: Record<string, any> = { status: filters.status || "published" }
+    if (filters.propertyType) queryFilters.property_type = filters.propertyType
+    if (filters.bedrooms) queryFilters.bedrooms = filters.bedrooms
+
+    const listings = await this.listPropertyListings(queryFilters) as any
+    const list = Array.isArray(listings) ? listings : [listings].filter(Boolean)
+
+    let filtered = list
+
+    if (filters.minPrice || filters.maxPrice) {
+      filtered = filtered.filter((p: any) => {
+        const price = Number(p.price || p.rent_price || 0)
+        if (filters.minPrice && price < filters.minPrice) return false
+        if (filters.maxPrice && price > filters.maxPrice) return false
+        return true
+      })
+    }
+
+    if (filters.lat && filters.lng && filters.radiusKm) {
+      filtered = filtered.filter((p: any) => {
+        if (!p.latitude || !p.longitude) return false
+        const lat1 = filters.lat! * Math.PI / 180
+        const lat2 = Number(p.latitude) * Math.PI / 180
+        const dLat = (Number(p.latitude) - filters.lat!) * Math.PI / 180
+        const dLng = (Number(p.longitude) - filters.lng!) * Math.PI / 180
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2)
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        const distance = 6371 * c
+        return distance <= filters.radiusKm!
+      })
+    }
+
+    return filtered
+  }
+
+  async createInquiry(propertyId: string, buyerId: string, message: string): Promise<any> {
+    if (!message || !message.trim()) {
+      throw new Error("Inquiry message is required")
+    }
+
+    const property = await this.retrievePropertyListing(propertyId) as any
+    if (property.status !== "published") {
+      throw new Error("Property is not available for inquiries")
+    }
+
+    return await (this as any).createPropertyValuations({
+      property_listing_id: propertyId,
+      buyer_id: buyerId,
+      inquiry_message: message.trim(),
+      asking_price: Number(property.price || property.rent_price || 0),
+      status: "inquiry",
+      submitted_at: new Date(),
+    })
+  }
+
   async getMarketAnalysis(filters: { location?: string; propertyType?: string }): Promise<{
     totalListings: number
     averagePrice: number

@@ -169,6 +169,48 @@ class FitnessModuleService extends MedusaService({
     }
   }
 
+  async cancelClassBooking(bookingId: string, memberId: string): Promise<{
+    bookingId: string
+    status: string
+    lateCancelFee: number
+    refundable: boolean
+  }> {
+    const booking = await this.retrieveClassBooking(bookingId) as any
+
+    if (booking.status === "cancelled") {
+      throw new Error("Booking is already cancelled")
+    }
+
+    if (booking.member_id !== memberId) {
+      throw new Error("Only the booking owner can cancel this booking")
+    }
+
+    const schedule = await this.retrieveClassSchedule(booking.class_schedule_id) as any
+    const classTime = new Date(schedule.start_time)
+    const now = new Date()
+    const hoursUntilClass = (classTime.getTime() - now.getTime()) / (1000 * 60 * 60)
+
+    let lateCancelFee = 0
+    let refundable = true
+
+    if (hoursUntilClass <= 2 && hoursUntilClass > 0) {
+      lateCancelFee = 15
+      refundable = false
+    } else if (hoursUntilClass <= 0) {
+      lateCancelFee = 25
+      refundable = false
+    }
+
+    await (this as any).updateClassBookings({
+      id: bookingId,
+      status: "cancelled",
+      cancelled_at: new Date(),
+      late_cancel_fee: lateCancelFee,
+    })
+
+    return { bookingId, status: "cancelled", lateCancelFee, refundable }
+  }
+
   async recordWorkout(memberId: string, data: {
     exerciseType: string
     duration: number
