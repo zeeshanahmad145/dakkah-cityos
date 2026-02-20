@@ -34,48 +34,80 @@ describe("Commission Calculation Workflow – Integration", () => {
 
   describe("end-to-end workflow execution", () => {
     it("should calculate commission, deduct, and record payout in sequence", async () => {
+      const listCommissionRules = jest.fn().mockResolvedValue([{ rate: 0.15 }])
+      const createCommissionTransaction = jest.fn().mockResolvedValue({ id: "txn_01", amount: 1200 })
+      const createPayouts = jest.fn().mockResolvedValue({ id: "payout_01", amount: 6800, status: "pending" })
+
       const container = mockContainer({
-        commission: {
-          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.15 }]),
-          createCommissionTransaction: jest.fn().mockResolvedValue({ id: "txn_01", amount: 1200 }),
-        },
-        payout: {
-          createPayouts: jest.fn().mockResolvedValue({ id: "payout_01", amount: 6800, status: "pending" }),
-        },
+        commission: { listCommissionRules, createCommissionTransaction },
+        payout: { createPayouts },
       })
 
       const calcResult = await calculateCommissionStep(validInput, { container })
       expect(calcResult.commissionAmount).toBe(1200)
       expect(calcResult.netAmount).toBe(6800)
+      expect(calcResult.rate).toBe(0.15)
+      expect(calcResult.vendorId).toBe("vendor_01")
+      expect(listCommissionRules).toHaveBeenCalledWith({ vendor_id: "vendor_01" })
+      expect(calcResult.commissionAmount + calcResult.netAmount).toBe(validInput.orderSubtotal)
 
       const deductResult = await deductCommissionStep(
         { vendorId: "vendor_01", commissionAmount: 1200, orderId: "order_01" },
         { container }
       )
       expect(deductResult.transaction.id).toBe("txn_01")
+      expect(createCommissionTransaction).toHaveBeenCalledWith({
+        vendorId: "vendor_01",
+        orderId: "order_01",
+        amount: 1200,
+        type: "deduction",
+      })
 
       const payoutResult = await recordPayoutStep(
         { vendorId: "vendor_01", netAmount: 6800, orderId: "order_01" },
         { container }
       )
       expect(payoutResult.payout.amount).toBe(6800)
+      expect(payoutResult.payout.status).toBe("pending")
+      expect(createPayouts).toHaveBeenCalledWith({
+        vendor_id: "vendor_01",
+        amount: 6800,
+        status: "pending",
+        reference_id: "order_01",
+      })
     })
 
     it("should use default 10% rate when no commission rules exist", async () => {
+      const listCommissionRules = jest.fn().mockResolvedValue([])
       const container = mockContainer({
-        commission: {
-          listCommissionRules: jest.fn().mockResolvedValue([]),
-          createCommissionTransaction: jest.fn().mockResolvedValue({ id: "txn_02" }),
-        },
-        payout: {
-          createPayouts: jest.fn().mockResolvedValue({ id: "payout_02" }),
-        },
+        commission: { listCommissionRules },
+        payout: { createPayouts: jest.fn().mockResolvedValue({ id: "payout_02" }) },
       })
 
       const calcResult = await calculateCommissionStep(validInput, { container })
       expect(calcResult.rate).toBe(0.1)
       expect(calcResult.commissionAmount).toBe(800)
       expect(calcResult.netAmount).toBe(7200)
+      expect(calcResult.commissionAmount + calcResult.netAmount).toBe(validInput.orderSubtotal)
+    })
+
+    it("should resolve correct modules from the container for each step", async () => {
+      const container = mockContainer({
+        commission: {
+          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.1 }]),
+          createCommissionTransaction: jest.fn().mockResolvedValue({ id: "txn_01" }),
+        },
+        payout: { createPayouts: jest.fn().mockResolvedValue({ id: "payout_01" }) },
+      })
+
+      await calculateCommissionStep(validInput, { container })
+      expect(container.resolve).toHaveBeenCalledWith("commission")
+
+      await deductCommissionStep({ vendorId: "vendor_01", commissionAmount: 800, orderId: "order_01" }, { container })
+      expect(container.resolve).toHaveBeenCalledWith("commission")
+
+      await recordPayoutStep({ vendorId: "vendor_01", netAmount: 7200, orderId: "order_01" }, { container })
+      expect(container.resolve).toHaveBeenCalledWith("payout")
     })
   })
 
@@ -106,6 +138,7 @@ describe("Commission Calculation Workflow – Integration", () => {
 
       await deductCommissionStep.compensate(deductResult.__compensation, { container })
       expect(deleteCommissionTransactions).toHaveBeenCalledWith("txn_01")
+      expect(deleteCommissionTransactions).toHaveBeenCalledTimes(1)
     })
 
     it("should compensate payout when a downstream error occurs", async () => {
@@ -125,14 +158,17 @@ describe("Commission Calculation Workflow – Integration", () => {
 
       await recordPayoutStep.compensate(payoutResult.__compensation, { container })
       expect(deletePayouts).toHaveBeenCalledWith("payout_01")
+      expect(deletePayouts).toHaveBeenCalledTimes(1)
     })
 
     it("should handle compensation gracefully when compensationData is undefined", async () => {
+      const deleteCommissionTransactions = jest.fn()
       const container = mockContainer({
-        commission: { deleteCommissionTransactions: jest.fn() },
+        commission: { deleteCommissionTransactions },
       })
 
       await expect(deductCommissionStep.compensate(undefined, { container })).resolves.not.toThrow()
+      expect(deleteCommissionTransactions).not.toHaveBeenCalled()
     })
 
     it("should handle compensation gracefully when transaction id is missing", async () => {
@@ -155,6 +191,7 @@ describe("Commission Calculation Workflow – Integration", () => {
 
       await deductCommissionStep.compensate({ transaction: { id: "txn_01" } }, { container })
       expect(deleteCommissionTransactions).toHaveBeenCalledWith("txn_01")
+      expect(deleteCommissionTransactions).toHaveBeenCalledTimes(1)
     })
 
     it("should leave no orphaned payouts after payout compensation", async () => {
@@ -165,6 +202,7 @@ describe("Commission Calculation Workflow – Integration", () => {
 
       await recordPayoutStep.compensate({ payoutId: "payout_01" }, { container })
       expect(deletePayouts).toHaveBeenCalledWith("payout_01")
+      expect(deletePayouts).toHaveBeenCalledTimes(1)
     })
 
     it("should not throw when compensation delete call fails", async () => {
@@ -175,6 +213,56 @@ describe("Commission Calculation Workflow – Integration", () => {
       await expect(
         deductCommissionStep.compensate({ transaction: { id: "txn_01" } }, { container })
       ).resolves.not.toThrow()
+    })
+
+    it("should have compensation functions defined for compensable steps", () => {
+      expect(deductCommissionStep.compensate).toBeDefined()
+      expect(recordPayoutStep.compensate).toBeDefined()
+    })
+
+    it("should run deduct-commission compensation idempotently", async () => {
+      const deleteCommissionTransactions = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({
+        commission: { deleteCommissionTransactions },
+      })
+
+      const compensationData = { transaction: { id: "txn_01" } }
+
+      await deductCommissionStep.compensate(compensationData, { container })
+      expect(deleteCommissionTransactions).toHaveBeenCalledWith("txn_01")
+
+      await expect(deductCommissionStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(deductCommissionStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
+    it("should run record-payout compensation idempotently", async () => {
+      const deletePayouts = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({
+        payout: { deletePayouts },
+      })
+
+      const compensationData = { payoutId: "payout_01" }
+
+      await recordPayoutStep.compensate(compensationData, { container })
+      expect(deletePayouts).toHaveBeenCalledWith("payout_01")
+
+      await expect(recordPayoutStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(recordPayoutStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
+    it("should skip payout compensation when payoutId is missing", async () => {
+      const deletePayouts = jest.fn()
+      const container = mockContainer({
+        payout: { deletePayouts },
+      })
+
+      await recordPayoutStep.compensate(undefined, { container })
+      expect(deletePayouts).not.toHaveBeenCalled()
+
+      await recordPayoutStep.compensate({}, { container })
+      expect(deletePayouts).not.toHaveBeenCalled()
     })
   })
 })

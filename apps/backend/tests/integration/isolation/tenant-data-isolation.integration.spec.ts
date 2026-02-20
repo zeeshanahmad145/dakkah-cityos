@@ -1,3 +1,23 @@
+jest.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
+  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
+  WorkflowResponse: jest.fn((data) => data),
+}))
+
+const mockContainer = (overrides: Record<string, any> = {}) => ({
+  resolve: jest.fn((name: string) => overrides[name] || {}),
+})
+
+let calculateCommissionStep: any
+
+beforeAll(async () => {
+  await import("../../../src/workflows/commission-calculation.js")
+  const { createStep } = require("@medusajs/framework/workflows-sdk")
+  const calls = createStep.mock.calls
+  calculateCommissionStep = calls.find((c: any) => c[0] === "calculate-vendor-commission-step")?.[1]
+})
+
 const mockJson = jest.fn()
 const mockStatus = jest.fn(() => ({ json: mockJson }))
 
@@ -36,27 +56,36 @@ describe("Tenant Data Isolation", () => {
         return []
       })
 
-      const resultA = listProducts({ tenant_id: "tenant_A" })
+      const containerA = mockContainer({ product: { listProducts } })
+      const containerB = mockContainer({ product: { listProducts } })
+
+      const serviceA = containerA.resolve("product") as any
+      const serviceB = containerB.resolve("product") as any
+
+      const resultA = serviceA.listProducts({ tenant_id: "tenant_A" })
       expect(resultA).toHaveLength(2)
       expect(resultA.every((p: any) => p.tenant_id === "tenant_A")).toBe(true)
 
-      const resultB = listProducts({ tenant_id: "tenant_B" })
+      const resultB = serviceB.listProducts({ tenant_id: "tenant_B" })
       expect(resultB).toHaveLength(1)
       expect(resultB.every((p: any) => p.tenant_id === "tenant_B")).toBe(true)
 
       const noMatch = resultA.filter((p: any) => p.tenant_id === "tenant_B")
       expect(noMatch).toHaveLength(0)
+
+      expect(containerA.resolve).toHaveBeenCalledWith("product")
+      expect(containerB.resolve).toHaveBeenCalledWith("product")
     })
 
     it("should scope queries to the requesting tenant", async () => {
       const listProducts = jest.fn().mockResolvedValue([])
-      const req = createMockReq({
-        query: { tenant_id: "tenant_A" },
-        product: { listProducts },
-      })
+      const container = mockContainer({ product: { listProducts } })
 
-      await listProducts({ tenant_id: (req.query as any).tenant_id })
+      const productService = container.resolve("product") as any
+      await productService.listProducts({ tenant_id: "tenant_A" })
+
       expect(listProducts).toHaveBeenCalledWith({ tenant_id: "tenant_A" })
+      expect(container.resolve).toHaveBeenCalledWith("product")
     })
 
     it("should reject cross-tenant product access", async () => {
@@ -68,8 +97,11 @@ describe("Tenant Data Isolation", () => {
         return product
       })
 
-      expect(() => retrieveProduct("prod_01", { tenant_id: "tenant_B" })).toThrow("cross-tenant access not allowed")
-      expect(retrieveProduct("prod_01", { tenant_id: "tenant_A" })).toEqual({ id: "prod_01", tenant_id: "tenant_A" })
+      const container = mockContainer({ product: { retrieveProduct } })
+      const productService = container.resolve("product") as any
+
+      expect(() => productService.retrieveProduct("prod_01", { tenant_id: "tenant_B" })).toThrow("cross-tenant access not allowed")
+      expect(productService.retrieveProduct("prod_01", { tenant_id: "tenant_A" })).toEqual({ id: "prod_01", tenant_id: "tenant_A" })
     })
   })
 
@@ -84,9 +116,16 @@ describe("Tenant Data Isolation", () => {
         return allOrders.filter(o => o.tenant_id === filters.tenant_id)
       })
 
-      const tenantAOrders = listOrders({ tenant_id: "tenant_A" })
+      const container = mockContainer({ order: { listOrders } })
+      const orderService = container.resolve("order") as any
+
+      const tenantAOrders = orderService.listOrders({ tenant_id: "tenant_A" })
       expect(tenantAOrders).toHaveLength(2)
       expect(tenantAOrders.some((o: any) => o.tenant_id === "tenant_B")).toBe(false)
+
+      const tenantBOrders = orderService.listOrders({ tenant_id: "tenant_B" })
+      expect(tenantBOrders).toHaveLength(1)
+      expect(tenantBOrders[0].id).toBe("order_02")
     })
 
     it("should prevent tenant B from modifying tenant A orders", async () => {
@@ -98,8 +137,15 @@ describe("Tenant Data Isolation", () => {
         return { ...order, ...data }
       })
 
-      expect(() => updateOrder("order_01", { status: "cancelled" }, { tenant_id: "tenant_B" }))
+      const container = mockContainer({ order: { updateOrder } })
+      const orderService = container.resolve("order") as any
+
+      expect(() => orderService.updateOrder("order_01", { status: "cancelled" }, { tenant_id: "tenant_B" }))
         .toThrow("cannot modify orders from another tenant")
+
+      const updated = orderService.updateOrder("order_01", { status: "cancelled" }, { tenant_id: "tenant_A" })
+      expect(updated.status).toBe("cancelled")
+      expect(updated.tenant_id).toBe("tenant_A")
     })
   })
 
@@ -113,13 +159,21 @@ describe("Tenant Data Isolation", () => {
         return customers.filter(c => c.tenant_id === filters.tenant_id)
       })
 
-      const tenantACustomers = listCustomers({ tenant_id: "tenant_A" })
+      const container = mockContainer({ customer: { listCustomers } })
+      const customerService = container.resolve("customer") as any
+
+      const tenantACustomers = customerService.listCustomers({ tenant_id: "tenant_A" })
       expect(tenantACustomers).toHaveLength(1)
       expect(tenantACustomers[0].email).toBe("alice@a.com")
 
-      const tenantBCustomers = listCustomers({ tenant_id: "tenant_B" })
+      const tenantBCustomers = customerService.listCustomers({ tenant_id: "tenant_B" })
       expect(tenantBCustomers).toHaveLength(1)
       expect(tenantBCustomers[0].email).toBe("bob@b.com")
+
+      const noOverlap = tenantACustomers.filter((c: any) =>
+        tenantBCustomers.some((bc: any) => bc.id === c.id)
+      )
+      expect(noOverlap).toHaveLength(0)
     })
 
     it("should not leak customer count across tenants", async () => {
@@ -131,8 +185,11 @@ describe("Tenant Data Isolation", () => {
         return all.filter(c => c.tenant_id === filters.tenant_id).length
       })
 
-      expect(countCustomers({ tenant_id: "tenant_A" })).toBe(3)
-      expect(countCustomers({ tenant_id: "tenant_B" })).toBe(1)
+      const container = mockContainer({ customer: { countCustomers } })
+      const customerService = container.resolve("customer") as any
+
+      expect(customerService.countCustomers({ tenant_id: "tenant_A" })).toBe(3)
+      expect(customerService.countCustomers({ tenant_id: "tenant_B" })).toBe(1)
     })
   })
 
@@ -146,13 +203,60 @@ describe("Tenant Data Isolation", () => {
         return rules.filter(r => r.tenant_id === filters.tenant_id)
       })
 
-      const rulesA = listCommissionRules({ tenant_id: "tenant_A" })
+      const container = mockContainer({ commission: { listCommissionRules } })
+      const commissionService = container.resolve("commission") as any
+
+      const rulesA = commissionService.listCommissionRules({ tenant_id: "tenant_A" })
       expect(rulesA).toHaveLength(1)
       expect(rulesA[0].rate).toBe(0.1)
 
-      const rulesB = listCommissionRules({ tenant_id: "tenant_B" })
+      const rulesB = commissionService.listCommissionRules({ tenant_id: "tenant_B" })
       expect(rulesB).toHaveLength(1)
       expect(rulesB[0].rate).toBe(0.2)
+    })
+
+    it("should calculate different commissions for different vendors via the real step", async () => {
+      const containerVendorA = mockContainer({
+        commission: {
+          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.1 }]),
+        },
+      })
+      const containerVendorB = mockContainer({
+        commission: {
+          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.25 }]),
+        },
+      })
+
+      const baseInput = {
+        orderId: "order_01",
+        orderTotal: 12000,
+        orderSubtotal: 10000,
+        tenantId: "tenant_01",
+        lineItems: [{ id: "li_01", amount: 10000 }],
+      }
+
+      const resultA = await calculateCommissionStep(
+        { ...baseInput, vendorId: "vendor_A" },
+        { container: containerVendorA }
+      )
+      const resultB = await calculateCommissionStep(
+        { ...baseInput, vendorId: "vendor_B" },
+        { container: containerVendorB }
+      )
+
+      expect(resultA.rate).toBe(0.1)
+      expect(resultA.commissionAmount).toBe(1000)
+      expect(resultA.netAmount).toBe(9000)
+
+      expect(resultB.rate).toBe(0.25)
+      expect(resultB.commissionAmount).toBe(2500)
+      expect(resultB.netAmount).toBe(7500)
+
+      expect(resultA.commissionAmount).not.toBe(resultB.commissionAmount)
+      expect(resultA.netAmount).not.toBe(resultB.netAmount)
+
+      expect(resultA.commissionAmount + resultA.netAmount).toBe(10000)
+      expect(resultB.commissionAmount + resultB.netAmount).toBe(10000)
     })
   })
 })

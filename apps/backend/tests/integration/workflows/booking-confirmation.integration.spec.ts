@@ -147,6 +147,43 @@ describe("Booking Confirmation Workflow – Integration", () => {
       expect(deleteBookings).toHaveBeenCalledWith("book_01")
     })
 
+    it("should have compensation functions defined for compensable steps", () => {
+      expect(reserveSlotStep.compensate).toBeDefined()
+      expect(confirmBookingStep.compensate).toBeDefined()
+    })
+
+    it("should run reserve-slot compensation idempotently", async () => {
+      const deleteBookings = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({ booking: { deleteBookings } })
+
+      const compensationData = { bookingId: "book_01" }
+
+      await reserveSlotStep.compensate(compensationData, { container })
+      expect(deleteBookings).toHaveBeenCalledWith("book_01")
+
+      await expect(reserveSlotStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(reserveSlotStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
+    it("should run confirm-booking compensation idempotently", async () => {
+      const updateBookings = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({ booking: { updateBookings } })
+
+      const compensationData = { bookingId: "book_01" }
+
+      await confirmBookingStep.compensate(compensationData, { container })
+      expect(updateBookings).toHaveBeenCalledWith({
+        id: "book_01",
+        status: "reserved",
+        confirmed_at: null,
+      })
+
+      await expect(confirmBookingStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(confirmBookingStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
     it("should revert booking to reserved state after confirm compensation", async () => {
       const updateBookings = jest.fn().mockResolvedValue(undefined)
       const container = mockContainer({ booking: { updateBookings } })

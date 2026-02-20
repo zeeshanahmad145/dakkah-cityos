@@ -145,6 +145,42 @@ describe("Vendor Payout Workflow – Integration", () => {
       expect(deletePayouts).toHaveBeenCalledWith("payout_01")
     })
 
+    it("should have compensation functions defined for compensable steps", () => {
+      expect(createPayoutStep.compensate).toBeDefined()
+      expect(markTransactionsPaidStep.compensate).toBeDefined()
+    })
+
+    it("should run create-payout compensation idempotently", async () => {
+      const deletePayouts = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({ payout: { deletePayouts } })
+
+      const compensationData = { payout: { id: "payout_01" } }
+
+      await createPayoutStep.compensate(compensationData, { container })
+      expect(deletePayouts).toHaveBeenCalledWith("payout_01")
+
+      await expect(createPayoutStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(createPayoutStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
+    it("should run mark-transactions-paid compensation idempotently", async () => {
+      const updateCommissionTransactions = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({ commission: { updateCommissionTransactions } })
+
+      const compensationData = { transactionIds: ["txn_01", "txn_02"] }
+
+      await markTransactionsPaidStep.compensate(compensationData, { container })
+      expect(updateCommissionTransactions).toHaveBeenCalledWith([
+        expect.objectContaining({ id: "txn_01", payout_status: "unpaid", payout_id: null, paid_at: null }),
+        expect.objectContaining({ id: "txn_02", payout_status: "unpaid", payout_id: null, paid_at: null }),
+      ])
+
+      await expect(markTransactionsPaidStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(markTransactionsPaidStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
     it("should revert all transaction statuses after compensation", async () => {
       const updateCommissionTransactions = jest.fn().mockResolvedValue(undefined)
       const container = mockContainer({ commission: { updateCommissionTransactions } })

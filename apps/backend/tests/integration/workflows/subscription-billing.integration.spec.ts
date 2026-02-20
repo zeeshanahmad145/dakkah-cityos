@@ -153,6 +153,26 @@ describe("Subscription Billing Workflow – Integration", () => {
       )
     })
 
+    it("should have compensation function defined for mark-cycle-processing step", () => {
+      expect(markCycleProcessingStep.compensate).toBeDefined()
+    })
+
+    it("should run mark-cycle-processing compensation idempotently", async () => {
+      const updateBillingCycles = jest.fn().mockResolvedValue(undefined)
+      const container = mockContainer({ subscription: { updateBillingCycles } })
+
+      const compensationData = { cycleId: "cycle_01", previousStatus: "upcoming", previousAttemptCount: 0 }
+
+      await markCycleProcessingStep.compensate(compensationData, { container })
+      expect(updateBillingCycles).toHaveBeenCalledWith(
+        expect.objectContaining({ id: "cycle_01", status: "upcoming", attempt_count: 0 })
+      )
+
+      await expect(markCycleProcessingStep.compensate(compensationData, { container })).resolves.not.toThrow()
+
+      await expect(markCycleProcessingStep.compensate(null, { container })).resolves.not.toThrow()
+    })
+
     it("should set last_attempt_at to a recent timestamp", async () => {
       const updateBillingCycles = jest.fn().mockResolvedValue({})
       const container = mockContainer({ subscription: { updateBillingCycles } })

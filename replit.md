@@ -49,6 +49,33 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 ### Database Configuration
 The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` environment variable. Medusa backend connects via `process.env.DATABASE_URL` in `medusa-config.ts`. All 203 MikroORM migrations are applied, and all seed data lives in heliumdb. No local PostgreSQL instance is required.
 
+## Recent Changes (2026-02-20)
+
+### Deep Audit & Remediation — Full 6-Sprint Plan Compliance
+All items from the detailed implementation plan have been verified and corrected across two remediation rounds:
+
+- **Sprint 1A (24/24 routes):** All store mutation routes have auth checks. Centralized `requireCustomerAuth` middleware in `middlewares.ts` provides defense-in-depth. IDOR fix on subscription checkout (uses auth_context.actor_id, not body-supplied customer_id).
+- **Sprint 1B (48/48 routes):** All store mutation routes have Zod validation. No-body action endpoints use `.strict()` to reject unexpected payloads. Routes with body fields use properly typed schemas.
+- **Sprint 2 (30/30 workflows):** All workflows have compensation on mutating steps. Read-only steps explicitly return `StepResponse(result, null)`. All compensation is idempotent (try/catch + null guards).
+- **Sprint 3 (2/2 modules):** Insurance and trade-in migration files match model definitions.
+- **Sprint 4 (4/4 items):** Centralized auth middleware, differentiated rate limits (30/min store, 5/min checkout, 10/min wallet, 3/min newsletter), request logger with redaction + correlation IDs, security headers.
+- **Sprint 5 (30 test files):** Integration tests across workflows (5), services (4), isolation (3), auth (3). Plus unit tests and store integration tests.
+- **Sprint 6 (215 routes):** 211 admin + 4 vendor routes with Zod validation.
+
+### Middleware Infrastructure
+- Auth: `apps/backend/src/api/middleware/require-customer-auth.ts`
+- Rate limiter: `apps/backend/src/api/middleware/rate-limiter.ts` — differentiated per-route limits
+- Request logger: `apps/backend/src/api/middleware/request-logger.ts` — redaction, correlation IDs
+- Security headers: `apps/backend/src/api/middleware/security-headers.ts`
+
+### Test Infrastructure (207 total test files)
+- `tests/integration/workflows/` (5 files) — compensation verification
+- `tests/integration/services/` (4 files) — financial accuracy
+- `tests/integration/isolation/` (3 files) — multi-tenant isolation
+- `tests/integration/auth/` (3 files) — auth boundaries
+- `tests/unit/workflows/` (8 files) — workflow unit tests
+- `tests/integration/` (7 files) — store/admin integration tests
+
 ## External Dependencies
 - **Database:** PostgreSQL
 - **Frontend Framework:** TanStack Start, React
