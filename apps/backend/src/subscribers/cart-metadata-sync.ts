@@ -9,9 +9,7 @@ export default async function cartMetadataSyncHandler({
   container,
 }: SubscriberArgs<{ id: string }>) {
   try {
-    const cartExtension = container.resolve(
-      "cartExtension",
-    ) as unknown as CartExtensionModuleService;
+    const cartExtension = container.resolve("cartExtension") as any;
 
     const existing = await cartExtension.listCartMetadatas({
       cart_id: data.id,

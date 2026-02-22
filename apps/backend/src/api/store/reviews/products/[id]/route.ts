@@ -4,7 +4,7 @@ import ReviewModuleService from "../../../../../modules/review/service";
 
 // GET /store/reviews/products/:id - Get reviews for a product
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const reviewService = req.scope.resolve("review") as ReviewModuleService;
+  const reviewService = req.scope.resolve("review") as any;
 
   console.log("Reviews Route Hit:");
   console.log("req.params:", req.params);

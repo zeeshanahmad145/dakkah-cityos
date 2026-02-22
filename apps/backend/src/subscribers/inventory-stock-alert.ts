@@ -9,9 +9,7 @@ export default async function inventoryStockAlertHandler({
   container,
 }: SubscriberArgs<{ id: string }>) {
   try {
-    const inventoryExtension = container.resolve(
-      "inventoryExtension",
-    ) as unknown as InventoryExtensionModuleService;
+    const inventoryExtension = container.resolve("inventoryExtension") as any;
     const query = container.resolve("query");
 
     const { data: items } = await query.graph({

@@ -11,9 +11,7 @@ export default async function bookingCheckedInHandler({
   container,
 }: SubscriberArgs<{ id: string }>) {
   const notificationService = container.resolve(Modules.NOTIFICATION);
-  const bookingService = container.resolve(
-    "booking",
-  ) as unknown as BookingModuleService;
+  const bookingService = container.resolve("booking") as any;
 
   try {
     const booking = await bookingService.retrieveBooking(data.id);
