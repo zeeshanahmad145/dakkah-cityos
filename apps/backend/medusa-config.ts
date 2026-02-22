@@ -14,15 +14,8 @@ const iconsPath = path.resolve(
 module.exports = defineConfig({
   admin: {
     path: "/commerce/admin",
+    disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
     vite: () => {
-      let hmrServer;
-      if (process.env.HMR_BIND_HOST) {
-        const { createServer } = require("http");
-        hmrServer = createServer();
-        const hmrPort = parseInt(process.env.HMR_PORT || "9001");
-        hmrServer.listen(hmrPort, process.env.HMR_BIND_HOST);
-      }
-
       let allowedHosts: string[] | true = true;
       if (process.env.__MEDUSA_ADDITIONAL_ALLOWED_HOSTS) {
         allowedHosts = process.env.__MEDUSA_ADDITIONAL_ALLOWED_HOSTS
@@ -33,9 +26,7 @@ module.exports = defineConfig({
       return {
         server: {
           allowedHosts,
-          hmr: {
-            server: hmrServer,
-          },
+          hmr: false,
         },
         resolve: {
           alias: {
