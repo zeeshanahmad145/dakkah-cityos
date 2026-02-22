@@ -68,6 +68,9 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **22.12** — Storefront SSR Build & Hydration Audit (page ID: 58851370)
 - **22.13** — Complete API Route Registry & Production Parity Matrix (page ID: 59047937)
 - **22.14** — Admin Dashboard 404 Root Cause Analysis & Vercel Deployment Fix (page ID: 59113473)
+- **22.15** — Product Seeding & Store API Verification Audit (page ID: 59015171)
+- **22.16** — Multi-Tenant Architecture Deep-Dive & RBAC Audit (page ID: 58785813)
+- **22.17** — Comprehensive Remediation Roadmap & Priority Matrix (page ID: 59015192)
 
 ### Key Findings (Feb 22, 2026)
 - **Medusa v2.13.1 upgrade complete**: All `@medusajs/*` packages upgraded from `2.11.4-snapshot-20251107212527` to `2.13.1`, `@medusajs/ui` to `4.1.1`, `@medusajs/icons` to `2.13.1`
