@@ -1,12 +1,28 @@
 {
-  "buildCommand": "npx medusa db:migrate && cd ../.. && turbo run build --filter=backend",
+  "buildCommand": "npx medusa db:migrate && cd ../.. && turbo run build --filter=backend && node scripts/vercel-post-build.mjs",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "outputDirectory": ".medusa/server",
   "framework": null,
   "rewrites": [
     {
+      "source": "/commerce/admin",
+      "destination": "/commerce/admin/index.html"
+    },
+    {
+      "source": "/commerce/admin/:path*",
+      "destination": "/commerce/admin/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.js"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/commerce/admin/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     }
   ],
   "regions": [
