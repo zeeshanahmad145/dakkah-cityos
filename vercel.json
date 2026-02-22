@@ -1,7 +1,7 @@
 {
     "version": 2,
     "buildCommand": "turbo run build",
-    "outputDirectory": "apps/backend/.medusa/server",
+    "outputDirectory": ".medusa/server",
     "installCommand": "pnpm install",
     "framework": null,
     "rewrites": [
@@ -9,11 +9,5 @@
             "source": "/(.*)",
             "destination": "/index.js"
         }
-    ],
-    "functions": {
-        "apps/backend/.medusa/server/index.js": {
-            "memory": 1024,
-            "maxDuration": 30
-        }
-    }
+    ]
 }
