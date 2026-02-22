@@ -1,40 +1,38 @@
 #!/bin/bash
 
-# ── 1. Use Replit-provided PostgreSQL database ──
-echo "Using Replit PostgreSQL database..."
+# Configuration
+export PORT=5000
+export HOST=0.0.0.0
 
-# ── 2. Kill any stale processes on our ports ──
-fuser -k 9000/tcp 2>/dev/null
-fuser -k 5000/tcp 2>/dev/null
-sleep 1
+# Medusa Backend Setup
+# We use 127.0.0.1 for internal health checks to avoid proxy issues
+export MEDUSA_BACKEND_URL="http://127.0.0.1:9000"
+# VITE_MEDUSA_BACKEND_URL is used by the frontend SDK
+# Setting to "/" allows Vite proxy to handle it, which is more reliable in Replit
+export VITE_MEDUSA_BACKEND_URL="/" 
 
-# ── 3. Start Medusa backend ──
-cd /home/runner/workspace/apps/backend
-echo "Starting Medusa backend..."
-# Use 'start' if built, otherwise 'develop'
-if [ -d ".medusa/server" ]; then
-  NODE_OPTIONS="--max-old-space-size=1024" npx medusa start &
-else
-  NODE_OPTIONS="--max-old-space-size=1024" npx medusa develop &
+# Kill any existing processes on ports 9000 and 5000
+echo "Cleaning up ports 9000 and 5000..."
+fuser -k 9000/tcp 5000/tcp 2>/dev/null || true
+
+# 1. Start Medusa Backend
+echo "Starting Medusa backend on port 9000..."
+cd apps/backend
+npm run dev -- --port 9000 --host 0.0.0.0 &
+
+# Wait for backend to be healthy before starting frontend
+echo "Waiting for Medusa backend to initialize..."
+# Medusa v2 can take a bit to start up all modules
+timeout 60s bash -c 'until curl -s http://127.0.0.1:9000/health > /dev/null; do sleep 2; done'
+
+if [ $? -ne 0 ]; then
+  echo "Backend failed to start within 60s. Checking logs..."
+  exit 1
 fi
-BACKEND_PID=$!
+echo "Medusa backend is ready."
 
-echo "Waiting for Medusa backend to start..."
-for i in $(seq 1 30); do
-  if curl -s http://localhost:9000/health > /dev/null 2>&1; then
-    echo "Medusa backend is ready on port 9000"
-    break
-  fi
-  sleep 2
-done
-
-# ── 4. Start storefront ──
-cd /home/runner/workspace/apps/storefront
-echo "Starting storefront..."
-if [ -d ".output" ]; then
-  echo "Found production build, starting with node..."
-  PORT=5000 HOST=0.0.0.0 NITRO_PORT=5000 NITRO_HOST=0.0.0.0 NODE_OPTIONS="--max-old-space-size=1024" exec node .output/server/index.mjs
-else
-  echo "Production build not found, starting in dev mode..."
-  NODE_OPTIONS="--max-old-space-size=1024" exec npx vite dev --host 0.0.0.0 --port 5000 --strictPort
-fi
+# 2. Start Storefront
+echo "Starting storefront on port 5000..."
+cd ../storefront
+# Explicitly set port and host for Vite to ensure it hits the Replit webview
+npm run dev -- --port 5000 --host 0.0.0.0

@@ -38,6 +38,16 @@ JWT-based authentication is used for the customer SDK. All tenant/governance/nod
 ### Manage Page Infrastructure
 The platform supports 45 CRUD configurations for various verticals using shared components like DataTable, Charts, Calendar, and FormWizard. Features include AnalyticsOverview, BulkActionsBar, and AdvancedFilters. The sidebar dynamically filters modules based on user role weight.
 
+### Connectivity & Port Mapping
+- **Frontend (Storefront):** Port 5000, Host 0.0.0.0. Configuration in `apps/storefront/vite.config.ts` includes `allowedHosts: true`.
+- **Backend (Medusa):** Port 9000, Host 0.0.0.0.
+- **Start Script:** `start.sh` manages process sequencing and port cleanup.
+
+### File Handling
+- **Provider:** Custom Replit Object Storage provider (`apps/backend/src/modules/file-replit`).
+- **Storage:** Integrated with Replit native object storage.
+- **Routes:** `/store/file-replit/download?key=...` for authenticated file access.
+
 ### System Responsibility Split
 - **Medusa (Commerce Engine):** Products, orders, payments, commissions, marketplace listings, vendor management.
 - **Payload CMS (Entity & Content Management):** Tenant profiles, POI content, vendor public profiles, pages, navigation.

@@ -87,19 +87,7 @@ export default defineConfig(({ mode }) => {
     },
 
     ssr: {
-      noExternal: ["@medusajs/js-sdk", "@medusajs/types"],
-      external: [
-        "react",
-        "react-dom",
-        "react/jsx-runtime",
-        "react/jsx-dev-runtime",
-        "@tanstack/react-query",
-        "@tanstack/react-router",
-      ],
-      optimizeDeps: {
-        noDiscovery: true,
-        include: [],
-      },
+      noExternal: ["@medusajs/js-sdk", "@medusajs/types", "lodash-es", "@dakkah-cityos/design-runtime", "@dakkah-cityos/design-tokens", "@dakkah-cityos/design-system"],
     },
 
     optimizeDeps: {
@@ -113,9 +101,6 @@ export default defineConfig(({ mode }) => {
         "@medusajs/js-sdk",
         "@medusajs/icons",
         "lodash-es",
-        "@dakkah-cityos/design-runtime",
-        "@dakkah-cityos/design-tokens",
-        "@dakkah-cityos/design-system",
       ],
       exclude: ["@medusajs-ai/tags"],
     },
