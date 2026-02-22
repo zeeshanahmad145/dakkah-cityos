@@ -1,7 +1,7 @@
 {
-  "buildCommand": "pnpm turbo run build --filter=storefront",
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=storefront",
   "devCommand": "pnpm dev",
-  "installCommand": "pnpm install --no-frozen-lockfile",
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "framework": null,
   "outputDirectory": "apps/storefront/.output/public",
   "regions": [
