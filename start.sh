@@ -1,40 +1,28 @@
 #!/bin/bash
 
-# ── 1. Use Replit-provided PostgreSQL database ──
-echo "Using Replit PostgreSQL database..."
+# Port Mapping:
+#   Port 5000 - Storefront (TanStack Start + Vite) - PUBLIC facing
+#   Port 9000 - Medusa Backend API - INTERNAL (proxied through Vite on 5000)
+#
+# Priority: Storefront starts FIRST to satisfy port detection,
+#           Backend starts in parallel
 
-# ── 2. Kill any stale processes on our ports ──
-fuser -k 9000/tcp 2>/dev/null
-fuser -k 5000/tcp 2>/dev/null
+export PORT=5000
+export HOST=0.0.0.0
+export MEDUSA_BACKEND_URL="http://127.0.0.1:9000"
+
+# Clean up any stale processes
+fuser -k 9000/tcp 5000/tcp 2>/dev/null || true
 sleep 1
 
-# ── 3. Start Medusa backend ──
+# Start Medusa Backend in background (port 9000)
+echo "Starting Medusa backend on port 9000..."
 cd /home/runner/workspace/apps/backend
-echo "Starting Medusa backend..."
-# Use 'start' if built, otherwise 'develop'
-if [ -d ".medusa/server" ]; then
-  NODE_OPTIONS="--max-old-space-size=1024" npx medusa start &
-else
-  NODE_OPTIONS="--max-old-space-size=1024" npx medusa develop &
-fi
+npm run dev -- --port 9000 --host 0.0.0.0 &
 BACKEND_PID=$!
 
-echo "Waiting for Medusa backend to start..."
-for i in $(seq 1 30); do
-  if curl -s http://localhost:9000/health > /dev/null 2>&1; then
-    echo "Medusa backend is ready on port 9000"
-    break
-  fi
-  sleep 2
-done
-
-# ── 4. Start storefront ──
+# Start Storefront immediately (port 5000) - don't wait for backend
+# Vite proxy will handle reconnection when backend becomes available
+echo "Starting storefront on port 5000..."
 cd /home/runner/workspace/apps/storefront
-echo "Starting storefront..."
-if [ -d ".output" ]; then
-  echo "Found production build, starting with node..."
-  PORT=5000 HOST=0.0.0.0 NITRO_PORT=5000 NITRO_HOST=0.0.0.0 NODE_OPTIONS="--max-old-space-size=1024" exec node .output/server/index.mjs
-else
-  echo "Production build not found, starting in dev mode..."
-  NODE_OPTIONS="--max-old-space-size=1024" exec npx vite dev --host 0.0.0.0 --port 5000 --strictPort
-fi
+exec npm run dev -- --port 5000 --host 0.0.0.0
