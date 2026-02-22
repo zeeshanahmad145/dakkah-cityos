@@ -1,8 +1,8 @@
 {
     "version": 2,
-    "buildCommand": "turbo run build",
-    "outputDirectory": ".medusa/server",
-    "installCommand": "pnpm install",
+    "buildCommand": "cd apps/backend && npx medusa db:migrate && cd ../.. && turbo run build --filter=backend",
+    "outputDirectory": "apps/backend/.medusa/server",
+    "installCommand": "pnpm install --no-frozen-lockfile",
     "framework": null,
     "rewrites": [
         {

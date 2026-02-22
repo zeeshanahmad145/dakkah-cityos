@@ -44,9 +44,16 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 - **Start Script:** `start.sh` manages process sequencing and port cleanup.
 
 ### File Handling
-- **Provider:** Custom Replit Object Storage provider (`apps/backend/src/modules/file-replit`).
-- **Storage:** Integrated with Replit native object storage.
-- **Routes:** `/store/file-replit/download?key=...` for authenticated file access.
+- **Development (Replit):** Custom Replit Object Storage provider (`apps/backend/src/modules/file-replit`).
+- **Production (Vercel):** Custom Vercel Blob provider (`apps/backend/src/modules/file-vercel-blob`).
+- **Auto-switching:** `medusa-config.ts` uses `BLOB_READ_WRITE_TOKEN` env var to select provider.
+- **Routes:** `/store/file-replit/download?key=...` for dev, Vercel Blob URLs for production.
+
+### Production Database (Neon)
+- **Connection:** `NEON_DATABASE_URL` secret in Replit, `DATABASE_URL` in Vercel.
+- **Migration:** `cd apps/backend && npx medusa db:migrate` (runs during Vercel build).
+- **Vercel backend config:** `vercel.json` at repo root — includes migration in build command.
+- **Current state:** Core Medusa tables (134 migrations, 111 tables) applied. Custom module migrations pending.
 
 ### System Responsibility Split
 - **Medusa (Commerce Engine):** Products, orders, payments, commissions, marketplace listings, vendor management.
@@ -60,6 +67,13 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` environment variable. Medusa backend connects via `process.env.DATABASE_URL` in `medusa-config.ts`. All 203 MikroORM migrations are applied, and all seed data lives in heliumdb. No local PostgreSQL instance is required.
 
 ## Recent Changes (2026-02-22)
+
+### Production Deployment Infrastructure
+- Vercel Blob file storage provider created (`apps/backend/src/modules/file-vercel-blob`) for production file uploads
+- `medusa-config.ts` updated with conditional file provider: Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set, Replit Object Storage otherwise
+- Root `vercel.json` updated for Medusa backend deployment: includes `medusa db:migrate` in build step
+- Neon PostgreSQL production database: core Medusa migrations (134/207) applied, remaining will complete during Vercel build
+- `@vercel/blob` package installed
 
 ### Orchestrator Removal & Storefront Migration Prep
 - Removed `@dakkah/orchestrator` (duplicate Payload CMS app) from monorepo — already deployed at https://vercel.com/mvp-lab-team/dakkah-cityos-cms/
