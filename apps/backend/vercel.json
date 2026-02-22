@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx medusa db:migrate && cd ../.. && turbo run build --filter=backend && node scripts/vercel-post-build.mjs",
+  "buildCommand": "npx medusa db:migrate && cd ../.. && turbo run build --filter=backend && cd apps/backend && node scripts/vercel-post-build.mjs",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "outputDirectory": ".medusa/server",
   "framework": null,
