@@ -42,7 +42,7 @@ export class VercelBlobFileService extends AbstractFileProviderService {
     }
 
     const blob = await put(file.filename, content, {
-      access: this.access_,
+      access: this.access_ as "public",
       addRandomSuffix: false,
       token: this.token_,
     });

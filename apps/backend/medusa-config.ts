@@ -635,14 +635,28 @@ module.exports = defineConfig({
       resolve: "@medusajs/medusa/file",
       options: {
         providers: [
-          {
-            resolve: "./src/modules/file-replit",
-            id: "replit-file",
-            options: {
-              bucket_id: "replit-objstore-d0367ca5-bb93-42b5-b2e7-53122f51e3cb",
-              backend_url: process.env.MEDUSA_BACKEND_URL,
-            },
-          },
+          ...(process.env.BLOB_READ_WRITE_TOKEN
+            ? [
+                {
+                  resolve: "./src/modules/file-vercel-blob",
+                  id: "vercel-blob",
+                  options: {
+                    token: process.env.BLOB_READ_WRITE_TOKEN,
+                    access: "public",
+                  },
+                },
+              ]
+            : [
+                {
+                  resolve: "./src/modules/file-replit",
+                  id: "replit-file",
+                  options: {
+                    bucket_id:
+                      "replit-objstore-d0367ca5-bb93-42b5-b2e7-53122f51e3cb",
+                    backend_url: process.env.MEDUSA_BACKEND_URL,
+                  },
+                },
+              ]),
         ],
       },
     },
