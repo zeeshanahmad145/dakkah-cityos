@@ -28,18 +28,22 @@ const approveVendorStep = createStep(
       onboarded_at: new Date(),
     })
 
-    return new StepResponse({ vendor }, { vendor })
+    return new StepResponse({ vendor }, { vendorId: input.vendorId, previousStatus: "pending", previousVerificationStatus: "onboarding" })
   },
-  async ({ vendor }: { vendor: any }, { container }) => {
-    const vendorModule = container.resolve("vendor") as any
-    await vendorModule.updateVendors({
-      id: vendor.id,
-      verification_status: "pending",
-      status: "onboarding",
-      verified_at: null,
-      verified_by: null,
-      onboarded_at: null,
-    })
+  async (compensationData: { vendorId: string; previousStatus: string; previousVerificationStatus: string }, { container }) => {
+    if (!compensationData?.vendorId) return
+    try {
+      const vendorModule = container.resolve("vendor") as any
+      await vendorModule.updateVendors({
+        id: compensationData.vendorId,
+        verification_status: "pending",
+        status: "onboarding",
+        verified_at: null,
+        verified_by: null,
+        onboarded_at: null,
+      })
+    } catch (error) {
+    }
   }
 )
 

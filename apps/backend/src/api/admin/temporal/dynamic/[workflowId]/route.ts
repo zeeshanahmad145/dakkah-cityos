@@ -10,7 +10,7 @@ import {
 const SignalWorkflowSchema = z.object({
   signal: z.string().min(1, "signal name is required"),
   data: z.any().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { workflowId } = req.params

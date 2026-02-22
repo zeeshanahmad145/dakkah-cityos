@@ -18,7 +18,7 @@ const createSchema = z.object({
   season_end: z.string().optional(),
   nutrition_info: z.any().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const mod = req.scope.resolve("grocery") as any

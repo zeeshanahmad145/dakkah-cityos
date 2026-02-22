@@ -1,16 +1,23 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { NodeHierarchySyncService } from "../../../../../integrations/node-hierarchy-sync/index"
 import { createLogger } from "../../../../../lib/logger"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 const logger = createLogger("api:admin/integrations")
 
+const nodeHierarchySyncSchema = z.object({
+  tenant_id: z.string().min(1),
+  mode: z.enum(["temporal", "direct"]).optional(),
+}).passthrough()
+
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const { tenant_id, mode } = req.body as { tenant_id: string; mode?: "temporal" | "direct" }
-
-    if (!tenant_id) {
-      return res.status(400).json({ error: "tenant_id is required" })
+    const parsed = nodeHierarchySyncSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const { tenant_id, mode } = parsed.data
 
     const syncMode = mode || (process.env.TEMPORAL_API_KEY ? "temporal" : "direct")
 

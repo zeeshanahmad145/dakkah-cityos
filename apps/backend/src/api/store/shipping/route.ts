@@ -1,5 +1,12 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const shippingRateQuerySchema = z.object({
+  origin: z.string().min(1),
+  destination: z.string().min(1),
+  weight: z.number(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -14,15 +21,21 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("shippingExtension") as any
-    const { origin, destination, weight } = req.body as { origin: string; destination: string; weight: number }
-    if (!origin || !destination || weight === undefined) {
-      return res.status(400).json({ message: "origin, destination, and weight are required" })
+    const customerId = (req as any).auth_context?.actor_id
+    if (!customerId) {
+      return res.status(401).json({ message: "Authentication required" })
     }
+
+    const parsed = shippingRateQuerySchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
+    const { origin, destination, weight } = parsed.data
+    const service = req.scope.resolve("shippingExtension") as any
     const rates = await service.listShippingRates({ is_active: true })
     const rateList = Array.isArray(rates) ? rates : [rates].filter(Boolean)
     res.json({ rates: rateList, origin, destination, weight })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-SHIPPING")}
 }
-

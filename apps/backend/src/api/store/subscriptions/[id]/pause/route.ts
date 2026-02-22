@@ -1,7 +1,12 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const pauseSubscriptionSchema = z.object({
+  reason: z.string().optional(),
+})
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
@@ -14,6 +19,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
   const subscriptionService = req.scope.resolve("subscription")
   
+  const parsed = pauseSubscriptionSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   try {
     // Verify ownership
     const { data: subscriptions } = await query.graph({
@@ -38,7 +48,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       paused_at: new Date(),
       metadata: {
         ...subscription.metadata,
-        pause_reason: (req.body as Record<string, any>).reason || "customer_requested",
+        pause_reason: parsed.data.reason || "customer_requested",
         paused_by: customerId,
       }
     })
@@ -48,7 +58,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     await eventBus.emit("subscription.paused", { 
       id, 
       customer_id: customerId,
-      reason: (req.body as Record<string, any>).reason 
+      reason: parsed.data.reason 
     })
     
     res.json({ subscription: updated })

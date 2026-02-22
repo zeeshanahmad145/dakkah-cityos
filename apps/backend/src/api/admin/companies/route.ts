@@ -15,7 +15,7 @@ const createCompanySchema = z.object({
   credit_limit: z.string().optional(),
   payment_terms_days: z.number().optional(),
   tier: z.enum(["bronze", "silver", "gold", "platinum"]).optional(),
-});
+}).passthrough();
 
 /**
  * GET /admin/companies
@@ -52,7 +52,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const tenantId = req.scope.resolve("tenantId");
-  const parsed = createCompanySchema.parse(req.body);
+  const parsed = createCompanySchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues });
+  }
 
   const { createCompanyWorkflow } = await import(
     "../../../workflows/b2b/create-company-workflow.js"
@@ -60,7 +63,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
   const { result } = await createCompanyWorkflow(req.scope).run({
     input: {
-      ...parsed,
+      ...parsed.data,
       tenant_id: tenantId as string,
     },
   });

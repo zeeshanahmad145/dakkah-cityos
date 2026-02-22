@@ -91,9 +91,13 @@ const updateSubscriptionStatusStep = createStep(
   async ({ subscription, retryResult }: { subscription: Record<string, unknown>; retryResult: Record<string, unknown> }, { container }) => {
     const subscriptionModule = container.resolve("subscription") as any;
     
+    const previousStatus = subscription.status as string;
+    const previousRetryCount = (subscription.retry_count as number) || 0;
+    const previousNextRetryAt = subscription.next_retry_at;
+    
     if (retryResult.success) {
-      // Payment succeeded - reactivate subscription
       const cycle = retryResult.cycle as Record<string, unknown>;
+      const previousCycleStatus = (cycle as any).status;
       
       await subscriptionModule.updateBillingCycles({
         id: cycle.id,
@@ -109,15 +113,16 @@ const updateSubscriptionStatusStep = createStep(
         next_retry_at: null,
       });
       
-      return new StepResponse({ status: "active", message: "Payment retry successful" });
+      return new StepResponse(
+        { status: "active", message: "Payment retry successful" },
+        { subscriptionId: subscription.id as string, previousStatus, previousRetryCount, previousNextRetryAt, cycleId: cycle.id as string, previousCycleStatus }
+      );
     } else {
-      // Payment failed - update retry count
       const newRetryCount = ((subscription.retry_count as number) || 0) + 1;
       const maxRetryAttempts = (subscription.max_retry_attempts as number) || 3;
       const maxReached = newRetryCount >= maxRetryAttempts;
       
-      // Calculate next retry (exponential backoff)
-      const retryDelays = [1, 3, 7]; // days
+      const retryDelays = [1, 3, 7];
       const nextRetryDelay = retryDelays[newRetryCount - 1] || 7;
       const nextRetryDate = new Date();
       nextRetryDate.setDate(nextRetryDate.getDate() + nextRetryDelay);
@@ -131,12 +136,36 @@ const updateSubscriptionStatusStep = createStep(
         canceled_at: maxReached ? new Date() : null,
       });
       
-      return new StepResponse({
-        status: maxReached ? "canceled" : "past_due",
-        message: maxReached
-          ? "Max retry attempts reached, subscription canceled"
-          : `Payment retry failed, will retry on ${nextRetryDate.toISOString()}`,
+      return new StepResponse(
+        {
+          status: maxReached ? "canceled" : "past_due",
+          message: maxReached
+            ? "Max retry attempts reached, subscription canceled"
+            : `Payment retry failed, will retry on ${nextRetryDate.toISOString()}`,
+        },
+        { subscriptionId: subscription.id as string, previousStatus, previousRetryCount, previousNextRetryAt }
+      );
+    }
+  },
+  async (compensationData: { subscriptionId: string; previousStatus: string; previousRetryCount: number; previousNextRetryAt: any; cycleId?: string; previousCycleStatus?: string }, { container }) => {
+    if (!compensationData?.subscriptionId) return;
+    try {
+      const subscriptionModule = container.resolve("subscription") as any;
+      await subscriptionModule.updateSubscriptions({
+        id: compensationData.subscriptionId,
+        status: compensationData.previousStatus,
+        retry_count: compensationData.previousRetryCount,
+        next_retry_at: compensationData.previousNextRetryAt,
+        canceled_at: null,
       });
+      if (compensationData.cycleId && compensationData.previousCycleStatus) {
+        await subscriptionModule.updateBillingCycles({
+          id: compensationData.cycleId,
+          status: compensationData.previousCycleStatus,
+          completed_at: null,
+        });
+      }
+    } catch (error) {
     }
   }
 );

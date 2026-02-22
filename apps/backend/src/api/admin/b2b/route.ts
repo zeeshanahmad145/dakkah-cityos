@@ -13,7 +13,7 @@ const createSchema = z.object({
   tax_exempt: z.boolean().optional(),
   tenant_id: z.string(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

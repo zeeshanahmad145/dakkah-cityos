@@ -1,6 +1,13 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const extendQuotesSchema = z.object({
+  quote_ids: z.array(z.string()),
+  extend_days: z.number(),
+  notify_customers: z.boolean().optional(),
+}).passthrough()
 
 // GET - List expiring and expired quotes
 export async function GET(
@@ -104,11 +111,12 @@ export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
 ) {
-  const { quote_ids, extend_days, notify_customers } = req.body as {
-    quote_ids: string[]
-    extend_days: number
-    notify_customers?: boolean
+  const parsed = extendQuotesSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+
+  const { quote_ids, extend_days, notify_customers } = parsed.data
 
   const quoteService = req.scope.resolve("quoteModuleService")
   const query = req.scope.resolve("query")

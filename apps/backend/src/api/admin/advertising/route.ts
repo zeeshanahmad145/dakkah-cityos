@@ -19,7 +19,7 @@ const createSchema = z.object({
   starts_at: z.string().optional(),
   ends_at: z.string().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

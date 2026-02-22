@@ -2,7 +2,24 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import { handleApiError } from "../../../lib/api-error-handler";
 
-// GET /admin/invoices - List all invoices
+const createInvoiceSchema = z.object({
+  customer_id: z.string(),
+  order_id: z.string().optional(),
+  amount: z.number(),
+  currency_code: z.string().optional().default("usd"),
+  due_date: z.string(),
+  line_items: z.array(z.object({
+    description: z.string(),
+    quantity: z.number(),
+    unit_price: z.number(),
+  })).optional(),
+}).strict()
+
+interface CityOSContext {
+  tenantId?: string
+  storeId?: string
+}
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY);
@@ -85,7 +102,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   }
 }
 
-// POST /admin/invoices - Create a new invoice
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const invoiceModule = req.scope.resolve("invoice") as any;

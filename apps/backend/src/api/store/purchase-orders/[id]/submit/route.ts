@@ -1,5 +1,8 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const submitPurchaseOrderSchema = z.object({})
 
 /**
  * POST /store/purchase-orders/:id/submit
@@ -16,6 +19,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context.actor_id
   
   try {
+    const parsed = submitPurchaseOrderSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const purchaseOrder = await companyModule.retrievePurchaseOrder(id, {
       relations: ["items"],
     })

@@ -20,7 +20,7 @@ const createVendorSchema = z.object({
   }),
   commissionRate: z.number().min(0).max(100).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 interface CityOSContext {
   tenantId?: string

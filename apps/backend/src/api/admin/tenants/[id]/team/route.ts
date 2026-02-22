@@ -1,6 +1,13 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const inviteTeamMemberSchema = z.object({
+  email: z.string(),
+  role: z.enum(["owner", "admin", "member"]),
+  permissions: z.array(z.string()).optional(),
+}).passthrough()
 
 // GET - List tenant team members
 export async function GET(
@@ -42,11 +49,11 @@ export async function POST(
 ) {
   try {
     const { id } = req.params
-    const { email, role, permissions } = req.body as {
-      email: string
-      role: "owner" | "admin" | "member"
-      permissions?: string[]
+    const parsed = inviteTeamMemberSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { email, role, permissions } = parsed.data
 
     const tenantService = req.scope.resolve("tenantModuleService")
     const query = req.scope.resolve("query")

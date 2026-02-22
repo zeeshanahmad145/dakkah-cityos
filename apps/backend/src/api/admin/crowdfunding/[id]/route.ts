@@ -18,7 +18,7 @@ const updateSchema = z.object({
   video_url: z.string().optional(),
   risks_and_challenges: z.string().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

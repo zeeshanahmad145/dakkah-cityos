@@ -1,14 +1,29 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const checkInSchema = z.object({
+  check_in_code: z.string().optional(),
+})
 
 // POST - Customer self-check-in for booking
 export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
 ) {
+  const customerId = (req as any).auth_context?.actor_id
+  if (!customerId) {
+    return res.status(401).json({ message: "Authentication required" })
+  }
+
+  const parsed = checkInSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
   const { id } = req.params
-  const { check_in_code } = req.body as { check_in_code?: string }
+  const { check_in_code } = parsed.data
   const query = req.scope.resolve("query")
   const bookingService = req.scope.resolve("bookingModuleService")
 

@@ -1,5 +1,26 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createCampaignSchema = z.object({
+  tenant_id: z.string().min(1),
+  creator_id: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  short_description: z.string().nullable().optional(),
+  campaign_type: z.enum(["reward", "equity", "donation", "debt"]),
+  status: z.enum(["draft", "pending_review", "active", "funded", "failed", "cancelled"]).optional(),
+  goal_amount: z.union([z.string(), z.number()]),
+  currency_code: z.string().min(1),
+  starts_at: z.string().nullable().optional(),
+  ends_at: z.string().min(1),
+  is_flexible_funding: z.boolean().optional(),
+  category: z.string().nullable().optional(),
+  images: z.any().nullable().optional(),
+  video_url: z.string().nullable().optional(),
+  risks_and_challenges: z.string().nullable().optional(),
+  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -36,8 +57,18 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
+    const customerId = (req as any).auth_context?.actor_id
+    if (!customerId) {
+      return res.status(401).json({ message: "Authentication required" })
+    }
+
+    const parsed = createCampaignSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const mod = req.scope.resolve("crowdfunding") as any
-    const item = await mod.createCrowdfundCampaigns(req.body)
+    const item = await mod.createCrowdfundCampaigns(parsed.data)
     res.status(201).json({ item })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-CROWDFUNDING")}

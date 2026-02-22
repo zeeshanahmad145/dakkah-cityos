@@ -1,6 +1,19 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 import { createLogger } from "../../../../../lib/logger"
+
+const updateCreditSchema = z.object({
+  credit_limit: z.number().optional(),
+  payment_terms_days: z.number().optional(),
+  reason: z.string().optional(),
+}).passthrough()
+
+const adjustCreditSchema = z.object({
+  amount: z.number(),
+  type: z.enum(["add", "subtract", "reset"]),
+  reason: z.string(),
+}).passthrough()
 const logger = createLogger("api:admin/companies")
 
 // Get credit details and history
@@ -49,11 +62,11 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
     const companyModuleService = req.scope.resolve("companyModuleService") as any
     const { id } = req.params
-    const { credit_limit, payment_terms_days, reason } = req.body as {
-      credit_limit?: number
-      payment_terms_days?: number
-      reason?: string
+    const parsed = updateCreditSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { credit_limit, payment_terms_days, reason } = parsed.data
   
     const updateData: Record<string, any> = {}
     if (credit_limit !== undefined) updateData.credit_limit = credit_limit.toString()
@@ -76,11 +89,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const query = req.scope.resolve("query")
     const companyModuleService = req.scope.resolve("companyModuleService") as any
     const { id } = req.params
-    const { amount, type, reason } = req.body as {
-      amount: number
-      type: "add" | "subtract" | "reset"
-      reason: string
+    const parsed = adjustCreditSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { amount, type, reason } = parsed.data
   
     const { data: [company] } = await query.graph({
       entity: "company",

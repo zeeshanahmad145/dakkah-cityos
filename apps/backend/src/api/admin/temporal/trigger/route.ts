@@ -9,19 +9,19 @@ const triggerSchema = z.object({
   input: z.record(z.string(), z.unknown()).optional(),
   nodeContext: z.record(z.string(), z.unknown()).optional(),
   eventType: z.string().optional(),
-})
+}).passthrough()
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const validation = triggerSchema.safeParse(req.body)
+  const parsed = triggerSchema.safeParse(req.body)
 
-  if (!validation.success) {
+  if (!parsed.success) {
     return res.status(400).json({
       message: "Validation failed",
-      errors: validation.error.issues,
+      errors: parsed.error.issues,
     })
   }
 
-  const { workflowId, input, nodeContext, eventType } = validation.data
+  const { workflowId, input, nodeContext, eventType } = parsed.data
 
   const mapping = eventType ? getWorkflowForEvent(eventType) : null
   const resolvedWorkflowId = mapping ? mapping.workflowId : workflowId

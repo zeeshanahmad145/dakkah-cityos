@@ -8,7 +8,7 @@ const createSchema = z.object({
   gift_wrap: z.boolean().optional(),
   gift_message: z.string().nullable().optional(),
   notes: z.string().nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

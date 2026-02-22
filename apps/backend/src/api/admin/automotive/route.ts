@@ -26,7 +26,7 @@ const createSchema = z.object({
   location_country: z.string().optional(),
   status: z.enum(["draft", "active", "reserved", "sold", "withdrawn"]).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const mod = req.scope.resolve("automotive") as any

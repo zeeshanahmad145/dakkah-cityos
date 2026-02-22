@@ -1,5 +1,10 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const eventActionSchema = z.object({
+  action: z.enum(["publish", "retry"]),
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -13,10 +18,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const service = req.scope.resolve("eventModuleService") as any
-    const { action } = req.body as { action: "publish" | "retry" }
-    if (!action || !["publish", "retry"].includes(action)) {
-      return res.status(400).json({ message: "Invalid action. Must be 'publish' or 'retry'." })
-    }
+    const parsed = eventActionSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const { action } = parsed.data
     const item = await service.updateEventOutboxes(req.params.id, { status: action === "publish" ? "published" : "pending" })
     res.json({ item })
   } catch (error: any) {

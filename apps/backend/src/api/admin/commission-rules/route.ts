@@ -18,7 +18,7 @@ const createCommissionRuleSchema = z.object({
   max_order_value: z.number().min(0).optional(),
   is_active: z.boolean().default(true),
   priority: z.number().int().default(0),
-}).refine(
+}).passthrough().refine(
   (data) => {
     if (data.type === "percentage") {
       return data.value <= 100

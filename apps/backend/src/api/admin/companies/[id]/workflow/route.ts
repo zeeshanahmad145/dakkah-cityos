@@ -1,5 +1,22 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateWorkflowSchema = z.object({
+  workflow: z.object({
+    enabled: z.boolean(),
+    auto_approve_threshold: z.number(),
+    steps: z.array(z.object({
+      id: z.string(),
+      name: z.string(),
+      threshold: z.number(),
+      required_role: z.string(),
+      notify_on_pending: z.boolean(),
+    })),
+    escalation_hours: z.number(),
+    notify_email: z.string().optional(),
+  }),
+}).passthrough()
 
 // B2B Approval Workflow Configuration
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -53,21 +70,11 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     const query = req.scope.resolve("query")
     const companyService = req.scope.resolve("companyModuleService") as any
     const { id } = req.params
-    const { workflow } = req.body as {
-      workflow: {
-        enabled: boolean
-        auto_approve_threshold: number
-        steps: Array<{
-          id: string
-          name: string
-          threshold: number
-          required_role: string
-          notify_on_pending: boolean
-        }>
-        escalation_hours: number
-        notify_email?: string
-      }
+    const parsed = updateWorkflowSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { workflow } = parsed.data
   
     const { data: [company] } = await query.graph({
       entity: "company",

@@ -18,7 +18,7 @@ const updateSchema = z.object({
   photo_url: z.string().nullable().optional(),
   availability: z.any().nullable().optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -36,9 +36,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("healthcare") as any
     const { id } = req.params
-    const validation = updateSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await moduleService.updatePractitioners({ id, ...validation.data })
+    const parsed = updateSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await moduleService.updatePractitioners({ id, ...parsed.data })
     return res.json({ item })
 
   } catch (error: any) {

@@ -13,7 +13,7 @@ const createSchema = z.object({
   status: z.enum(["active", "inactive", "out-of-stock"]).optional(),
   tenant_id: z.string(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

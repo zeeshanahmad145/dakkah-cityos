@@ -1,5 +1,11 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+// POST handler does not extract or use any fields from the request body
+// Action triggered by URL path parameter [id] - status updated to "submitted"
+const submitQuoteSchema = z.object({
+}).strict()
 
 /**
  * GET /store/quotes/:id
@@ -38,6 +44,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     if (!req.auth_context?.actor_id) {
       return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const parsed = submitQuoteSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
     const quote = await quoteModuleService.retrieveQuote(id);

@@ -1,5 +1,13 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updateFeaturesSchema = z.object({
+  core: z.any().optional(),
+  modules: z.any().optional(),
+  homepage: z.any().optional(),
+  navigation: z.any().optional(),
+}).passthrough()
 
 /**
  * Feature Configuration System
@@ -294,7 +302,11 @@ export async function PUT(
   res: MedusaResponse
 ) {
   try {
-    const updates = req.body as Partial<StoreFeatures>
+    const parsed = updateFeaturesSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+    const updates = parsed.data as Partial<StoreFeatures>
   
     // Deep merge updates
     storeFeatures = deepMerge(storeFeatures, updates)

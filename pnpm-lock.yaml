@@ -35,7 +35,6 @@ overrides:
   '@payloadcms/richtext-lexical': ^3.75.0
   '@payloadcms/storage-s3': ^3.75.0
   '@payloadcms/ui': ^3.75.0
-  '@remix-run/router': 1.23.2
 
 importers:
 
@@ -4868,8 +4867,8 @@ packages:
     peerDependencies:
       react: 19.1.1
 
-  '@remix-run/router@1.23.2':
-    resolution: {integrity: sha512-Ic6m2U/rMjTkhERIa/0ZtXJP17QUi2CbWE7cqx4J58M8aA3QTfW+2UlQ4psvTX9IO1RfNVhK3pcpdjej7L+t2w==}
+  '@remix-run/router@1.13.1':
+    resolution: {integrity: sha512-so+DHzZKsoOcoXrILB4rqDkMDy7NLMErRdOxvzvOKb507YINKUP4Di+shbTZDhSE/pBZ+vr7XGIpcOO0VLSA+Q==}
     engines: {node: '>=14.0.0'}
 
   '@replit/object-storage@1.0.0':
@@ -18400,7 +18399,7 @@ snapshots:
       '@react-types/shared': 3.32.1(react@19.1.1)
       react: 19.1.1
 
-  '@remix-run/router@1.23.2': {}
+  '@remix-run/router@1.13.1': {}
 
   '@replit/object-storage@1.0.0':
     dependencies:
@@ -25011,14 +25010,14 @@ snapshots:
 
   react-router-dom@6.20.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
-      '@remix-run/router': 1.23.2
+      '@remix-run/router': 1.13.1
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       react-router: 6.20.1(react@19.1.1)
 
   react-router@6.20.1(react@19.1.1):
     dependencies:
-      '@remix-run/router': 1.23.2
+      '@remix-run/router': 1.13.1
       react: 19.1.1
 
   react-select@5.9.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(types-react@19.0.0-rc.0):

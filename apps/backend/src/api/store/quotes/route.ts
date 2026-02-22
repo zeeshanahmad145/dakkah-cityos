@@ -1,6 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const quoteItemSchema = z.object({
+  product_id: z.string().min(1),
+  variant_id: z.string().optional(),
+  title: z.string().min(1),
+  sku: z.string().optional(),
+  thumbnail: z.string().optional(),
+  quantity: z.number().min(1),
+  unit_price: z.union([z.string(), z.number()]),
+})
+
+const createQuoteSchema = z.object({
+  items: z.array(quoteItemSchema).optional(),
+  customer_notes: z.string().optional(),
+  company_id: z.string().optional(),
+  tenant_id: z.string().optional(),
+  region_id: z.string().optional(),
+  store_id: z.string().optional(),
+})
 
 /**
  * POST /store/quotes
@@ -9,7 +29,13 @@ import { handleApiError } from "../../../lib/api-error-handler"
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
-    const { items, customer_notes, company_id, tenant_id, region_id, store_id } = req.body as Record<string, any>;
+
+    const parsed = createQuoteSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues });
+    }
+
+    const { items, customer_notes, company_id, tenant_id, region_id, store_id } = parsed.data;
 
     // Validate authenticated customer
     if (!req.auth_context?.actor_id) {

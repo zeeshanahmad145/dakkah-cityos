@@ -19,7 +19,7 @@ const createSchema = z.object({
   photos: z.any().optional(),
   reference_number: z.string(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

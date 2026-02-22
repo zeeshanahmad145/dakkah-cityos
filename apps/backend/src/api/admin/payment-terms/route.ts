@@ -1,6 +1,15 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createPaymentTermSchema = z.object({
+  name: z.string().min(1),
+  net_days: z.number().positive(),
+  discount_percent: z.number().min(0).max(100).default(0),
+  discount_days: z.number().min(0).default(0),
+  is_default: z.boolean().default(false),
+}).passthrough()
 
 /**
  * Payment Terms with Early Payment Discounts
@@ -92,27 +101,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const { 
-      name, 
-      net_days, 
-      discount_percent = 0, 
-      discount_days = 0,
-      is_default = false 
-    } = req.body as {
-      name: string
-      net_days: number
-      discount_percent?: number
-      discount_days?: number
-      is_default?: boolean
+    const parsed = createPaymentTermSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
 
-    if (!name || !net_days) {
-      return res.status(400).json({ error: "Name and net_days are required" })
-    }
-
-    if (discount_percent < 0 || discount_percent > 100) {
-      return res.status(400).json({ error: "Discount percent must be between 0 and 100" })
-    }
+    const { name, net_days, discount_percent, discount_days, is_default } = parsed.data
 
     if (discount_days > net_days) {
       return res.status(400).json({ error: "Discount days cannot exceed net days" })

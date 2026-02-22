@@ -167,6 +167,49 @@ class CharityModuleService extends MedusaService({
       issuedAt: new Date(),
     }
   }
+  async calculateTaxDeduction(donationId: string, countryCode: string = "US"): Promise<{
+    donationId: string
+    donationAmount: number
+    countryCode: string
+    deductiblePercentage: number
+    deductibleAmount: number
+    maxDeductible: number | null
+  }> {
+    const donation = await this.retrieveDonation(donationId) as any
+
+    if (donation.status !== "completed") {
+      throw new Error("Tax deduction can only be calculated for completed donations")
+    }
+
+    const donationAmount = Number(donation.amount)
+
+    const countryRules: Record<string, { percentage: number; maxDeductible: number | null }> = {
+      US: { percentage: 60, maxDeductible: null },
+      UK: { percentage: 100, maxDeductible: null },
+      CA: { percentage: 75, maxDeductible: null },
+      AU: { percentage: 100, maxDeductible: null },
+      DE: { percentage: 20, maxDeductible: null },
+      FR: { percentage: 66, maxDeductible: 20000 },
+      AE: { percentage: 10, maxDeductible: null },
+      SA: { percentage: 0, maxDeductible: null },
+    }
+
+    const rules = countryRules[countryCode.toUpperCase()] || { percentage: 0, maxDeductible: null }
+    let deductibleAmount = Math.round((donationAmount * rules.percentage / 100) * 100) / 100
+
+    if (rules.maxDeductible !== null) {
+      deductibleAmount = Math.min(deductibleAmount, rules.maxDeductible)
+    }
+
+    return {
+      donationId,
+      donationAmount,
+      countryCode: countryCode.toUpperCase(),
+      deductiblePercentage: rules.percentage,
+      deductibleAmount,
+      maxDeductible: rules.maxDeductible,
+    }
+  }
 }
 
 export default CharityModuleService

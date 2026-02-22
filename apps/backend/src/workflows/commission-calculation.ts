@@ -38,9 +38,13 @@ const deductCommissionStep = createStep(
     })
     return new StepResponse({ transaction }, { transaction })
   },
-  async ({ transaction }: { transaction: any }, { container }) => {
-    const commissionModule = container.resolve("commission") as any
-    await commissionModule.deleteCommissionTransactions(transaction.id)
+  async (compensationData: { transaction: any } | undefined, { container }) => {
+    if (!compensationData?.transaction?.id) return
+    try {
+      const commissionModule = container.resolve("commission") as any
+      await commissionModule.deleteCommissionTransactions(compensationData.transaction.id)
+    } catch (error) {
+    }
   }
 )
 
@@ -54,7 +58,15 @@ const recordPayoutStep = createStep(
       status: "pending",
       reference_id: input.orderId,
     })
-    return new StepResponse({ payout }, { payout })
+    return new StepResponse({ payout }, { payoutId: payout.id })
+  },
+  async (compensationData: { payoutId: string } | undefined, { container }) => {
+    if (!compensationData?.payoutId) return
+    try {
+      const payoutModule = container.resolve("payout") as any
+      await payoutModule.deletePayouts(compensationData.payoutId)
+    } catch (error) {
+    }
   }
 )
 

@@ -1,6 +1,16 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const updateLimitsSchema = z.object({
+  max_products: z.number().optional(),
+  max_orders_per_month: z.number().optional(),
+  max_storage_gb: z.number().optional(),
+  max_api_calls_per_day: z.number().optional(),
+  max_team_members: z.number().optional(),
+  max_stores: z.number().optional(),
+}).passthrough()
 
 // GET - Get tenant limits
 export async function GET(
@@ -89,6 +99,10 @@ export async function PUT(
 ) {
   try {
     const { id } = req.params
+    const parsed = updateLimitsSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
     const {
       max_products,
       max_orders_per_month,
@@ -96,14 +110,7 @@ export async function PUT(
       max_api_calls_per_day,
       max_team_members,
       max_stores
-    } = req.body as {
-      max_products?: number
-      max_orders_per_month?: number
-      max_storage_gb?: number
-      max_api_calls_per_day?: number
-      max_team_members?: number
-      max_stores?: number
-    }
+    } = parsed.data
 
     const tenantService = req.scope.resolve("tenantModuleService")
     const query = req.scope.resolve("query")

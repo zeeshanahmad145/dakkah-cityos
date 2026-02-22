@@ -26,11 +26,15 @@ const openDisputeStep = createStep(
       description: input.description,
       status: "open",
     })
-    return new StepResponse({ dispute }, { dispute })
+    return new StepResponse({ dispute }, { disputeId: dispute.id })
   },
-  async ({ dispute }: { dispute: any }, { container }) => {
-    const disputeModule = container.resolve("dispute") as any
-    await disputeModule.deleteDisputes(dispute.id)
+  async (compensationData: { disputeId: string } | undefined, { container }) => {
+    if (!compensationData?.disputeId) return
+    try {
+      const disputeModule = container.resolve("dispute") as any
+      await disputeModule.deleteDisputes(compensationData.disputeId)
+    } catch (error) {
+    }
   }
 )
 
@@ -43,7 +47,18 @@ const reviewDisputeStep = createStep(
       status: "under_review",
       reviewed_at: new Date(),
     })
-    return new StepResponse({ dispute: updated }, { disputeId: input.disputeId })
+    return new StepResponse({ dispute: updated }, { disputeId: input.disputeId, previousStatus: "open" })
+  },
+  async (compensationData: { disputeId: string; previousStatus: string } | undefined, { container }) => {
+    if (!compensationData?.disputeId) return
+    try {
+      const disputeModule = container.resolve("dispute") as any
+      await disputeModule.updateDisputes({
+        id: compensationData.disputeId,
+        status: compensationData.previousStatus,
+      })
+    } catch (error) {
+    }
   }
 )
 
@@ -57,7 +72,19 @@ const resolveDisputeStep = createStep(
       resolution: input.resolution,
       resolved_at: new Date(),
     })
-    return new StepResponse({ dispute: resolved })
+    return new StepResponse({ dispute: resolved }, { disputeId: input.disputeId, previousStatus: "under_review" })
+  },
+  async (compensationData: { disputeId: string; previousStatus: string } | undefined, { container }) => {
+    if (!compensationData?.disputeId) return
+    try {
+      const disputeModule = container.resolve("dispute") as any
+      await disputeModule.updateDisputes({
+        id: compensationData.disputeId,
+        status: compensationData.previousStatus,
+        resolution: null,
+      })
+    } catch (error) {
+    }
   }
 )
 

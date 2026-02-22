@@ -1,5 +1,16 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createFinancialProductSchema = z.object({
+  name: z.string().min(1),
+  product_type: z.string().min(1),
+  interest_rate: z.number().optional(),
+  term: z.number().optional(),
+  tenant_id: z.string().optional(),
+  description: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -36,8 +47,18 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
+    const customerId = (req as any).auth_context?.actor_id
+    if (!customerId) {
+      return res.status(401).json({ message: "Authentication required" })
+    }
+
+    const parsed = createFinancialProductSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const mod = req.scope.resolve("financialProduct") as any
-    const item = await mod.createLoanProducts(req.body)
+    const item = await mod.createLoanProducts(parsed.data)
     res.status(201).json({ item })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-FINANCIAL-PRODUCTS")}

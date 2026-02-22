@@ -1,6 +1,12 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../../lib/api-error-handler"
+
+const updateTeamMemberSchema = z.object({
+  role: z.enum(["owner", "admin", "member"]).optional(),
+  permissions: z.array(z.string()).optional(),
+}).passthrough()
 
 // PUT - Update team member role/permissions
 export async function PUT(
@@ -9,10 +15,11 @@ export async function PUT(
 ) {
   try {
     const { id, userId } = req.params
-    const { role, permissions } = req.body as {
-      role?: "owner" | "admin" | "member"
-      permissions?: string[]
+    const parsed = updateTeamMemberSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { role, permissions } = parsed.data
 
     const tenantService = req.scope.resolve("tenantModuleService")
     const query = req.scope.resolve("query")

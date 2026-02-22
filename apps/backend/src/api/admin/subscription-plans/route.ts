@@ -1,5 +1,22 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createPlanSchema = z.object({
+  name: z.string(),
+  handle: z.string().optional(),
+  description: z.string().optional(),
+  billing_interval: z.enum(["daily", "weekly", "monthly", "quarterly", "yearly"]).optional(),
+  billing_interval_count: z.number().optional(),
+  price: z.string().optional(),
+  currency_code: z.string().optional(),
+  trial_days: z.number().optional(),
+  setup_fee: z.string().optional(),
+  is_active: z.boolean().optional(),
+  sort_order: z.number().optional(),
+  features: z.array(z.string()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -35,8 +52,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const subscriptionModuleService = req.scope.resolve("subscriptionModuleService") as any
+    const parsed = createPlanSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
   
-    const plan = await subscriptionModuleService.createSubscriptionPlans(req.body)
+    const plan = await subscriptionModuleService.createSubscriptionPlans(parsed.data)
   
     res.status(201).json({ plan })
 

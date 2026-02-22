@@ -9,7 +9,7 @@ const createSchema = z.object({
   tax_type: z.enum(["vat", "gst", "sales_tax", "excise"]),
   product_category: z.string().optional(),
   status: z.enum(["active", "inactive"]).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -30,9 +30,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("taxConfigModuleService") as any
-    const validation = createSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await moduleService.createTaxRules(validation.data)
+    const parsed = createSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await moduleService.createTaxRules(parsed.data)
     return res.status(201).json({ item })
 
   } catch (error: any) {

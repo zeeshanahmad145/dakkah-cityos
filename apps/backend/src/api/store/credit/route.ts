@@ -1,5 +1,11 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const applyCreditSchema = z.object({
+  cart_id: z.string().min(1),
+  amount: z.number().positive(),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context?.actor_id
@@ -84,11 +90,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Authentication required" })
   }
 
-  const { cart_id, amount } = req.body as { cart_id: string; amount: number }
-
-  if (!cart_id || !amount) {
-    return res.status(400).json({ message: "cart_id and amount are required" })
+  const parsed = applyCreditSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+
+  const { cart_id, amount } = parsed.data
 
   try {
     const companyModule = req.scope.resolve("company") as any

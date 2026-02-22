@@ -1,5 +1,24 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const createRoleSchema = z.object({
+  role: z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    permissions: z.array(z.string()),
+  }),
+}).passthrough()
+
+const updateRoleSchema = z.object({
+  role_id: z.string(),
+  updates: z.object({
+    name: z.string().optional(),
+    description: z.string().optional(),
+    permissions: z.array(z.string()).optional(),
+  }),
+}).passthrough()
 
 // Company User Role Management
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -85,14 +104,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const query = req.scope.resolve("query")
     const companyService = req.scope.resolve("companyModuleService") as any
     const { id } = req.params
-    const { role } = req.body as {
-      role: {
-        id: string
-        name: string
-        description: string
-        permissions: string[]
-      }
+    const parsed = createRoleSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { role } = parsed.data
   
     const { data: [company] } = await query.graph({
       entity: "company",
@@ -137,14 +153,11 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     const query = req.scope.resolve("query")
     const companyService = req.scope.resolve("companyModuleService") as any
     const { id } = req.params
-    const { role_id, updates } = req.body as {
-      role_id: string
-      updates: {
-        name?: string
-        description?: string
-        permissions?: string[]
-      }
+    const parsed = updateRoleSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { role_id, updates } = parsed.data
   
     const { data: [company] } = await query.graph({
       entity: "company",

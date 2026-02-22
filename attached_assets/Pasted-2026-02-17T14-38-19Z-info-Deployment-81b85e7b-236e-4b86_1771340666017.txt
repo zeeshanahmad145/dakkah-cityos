@@ -1,0 +1,724 @@
+2026-02-17T14:38:19Z info: Deployment: 81b85e7b-236e-4b86-91ec-78f24a32d259
+2026-02-17T14:38:19Z info: Build: de2af44c-f798-49f4-b15a-5c422de131bf
+2026-02-17T14:38:19Z info: Running Security Scan
+2026-02-17T14:38:55Z info: Security Scan Complete
+2026-02-17T14:38:55Z info: Connecting to builder
+2026-02-17T14:38:56Z info: Builder connected
+2026-02-17T14:38:57Z info: Installing packages
+--> pnpm install
+
+Scope: all 9 workspace projects
+
+
+   ╭──────────────────────────────────────────╮
+   │                                          │
+   │   Update available! 10.12.3 → 10.29.3.   │
+   │   Changelog: https://pnpm.io/v/10.29.3   │
+   │     To update, run: pnpm add -g pnpm     │
+   │                                          │
+   ╰──────────────────────────────────────────╯
+
+
+Lockfile is up to date, resolution step is skipped
+
+Already up to date
+
+Done in 5.8s using pnpm v10.12.3
+
+2026-02-17T14:39:05Z info: Starting Build
+========================================
+  Dakkah CityOS Commerce — Build
+========================================
+[1/2] Building backend...
+
+
+> backend@0.0.1 build /home/runner/workspace/apps/backend
+> medusa build
+
+
+[2026-02-17T14:39:11.566Z] [INFO] [env-validation] [EnvValidation] Checking environment variables...
+
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_API_KEY — Payment processing disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: STRIPE_WEBHOOK_SECRET — Webhook verification disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: SENDGRID_API_KEY — Email notifications disabled
+
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: PAYLOAD_API_KEY — CMS hierarchy sync disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_API_KEY — ERPNext sync disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: ERPNEXT_API_SECRET — ERPNext sync disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: TEMPORAL_ADDRESS — Workflow orchestration disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: FLEETBASE_API_KEY — Logistics/geo features disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: WALTID_API_KEY — Digital identity features disabled
+
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: REDIS_URL — Using in-memory fallback (not production-ready)
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: MEILISEARCH_HOST — Search functionality disabled
+[2026-02-17T14:39:11.567Z] [WARN] [env-validation] [EnvValidation] Not set: SENTRY_DSN — Error monitoring disabled
+
+[2026-02-17T14:39:11.567Z] [INFO] [env-validation] [EnvValidation] 12 optional variable(s) not set (features will be limited)
+
+info:    redisUrl not found. A fake redis instance will be used.
+
+info:    Starting build...
+
+info:    Compiling backend source...
+
+info:    Removing existing ".medusa/server" folder
+
+info:    Backend build completed successfully (30.89s)
+
+info:    Compiling frontend source...
+
+info:    Frontend build completed successfully (21.64s)
+
+  ✓ Backend built
+[2/2] Building storefront...
+
+
+> storefront@ build /home/runner/workspace/apps/storefront
+> vite build
+
+
+vite v7.3.1 building client environment for production...
+
+Generated route tree in 3486ms
+
+transforming...
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+✓ 2502 modules transformed.
+
+rendering chunks...
+
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/utils/env.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/bookings/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/purchase-orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/lib/api/unified-client.ts, /home/runner/workspace/apps/storefront/src/lib/context/auth-context.tsx, /home/runner/workspace/apps/storefront/src/lib/hooks/use-campaigns.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-cms.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-companies.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-content.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-digital-products.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-payments.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-platform-context.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-reviews.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-subscriptions.ts, /home/runner/workspace/apps/storefront/src/lib/utils/sdk.ts, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.return.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.billing.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/affiliate/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/blog/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/$serviceHandle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/business/approvals.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/campaigns/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/categories/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment-shop/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/credit/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/crowdfunding/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/d
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/data/regions.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant.$locale.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/pages/product.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/cart.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/checkout.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/products/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/__root.tsx, dynamic import will not move module into another chunk.
+
+
+computing gzip size...
+
+.tanstack/start/build/client-dist/.vite/manifest.json                                241.39 kB │ gzip:  16.77 kB
+
+.tanstack/start/build/client-dist/assets/rtl-CFTvojR3.css                              0.54 kB │ gzip:   0.18 kB
+
+.tanstack/start/build/client-dist/assets/app-MYNxNCn0.css                            161.30 kB │ gzip:  20.83 kB
+.tanstack/start/build/client-dist/assets/index-DtqBFgK5.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-rrnUF981.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-B0-9TnmF.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-8solrUmu.js                             0.04 kB │ gzip:   0.06 kB
+
+.tanstack/start/build/client-dist/assets/index-DCrkzMOW.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/index-f3Qu8E09.js                             0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/_id-DtqBFgK5.js                               0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/_id-rrnUF981.js                               0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/_id-B0-9TnmF.js                               0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/_id-8solrUmu.js                               0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/_id-DCrkzMOW.js                               0.04 kB │ gzip:   0.06 kB
+.tanstack/start/build/client-dist/assets/payment-methods-Y6sq--Fn.js                   0.23 kB │ gzip:   0.18 kB
+
+.tanstack/start/build/client-dist/assets/payouts-CYCHFWSX.js                           0.27 kB │ gzip:   0.21 kB
+.tanstack/start/build/client-dist/assets/index-deGdbsAb.js                             0.27 kB │ gzip:   0.21 kB
+.tanstack/start/build/client-dist/assets/label-CuQ2nbFj.js                             0.30 kB │ gzip:   0.23 kB
+.tanstack/start/build/client-dist/assets/new-e_kMEald.js                               0.32 kB │ gzip:   0.24 kB
+.tanstack/start/build/client-dist/assets/use-platform-context-BAqwtzSS.js              0.34 kB │ gzip:   0.27 kB
+.tanstack/start/build/client-dist/assets/use-orders-B3Gz-Bed.js                        0.37 kB │ gzip:   0.24 kB
+.tanstack/start/build/client-dist/assets/checkout-_fTODqHT.js                          0.52 kB │ gzip:   0.35 kB
+
+.tanstack/start/build/client-dist/assets/payment-method-info-Lp4hy15G.js               0.53 kB │ gzip:   0.34 kB
+.tanstack/start/build/client-dist/assets/checkout-summary-MDwwdy54.js                  0.55 kB │ gzip:   0.29 kB
+.tanstack/start/build/client-dist/assets/use-commerce-extras-DB0-U2hc.js               0.57 kB │ gzip:   0.32 kB
+.tanstack/start/build/client-dist/assets/use-campaigns-Btn54KkO.js                     0.58 kB │ gzip:   0.37 kB
+.tanstack/start/build/client-dist/assets/section-card-BJ44rDvi.js                      0.68 kB │ gzip:   0.36 kB
+.tanstack/start/build/client-dist/assets/radio-CyiSMITH.js                             0.73 kB │ gzip:   0.41 kB
+.tanstack/start/build/client-dist/assets/_productId-7MA_yh0B.js                        0.73 kB │ gzip:   0.39 kB
+.tanstack/start/build/client-dist/assets/use-content-DgS94B6L.js                       0.79 kB │ gzip:   0.43 kB
+.tanstack/start/build/client-dist/assets/sanitize-html-Cq0auP3l.js                     0.85 kB │ gzip:   0.36 kB
+.tanstack/start/build/client-dist/assets/not-found-BHTQBAWc.js                         0.89 kB │ gzip:   0.43 kB
+.tanstack/start/build/client-dist/assets/auth-guard-DG7mtjyG.js                        0.91 kB │ gzip:   0.53 kB
+
+.tanstack/start/build/client-dist/assets/arrow-left-DfNcygGr.js                        0.92 kB │ gzip:   0.55 kB
+.tanstack/start/build/client-dist/assets/tabs-Dnis7ddt.js                              0.94 kB │ gzip:   0.51 kB
+.tanstack/start/build/client-dist/assets/skeleton-BvQaLnUy.js                          0.96 kB │ gzip:   0.39 kB
+.tanstack/start/build/client-dist/assets/product-card-BBDOPr1w.js                      1.05 kB │ gzip:   0.58 kB
+.tanstack/start/build/client-dist/assets/stats-grid-Cwco81Od.js                        1.09 kB │ gzip:   0.52 kB
+.tanstack/start/build/client-dist/assets/star-DaJ9cdcC.js                              1.13 kB │ gzip:   0.64 kB
+.tanstack/start/build/client-dist/assets/media-CxEnrQ3N.js                             1.14 kB │ gzip:   0.60 kB
+.tanstack/start/build/client-dist/assets/status-badge-B-hYahbC.js                      1.14 kB │ gzip:   0.52 kB
+.tanstack/start/build/client-dist/assets/_tenant._locale-DECpKomm.js                   1.17 kB │ gzip:   0.52 kB
+.tanstack/start/build/client-dist/assets/pencil-square-rNClvPW0.js                     1.19 kB │ gzip:   0.67 kB
+.tanstack/start/build/client-dist/assets/navigation-DfaW7Zia.js                        1.20 kB │ gzip:   0.61 kB
+.tanstack/start/build/client-dist/assets/chevron-left-DpRLoS0p.js                      1.21 kB │ gzip:   0.63 kB
+.tanstack/start/build/client-dist/assets/use-companies-TX6UDjqx.js                     1.23 kB │ gzip:   0.47 kB
+.tanstack/start/build/client-dist/assets/arrow-path-CutYYB5E.js                        1.24 kB │ gzip:   0.67 kB
+.tanstack/start/build/client-dist/assets/clock-DMW2hEr5.js                             1.24 kB │ gzip:   0.68 kB
+.tanstack/start/build/client-dist/assets/document-text-DycClX2l.js                     1.25 kB │ gzip:   0.68 kB
+.tanstack/start/build/client-dist/assets/buildings-CzCVeB0K.js                         1.28 kB │ gzip:   0.71 kB
+.tanstack/start/build/client-dist/assets/squares-plus-DbovH6Bs.js                      1.28 kB │ gzip:   0.67 kB
+.tanstack/start/build/client-dist/assets/add-to-wishlist-button-BPyF3shk.js            1.30 kB │ gzip:   0.73 kB
+.tanstack/start/build/client-dist/assets/currency-dollar-BTUjLdm8.js                   1.35 kB │ gzip:   0.75 kB
+.tanstack/start/build/client-dist/assets/users-iQ8Nnkn5.js                             1.37 kB │ gzip:   0.73 kB
+.tanstack/start/build/client-dist/assets/use-payments-DmpfGsIt.js                      1.39 kB │ gzip:   0.69 kB
+.tanstack/start/build/client-dist/assets/quotes-C4cyL7Lo.js                            1.40 kB │ gzip:   0.61 kB
+.tanstack/start/build/client-dist/assets/truck-fast-zHs8z4_7.js                        1.41 kB │ gzip:   0.76 kB
+
+.tanstack/start/build/client-dist/assets/metrics-BzS9aJWd.js                           1.52 kB │ gzip:   0.83 kB
+.tanstack/start/build/client-dist/assets/condition-grader-JyjIF1bI.js                  1.54 kB │ gzip:   0.65 kB
+.tanstack/start/build/client-dist/assets/use-bookings-fLFAbeU4.js                      1.58 kB │ gzip:   0.64 kB
+.tanstack/start/build/client-dist/assets/cash-Bha-XyVt.js                              1.58 kB │ gzip:   0.84 kB
+.tanstack/start/build/client-dist/assets/reviews-DKPTC72f.js                           1.58 kB │ gzip:   0.72 kB
+.tanstack/start/build/client-dist/assets/integrations-Dmisq9QF.js                      1.61 kB │ gzip:   0.86 kB
+.tanstack/start/build/client-dist/assets/cart-CfySpPry.js                              1.63 kB │ gzip:   0.81 kB
+.tanstack/start/build/client-dist/assets/use-purchase-orders-DihEpTJ-.js               1.66 kB │ gzip:   0.51 kB
+.tanstack/start/build/client-dist/assets/trade-in-calculator-Bx9dG7eP.js               1.68 kB │ gzip:   0.62 kB
+
+.tanstack/start/build/client-dist/assets/temporal-C4wZje8O.js                          1.68 kB │ gzip:   0.89 kB
+.tanstack/start/build/client-dist/assets/payment-methods-CfCqWFqe.js                   1.72 kB │ gzip:   0.72 kB
+.tanstack/start/build/client-dist/assets/wishlists-D5HdO-Tn.js                         1.79 kB │ gzip:   0.97 kB
+.tanstack/start/build/client-dist/assets/confirm-dialog-BjUPt_lb.js                    1.82 kB │ gzip:   0.78 kB
+.tanstack/start/build/client-dist/assets/events-C8q3rOZv.js                            1.96 kB │ gzip:   1.03 kB
+.tanstack/start/build/client-dist/assets/use-manage-data-BHqxsUKi.js                   2.04 kB │ gzip:   1.08 kB
+.tanstack/start/build/client-dist/assets/audit-Cqx1_0jn.js                             2.07 kB │ gzip:   1.05 kB
+.tanstack/start/build/client-dist/assets/countdown-timer-DDYFDxfN.js                   2.10 kB │ gzip:   0.81 kB
+
+.tanstack/start/build/client-dist/assets/login-CsPnY7sv.js                             2.11 kB │ gzip:   0.76 kB
+.tanstack/start/build/client-dist/assets/use-subscriptions-DMVwdARk.js                 2.16 kB │ gzip:   0.73 kB
+.tanstack/start/build/client-dist/assets/checkout-delivery-step-DbxF0YW2.js            2.21 kB │ gzip:   1.02 kB
+.tanstack/start/build/client-dist/assets/register-DEPqtyAn.js                          2.29 kB │ gzip:   0.80 kB
+.tanstack/start/build/client-dist/assets/analytics-CFmZ89w-.js                         2.33 kB │ gzip:   0.85 kB
+.tanstack/start/build/client-dist/assets/tracking-timeline-C73j8ZrF.js                 2.47 kB │ gzip:   0.98 kB
+.tanstack/start/build/client-dist/assets/delivery-instructions-DRWKL0vG.js             2.53 kB │ gzip:   1.11 kB
+
+.tanstack/start/build/client-dist/assets/provider-select-D0aYuOzt.js                   2.55 kB │ gzip:   0.83 kB
+.tanstack/start/build/client-dist/assets/trade-in-item-card-CfQ17m0M.js                2.57 kB │ gzip:   1.02 kB
+.tanstack/start/build/client-dist/assets/index-DdeUeA56.js                             2.61 kB │ gzip:   1.06 kB
+.tanstack/start/build/client-dist/assets/faq-block-w_aTJima.js                         2.61 kB │ gzip:   1.20 kB
+.tanstack/start/build/client-dist/assets/stats-block-DyzchCX2.js                       2.76 kB │ gzip:   0.75 kB
+.tanstack/start/build/client-dist/assets/profile-Dtz7e4KZ.js                           2.78 kB │ gzip:   1.11 kB
+.tanstack/start/build/client-dist/assets/tag-DgbCR02q.js                               2.78 kB │ gzip:   1.08 kB
+
+.tanstack/start/build/client-dist/assets/comparison-table-block-CpyHT-5N.js            2.83 kB │ gzip:   1.03 kB
+.tanstack/start/build/client-dist/assets/notification-preferences-BxmCiD8y.js          2.90 kB │ gzip:   1.20 kB
+.tanstack/start/build/client-dist/assets/wishlists-Crn-c6rO.js                         2.93 kB │ gzip:   1.15 kB
+.tanstack/start/build/client-dist/assets/_slug-3rKIiml_.js                             3.02 kB │ gzip:   1.41 kB
+.tanstack/start/build/client-dist/assets/bnpl-options-DYSKdsVk.js                      3.05 kB │ gzip:   1.17 kB
+.tanstack/start/build/client-dist/assets/use-checkout-CmCPeD1S.js                      3.07 kB │ gzip:   0.91 kB
+.tanstack/start/build/client-dist/assets/digital-products-COkcDBpK.js                  3.12 kB │ gzip:   1.27 kB
+
+.tanstack/start/build/client-dist/assets/payouts-KTXQt4D5.js                           3.13 kB │ gzip:   1.57 kB
+.tanstack/start/build/client-dist/assets/invoices-Ke0PJZDj.js                          3.13 kB │ gzip:   1.45 kB
+.tanstack/start/build/client-dist/assets/store-credit-apply-JVNHwciE.js                3.20 kB │ gzip:   1.18 kB
+.tanstack/start/build/client-dist/assets/index-BOj0W98C.js                             3.24 kB │ gzip:   1.20 kB
+.tanstack/start/build/client-dist/assets/healthcare-B6sbmwhC.js                        3.26 kB │ gzip:   1.24 kB
+.tanstack/start/build/client-dist/assets/newsletter-block-ie0v067W.js                  3.27 kB │ gzip:   1.10 kB
+.tanstack/start/build/client-dist/assets/orders-CQJd4A8z.js                            3.28 kB │ gzip:   1.64 kB
+.tanstack/start/build/client-dist/assets/classified-CdsCj_XU.js                        3.29 kB │ gzip:   1.27 kB
+.tanstack/start/build/client-dist/assets/fitness-CcIe9v_c.js                           3.32 kB │ gzip:   1.25 kB
+
+.tanstack/start/build/client-dist/assets/warranty-BTyWc6IS.js                          3.32 kB │ gzip:   1.27 kB
+.tanstack/start/build/client-dist/assets/consignments-C9zfkeTj.js                      3.34 kB │ gzip:   1.25 kB
+.tanstack/start/build/client-dist/assets/commissions-pN7PAUWx.js                       3.34 kB │ gzip:   0.98 kB
+.tanstack/start/build/client-dist/assets/tax-config-CPq402NA.js                        3.36 kB │ gzip:   1.20 kB
+.tanstack/start/build/client-dist/assets/vendor-payouts-BbbwmZ7h.js                    3.38 kB │ gzip:   1.13 kB
+.tanstack/start/build/client-dist/assets/coupon-input-Bo0koEqq.js                      3.38 kB │ gzip:   1.35 kB
+.tanstack/start/build/client-dist/assets/cart-rules-D8naEe7_.js                        3.42 kB │ gzip:   1.26 kB
+.tanstack/start/build/client-dist/assets/_-Bfv0CME7.js                                 3.44 kB │ gzip:   1.63 kB
+.tanstack/start/build/client-dist/assets/education-OFZSDH9x.js                         3.44 kB │ gzip:   1.37 kB
+.tanstack/start/build/client-dist/assets/events-iFnf_boN.js                            3.46 kB │ gzip:   1.31 kB
+.tanstack/start/build/client-dist/assets/flash-sale-countdown-block-Bs5O7Qh3.js        3.46 kB │ gzip:   1.36 kB
+.tanstack/start/build/client-dist/assets/index-BS6Q4-w9.js                             3.48 kB │ gzip:   1.38 kB
+.tanstack/start/build/client-dist/assets/checkout-review-step-wLvec5LM.js              3.49 kB │ gzip:   1.16 kB
+
+.tanstack/start/build/client-dist/assets/loyalty-uUcMME0d.js                           3.51 kB │ gzip:   1.24 kB
+.tanstack/start/build/client-dist/assets/subscriptions-BbzYYUbs.js                     3.52 kB │ gzip:   1.33 kB
+.tanstack/start/build/client-dist/assets/white-label-BN-eDmxI.js                       3.52 kB │ gzip:   1.30 kB
+.tanstack/start/build/client-dist/assets/try-before-you-buy-CAhvP8bk.js                3.53 kB │ gzip:   1.27 kB
+.tanstack/start/build/client-dist/assets/volume-pricing-BndilQZ1.js                    3.53 kB │ gzip:   1.31 kB
+.tanstack/start/build/client-dist/assets/reset-password-DoGaapqB.js                    3.56 kB │ gzip:   1.18 kB
+.tanstack/start/build/client-dist/assets/index-Bv5JTx9s.js                             3.58 kB │ gzip:   1.29 kB
+.tanstack/start/build/client-dist/assets/shipping-rules-DjflhuVa.js                    3.59 kB │ gzip:   1.28 kB
+.tanstack/start/build/client-dist/assets/success-DYomABDs.js                           3.60 kB │ gzip:   1.05 kB
+.tanstack/start/build/client-dist/assets/trade-in-As0JbIlj.js                          3.63 kB │ gzip:   1.34 kB
+.tanstack/start/build/client-dist/assets/crowdfunding-DbQHLeyh.js                      3.63 kB │ gzip:   1.39 kB
+.tanstack/start/build/client-dist/assets/index-pPgLDwKD.js                             3.64 kB │ gzip:   1.35 kB
+.tanstack/start/build/client-dist/assets/wallet-RPl3VJn0.js                            3.65 kB │ gzip:   1.23 kB
+
+.tanstack/start/build/client-dist/assets/compare-CLXayMVf.js                           3.66 kB │ gzip:   1.28 kB
+.tanstack/start/build/client-dist/assets/travel-I3SrktL_.js                            3.69 kB │ gzip:   1.40 kB
+.tanstack/start/build/client-dist/assets/cart-extension-jtctCkgx.js                    3.70 kB │ gzip:   1.33 kB
+.tanstack/start/build/client-dist/assets/credit-dGwP0N7b.js                            3.71 kB │ gzip:   1.27 kB
+.tanstack/start/build/client-dist/assets/rentals-YmZijBek.js                           3.72 kB │ gzip:   1.36 kB
+.tanstack/start/build/client-dist/assets/charity-DlJGSsmd.js                           3.72 kB │ gzip:   1.41 kB
+.tanstack/start/build/client-dist/assets/auctions-B_lefSwM.js                          3.73 kB │ gzip:   1.42 kB
+.tanstack/start/build/client-dist/assets/tenants-admin-C_8BVDvq.js                     3.74 kB │ gzip:   1.76 kB
+.tanstack/start/build/client-dist/assets/personas-CIyAVMiZ.js                          3.74 kB │ gzip:   1.76 kB
+.tanstack/start/build/client-dist/assets/companies-admin-DZp1cNM4.js                   3.75 kB │ gzip:   1.76 kB
+.tanstack/start/build/client-dist/assets/wallet-CP2xqk0S.js                            3.76 kB │ gzip:   1.78 kB
+.tanstack/start/build/client-dist/assets/print-on-demand-C1Tc2snf.js                   3.76 kB │ gzip:   1.36 kB
+.tanstack/start/build/client-dist/assets/channels-DHNY-4qG.js                          3.76 kB │ gzip:   1.77 kB
+.tanstack/start/build/client-dist/assets/warranties-CTegku7c.js                        3.77 kB │ gzip:   1.77 kB
+.tanstack/start/build/client-dist/assets/index-DeTMSIcD.js                             3.78 kB │ gzip:   1.49 kB
+.tanstack/start/build/client-dist/assets/region-zones-DfQ4Owvn.js                      3.78 kB │ gzip:   1.77 kB
+.tanstack/start/build/client-dist/assets/tax-config-CZLtwCf7.js                        3.79 kB │ gzip:   1.77 kB
+.tanstack/start/build/client-dist/assets/volume-pricing-CDjKNJ7R.js                    3.80 kB │ gzip:   1.77 kB
+.tanstack/start/build/client-dist/assets/dropshipping-DL4EwKxg.js                      3.80 kB │ gzip:   1.33 kB
+.tanstack/start/build/client-dist/assets/shipping-extensions-ct2EnLEA.js               3.81 kB │ gzip:   1.77 kB
+.tanstack/start/build/client-dist/assets/cart-extensions-BomjRsaK.js                   3.81 kB │ gzip:   1.78 kB
+.tanstack/start/build/client-dist/assets/customers-BgNXeUes.js                         3.82 kB │ gzip:   1.72 kB
+.tanstack/start/build/client-dist/assets/gift-cards-DQfUTQs6.js                        3.83 kB │ gzip:   1.30 kB
+.tanstack/start/build/client-dist/assets/promotion-extensions-DF1gdyj6.js              3.83 kB │ gzip:   1.79 kB
+.tanstack/start/build/client-dist/assets/cms-D9-4n7Vy.js                               3.83 kB │ gzip:   1.80 kB
+.tanstack/start/build/client-dist/assets/inventory-DWkeD-22.js                         3.84 kB │ gzip:   1.32 kB
+.tanstack/start/build/client-dist/assets/trade-in-Dj0QrQs6.js                          3.84 kB │ gzip:   1.80 kB
+.tanstack/start/build/client-dist/assets/governance-pScLsCz7.js                        3.86 kB │ gzip:   1.79 kB
+.tanstack/start/build/client-dist/assets/memberships-B7lmMyTT.js                       3.86 kB │ gzip:   1.27 kB
+.tanstack/start/build/client-dist/assets/request-NmCMnA5m.js                           3.87 kB │ gzip:   1.69 kB
+.tanstack/start/build/client-dist/assets/newsletter-B_XV4eIu.js                        3.88 kB │ gzip:   1.32 kB
+.tanstack/start/build/client-dist/assets/bundles-nxiqwbWk.js                           3.89 kB │ gzip:   1.31 kB
+.tanstack/start/build/client-dist/assets/nodes-CHWDIccz.js                             3.89 kB │ gzip:   1.82 kB
+.tanstack/start/build/client-dist/assets/grocery-B03KEYvL.js                           3.90 kB │ gzip:   1.46 kB
+.tanstack/start/build/client-dist/assets/orders-EilDGJq9.js                            3.90 kB │ gzip:   1.19 kB
+.tanstack/start/build/client-dist/assets/i18n-BercRrKe.js                              3.91 kB │ gzip:   1.81 kB
+.tanstack/start/build/client
+.tanstack/start/build/client-dist/assets/pet-services-BwR8-e9s.js                      4.05 kB │ gzip:   1.88 kB
+.tanstack/start/build/client-dist/assets/reviews-CeavB9Yi.js                           4.07 kB │ gzip:   1.90 kB
+.tanstack/start/build/client-dist/assets/financial-products-C521sCRf.js                4.07 kB │ gzip:   1.86 kB
+.tanstack/start/build/client-dist/assets/company-BnX7Hbtz.js                           4.07 kB │ gzip:   1.88 kB
+.tanstack/start/build/client-dist/assets/inventory-extension-DArL8m9E.js               4.07 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/memberships-86FBdvp-.js                       4.08 kB │ gzip:   1.88 kB
+.tanstack/start/build/client-dist/assets/education-j37Th9DW.js                         4.08 kB │ gzip:   1.90 kB
+.tanstack/start/build/client-dist/assets/charity-CvUUBlvj.js                           4.09 kB │ gzip:   1.88 kB
+.tanstack/start/build/client-dist/assets/parking-B3729YKq.js                           4.10 kB │ gzip:   1.90 kB
+.tanstack/start/build/client-dist/assets/digital-products-mCOdcyge.js                  4.10 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/social-commerce-BPfmnP9E.js                   4.10 kB │ gzip:   1.87 kB
+.tanstack/start/build/client-dist/assets/shipping-extension-Btu4pvr0.js                4.10 kB │ gzip:   1.38 kB
+.tanstack/start/build/client-dist/assets/travel-Sk-9-hxt.js                            4.10 kB │ gzip:   1.87 kB
+.tanstack/start/build/client-dist/assets/healthcare-CgLDyitq.js                        4.12 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/automotive-wetkcNc3.js                        4.12 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/gift-cards-BsRbZky0.js                        4.12 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/consignments-B5UHO0Ts.js                      4.12 kB │ gzip:   1.87 kB
+.tanstack/start/build/client-dist/assets/warranty-BhCjJpX7.js                          4.12 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/credit-C8L0mcUE.js                            4.12 kB │ gzip:   1.88 kB
+.tanstack/start/build/client-dist/assets/freelance-kjKp-gqp.js                         4.13 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/volume-deals-B0LroGfn.js                      4.14 kB │ gzip:   1.91 kB
+
+.tanstack/start/build/client-dist/assets/utilities-BzNkl8x2.js                         4.15 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/classifieds-DEm8C1Ie.js                       4.15 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/payment-terms-_HfjPtrG.js                     4.16 kB │ gzip:   1.83 kB
+.tanstack/start/build/client-dist/assets/restaurants-BTqPSwRF.js                       4.17 kB │ gzip:   1.87 kB
+.tanstack/start/build/client-dist/assets/government-B5n4_DnU.js                        4.17 kB │ gzip:   1.40 kB
+.tanstack/start/build/client-dist/assets/print-on-demand-CDLFmSvw.js                   4.17 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/event-ticketing-JyGuYcqg.js                   4.17 kB │ gzip:   1.89 kB
+.tanstack/start/build/client-dist/assets/try-before-you-buy-C162Jjyx.js                4.18 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/auctions-COzMwr2I.js                          4.19 kB │ gzip:   1.89 kB
+
+.tanstack/start/build/client-dist/assets/advertising-Dl9-Zgif.js                       4.19 kB │ gzip:   1.90 kB
+.tanstack/start/build/client-dist/assets/pet-service-QS34sjDh.js                       4.22 kB │ gzip:   1.41 kB
+.tanstack/start/build/client-dist/assets/legal-B7KlvK5t.js                             4.23 kB │ gzip:   1.42 kB
+.tanstack/start/build/client-dist/assets/real-estate-BLQTXMtn.js                       4.23 kB │ gzip:   1.50 kB
+.tanstack/start/build/client-dist/assets/pricing-tiers-D7orhQ9P.js                     4.25 kB │ gzip:   1.86 kB
+.tanstack/start/build/client-dist/assets/affiliates-sdnhOlhM.js                        4.25 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/products-BRE1HMnW.js                          4.25 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/dropshipping-Cw4Ac5Wq.js                      4.25 kB │ gzip:   1.93 kB
+.tanstack/start/build/client-dist/assets/automotive-Bympz-NG.js                        4.25 kB │ gzip:   1.39 kB
+.tanstack/start/build/client-dist/assets/rentals-jPyz9nSD.js                           4.26 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/quotes-BUz5DsRl.js                            4.27 kB │ gzip:   1.97 kB
+.tanstack/start/build/client-dist/assets/promotions-Dztvjy0f.js                        4.28 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/bookings-BtoeURNf.js                          4.29 kB │ gzip:   1.92 kB
+
+.tanstack/start/build/client-dist/assets/vendors-DjU726Vi.js                           4.29 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/crowdfunding-B-ar0n7H.js                      4.30 kB │ gzip:   1.95 kB
+.tanstack/start/build/client-dist/assets/menu-display-block-BOrxBVkN.js                4.31 kB │ gzip:   1.71 kB
+.tanstack/start/build/client-dist/assets/parking-Od7GtoiS.js                           4.31 kB │ gzip:   1.43 kB
+.tanstack/start/build/client-dist/assets/invoices-BqKQtrtD.js                          4.32 kB │ gzip:   2.00 kB
+.tanstack/start/build/client-dist/assets/map-block-CeUgYM7Z.js                         4.34 kB │ gzip:   1.45 kB
+.tanstack/start/build/client-dist/assets/flash-deals-BpLy95zW.js                       4.34 kB │ gzip:   1.97 kB
+.tanstack/start/build/client-dist/assets/flash-sales-DIzPRzEl.js                       4.34 kB │ gzip:   1.97 kB
+.tanstack/start/build/client-dist/assets/inventory-extension-CQ7JPh3e.js               4.37 kB │ gzip:   1.42 kB
+.tanstack/start/build/client-dist/assets/financial-product-Bv7urbzn.js                 4.41 kB │ gzip:   1.43 kB
+.tanstack/start/build/client-dist/assets/b2b-Chb3p5dq.js                               4.41 kB │ gzip:   1.48 kB
+.tanstack/start/build/client-dist/assets/quotes-W1uc6Aca.js                            4.42 kB │ gzip:   1.38 kB
+.tanstack/start/build/client-dist/assets/subscriptions-B9QDbPed.js                     4.45 kB │ gzip:   2.02 kB
+.tanstack/start/build/client-dist/assets/transactions-EDKNRjpV.js                      4.45 kB │ gzip:   1.47 kB
+.tanstack/start/build/client-dist/assets/companies-CwlD_Jt3.js                         4.46 kB │ gzip:   2.03 kB
+.tanstack/start/build/client-dist/assets/charities-wiJtbxrc.js                         4.51 kB │ gzip:   1.99 kB
+.tanstack/start/build/client-dist/assets/affiliate-_5G4fuv8.js                         4.52 kB │ gzip:   1.44 kB
+
+.tanstack/start/build/client-dist/assets/commissions-FsvuXtaB.js                       4.53 kB │ gzip:   1.99 kB
+.tanstack/start/build/client-dist/assets/advertising-DT0Zt-Kp.js                       4.54 kB │ gzip:   1.42 kB
+.tanstack/start/build/client-dist/assets/webhooks-BdPWU90a.js                          4.55 kB │ gzip:   2.02 kB
+.tanstack/start/build/client-dist/assets/social-commerce-BRNUJFnt.js                   4.57 kB │ gzip:   1.42 kB
+.tanstack/start/build/client-dist/assets/checkout-payment-step-CVDG2vgL.js             4.62 kB │ gzip:   1.78 kB
+.tanstack/start/build/client-dist/assets/_slug-Co7S4MJU.js                             4.62 kB │ gzip:   1.46 kB
+.tanstack/start/build/client-dist/assets/insurance-D_aq9TW3.js                         4.63 kB │ gzip:   1.43 kB
+.tanstack/start/build/client-dist/assets/index-Dt05fp5x.js                             4.64 kB │ gzip:   1.68 kB
+.tanstack/start/build/client-dist/assets/installments-UYy-kVz8.js                      4.66 kB │ gzip:   1.39 kB
+
+.tanstack/start/build/client-dist/assets/team-CpEcYUMf.js                              4.68 kB │ gzip:   1.76 kB
+.tanstack/start/build/client-dist/assets/timeline-block-NHGt5ywK.js                    4.68 kB │ gzip:   1.16 kB
+.tanstack/start/build/client-dist/assets/purchase-orders-BqutXm1M.js                   4.71 kB │ gzip:   2.05 kB
+.tanstack/start/build/client-dist/assets/service-providers-6mHcyLUy.js                 4.71 kB │ gzip:   2.04 kB
+.tanstack/start/build/client-dist/assets/property-listing-block-Bsixkc9L.js            4.77 kB │ gzip:   1.38 kB
+.tanstack/start/build/client-dist/assets/restaurants-D-Cr3vcl.js                       4.77 kB │ gzip:   1.45 kB
+.tanstack/start/build/client-dist/assets/promotions-ext-BfDekPri.js                    4.80 kB │ gzip:   2.08 kB
+.tanstack/start/build/client-dist/assets/consents-Q7v6MMd8.js                          4.81 kB │ gzip:   1.62 kB
+.tanstack/start/build/client-dist/assets/wishlist-BJ7coHBr.js                          4.82 kB │ gzip:   1.62 kB
+.tanstack/start/build/client-dist/assets/downloads-BHR28E5F.js                         4.83 kB │ gzip:   1.75 kB
+.tanstack/start/build/client-dist/assets/commission-rules-BxvIfntc.js                  4.83 kB │ gzip:   2.07 kB
+
+.tanstack/start/build/client-dist/assets/subscription-plans-DE0Kk4Is.js                4.84 kB │ gzip:   2.09 kB
+.tanstack/start/build/client-dist/assets/invoices-CcpW15Ja.js                          4.91 kB │ gzip:   1.49 kB
+.tanstack/start/build/client-dist/assets/flash-sales-BKyZsj_3.js                       5.03 kB │ gzip:   1.66 kB
+.tanstack/start/build/client-dist/assets/availability-CiOFcLEa.js                      5.04 kB │ gzip:   2.13 kB
+.tanstack/start/build/client-dist/assets/confirmation-VgSQLs4k.js                      5.05 kB │ gzip:   1.43 kB
+.tanstack/start/build/client-dist/assets/reviews-CrA7E8P0.js                           5.06 kB │ gzip:   1.74 kB
+.tanstack/start/build/client-dist/assets/index-qqTR4UmX.js                             5.07 kB │ gzip:   1.57 kB
+.tanstack/start/build/client-dist/assets/_handle-BkRndIfW.js                           5.09 kB │ gzip:   1.69 kB
+.tanstack/start/build/client-dist/assets/event-ticketing-BdYyz43j.js                   5.12 kB │ gzip:   1.63 kB
+.tanstack/start/build/client-dist/assets/healthcare-provider-block-CQWNizSa.js         5.14 kB │ gzip:   1.51 kB
+.tanstack/start/build/client-dist/assets/image-gallery-block-BdqWjCfg.js               5.15 kB │ gzip:   1.41 kB
+.tanstack/start/build/client-dist/assets/index-CBBiObc-.js                             5.24 kB │ gzip:   1.91 kB
+.tanstack/start/build/client-dist/assets/home-BqmWnSQ0.js                              5.24 kB │ gzip:   1.63 kB
+.tanstack/start/build/client-dist/assets/index-BdxJK7fV.js                             5.25 kB │ gzip:   1.54 kB
+
+.tanstack/start/build/client-dist/assets/analytics-CWAx6ZXN.js                         5.26 kB │ gzip:   1.50 kB
+.tanstack/start/build/client-dist/assets/_id-Ca-MSOEq.js                               5.28 kB │ gzip:   1.62 kB
+.tanstack/start/build/client-dist/assets/store-credits-iwjs_-S2.js                     5.29 kB │ gzip:   1.58 kB
+.tanstack/start/build/client-dist/assets/review-list-block-BOUN7mKA.js                 5.29 kB │ gzip:   2.07 kB
+.tanstack/start/build/client-dist/assets/checkout-C7eGFCMj.js                          5.36 kB │ gzip:   1.96 kB
+.tanstack/start/build/client-dist/assets/index-DObzpAvb.js                             5.37 kB │ gzip:   1.86 kB
+.tanstack/start/build/client-dist/assets/new-BfcqA8x6.js                               5.38 kB │ gzip:   1.84 kB
+.tanstack/start/build/client-dist/assets/index-ai7L5EMF.js                             5.55 kB │ gzip:   1.64 kB
+.tanstack/start/build/client-dist/assets/_id-DomOvD05.js                               5.62 kB │ gzip:   1.76 kB
+.tanstack/start/build/client-dist/assets/appointment-slots-block-BkjD9BLx.js           5.68 kB │ gzip:   1.65 kB
+.tanstack/start/build/client-dist/assets/disputes-DDpTJoH0.js                          5.73 kB │ gzip:   1.78 kB
+.tanstack/start/build/client-dist/assets/settings-NC1yjOsj.js                          5.77 kB │ gzip:   1.82 kB
+.tanstack/start/build/client-dist/assets/trade-in-CjRSp-UO.js                          5.82 kB │ gzip:   1.89 kB
+
+.tanstack/start/build/client-dist/assets/index-O4c45YU0.js                             6.07 kB │ gzip:   1.85 kB
+.tanstack/start/build/client-dist/assets/confirmed-CdK1MXtj.js                         6.08 kB │ gzip:   1.30 kB
+.tanstack/start/build/client-dist/assets/parking-spot-finder-block-L2I66ys7.js         6.09 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/classified-ad-card-block-CQj6zxC6.js          6.14 kB │ gzip:   1.82 kB
+.tanstack/start/build/client-dist/assets/_id-SsjNPb4D.js                               6.14 kB │ gzip:   1.68 kB
+.tanstack/start/build/client-dist/assets/approvals-DAF_jesB.js                         6.18 kB │ gzip:   2.07 kB
+
+.tanstack/start/build/client-dist/assets/account-layout-BKYgGU3I.js                    6.21 kB │ gzip:   2.18 kB
+.tanstack/start/build/client-dist/assets/event-schedule-block-DNAetWCj.js              6.22 kB │ gzip:   1.90 kB
+.tanstack/start/build/client-dist/assets/index-BJSKk308.js                             6.27 kB │ gzip:   1.80 kB
+.tanstack/start/build/client-dist/assets/use-manage-crud-pE3-hzeV.js                   6.28 kB │ gzip:   2.46 kB
+.tanstack/start/build/client-dist/assets/vehicle-listing-block-D9U5Nbsi.js             6.35 kB │ gzip:   1.76 kB
+.tanstack/start/build/client-dist/assets/membership-tiers-block-DYuGn-BO.js            6.36 kB │ gzip:   1.65 kB
+.tanstack/start/build/client-dist/assets/subscription-manage-block-Du4VJRrU.js         6.42 kB │ gzip:   1.81 kB
+.tanstack/start/build/client-dist/assets/index-DFAXDhN6.js                             6.43 kB │ gzip:   1.80 kB
+.tanstack/start/build/client-dist/assets/index-BWyq7RgU.js                             6.61 kB │ gzip:   1.95 kB
+.tanstack/start/build/client-dist/assets/index-DV4F-zzb.js                             6.69 kB │ gzip:   1.70 kB
+.tanstack/start/build/client-dist/assets/crowdfunding-progress-block-CZoFluNA.js       6.72 kB │ gzip:   1.62 kB
+.tanstack/start/build/client-dist/assets/vendor-products-block-fYih8-oV.js             6.76 kB │ gzip:   2.05 kB
+
+.tanstack/start/build/client-dist/assets/fitness-class-schedule-block-DPaeJgK1.js      6.87 kB │ gzip:   1.82 kB
+.tanstack/start/build/client-dist/assets/donation-campaign-block-CJ9YFlp5.js           7.06 kB │ gzip:   1.66 kB
+.tanstack/start/build/client-dist/assets/_id.billing-BDaMft_F.js                       7.08 kB │ gzip:   2.04 kB
+.tanstack/start/build/client-dist/assets/register-Ceu0XTXH.js                          7.30 kB │ gzip:   2.32 kB
+.tanstack/start/build/client-dist/assets/index-2NQVoCUE.js                             7.31 kB │ gzip:   2.16 kB
+.tanstack/start/build/client-dist/assets/index-CEHKfX-h.js                             7.33 kB │ gzip:   1.82 kB
+.tanstack/start/build/client-dist/assets/_id.track-DHJ_i5fX.js                         7.42 kB │ gzip:   2.39 kB
+.tanstack/start/build/client-dist/assets/company-dashboard-block-BC_RYFyc.js           7.43 kB │ gzip:   1.95 kB
+.tanstack/start/build/client-dist/assets/wallet-BCoP8hHB.js                            7.57 kB │ gzip:   2.12 kB
+.tanstack/start/build/client-dist/assets/_id-Dti7whjH.js                               7.58 kB │ gzip:   2.26 kB
+.tanstack/start/build/client-dist/assets/course-curriculum-block-B_G4Z24W.js           7.61 kB │ gzip:   1.70 kB
+.tanstack/start/build/client-dist/assets/checkout-MIC-WbXh.js                          7.69 kB │ gzip:   2.48 kB
+.tanstack/start/build/client-dist/assets/index-ABNF6S__.js                             7.70 kB │ gzip:   2.41 kB
+.tanstack/start/build/client-dist/assets/_id-0Alu4wr0.js                               7.71 kB │ gzip:   1.90 kB
+
+.tanstack/start/build/client-dist/assets/index-CF8bngPp.js                             7.76 kB │ gzip:   2.16 kB
+.tanstack/start/build/client-dist/assets/store-pickup-DGoxBNk2.js                      7.77 kB │ gzip:   2.43 kB
+.tanstack/start/build/client-dist/assets/index-DswtwRaD.js                             7.77 kB │ gzip:   2.13 kB
+.tanstack/start/build/client-dist/assets/index-DYXyJiNF.js                             7.78 kB │ gzip:   2.15 kB
+.tanstack/start/build/client-dist/assets/index-BjfQufaS.js                             7.80 kB │ gzip:   2.17 kB
+.tanstack/start/build/client-dist/assets/addresses-BA9srfYZ.js                         7.82 kB │ gzip:   2.29 kB
+.tanstack/start/build/client-dist/assets/index-LgJcwtkb.js                             7.84 kB │ gzip:   2.33 kB
+
+.tanstack/start/build/client-dist/assets/bulk-pricing-table-block-C_6xrrie.js          7.88 kB │ gzip:   1.79 kB
+.tanstack/start/build/client-dist/assets/_id-BqAvPTJF.js                               7.90 kB │ gzip:   1.83 kB
+.tanstack/start/build/client-dist/assets/index-axIGAcrm.js                             7.94 kB │ gzip:   2.60 kB
+.tanstack/start/build/client-dist/assets/_id-Cqu_gTRN.js                               7.95 kB │ gzip:   2.39 kB
+.tanstack/start/build/client-dist/assets/_id-NKffMz_P.js                               7.97 kB │ gzip:   2.28 kB
+.tanstack/start/build/client-dist/assets/settings-BoC7Pt7j.js                          7.98 kB │ gzip:   2.51 kB
+
+.tanstack/start/build/client-dist/assets/index-BFGPtfsm.js                             7.98 kB │ gzip:   2.32 kB
+.tanstack/start/build/client-dist/assets/pet-profile-card-block-D2Pjz-4Y.js            7.98 kB │ gzip:   1.68 kB
+
+.tanstack/start/build/client-dist/assets/complete-DxYDh0OC.js                          7.99 kB │ gzip:   1.99 kB
+.tanstack/start/build/client-dist/assets/_id-Bho30UKg.js                               8.02 kB │ gzip:   2.05 kB
+.tanstack/start/build/client-dist/assets/verification-fT9U3JFj.js                      8.03 kB │ gzip:   1.97 kB
+.tanstack/start/build/client-dist/assets/_id-O5VvXTVx.js                               8.07 kB │ gzip:   1.92 kB
+.tanstack/start/build/client-dist/assets/index-CFdCkYmu.js                             8.09 kB │ gzip:   2.39 kB
+
+.tanstack/start/build/client-dist/assets/index-CFzLi8aC.js                             8.10 kB │ gzip:   2.37 kB
+.tanstack/start/build/client-dist/assets/age-DcauLI79.js                               8.22 kB │ gzip:   2.33 kB
+.tanstack/start/build/client-dist/assets/_id-CeCagrtd.js                               8.28 kB │ gzip:   2.39 kB
+.tanstack/start/build/client-dist/assets/vendor-order-detail-DhAYkaKR.js               8.31 kB │ gzip:   1.96 kB
+.tanstack/start/build/client-dist/assets/index-_iDAPZxb.js                             8.33 kB │ gzip:   2.42 kB
+.tanstack/start/build/client-dist/assets/index-CVoRfTkg.js                             8.33 kB │ gzip:   2.40 kB
+.tanstack/start/build/client-dist/assets/index-C6B_TxEg.js                             8.37 kB │ gzip:   2.44 kB
+.tanstack/start/build/client-dist/assets/index-CXYjh5e-.js                             8.39 kB │ gzip:   2.19 kB
+
+.tanstack/start/build/client-dist/assets/_id-DUSVdcae.js                               8.43 kB │ gzip:   2.09 kB
+.tanstack/start/build/client-dist/assets/index-wp1aJVWn.js                             8.54 kB │ gzip:   2.80 kB
+.tanstack/start/build/client-dist/assets/_id-DyJZyVMK.js                               8.74 kB │ gzip:   2.13 kB
+.tanstack/start/build/client-dist/assets/_id-Dz3FbCRh.js                               8.75 kB │ gzip:   2.03 kB
+.tanstack/start/build/client-dist/assets/vendor-product-form-BFj2ux4k.js               8.76 kB │ gzip:   2.14 kB
+
+.tanstack/start/build/client-dist/assets/index-C-nhNcv2.js                             8.78 kB │ gzip:   2.41 kB
+.tanstack/start/build/client-dist/assets/index-Tlmsa3UE.js                             8.80 kB │ gzip:   2.47 kB
+.tanstack/start/build/client-dist/assets/index-CJsrCTVX.js                             8.96 kB │ gzip:   2.52 kB
+.tanstack/start/build/client-dist/assets/index-Dbbb16H5.js                             8.97 kB │ gzip:   3.12 kB
+.tanstack/start/build/client-dist/assets/_id-BTmxxEtN.js                               8.97 kB │ gzip:   2.32 kB
+.tanstack/start/build/client-dist/assets/index-DIAZ9QEq.js                             9.11 kB │ gzip:   2.50 kB
+.tanstack/start/build/client-dist/assets/index-aSv0SHOi.js                             9.22 kB │ gzip:   2.62 kB
+.tanstack/start/build/client-dist/assets/index-C3pkfdIa.js                             9.27 kB │ gzip:   2.72 kB
+.tanstack/start/build/client-dist/assets/_id-D51OGoql.js                               9.28 kB │ gzip:   2.33 kB
+.tanstack/start/build/client-dist/assets/_id-CzyYE0h1.js                               9.33 kB │ gzip:   2.41 kB
+.tanstack/start/build/client-dist/assets/index-DBq_YPlo.js                             9.35 kB │ gzip:   2.61 kB
+.tanstack/start/build/client-dist/assets/index-C08_q4ko.js                             9.37 kB │ gzip:   2.82 kB
+.tanstack/start/build/client-dist/assets/track-DdqYD4Bo.js                             9.38 kB │ gzip:   2.98 kB
+.tanstack/start/build/client-dist/assets/index-DzcVXqrJ.js                             9.39 kB │ gzip:   2.69 kB
+.tanstack/start/build/client-dist/assets/_id-iJIjrLnN.js                               9.44 kB │ gzip:   2.25 kB
+
+.tanstack/start/build/client-dist/assets/social-proof-block-BIUSyBbN.js                9.46 kB │ gzip:   2.80 kB
+.tanstack/start/build/client-dist/assets/index-Cg1SPFx_.js                             9.48 kB │ gzip:   2.84 kB
+.tanstack/start/build/client-dist/assets/_id-ta0Haph8.js                               9.51 kB │ gzip:   2.30 kB
+.tanstack/start/build/client-dist/assets/index-CD1xjHzC.js                             9.51 kB │ gzip:   2.74 kB
+.tanstack/start/build/client-dist/assets/_id-BeCQC5t8.js                               9.55 kB │ gzip:   2.30 kB
+.tanstack/start/build/client-dist/assets/index-D3jLx5mp.js                             9.55 kB │ gzip:   2.91 kB
+.tanstack/start/build/client-dist/assets/_id-DJU7UcIS.js                               9.65 kB │ gzip:   2.35 kB
+.tanstack/start/build/client-dist/assets/data-table-BDbbhAJm.js                        9.65 kB │ gzip:   3.56 kB
+
+.tanstack/start/build/client-dist/assets/index-DTSuTzEI.js                             9.67 kB │ gzip:   2.50 kB
+.tanstack/start/build/client-dist/assets/index-BSd9x0qL.js                             9.69 kB │ gzip:   2.72 kB
+.tanstack/start/build/client-dist/assets/_id-Boik1eNC.js                               9.74 kB │ gzip:   2.47 kB
+.tanstack/start/build/client-dist/assets/_id-BRZn6SwL.js                               9.75 kB │ gzip:   2.38 kB
+.tanstack/start/build/client-dist/assets/freelancer-profile-block-DtUQ8nlX.js          9.85 kB │ gzip:   2.13 kB
+.tanstack/start/build/client-dist/assets/_id-C5HQGJkX.js                               9.86 kB │ gzip:   2.44 kB
+.tanstack/start/build/client-dist/assets/_id-K7-T234u.js                               9.94 kB │ gzip:   2.29 kB
+.tanstack/start/build/client-dist/assets/_id-DDGHuXVK.js                               9.97 kB │ gzip:   2.38 kB
+.tanstack/start/build/client-dist/assets/index-CafdEWzn.js                             9.97 kB │ gzip:   2.89 kB
+.tanstack/start/build/client-dist/assets/_id-CmZwA_gx.js                              10.05 kB │ gzip:   2.59 kB
+.tanstack/start/build/client-dist/assets/index-DNdscGBe.js                            10.05 kB │ gzip:   2.84 kB
+.tanstack/start/build/client-dist/assets/index-Do1c8e3A.js                            10.12 kB │ gzip:   2.93 kB
+
+.tanstack/start/build/client-dist/assets/referral-program-block-BfCN2u6A.js           10.15 kB │ gzip:   2.65 kB
+.tanstack/start/build/client-dist/assets/_id-COYzxXTG.js                              10.17 kB │ gzip:   2.54 kB
+.tanstack/start/build/client-dist/assets/index-DbuQQIK5.js                            10.18 kB │ gzip:   2.74 kB
+.tanstack/start/build/client-dist/assets/index-DjgiWVrR.js                            10.26 kB │ gzip:   2.85 kB
+.tanstack/start/build/client-dist/assets/_id-Bst_iotH.js                              10.28 kB │ gzip:   2.31 kB
+.tanstack/start/build/client-dist/assets/index-D15SoKee.js                            10.29 kB │ gzip:   2.65 kB
+.tanstack/start/build/client-dist/assets/referrals-BgZG5KIm.js                        10.29 kB │ gzip:   2.80 kB
+.tanstack/start/build/client-dist/assets/loyalty-CeMZ48lx.js                          10.31 kB │ gzip:   2.95 kB
+.tanstack/start/build/client-dist/assets/index-B_odnZAn.js                            10.38 kB │ gzip:   2.97 kB
+.tanstack/start/build/client-dist/assets/_id-y-pCd3Xq.js                              10.40 kB │ gzip:   2.61 kB
+.tanstack/start/build/client-dist/assets/_id-Ykd_q39M.js                              10.45 kB │ gzip:   2.12 kB
+.tanstack/start/build/client-dist/assets/index-DMLjDnq9.js                            10.47 kB │ gzip:   2.89 kB
+.tanstack/start/build/client-dist/assets/_id-CvF9l0aQ.js                              10.57 kB │ gzip:   2.57 kB
+.tanstack/start/build/client-dist/assets/_id-BHZiRyRT.js                              10.67 kB │ gzip:   2.41 kB
+.tanstack/start/build/client-dist/assets/index-BDCkoSjm.js                            10.67 kB │ gzip:   3.00 kB
+.tanstack/start/build/client-dist/assets/_id-DcaZm6XO.js                              10.69 kB │ gzip:   2.75 kB
+
+.tanstack/start/build/client-dist/assets/index-DRyVfXWf.js                            10.76 kB │ gzip:   2.97 kB
+.tanstack/start/build/client-dist/assets/_id-D1QqPtdB.js                              10.80 kB │ gzip:   2.57 kB
+.tanstack/start/build/client-dist/assets/_id-DshpALRD.js                              10.83 kB │ gzip:   2.62 kB
+.tanstack/start/build/client-dist/assets/_id-D6vv4uWR.js                              11.09 kB │ gzip:   2.45 kB
+.tanstack/start/build/client-dist/assets/dashboard-D-_-IusX.js                        11.17 kB │ gzip:   2.82 kB
+.tanstack/start/build/client-dist/assets/_id-Cst4I5Le.js                              11.31 kB │ gzip:   2.26 kB
+.tanstack/start/build/client-dist/assets/_id-Vl5QC0Ud.js                              11.38 kB │ gzip:   2.73 kB
+.tanstack/start/build/client-dist/assets/_id-ChBwqaJr.js                              11.56 kB │ gzip:   2.36 kB
+.tanstack/start/build/client-dist/assets/index-CogoTZ37.js                            11.59 kB │ gzip:   2.31 kB
+.tanstack/start/build/client-dist/assets/_id-C1kDciX0.js                              11.63 kB │ gzip:   2.73 kB
+.tanstack/start/build/client-dist/assets/index-aozYBs0G.js                            11.64 kB │ gzip:   3.12 kB
+.tanstack/start/build/client-dist/assets/_id-BPDXmGEQ.js                              11.88 kB │ gzip:   3.13 kB
+.tanstack/start/build/client-dist/assets/_slug-3bI566wU.js                            12.01 kB │ gzip:   2.86 kB
+
+.tanstack/start/build/client-dist/assets/_id-DHFeNiJa.js                              12.03 kB │ gzip:   2.74 kB
+.tanstack/start/build/client-dist/assets/_id-fU0auG-L.js                              12.59 kB │ gzip:   3.67 kB
+.tanstack/start/build/client-dist/assets/_id-BLwU1Zv1.js                              12.80 kB │ gzip:   2.79 kB
+.tanstack/start/build/client-dist/assets/wishlist-Dv__K5le.js                         13.28 kB │ gzip:   4.04 kB
+.tanstack/start/build/client-dist/assets/register-D-Ot0PHo.js                         13.48 kB │ gzip:   3.60 kB
+.tanstack/start/build/client-dist/assets/_id-1XsWYUvS.js                              13.53 kB │ gzip:   3.28 kB
+.tanstack/start/build/client-dist/assets/_id-BQBrwwgx.js                              13.70 kB │ gzip:   3.70 kB
+.tanstack/start/build/client-dist/assets/_id.return-eT01-f8Z.js                       13.88 kB │ gzip:   3.61 kB
+
+.tanstack/start/build/client-dist/assets/_id-D6JEZKR9.js                              14.20 kB │ gzip:   3.70 kB
+.tanstack/start/build/client-dist/assets/_serviceHandle-BUOkuKcy.js                   14.45 kB │ gzip:   4.32 kB
+.tanstack/start/build/client-dist/assets/_id-hSaVRQfB.js                              14.72 kB │ gzip:   3.75 kB
+.tanstack/start/build/client-dist/assets/gift-cards-ppTD8M5z.js                       14.82 kB │ gzip:   4.17 kB
+.tanstack/start/build/client-dist/assets/verification-DDoV_aHX.js                     14.83 kB │ gzip:   3.17 kB
+.tanstack/start/build/client-dist/assets/disputes-ukLkotBv.js                         16.07 kB │ gzip:   4.22 kB
+.tanstack/start/build/client-dist/assets/catalog-DrCOWMkk.js                          16.92 kB │ gzip:   3.61 kB
+.tanstack/start/build/client-dist/assets/checkout-address-step-f4QpAdeJ.js            16.99 kB │ gzip:   4.90 kB
+.tanstack/start/build/client-dist/assets/loyalty-points-display-block-eyWzmGyR.js     17.42 kB │ gzip:   3.32 kB
+.tanstack/start/build/client-dist/assets/index-Cb2R63qP.js                            23.65 kB │ gzip:   5.61 kB
+.tanstack/start/build/client-dist/assets/cn-ZGhk15c7.js                               25.18 kB │ gzip:   8.02 kB
+.tanstack/start/build/client-dist/assets/_handle-D1ZLDy3T.js                          34.55 kB │ gzip:  11.80 kB
+.tanstack/start/build/client-dist/assets/textarea-bHC5IP0-.js                         40.26 kB │ gzip:   8.97 kB
+
+.tanstack/start/build/client-dist/assets/crud-configs-DZD2H0Xa.js                     72.63 kB │ gzip:  12.46 kB
+.tanstack/start/build/client-dist/assets/template-renderer-D-VP6wsQ.js               186.86 kB │ gzip:  36.31 kB
+.tanstack/start/build/client-dist/assets/main-ChxKrHbx.js                          1,346.51 kB │ gzip: 364.79 kB
+
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 25.29s
+
+vite v7.3.1 building ssr environment for production...
+
+transforming...
+
+✓ 1332 modules transformed.
+
+rendering chunks...
+
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/utils/env.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/bookings/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/purchase-orders/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/lib/api/unified-client.ts, /home/runner/workspace/apps/storefront/src/lib/context/auth-context.tsx, /home/runner/workspace/apps/storefront/src/lib/hooks/use-campaigns.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-cms.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-companies.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-content.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-digital-products.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-payments.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-platform-context.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-reviews.ts, /home/runner/workspace/apps/storefront/src/lib/hooks/use-subscriptions.ts, /home/runner/workspace/apps/storefront/src/lib/utils/sdk.ts, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.return.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/orders/$id.track.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/account/subscriptions/$id.billing.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/affiliate/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/auctions/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/automotive/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/b2b/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/blog/$slug.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/$serviceHandle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bookings/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/bundles/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/business/approvals.tsx?tsr-split=component, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/campaigns/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/categories/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/charity/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/classifieds/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment-shop/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/consignment/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/credit/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/crowdfunding/$id.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/d
+[plugin vite:reporter] 
+(!) /home/runner/workspace/apps/storefront/src/lib/data/regions.ts is dynamically imported by /home/runner/workspace/apps/storefront/src/routes/$tenant.$locale.tsx but also statically imported by /home/runner/workspace/apps/storefront/src/pages/product.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/cart.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/checkout.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/index.tsx, /home/runner/workspace/apps/storefront/src/routes/$tenant/$locale/products/$handle.tsx, /home/runner/workspace/apps/storefront/src/routes/__root.tsx, dynamic import will not move module into another chunk.
+
+
+[plugin vite:css-post] Sourcemap is likely to be incorrect: a plugin (vite:css-post) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help
+
+✓ built in 19.65s
+
+[nitro] ✔ Generated public .output/public
+
+[nitro] ℹ Building Nitro Server (preset: node-listener, compatibility date: 2024-11-19)
+
+[nitro] ✔ Nitro Server built
+
+  ├─ .output/server/chunks/_/_-B6e6niXg.mjs (4.65 kB) (1.82 kB gzip)
+  ├─ .output/server/chunks/_/_-B6e6niXg.mjs.map (2.66 kB) (939 B gzip)
+  ├─ .output/server/chunks/_/_handle-BOKQarSe.mjs (38.5 kB) (9.32 kB gzip)
+  ├─ .output/server/chunks/_/_handle-BOKQarSe.mjs.map (32.8 kB) (7.24 kB gzip)
+  ├─ .output/server/chunks/_/_handle-DgI3Jptc.mjs (8.44 kB) (2.2 kB gzip)
+  ├─ .output/server/chunks/_/_handle-DgI3Jptc.mjs.map (7.11 kB) (1.94 kB gzip)
+  ├─ .output/server/chunks/_/_id-55z7Vga1.mjs (8.11 kB) (2.01 kB gzip)
+  ├─ .output/server/chunks/_/_id-55z7Vga1.mjs.map (6.08 kB) (1.65 kB gzip)
+  ├─ .output/server/chunks/_/_id-8y5I0GUG.mjs (18 kB) (3.89 kB gzip)
+  ├─ .output/server/chunks/_/_id-8y5I0GUG.mjs.map (13.8 kB) (2.87 kB gzip)
+  ├─ .output/server/chunks/_/_id-AIQ3ImiU.mjs (9.98 kB) (2.16 kB gzip)
+  ├─ .output/server/chunks/_/_id-AIQ3ImiU.mjs.map (7.77 kB) (1.99 kB gzip)
+  ├─ .output/server/chunks/_/_id-B-MP1vRV.mjs (15 kB) (3.09 kB gzip)
+  ├─ .output/server/chunks/_/_id-B-MP1vRV.mjs.map (10.2 kB) (2.47 kB gzip)
+  ├─ .output/server/chunks/_/_id-B3JkWBV6.mjs (16.4 kB) (2.83 kB gzip)
+  ├─ .output/server/chunks/_/_id-B3JkWBV6.mjs.map (11.1 kB) (2.23 kB gzip)
+  ├─ .output/server/chunks/_/_id-B4kEtFgP.mjs (15.3 kB) (3.03 kB gzip)
+  ├─ .output/server/chunks/_/_id-B4kEtFgP.mjs.map (11.3 kB) (2.63 kB gzip)
+  ├─ .output/server/chunks/_/_id-B6p8ElLM.mjs (13.8 kB) (2.79 kB gzip)
+  ├─ .output/server/chunks/_/_id-B6p8ElLM.mjs.map (9.89 kB) (2.43 kB gzip)
+  ├─ .output/server/chunks/_/_id-B7KrqLOG.mjs (12.3 kB) (2.47 kB gzip)
+  ├─ .output/server/chunks/_/_id-B7KrqLOG.mjs.map (9.28 kB) (2.05 kB gzip)
+  ├─ .output/server/chunks/_/_id-BBUI1zoo.mjs (118 B) (117 B gzip)
+  ├─ .output/server/chunks/_/_id-BBUI1zoo.mjs.map (237 B) (191 B gzip)
+  ├─ .output/server/chunks/_/_id-BC586U9d.mjs (16.3 kB) (3.21 kB gzip)
+  ├─ .output/server/chunks/_/_id-BC586U9d.mjs.map (10.7 kB) (2.35 kB gzip)
+  ├─ .output/server/chunks/_/_id-BJQCaMGM.mjs (16.2 kB) (3.02 kB gzip)
+  ├─ .output/server/chunks/_/_id-BJQCaMGM.mjs.map (11 kB) (2.53 kB gzip)
+  ├─ .output/server/chunks/_/_id-BKll-ZRl.mjs (22 kB) (4.69 kB gzip)
+  ├─ .output/server/chunks/_/_id-BKll-ZRl.mjs.map (18.4 kB) (4.25 kB gzip)
+  ├─ .output/server/chunks/_/_id-BqjqqsNo.mjs (13.5 kB) (2.77 kB gzip)
+  ├─ .output/server/chunks/_/_id-BqjqqsNo.mjs.map (9.37 kB) (2.11 kB gzip)
+  ├─ .output/server/chunks/_/_id-BrVQtJzS.mjs (16.7 kB) (3.23 kB gzip)
+  ├─ .output/server/chunks/_/_id-BrVQtJzS.mjs.map (11.2 kB) (2.54 kB gzip)
+  ├─ .output/server/chunks/_/_id-Bt1gN0LO.mjs (13.8 kB) (2.85 kB gzip)
+  ├─ .output/server/chunks/_/_id-Bt1gN0LO.mjs.map (9.94 kB) (2.29 kB gzip)
+  ├─ .output/server/chunks/_/_id-BTU5dmpx.mjs (118 B) (117 B gzip)
+  ├─ .output/server/chunks/_/_id-BTU5dmpx.mjs.map (229 B) (185 B gzip)
+  ├─ .output/server/chunks/_/_id-BW-Y5FyY.mjs (11.5 kB) (2.48 kB gzip)
+  ├─ .output/server/chunks/_/_id-BW-Y5FyY.mjs.map (8.06 kB) (1.85 kB gzip)
+  ├─ .output/server/chunks/_/_id-Bx38-z1B.mjs (17 kB) (3.25 kB gzip)
+  ├─ .output/server/chunks/_/_id-Bx38-z1B.mjs.map (11.5 kB) (2.53 kB gzip)
+  ├─ .output/server/chunks/_/_id-BzjEFk3Z.mjs (21.7 kB) (4.78 kB gzip)
+  ├─ .output/server/chunks/_/_id-BzjEFk3Z.mjs.map (18.5 kB) (4.37 kB gzip)
+  ├─ .output/server/chunks/_/_id-ChlWYr6b.mjs (11.9 kB) (2.83 kB gzip)
+  ├─ .output/server/chunks/_/_id-ChlWYr6b.mjs.map (9.09 kB) (2.48 kB gzip)
+  ├─ .output/server/chunks/_/_id-cqzUh4am.mjs (12.8 kB) (2.5 kB gzip)
+  ├─ .output/server/chunks/_/_id-cqzUh4am.mjs.map (9.03 kB) (2 kB gzip)
+  ├─ .output/server/chunks/_/_id-Csv0EK_S.mjs (19.6 kB) (4.32 kB gzip)
+  ├─ .output/server/chunks/_/_id-Csv0EK_S.mjs.map (14.4 kB) (3.06 kB gzip)
+  ├─ .output/server/chunks/_/_id-CswYKP5Z.mjs (15.5 kB) (3.12 kB gzip)
+  ├─ .output/server/chunks/_/_id-CswYKP5Z.mjs.map (10.4 kB) (2.43 kB gzip)
+  ├─ .output/server/chunks/_/_id-CUGwchvZ.mjs (15.2 kB) (2.6 kB gzip)
+  ├─ .output/server/chunks/_/_id-CUGwchvZ.mjs.map (10.6 kB) (2.18 kB gzip)
+  ├─ .output/server/chunks/_/_id-CXbsGyl2.mjs (14.4 kB) (3.05 kB gzip)
+  ├─ .output/server/chunks/_/_id-CXbsGyl2.mjs.map (10.4 kB) (2.44 kB gzip)
+  ├─ .output/server/chunks/_/_
+7H-.mjs (3.11 kB) (899 B gzip)
+  ├─ .output/server/chunks/_/use-bookings-Bd7Jo7H-.mjs.map (3.07 kB) (856 B gzip)
+  ├─ .output/server/chunks/_/use-campaigns-BoBVwdWG.mjs (1.19 kB) (557 B gzip)
+  ├─ .output/server/chunks/_/use-campaigns-BoBVwdWG.mjs.map (1.18 kB) (472 B gzip)
+  ├─ .output/server/chunks/_/use-checkout-C_7sccKC.mjs (5.5 kB) (1.23 kB gzip)
+  ├─ .output/server/chunks/_/use-checkout-C_7sccKC.mjs.map (4.93 kB) (1.18 kB gzip)
+  ├─ .output/server/chunks/_/use-commerce-extras-DCe7Y9jr.mjs (1.22 kB) (501 B gzip)
+  ├─ .output/server/chunks/_/use-commerce-extras-DCe7Y9jr.mjs.map (1.2 kB) (465 B gzip)
+  ├─ .output/server/chunks/_/use-companies-Di4TLa_c.mjs (2.44 kB) (663 B gzip)
+  ├─ .output/server/chunks/_/use-companies-Di4TLa_c.mjs.map (2.15 kB) (575 B gzip)
+  ├─ .output/server/chunks/_/use-content-DLtaCUn3.mjs (1.52 kB) (616 B gzip)
+  ├─ .output/server/chunks/_/use-content-DLtaCUn3.mjs.map (1.68 kB) (538 B gzip)
+  ├─ .output/server/chunks/_/use-manage-crud-DOfRrHTD.mjs (9.83 kB) (2.66 kB gzip)
+  ├─ .output/server/chunks/_/use-manage-crud-DOfRrHTD.mjs.map (8.33 kB) (2 kB gzip)
+  ├─ .output/server/chunks/_/use-manage-data-B0DJfL3X.mjs (1.04 kB) (469 B gzip)
+  ├─ .output/server/chunks/_/use-manage-data-B0DJfL3X.mjs.map (1.09 kB) (429 B gzip)
+  ├─ .output/server/chunks/_/use-orders-Bas8ER7E.mjs (728 B) (340 B gzip)
+  ├─ .output/server/chunks/_/use-orders-Bas8ER7E.mjs.map (812 B) (354 B gzip)
+  ├─ .output/server/chunks/_/use-payments-CBFMKMJe.mjs (2.72 kB) (981 B gzip)
+  ├─ .output/server/chunks/_/use-payments-CBFMKMJe.mjs.map (2.69 kB) (839 B gzip)
+  ├─ .output/server/chunks/_/use-platform-context-Bz95xLnP.mjs (687 B) (389 B gzip)
+  ├─ .output/server/chunks/_/use-platform-context-Bz95xLnP.mjs.map (690 B) (357 B gzip)
+  ├─ .output/server/chunks/_/use-purchase-orders-BNJIKe8d.mjs (3.31 kB) (713 B gzip)
+  ├─ .output/server/chunks/_/use-purchase-orders-BNJIKe8d.mjs.map (3 kB) (647 B gzip)
+  ├─ .output/server/chunks/_/use-subscriptions-DzupIKbX.mjs (4.68 kB) (1.07 kB gzip)
+  ├─ .output/server/chunks/_/use-subscriptions-DzupIKbX.mjs.map (4.5 kB) (1.02 kB gzip)
+  ├─ .output/server/chunks/_/utilities-y9-bjL9C.mjs (7.75 kB) (2.48 kB gzip)
+  ├─ .output/server/chunks/_/utilities-y9-bjL9C.mjs.map (8.88 kB) (2.71 kB gzip)
+  ├─ .output/server/chunks/_/vehicle-listing-block-BHLFDb6w.mjs (9.57 kB) (2.15 kB gzip)
+  ├─ .output/server/chunks/_/vehicle-listing-block-BHLFDb6w.mjs.map (7.55 kB) (1.59 kB gzip)
+  ├─ .output/server/chunks/_/vendor-order-detail-CPzjjTwo.mjs (12.7 kB) (2.5 kB gzip)
+  ├─ .output/server/chunks/_/vendor-order-detail-CPzjjTwo.mjs.map (8.87 kB) (1.74 kB gzip)
+  ├─ .output/server/chunks/_/vendor-payouts-Bzc6w6W4.mjs (5.68 kB) (1.47 kB gzip)
+  ├─ .output/server/chunks/_/vendor-payouts-Bzc6w6W4.mjs.map (4.74 kB) (1.21 kB gzip)
+  ├─ .output/server/chunks/_/vendor-product-form-BPZ2rUQc.mjs (17.8 kB) (2.96 kB gzip)
+  ├─ .output/server/chunks/_/vendor-product-form-BPZ2rUQc.mjs.map (13.9 kB) (2.42 kB gzip)
+  ├─ .output/server/chunks/_/vendor-products-block-BRwFvQu4.mjs (9.7 kB) (2.44 kB gzip)
+  ├─ .output/server/chunks/_/vendor-products-block-BRwFvQu4.mjs.map (6.29 kB) (1.61 kB gzip)
+  ├─ .output/server/chunks/_/vendors-DepWEah2.mjs (7.78 kB) (2.51 kB gzip)
+  ├─ .output/server/chunks/_/vendors-DepWEah2.mjs.map (9.16 kB) (2.78 kB gzip)
+  ├─ .output/server/chunks/_/verification-DQqW3dmy.mjs (11.5 kB) (2.46 kB gzip)
+  ├─ .output/server/chunks/_/verification-DQqW3dmy.mjs.map (7.96 kB) (2.04 kB gzip)
+  ├─ .output/server/chunks/_/verification-DRVi3WRQ.mjs (25 kB) (4.15 kB gzip)
+  ├─ .output/server/chunks/_/verification-DRVi3WRQ.mjs.map (18.4 kB) (3.54 kB gzip)
+  ├─ .output/server/chunks/_/volume-deals-BeMrgMVs.mjs (7.6 kB) (2.5 kB gzip)
+  ├─ .output/server/chunks/_/volume-deals-BeMrgMVs.mjs.map (8.64 kB) (2.71 kB gzip)
+  ├─ .output/server/chunks/_/volume-deals-CQREvedj.mjs (6.55 kB) (1.8 kB gzip)
+  ├─ .output/server/chunks/_/volume-deals-CQREvedj.mjs.map (5.51 kB) (1.71 kB gzip)
+  ├─ .output/server/chunks/_/volume-pricing-DAN8a5Gz.mjs (6.01 kB) (1.77 kB gzip)
+  ├─ .output/server/chunks/_/volume-pricing-DAN8a5Gz.mjs.map (5.36 kB) (1
+[nitro] ✔ Client and Server bundles for TanStack Start have been successfully built.
+
+  ✓ Storefront built
+
+Verifying build outputs...
+
+  ✓ Backend .medusa/ exists
+  ✓ Storefront .output/server/index.mjs exists
+
+========================================
+  Build complete!
+========================================
+
+2026-02-17T14:41:25Z info: Pushing pid1 binary layer...
+2026-02-17T14:41:34Z info: Pushing Repl layer...
+2026-02-17T14:41:34Z info: Pushing hosting layer...
+2026-02-17T14:41:38Z info: Created hosting layer
+2026-02-17T14:41:47Z info: Created pid1 binary layer
+Deployment timed out. Check the Logs tab for more details. - 2026-02-17T14:47:19.970Z

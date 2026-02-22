@@ -18,7 +18,7 @@ const createSchema = z.object({
   tier: z.enum(["bronze", "silver", "gold", "platinum"]).optional(),
   status: z.enum(["active", "pending", "suspended", "inactive"]).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const mod = req.scope.resolve("companyModuleService") as any

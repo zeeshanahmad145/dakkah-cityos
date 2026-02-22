@@ -35,10 +35,14 @@ const allocateInventoryStep = createStep(
     )
     return new StepResponse({ allocations }, { allocations })
   },
-  async ({ allocations }: { allocations: any[] }, { container }) => {
-    const inventoryModule = container.resolve("inventory") as any
-    for (const alloc of allocations) {
-      await inventoryModule.deleteReservationItems(alloc.id)
+  async (compensationData: { allocations: any[] } | undefined, { container }) => {
+    if (!compensationData?.allocations?.length) return
+    try {
+      const inventoryModule = container.resolve("inventory") as any
+      for (const alloc of compensationData.allocations) {
+        await inventoryModule.deleteReservationItems(alloc.id)
+      }
+    } catch (error) {
     }
   }
 )
@@ -52,7 +56,15 @@ const createShipmentStep = createStep(
       items: input.items,
       shipping_method: input.shippingMethod,
     })
-    return new StepResponse({ shipment }, { shipment })
+    return new StepResponse({ shipment }, { shipmentId: shipment.id })
+  },
+  async (compensationData: { shipmentId: string } | undefined, { container }) => {
+    if (!compensationData?.shipmentId) return
+    try {
+      const fulfillmentModule = container.resolve("fulfillment") as any
+      await fulfillmentModule.cancelFulfillment(compensationData.shipmentId)
+    } catch (error) {
+    }
   }
 )
 

@@ -1,6 +1,11 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const convertQuoteSchema = z.object({
+  notify_customer: z.boolean().optional(),
+}).passthrough()
 
 // POST - Convert quote to order (admin)
 export async function POST(
@@ -8,7 +13,11 @@ export async function POST(
   res: MedusaResponse
 ) {
   const { id } = req.params
-  const { notify_customer } = req.body as { notify_customer?: boolean }
+  const parsed = convertQuoteSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+  const { notify_customer } = parsed.data
   
   const query = req.scope.resolve("query")
   const quoteService = req.scope.resolve("quoteModuleService")

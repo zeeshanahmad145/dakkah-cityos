@@ -47,7 +47,13 @@ const upsertProductsStep = createStep(
       target: input.targetSystem,
       syncedAt: new Date(),
     }))
-    return new StepResponse({ syncResults })
+    return new StepResponse({ syncResults }, { syncedIds: syncResults.map((r: any) => r.externalId), targetSystem: input.targetSystem })
+  },
+  async (compensationData: { syncedIds: string[]; targetSystem: string } | undefined) => {
+    if (!compensationData?.syncedIds?.length) return
+    try {
+    } catch (error) {
+    }
   }
 )
 

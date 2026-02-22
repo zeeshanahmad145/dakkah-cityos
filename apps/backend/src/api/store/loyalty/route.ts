@@ -1,5 +1,11 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const enrollLoyaltySchema = z.object({
+  program_id: z.string().min(1),
+  tenant_id: z.string().min(1),
+})
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context?.actor_id
@@ -89,11 +95,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Authentication required" })
   }
 
-  const { program_id, tenant_id } = req.body as { program_id: string; tenant_id: string }
-
-  if (!program_id || !tenant_id) {
-    return res.status(400).json({ message: "program_id and tenant_id are required" })
+  const parsed = enrollLoyaltySchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
   }
+
+  const { program_id, tenant_id } = parsed.data
 
   try {
     const loyaltyService = req.scope.resolve("loyalty") as any
@@ -113,4 +120,3 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   } catch (error: any) {
     handleApiError(res, error, "STORE-LOYALTY")}
 }
-

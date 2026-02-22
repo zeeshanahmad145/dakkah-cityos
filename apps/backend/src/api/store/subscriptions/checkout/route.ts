@@ -1,24 +1,30 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const checkoutSchema = z.object({
+  plan_id: z.string().min(1),
+  success_url: z.string().min(1),
+  cancel_url: z.string().min(1),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
 
 // POST - Create Stripe Checkout session for subscription
 export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
 ) {
-  const { 
-    plan_id, 
-    customer_id,
-    success_url,
-    cancel_url,
-    metadata
-  } = req.body as {
-    plan_id: string
-    customer_id: string
-    success_url: string
-    cancel_url: string
-    metadata?: Record<string, string>
+  const customerId = (req as any).auth_context?.actor_id
+  if (!customerId) {
+    return res.status(401).json({ message: "Authentication required" })
   }
+
+  const parsed = checkoutSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+  }
+
+  const { plan_id, success_url, cancel_url, metadata } = parsed.data
 
   const query = req.scope.resolve("query")
 
@@ -35,11 +41,11 @@ export async function POST(
 
   const plan = plans[0]
 
-  // Get customer details
+  // Get customer details using authenticated customer ID (prevents IDOR)
   const { data: customers } = await query.graph({
     entity: "customer",
     fields: ["id", "email", "first_name", "last_name"],
-    filters: { id: customer_id }
+    filters: { id: customerId }
   })
 
   if (!customers.length) {
@@ -97,13 +103,13 @@ export async function POST(
       success_url: success_url || `${process.env.STORE_URL}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancel_url || `${process.env.STORE_URL}/subscriptions/cancel`,
       metadata: {
-        medusa_customer_id: customer_id,
+        medusa_customer_id: customerId,
         medusa_plan_id: plan_id,
         ...metadata
       },
       subscription_data: {
         metadata: {
-          medusa_customer_id: customer_id,
+          medusa_customer_id: customerId,
           medusa_plan_id: plan_id
         }
       }

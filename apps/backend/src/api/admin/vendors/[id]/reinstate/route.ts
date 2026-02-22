@@ -1,6 +1,12 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const reinstateVendorSchema = z.object({
+  reason: z.string().optional(),
+  notify_vendor: z.boolean().optional(),
+}).passthrough()
 
 // POST - Reinstate suspended vendor
 export async function POST(
@@ -8,11 +14,13 @@ export async function POST(
   res: MedusaResponse
 ) {
   try {
-    const { id } = req.params
-    const { reason, notify_vendor } = req.body as { 
-      reason?: string
-      notify_vendor?: boolean 
+    const parsed = reinstateVendorSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const { id } = req.params
+    const { reason, notify_vendor } = parsed.data
 
     const query = req.scope.resolve("query")
     const vendorService = req.scope.resolve("vendorModuleService")

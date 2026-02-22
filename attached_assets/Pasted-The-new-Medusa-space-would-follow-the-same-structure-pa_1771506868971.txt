@@ -1,0 +1,47 @@
+The new Medusa space would follow the same structure pattern:
+
+Tier	Section	Scope	Est. Pages
+1	Platform Overview	Medusa config, module registry, tech stack, monorepo structure	~8
+2	Core Commerce	Products, orders, carts, payments, shipping, tax, inventory	~12
+3	Multi-Vendor	Vendor module, commissions, order splitting, vendor portal (73 pages)	~10
+4	Vertical Modules (27)	Booking, Healthcare, Restaurant, Travel, Auction, etc. — one page each	~30
+5	Infrastructure Modules	Governance, Persona, Wallet, Loyalty, Subscription, i18n, etc.	~20
+6	Custom API Layer	Store, Admin, Vendor, Platform API routes, middleware	~10
+7	Integration Bridges	Payload CMS sync, ERPNext, Fleetbase, Stripe webhooks, Temporal	~12
+8	Database & Migrations	MikroORM entities, 203 migrations, enum constraints, seed data	~8
+9	Object Storage & Media	Bucket config, serve endpoint, media caching, image policy	~5
+10	Deployment & DevOps	Production proxy, health responder, startup sequence, VM config	~6
+11	Storefront (Legacy)	TanStack Start frontend, migration plan to Payload CMS	~5
+—	Total		~126 pages
+Cross-linking between spaces: Section 25 in Payload docs would link to the Medusa space for deep details, and the Medusa space's "Integration Bridges" section would link back to Payload docs for CMS-side details.
+
+
+How to Document the Medusa System
+Given your plan to keep Medusa as headless commerce connected to the Payload CMS frontend, I'd recommend expanding section 25 (Commerce — Medusa Integration) from its current 5-page skeleton into a comprehensive sub-tree that mirrors the Payload documentation style. Here's the structure:
+
+Section 25: Commerce Engine — Medusa v2 (Headless)
+
+#	Page	Description
+25.0	Commerce Engine Overview (Index)	Architecture, system boundary with Payload CMS, 61 modules, 27 verticals
+25.1	Medusa Configuration & Module Registry	medusa-config.ts, module loading, database connection, feature flags
+25.2	Module Reference (61 modules)	Per-module pages: model fields, service methods, API routes, hooks
+25.3	Vertical Modules (27 verticals)	Booking, Healthcare, Restaurant, Travel, etc. — each as a child page
+25.4	Multi-Vendor Architecture	Vendor module, commission, order splitting, vendor portal
+25.5	Custom API Layer	Store API, Admin API, Vendor API, Platform API — all custom routes
+25.6	Integration Bridge: Medusa ↔ Payload CMS	How products/orders/entities sync between systems
+25.7	Integration Bridge: Medusa ↔ ERPNext	Invoice sync, GL posting, inventory
+25.8	Integration Bridge: Medusa ↔ Fleetbase	Delivery, fulfillment, tracking
+25.9	Seed Data Infrastructure	seed-verticals, seed-all-with-images, seed-utils
+25.10	Object Storage & Image Serving	Bucket config, serve endpoint, media caching
+25.11	Database Schema & Migrations	MikroORM entities, 203 migrations, enum constraints
+25.12	Deployment Architecture	Production proxy, health responder, startup sequence
+25.13	Storefront (Legacy — Migration Plan)	Current TanStack Start frontend, migration path to Payload CMS frontend
+Each of the 27 vertical modules (under 25.3) would get its own child page following the same pattern:
+
+Status + Source files
+Overview
+Data Model (table of fields)
+Service Methods
+API Endpoints
+Hooks/Subscribers
+Cross-References to Payload CMS equivalent domain package

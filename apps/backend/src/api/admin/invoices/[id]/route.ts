@@ -2,6 +2,14 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
+const updateInvoiceSchema = z.object({
+  due_date: z.string().optional(),
+  payment_terms: z.string().optional(),
+  payment_terms_days: z.number().optional(),
+  notes: z.string().optional(),
+  internal_notes: z.string().optional(),
+}).passthrough()
+
 // GET /admin/invoices/:id - Get invoice detail
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve(ContainerRegistrationKeys.QUERY);

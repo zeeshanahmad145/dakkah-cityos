@@ -168,6 +168,53 @@ class HealthcareModuleService extends MedusaService({
     })
   }
 
+  async verifyInsurance(patientId: string, providerId: string): Promise<{
+    verified: boolean
+    patientId: string
+    providerId: string
+    coverageStatus: string
+    reason?: string
+  }> {
+    if (!patientId || !providerId) {
+      throw new Error("Patient ID and provider ID are required")
+    }
+
+    const claims = await this.listInsuranceClaims({ patient_id: patientId }) as any
+    const claimList = Array.isArray(claims) ? claims : [claims].filter(Boolean)
+
+    const activeClaims = claimList.filter((c: any) =>
+      c.insurance_provider_id === providerId && (c.status === "submitted" || c.status === "approved" || c.status === "active")
+    )
+
+    if (activeClaims.length > 0) {
+      return {
+        verified: true,
+        patientId,
+        providerId,
+        coverageStatus: "active",
+      }
+    }
+
+    const provider = await this.retrievePractitioner(providerId).catch(() => null)
+    if (!provider) {
+      return {
+        verified: false,
+        patientId,
+        providerId,
+        coverageStatus: "provider_not_found",
+        reason: "Insurance provider not found in the system",
+      }
+    }
+
+    return {
+      verified: false,
+      patientId,
+      providerId,
+      coverageStatus: "no_coverage",
+      reason: "No active insurance coverage found for this patient with the specified provider",
+    }
+  }
+
   async getPractitionerDashboard(practitionerId: string): Promise<any> {
     const appointments = await this.listHealthcareAppointments({
       practitioner_id: practitionerId,

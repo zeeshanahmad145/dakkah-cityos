@@ -1,0 +1,280 @@
+the full detailed implementation plan for all remaining gaps, organized into 6 prioritized sprints:
+
+Sprint 1: Store Route Security (Highest Priority) — ~2 weeks
+This is the most critical gap. Customer-facing routes that accept data without validation or authentication are a real security risk.
+
+1A. Add Authentication to 24 Unprotected Store Mutation Routes
+These routes allow POST/PUT/PATCH/DELETE but don't verify who's making the request:
+
+Financial (Critical):
+
+store/subscriptions/checkout/route.ts
+store/financial-products/route.ts
+store/gift-cards/route.ts
+store/credit/route.ts (GET has auth, POST doesn't)
+Commerce:
+
+store/freelance/route.ts
+store/rentals/route.ts
+store/memberships/route.ts
+store/digital-products/route.ts
+store/classifieds/route.ts
+store/crowdfunding/route.ts
+store/auctions/route.ts
+store/automotive/route.ts
+store/government/route.ts
+store/shipping/route.ts
+User Data:
+
+store/notification-preferences/[id]/route.ts
+store/wishlists/[id]/route.ts
+store/reviews/[id]/helpful/route.ts
+Vendor Registration:
+
+store/vendors/register/route.ts
+store/vendors/[id]/stripe-connect/route.ts
+Special Cases (may be intentionally public — needs review):
+
+store/advertising/route.ts
+store/affiliate/route.ts
+store/affiliates/route.ts
+store/cart-extension/route.ts (cart may need anonymous access)
+store/bookings/[id]/check-in/route.ts
+Pattern to follow (from store/disputes/route.ts):
+
+const customerId = (req as any).auth_context?.actor_id
+if (!customerId) {
+  return res.status(401).json({ message: "Authentication required" })
+}
+Acceptance criteria: Every store route that creates/modifies customer-specific data verifies auth_context.actor_id. Cart-related routes that support anonymous users should be explicitly documented as intentionally public.
+
+1B. Add Zod Validation to 48 Store Mutation Routes
+Every POST/PUT/PATCH on customer-facing routes should validate input shape before touching the database:
+
+Highest risk (financial/billing):
+
+store/wallet/route.ts — wallet top-ups, credit operations
+store/subscriptions/checkout/route.ts — subscription creation
+store/subscriptions/[id]/payment-method/route.ts — payment method updates
+store/subscriptions/[id]/cancel/route.ts
+store/subscriptions/[id]/pause/route.ts
+store/subscriptions/[id]/resume/route.ts
+store/credit/route.ts
+store/financial-products/route.ts
+High risk (data creation):
+9. store/bookings/route.ts — booking creation
+
+store/bookings/[id]/cancel/route.ts
+store/bookings/[id]/reschedule/route.ts
+store/bookings/[id]/confirm/route.ts
+store/bookings/[id]/check-in/route.ts
+store/quotes/route.ts — quote creation
+store/quotes/[id]/route.ts
+store/quotes/[id]/accept/route.ts
+store/quotes/[id]/decline/route.ts
+store/purchase-orders/route.ts
+store/purchase-orders/[id]/route.ts
+store/purchase-orders/[id]/submit/route.ts
+Medium risk (user content):
+21. store/reviews/route.ts
+
+store/reviews/[id]/helpful/route.ts
+store/classifieds/route.ts
+store/crowdfunding/route.ts
+store/auctions/route.ts
+store/freelance/route.ts
+store/social-commerce/route.ts (if applicable)
+store/advertising/route.ts
+Standard risk (entity creation):
+29-48: store/affiliate/route.ts, store/affiliates/route.ts, store/automotive/route.ts, store/cart-extension/route.ts, store/companies/route.ts, store/digital-products/route.ts, store/gift-cards/route.ts, store/government/route.ts, store/loyalty/route.ts, store/memberships/route.ts, store/newsletter/route.ts, store/notification-preferences/route.ts, store/notification-preferences/[id]/route.ts, store/rentals/route.ts, store/shipping/route.ts, store/trade-in/route.ts, store/vendors/register/route.ts, store/vendors/[id]/stripe-connect/route.ts, store/wishlists/route.ts, store/wishlists/[id]/route.ts
+
+Pattern to follow (from store/disputes/route.ts):
+
+import { z } from "zod"
+const createBookingSchema = z.object({
+  service_id: z.string().min(1),
+  date: z.string().datetime(),
+  time_slot: z.string(),
+  notes: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+})
+// In POST handler:
+const parsed = createBookingSchema.safeParse(req.body)
+if (!parsed.success) {
+  return res.status(400).json({
+    message: "Validation failed",
+    errors: parsed.error.issues,
+  })
+}
+const data = parsed.data  // use this instead of req.body
+Acceptance criteria: All 48 store mutation routes have Zod schemas matching their model fields. Validation errors return 400 with structured error messages.
+
+Sprint 2: Workflow Compensation — ~2 weeks
+All 30 workflows use createStep and StepResponse but none provide rollback/compensation callbacks. If a step fails mid-workflow, there's no automatic cleanup.
+
+Priority order:
+Tier 1 — Financial (must have rollback):
+
+commission-calculation.ts — reverse commission entries on failure
+payment-reconciliation.ts — reverse payment entries
+subscription/process-billing-cycle-workflow.ts — reverse charges
+subscription/retry-failed-payment-workflow.ts — reset retry counts
+vendor/process-payout-workflow.ts — reverse payout records
+vendor/calculate-commission-workflow.ts — reverse calculations
+Tier 2 — Order/Fulfillment (rollback prevents data corruption):
+7. order-fulfillment.ts — release inventory allocations
+
+return-processing.ts — reverse return status
+inventory-replenishment.ts — cancel reorder
+fleet-dispatch.ts — cancel dispatch request
+Tier 3 — Entity Lifecycle (rollback prevents orphan records):
+11. vendor/create-vendor-workflow.ts — delete partial vendor
+
+vendor/approve-vendor-workflow.ts — revert approval status
+vendor-onboarding.ts — cleanup onboarding state
+b2b/create-company-workflow.ts — delete partial company
+b2b/create-quote-workflow.ts — delete partial quote
+b2b/approve-quote-workflow.ts — revert approval
+subscription/create-subscription-workflow.ts — delete partial sub
+tenant-provisioning.ts — cleanup partial tenant
+booking-confirmation.ts — release time slot
+event-ticketing.ts — release ticket holds
+Tier 4 — Support (lower risk but should still rollback):
+21-30: auction-lifecycle.ts, campaign-activation.ts, content-moderation.ts, dispute-resolution.ts, hierarchy-sync.ts, kyc-verification.ts, loyalty-reward.ts, product-sync.ts, subscription-renewal.ts, trade-in-evaluation.ts
+
+Pattern to implement:
+
+const allocateInventoryStep = createStep(
+  "allocate-inventory-step",
+  async (input, { container }) => {
+    const inventoryModule = container.resolve("inventory") as any
+    const allocations = await inventoryModule.createReservationItems(input.items)
+    // Return data + compensation context
+    return new StepResponse(
+      { allocations },
+      { allocationIds: allocations.map(a => a.id) } // compensation data
+    )
+  },
+  // COMPENSATION FUNCTION — runs if a later step fails
+  async (compensationData, { container }) => {
+    const inventoryModule = container.resolve("inventory") as any
+    await inventoryModule.deleteReservationItems(compensationData.allocationIds)
+  }
+)
+Acceptance criteria: Every step that creates, updates, or allocates resources has a compensation function. Compensations are idempotent (safe to re-run).
+
+Sprint 3: Migration Reconciliation — ~3 days
+3A. Insurance Module
+Current state: 3 tables exist (insurance_claim, insurance_policy, insurance_product) but migrations/ dir is empty. Models define entities as ins_claim, ins_policy.
+
+Tasks:
+
+Verify exact column match between models and DB tables
+Generate a baseline migration using npx medusa migrations generate insurance
+If the generated migration tries to create already-existing tables, wrap in IF NOT EXISTS or use Medusa's migration stamp approach
+Test by running npx medusa migrations run — should be a no-op since tables exist
+3B. Trade-In Module
+Current state: Only 1 table (trade_in) exists but models define 2 entities: trade_in_request and trade_in_offer.
+
+Tasks:
+
+Check what columns trade_in table actually has vs. what models define
+Determine if trade_in was a combined table or if trade_in_offer table is truly missing
+Either: (a) add migration to create trade_in_offer table, or (b) reconcile models to match DB
+Generate baseline migration
+Test with npx medusa migrations run
+Acceptance criteria: Both modules have migration files. Running migrations on a fresh database creates the correct tables. Running on the existing database is a no-op.
+
+Sprint 4: Middleware Hardening — ~1 week
+4A. Centralized Store Auth Middleware
+Instead of checking auth in every route handler, add middleware patterns:
+
+// In middlewares.ts — protect all store mutation routes that need auth
+{
+  matcher: "/store/subscriptions/**",
+  method: ["POST", "PUT", "PATCH", "DELETE"],
+  middlewares: [requireCustomerAuth],
+},
+{
+  matcher: "/store/wallet/**",
+  method: ["POST", "PUT", "PATCH", "DELETE"],
+  middlewares: [requireCustomerAuth],
+},
+// ... repeat for all protected routes
+4B. Rate Limiting
+Add rate limiting for store POST endpoints to prevent abuse:
+
+General store POST: 30 requests/minute per IP
+Subscription checkout: 5 requests/minute per customer
+Wallet operations: 10 requests/minute per customer
+Newsletter signup: 3 requests/minute per IP
+4C. Request Logging
+Add structured request/response logging middleware:
+
+Log method, path, response status, duration
+Redact sensitive fields (passwords, tokens, card numbers)
+Include correlation IDs for tracing
+Dependencies: Sprint 1 (auth + validation) should be done first so middleware doesn't break routes that aren't yet handling validation correctly.
+
+Acceptance criteria: middlewares.ts covers all protected routes. Rate limiting active on POST endpoints. Request logs available for debugging.
+
+Sprint 5: Integration & Workflow Tests — ~2 weeks
+5A. Workflow Compensation Tests (Priority)
+After Sprint 2 adds compensation logic, test that rollbacks work:
+
+tests/integration/workflows/
+  order-fulfillment.integration.spec.ts
+  commission-calculation.integration.spec.ts
+  subscription-billing.integration.spec.ts
+  vendor-payout.integration.spec.ts
+  booking-confirmation.integration.spec.ts
+Each test: trigger workflow → simulate step failure → verify compensation ran → verify database state is clean.
+
+5B. Financial Accuracy Tests
+tests/integration/services/
+  commission-accuracy.integration.spec.ts   — verify exact commission splits
+  subscription-billing.integration.spec.ts  — verify billing cycle amounts
+  payout-calculation.integration.spec.ts    — verify vendor payout math
+  volume-pricing.integration.spec.ts        — verify tier-based pricing
+5C. Multi-Tenant Isolation Tests
+tests/integration/isolation/
+  tenant-data-isolation.integration.spec.ts  — verify tenant A can't see tenant B data
+  vendor-data-isolation.integration.spec.ts  — verify vendor A can't access vendor B
+  store-scope-isolation.integration.spec.ts  — verify store-scoped data boundaries
+5D. Auth Boundary Tests
+tests/integration/auth/
+  store-route-auth.integration.spec.ts  — verify protected routes reject unauthenticated
+  admin-route-auth.integration.spec.ts  — verify admin routes reject non-admin
+  vendor-route-auth.integration.spec.ts — verify vendor routes reject non-vendor
+Dependencies: Sprint 2 (workflow compensation) must complete before 5A. Sprint 1 (auth) must complete before 5D.
+
+Acceptance criteria: All tests pass. Financial calculations match expected values to the cent. Tenant isolation verified across all data access patterns.
+
+Sprint 6: Admin Route Validation — ~1 week
+Lower priority because admin routes are already protected by Medusa's built-in admin authentication. But input validation is still good practice.
+
+84 admin route files need Zod schemas added. Batch by module:
+
+Module Group	Route Files	Estimate
+Commerce (bookings, invoices, quotes, disputes, commissions)	~25	2 days
+Companies (companies, payment-terms, purchase-orders)	~12	1 day
+Verticals (events, loyalty, notification-preferences)	~15	1 day
+Infrastructure (integrations, cms, settings, payouts)	~15	1 day
+Remaining (all others)	~17	1 day
+Plus 4 vendor route files without Zod (very quick):
+
+vendor/orders/[orderId]/fulfill/route.ts
+vendor/payouts/request/route.ts
+vendor/products/[productId]/route.ts
+vendor/products/route.ts
+Acceptance criteria: All admin and vendor mutation routes have Zod schemas. Zero unvalidated POST/PUT/PATCH handlers remain.
+
+Overall Timeline Summary
+Sprint	Focus	Files	Priority	Estimated Time
+1	Store route auth (24) + Zod (48)	72 route files	CRITICAL	2 weeks
+2	Workflow compensation	30 workflow files	HIGH	2 weeks
+3	Migration reconciliation	2 modules	HIGH	3 days
+4	Middleware hardening	1 file + utilities	MEDIUM	1 week
+5	Integration tests	~15 new test files	MEDIUM	2 weeks
+6	Admin route validation	88 route files	LOW	1 week
+Total		~207 files		~8-9 weeks

@@ -234,6 +234,69 @@ class FreelanceModuleService extends MedusaService({
     return timeLog
   }
 
+  async releaseMilestonePayment(milestoneId: string): Promise<{
+    milestoneId: string
+    amount: number
+    status: string
+    releasedAt: Date
+  }> {
+    const milestone = await this.retrieveMilestone(milestoneId) as any
+
+    if (milestone.status !== "approved" && milestone.status !== "completed") {
+      throw new Error("Milestone must be approved or completed before releasing payment")
+    }
+
+    if (milestone.payment_released) {
+      throw new Error("Payment has already been released for this milestone")
+    }
+
+    const contract = await this.retrieveFreelanceContract(milestone.contract_id) as any
+    const amount = Number(milestone.amount || contract.rate || 0)
+
+    await (this as any).updateMilestones({
+      id: milestoneId,
+      status: "paid",
+      payment_released: true,
+      payment_released_at: new Date(),
+      payment_amount: amount,
+    })
+
+    return {
+      milestoneId,
+      amount,
+      status: "paid",
+      releasedAt: new Date(),
+    }
+  }
+
+  async calculatePlatformFee(amount: number): Promise<{
+    amount: number
+    fee: number
+    feePercentage: number
+    netAmount: number
+  }> {
+    if (amount <= 0) {
+      throw new Error("Amount must be greater than zero")
+    }
+
+    let fee: number
+    const firstTierLimit = 500
+    const firstTierRate = 0.10
+    const secondTierRate = 0.05
+
+    if (amount <= firstTierLimit) {
+      fee = amount * firstTierRate
+    } else {
+      fee = (firstTierLimit * firstTierRate) + ((amount - firstTierLimit) * secondTierRate)
+    }
+
+    fee = Math.round(fee * 100) / 100
+    const feePercentage = Math.round((fee / amount) * 10000) / 100
+    const netAmount = Math.round((amount - fee) * 100) / 100
+
+    return { amount, fee, feePercentage, netAmount }
+  }
+
   async getFreelancerStats(freelancerId: string): Promise<{
     completedContracts: number
     activeContracts: number

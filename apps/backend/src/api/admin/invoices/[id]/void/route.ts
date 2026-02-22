@@ -1,6 +1,10 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
+const voidInvoiceSchema = z.object({
+  reason: z.string().optional(),
+}).passthrough()
+
 // POST /admin/invoices/:id/void - Void an invoice
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {

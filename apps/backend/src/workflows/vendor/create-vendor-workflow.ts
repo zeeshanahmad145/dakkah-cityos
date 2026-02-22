@@ -56,9 +56,13 @@ const createVendorStep = createStep(
 
     return new StepResponse({ vendor }, { vendor })
   },
-  async ({ vendor }: { vendor: any }, { container }) => {
-    const vendorModule = container.resolve("vendor")
-    await vendorModule.deleteVendors(vendor.id)
+  async (compensationData: { vendor: any }, { container }) => {
+    if (!compensationData?.vendor?.id) return
+    try {
+      const vendorModule = container.resolve("vendor")
+      await vendorModule.deleteVendors(compensationData.vendor.id)
+    } catch (error) {
+    }
   }
 )
 
@@ -88,11 +92,15 @@ const createDefaultCommissionRuleStep = createStep(
       applies_to: "all_products",
     })
 
-    return new StepResponse({ rule }, { rule })
+    return new StepResponse({ rule }, { ruleId: rule.id })
   },
-  async ({ rule }: { rule: any }, { container }) => {
-    const commissionModule = container.resolve("commission")
-    await (commissionModule as any).deleteCommissions(rule.id)
+  async (compensationData: { ruleId: string }, { container }) => {
+    if (!compensationData?.ruleId) return
+    try {
+      const commissionModule = container.resolve("commission")
+      await (commissionModule as any).deleteCommissions(compensationData.ruleId)
+    } catch (error) {
+    }
   }
 )
 

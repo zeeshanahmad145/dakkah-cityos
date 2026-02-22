@@ -1,6 +1,15 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+
+const createTierSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  discount_percentage: z.number(),
+  min_order_value: z.number().optional(),
+  priority: z.number().optional(),
+}).passthrough()
 
 // GET - List B2B pricing tiers
 export async function GET(
@@ -54,19 +63,18 @@ export async function POST(
   res: MedusaResponse
 ) {
   try {
+    const parsed = createTierSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
     const {
       name,
       description,
       discount_percentage,
       min_order_value,
       priority
-    } = req.body as {
-      name: string
-      description?: string
-      discount_percentage: number
-      min_order_value?: number
-      priority?: number
-    }
+    } = parsed.data
 
     const pricingService = req.scope.resolve("pricingModuleService")
 

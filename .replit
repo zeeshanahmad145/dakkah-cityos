@@ -26,7 +26,7 @@ PAYLOAD_CMS_URL_LOCAL = "http://localhost:3001"
 WALTID_URL_LOCAL = "http://localhost:7000"
 MEDUSA_BACKEND_URL_LOCAL = "http://localhost:9000"
 STOREFRONT_URL_LOCAL = "http://localhost:5000"
-VITE_MEDUSA_PUBLISHABLE_KEY = "pk_223392ac13f78639c0bad4ce1399f8f33a49188fb95a2f69c31d4ef8e0e5dbd7"
+VITE_MEDUSA_PUBLISHABLE_KEY = "pk_56377e90449a39fc4585675802137b09577cd6e17f339eba6dc923eaf22e3445"
 
 [userenv.development]
 
@@ -41,12 +41,7 @@ SENDGRID_FROM = "dk_dev_22d60466c799dbf8d9af7d6af51244359d77d26c9cb7fe287515c8b6
 
 [[ports]]
 localPort = 5000
-externalPort = 80
-
-[[ports]]
-localPort = 5433
-externalPort = 3000
-exposeLocalhost = true
+externalPort = 5000
 
 [[ports]]
 localPort = 9000
@@ -77,9 +72,9 @@ args = "bash /home/runner/workspace/start.sh"
 waitForPort = 5000
 
 [deployment]
-deploymentTarget = "cloudrun"
+deploymentTarget = "vm"
 run = ["bash", "scripts/start-production.sh"]
 build = ["bash", "scripts/build-production.sh"]
 
 [objectStorage]
-defaultBucketID = "replit-objstore-9ae4a2f3-0592-42b1-908d-b04c0c0e79c4"
+defaultBucketID = "replit-objstore-d0367ca5-bb93-42b5-b2e7-53122f51e3cb"

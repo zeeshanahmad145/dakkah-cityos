@@ -24,7 +24,7 @@ const updateSchema = z.object({
   thumbnail_url: z.string().nullable().optional(),
   preview_video_url: z.string().nullable().optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

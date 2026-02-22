@@ -167,6 +167,86 @@ class ParkingModuleService extends MedusaService({
     }
   }
 
+  async calculateParkingFee(entryTime: Date, exitTime: Date, rateType: string = "hourly"): Promise<{
+    entryTime: Date
+    exitTime: Date
+    durationHours: number
+    rateType: string
+    rate: number
+    totalFee: number
+  }> {
+    const entry = new Date(entryTime)
+    const exit = new Date(exitTime)
+
+    if (exit <= entry) {
+      throw new Error("Exit time must be after entry time")
+    }
+
+    const durationMs = exit.getTime() - entry.getTime()
+    const durationHours = Math.ceil(durationMs / (1000 * 60 * 60))
+    const durationDays = Math.ceil(durationMs / (1000 * 60 * 60 * 24))
+
+    const rates: Record<string, number> = {
+      hourly: 5,
+      daily: 30,
+      monthly: 500,
+    }
+
+    const rate = rates[rateType] || rates.hourly
+    let totalFee: number
+
+    if (rateType === "hourly") {
+      totalFee = Math.max(1, durationHours) * rate
+    } else if (rateType === "daily") {
+      totalFee = Math.max(1, durationDays) * rate
+    } else if (rateType === "monthly") {
+      const months = Math.max(1, Math.ceil(durationDays / 30))
+      totalFee = months * rate
+    } else {
+      totalFee = Math.max(1, durationHours) * rates.hourly
+    }
+
+    return {
+      entryTime: entry,
+      exitTime: exit,
+      durationHours,
+      rateType,
+      rate,
+      totalFee: Math.round(totalFee * 100) / 100,
+    }
+  }
+
+  async reserveSpotAdvanced(lotId: string, vehicleType: string, startTime: Date, duration: number): Promise<any> {
+    if (duration <= 0) {
+      throw new Error("Duration must be greater than zero")
+    }
+
+    const zone = await this.retrieveParkingZone(lotId) as any
+    const totalSpots = Number(zone.total_spots || 0)
+
+    const activeSessions = await this.listParkingSessions({ zone_id: lotId, status: "active" }) as any
+    const sessionList = Array.isArray(activeSessions) ? activeSessions : [activeSessions].filter(Boolean)
+
+    if (sessionList.length >= totalSpots) {
+      throw new Error("No available parking spots in this lot")
+    }
+
+    const hourlyRate = Number(zone.hourly_rate || 5)
+    const fee = Math.round(hourlyRate * duration * 100) / 100
+
+    const session = await (this as any).createParkingSessions({
+      zone_id: lotId,
+      vehicle_type: vehicleType,
+      status: "active",
+      started_at: new Date(startTime),
+      duration_hours: duration,
+      fee,
+      reserved_at: new Date(),
+    })
+
+    return session
+  }
+
   async calculateDynamicFee(lotId: string, durationMinutes: number, vehicleType: string): Promise<{
     lotId: string
     durationMinutes: number

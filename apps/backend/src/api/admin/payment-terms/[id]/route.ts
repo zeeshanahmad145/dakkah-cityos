@@ -1,5 +1,15 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+
+const updatePaymentTermSchema = z.object({
+  name: z.string().min(1).optional(),
+  net_days: z.number().positive().optional(),
+  discount_percent: z.number().min(0).max(100).optional(),
+  discount_days: z.number().min(0).optional(),
+  is_default: z.boolean().optional(),
+  is_active: z.boolean().optional(),
+}).passthrough()
 
 // Reference the same store (in production, use database)
 const paymentTermsStore: Map<string, any> = new Map()
@@ -29,23 +39,16 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params
-    const updates = req.body as {
-      name?: string
-      net_days?: number
-      discount_percent?: number
-      discount_days?: number
-      is_default?: boolean
-      is_active?: boolean
+    const parsed = updatePaymentTermSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const updates = parsed.data
 
     const existingTerm = paymentTermsStore.get(id)
     if (!existingTerm) {
       return res.status(404).json({ error: "Payment term not found" })
-    }
-
-    // Validate
-    if (updates.discount_percent !== undefined && (updates.discount_percent < 0 || updates.discount_percent > 100)) {
-      return res.status(400).json({ error: "Discount percent must be between 0 and 100" })
     }
 
     const net_days = updates.net_days ?? existingTerm.net_days

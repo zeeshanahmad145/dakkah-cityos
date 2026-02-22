@@ -1,6 +1,16 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
+const updateExceptionSchema = z.object({
+  exception_type: z.enum(["time_off", "holiday", "special_hours", "blocked"]).optional(),
+  start_date: z.string().optional(),
+  end_date: z.string().optional(),
+  all_day: z.boolean().optional(),
+  special_hours: z.array(z.object({ start: z.string(), end: z.string() })).optional(),
+  title: z.string().optional(),
+  reason: z.string().optional(),
+}).passthrough()
+
 export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { exceptionId } = req.params;

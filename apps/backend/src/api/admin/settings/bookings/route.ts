@@ -1,4 +1,5 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
 // In a real implementation, this would be stored in the database
@@ -34,13 +35,34 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     handleApiError(res, error, "GET admin settings bookings")}
 }
 
+const updateBookingConfigSchema = z.object({
+  config: z.object({
+    reminder_enabled: z.boolean().optional(),
+    reminder_hours_before: z.number().optional(),
+    cancellation_window_hours: z.number().optional(),
+    cancellation_fee_percent: z.number().optional(),
+    allow_reschedule: z.boolean().optional(),
+    reschedule_window_hours: z.number().optional(),
+    buffer_minutes_before: z.number().optional(),
+    buffer_minutes_after: z.number().optional(),
+    no_show_fee_percent: z.number().optional(),
+    mark_no_show_after_minutes: z.number().optional(),
+    allow_same_day_booking: z.boolean().optional(),
+    min_advance_booking_hours: z.number().optional(),
+    max_advance_booking_days: z.number().optional(),
+    allow_self_checkin: z.boolean().optional(),
+    checkin_window_minutes: z.number().optional(),
+  }).passthrough(),
+}).passthrough()
+
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const { config } = req.body as { config: typeof DEFAULT_CONFIG }
-  
-    if (!config) {
-      return res.status(400).json({ message: "Config is required" })
+    const parsed = updateBookingConfigSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+
+    const { config } = parsed.data
   
     // Validate and merge with defaults
     bookingConfig = {

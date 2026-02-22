@@ -1,6 +1,11 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const assignCompaniesSchema = z.object({
+  company_ids: z.array(z.string()),
+}).passthrough()
 
 // POST - Assign companies to pricing tier
 export async function POST(
@@ -9,7 +14,11 @@ export async function POST(
 ) {
   try {
     const { id } = req.params
-    const { company_ids } = req.body as { company_ids: string[] }
+    const parsed = assignCompaniesSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+    const { company_ids } = parsed.data
 
     const companyService = req.scope.resolve("companyModuleService")
 

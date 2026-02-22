@@ -1,5 +1,6 @@
 // @ts-nocheck
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { createLogger } from "../../../../../lib/logger"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 const logger = createLogger("api:admin/integrations")
@@ -15,9 +16,19 @@ const VALID_COLLECTIONS = [
   "portals",
 ]
 
+const cmsSyncSchema = z.object({
+  collection: z.string().optional(),
+  force: z.boolean().optional(),
+}).passthrough()
+
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const { collection, force } = (req.body || {}) as { collection?: string; force?: boolean }
+    const parsed = cmsSyncSchema.safeParse(req.body || {})
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+
+    const { collection, force } = parsed.data
 
     if (collection && !VALID_COLLECTIONS.includes(collection)) {
       return res.status(400).json({
@@ -32,11 +43,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const erpnextApiSecret = process.env.ERPNEXT_API_SECRET
 
     if (!payloadUrl || !payloadApiKey) {
-      return res.status(400).json({ error: "Payload CMS not configured (missing PAYLOAD_CMS_URL_DEV/PAYLOAD_CMS_URL or PAYLOAD_API_KEY)" })
+      return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
     }
 
     if (!erpnextUrl || !erpnextApiKey || !erpnextApiSecret) {
-      return res.status(400).json({ error: "ERPNext not configured (missing ERPNEXT_URL_DEV, ERPNEXT_API_KEY, or ERPNEXT_API_SECRET)" })
+      return res.status(503).json({ success: false, message: "Service not configured", service: "erpnext" })
     }
 
     const startTime = Date.now()

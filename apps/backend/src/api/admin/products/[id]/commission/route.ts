@@ -1,6 +1,17 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const createCommissionSchema = z.object({
+  rate: z.number(),
+  type: z.enum(["percentage", "fixed"]).optional(),
+}).passthrough()
+
+const updateCommissionSchema = z.object({
+  rate: z.number().optional(),
+  type: z.enum(["percentage", "fixed"]).optional(),
+}).passthrough()
 
 // GET - Get per-product commission override
 export async function GET(
@@ -43,10 +54,11 @@ export async function POST(
 ) {
   try {
     const { id } = req.params
-    const { rate, type = "percentage" } = req.body as {
-      rate: number
-      type?: "percentage" | "fixed"
+    const parsed = createCommissionSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { rate, type = "percentage" } = parsed.data
 
     const commissionService = req.scope.resolve("commissionModuleService")
     const query = req.scope.resolve("query")
@@ -95,10 +107,11 @@ export async function PUT(
 ) {
   try {
     const { id } = req.params
-    const { rate, type } = req.body as {
-      rate?: number
-      type?: "percentage" | "fixed"
+    const parsed = updateCommissionSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
     }
+    const { rate, type } = parsed.data
 
     const commissionService = req.scope.resolve("commissionModuleService")
     const query = req.scope.resolve("query")

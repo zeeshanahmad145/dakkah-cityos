@@ -3,6 +3,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
 // POST - Handle Stripe subscription webhooks
+// Webhook payloads validated by Stripe signature verification
 export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
@@ -11,7 +12,7 @@ export async function POST(
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
   if (!stripeSecretKey) {
-    return res.status(400).json({ message: "Stripe is not configured" })
+    return res.status(503).json({ success: false, message: "Service not configured", service: "stripe" })
   }
 
   const stripe = require("stripe")(stripeSecretKey)

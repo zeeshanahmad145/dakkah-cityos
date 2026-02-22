@@ -1,6 +1,11 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+
+const assignPaymentTermsSchema = z.object({
+  payment_term_id: z.string(),
+}).passthrough()
 
 /**
  * Assign Payment Terms to a Company
@@ -67,7 +72,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params
-    const { payment_term_id } = req.body as { payment_term_id: string }
+    const parsed = assignPaymentTermsSchema.safeParse(req.body)
+    if (!parsed.success) {
+      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    }
+    const { payment_term_id } = parsed.data
     
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
 

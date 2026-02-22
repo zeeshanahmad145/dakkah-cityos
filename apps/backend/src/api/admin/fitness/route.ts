@@ -18,7 +18,7 @@ const createSchema = z.object({
   access_hours: z.any().optional(),
   includes: z.any().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

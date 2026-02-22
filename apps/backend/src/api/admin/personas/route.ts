@@ -16,7 +16,7 @@ const createSchema = z.object({
   tenant_id: z.string().min(1),
   status: z.enum(["active", "inactive"]).optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -35,9 +35,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("persona") as any
-    const validation = createSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await moduleService.createPersonas(validation.data)
+    const parsed = createSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await moduleService.createPersonas(parsed.data)
     return res.status(201).json({ item })
 
   } catch (error: any) {

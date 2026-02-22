@@ -24,7 +24,7 @@ const createSchema = z.object({
   tags: z.any().nullable().optional(),
   status: z.enum(["draft", "published", "live", "completed", "cancelled"]).optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {

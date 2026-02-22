@@ -9,7 +9,7 @@ const updateSchema = z.object({
   location: z.any().nullable().optional(),
   status: z.enum(["active", "inactive", "maintenance"]).optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -27,9 +27,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("node") as any
     const { id } = req.params
-    const validation = updateSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await moduleService.updateNodes({ id, ...validation.data })
+    const parsed = updateSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await moduleService.updateNodes({ id, ...parsed.data })
     return res.json({ item })
 
   } catch (error: any) {

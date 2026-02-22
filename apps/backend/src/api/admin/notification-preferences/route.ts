@@ -8,7 +8,7 @@ const createSchema = z.object({
   channel: z.enum(["email", "sms", "push", "in_app"]),
   category: z.enum(["marketing", "transactional", "security", "updates"]),
   enabled: z.boolean(),
-})
+}).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -28,9 +28,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("notificationPreferencesModuleService") as any
-    const validation = createSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await moduleService.createNotificationPreferences(validation.data)
+    const parsed = createSchema.safeParse(req.body)
+    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    const item = await moduleService.createNotificationPreferences(parsed.data)
     return res.status(201).json({ item })
 
   } catch (error: any) {

@@ -66,6 +66,10 @@ async function handleHierarchySync(collection: string, data: any, correlationId:
   try {
     const { createHierarchySyncEngine } = require("../../../integrations/cms-hierarchy-sync/engine")
     const engine = createHierarchySyncEngine()
+    if (!engine) {
+      logger.info(`[Webhook:PayloadCMS] CMS sync engine not available (services not configured), skipping hierarchy sync, correlation: ${correlationId}`)
+      return
+    }
     const result = await engine.syncCollection(collection)
     logger.info(`[Webhook:PayloadCMS] Hierarchy sync completed for ${collection}: ${result.created} created, ${result.updated} updated, ${result.failed} failed, correlation: ${correlationId}`)
   } catch (error: any) {}
@@ -110,6 +114,10 @@ async function handleDelete(collection: string, data: any, correlationId: string
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
+
+  if (!process.env.PAYLOAD_CMS_URL_DEV && !process.env.PAYLOAD_CMS_URL) {
+    return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
+  }
 
   try {
     const secret = process.env.PAYLOAD_CMS_WEBHOOK_SECRET
