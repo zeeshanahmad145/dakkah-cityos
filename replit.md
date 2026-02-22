@@ -88,3 +88,5 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **Payment Gateway:** Stripe
 - **Email Service:** SendGrid
 - **File Storage:** Vercel Blob, Replit Object Storage
+- **Caching:** Redis (Redis Labs) — `@medusajs/cache-redis` for Medusa framework cache, `CityOSCache` (ioredis) for application-level cache
+- **Event Bus:** Redis (Redis Labs) — `@medusajs/event-bus-redis` replaces local in-memory event bus
