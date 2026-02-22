@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=storefront",
+  "buildCommand": "pnpm run build",
   "devCommand": "pnpm dev",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "framework": null,
