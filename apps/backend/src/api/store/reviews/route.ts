@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -8,7 +9,7 @@ const createReviewSchema = z.object({
   product_id: z.string().optional(),
   vendor_id: z.string().optional(),
   order_id: z.string().optional(),
-})
+});
 
 // POST /store/reviews - Create a new review
 export async function POST(req: MedusaRequest, res: MedusaResponse) {

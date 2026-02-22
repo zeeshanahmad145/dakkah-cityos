@@ -1,7 +1,8 @@
+import { z } from "zod";
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
-const markHelpfulSchema = z.object({})
+const markHelpfulSchema = z.object({});
 
 // POST /store/reviews/:id/helpful - Mark a review as helpful
 export async function POST(req: MedusaRequest, res: MedusaResponse) {

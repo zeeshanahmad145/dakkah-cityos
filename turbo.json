@@ -2,15 +2,72 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        ".medusa/**"
+      ],
+      "env": [
+        "DATABASE_URL",
+        "DATABASE_URL_UNPOOLED",
+        "POSTGRES_URL",
+        "POSTGRES_URL_NON_POOLING",
+        "POSTGRES_URL_NO_SSL",
+        "POSTGRES_PRISMA_URL",
+        "PGHOST",
+        "PGHOST_UNPOOLED",
+        "PGUSER",
+        "PGPASSWORD",
+        "PGDATABASE",
+        "POSTGRES_USER",
+        "POSTGRES_HOST",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_DATABASE",
+        "commerce_db_DATABASE_URL",
+        "commerce_db_DATABASE_URL_UNPOOLED",
+        "commerce_db_POSTGRES_URL",
+        "commerce_db_POSTGRES_URL_NON_POOLING",
+        "commerce_db_POSTGRES_URL_NO_SSL",
+        "commerce_db_POSTGRES_PRISMA_URL",
+        "commerce_db_PGHOST",
+        "commerce_db_PGHOST_UNPOOLED",
+        "commerce_db_PGUSER",
+        "commerce_db_PGPASSWORD",
+        "commerce_db_PGDATABASE",
+        "commerce_db_POSTGRES_USER",
+        "commerce_db_POSTGRES_HOST",
+        "commerce_db_POSTGRES_PASSWORD",
+        "commerce_db_POSTGRES_DATABASE",
+        "REDIS_URL",
+        "commerce_cache_REDIS_URL",
+        "BLOB_READ_WRITE_TOKEN",
+        "SESSION_SECRET",
+        "NODE_ENV",
+        "LOG_LEVEL",
+        "APP_VERSION",
+        "SERVICE_NAME",
+        "STORE_CORS",
+        "ADMIN_CORS",
+        "AUTH_CORS",
+        "MEDUSA_BACKEND_PORT",
+        "MEDUSA_BACKEND_URL",
+        "MEDUSA_ADMIN_PATH",
+        "STRIPE_API_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "SENDGRID_API_KEY"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "start": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "lint": {
       "outputs": []

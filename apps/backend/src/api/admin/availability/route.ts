@@ -1,17 +1,20 @@
+import { z } from "zod";
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../lib/api-error-handler";
 
-const createAvailabilitySchema = z.object({
-  owner_type: z.enum(["provider", "service", "resource"]),
-  owner_id: z.string(),
-  schedule_type: z.enum(["weekly_recurring", "custom"]).optional(),
-  weekly_schedule: z.any().optional(),
-  timezone: z.string().optional(),
-  effective_from: z.string().optional(),
-  effective_to: z.string().optional(),
-  slot_duration_minutes: z.number().optional(),
-  slot_increment_minutes: z.number().optional(),
-}).passthrough()
+const createAvailabilitySchema = z
+  .object({
+    owner_type: z.enum(["provider", "service", "resource"]),
+    owner_id: z.string(),
+    schedule_type: z.enum(["weekly_recurring", "custom"]).optional(),
+    weekly_schedule: z.any().optional(),
+    timezone: z.string().optional(),
+    effective_from: z.string().optional(),
+    effective_to: z.string().optional(),
+    slot_duration_minutes: z.number().optional(),
+    slot_increment_minutes: z.number().optional(),
+  })
+  .passthrough();
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   try {

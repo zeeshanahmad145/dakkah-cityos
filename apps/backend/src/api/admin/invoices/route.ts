@@ -1,23 +1,30 @@
+import { z } from "zod";
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import { handleApiError } from "../../../lib/api-error-handler";
 
-const createInvoiceSchema = z.object({
-  customer_id: z.string(),
-  order_id: z.string().optional(),
-  amount: z.number(),
-  currency_code: z.string().optional().default("usd"),
-  due_date: z.string(),
-  line_items: z.array(z.object({
-    description: z.string(),
-    quantity: z.number(),
-    unit_price: z.number(),
-  })).optional(),
-}).strict()
+const createInvoiceSchema = z
+  .object({
+    customer_id: z.string(),
+    order_id: z.string().optional(),
+    amount: z.number(),
+    currency_code: z.string().optional().default("usd"),
+    due_date: z.string(),
+    line_items: z
+      .array(
+        z.object({
+          description: z.string(),
+          quantity: z.number(),
+          unit_price: z.number(),
+        }),
+      )
+      .optional(),
+  })
+  .strict();
 
 interface CityOSContext {
-  tenantId?: string
-  storeId?: string
+  tenantId?: string;
+  storeId?: string;
 }
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
