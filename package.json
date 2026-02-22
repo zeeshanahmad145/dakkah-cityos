@@ -70,6 +70,7 @@
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",
     "@octokit/rest": "^22.0.1",
+    "@replit/object-storage": "^1.0.0",
     "@temporalio/client": "^1.14.1",
     "google-auth-library": "^10.5.0"
   }

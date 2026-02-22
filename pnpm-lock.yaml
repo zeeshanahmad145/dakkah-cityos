@@ -46,6 +46,9 @@ importers:
       '@octokit/rest':
         specifier: ^22.0.1
         version: 22.0.1
+      '@replit/object-storage':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@temporalio/client':
         specifier: ^1.14.1
         version: 1.14.1
