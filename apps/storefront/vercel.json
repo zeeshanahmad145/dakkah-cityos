@@ -1,15 +1,10 @@
 {
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=storefront",
+  "buildCommand": "pnpm turbo run build --filter=storefront",
   "devCommand": "pnpm dev",
-  "installCommand": "cd ../.. && pnpm install",
+  "installCommand": "pnpm install",
   "framework": null,
-  "outputDirectory": ".output/public",
+  "outputDirectory": "apps/storefront/.output/public",
   "regions": [
     "iad1"
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "VITE_DEPLOYMENT_TARGET": "vercel",
-    "VITE_MEDUSA_BACKEND_URL": "https://dakkah-cityos-medusa.vercel.app"
-  }
+  ]
 }
