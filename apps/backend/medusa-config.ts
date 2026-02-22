@@ -58,6 +58,23 @@ module.exports = defineConfig({
     // @rsc-labs/medusa-rbac — NOT NEEDED: custom 10-role RBAC system already implemented via governance module
   ],
   modules: [
+    ...(process.env.REDIS_URL
+      ? [
+          {
+            resolve: "@medusajs/medusa/event-bus-redis",
+            options: {
+              redisUrl: process.env.REDIS_URL,
+            },
+          },
+          {
+            resolve: "@medusajs/medusa/cache-redis",
+            options: {
+              redisUrl: process.env.REDIS_URL,
+              ttl: 300,
+            },
+          },
+        ]
+      : []),
     {
       resolve: "@medusajs/medusa/notification",
       options: {
