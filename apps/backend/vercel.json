@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npx medusa db:migrate && cd ../.. && turbo run build --filter=backend",
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
+  "outputDirectory": ".medusa/server",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.js"
+    }
+  ],
+  "regions": [
+    "iad1"
+  ]
+}
