@@ -5,5 +5,27 @@
   "framework": null,
   "regions": [
     "iad1"
+  ],
+  "rewrites": [
+    {
+      "source": "/store/:path*",
+      "destination": "https://dakkah-cityos-medusa-backend.vercel.app/store/:path*"
+    },
+    {
+      "source": "/platform/:path*",
+      "destination": "https://dakkah-cityos-medusa-backend.vercel.app/platform/:path*"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://dakkah-cityos-medusa-backend.vercel.app/admin/:path*"
+    },
+    {
+      "source": "/auth/:path*",
+      "destination": "https://dakkah-cityos-medusa-backend.vercel.app/auth/:path*"
+    },
+    {
+      "source": "/commerce/:path*",
+      "destination": "https://dakkah-cityos-medusa-backend.vercel.app/commerce/:path*"
+    }
   ]
 }
