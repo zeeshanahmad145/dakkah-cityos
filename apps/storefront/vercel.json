@@ -1,7 +1,7 @@
 {
   "buildCommand": "pnpm run build",
   "devCommand": "pnpm dev",
-  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": null,
   "regions": [
     "iad1"
