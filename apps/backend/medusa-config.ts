@@ -40,7 +40,7 @@ module.exports = defineConfig({
     },
   },
   projectConfig: {
-    databaseUrl: process.env.DATABASE_URL,
+    databaseUrl: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL,
 
     http: {
       storeCors: process.env.STORE_CORS!,

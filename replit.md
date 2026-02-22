@@ -56,7 +56,7 @@ The project utilizes Neon PostgreSQL (`NEON_DATABASE_URL` in Replit, `DATABASE_U
 - **Walt.id (Decentralized Digital Identity):** DID management, verifiable credentials, wallet integration.
 
 ### Database Configuration
-The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` environment variable. All MikroORM migrations are applied, and seed data resides in heliumdb.
+The project uses an external Neon PostgreSQL database via the `NEON_DATABASE_URL` secret (same database used by Vercel production). The `medusa-config.ts` prefers `NEON_DATABASE_URL` over the Replit-provided `DATABASE_URL` (heliumdb), ensuring dev and production share the same database. All MikroORM migrations are applied against the Neon database.
 
 ## Confluence Documentation
 The following audit and remediation pages are published to the Dakkah Confluence space (SD):
