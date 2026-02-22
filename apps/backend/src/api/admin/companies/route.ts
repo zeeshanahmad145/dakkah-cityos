@@ -65,7 +65,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     input: {
       ...parsed.data,
       tenant_id: tenantId as string,
-    },
+    } as any,
   });
 
   res.json({ company: (result as any).company });

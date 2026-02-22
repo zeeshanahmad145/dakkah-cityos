@@ -77,7 +77,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       tenantId: context.tenantId,
       storeId: context.storeId,
       ...validation.data,
-    },
+    } as any,
   })
 
   return res.status(201).json({ vendor: result.vendor })
