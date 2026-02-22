@@ -659,7 +659,7 @@ module.exports = defineConfig({
                   id: "vercel-blob",
                   options: {
                     token: process.env.BLOB_READ_WRITE_TOKEN,
-                    access: "public",
+                    access: "private",
                   },
                 },
               ]

@@ -42,7 +42,7 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 The frontend (Storefront) uses Port 5000 and Host 0.0.0.0, configured in `apps/storefront/vite.config.ts` with `allowedHosts: true`. The backend (Medusa) uses Port 9000 and Host 0.0.0.0. A `start.sh` script manages process sequencing and port cleanup.
 
 ### File Handling
-Development (Replit) uses a custom Replit Object Storage provider (`apps/backend/src/modules/file-replit`). Production (Vercel) uses a custom Vercel Blob provider (`apps/backend/src/modules/file-vercel-blob`). `medusa-config.ts` auto-switches providers based on the `BLOB_READ_WRITE_TOKEN` environment variable.
+All media assets are stored on Vercel Blob (private store) using `@vercel/blob@2.3.0`. The `BLOB_READ_WRITE_TOKEN` secret enables the Vercel Blob file provider (`apps/backend/src/modules/file-vercel-blob`). A fallback Replit Object Storage provider exists (`apps/backend/src/modules/file-replit`) but is no longer active since `BLOB_READ_WRITE_TOKEN` is set. `medusa-config.ts` auto-switches providers based on the `BLOB_READ_WRITE_TOKEN` environment variable. All 201 product images and 65 product thumbnails were migrated from Replit Object Storage to Vercel Blob on Feb 22, 2026.
 
 ### Production Database
 The project utilizes Neon PostgreSQL (`NEON_DATABASE_URL` in Replit, `DATABASE_URL` in Vercel) for production. Migrations are handled via `npx medusa db:migrate` during the Vercel build process. The `apps/backend/vercel.json` config ensures correct build commands for the monorepo structure.

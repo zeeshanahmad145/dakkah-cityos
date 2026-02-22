@@ -27,6 +27,7 @@ WALTID_URL_LOCAL = "http://localhost:7000"
 MEDUSA_BACKEND_URL_LOCAL = "http://localhost:9000"
 STOREFRONT_URL_LOCAL = "http://localhost:5000"
 VITE_MEDUSA_PUBLISHABLE_KEY = "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a"
+BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_IbLh48cuyUsSk964_alw7fQT1NHRj9OYHcXHBJFXVwl4EkM"
 
 [userenv.development]
 
