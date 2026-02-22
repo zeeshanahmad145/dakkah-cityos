@@ -54,7 +54,19 @@
       "@payloadcms/next": "^3.75.0",
       "@payloadcms/richtext-lexical": "^3.75.0",
       "@payloadcms/storage-s3": "^3.75.0",
-      "@payloadcms/ui": "^3.75.0"
+      "@payloadcms/ui": "^3.75.0",
+      "@types/node": "20.19.0",
+      "@swc/core": "^1.7.28"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "7",
+        "@types/react": "19",
+        "picomatch": "4",
+        "magicast": "0.5",
+        "@medusajs/ui": "4"
+      },
+      "ignoreMissing": []
     },
     "ignoredBuiltDependencies": [
       "@medusajs/telemetry",
