@@ -56,7 +56,7 @@ export class ReplitFileService extends AbstractFileProviderService {
       );
     }
 
-    const url = `${this.backendUrl_}/store/file-replit/${key}`;
+    const url = `${this.backendUrl_}/store/file-replit/download?key=${encodeURIComponent(key)}`;
 
     return {
       url,
@@ -74,6 +74,6 @@ export class ReplitFileService extends AbstractFileProviderService {
   }
 
   async getPresignedDownloadUrl(fileData: ProviderGetFileDTO): Promise<string> {
-    return `${this.backendUrl_}/store/file-replit/${fileData.fileKey}`;
+    return `${this.backendUrl_}/store/file-replit/download?key=${encodeURIComponent(fileData.fileKey)}`;
   }
 }
