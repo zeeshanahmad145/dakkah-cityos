@@ -12,7 +12,7 @@ This project is a Medusa.js e-commerce monorepo designed for multi-tenancy and i
 - Payload CMS API compatibility for future migration
 
 ## System Architecture
-The project utilizes a Turborepo monorepo structure, incorporating a Medusa.js v2 backend API, a TanStack Start + React storefront, shared TypeScript contracts, design tokens, theme providers, and a component type system.
+The project utilizes a Turborepo monorepo structure, incorporating a Medusa.js v2.13.1 backend API, a TanStack Start + React storefront, shared TypeScript contracts, design tokens, theme providers, and a component type system.
 
 ### Backend
 The backend offers modularity for CityOS features including tenant management, a 5-level node hierarchy (CITY→DISTRICT→ZONE→FACILITY→ASSET), policy inheritance-based governance, a persona system, a CMS-compatible event outbox, and i18n. It supports multi-vendor marketplaces, subscriptions, B2B, bookings, promotions, and specialized services. Key design principles include multi-tenant isolation, RBAC, persona precedence, and residency zones. All custom code adheres to Medusa's official extension pattern without modifying its core.
@@ -70,6 +70,8 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **22.14** — Admin Dashboard 404 Root Cause Analysis & Vercel Deployment Fix (page ID: 59113473)
 
 ### Key Findings (Feb 22, 2026)
+- **Medusa v2.13.1 upgrade complete**: All `@medusajs/*` packages upgraded from `2.11.4-snapshot-20251107212527` to `2.13.1`, `@medusajs/ui` to `4.1.1`, `@medusajs/icons` to `2.13.1`
+- **Zod compatibility**: Medusa 2.13.1 requires Zod v3 (`^3.25.0`), not v4 — v4's changed internals (no `.def` property) cause API route registration failures
 - **472 total API routes**: 250 admin, 206 store, 16 platform
 - **Production 404s**: All `/platform/*` routes return 404 via storefront proxy due to Nitro-generated `.vercel/output/config.json` overriding `vercel.json` rewrites
 - **SSR hydration issue**: `enabled: typeof window !== "undefined"` in TanStack Query hooks prevents SSR data fetching, causing 3-5s LCP
