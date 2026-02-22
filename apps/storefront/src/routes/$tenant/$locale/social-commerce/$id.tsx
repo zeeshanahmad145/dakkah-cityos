@@ -24,7 +24,7 @@ export const Route = createFileRoute("/$tenant/$locale/social-commerce/$id")({
     try {
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/social-commerce/${params.id}`, {
-        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_56377e90449a39fc4585675802137b09577cd6e17f339eba6dc923eaf22e3445" },
+        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_8284bf2e6620fac6cd844648a64e64ed0b4a0cf402d4dfc66725ffc67854d8a6" },
       })
       if (!resp.ok) return { item: null }
       const data = await resp.json()

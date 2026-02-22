@@ -52,7 +52,7 @@ export const Route = createFileRoute("/$tenant/$locale/bookings/$serviceHandle")
   loader: async ({ params, abortController }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const headers = { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_56377e90449a39fc4585675802137b09577cd6e17f339eba6dc923eaf22e3445" }
+      const headers = { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_8284bf2e6620fac6cd844648a64e64ed0b4a0cf402d4dfc66725ffc67854d8a6" }
       const resp = await fetchWithTimeout(`${baseUrl}/store/bookings/services`, { headers, signal: abortController.signal })
       if (!resp.ok) return { service: null, providers: [] }
       const data = await resp.json()

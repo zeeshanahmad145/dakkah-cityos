@@ -40,7 +40,7 @@ export const Route = createFileRoute("/$tenant/$locale/event-ticketing/$id")({
     try {
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/event-ticketing/${params.id}`, {
-        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_56377e90449a39fc4585675802137b09577cd6e17f339eba6dc923eaf22e3445" },
+        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_8284bf2e6620fac6cd844648a64e64ed0b4a0cf402d4dfc66725ffc67854d8a6" },
       })
       if (!resp.ok) {
         const fallback = getFallbackItems().find((i) => i.id === params.id) || null
