@@ -59,7 +59,15 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 ### Database Configuration
 The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` environment variable. Medusa backend connects via `process.env.DATABASE_URL` in `medusa-config.ts`. All 203 MikroORM migrations are applied, and all seed data lives in heliumdb. No local PostgreSQL instance is required.
 
-## Recent Changes (2026-02-20)
+## Recent Changes (2026-02-22)
+
+### Orchestrator Removal & Storefront Migration Prep
+- Removed `@dakkah/orchestrator` (duplicate Payload CMS app) from monorepo — already deployed at https://vercel.com/mvp-lab-team/dakkah-cityos-cms/
+- Storefront migration guide created at `docs/STOREFRONT_MIGRATION_GUIDE.md`
+- Storefront to be migrated to the CMS project; this repo will become backend-only
+- Shared packages needed by storefront: `@dakkah-cityos/design-runtime`, `@dakkah-cityos/design-tokens`, `@dakkah-cityos/design-system`
+
+## Previous Changes (2026-02-20)
 
 ### Comprehensive 7-Sprint Gap Remediation
 Full deep-dive audit identified and remediated all gaps across 8 areas:
