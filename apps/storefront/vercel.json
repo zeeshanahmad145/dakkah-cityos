@@ -3,7 +3,6 @@
   "devCommand": "pnpm dev",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "framework": null,
-  "outputDirectory": "apps/storefront/.output/public",
   "regions": [
     "iad1"
   ]

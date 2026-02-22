@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
         : []),
 
       tanstackStart({
-        target: "node",
+        target: process.env.VERCEL ? "vercel" : "node",
         customViteReactPlugin: true,
       }),
       react(),
