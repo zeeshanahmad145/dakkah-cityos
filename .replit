@@ -41,10 +41,7 @@ SENDGRID_FROM = "dk_dev_22d60466c799dbf8d9af7d6af51244359d77d26c9cb7fe287515c8b6
 
 [[ports]]
 localPort = 5000
-
-[[ports]]
-localPort = 9000
-externalPort = 9000
+externalPort = 80
 
 [[ports]]
 localPort = 24678
