@@ -67,6 +67,7 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **22.11** — Post-Deployment Vercel Routing Audit & Remediation (page ID: 58851329)
 - **22.12** — Storefront SSR Build & Hydration Audit (page ID: 58851370)
 - **22.13** — Complete API Route Registry & Production Parity Matrix (page ID: 59047937)
+- **22.14** — Admin Dashboard 404 Root Cause Analysis & Vercel Deployment Fix (page ID: 59113473)
 
 ### Key Findings (Feb 22, 2026)
 - **472 total API routes**: 250 admin, 206 store, 16 platform
