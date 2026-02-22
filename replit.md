@@ -58,6 +58,22 @@ The project utilizes Neon PostgreSQL (`NEON_DATABASE_URL` in Replit, `DATABASE_U
 ### Database Configuration
 The project uses Replit-provided PostgreSQL (heliumdb) via the `DATABASE_URL` environment variable. All MikroORM migrations are applied, and seed data resides in heliumdb.
 
+## Confluence Documentation
+The following audit and remediation pages are published to the Dakkah Confluence space (SD):
+
+- **22.8.4** — Multi-Tenancy Gap Report & Model-Migration Audit
+- **22.9** — Vercel Production Deployment Guide
+- **22.10** — MikroORM Migration Conflict Audit & Resolution
+- **22.11** — Post-Deployment Vercel Routing Audit & Remediation (page ID: 58851329)
+- **22.12** — Storefront SSR Build & Hydration Audit (page ID: 58851370)
+- **22.13** — Complete API Route Registry & Production Parity Matrix (page ID: 59047937)
+
+### Key Findings (Feb 22, 2026)
+- **472 total API routes**: 250 admin, 206 store, 16 platform
+- **Production 404s**: All `/platform/*` routes return 404 via storefront proxy due to Nitro-generated `.vercel/output/config.json` overriding `vercel.json` rewrites
+- **SSR hydration issue**: `enabled: typeof window !== "undefined"` in TanStack Query hooks prevents SSR data fetching, causing 3-5s LCP
+- **Fix priorities**: P0 — Nitro route rules + MEDUSA_BACKEND_URL env var; P1 — Migrate to TanStack Router loaders for SSR
+
 ## External Dependencies
 - **Database:** PostgreSQL (Neon, Replit's heliumdb)
 - **Frontend Framework:** TanStack Start, React
