@@ -7,8 +7,9 @@ import {
   getAllPrefixes,
   getAllSystemPolicies,
 } from "../lib/storage/prefixRegistry";
+import { appConfig } from "../lib/config";
 
-const TENANT_SLUG = process.env.CITYOS_DEFAULT_TENANT || "dakkah";
+const TENANT_SLUG = appConfig.tenant.defaultId;
 
 async function scaffold() {
   const args = process.argv.slice(2);
@@ -25,14 +26,14 @@ async function scaffold() {
   console.log(`Prefix registry: ${Object.keys(prefixes).length} entries`);
   console.log(`System policies: ${Object.keys(policies).length} entries`);
 
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  const token = appConfig.storage.blobToken;
   if (!token) {
     console.error("ERROR: BLOB_READ_WRITE_TOKEN not configured");
     process.exit(1);
   }
   console.log("Vercel Blob: configured");
 
-  const dbUrl = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
+  const dbUrl = appConfig.database.url;
   if (!dbUrl) {
     console.error("ERROR: No database URL configured");
     process.exit(1);
