@@ -96,12 +96,14 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **SSR hydration issue**: `enabled: typeof window !== "undefined"` in TanStack Query hooks prevents SSR data fetching, causing 3-5s LCP
 - **Fix priorities**: P0 — Nitro route rules + MEDUSA_BACKEND_URL env var; P1 — Migrate to TanStack Router loaders for SSR
 
-### Vercel Production Routing Fix (Feb 23, 2026)
-- **Post-build script** (`apps/storefront/scripts/vercel-post-build.mjs`): Injects proxy rewrites for `/platform/**`, `/store/**`, `/admin/**`, `/auth/**`, `/commerce/**` into Nitro-generated `.vercel/output/config.json` — solves production 404s on API routes
-- **Storefront vercel.json build command** updated to: `cd ../.. && npx turbo run build --filter=storefront && node apps/storefront/scripts/vercel-post-build.mjs`
-- **Admin dashboard backend URL fix**: `medusa-config.ts` now uses `MEDUSA_BACKEND_URL` or `VERCEL_URL` for admin `backendUrl`, preventing localhost:9000 calls in production
+### Vercel Production Deployment (Feb 23, 2026)
+- **Client-side absolute URLs**: Storefront `getServerBaseUrl()` returns `VITE_MEDUSA_BACKEND_URL` on client side in production, making all SDK and `fetchWithTimeout` calls use absolute backend URLs (no proxy rewrites needed)
+- **Admin dashboard backend URL**: `medusa-config.ts` uses `MEDUSA_BACKEND_URL` → `VERCEL_URL` → `VERCEL_PROJECT_PRODUCTION_URL` fallback chain for admin `backendUrl`, preventing localhost:9000 calls
+- **Post-build script** (`apps/storefront/scripts/vercel-post-build.mjs`): Backup rewrite injection into Nitro config (kept as defense-in-depth)
 - **Image proxy**: All product images use `/platform/media?path={blob-pathname}` proxy URLs; private Vercel Blob images served through backend proxy with caching
-- **Required Vercel env var**: `MEDUSA_BACKEND_URL` must be set to the backend deployment URL (e.g., `https://api.dakkah.com` or the Vercel backend URL)
+- **Required Vercel env vars**:
+  - **Backend project**: `STORE_CORS` must include `*` or the storefront domain; `MEDUSA_BACKEND_URL` (optional, auto-detected from `VERCEL_URL`)
+  - **Storefront project**: `VITE_MEDUSA_BACKEND_URL` must be set to the backend deployment URL (e.g., `https://dakkah-cityos-medusa-backend.vercel.app`)
 
 ## External Dependencies
 - **Database:** PostgreSQL (Neon, Replit's heliumdb)

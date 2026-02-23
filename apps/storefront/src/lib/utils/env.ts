@@ -17,7 +17,8 @@ export function getBackendUrl(): string {
 
 export function getServerBaseUrl(): string {
   const isServer = typeof window === "undefined"
-  return isServer ? getBackendUrl() : ""
+  if (isServer) return getBackendUrl()
+  return import.meta.env.VITE_MEDUSA_BACKEND_URL || import.meta.env.VITE_BACKEND_URL || ""
 }
 
 /**
@@ -71,13 +72,20 @@ export function fetchWithTimeout(
 ): Promise<Response> {
   const { timeoutMs = DEFAULT_TIMEOUT_MS, ...fetchOptions } = options || {}
 
-  // Inject publishable key into headers
   const publishableKey = import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY
   const headers = new Headers(fetchOptions.headers)
   if (publishableKey && !headers.has("x-publishable-api-key")) {
     headers.set("x-publishable-api-key", publishableKey)
   }
   fetchOptions.headers = headers
+
+  let resolvedUrl = url
+  if (typeof window !== "undefined" && url.startsWith("/")) {
+    const base = getServerBaseUrl()
+    if (base) {
+      resolvedUrl = `${base}${url}`
+    }
+  }
 
   const controller = new AbortController()
   const existingSignal = fetchOptions.signal
@@ -90,7 +98,7 @@ export function fetchWithTimeout(
     () => controller.abort("Request timeout"),
     timeoutMs,
   )
-  return fetch(url, { ...fetchOptions, signal: controller.signal }).finally(
+  return fetch(resolvedUrl, { ...fetchOptions, signal: controller.signal }).finally(
     () => clearTimeout(timeoutId),
   )
 }
