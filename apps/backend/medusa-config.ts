@@ -1,10 +1,12 @@
 import { defineConfig, loadEnv } from "@medusajs/framework/utils";
 import path from "path";
 import { validateEnvironment } from "./src/lib/env-validation";
+import { initSentry } from "./src/lib/sentry-init";
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
 
 validateEnvironment();
+initSentry();
 
 const iconsPath = path.resolve(
   __dirname,

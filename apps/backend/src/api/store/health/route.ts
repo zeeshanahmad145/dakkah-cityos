@@ -29,6 +29,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   }
 
   const integrations: Record<string, { status: string; configured: boolean }> = {
+    sentry: {
+      status: appConfig.sentry.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.sentry.isConfigured,
+    },
     stripe: {
       status: appConfig.stripe.isConfigured ? "configured" : "not_configured",
       configured: appConfig.stripe.isConfigured,
