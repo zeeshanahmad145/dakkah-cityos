@@ -5,9 +5,20 @@
 
 /**
  * Get the backend URL for API requests
- * Uses VITE_BACKEND_URL environment variable with fallback
+ * Uses VITE_BACKEND_URL environment variable with fallback.
+ * On server (Vercel SSR), also checks process.env as runtime fallback
+ * since VITE_ vars are baked at build time and may be missing from cached builds.
  */
 export function getBackendUrl(): string {
+  if (typeof window === "undefined") {
+    return (
+      import.meta.env.VITE_BACKEND_URL ||
+      import.meta.env.VITE_MEDUSA_BACKEND_URL ||
+      (typeof process !== "undefined" && process.env?.MEDUSA_BACKEND_URL) ||
+      (typeof process !== "undefined" && process.env?.BACKEND_URL) ||
+      ""
+    )
+  }
   return (
     import.meta.env.VITE_BACKEND_URL ||
     import.meta.env.VITE_MEDUSA_BACKEND_URL ||
@@ -66,9 +77,15 @@ export function isProduction(): boolean {
 
 /**
  * Get Medusa publishable API key
+ * On server, also checks process.env as runtime fallback for Vercel SSR.
  */
 export function getMedusaPublishableKey(): string {
-  return import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || ""
+  const viteKey = import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY
+  if (viteKey) return viteKey
+  if (typeof window === "undefined" && typeof process !== "undefined") {
+    return process.env?.MEDUSA_PUBLISHABLE_KEY || process.env?.VITE_MEDUSA_PUBLISHABLE_KEY || ""
+  }
+  return ""
 }
 
 /**
