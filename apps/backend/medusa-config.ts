@@ -15,6 +15,7 @@ module.exports = defineConfig({
   admin: {
     path: "/commerce/admin",
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
+    backendUrl: process.env.MEDUSA_BACKEND_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined),
     vite: () => {
       let allowedHosts: string[] | true = true;
       if (process.env.__MEDUSA_ADDITIONAL_ALLOWED_HOSTS) {

@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=storefront",
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=storefront && cd apps/storefront && node scripts/vercel-post-build.mjs",
   "devCommand": "pnpm dev",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "framework": null,
