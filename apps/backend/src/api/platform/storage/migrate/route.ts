@@ -100,7 +100,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
         try {
           const copyResult = await copy(url, newPath, {
-            access: "public",
+            access: "private",
             token,
           });
 
