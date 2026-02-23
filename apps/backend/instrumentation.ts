@@ -1,24 +1,40 @@
-// Uncomment this file to enable instrumentation and observability using OpenTelemetry
-// Refer to the docs for installation instructions: https://docs.medusajs.com/learn/debugging-and-testing/instrumentation
+import * as Sentry from "@sentry/node"
+import { appConfig } from "./src/lib/config"
+import { createLogger } from "./src/lib/logger"
+import { initGracefulShutdown } from "./src/lib/middleware/graceful-shutdown"
 
-// import { registerOtel } from "@medusajs/medusa"
-// // If using an exporter other than Zipkin, require it here.
-// import { ZipkinExporter } from "@opentelemetry/exporter-zipkin"
+const logger = createLogger("instrumentation")
 
-// // If using an exporter other than Zipkin, initialize it here.
-// const exporter = new ZipkinExporter({
-//   serviceName: 'my-medusa-project',
-// })
+export function register() {
+  if (appConfig.sentry.isConfigured) {
+    Sentry.init({
+      dsn: appConfig.sentry.dsn,
+      environment: appConfig.nodeEnv,
+      release: appConfig.appVersion,
+      tracesSampleRate: appConfig.isProduction ? 0.2 : 1.0,
+      sendDefaultPii: false,
+      integrations: [
+        Sentry.httpIntegration(),
+      ],
+    })
+    logger.info("Sentry initialized successfully")
+  } else {
+    logger.info("Sentry DSN not configured — error monitoring disabled")
+  }
 
-// export function register() {
-//   registerOtel({
-//     serviceName: 'medusajs',
-//     // pass exporter
-//     exporter,
-//     instrument: {
-//       http: true,
-//       workflows: true,
-//       query: true
-//     },
-//   })
-// }
+  initGracefulShutdown()
+
+  const startupLog = {
+    timestamp: new Date().toISOString(),
+    level: "info",
+    message: "CityOS Commerce Platform — graceful shutdown handlers registered",
+    type: "lifecycle",
+    pid: process.pid,
+  }
+
+  if (appConfig.isProduction) {
+    logger.info(String(JSON.stringify(startupLog)))
+  } else {
+    logger.info(`${startupLog.timestamp} INFO ${startupLog.message}`)
+  }
+}
