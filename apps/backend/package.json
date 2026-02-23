@@ -24,7 +24,9 @@
     "test:unit": "TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit",
     "test:integration:services": "TEST_TYPE=integration:services NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit",
     "test:e2e": "TEST_TYPE=e2e NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit",
-    "seed:master": "medusa exec ./src/scripts/seed-master.ts"
+    "seed:master": "medusa exec ./src/scripts/seed-master.ts",
+    "storage:scaffold": "npx tsx src/scripts/storage-scaffold.ts",
+    "storage:scaffold:fix": "npx tsx src/scripts/storage-scaffold.ts --fix"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",
