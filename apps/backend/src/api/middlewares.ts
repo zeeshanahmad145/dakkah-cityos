@@ -1,4 +1,5 @@
 import { defineMiddlewares } from "@medusajs/medusa";
+import * as Sentry from "@sentry/node";
 import type {
   MedusaNextFunction,
   MedusaRequest,
@@ -34,11 +35,70 @@ function storeCorsMiddleware(
   next();
 }
 
+function sentryRequestMiddleware(
+  req: MedusaRequest,
+  res: MedusaResponse,
+  next: MedusaNextFunction,
+) {
+  const client = Sentry.getClient();
+  if (!client) {
+    next();
+    return;
+  }
+
+  Sentry.withScope((scope) => {
+    scope.setTag("http.method", req.method);
+    scope.setTag("http.url", req.originalUrl || req.url);
+    scope.setTransactionName(`${req.method} ${req.route?.path || req.originalUrl || req.url}`);
+
+    const originalJson = res.json.bind(res);
+    res.json = function (body: any) {
+      if (res.statusCode >= 500) {
+        const errorMessage =
+          body?.message || body?.error || `Server error on ${req.method} ${req.originalUrl}`;
+        Sentry.captureException(new Error(errorMessage), {
+          extra: {
+            statusCode: res.statusCode,
+            method: req.method,
+            url: req.originalUrl || req.url,
+            responseBody: body,
+          },
+        });
+      } else if (res.statusCode >= 400) {
+        Sentry.captureMessage(
+          `${res.statusCode} ${req.method} ${req.originalUrl}: ${body?.message || JSON.stringify(body?.errors || "")}`,
+          {
+            level: res.statusCode >= 500 ? "error" : "warning",
+            extra: {
+              statusCode: res.statusCode,
+              method: req.method,
+              url: req.originalUrl || req.url,
+              responseBody: body,
+            },
+          },
+        );
+      }
+
+      return originalJson(body);
+    };
+
+    next();
+  });
+}
+
 export default defineMiddlewares({
   routes: [
     {
+      matcher: "/store/**",
+      middlewares: [sentryRequestMiddleware],
+    },
+    {
+      matcher: "/admin/**",
+      middlewares: [sentryRequestMiddleware],
+    },
+    {
       matcher: "/platform/**",
-      middlewares: [storeCorsMiddleware],
+      middlewares: [storeCorsMiddleware, sentryRequestMiddleware],
     },
     {
       matcher: "/store/rentals",
