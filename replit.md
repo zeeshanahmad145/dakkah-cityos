@@ -44,7 +44,11 @@ The frontend (Storefront) uses Port 5000 and Host 0.0.0.0, configured in `apps/s
 ### File Handling & CMS Storage Compliance
 All media assets are stored on Vercel Blob (private store) using `@vercel/blob@2.3.0` with **CMS-compliant tenant-prefixed paths**. The `BLOB_READ_WRITE_TOKEN` secret enables the Vercel Blob file provider (`apps/backend/src/modules/file-vercel-blob`). All new uploads automatically go to `tenants/dakkah/domains/commerce/products/` via the prefix registry (`apps/backend/src/lib/storage/prefixRegistry.ts`). The default tenant is `dakkah` (configurable via `CITYOS_DEFAULT_TENANT` env var).
 
-**Storage Migration (Feb 23, 2026):** All 209 image records (201 dev + 8 production) migrated from flat paths (`media/products/{category}/`) to CMS-compliant paths (`tenants/dakkah/domains/commerce/products/`). Both Neon and HeliumDB are 100% compliant.
+**Storage Migration (Feb 23, 2026):** All 282 media records fully migrated to CMS-compliant paths (`tenants/dakkah/domains/commerce/products/`):
+- **Image records:** 209 total (201 dev + 8 production) — 100% compliant
+- **Product thumbnails:** 73 total (65 dev + 8 production) — 100% compliant
+- **Vercel Blob:** 90 files at tenant-prefixed paths, all copied and verified
+- Both Neon (production) and HeliumDB (dev) databases at 100% compliance
 
 **CMS Gateway Endpoints:**
 - `/platform/storage/gateway/download` — CMS-compatible download with X-Api-Key + X-System-Id access control
