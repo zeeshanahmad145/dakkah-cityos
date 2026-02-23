@@ -41,8 +41,19 @@ The platform supports 45 CRUD configurations for various verticals using shared 
 ### Connectivity & Port Mapping
 The frontend (Storefront) uses Port 5000 and Host 0.0.0.0, configured in `apps/storefront/vite.config.ts` with `allowedHosts: true`. The backend (Medusa) uses Port 9000 and Host 0.0.0.0. A `start.sh` script manages process sequencing and port cleanup.
 
-### File Handling
-All media assets are stored on Vercel Blob (private store) using `@vercel/blob@2.3.0`. The `BLOB_READ_WRITE_TOKEN` secret enables the Vercel Blob file provider (`apps/backend/src/modules/file-vercel-blob`). A fallback Replit Object Storage provider exists (`apps/backend/src/modules/file-replit`) but is no longer active since `BLOB_READ_WRITE_TOKEN` is set. `medusa-config.ts` auto-switches providers based on the `BLOB_READ_WRITE_TOKEN` environment variable. All 201 product images and 65 product thumbnails were migrated from Replit Object Storage to Vercel Blob on Feb 22, 2026.
+### File Handling & CMS Storage Compliance
+All media assets are stored on Vercel Blob (private store) using `@vercel/blob@2.3.0` with **CMS-compliant tenant-prefixed paths**. The `BLOB_READ_WRITE_TOKEN` secret enables the Vercel Blob file provider (`apps/backend/src/modules/file-vercel-blob`). All new uploads automatically go to `tenants/dakkah/domains/commerce/products/` via the prefix registry (`apps/backend/src/lib/storage/prefixRegistry.ts`). The default tenant is `dakkah` (configurable via `CITYOS_DEFAULT_TENANT` env var).
+
+**Storage Migration (Feb 23, 2026):** All 209 image records (201 dev + 8 production) migrated from flat paths (`media/products/{category}/`) to CMS-compliant paths (`tenants/dakkah/domains/commerce/products/`). Both Neon and HeliumDB are 100% compliant.
+
+**CMS Gateway Endpoints:**
+- `/platform/storage/gateway/download` — CMS-compatible download with X-Api-Key + X-System-Id access control
+- `/platform/storage/info` — Provider status, prefix counts, endpoint registry
+- `/platform/storage/migrate` — Bulk migration with dry-run support
+- `/platform/storage/serve` — Direct file serving with caching
+- `/platform/storage/upload-buffer` — Base64 buffer upload
+
+**Storage Scaffold:** `npm run storage:scaffold` (audit) / `npm run storage:scaffold:fix` (auto-migrate) — CI/CD-compatible compliance checker at `apps/backend/src/scripts/storage-scaffold.ts`.
 
 ### Production Database
 The project utilizes Neon PostgreSQL (`NEON_DATABASE_URL` in Replit, `DATABASE_URL` in Vercel) for production. Migrations are handled via `npx medusa db:migrate` during the Vercel build process. The `apps/backend/vercel.json` config ensures correct build commands for the monorepo structure.
