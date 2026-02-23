@@ -90,6 +90,11 @@
         "STOREFRONT_PORT",
         "STOREFRONT_URL",
         "VERCEL",
+        "NEON_DATABASE_URL",
+        "SENTRY_DSN",
+        "JWT_SECRET",
+        "COOKIE_SECRET",
+        "MEDUSA_PUBLISHABLE_KEY",
         "VITE_MEDUSA_BACKEND_URL",
         "VITE_MEDUSA_PUBLISHABLE_KEY"
       ]

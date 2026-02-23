@@ -1,3 +1,5 @@
+import { appConfig } from "../lib/config"
+
 export interface SeedContext {
   tenantId: string
   storeId: string
@@ -306,7 +308,7 @@ export async function uploadImageToBucket(buffer: Buffer, path: string, contentT
   try {
     const storage = getGcsStorage()
     if (!storage) return false
-    const bucketName = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID
+    const bucketName = appConfig.storage.replitBucketId
     if (!bucketName) return false
     const bucket = storage.bucket(bucketName)
     const file = bucket.file(path)
@@ -326,7 +328,7 @@ export async function checkBucketAvailable(): Promise<boolean> {
       _bucketUploadAvailable = false
       return false
     }
-    const bucketName = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID
+    const bucketName = appConfig.storage.replitBucketId
     if (!bucketName) {
       _bucketUploadAvailable = false
       return false
