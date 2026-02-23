@@ -18,7 +18,7 @@ export function getBackendUrl(): string {
 export function getServerBaseUrl(): string {
   const isServer = typeof window === "undefined"
   if (isServer) return getBackendUrl()
-  return import.meta.env.VITE_MEDUSA_BACKEND_URL || import.meta.env.VITE_BACKEND_URL || ""
+  return ""
 }
 
 /**
@@ -97,7 +97,7 @@ export function fetchWithTimeout(
   fetchOptions.headers = headers
 
   let resolvedUrl = url
-  if (typeof window !== "undefined" && url.startsWith("/")) {
+  if (url.startsWith("/")) {
     const base = getServerBaseUrl()
     if (base) {
       resolvedUrl = `${base}${url}`
