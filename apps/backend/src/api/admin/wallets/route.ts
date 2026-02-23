@@ -1,9 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
-
-
-// GET    /admin/wallets        — list all wallets
-// POST   /admin/wallets/:id/credit  (separate route)
-// POST   /admin/wallets/:id/debit   (separate route)
+import { handleApiError } from "../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const walletService = req.scope.resolve("wallet") as any;
@@ -18,7 +14,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const count = await walletService.countWallets();
     return res.json({ wallets: Array.isArray(wallets) ? wallets : [], count });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleApiError(res, error, "List wallets");
   }
 }
-

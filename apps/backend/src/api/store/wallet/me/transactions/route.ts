@@ -1,7 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
+import { handleApiError } from "../../../../../lib/api-error-handler";
 
-
-// GET  /store/wallet/me/transactions
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const session = req.auth_context as any;
   const customerId = session?.actor_id;
@@ -28,8 +27,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     );
     return res.json({ transactions, count: transactions.length });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleApiError(res, error, "Wallet transactions");
   }
 }
-
-

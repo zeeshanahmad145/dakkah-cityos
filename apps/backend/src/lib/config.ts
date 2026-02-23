@@ -42,7 +42,11 @@ export const appConfig = {
 
   sentry: {
     dsn: env.SENTRY_DSN || "",
+    authToken: env.SENTRY_AUTH_TOKEN || "",
+    org: env.SENTRY_ORG || "",
+    project: env.SENTRY_PROJECT || "",
     isConfigured: !!env.SENTRY_DSN,
+    isApiConfigured: !!(env.SENTRY_AUTH_TOKEN && env.SENTRY_ORG && env.SENTRY_PROJECT),
   },
 
   temporal: {

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { storageService, ObjectNotFoundError } from "../../../../lib/storage"
+import { handleApiError } from "../../../../lib/api-error-handler"
 
 export const AUTHENTICATE = false
 
@@ -16,7 +17,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (error instanceof ObjectNotFoundError) {
       return res.status(404).json({ error: "Object not found" })
     }
-    console.error("Error serving storage object:", error)
-    return res.status(500).json({ error: "Failed to serve object" })
+    return handleApiError(res, error, "Storage serve")
   }
 }

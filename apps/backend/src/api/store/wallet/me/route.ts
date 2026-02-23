@@ -1,8 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { WALLET_MODULE } from "../../../../modules/wallet";
-
-// GET  /store/wallet/me   — get or create customer wallet
-// POST /store/wallet/me/topup — credit wallet (e.g. after payment)
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const session = req.auth_context as any;
@@ -26,6 +24,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const wallet = wallets[0];
     return res.json({ wallet });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleApiError(res, error, "Get customer wallet");
   }
 }

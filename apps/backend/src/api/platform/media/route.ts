@@ -2,6 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { get } from "@vercel/blob"
 import { Readable } from "stream"
 import { appConfig } from "../../../lib/config"
+import { handleApiError } from "../../../lib/api-error-handler"
 
 export const AUTHENTICATE = false
 
@@ -42,7 +43,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (error?.message?.includes("not found") || error?.message?.includes("404") || error?.name === "BlobNotFoundError") {
       return res.status(404).json({ error: "File not found" })
     }
-    console.error("[platform/media] Error serving blob:", error.message)
-    return res.status(500).json({ error: "Failed to serve file" })
+    return handleApiError(res, error, "Media serve")
   }
 }

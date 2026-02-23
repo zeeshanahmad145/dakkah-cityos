@@ -2,6 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { buildTenantPath, MEDUSA_PRODUCT_PREFIX } from "../../../../lib/storage/prefixRegistry";
 import { put, list, copy } from "@vercel/blob";
 import { appConfig } from "../../../../lib/config";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 export const AUTHENTICATE = false;
 
@@ -140,7 +141,6 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       await client.end();
     }
   } catch (error: any) {
-    console.error("Migration error:", error);
-    return res.status(500).json({ success: false, error: error.message });
+    return handleApiError(res, error, "Storage migration");
   }
 }

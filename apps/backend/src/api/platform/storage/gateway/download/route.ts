@@ -6,6 +6,7 @@ import {
 } from "../../../../../lib/storage/prefixRegistry";
 import { randomUUID } from "crypto";
 import { appConfig } from "../../../../../lib/config";
+import { handleApiError } from "../../../../../lib/api-error-handler";
 
 export const AUTHENTICATE = false;
 
@@ -52,10 +53,6 @@ const PRIVATE_PREFIXES = [
   "domains/insurance",
   "domains/digital-product",
 ];
-
-function isPublicPrefix(path: string): boolean {
-  return PUBLIC_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
-}
 
 function isPrivatePrefix(path: string): boolean {
   return PRIVATE_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
@@ -155,7 +152,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       },
     });
   } catch (error: any) {
-    console.error("Gateway download error:", error);
-    return res.status(500).json({ success: false, error: error.message });
+    return handleApiError(res, error, "Gateway download");
   }
 }

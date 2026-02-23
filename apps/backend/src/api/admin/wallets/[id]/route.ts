@@ -1,6 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
-// GET  /admin/wallets/:id   — wallet detail + transactions
-// POST /admin/wallets/:id/adjust — admin credit/debit
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const walletService = req.scope.resolve("wallet") as any;
@@ -13,7 +12,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     });
     return res.json({ wallet, transactions });
   } catch (error: any) {
-    return res.status(404).json({ message: error.message });
+    return handleApiError(res, error, "Wallet retrieval");
   }
 }
 
@@ -50,7 +49,6 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
     return res.json({ transaction });
   } catch (error: any) {
-    return res.status(400).json({ message: error.message });
+    return handleApiError(res, error, "Wallet transaction");
   }
 }
-
