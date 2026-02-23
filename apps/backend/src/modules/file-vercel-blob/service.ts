@@ -87,8 +87,10 @@ export class VercelBlobFileService extends AbstractFileProviderService {
       token: this.token_,
     });
 
+    const proxyUrl = `/platform/media?path=${encodeURIComponent(blob.pathname)}`;
+
     return {
-      url: blob.url,
+      url: proxyUrl,
       key: blob.pathname,
     };
   }
@@ -108,9 +110,20 @@ export class VercelBlobFileService extends AbstractFileProviderService {
   async getPresignedDownloadUrl(
     fileData: ProviderGetFileDTO
   ): Promise<string> {
-    if (fileData.fileKey.startsWith("http")) {
+    if (fileData.fileKey.startsWith("/platform/media")) {
       return fileData.fileKey;
     }
-    return `https://${fileData.fileKey}`;
+    if (fileData.fileKey.startsWith("http")) {
+      try {
+        const url = new URL(fileData.fileKey);
+        const pathname = url.pathname.startsWith("/")
+          ? url.pathname.slice(1)
+          : url.pathname;
+        return `/platform/media?path=${encodeURIComponent(pathname)}`;
+      } catch {
+        return fileData.fileKey;
+      }
+    }
+    return `/platform/media?path=${encodeURIComponent(fileData.fileKey)}`;
   }
 }
