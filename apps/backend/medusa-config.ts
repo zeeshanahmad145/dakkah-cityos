@@ -62,6 +62,23 @@ module.exports = defineConfig({
     // @rsc-labs/medusa-rbac — NOT NEEDED: custom 10-role RBAC system already implemented via governance module
   ],
   modules: [
+    {
+      resolve: "./src/modules/trade-in",
+      key: "tradeInModule",
+      options: {
+        definition: {
+          isQueryable: true
+        }
+      },
+    },
+    {
+      resolve: "./src/modules/trade-in",
+      options: {
+        definition: {
+          isQueryable: true
+        }
+      },
+    },
     ...(process.env.REDIS_URL
       ? [
           {
