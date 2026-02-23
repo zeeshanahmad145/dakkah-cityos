@@ -22,7 +22,7 @@ export default async function companyCreatedHandler({
         template: "company-welcome",
         data: {
           company_name: company.name,
-          dashboard_url: `${appConfig.storefrontUrl}/business/dashboard`,
+          dashboard_url: `${appConfig.urls.storefront}/business/dashboard`,
           features: ["Request quotes", "Manage team", "Track orders", "Volume pricing"],
         }
       })

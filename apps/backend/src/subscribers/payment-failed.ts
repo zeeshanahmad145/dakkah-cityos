@@ -33,7 +33,7 @@ export default async function paymentFailedHandler({
           order_id: order?.id,
           order_display_id: order?.display_id,
           error: data.error || "Payment could not be processed",
-          retry_url: `${appConfig.storefrontUrl}/checkout?retry=true`,
+          retry_url: `${appConfig.urls.storefront}/checkout?retry=true`,
           customer_name: customer.first_name || "Customer",
         }
       })

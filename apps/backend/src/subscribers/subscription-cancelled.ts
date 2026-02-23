@@ -27,7 +27,7 @@ export default async function subscriptionCancelledHandler({
           cancel_reason: data.reason || "Cancelled by request",
           end_date: subscription.current_period_end,
           customer_name: subscription.customer?.first_name || "Customer",
-          resubscribe_url: `${appConfig.storefrontUrl}/subscriptions`,
+          resubscribe_url: `${appConfig.urls.storefront}/subscriptions`,
         },
       })
     }

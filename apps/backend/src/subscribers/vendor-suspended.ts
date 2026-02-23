@@ -29,7 +29,7 @@ export default async function vendorSuspendedHandler({
         data: {
           vendor_name: vendor.name,
           reason: data.reason || "Policy violation",
-          appeal_url: `${appConfig.storefrontUrl}/vendor/appeal`,
+          appeal_url: `${appConfig.urls.storefront}/vendor/appeal`,
           support_email: appConfig.emails.support,
         }
       })

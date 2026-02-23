@@ -32,7 +32,7 @@ export default async function vendorApprovedHandler({
         template: "vendor-approved",
         data: {
           vendor_name: vendor.name,
-          dashboard_url: `${appConfig.storefrontUrl}/vendor/dashboard`,
+          dashboard_url: `${appConfig.urls.storefront}/vendor/dashboard`,
           next_steps: "You can now start adding products to your store",
         },
       })

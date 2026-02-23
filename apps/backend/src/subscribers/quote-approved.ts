@@ -32,7 +32,7 @@ export default async function quoteApprovedHandler({
           company_name: quote.company?.name || "Customer",
           total: quote.total,
           valid_until: quote.valid_until,
-          view_url: `${appConfig.storefrontUrl}/business/quotes/${quote.id}`,
+          view_url: `${appConfig.urls.storefront}/business/quotes/${quote.id}`,
         },
       })
     }

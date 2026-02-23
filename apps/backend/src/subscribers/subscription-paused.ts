@@ -25,7 +25,7 @@ export default async function subscriptionPausedHandler({
           subscription_id: subscription.id,
           plan_name: subscription.plan?.name || "Subscription",
           pause_reason: data.reason || "Paused by request",
-          resume_url: `${appConfig.storefrontUrl}/account/subscriptions/${subscription.id}`,
+          resume_url: `${appConfig.urls.storefront}/account/subscriptions/${subscription.id}`,
           customer_name: subscription.customer?.first_name || "Customer",
         }
       })

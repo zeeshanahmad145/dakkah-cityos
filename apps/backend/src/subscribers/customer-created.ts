@@ -32,8 +32,8 @@ export default async function customerCreatedHandler({
         template: "customer-welcome",
         data: {
           customer_name: customer.first_name || "there",
-          shop_url: appConfig.storefrontUrl,
-          account_url: `${appConfig.storefrontUrl}/account`,
+          shop_url: appConfig.urls.storefront,
+          account_url: `${appConfig.urls.storefront}/account`,
         },
       })
     }

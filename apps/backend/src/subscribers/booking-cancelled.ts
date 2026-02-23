@@ -29,7 +29,7 @@ export default async function bookingCancelledHandler({
           cancellation_reason: data.reason || "Booking cancelled",
           customer_name: booking.customer?.first_name || "Customer",
           refund_info: "Any applicable refund will be processed within 5-10 business days",
-          rebook_url: `${appConfig.storefrontUrl}/services`,
+          rebook_url: `${appConfig.urls.storefront}/services`,
         }
       })
     }

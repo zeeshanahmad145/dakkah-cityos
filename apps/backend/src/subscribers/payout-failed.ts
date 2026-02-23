@@ -40,7 +40,7 @@ export default async function payoutFailedHandler({
           amount: payout?.net_amount,
           error: data.error || "Payout could not be processed",
           retry_info: "We will automatically retry in 24 hours",
-          update_payment_url: `${appConfig.storefrontUrl}/vendor/settings/payments`,
+          update_payment_url: `${appConfig.urls.storefront}/vendor/settings/payments`,
           support_email: appConfig.emails.support,
         }
       })

@@ -26,7 +26,7 @@ export default async function purchaseOrderSubmittedHandler({
           company_name: po.company.name,
           total: po.total,
           status: po.status,
-          view_url: `${appConfig.storefrontUrl}/business/purchase-orders/${po.id}`,
+          view_url: `${appConfig.urls.storefront}/business/purchase-orders/${po.id}`,
         }
       })
     }

@@ -26,8 +26,8 @@ export default async function bookingCompletedHandler({
           booking_id: booking.id,
           service_name: booking.service?.title || "Service",
           customer_name: booking.customer?.first_name || "Customer",
-          review_url: `${appConfig.storefrontUrl}/account/bookings/${booking.id}/review`,
-          rebook_url: `${appConfig.storefrontUrl}/services/${booking.service?.handle || ""}`,
+          review_url: `${appConfig.urls.storefront}/account/bookings/${booking.id}/review`,
+          rebook_url: `${appConfig.urls.storefront}/services/${booking.service?.handle || ""}`,
         }
       })
     }

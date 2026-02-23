@@ -32,7 +32,7 @@ export default async function subscriptionPaymentFailedHandler({
           retry_count: retryCount,
           max_retries: maxRetries,
           will_retry: willRetry,
-          update_payment_url: `${appConfig.storefrontUrl}/account/subscriptions/${subscription.id}/payment`,
+          update_payment_url: `${appConfig.urls.storefront}/account/subscriptions/${subscription.id}/payment`,
           customer_name: subscription.customer?.first_name || "Customer",
           grace_period_days: appConfig.subscription.gracePeriodDays,
         }

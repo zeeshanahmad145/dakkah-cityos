@@ -29,7 +29,7 @@ export default async function subscriptionRenewalUpcomingHandler({
           renewal_date: subscription.next_billing_date,
           days_until_renewal: daysUntilRenewal,
           renewal_amount: subscription.plan?.price,
-          manage_url: `${appConfig.storefrontUrl}/account/subscriptions/${subscription.id}`,
+          manage_url: `${appConfig.urls.storefront}/account/subscriptions/${subscription.id}`,
           customer_name: subscription.customer?.first_name || "Customer",
         }
       })

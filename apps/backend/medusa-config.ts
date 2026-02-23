@@ -44,8 +44,6 @@ module.exports = defineConfig({
   },
   projectConfig: {
     databaseUrl: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL,
-    image_proxy_url: process.env.MEDUSA_BACKEND_URL,
-
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,

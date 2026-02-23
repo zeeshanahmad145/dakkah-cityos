@@ -35,7 +35,7 @@ export default async function bookingCreatedHandler({
           end_time: booking.end_time,
           location: booking.service?.location || "TBD",
           customer_name: booking.customer?.first_name || "Customer",
-          manage_url: `${appConfig.storefrontUrl}/account/bookings/${booking.id}`,
+          manage_url: `${appConfig.urls.storefront}/account/bookings/${booking.id}`,
         },
       })
     }

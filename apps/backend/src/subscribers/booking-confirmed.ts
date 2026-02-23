@@ -29,7 +29,7 @@ export default async function bookingConfirmedHandler({
           end_time: booking.end_time,
           location: booking.service?.location || "TBD",
           customer_name: booking.customer?.first_name || "Customer",
-          check_in_url: `${appConfig.storefrontUrl}/account/bookings/${booking.id}/check-in`,
+          check_in_url: `${appConfig.urls.storefront}/account/bookings/${booking.id}/check-in`,
         }
       })
     }
