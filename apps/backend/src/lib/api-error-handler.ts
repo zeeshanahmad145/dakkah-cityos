@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node"
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { appConfig } from "./config"
 import { createLogger } from "./logger"
@@ -11,6 +12,10 @@ export function handleApiError(
 ) {
   const message = error instanceof Error ? error.message : String(error)
   logger.error(`${context}: ${message}`, error instanceof Error ? error : undefined)
+
+  if (error instanceof Error) {
+    Sentry.captureException(error, { extra: { context } })
+  }
 
   if (message.includes("not found") || message.includes("Not found")) {
     return res.status(404).json({ message: `${context}: not found` })
