@@ -37,6 +37,10 @@ function storeCorsMiddleware(
 export default defineMiddlewares({
   routes: [
     {
+      matcher: "/platform/**",
+      middlewares: [storeCorsMiddleware],
+    },
+    {
       matcher: "/store/rentals",
       middlewares: [storeCorsMiddleware],
     },
