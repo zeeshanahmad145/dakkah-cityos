@@ -187,11 +187,9 @@ import { Route as TenantLocaleMembershipsIdRouteImport } from './routes/$tenant/
 import { Route as TenantLocaleManageWishlistsRouteImport } from './routes/$tenant/$locale/manage/wishlists'
 import { Route as TenantLocaleManageWhiteLabelRouteImport } from './routes/$tenant/$locale/manage/white-label'
 import { Route as TenantLocaleManageWebhooksRouteImport } from './routes/$tenant/$locale/manage/webhooks'
-import { Route as TenantLocaleManageWarrantyRouteImport } from './routes/$tenant/$locale/manage/warranty'
 import { Route as TenantLocaleManageWarrantiesRouteImport } from './routes/$tenant/$locale/manage/warranties'
 import { Route as TenantLocaleManageWalletRouteImport } from './routes/$tenant/$locale/manage/wallet'
 import { Route as TenantLocaleManageVolumePricingRouteImport } from './routes/$tenant/$locale/manage/volume-pricing'
-import { Route as TenantLocaleManageVolumeDealsRouteImport } from './routes/$tenant/$locale/manage/volume-deals'
 import { Route as TenantLocaleManageVendorsRouteImport } from './routes/$tenant/$locale/manage/vendors'
 import { Route as TenantLocaleManageUtilitiesRouteImport } from './routes/$tenant/$locale/manage/utilities'
 import { Route as TenantLocaleManageTryBeforeYouBuyRouteImport } from './routes/$tenant/$locale/manage/try-before-you-buy'
@@ -215,7 +213,6 @@ import { Route as TenantLocaleManageRegionZonesRouteImport } from './routes/$ten
 import { Route as TenantLocaleManageRealEstateRouteImport } from './routes/$tenant/$locale/manage/real-estate'
 import { Route as TenantLocaleManageQuotesRouteImport } from './routes/$tenant/$locale/manage/quotes'
 import { Route as TenantLocaleManagePurchaseOrdersRouteImport } from './routes/$tenant/$locale/manage/purchase-orders'
-import { Route as TenantLocaleManagePromotionsExtRouteImport } from './routes/$tenant/$locale/manage/promotions-ext'
 import { Route as TenantLocaleManagePromotionsRouteImport } from './routes/$tenant/$locale/manage/promotions'
 import { Route as TenantLocaleManagePromotionExtensionsRouteImport } from './routes/$tenant/$locale/manage/promotion-extensions'
 import { Route as TenantLocaleManageProductsRouteImport } from './routes/$tenant/$locale/manage/products'
@@ -262,15 +259,10 @@ import { Route as TenantLocaleManageCustomersRouteImport } from './routes/$tenan
 import { Route as TenantLocaleManageCrowdfundingRouteImport } from './routes/$tenant/$locale/manage/crowdfunding'
 import { Route as TenantLocaleManageCreditRouteImport } from './routes/$tenant/$locale/manage/credit'
 import { Route as TenantLocaleManageConsignmentsRouteImport } from './routes/$tenant/$locale/manage/consignments'
-import { Route as TenantLocaleManageCompanyRouteImport } from './routes/$tenant/$locale/manage/company'
-import { Route as TenantLocaleManageCompaniesAdminRouteImport } from './routes/$tenant/$locale/manage/companies-admin'
 import { Route as TenantLocaleManageCompaniesRouteImport } from './routes/$tenant/$locale/manage/companies'
 import { Route as TenantLocaleManageCommissionsRouteImport } from './routes/$tenant/$locale/manage/commissions'
-import { Route as TenantLocaleManageCommissionRulesRouteImport } from './routes/$tenant/$locale/manage/commission-rules'
 import { Route as TenantLocaleManageCmsContentRouteImport } from './routes/$tenant/$locale/manage/cms-content'
-import { Route as TenantLocaleManageCmsRouteImport } from './routes/$tenant/$locale/manage/cms'
 import { Route as TenantLocaleManageClassifiedsRouteImport } from './routes/$tenant/$locale/manage/classifieds'
-import { Route as TenantLocaleManageCharityRouteImport } from './routes/$tenant/$locale/manage/charity'
 import { Route as TenantLocaleManageCharitiesRouteImport } from './routes/$tenant/$locale/manage/charities'
 import { Route as TenantLocaleManageChannelsRouteImport } from './routes/$tenant/$locale/manage/channels'
 import { Route as TenantLocaleManageCartExtensionsRouteImport } from './routes/$tenant/$locale/manage/cart-extensions'
@@ -1364,12 +1356,6 @@ const TenantLocaleManageWebhooksRoute =
     path: '/manage/webhooks',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
-const TenantLocaleManageWarrantyRoute =
-  TenantLocaleManageWarrantyRouteImport.update({
-    id: '/manage/warranty',
-    path: '/manage/warranty',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
 const TenantLocaleManageWarrantiesRoute =
   TenantLocaleManageWarrantiesRouteImport.update({
     id: '/manage/warranties',
@@ -1386,12 +1372,6 @@ const TenantLocaleManageVolumePricingRoute =
   TenantLocaleManageVolumePricingRouteImport.update({
     id: '/manage/volume-pricing',
     path: '/manage/volume-pricing',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
-const TenantLocaleManageVolumeDealsRoute =
-  TenantLocaleManageVolumeDealsRouteImport.update({
-    id: '/manage/volume-deals',
-    path: '/manage/volume-deals',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
 const TenantLocaleManageVendorsRoute =
@@ -1529,12 +1509,6 @@ const TenantLocaleManagePurchaseOrdersRoute =
   TenantLocaleManagePurchaseOrdersRouteImport.update({
     id: '/manage/purchase-orders',
     path: '/manage/purchase-orders',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
-const TenantLocaleManagePromotionsExtRoute =
-  TenantLocaleManagePromotionsExtRouteImport.update({
-    id: '/manage/promotions-ext',
-    path: '/manage/promotions-ext',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
 const TenantLocaleManagePromotionsRoute =
@@ -1809,18 +1783,6 @@ const TenantLocaleManageConsignmentsRoute =
     path: '/manage/consignments',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
-const TenantLocaleManageCompanyRoute =
-  TenantLocaleManageCompanyRouteImport.update({
-    id: '/manage/company',
-    path: '/manage/company',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
-const TenantLocaleManageCompaniesAdminRoute =
-  TenantLocaleManageCompaniesAdminRouteImport.update({
-    id: '/manage/companies-admin',
-    path: '/manage/companies-admin',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
 const TenantLocaleManageCompaniesRoute =
   TenantLocaleManageCompaniesRouteImport.update({
     id: '/manage/companies',
@@ -1833,33 +1795,16 @@ const TenantLocaleManageCommissionsRoute =
     path: '/manage/commissions',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
-const TenantLocaleManageCommissionRulesRoute =
-  TenantLocaleManageCommissionRulesRouteImport.update({
-    id: '/manage/commission-rules',
-    path: '/manage/commission-rules',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
 const TenantLocaleManageCmsContentRoute =
   TenantLocaleManageCmsContentRouteImport.update({
     id: '/manage/cms-content',
     path: '/manage/cms-content',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
-const TenantLocaleManageCmsRoute = TenantLocaleManageCmsRouteImport.update({
-  id: '/manage/cms',
-  path: '/manage/cms',
-  getParentRoute: () => TenantLocaleRoute,
-} as any)
 const TenantLocaleManageClassifiedsRoute =
   TenantLocaleManageClassifiedsRouteImport.update({
     id: '/manage/classifieds',
     path: '/manage/classifieds',
-    getParentRoute: () => TenantLocaleRoute,
-  } as any)
-const TenantLocaleManageCharityRoute =
-  TenantLocaleManageCharityRouteImport.update({
-    id: '/manage/charity',
-    path: '/manage/charity',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
 const TenantLocaleManageCharitiesRoute =
@@ -2488,15 +2433,10 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/manage/cart-extensions': typeof TenantLocaleManageCartExtensionsRoute
   '/$tenant/$locale/manage/channels': typeof TenantLocaleManageChannelsRoute
   '/$tenant/$locale/manage/charities': typeof TenantLocaleManageCharitiesRoute
-  '/$tenant/$locale/manage/charity': typeof TenantLocaleManageCharityRoute
   '/$tenant/$locale/manage/classifieds': typeof TenantLocaleManageClassifiedsRoute
-  '/$tenant/$locale/manage/cms': typeof TenantLocaleManageCmsRoute
   '/$tenant/$locale/manage/cms-content': typeof TenantLocaleManageCmsContentRoute
-  '/$tenant/$locale/manage/commission-rules': typeof TenantLocaleManageCommissionRulesRoute
   '/$tenant/$locale/manage/commissions': typeof TenantLocaleManageCommissionsRoute
   '/$tenant/$locale/manage/companies': typeof TenantLocaleManageCompaniesRoute
-  '/$tenant/$locale/manage/companies-admin': typeof TenantLocaleManageCompaniesAdminRoute
-  '/$tenant/$locale/manage/company': typeof TenantLocaleManageCompanyRoute
   '/$tenant/$locale/manage/consignments': typeof TenantLocaleManageConsignmentsRoute
   '/$tenant/$locale/manage/credit': typeof TenantLocaleManageCreditRoute
   '/$tenant/$locale/manage/crowdfunding': typeof TenantLocaleManageCrowdfundingRoute
@@ -2543,7 +2483,6 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/manage/products': typeof TenantLocaleManageProductsRoute
   '/$tenant/$locale/manage/promotion-extensions': typeof TenantLocaleManagePromotionExtensionsRoute
   '/$tenant/$locale/manage/promotions': typeof TenantLocaleManagePromotionsRoute
-  '/$tenant/$locale/manage/promotions-ext': typeof TenantLocaleManagePromotionsExtRoute
   '/$tenant/$locale/manage/purchase-orders': typeof TenantLocaleManagePurchaseOrdersRoute
   '/$tenant/$locale/manage/quotes': typeof TenantLocaleManageQuotesRoute
   '/$tenant/$locale/manage/real-estate': typeof TenantLocaleManageRealEstateRoute
@@ -2567,11 +2506,9 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/manage/try-before-you-buy': typeof TenantLocaleManageTryBeforeYouBuyRoute
   '/$tenant/$locale/manage/utilities': typeof TenantLocaleManageUtilitiesRoute
   '/$tenant/$locale/manage/vendors': typeof TenantLocaleManageVendorsRoute
-  '/$tenant/$locale/manage/volume-deals': typeof TenantLocaleManageVolumeDealsRoute
   '/$tenant/$locale/manage/volume-pricing': typeof TenantLocaleManageVolumePricingRoute
   '/$tenant/$locale/manage/wallet': typeof TenantLocaleManageWalletRoute
   '/$tenant/$locale/manage/warranties': typeof TenantLocaleManageWarrantiesRoute
-  '/$tenant/$locale/manage/warranty': typeof TenantLocaleManageWarrantyRoute
   '/$tenant/$locale/manage/webhooks': typeof TenantLocaleManageWebhooksRoute
   '/$tenant/$locale/manage/white-label': typeof TenantLocaleManageWhiteLabelRoute
   '/$tenant/$locale/manage/wishlists': typeof TenantLocaleManageWishlistsRoute
@@ -2837,15 +2774,10 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/manage/cart-extensions': typeof TenantLocaleManageCartExtensionsRoute
   '/$tenant/$locale/manage/channels': typeof TenantLocaleManageChannelsRoute
   '/$tenant/$locale/manage/charities': typeof TenantLocaleManageCharitiesRoute
-  '/$tenant/$locale/manage/charity': typeof TenantLocaleManageCharityRoute
   '/$tenant/$locale/manage/classifieds': typeof TenantLocaleManageClassifiedsRoute
-  '/$tenant/$locale/manage/cms': typeof TenantLocaleManageCmsRoute
   '/$tenant/$locale/manage/cms-content': typeof TenantLocaleManageCmsContentRoute
-  '/$tenant/$locale/manage/commission-rules': typeof TenantLocaleManageCommissionRulesRoute
   '/$tenant/$locale/manage/commissions': typeof TenantLocaleManageCommissionsRoute
   '/$tenant/$locale/manage/companies': typeof TenantLocaleManageCompaniesRoute
-  '/$tenant/$locale/manage/companies-admin': typeof TenantLocaleManageCompaniesAdminRoute
-  '/$tenant/$locale/manage/company': typeof TenantLocaleManageCompanyRoute
   '/$tenant/$locale/manage/consignments': typeof TenantLocaleManageConsignmentsRoute
   '/$tenant/$locale/manage/credit': typeof TenantLocaleManageCreditRoute
   '/$tenant/$locale/manage/crowdfunding': typeof TenantLocaleManageCrowdfundingRoute
@@ -2892,7 +2824,6 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/manage/products': typeof TenantLocaleManageProductsRoute
   '/$tenant/$locale/manage/promotion-extensions': typeof TenantLocaleManagePromotionExtensionsRoute
   '/$tenant/$locale/manage/promotions': typeof TenantLocaleManagePromotionsRoute
-  '/$tenant/$locale/manage/promotions-ext': typeof TenantLocaleManagePromotionsExtRoute
   '/$tenant/$locale/manage/purchase-orders': typeof TenantLocaleManagePurchaseOrdersRoute
   '/$tenant/$locale/manage/quotes': typeof TenantLocaleManageQuotesRoute
   '/$tenant/$locale/manage/real-estate': typeof TenantLocaleManageRealEstateRoute
@@ -2916,11 +2847,9 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/manage/try-before-you-buy': typeof TenantLocaleManageTryBeforeYouBuyRoute
   '/$tenant/$locale/manage/utilities': typeof TenantLocaleManageUtilitiesRoute
   '/$tenant/$locale/manage/vendors': typeof TenantLocaleManageVendorsRoute
-  '/$tenant/$locale/manage/volume-deals': typeof TenantLocaleManageVolumeDealsRoute
   '/$tenant/$locale/manage/volume-pricing': typeof TenantLocaleManageVolumePricingRoute
   '/$tenant/$locale/manage/wallet': typeof TenantLocaleManageWalletRoute
   '/$tenant/$locale/manage/warranties': typeof TenantLocaleManageWarrantiesRoute
-  '/$tenant/$locale/manage/warranty': typeof TenantLocaleManageWarrantyRoute
   '/$tenant/$locale/manage/webhooks': typeof TenantLocaleManageWebhooksRoute
   '/$tenant/$locale/manage/white-label': typeof TenantLocaleManageWhiteLabelRoute
   '/$tenant/$locale/manage/wishlists': typeof TenantLocaleManageWishlistsRoute
@@ -3188,15 +3117,10 @@ export interface FileRoutesById {
   '/$tenant/$locale/manage/cart-extensions': typeof TenantLocaleManageCartExtensionsRoute
   '/$tenant/$locale/manage/channels': typeof TenantLocaleManageChannelsRoute
   '/$tenant/$locale/manage/charities': typeof TenantLocaleManageCharitiesRoute
-  '/$tenant/$locale/manage/charity': typeof TenantLocaleManageCharityRoute
   '/$tenant/$locale/manage/classifieds': typeof TenantLocaleManageClassifiedsRoute
-  '/$tenant/$locale/manage/cms': typeof TenantLocaleManageCmsRoute
   '/$tenant/$locale/manage/cms-content': typeof TenantLocaleManageCmsContentRoute
-  '/$tenant/$locale/manage/commission-rules': typeof TenantLocaleManageCommissionRulesRoute
   '/$tenant/$locale/manage/commissions': typeof TenantLocaleManageCommissionsRoute
   '/$tenant/$locale/manage/companies': typeof TenantLocaleManageCompaniesRoute
-  '/$tenant/$locale/manage/companies-admin': typeof TenantLocaleManageCompaniesAdminRoute
-  '/$tenant/$locale/manage/company': typeof TenantLocaleManageCompanyRoute
   '/$tenant/$locale/manage/consignments': typeof TenantLocaleManageConsignmentsRoute
   '/$tenant/$locale/manage/credit': typeof TenantLocaleManageCreditRoute
   '/$tenant/$locale/manage/crowdfunding': typeof TenantLocaleManageCrowdfundingRoute
@@ -3243,7 +3167,6 @@ export interface FileRoutesById {
   '/$tenant/$locale/manage/products': typeof TenantLocaleManageProductsRoute
   '/$tenant/$locale/manage/promotion-extensions': typeof TenantLocaleManagePromotionExtensionsRoute
   '/$tenant/$locale/manage/promotions': typeof TenantLocaleManagePromotionsRoute
-  '/$tenant/$locale/manage/promotions-ext': typeof TenantLocaleManagePromotionsExtRoute
   '/$tenant/$locale/manage/purchase-orders': typeof TenantLocaleManagePurchaseOrdersRoute
   '/$tenant/$locale/manage/quotes': typeof TenantLocaleManageQuotesRoute
   '/$tenant/$locale/manage/real-estate': typeof TenantLocaleManageRealEstateRoute
@@ -3267,11 +3190,9 @@ export interface FileRoutesById {
   '/$tenant/$locale/manage/try-before-you-buy': typeof TenantLocaleManageTryBeforeYouBuyRoute
   '/$tenant/$locale/manage/utilities': typeof TenantLocaleManageUtilitiesRoute
   '/$tenant/$locale/manage/vendors': typeof TenantLocaleManageVendorsRoute
-  '/$tenant/$locale/manage/volume-deals': typeof TenantLocaleManageVolumeDealsRoute
   '/$tenant/$locale/manage/volume-pricing': typeof TenantLocaleManageVolumePricingRoute
   '/$tenant/$locale/manage/wallet': typeof TenantLocaleManageWalletRoute
   '/$tenant/$locale/manage/warranties': typeof TenantLocaleManageWarrantiesRoute
-  '/$tenant/$locale/manage/warranty': typeof TenantLocaleManageWarrantyRoute
   '/$tenant/$locale/manage/webhooks': typeof TenantLocaleManageWebhooksRoute
   '/$tenant/$locale/manage/white-label': typeof TenantLocaleManageWhiteLabelRoute
   '/$tenant/$locale/manage/wishlists': typeof TenantLocaleManageWishlistsRoute
@@ -3541,15 +3462,10 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/cart-extensions'
     | '/$tenant/$locale/manage/channels'
     | '/$tenant/$locale/manage/charities'
-    | '/$tenant/$locale/manage/charity'
     | '/$tenant/$locale/manage/classifieds'
-    | '/$tenant/$locale/manage/cms'
     | '/$tenant/$locale/manage/cms-content'
-    | '/$tenant/$locale/manage/commission-rules'
     | '/$tenant/$locale/manage/commissions'
     | '/$tenant/$locale/manage/companies'
-    | '/$tenant/$locale/manage/companies-admin'
-    | '/$tenant/$locale/manage/company'
     | '/$tenant/$locale/manage/consignments'
     | '/$tenant/$locale/manage/credit'
     | '/$tenant/$locale/manage/crowdfunding'
@@ -3596,7 +3512,6 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/products'
     | '/$tenant/$locale/manage/promotion-extensions'
     | '/$tenant/$locale/manage/promotions'
-    | '/$tenant/$locale/manage/promotions-ext'
     | '/$tenant/$locale/manage/purchase-orders'
     | '/$tenant/$locale/manage/quotes'
     | '/$tenant/$locale/manage/real-estate'
@@ -3620,11 +3535,9 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/try-before-you-buy'
     | '/$tenant/$locale/manage/utilities'
     | '/$tenant/$locale/manage/vendors'
-    | '/$tenant/$locale/manage/volume-deals'
     | '/$tenant/$locale/manage/volume-pricing'
     | '/$tenant/$locale/manage/wallet'
     | '/$tenant/$locale/manage/warranties'
-    | '/$tenant/$locale/manage/warranty'
     | '/$tenant/$locale/manage/webhooks'
     | '/$tenant/$locale/manage/white-label'
     | '/$tenant/$locale/manage/wishlists'
@@ -3890,15 +3803,10 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/cart-extensions'
     | '/$tenant/$locale/manage/channels'
     | '/$tenant/$locale/manage/charities'
-    | '/$tenant/$locale/manage/charity'
     | '/$tenant/$locale/manage/classifieds'
-    | '/$tenant/$locale/manage/cms'
     | '/$tenant/$locale/manage/cms-content'
-    | '/$tenant/$locale/manage/commission-rules'
     | '/$tenant/$locale/manage/commissions'
     | '/$tenant/$locale/manage/companies'
-    | '/$tenant/$locale/manage/companies-admin'
-    | '/$tenant/$locale/manage/company'
     | '/$tenant/$locale/manage/consignments'
     | '/$tenant/$locale/manage/credit'
     | '/$tenant/$locale/manage/crowdfunding'
@@ -3945,7 +3853,6 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/products'
     | '/$tenant/$locale/manage/promotion-extensions'
     | '/$tenant/$locale/manage/promotions'
-    | '/$tenant/$locale/manage/promotions-ext'
     | '/$tenant/$locale/manage/purchase-orders'
     | '/$tenant/$locale/manage/quotes'
     | '/$tenant/$locale/manage/real-estate'
@@ -3969,11 +3876,9 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/try-before-you-buy'
     | '/$tenant/$locale/manage/utilities'
     | '/$tenant/$locale/manage/vendors'
-    | '/$tenant/$locale/manage/volume-deals'
     | '/$tenant/$locale/manage/volume-pricing'
     | '/$tenant/$locale/manage/wallet'
     | '/$tenant/$locale/manage/warranties'
-    | '/$tenant/$locale/manage/warranty'
     | '/$tenant/$locale/manage/webhooks'
     | '/$tenant/$locale/manage/white-label'
     | '/$tenant/$locale/manage/wishlists'
@@ -4240,15 +4145,10 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/cart-extensions'
     | '/$tenant/$locale/manage/channels'
     | '/$tenant/$locale/manage/charities'
-    | '/$tenant/$locale/manage/charity'
     | '/$tenant/$locale/manage/classifieds'
-    | '/$tenant/$locale/manage/cms'
     | '/$tenant/$locale/manage/cms-content'
-    | '/$tenant/$locale/manage/commission-rules'
     | '/$tenant/$locale/manage/commissions'
     | '/$tenant/$locale/manage/companies'
-    | '/$tenant/$locale/manage/companies-admin'
-    | '/$tenant/$locale/manage/company'
     | '/$tenant/$locale/manage/consignments'
     | '/$tenant/$locale/manage/credit'
     | '/$tenant/$locale/manage/crowdfunding'
@@ -4295,7 +4195,6 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/products'
     | '/$tenant/$locale/manage/promotion-extensions'
     | '/$tenant/$locale/manage/promotions'
-    | '/$tenant/$locale/manage/promotions-ext'
     | '/$tenant/$locale/manage/purchase-orders'
     | '/$tenant/$locale/manage/quotes'
     | '/$tenant/$locale/manage/real-estate'
@@ -4319,11 +4218,9 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/manage/try-before-you-buy'
     | '/$tenant/$locale/manage/utilities'
     | '/$tenant/$locale/manage/vendors'
-    | '/$tenant/$locale/manage/volume-deals'
     | '/$tenant/$locale/manage/volume-pricing'
     | '/$tenant/$locale/manage/wallet'
     | '/$tenant/$locale/manage/warranties'
-    | '/$tenant/$locale/manage/warranty'
     | '/$tenant/$locale/manage/webhooks'
     | '/$tenant/$locale/manage/white-label'
     | '/$tenant/$locale/manage/wishlists'
@@ -5742,13 +5639,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleManageWebhooksRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
-    '/$tenant/$locale/manage/warranty': {
-      id: '/$tenant/$locale/manage/warranty'
-      path: '/manage/warranty'
-      fullPath: '/$tenant/$locale/manage/warranty'
-      preLoaderRoute: typeof TenantLocaleManageWarrantyRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
     '/$tenant/$locale/manage/warranties': {
       id: '/$tenant/$locale/manage/warranties'
       path: '/manage/warranties'
@@ -5768,13 +5658,6 @@ declare module '@tanstack/react-router' {
       path: '/manage/volume-pricing'
       fullPath: '/$tenant/$locale/manage/volume-pricing'
       preLoaderRoute: typeof TenantLocaleManageVolumePricingRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
-    '/$tenant/$locale/manage/volume-deals': {
-      id: '/$tenant/$locale/manage/volume-deals'
-      path: '/manage/volume-deals'
-      fullPath: '/$tenant/$locale/manage/volume-deals'
-      preLoaderRoute: typeof TenantLocaleManageVolumeDealsRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
     '/$tenant/$locale/manage/vendors': {
@@ -5936,13 +5819,6 @@ declare module '@tanstack/react-router' {
       path: '/manage/purchase-orders'
       fullPath: '/$tenant/$locale/manage/purchase-orders'
       preLoaderRoute: typeof TenantLocaleManagePurchaseOrdersRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
-    '/$tenant/$locale/manage/promotions-ext': {
-      id: '/$tenant/$locale/manage/promotions-ext'
-      path: '/manage/promotions-ext'
-      fullPath: '/$tenant/$locale/manage/promotions-ext'
-      preLoaderRoute: typeof TenantLocaleManagePromotionsExtRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
     '/$tenant/$locale/manage/promotions': {
@@ -6267,20 +6143,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleManageConsignmentsRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
-    '/$tenant/$locale/manage/company': {
-      id: '/$tenant/$locale/manage/company'
-      path: '/manage/company'
-      fullPath: '/$tenant/$locale/manage/company'
-      preLoaderRoute: typeof TenantLocaleManageCompanyRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
-    '/$tenant/$locale/manage/companies-admin': {
-      id: '/$tenant/$locale/manage/companies-admin'
-      path: '/manage/companies-admin'
-      fullPath: '/$tenant/$locale/manage/companies-admin'
-      preLoaderRoute: typeof TenantLocaleManageCompaniesAdminRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
     '/$tenant/$locale/manage/companies': {
       id: '/$tenant/$locale/manage/companies'
       path: '/manage/companies'
@@ -6295,13 +6157,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleManageCommissionsRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
-    '/$tenant/$locale/manage/commission-rules': {
-      id: '/$tenant/$locale/manage/commission-rules'
-      path: '/manage/commission-rules'
-      fullPath: '/$tenant/$locale/manage/commission-rules'
-      preLoaderRoute: typeof TenantLocaleManageCommissionRulesRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
     '/$tenant/$locale/manage/cms-content': {
       id: '/$tenant/$locale/manage/cms-content'
       path: '/manage/cms-content'
@@ -6309,25 +6164,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleManageCmsContentRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
-    '/$tenant/$locale/manage/cms': {
-      id: '/$tenant/$locale/manage/cms'
-      path: '/manage/cms'
-      fullPath: '/$tenant/$locale/manage/cms'
-      preLoaderRoute: typeof TenantLocaleManageCmsRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
     '/$tenant/$locale/manage/classifieds': {
       id: '/$tenant/$locale/manage/classifieds'
       path: '/manage/classifieds'
       fullPath: '/$tenant/$locale/manage/classifieds'
       preLoaderRoute: typeof TenantLocaleManageClassifiedsRouteImport
-      parentRoute: typeof TenantLocaleRoute
-    }
-    '/$tenant/$locale/manage/charity': {
-      id: '/$tenant/$locale/manage/charity'
-      path: '/manage/charity'
-      fullPath: '/$tenant/$locale/manage/charity'
-      preLoaderRoute: typeof TenantLocaleManageCharityRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
     '/$tenant/$locale/manage/charities': {
@@ -7135,15 +6976,10 @@ interface TenantLocaleRouteChildren {
   TenantLocaleManageCartExtensionsRoute: typeof TenantLocaleManageCartExtensionsRoute
   TenantLocaleManageChannelsRoute: typeof TenantLocaleManageChannelsRoute
   TenantLocaleManageCharitiesRoute: typeof TenantLocaleManageCharitiesRoute
-  TenantLocaleManageCharityRoute: typeof TenantLocaleManageCharityRoute
   TenantLocaleManageClassifiedsRoute: typeof TenantLocaleManageClassifiedsRoute
-  TenantLocaleManageCmsRoute: typeof TenantLocaleManageCmsRoute
   TenantLocaleManageCmsContentRoute: typeof TenantLocaleManageCmsContentRoute
-  TenantLocaleManageCommissionRulesRoute: typeof TenantLocaleManageCommissionRulesRoute
   TenantLocaleManageCommissionsRoute: typeof TenantLocaleManageCommissionsRoute
   TenantLocaleManageCompaniesRoute: typeof TenantLocaleManageCompaniesRoute
-  TenantLocaleManageCompaniesAdminRoute: typeof TenantLocaleManageCompaniesAdminRoute
-  TenantLocaleManageCompanyRoute: typeof TenantLocaleManageCompanyRoute
   TenantLocaleManageConsignmentsRoute: typeof TenantLocaleManageConsignmentsRoute
   TenantLocaleManageCreditRoute: typeof TenantLocaleManageCreditRoute
   TenantLocaleManageCrowdfundingRoute: typeof TenantLocaleManageCrowdfundingRoute
@@ -7190,7 +7026,6 @@ interface TenantLocaleRouteChildren {
   TenantLocaleManageProductsRoute: typeof TenantLocaleManageProductsRoute
   TenantLocaleManagePromotionExtensionsRoute: typeof TenantLocaleManagePromotionExtensionsRoute
   TenantLocaleManagePromotionsRoute: typeof TenantLocaleManagePromotionsRoute
-  TenantLocaleManagePromotionsExtRoute: typeof TenantLocaleManagePromotionsExtRoute
   TenantLocaleManagePurchaseOrdersRoute: typeof TenantLocaleManagePurchaseOrdersRoute
   TenantLocaleManageQuotesRoute: typeof TenantLocaleManageQuotesRoute
   TenantLocaleManageRealEstateRoute: typeof TenantLocaleManageRealEstateRoute
@@ -7214,11 +7049,9 @@ interface TenantLocaleRouteChildren {
   TenantLocaleManageTryBeforeYouBuyRoute: typeof TenantLocaleManageTryBeforeYouBuyRoute
   TenantLocaleManageUtilitiesRoute: typeof TenantLocaleManageUtilitiesRoute
   TenantLocaleManageVendorsRoute: typeof TenantLocaleManageVendorsRoute
-  TenantLocaleManageVolumeDealsRoute: typeof TenantLocaleManageVolumeDealsRoute
   TenantLocaleManageVolumePricingRoute: typeof TenantLocaleManageVolumePricingRoute
   TenantLocaleManageWalletRoute: typeof TenantLocaleManageWalletRoute
   TenantLocaleManageWarrantiesRoute: typeof TenantLocaleManageWarrantiesRoute
-  TenantLocaleManageWarrantyRoute: typeof TenantLocaleManageWarrantyRoute
   TenantLocaleManageWebhooksRoute: typeof TenantLocaleManageWebhooksRoute
   TenantLocaleManageWhiteLabelRoute: typeof TenantLocaleManageWhiteLabelRoute
   TenantLocaleManageWishlistsRoute: typeof TenantLocaleManageWishlistsRoute
@@ -7481,16 +7314,10 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleManageCartExtensionsRoute: TenantLocaleManageCartExtensionsRoute,
   TenantLocaleManageChannelsRoute: TenantLocaleManageChannelsRoute,
   TenantLocaleManageCharitiesRoute: TenantLocaleManageCharitiesRoute,
-  TenantLocaleManageCharityRoute: TenantLocaleManageCharityRoute,
   TenantLocaleManageClassifiedsRoute: TenantLocaleManageClassifiedsRoute,
-  TenantLocaleManageCmsRoute: TenantLocaleManageCmsRoute,
   TenantLocaleManageCmsContentRoute: TenantLocaleManageCmsContentRoute,
-  TenantLocaleManageCommissionRulesRoute:
-    TenantLocaleManageCommissionRulesRoute,
   TenantLocaleManageCommissionsRoute: TenantLocaleManageCommissionsRoute,
   TenantLocaleManageCompaniesRoute: TenantLocaleManageCompaniesRoute,
-  TenantLocaleManageCompaniesAdminRoute: TenantLocaleManageCompaniesAdminRoute,
-  TenantLocaleManageCompanyRoute: TenantLocaleManageCompanyRoute,
   TenantLocaleManageConsignmentsRoute: TenantLocaleManageConsignmentsRoute,
   TenantLocaleManageCreditRoute: TenantLocaleManageCreditRoute,
   TenantLocaleManageCrowdfundingRoute: TenantLocaleManageCrowdfundingRoute,
@@ -7542,7 +7369,6 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleManagePromotionExtensionsRoute:
     TenantLocaleManagePromotionExtensionsRoute,
   TenantLocaleManagePromotionsRoute: TenantLocaleManagePromotionsRoute,
-  TenantLocaleManagePromotionsExtRoute: TenantLocaleManagePromotionsExtRoute,
   TenantLocaleManagePurchaseOrdersRoute: TenantLocaleManagePurchaseOrdersRoute,
   TenantLocaleManageQuotesRoute: TenantLocaleManageQuotesRoute,
   TenantLocaleManageRealEstateRoute: TenantLocaleManageRealEstateRoute,
@@ -7570,11 +7396,9 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
     TenantLocaleManageTryBeforeYouBuyRoute,
   TenantLocaleManageUtilitiesRoute: TenantLocaleManageUtilitiesRoute,
   TenantLocaleManageVendorsRoute: TenantLocaleManageVendorsRoute,
-  TenantLocaleManageVolumeDealsRoute: TenantLocaleManageVolumeDealsRoute,
   TenantLocaleManageVolumePricingRoute: TenantLocaleManageVolumePricingRoute,
   TenantLocaleManageWalletRoute: TenantLocaleManageWalletRoute,
   TenantLocaleManageWarrantiesRoute: TenantLocaleManageWarrantiesRoute,
-  TenantLocaleManageWarrantyRoute: TenantLocaleManageWarrantyRoute,
   TenantLocaleManageWebhooksRoute: TenantLocaleManageWebhooksRoute,
   TenantLocaleManageWhiteLabelRoute: TenantLocaleManageWhiteLabelRoute,
   TenantLocaleManageWishlistsRoute: TenantLocaleManageWishlistsRoute,

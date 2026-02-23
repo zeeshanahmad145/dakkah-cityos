@@ -67,16 +67,8 @@ module.exports = defineConfig({
       key: "tradeInModule",
       options: {
         definition: {
-          isQueryable: true
-        }
-      },
-    },
-    {
-      resolve: "./src/modules/trade-in",
-      options: {
-        definition: {
-          isQueryable: true
-        }
+          isQueryable: true,
+        },
       },
     },
     ...(process.env.REDIS_URL

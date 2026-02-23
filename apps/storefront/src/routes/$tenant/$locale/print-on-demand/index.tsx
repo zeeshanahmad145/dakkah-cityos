@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
@@ -13,23 +14,32 @@ export const Route = createFileRoute("/$tenant/$locale/print-on-demand/")({
   }),
   loader: async () => {
     try {
-      const products = [
-        { id: "1", name: "T-Shirts", description: t(locale, "printOnDemand.description1_premium_cotton_tees", "Premium cotton tees in 20+ colors. Perfect for custom designs, logos, and artwork."), startingAt: "35 SAR", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop" },
-        { id: "2", name: "Hoodies", description: t(locale, "printOnDemand.description2_comfortable_fleece_h", "Comfortable fleece hoodies with full-color front and back printing options."), startingAt: "89 SAR", image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop" },
-        { id: "3", name: "Mugs", description: t(locale, "printOnDemand.description3_ceramic_mugs_with_vi", "Ceramic mugs with vibrant, dishwasher-safe prints. 11oz and 15oz sizes available."), startingAt: "25 SAR", image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400&h=300&fit=crop" },
-        { id: "4", name: "Phone Cases", description: t(locale, "printOnDemand.description4_durable_phone_cases", "Durable phone cases with high-resolution prints for iPhone and Samsung models."), startingAt: "39 SAR", image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&h=300&fit=crop" },
-        { id: "5", name: "Tote Bags", description: t(locale, "printOnDemand.description5_eco_friendly_canvas", "Eco-friendly canvas tote bags with all-over print or centered designs."), startingAt: "29 SAR", image: "https://images.unsplash.com/photo-1597633425046-08f5110420b5?w=400&h=300&fit=crop" },
-        { id: "6", name: "Posters & Art", description: t(locale, "printOnDemand.description6_museum_quality_print", "Museum-quality prints on premium paper. Multiple sizes from A4 to A1."), startingAt: "19 SAR", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&h=300&fit=crop" },
-      ]
-      const benefits = [
-        { title: t(locale, "printOnDemand.title7_zero_upfront_costs", "Zero Upfront Costs"), description: t(locale, "printOnDemand.description8_no_inventory__no_min", "No inventory, no minimum orders. Products are printed only when ordered."), icon: "💸" },
-        { title: t(locale, "printOnDemand.title9_easy_design_tools", "Easy Design Tools"), description: t(locale, "printOnDemand.description10_upload_your_designs", "Upload your designs or use our built-in editor with templates and mockups."), icon: "🎨" },
-        { title: t(locale, "printOnDemand.title11_global_shipping", "Global Shipping"), description: t(locale, "printOnDemand.description12_we_ship_to_30__count", "We ship to 30+ countries with tracking on every order."), icon: "🌍" },
-        { title: t(locale, "printOnDemand.title13_quality_guarantee", "Quality Guarantee"), description: t(locale, "printOnDemand.description14_premium_materials_an", "Premium materials and printing. Unhappy? We reprint or refund."), icon: "✅" },
-      ]
-      return { products, benefits }
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetchWithTimeout(`${baseUrl}/store/print-on-demand`, {
+        headers: {
+          "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
+        },
+      })
+      if (!resp.ok) return { products: [], benefits: [], count: 0 }
+      const data = await resp.json()
+      const raw = data.items || data.products || data.listings || []
+      const products = raw.map((item: any) => {
+        const meta = item.metadata || {}
+        return {
+          id: item.id,
+          name: item.name || meta.name || "Untitled Product",
+          description: item.description || meta.description || "",
+          startingAt: meta.starting_at || item.starting_at || null,
+          image: meta.thumbnail || meta.image || meta.images?.[0] || null,
+          price: item.price || meta.price || null,
+          currency: item.currency_code || meta.currency || "SAR",
+          category: item.category || meta.category || null,
+        }
+      })
+      const benefits = data.benefits || []
+      return { products, benefits, count: data.count || products.length }
     } catch {
-      return { products: [], benefits: [] }
+      return { products: [], benefits: [], count: 0 }
     }
   },
 })
@@ -90,11 +100,19 @@ function PrintOnDemandPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {filtered.map((p: any) => (
               <div key={p.id} className="group bg-ds-background border border-ds-border rounded-xl overflow-hidden hover:shadow-lg hover:border-ds-destructive/40 transition-all duration-200">
-                <div className="aspect-[4/3] relative overflow-hidden">
-                  <img loading="lazy" src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <div className="absolute bottom-3 start-3">
-                    <span className="px-2 py-1 text-xs font-medium bg-ds-card/90 text-ds-foreground rounded-md">From {p.startingAt}</span>
-                  </div>
+                <div className="aspect-[4/3] relative overflow-hidden bg-gradient-to-br from-ds-destructive/10 to-fuchsia-100">
+                  {p.image ? (
+                    <img loading="lazy" src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <svg className="w-16 h-16 text-ds-destructive/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg>
+                    </div>
+                  )}
+                  {p.startingAt && (
+                    <div className="absolute bottom-3 start-3">
+                      <span className="px-2 py-1 text-xs font-medium bg-ds-card/90 text-ds-foreground rounded-md">From {p.startingAt}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-5">
                   <h3 className="text-lg font-semibold text-ds-foreground mb-2 group-hover:text-ds-destructive transition-colors">{p.name}</h3>

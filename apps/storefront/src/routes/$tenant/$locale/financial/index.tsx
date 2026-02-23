@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
@@ -13,17 +14,32 @@ export const Route = createFileRoute("/$tenant/$locale/financial/")({
   }),
   loader: async () => {
     try {
-      const services = [
-        { id: "1", name: "Personal Loans", description: t(locale, "financial.description1_flexible_personal_lo", "Flexible personal loans with competitive rates starting from 2.5% APR. Quick approval and disbursement within 24 hours."), icon: "banknotes", rate: "From 2.5% APR", image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop" },
-        { id: "2", name: "Business Financing", description: t(locale, "financial.description2_tailored_financing_s", "Tailored financing solutions for SMEs and enterprises. Working capital, equipment financing, and growth funding."), icon: "building", rate: "From 3.5% APR", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300&fit=crop" },
-        { id: "3", name: "Insurance", description: t(locale, "financial.description3_comprehensive_insura", "Comprehensive insurance products covering health, auto, property, and travel. Protect what matters most."), icon: "shield", rate: "From 99 SAR/mo", image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=300&fit=crop" },
-        { id: "4", name: "Investment", description: t(locale, "financial.description4_diversified_investme", "Diversified investment portfolios managed by expert advisors. Grow your wealth with stocks, sukuk, and mutual funds."), icon: "chart", rate: "5-12% returns", image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=300&fit=crop" },
-        { id: "5", name: "Payment Plans", description: t(locale, "financial.description5_split_your_purchases", "Split your purchases into easy installments with 0% interest on select plans. Buy now, pay later with flexibility."), icon: "calendar", rate: "0% interest available", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop" },
-        { id: "6", name: "Currency Exchange", description: t(locale, "financial.description6_real_time_currency_e", "Real-time currency exchange at competitive rates. Send and receive international transfers with low fees."), icon: "globe", rate: "Low 0.5% spread", image: "https://images.unsplash.com/photo-1580519542036-c47de6196ba5?w=400&h=300&fit=crop" },
-      ]
-      return { services }
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetchWithTimeout(`${baseUrl}/store/financial-products`, {
+        headers: {
+          "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
+        },
+      })
+      if (!resp.ok) return { services: [], count: 0 }
+      const data = await resp.json()
+      const raw = data.items || data.financial_products || data.products || data.services || []
+      const services = raw.map((item: any) => {
+        const meta = item.metadata || {}
+        return {
+          id: item.id,
+          name: item.name || meta.name || "Untitled Product",
+          description: item.description || meta.description || "",
+          icon: item.icon || meta.icon || "banknotes",
+          rate: item.rate || meta.rate || null,
+          image: meta.thumbnail || meta.image || meta.images?.[0] || null,
+          price: item.price || meta.price || null,
+          currency: item.currency_code || meta.currency || "SAR",
+          product_type: item.product_type || meta.product_type || null,
+        }
+      })
+      return { services, count: data.count || services.length }
     } catch {
-      return { services: [] }
+      return { services: [], count: 0 }
     }
   },
 })
@@ -60,7 +76,7 @@ function FinancialPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{t(locale, 'financial.title')}</h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">{t(locale, 'financial.subtitle')}</p>
           <div className="mt-6 flex items-center justify-center gap-4 text-sm text-white/60">
-            <span>{t(locale, "financial.badge_services", "6 services")}</span><span>|</span><span>{t(locale, "financial.badge_rates", "Competitive rates")}</span><span>|</span><span>{t(locale, "financial.badge_shariah", "Shariah compliant")}</span>
+            <span>{services.length} {t(locale, "financial.badge_services", "services")}</span><span>|</span><span>{t(locale, "financial.badge_rates", "Competitive rates")}</span><span>|</span><span>{t(locale, "financial.badge_shariah", "Shariah compliant")}</span>
           </div>
         </div>
       </div>
@@ -80,12 +96,20 @@ function FinancialPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {filtered.map((s: any) => (
               <div key={s.id} className="group bg-ds-background border border-ds-border rounded-xl overflow-hidden hover:shadow-lg hover:border-ds-border transition-all duration-200">
-                <div className="aspect-[4/3] relative overflow-hidden">
-                  <img loading="lazy" src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div className="aspect-[4/3] relative overflow-hidden bg-gradient-to-br from-ds-primary/10 to-ds-primary/15">
+                  {s.image ? (
+                    <img loading="lazy" src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <svg className="w-16 h-16 text-ds-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={iconPaths[s.icon] || iconPaths.banknotes} /></svg>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-3 start-3">
-                    <span className="px-2 py-1 text-xs font-medium bg-ds-card/90 text-ds-foreground rounded-md">{s.rate}</span>
-                  </div>
+                  {s.rate && (
+                    <div className="absolute bottom-3 start-3">
+                      <span className="px-2 py-1 text-xs font-medium bg-ds-card/90 text-ds-foreground rounded-md">{s.rate}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-3 mb-3">

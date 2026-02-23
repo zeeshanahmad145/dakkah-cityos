@@ -435,7 +435,7 @@ const activityImplementations = {
     logger.info(`[TemporalWorker] Executing scheduledProductSync: ${input.timestamp}`)
     try {
       const payloadClient = createPayloadClient()
-      const medusaUrl = process.env.MEDUSA_BACKEND_URL || "http://localhost:9000"
+      const medusaUrl = process.env.MEDUSA_BACKEND_URL || ""
       const productsResponse = await axios.get(`${medusaUrl}/store/products`, {
         params: { limit: 1000 },
       }).catch(() => ({ data: { products: [] } }))

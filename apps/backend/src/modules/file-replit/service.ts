@@ -25,7 +25,7 @@ export class ReplitFileService extends AbstractFileProviderService {
     this.backendUrl_ =
       options.backend_url ||
       process.env.MEDUSA_BACKEND_URL ||
-      "http://localhost:9000";
+      "";
     this.client_ = new Client();
   }
 

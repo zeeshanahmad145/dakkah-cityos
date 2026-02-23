@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t } from "@/lib/i18n"
 import { useState } from "react"
@@ -11,18 +12,38 @@ export const Route = createFileRoute("/$tenant/$locale/marketplace/")({
       { name: "description", content: "Browse product categories on our marketplace" },
     ],
   }),
+  loader: async () => {
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetchWithTimeout(`${baseUrl}/store/vendors`, {
+        headers: {
+          "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
+        },
+      })
+      if (!resp.ok) return { items: [], count: 0 }
+      const data = await resp.json()
+      const raw = data.vendors || data.items || []
+      const items = raw.map((v: any) => {
+        const meta = v.metadata || {}
+        return {
+          id: v.id,
+          handle: v.handle || v.slug || "",
+          name: v.business_name || v.name || meta.business_name || "Unnamed Vendor",
+          description: v.description || meta.description || "",
+          logo_url: v.logo_url || v.logo || meta.logo_url || null,
+          banner_url: v.banner_url || v.banner || meta.banner_url || null,
+          is_verified: v.is_verified || meta.is_verified || false,
+          total_products: v.total_products || meta.total_products || 0,
+          rating: v.rating || meta.rating || null,
+          categories: v.categories || meta.categories || [],
+        }
+      })
+      return { items, count: data.count || items.length }
+    } catch {
+      return { items: [], count: 0 }
+    }
+  },
 })
-
-const categories = [
-  { id: "electronics", name: "Electronics", icon: "💻", slug: "electronics", productCount: 1240, color: "bg-ds-info/10" },
-  { id: "fashion", name: "Fashion", icon: "👗", slug: "fashion", productCount: 3500, color: "bg-ds-destructive/10" },
-  { id: "home", name: "Home & Garden", icon: "🏠", slug: "home-garden", productCount: 890, color: "bg-ds-success/10" },
-  { id: "beauty", name: "Beauty", icon: "✨", slug: "beauty", productCount: 2100, color: "bg-ds-primary/10" },
-  { id: "sports", name: "Sports", icon: "⚽", slug: "sports", productCount: 760, color: "bg-ds-warning/10" },
-  { id: "toys", name: "Toys & Games", icon: "🎮", slug: "toys-games", productCount: 430, color: "bg-ds-warning/10" },
-  { id: "automotive", name: "Automotive", icon: "🚗", slug: "automotive", productCount: 320, color: "bg-ds-destructive/10" },
-  { id: "books", name: "Books", icon: "📚", slug: "books", productCount: 5600, color: "bg-ds-success/10" },
-]
 
 const sortOptions = ["all", "popular", "newest", "trending"] as const
 const priceOptions = ["all", "under_50", "50_to_200", "200_to_1000", "over_1000"] as const
@@ -34,9 +55,13 @@ function MarketplacePage() {
   const [sortFilter, setSortFilter] = useState<string>("popular")
   const [priceFilter, setPriceFilter] = useState<string>("all")
 
-  const filteredCategories = categories.filter((cat) => {
+  const loaderData = Route.useLoaderData()
+  const items = loaderData?.items || []
+
+  const filteredCategories = items.filter((item: any) => {
     return searchQuery
-      ? cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ? (item.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.description || "").toLowerCase().includes(searchQuery.toLowerCase())
       : true
   })
 
@@ -54,9 +79,9 @@ function MarketplacePage() {
             Explore our curated selection of products across multiple categories from trusted vendors.
           </p>
           <div className="mt-6 flex items-center justify-center gap-4 text-sm text-white/60">
-            <span>{categories.length} categories</span>
+            <span>{items.length} vendors</span>
             <span>|</span>
-            <span>{categories.reduce((sum, cat) => sum + (cat.productCount || 0), 0).toLocaleString()} products</span>
+            <span>{items.reduce((sum: number, item: any) => sum + (item.total_products || 0), 0).toLocaleString()} products</span>
             <span>|</span>
             <span>{t(locale, "marketplace.quality_assured", "Quality assured")}</span>
           </div>
@@ -121,32 +146,58 @@ function MarketplacePage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredCategories.map((category) => (
-                  <Link
-                    key={category.id}
-                    to={`${prefix}/categories/${category.slug}` as any}
+                {filteredCategories.map((item: any) => (
+                  <a
+                    key={item.id}
+                    href={`${prefix}/vendors/${item.handle || item.id}`}
                     className="group bg-ds-background border border-ds-border rounded-xl overflow-hidden hover:shadow-lg hover:border-ds-primary/40 transition-all duration-200"
                   >
-                    <div className={`${category.color} p-8 flex items-center justify-center min-h-48 relative overflow-hidden`}>
-                      <div className="text-7xl group-hover:scale-110 transition-transform duration-300">{category.icon}</div>
-                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/5 group-hover:to-black/10 transition-all" />
+                    <div className="aspect-[3/1] bg-gradient-to-br from-ds-primary/15 to-ds-primary/30 relative overflow-hidden">
+                      {item.banner_url ? (
+                        <img loading="lazy" src={item.banner_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <svg className="w-12 h-12 text-ds-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        </div>
+                      )}
+                      {item.is_verified && (
+                        <span className="absolute top-2 end-2 px-2 py-1 text-xs font-medium bg-ds-success text-white rounded-md flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          Verified
+                        </span>
+                      )}
                     </div>
 
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-ds-foreground group-hover:text-ds-primary transition-colors mb-2">{category.name}</h3>
+                    <div className="p-4 relative">
+                      <div className="flex items-start gap-3">
+                        <div className="w-12 h-12 rounded-full bg-ds-primary/15 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 -mt-8">
+                          {item.logo_url ? (
+                            <img loading="lazy" src={item.logo_url} alt={item.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-lg font-bold text-ds-primary">{(item.name || "V").charAt(0)}</span>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0 pt-1">
+                          <h3 className="text-lg font-semibold text-ds-foreground group-hover:text-ds-primary transition-colors line-clamp-1">{item.name}</h3>
+                        </div>
+                      </div>
 
-                      <div className="flex items-center gap-2 text-sm text-ds-muted-foreground mb-4">
+                      {item.description && (
+                        <p className="text-sm text-ds-muted-foreground mt-2 line-clamp-2">{item.description}</p>
+                      )}
+
+                      <div className="flex items-center gap-2 text-sm text-ds-muted-foreground mt-3 mb-4">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
-                        <span>{category.productCount.toLocaleString()} products</span>
+                        <span>{(item.total_products || 0).toLocaleString()} products</span>
                       </div>
 
                       <div className="pt-3 border-t border-ds-border">
-                        <span className="px-4 py-1.5 text-xs font-semibold text-white bg-ds-primary rounded-lg group-hover:bg-ds-primary/90 transition-colors inline-block">Browse Category</span>
+                        <span className="px-4 py-1.5 text-xs font-semibold text-white bg-ds-primary rounded-lg group-hover:bg-ds-primary/90 transition-colors inline-block">Visit Store</span>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 ))}
               </div>
             )}

@@ -196,8 +196,8 @@ export class StripeGatewayService {
 
       const accountLink = await stripe.accountLinks.create({
         account: account.id,
-        refresh_url: `${process.env.STORE_URL || "http://localhost:5000"}/vendor/stripe-connect/refresh`,
-        return_url: `${process.env.STORE_URL || "http://localhost:5000"}/vendor/stripe-connect/complete`,
+        refresh_url: `${process.env.STORE_URL || process.env.STOREFRONT_URL || ""}/vendor/stripe-connect/refresh`,
+        return_url: `${process.env.STORE_URL || process.env.STOREFRONT_URL || ""}/vendor/stripe-connect/complete`,
         type: "account_onboarding",
       });
 

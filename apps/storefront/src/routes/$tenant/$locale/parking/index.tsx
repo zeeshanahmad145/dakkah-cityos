@@ -15,7 +15,7 @@ export const Route = createFileRoute("/$tenant/$locale/parking/")({
   loader: async () => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/parking`, {
+      const resp = await fetchWithTimeout(`${baseUrl}/store/parking/spots`, {
         headers: {
           "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
         },

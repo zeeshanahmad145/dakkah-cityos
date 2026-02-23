@@ -59,7 +59,6 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   { key: "commissions", icon: "ArrowUpDown", section: "marketplace", scope: "shared", minWeight: 40, path: "/commissions" },
   { key: "payouts", icon: "Cash", section: "marketplace", scope: "shared", minWeight: 40, path: "/payouts" },
   { key: "affiliates", icon: "Sparkles", section: "marketplace", scope: "tenant", minWeight: 40, path: "/affiliates" },
-  { key: "commission-rules", icon: "ArrowUpDown", section: "marketplace", scope: "shared", minWeight: 40, path: "/commission-rules" },
 
   { key: "auctions", icon: "Bolt", section: "verticals", scope: "tenant", minWeight: 40, path: "/auctions" },
   { key: "bookings", icon: "Calendar", section: "verticals", scope: "tenant", minWeight: 40, path: "/bookings" },
@@ -99,7 +98,6 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   { key: "availability", icon: "Calendar", section: "verticals", scope: "tenant", minWeight: 40, path: "/availability" },
   { key: "print-on-demand", icon: "RocketLaunch", section: "verticals", scope: "tenant", minWeight: 40, path: "/print-on-demand" },
   { key: "flash-deals", icon: "Bolt", section: "verticals", scope: "tenant", minWeight: 40, path: "/flash-deals" },
-  { key: "volume-deals", icon: "Cash", section: "verticals", scope: "tenant", minWeight: 40, path: "/volume-deals" },
   { key: "b2b", icon: "Buildings", section: "verticals", scope: "tenant", minWeight: 40, path: "/b2b" },
 
   { key: "advertising", icon: "Target", section: "marketing", scope: "tenant", minWeight: 40, path: "/advertising" },
@@ -107,11 +105,10 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   { key: "social-commerce", icon: "ChatBubble", section: "marketing", scope: "tenant", minWeight: 40, path: "/social-commerce" },
   { key: "classifieds", icon: "Tag", section: "marketing", scope: "tenant", minWeight: 40, path: "/classifieds" },
   { key: "crowdfunding", icon: "Trophy", section: "marketing", scope: "tenant", minWeight: 40, path: "/crowdfunding" },
-  { key: "charity", icon: "Heart", section: "marketing", scope: "tenant", minWeight: 40, path: "/charity" },
+  { key: "charity", icon: "Heart", section: "marketing", scope: "tenant", minWeight: 40, path: "/charities" },
   { key: "newsletters", icon: "DocumentText", section: "marketing", scope: "tenant", minWeight: 40, path: "/newsletters" },
   { key: "promotion-extensions", icon: "Bolt", section: "marketing", scope: "tenant", minWeight: 40, path: "/promotion-extensions" },
 
-  { key: "cms-pages", icon: "DocumentText", section: "cms", scope: "tenant", minWeight: 30, path: "/cms" },
   { key: "cms-content", icon: "Bookmarks", section: "cms", scope: "tenant", minWeight: 30, path: "/cms-content" },
   { key: "media-library", icon: "Sparkles", section: "cms", scope: "tenant", minWeight: 30, path: "/media" },
   { key: "navigation", icon: "SquaresPlus", section: "cms", scope: "tenant", minWeight: 30, path: "/navigation" },
@@ -121,7 +118,6 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   { key: "stores", icon: "BuildingStorefront", section: "organization", scope: "tenant", minWeight: 40, path: "/stores" },
   { key: "legal", icon: "Book", section: "organization", scope: "tenant", minWeight: 40, path: "/legal" },
   { key: "utilities", icon: "Beaker", section: "organization", scope: "tenant", minWeight: 40, path: "/utilities" },
-  { key: "companies-admin", icon: "Buildings", section: "organization", scope: "tenant", minWeight: 40, path: "/companies-admin" },
 
   { key: "tenants-admin", icon: "Buildings", section: "platform", scope: "platform", minWeight: 90, path: "/tenants-admin" },
   { key: "governance", icon: "Book", section: "platform", scope: "platform", minWeight: 90, path: "/governance" },

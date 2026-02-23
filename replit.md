@@ -122,3 +122,35 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **File Storage:** Vercel Blob, Replit Object Storage
 - **Caching:** Redis (Redis Labs) — `@medusajs/cache-redis` for Medusa framework cache, `CityOSCache` (ioredis) for application-level cache
 - **Event Bus:** Redis (Redis Labs) — `@medusajs/event-bus-redis` replaces local in-memory event bus
+
+## Deep Audit & Remediation (Feb 23, 2026 — Session 2)
+
+### Infrastructure Fixes
+- **Duplicate module registration fixed**: Removed duplicate `trade-in` module entry in `medusa-config.ts` (was registered twice, causing LSP errors)
+- **Hardcoded URLs eliminated**: All `localhost:9000` and `localhost:5000` fallbacks replaced with proper env var chains (`MEDUSA_BACKEND_URL`, `STOREFRONT_URL`, etc.) across 6 files
+- **Trade-in service expanded**: Added 7 domain methods (createRequest, evaluateItem, createOffer, acceptOffer, rejectOffer, getRequestsByCustomer, getRequestsByStatus) with depreciation formula and validation logic
+
+### Data Sync Remediation
+- **Full data parity achieved** between local HeliumDB and remote Neon:
+  - Vendors: 0 → 10 (synced)
+  - Customers: 0 → 6 (synced)
+  - Nodes: 0 → 10 (synced)
+  - Images: 8 → 209 (synced)
+  - Product variant options: 57 → 181 (synced)
+  - Product tags: 0 → 6 (synced)
+  - Product collections: 0 → 3 (synced)
+
+### Duplicate Page Cleanup
+- **8 redundant manage pages removed**: charity.tsx, warranty.tsx, cms.tsx, promotions-ext.tsx, company.tsx, companies-admin.tsx, commission-rules.tsx (merged into commissions.tsx as tab), volume-deals.tsx
+- **Module registry updated**: Removed stale entries, fixed paths
+
+### Storefront Pages — Hardcoded Data Removed
+- **23 storefront pages** converted from hardcoded arrays to real API calls using `fetchWithTimeout` + `getServerBaseUrl()`
+- All pages now have proper loading states and empty state UI
+
+### Test Coverage Expansion
+- **20+ new test files** created covering:
+  - **Unit tests**: trade-in, insurance, auction, wallet, commission services (62 tests)
+  - **API route tests**: admin bookings, subscriptions, commissions, wallets, auctions, insurance, store features (153 tests)
+  - **Workflow tests**: KYC verification, fleet dispatch, payment reconciliation, auction lifecycle, event ticketing, tenant provisioning (70 tests)
+- Total test files: ~40+ (up from ~20)

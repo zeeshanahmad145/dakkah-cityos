@@ -2,89 +2,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
-
-const hardcodedPosts = [
-  {
-    id: "blog-1",
-    title: "The Future of E-Commerce: Trends to Watch in 2026",
-    excerpt: "From AI-powered personalization to sustainable packaging, discover the key trends shaping the future of online retail and how businesses can stay ahead.",
-    category: "tech",
-    author: "Sarah Chen",
-    date: "2026-02-10",
-    read_time: "8 min read",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
-  },
-  {
-    id: "blog-2",
-    title: "How to Build a Loyal Customer Base From Scratch",
-    excerpt: "Learn proven strategies for customer retention including loyalty programs, personalized communication, and community building that drive repeat purchases.",
-    category: "business",
-    author: "James Wilson",
-    date: "2026-02-08",
-    read_time: "6 min read",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
-  },
-  {
-    id: "blog-3",
-    title: "Sustainable Shopping: A Complete Guide for Conscious Consumers",
-    excerpt: "Navigate the world of eco-friendly products with our comprehensive guide to sustainable shopping practices and how to make greener choices every day.",
-    category: "lifestyle",
-    author: "Emma Rodriguez",
-    date: "2026-02-05",
-    read_time: "10 min read",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80",
-  },
-  {
-    id: "blog-4",
-    title: "Breaking: New Platform Features Launching This Month",
-    excerpt: "We are excited to announce several major platform updates including enhanced vendor analytics, improved search, and a brand new mobile experience.",
-    category: "news",
-    author: "Michael Park",
-    date: "2026-02-03",
-    read_time: "4 min read",
-    image: "https://images.unsplash.com/photo-1504711434969-e33886168d5c?w=800&q=80",
-  },
-  {
-    id: "blog-5",
-    title: "The Ultimate Guide to Product Photography on a Budget",
-    excerpt: "Professional-looking product photos do not require an expensive studio. Learn how to take stunning product images with just your smartphone and natural light.",
-    category: "guides",
-    author: "Lisa Tran",
-    date: "2026-01-28",
-    read_time: "12 min read",
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80",
-  },
-  {
-    id: "blog-6",
-    title: "5 Tech Tools Every Small Business Owner Needs",
-    excerpt: "Streamline your operations with these essential technology tools for inventory management, customer relationships, analytics, and automated marketing.",
-    category: "tech",
-    author: "David Kim",
-    date: "2026-01-25",
-    read_time: "7 min read",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-  },
-  {
-    id: "blog-7",
-    title: "How Local Businesses Are Thriving in the Digital Marketplace",
-    excerpt: "Real stories from local vendors who successfully transitioned to online selling, doubling their revenue and reaching customers across the region.",
-    category: "business",
-    author: "Fatima Al-Rashid",
-    date: "2026-01-20",
-    read_time: "9 min read",
-    image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?w=800&q=80",
-  },
-  {
-    id: "blog-8",
-    title: "Wellness at Work: Creating a Healthy Home Office Setup",
-    excerpt: "Transform your workspace into a productivity paradise with ergonomic tips, mindfulness practices, and the best gear for a comfortable work-from-home experience.",
-    category: "lifestyle",
-    author: "Ryan Foster",
-    date: "2026-01-15",
-    read_time: "6 min read",
-    image: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&q=80",
-  },
-]
+import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
 
 export const Route = createFileRoute("/$tenant/$locale/blog/")({
   component: BlogPage,
@@ -96,7 +14,29 @@ export const Route = createFileRoute("/$tenant/$locale/blog/")({
   }),
   loader: async () => {
     try {
-      return { items: hardcodedPosts, count: hardcodedPosts.length }
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetchWithTimeout(`${baseUrl}/store/content/blog`, {
+        headers: {
+          "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
+        },
+      })
+      if (!resp.ok) return { items: [], count: 0 }
+      const data = await resp.json()
+      const raw = data.posts || data.items || data.articles || data.docs || []
+      const items = raw.map((p: any) => {
+        const meta = p.metadata || {}
+        return {
+          id: p.id || p.slug,
+          title: p.title || meta.title || "Untitled Post",
+          excerpt: p.excerpt || p.description || meta.excerpt || meta.description || "",
+          category: p.category || meta.category || null,
+          author: p.author || meta.author || null,
+          date: p.publishedAt || p.published_at || p.date || p.createdAt || meta.date || null,
+          read_time: p.read_time || meta.read_time || null,
+          image: p.image?.url || p.thumbnail || meta.image || meta.thumbnail || null,
+        }
+      })
+      return { items, count: data.count || items.length }
     } catch {
       return { items: [], count: 0 }
     }

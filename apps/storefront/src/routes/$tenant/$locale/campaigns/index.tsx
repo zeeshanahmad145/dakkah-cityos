@@ -2,75 +2,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
-
-const hardcodedCampaigns = [
-  {
-    id: "camp-1",
-    title: "Summer Mega Sale",
-    description: "Enjoy up to 50% off on selected summer essentials. From fashion to electronics, find incredible deals across all categories.",
-    type: "seasonal",
-    discount: "50%",
-    discount_label: "Up to 50% Off",
-    start_date: "2026-06-01",
-    end_date: "2026-06-30",
-    image: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&q=80",
-  },
-  {
-    id: "camp-2",
-    title: "Flash Friday Deals",
-    description: "24 hours only! Grab limited-time flash deals on top brands. New deals drop every hour — do not miss out.",
-    type: "flash",
-    discount: "40%",
-    discount_label: "Up to 40% Off",
-    start_date: "2026-03-14",
-    end_date: "2026-03-14",
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800&q=80",
-  },
-  {
-    id: "camp-3",
-    title: "End of Season Clearance",
-    description: "Last chance to save big on winter inventory. Clearance prices on jackets, boots, accessories, and more while supplies last.",
-    type: "clearance",
-    discount: "70%",
-    discount_label: "Up to 70% Off",
-    start_date: "2026-02-15",
-    end_date: "2026-03-15",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
-  },
-  {
-    id: "camp-4",
-    title: "Ramadan Special Offers",
-    description: "Celebrate the holy month with exclusive offers on groceries, home decor, fashion, and gifting essentials for the whole family.",
-    type: "holiday",
-    discount: "35%",
-    discount_label: "Up to 35% Off",
-    start_date: "2026-02-28",
-    end_date: "2026-03-30",
-    image: "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&q=80",
-  },
-  {
-    id: "camp-5",
-    title: "Tech Tuesday Flash Sale",
-    description: "Every Tuesday, score amazing deals on laptops, phones, tablets, and smart home gadgets from premium brands.",
-    type: "flash",
-    discount: "30%",
-    discount_label: "Up to 30% Off",
-    start_date: "2026-03-01",
-    end_date: "2026-04-30",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
-  },
-  {
-    id: "camp-6",
-    title: "Spring Collection Launch",
-    description: "Be the first to shop our brand-new spring collection. Fresh styles, vibrant colors, and exclusive early-bird discounts.",
-    type: "seasonal",
-    discount: "25%",
-    discount_label: "25% Launch Discount",
-    start_date: "2026-03-20",
-    end_date: "2026-04-20",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
-  },
-]
+import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
 
 export const Route = createFileRoute("/$tenant/$locale/campaigns/")({
   component: CampaignsPage,
@@ -82,7 +14,30 @@ export const Route = createFileRoute("/$tenant/$locale/campaigns/")({
   }),
   loader: async () => {
     try {
-      return { items: hardcodedCampaigns, count: hardcodedCampaigns.length }
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetchWithTimeout(`${baseUrl}/store/campaigns`, {
+        headers: {
+          "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
+        },
+      })
+      if (!resp.ok) return { items: [], count: 0 }
+      const data = await resp.json()
+      const raw = data.campaigns || data.items || data.promotions || []
+      const items = raw.map((c: any) => {
+        const meta = c.metadata || {}
+        return {
+          id: c.id,
+          title: c.title || c.name || meta.title || "Untitled Campaign",
+          description: c.description || meta.description || "",
+          type: c.type || c.campaign_type || meta.type || null,
+          discount: meta.discount || null,
+          discount_label: meta.discount_label || null,
+          start_date: c.starts_at || c.start_date || meta.start_date || null,
+          end_date: c.ends_at || c.end_date || meta.end_date || null,
+          image: meta.image || meta.thumbnail || c.thumbnail || null,
+        }
+      })
+      return { items, count: data.count || items.length }
     } catch {
       return { items: [], count: 0 }
     }

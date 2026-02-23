@@ -90,7 +90,7 @@ export async function GET(
   
     // Simulating fetching from admin settings
     const adminFeaturesResponse = await fetch(
-      `${process.env.BACKEND_URL || 'http://localhost:9000'}/admin/settings/features`,
+      `${process.env.BACKEND_URL || process.env.MEDUSA_BACKEND_URL || ''}/admin/settings/features`,
       {
         headers: {
           'Authorization': req.headers.authorization || ''

@@ -7,5 +7,8 @@ export const TradeInOffer = model.define("trade_in_offer", {
   credit_type: model.enum(["store_credit", "wallet", "refund"]).default("store_credit"),
   expires_at: model.dateTime().nullable(),
   status: model.enum(["pending", "accepted", "rejected", "expired"]).default("pending"),
+  rejection_reason: model.text().nullable(),
+  accepted_at: model.dateTime().nullable(),
+  rejected_at: model.dateTime().nullable(),
   metadata: model.json().nullable(),
 })

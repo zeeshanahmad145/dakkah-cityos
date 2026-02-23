@@ -11,7 +11,7 @@ export function getBackendUrl(): string {
   return (
     import.meta.env.VITE_BACKEND_URL ||
     import.meta.env.VITE_MEDUSA_BACKEND_URL ||
-    "http://localhost:9000"
+    ""
   )
 }
 
@@ -26,7 +26,7 @@ export function getServerBaseUrl(): string {
  * Uses VITE_STOREFRONT_URL environment variable with fallback
  */
 export function getStorefrontUrl(): string {
-  return import.meta.env.VITE_STOREFRONT_URL || "http://localhost:3000"
+  return import.meta.env.VITE_STOREFRONT_URL || ""
 }
 
 /**
