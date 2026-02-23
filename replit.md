@@ -97,12 +97,14 @@ The following audit and remediation pages are published to the Dakkah Confluence
 - **Fix priorities**: P0 — Nitro route rules + MEDUSA_BACKEND_URL env var; P1 — Migrate to TanStack Router loaders for SSR
 
 ### Vercel Production Deployment (Feb 23, 2026)
+- **Serverless entry point**: Medusa v2 build output (`.medusa/server/`) has no `index.js` by default. The post-build script (`apps/backend/scripts/vercel-post-build.mjs`) copies `scripts/vercel-entry.js` → `.medusa/server/api/index.js` to create a Vercel serverless function that bootstraps the Express app and Medusa loaders
+- **CORS handling**: The serverless entry point includes global CORS middleware that handles OPTIONS preflight (204 response) before Medusa's route system, ensuring cross-origin requests work for all `/platform/*`, `/store/*`, and `/admin/*` routes
 - **Client-side absolute URLs**: Storefront `getServerBaseUrl()` returns `VITE_MEDUSA_BACKEND_URL` on client side in production, making all SDK and `fetchWithTimeout` calls use absolute backend URLs (no proxy rewrites needed)
 - **Admin dashboard backend URL**: `medusa-config.ts` uses `MEDUSA_BACKEND_URL` → `VERCEL_URL` → `VERCEL_PROJECT_PRODUCTION_URL` fallback chain for admin `backendUrl`, preventing localhost:9000 calls
 - **Post-build script** (`apps/storefront/scripts/vercel-post-build.mjs`): Backup rewrite injection into Nitro config (kept as defense-in-depth)
 - **Image proxy**: All product images use `/platform/media?path={blob-pathname}` proxy URLs; private Vercel Blob images served through backend proxy with caching
 - **Required Vercel env vars**:
-  - **Backend project**: `STORE_CORS` must include `*` or the storefront domain; `MEDUSA_BACKEND_URL` (optional, auto-detected from `VERCEL_URL`)
+  - **Backend project**: `STORE_CORS` must include `*` or the storefront domain; `MEDUSA_BACKEND_URL` (optional, auto-detected from `VERCEL_URL`); `NEON_DATABASE_URL` or `DATABASE_URL` for PostgreSQL
   - **Storefront project**: `VITE_MEDUSA_BACKEND_URL` must be set to the backend deployment URL (e.g., `https://dakkah-cityos-medusa-backend.vercel.app`)
 
 ## External Dependencies

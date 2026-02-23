@@ -1,4 +1,4 @@
-import { existsSync, cpSync, mkdirSync, readdirSync, writeFileSync } from "fs";
+import { existsSync, cpSync, mkdirSync, readdirSync, writeFileSync, copyFileSync } from "fs";
 import { join, resolve } from "path";
 
 const ROOT = resolve(process.cwd());
@@ -6,6 +6,20 @@ const SERVER_DIR = join(ROOT, ".medusa", "server");
 const ADMIN_SRC = join(ROOT, ".medusa", "server", "public", "commerce", "admin");
 const ADMIN_ALT_SRC = join(ROOT, ".medusa", "server", "public", "admin");
 const ADMIN_DEST = join(SERVER_DIR, "commerce", "admin");
+
+const ENTRY_SRC = join(ROOT, "scripts", "vercel-entry.js");
+const API_DIR = join(SERVER_DIR, "api");
+const ENTRY_DEST = join(API_DIR, "index.js");
+
+console.log("[vercel-post-build] Copying Vercel serverless entry point...");
+mkdirSync(API_DIR, { recursive: true });
+if (existsSync(ENTRY_SRC)) {
+  copyFileSync(ENTRY_SRC, ENTRY_DEST);
+  console.log("[vercel-post-build] Entry point copied to:", ENTRY_DEST);
+} else {
+  console.error("[vercel-post-build] ERROR: vercel-entry.js not found at:", ENTRY_SRC);
+  process.exit(1);
+}
 
 console.log("[vercel-post-build] Checking admin SPA assets...");
 console.log("[vercel-post-build] Server dir:", SERVER_DIR);

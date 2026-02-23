@@ -14,7 +14,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/index.js"
+      "destination": "/api/index.js"
     }
   ],
   "headers": [
