@@ -407,7 +407,7 @@ export const CartEmpty = () => {
 }
 
 
-export const DEFAULT_CART_DROPDOWN_FIELDS = "id, *items, total, currency_code, item_subtotal"
+export const DEFAULT_CART_DROPDOWN_FIELDS = "id, *items, total, currency_code"
 
 export const CartDropdown = () => {
   const { isOpen, openCart, closeCart } = useCartDrawer()
@@ -464,7 +464,7 @@ export const CartDropdown = () => {
             <DrawerFooter>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-base font-medium text-ds-muted-foreground">Subtotal</span>
-                <Price price={cart.item_subtotal} currencyCode={cart.currency_code} />
+                <Price price={cart.total} currencyCode={cart.currency_code} />
               </div>
 
               <Link to={`${prefix}/cart` as any} onClick={closeCart}>

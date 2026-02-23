@@ -3,6 +3,7 @@ import { TenantProvider } from "@/lib/context/tenant-context"
 import type { TenantConfig } from "@/lib/context/tenant-context"
 import { PlatformContextProvider } from "@/lib/context/platform-context"
 import { sdk } from "@/lib/utils/sdk"
+import { useEffect, useState } from "react"
 
 const SUPPORTED_LOCALES = ["en", "fr", "ar"]
 
@@ -95,6 +96,19 @@ export const Route = createFileRoute("/$tenant/$locale")({
 
 function TenantLocaleLayout() {
   const { tenant, tenantSlug, locale, direction } = Route.useLoaderData()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    )
+  }
 
   return (
     <div dir={direction} lang={locale}>
