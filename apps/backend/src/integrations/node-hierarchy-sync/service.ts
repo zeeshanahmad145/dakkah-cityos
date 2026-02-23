@@ -1,5 +1,6 @@
 import { MedusaContainer } from "@medusajs/framework/types";
 import axios from "axios";
+import { appConfig } from "../../lib/config"
 import { createLogger } from "../../lib/logger"
 const logger = createLogger("integration:node-hierarchy-sync")
 
@@ -88,8 +89,8 @@ export class NodeHierarchySyncService {
   }
 
   async syncNodeToPayload(node: any, tenantId: string): Promise<void> {
-    const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV;
-    const payloadKey = process.env.PAYLOAD_API_KEY;
+    const payloadUrl = appConfig.payloadCms.url;
+    const payloadKey = appConfig.payloadCms.apiKey;
 
     if (!payloadUrl || !payloadKey) {
       logger.info("[NodeHierarchySync] Payload CMS not configured, skipping sync");
@@ -142,9 +143,9 @@ export class NodeHierarchySyncService {
   }
 
   async syncNodeToERPNext(node: any, tenantId: string): Promise<void> {
-    const siteUrl = process.env.ERPNEXT_URL_DEV;
-    const apiKey = process.env.ERPNEXT_API_KEY;
-    const apiSecret = process.env.ERPNEXT_API_SECRET;
+    const siteUrl = appConfig.erpnext.url;
+    const apiKey = appConfig.erpnext.apiKey;
+    const apiSecret = appConfig.erpnext.apiSecret;
 
     if (!siteUrl || !apiKey || !apiSecret) {
       logger.info("[NodeHierarchySync] ERPNext not configured, skipping sync");
@@ -216,9 +217,9 @@ export class NodeHierarchySyncService {
   }
 
   async syncNodeToFleetbase(node: any, tenantId: string): Promise<void> {
-    const apiUrl = process.env.FLEETBASE_URL_DEV;
-    const apiKey = process.env.FLEETBASE_API_KEY;
-    const orgId = process.env.FLEETBASE_ORG_ID;
+    const apiUrl = appConfig.fleetbase.url;
+    const apiKey = appConfig.fleetbase.apiKey;
+    const orgId = appConfig.fleetbase.orgId;
 
     if (!apiUrl || !apiKey || !orgId) {
       logger.info("[NodeHierarchySync] Fleetbase not configured, skipping sync");
@@ -299,8 +300,8 @@ export class NodeHierarchySyncService {
   }
 
   async syncNodeToWaltId(node: any, tenantId: string): Promise<void> {
-    const apiUrl = process.env.WALTID_URL_DEV;
-    const apiKey = process.env.WALTID_API_KEY;
+    const apiUrl = appConfig.waltid.url;
+    const apiKey = appConfig.waltid.apiKey;
 
     if (!apiUrl || !apiKey) {
       logger.info("[NodeHierarchySync] WaltId not configured, skipping sync");
@@ -455,8 +456,8 @@ export class NodeHierarchySyncService {
   async deleteNodeFromSystems(nodeId: string, tenantId: string): Promise<void> {
     logger.info(`[NodeHierarchySync] Deleting node ${nodeId} from all systems`);
 
-    const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV;
-    const payloadKey = process.env.PAYLOAD_API_KEY;
+    const payloadUrl = appConfig.payloadCms.url;
+    const payloadKey = appConfig.payloadCms.apiKey;
     if (payloadUrl && payloadKey) {
       try {
         const client = axios.create({
@@ -478,9 +479,9 @@ export class NodeHierarchySyncService {
       }
     }
 
-    const erpSiteUrl = process.env.ERPNEXT_URL_DEV;
-    const erpApiKey = process.env.ERPNEXT_API_KEY;
-    const erpApiSecret = process.env.ERPNEXT_API_SECRET;
+    const erpSiteUrl = appConfig.erpnext.url;
+    const erpApiKey = appConfig.erpnext.apiKey;
+    const erpApiSecret = appConfig.erpnext.apiSecret;
     if (erpSiteUrl && erpApiKey && erpApiSecret) {
       try {
         const client = axios.create({
@@ -509,9 +510,9 @@ export class NodeHierarchySyncService {
       }
     }
 
-    const fbApiUrl = process.env.FLEETBASE_URL_DEV;
-    const fbApiKey = process.env.FLEETBASE_API_KEY;
-    const fbOrgId = process.env.FLEETBASE_ORG_ID;
+    const fbApiUrl = appConfig.fleetbase.url;
+    const fbApiKey = appConfig.fleetbase.apiKey;
+    const fbOrgId = appConfig.fleetbase.orgId;
     if (fbApiUrl && fbApiKey && fbOrgId) {
       try {
         const client = axios.create({

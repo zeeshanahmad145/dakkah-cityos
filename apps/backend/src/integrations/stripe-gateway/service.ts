@@ -1,4 +1,5 @@
 import { MedusaError } from "@medusajs/framework/utils";
+import { appConfig } from "../../lib/config"
 import { createLogger } from "../../lib/logger"
 const logger = createLogger("integration:stripe-gateway")
 
@@ -196,8 +197,8 @@ export class StripeGatewayService {
 
       const accountLink = await stripe.accountLinks.create({
         account: account.id,
-        refresh_url: `${process.env.STORE_URL || process.env.STOREFRONT_URL || ""}/vendor/stripe-connect/refresh`,
-        return_url: `${process.env.STORE_URL || process.env.STOREFRONT_URL || ""}/vendor/stripe-connect/complete`,
+        refresh_url: `${appConfig.urls.storefront}/vendor/stripe-connect/refresh`,
+        return_url: `${appConfig.urls.storefront}/vendor/stripe-connect/complete`,
         type: "account_onboarding",
       });
 

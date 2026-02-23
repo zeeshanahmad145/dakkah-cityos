@@ -1,6 +1,7 @@
 import type { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
 import { dispatchEventToTemporal, getWorkflowForEvent } from "../lib/event-dispatcher"
 import { createLogger } from "../lib/logger"
+import { appConfig } from "../lib/config"
 const logger = createLogger("subscribers:temporal-event-bridge")
 
 export default async function temporalEventBridge({
@@ -9,7 +10,7 @@ export default async function temporalEventBridge({
 }: SubscriberArgs<any>) {
   const eventName = event.name
 
-  if (!process.env.TEMPORAL_API_KEY) {
+  if (!appConfig.temporal.isConfigured) {
     return
   }
 

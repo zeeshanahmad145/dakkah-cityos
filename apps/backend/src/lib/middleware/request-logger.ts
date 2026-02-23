@@ -1,5 +1,6 @@
 import type { MedusaNextFunction, MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
+import { appConfig } from "../config"
 import { createLogger } from "../logger"
 const logger = createLogger("middleware:request-logger")
 
@@ -51,7 +52,7 @@ export function requestLoggerMiddleware(
       const userId = (req as any).auth_context?.actor_id
       if (userId) logData.user_id = userId
 
-      if (process.env.NODE_ENV === "production") {
+      if (appConfig.isProduction) {
         if (statusCode >= 500) {
           logger.error(JSON.stringify(logData))
         } else if (statusCode >= 400) {

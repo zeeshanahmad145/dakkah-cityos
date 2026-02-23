@@ -1,21 +1,22 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { createLogger } from "../../../lib/logger"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 const logger = createLogger("api:admin/integrations")
 
 const INTEGRATION_SYSTEMS = [
-  { name: "payload", envVar: "PAYLOAD_CMS_URL_DEV" },
-  { name: "erpnext", envVar: "ERPNEXT_URL_DEV" },
-  { name: "fleetbase", envVar: "FLEETBASE_URL_DEV" },
-  { name: "waltid", envVar: "WALTID_URL_DEV" },
-  { name: "stripe", envVar: "STRIPE_SECRET_KEY" },
-  { name: "temporal", envVar: "TEMPORAL_API_KEY" },
+  { name: "payload", isConfigured: () => appConfig.payloadCms.isConfigured },
+  { name: "erpnext", isConfigured: () => appConfig.erpnext.isConfigured },
+  { name: "fleetbase", isConfigured: () => appConfig.fleetbase.isConfigured },
+  { name: "waltid", isConfigured: () => appConfig.waltid.isConfigured },
+  { name: "stripe", isConfigured: () => appConfig.stripe.isConfigured },
+  { name: "temporal", isConfigured: () => appConfig.temporal.isConfigured },
 ]
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const systems = INTEGRATION_SYSTEMS.map((system) => {
-      const configured = !!process.env[system.envVar]
+      const configured = system.isConfigured()
       return {
         name: system.name,
         configured,

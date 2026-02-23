@@ -3,6 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
 import { createLogger } from "../../../lib/logger"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 const logger = createLogger("api:webhooks/stripe")
 
 async function handlePaymentIntentSucceeded(data: any, correlationId: string, req: MedusaRequest) {
@@ -57,12 +58,12 @@ async function handleInvoicePaymentFailed(data: any, correlationId: string) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
 
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!appConfig.stripe.secretKey) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "stripe" })
   }
 
   try {
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+    const webhookSecret = appConfig.stripe.webhookSecret
     let stripeEvent: any
 
     if (webhookSecret) {
@@ -74,7 +75,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
       try {
         const Stripe = (await import("stripe")).default
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "")
+        const stripe = new Stripe(appConfig.stripe.secretKey)
         const rawBody = typeof req.body === "string" ? req.body : JSON.stringify(req.body)
         stripeEvent = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret)
       } catch (error: any) {

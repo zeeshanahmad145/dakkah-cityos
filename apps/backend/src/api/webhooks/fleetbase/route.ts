@@ -3,6 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
 import { createLogger } from "../../../lib/logger"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 const logger = createLogger("api:webhooks/fleetbase")
 
 const FLEETBASE_STATUS_MAP: Record<string, string> = {
@@ -259,12 +260,12 @@ async function handleDeliveryCompleted(payload: any, container: any) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
 
-  if (!process.env.FLEETBASE_API_KEY && !process.env.FLEETBASE_URL_DEV) {
+  if (!appConfig.fleetbase.isConfigured) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "fleetbase" })
   }
 
   try {
-    const secret = process.env.FLEETBASE_WEBHOOK_SECRET
+    const secret = appConfig.fleetbase.webhookSecret
     if (secret) {
       const apiKey = req.headers["x-fleetbase-key"] as string || req.headers["x-fleetbase-signature"] as string
       if (!apiKey) {

@@ -9,6 +9,7 @@
  */
 
 import { Redis } from "ioredis"
+import { appConfig } from "../../lib/config"
 import { createLogger } from "../../lib/logger"
 const logger = createLogger("lib:cache")
 
@@ -47,7 +48,7 @@ export class CityOSCache {
   private enabled: boolean = false
 
   constructor(config?: CacheConfig) {
-    if (config || process.env.REDIS_URL) {
+    if (config || appConfig.redis.isConfigured) {
       try {
         this.redis = config
           ? new Redis({
@@ -57,7 +58,7 @@ export class CityOSCache {
               db: config.db || 0,
               keyPrefix: config.keyPrefix || "cityos:",
             })
-          : new Redis(process.env.REDIS_URL!)
+          : new Redis(appConfig.redis.url)
 
         this.enabled = true
         logger.info("[CityOS Cache] Redis cache initialized")

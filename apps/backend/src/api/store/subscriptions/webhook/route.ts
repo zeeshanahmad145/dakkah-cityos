@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 
 // POST - Handle Stripe subscription webhooks
 // Webhook payloads validated by Stripe signature verification
@@ -8,8 +9,8 @@ export async function POST(
   req: MedusaRequest,
   res: MedusaResponse
 ) {
-  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+  const stripeSecretKey = appConfig.stripe.secretKey
+  const webhookSecret = appConfig.stripe.webhookSecret
 
   if (!stripeSecretKey) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "stripe" })

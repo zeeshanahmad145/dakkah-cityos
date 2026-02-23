@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../../../lib/api-error-handler"
+import { appConfig } from "../../../../../../lib/config"
 
 // GET - Check and update Stripe Connect onboarding status
 export async function GET(
@@ -32,7 +33,7 @@ export async function GET(
     })
   }
 
-  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  const stripeSecretKey = appConfig.stripe.secretKey
   if (!stripeSecretKey) {
     return res.status(400).json({ message: "Stripe is not configured" })
   }

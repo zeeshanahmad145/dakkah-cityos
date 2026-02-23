@@ -1,6 +1,7 @@
 import { MedusaContainer } from "@medusajs/framework/types"
 import cron from "node-cron"
 import { startWorkflow } from "../lib/temporal-client"
+import { appConfig } from "../lib/config"
 import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:integration-sync-scheduler")
 
@@ -17,7 +18,7 @@ export class IntegrationSyncScheduler {
 
     const productSyncTask = cron.schedule("0 * * * *", async () => {
       try {
-        if (!process.env.TEMPORAL_API_KEY) {
+        if (!appConfig.temporal.isConfigured) {
           logger.info("[SyncScheduler] Temporal not configured, skipping scheduled product sync")
           return
         }
@@ -33,7 +34,7 @@ export class IntegrationSyncScheduler {
 
     const retryTask = cron.schedule("*/30 * * * *", async () => {
       try {
-        if (!process.env.TEMPORAL_API_KEY) {
+        if (!appConfig.temporal.isConfigured) {
           logger.info("[SyncScheduler] Temporal not configured, skipping retry sync")
           return
         }
@@ -49,7 +50,7 @@ export class IntegrationSyncScheduler {
 
     const hierarchyTask = cron.schedule("0 */6 * * *", async () => {
       try {
-        if (!process.env.TEMPORAL_API_KEY) {
+        if (!appConfig.temporal.isConfigured) {
           logger.info("[SyncScheduler] Temporal not configured, skipping hierarchy reconciliation")
           return
         }
@@ -101,7 +102,7 @@ export default async function integrationSyncSchedulerJob(container: MedusaConta
   logger.info("[SyncScheduler] Running scheduled integration sync reconciliation (via Temporal)")
 
   try {
-    if (!process.env.TEMPORAL_API_KEY) {
+    if (!appConfig.temporal.isConfigured) {
       logger.info("[SyncScheduler] Temporal not configured, skipping scheduled sync")
       return
     }

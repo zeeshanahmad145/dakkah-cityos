@@ -1,4 +1,5 @@
 import type { MedusaNextFunction, MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { appConfig } from "../config"
 
 export function securityHeadersMiddleware(
   req: MedusaRequest,
@@ -18,7 +19,7 @@ export function securityHeadersMiddleware(
     "camera=(), microphone=(), geolocation=(self), payment=(self)"
   )
 
-  if (process.env.NODE_ENV === "production") {
+  if (appConfig.isProduction) {
     res.setHeader(
       "Strict-Transport-Security",
       "max-age=31536000; includeSubDomains; preload"

@@ -2,6 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { createHmac } from "crypto"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 const logger = createLogger("api:admin/webhooks")
 
 function verifyFleetbaseSignature(payload: string, signature: string, secret: string): boolean {
@@ -11,12 +12,12 @@ function verifyFleetbaseSignature(payload: string, signature: string, secret: st
 
 // Webhook payloads validated by signature verification
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  if (!process.env.FLEETBASE_API_KEY && !process.env.FLEETBASE_URL_DEV) {
+  if (!appConfig.fleetbase.isConfigured) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "fleetbase" })
   }
 
   try {
-    const secret = process.env.FLEETBASE_WEBHOOK_SECRET
+    const secret = appConfig.fleetbase.webhookSecret
     if (secret) {
       const signature = req.headers["x-fleetbase-signature"] as string
       if (!signature) {

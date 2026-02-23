@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const startTime = Date.now()
@@ -7,7 +8,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const health: Record<string, unknown> = {
     status: "healthy",
     timestamp: new Date().toISOString(),
-    version: process.env.APP_VERSION || "1.0.0",
+    version: appConfig.appVersion,
     uptime_seconds: Math.floor(process.uptime()),
     checks: {} as Record<string, unknown>,
   }
@@ -29,28 +30,28 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
   const integrations: Record<string, { status: string; configured: boolean }> = {
     stripe: {
-      status: process.env.STRIPE_API_KEY ? "configured" : "not_configured",
-      configured: !!process.env.STRIPE_API_KEY,
+      status: appConfig.stripe.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.stripe.isConfigured,
     },
     temporal: {
-      status: process.env.TEMPORAL_ENDPOINT ? "configured" : "not_configured",
-      configured: !!process.env.TEMPORAL_ENDPOINT,
+      status: appConfig.temporal.endpoint ? "configured" : "not_configured",
+      configured: !!appConfig.temporal.endpoint,
     },
     payload_cms: {
-      status: process.env.PAYLOAD_CMS_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.PAYLOAD_CMS_URL_DEV,
+      status: appConfig.payloadCms.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.payloadCms.isConfigured,
     },
     erpnext: {
-      status: process.env.ERPNEXT_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.ERPNEXT_URL_DEV,
+      status: appConfig.erpnext.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.erpnext.isConfigured,
     },
     fleetbase: {
-      status: process.env.FLEETBASE_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.FLEETBASE_URL_DEV,
+      status: appConfig.fleetbase.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.fleetbase.isConfigured,
     },
     waltid: {
-      status: process.env.WALTID_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.WALTID_URL_DEV,
+      status: appConfig.waltid.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.waltid.isConfigured,
     },
   }
 

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { getMedusaPublishableKey } from "@/lib/utils/env"
 import { AccountLayout } from "@/components/account"
 import { OrderDetail } from "@/components/orders"
 import { useOrder } from "@/lib/hooks/use-orders"
@@ -10,7 +11,7 @@ export const Route = createFileRoute("/$tenant/$locale/account/orders/$id")({
       const { getServerBaseUrl, fetchWithTimeout } = await import("@/lib/utils/env")
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/orders/${params.id}`, {
-        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a" },
+        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) return { item: null }
       const data = await resp.json()

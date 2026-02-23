@@ -2,6 +2,7 @@ import { MedusaService } from "@medusajs/framework/utils";
 import Payout from "./models/payout";
 import PayoutTransactionLink from "./models/payout-transaction-link";
 import { createLogger } from "../../lib/logger";
+import { appConfig } from "../../lib/config";
 
 const logger = createLogger("module:payout");
 
@@ -86,7 +87,7 @@ function getStripe() {
   if (!stripeInstance) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Stripe = require("stripe");
-    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
+    stripeInstance = new Stripe(appConfig.stripe.secretKey ?? "", {
       apiVersion: "2023-10-16",
     });
   }

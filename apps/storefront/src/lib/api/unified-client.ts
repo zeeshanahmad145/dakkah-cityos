@@ -7,11 +7,11 @@
  * - Combined product data (Medusa product + Payload content)
  */
 
-import { getServerBaseUrl } from "@/lib/utils/env"
+import { getServerBaseUrl, getMedusaPublishableKey, getPayloadCmsUrl } from "@/lib/utils/env"
 
 const MEDUSA_BACKEND_URL = getServerBaseUrl()
-const PAYLOAD_CMS_URL = (import.meta.env?.VITE_PAYLOAD_CMS_URL || (typeof process !== 'undefined' ? process.env?.PAYLOAD_CMS_URL : '') || 'http://localhost:3001')
-const MEDUSA_PUBLISHABLE_KEY = import.meta.env?.VITE_MEDUSA_PUBLISHABLE_KEY || ''
+const PAYLOAD_CMS_URL = getPayloadCmsUrl()
+const MEDUSA_PUBLISHABLE_KEY = getMedusaPublishableKey()
 
 export interface UnifiedProduct {
   // Medusa fields

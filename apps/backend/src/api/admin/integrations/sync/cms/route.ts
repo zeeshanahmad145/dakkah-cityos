@@ -3,6 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { createLogger } from "../../../../../lib/logger"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+import { appConfig } from "../../../../../lib/config"
 const logger = createLogger("api:admin/integrations")
 
 const VALID_COLLECTIONS = [
@@ -36,11 +37,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       })
     }
 
-    const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || process.env.PAYLOAD_CMS_URL
-    const payloadApiKey = process.env.PAYLOAD_API_KEY
-    const erpnextUrl = process.env.ERPNEXT_URL_DEV
-    const erpnextApiKey = process.env.ERPNEXT_API_KEY
-    const erpnextApiSecret = process.env.ERPNEXT_API_SECRET
+    const payloadUrl = appConfig.payloadCms.url
+    const payloadApiKey = appConfig.payloadCms.apiKey
+    const erpnextUrl = appConfig.erpnext.url
+    const erpnextApiKey = appConfig.erpnext.apiKey
+    const erpnextApiSecret = appConfig.erpnext.apiSecret
 
     if (!payloadUrl || !payloadApiKey) {
       return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
@@ -93,21 +94,15 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || process.env.PAYLOAD_CMS_URL
-    const payloadApiKey = process.env.PAYLOAD_API_KEY
-    const erpnextUrl = process.env.ERPNEXT_URL_DEV
-    const erpnextApiKey = process.env.ERPNEXT_API_KEY
-    const erpnextApiSecret = process.env.ERPNEXT_API_SECRET
-
     return res.json({
       collections: VALID_COLLECTIONS,
       payload_cms: {
-        configured: !!(payloadUrl && payloadApiKey),
-        url: payloadUrl ? payloadUrl.replace(/\/\/(.+?)@/, "//<redacted>@") : null,
+        configured: appConfig.payloadCms.isConfigured && !!appConfig.payloadCms.apiKey,
+        url: appConfig.payloadCms.url ? appConfig.payloadCms.url.replace(/\/\/(.+?)@/, "//<redacted>@") : null,
       },
       erpnext: {
-        configured: !!(erpnextUrl && erpnextApiKey && erpnextApiSecret),
-        url: erpnextUrl || null,
+        configured: appConfig.erpnext.isConfigured && !!appConfig.erpnext.apiSecret,
+        url: appConfig.erpnext.url || null,
       },
       schedule: "*/15 * * * *",
       job_name: "payload-cms-poll",

@@ -3,6 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
 import { createLogger } from "../../../lib/logger"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 const logger = createLogger("api:webhooks/payload-cms")
 
 const SUPPORTED_COLLECTIONS = [
@@ -81,8 +82,8 @@ async function handleContentSync(collection: string, data: any, correlationId: s
 
   try {
     const { PayloadToMedusaSync } = require("../../../integrations/payload-sync/payload-to-medusa")
-    const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || process.env.PAYLOAD_CMS_URL || ""
-    const payloadApiKey = process.env.PAYLOAD_API_KEY || ""
+    const payloadUrl = appConfig.payloadCms.url
+    const payloadApiKey = appConfig.payloadCms.apiKey
     if (payloadUrl && payloadApiKey && docId) {
       const sync = new PayloadToMedusaSync(req.scope, { payloadUrl, payloadApiKey })
       await sync.syncProductContent(docId)
@@ -115,12 +116,12 @@ async function handleDelete(collection: string, data: any, correlationId: string
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
 
-  if (!process.env.PAYLOAD_CMS_URL_DEV && !process.env.PAYLOAD_CMS_URL) {
+  if (!appConfig.payloadCms.isConfigured) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
   }
 
   try {
-    const secret = process.env.PAYLOAD_CMS_WEBHOOK_SECRET
+    const secret = appConfig.payloadCms.webhookSecret
     if (secret) {
       const signature = req.headers["x-payload-signature"] as string || req.headers["x-webhook-signature"] as string
       if (!signature) {

@@ -1,6 +1,7 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 
 const checkoutSchema = z.object({
   plan_id: z.string().min(1),
@@ -54,7 +55,7 @@ export async function POST(
 
   const customer = customers[0]
 
-  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  const stripeSecretKey = appConfig.stripe.secretKey
   if (!stripeSecretKey) {
     return res.status(400).json({ 
       message: "Stripe is not configured. Please add STRIPE_SECRET_KEY to environment variables." 
@@ -100,8 +101,8 @@ export async function POST(
           quantity: 1,
         },
       ],
-      success_url: success_url || `${process.env.STORE_URL}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancel_url || `${process.env.STORE_URL}/subscriptions/cancel`,
+      success_url: success_url || `${appConfig.urls.storefront}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancel_url || `${appConfig.urls.storefront}/subscriptions/cancel`,
       metadata: {
         medusa_customer_id: customerId,
         medusa_plan_id: plan_id,

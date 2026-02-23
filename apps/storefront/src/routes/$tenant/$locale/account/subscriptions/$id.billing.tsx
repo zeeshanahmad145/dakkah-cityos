@@ -6,14 +6,14 @@ import { ArrowLeft, Spinner } from "@medusajs/icons"
 import { useSubscription } from "@/lib/hooks/use-subscriptions"
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { sdk } from "@/lib/utils/sdk"
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 
 export const Route = createFileRoute("/$tenant/$locale/account/subscriptions/$id/billing")({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/subscriptions/${params.id}`, {
-        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a" },
+        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) return { item: null }
       const data = await resp.json()

@@ -1,4 +1,5 @@
 import { Counter, Histogram, Registry, Gauge } from "prom-client";
+import { appConfig } from "../lib/config";
 
 class MetricsService {
   private registry: Registry;
@@ -121,7 +122,7 @@ class MetricsService {
     // Collect default metrics (CPU, memory, etc.)
     this.registry.setDefaultLabels({
       app: "medusa-backend",
-      environment: process.env.NODE_ENV || "development",
+      environment: appConfig.nodeEnv,
     });
   }
 

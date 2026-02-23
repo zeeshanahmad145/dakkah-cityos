@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useState, useMemo } from "react"
 import { t } from "@/lib/i18n"
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import {
   useProviderAvailability,
   useCreateBooking,
@@ -52,7 +52,7 @@ export const Route = createFileRoute("/$tenant/$locale/bookings/$serviceHandle")
   loader: async ({ params, abortController }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const headers = { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a" }
+      const headers = { "x-publishable-api-key": getMedusaPublishableKey() }
       const resp = await fetchWithTimeout(`${baseUrl}/store/bookings/services`, { headers, signal: abortController.signal })
       if (!resp.ok) return { service: null, providers: [] }
       const data = await resp.json()

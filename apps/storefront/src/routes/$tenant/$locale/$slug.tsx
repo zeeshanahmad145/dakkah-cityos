@@ -2,8 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { TemplateRenderer } from '@/components/cms/template-renderer'
 import type { CMSPage } from '@/lib/types/cityos'
 import ProductCard from '@/components/product-card'
-import { getServerBaseUrl } from '@/lib/utils/env'
-import { fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 
 const DEFAULT_TENANT_ID = "01KGZ2JRYX607FWMMYQNQRKVWS"
 
@@ -17,14 +16,6 @@ const LOCALE_TO_COUNTRY: Record<string, string> = {
   en: "us",
   fr: "fr",
   ar: "sa",
-}
-
-function getPublishableKey() {
-  try {
-    return import.meta.env?.VITE_MEDUSA_PUBLISHABLE_KEY || ""
-  } catch {
-    return ""
-  }
 }
 
 function getBaseUrl() {
@@ -48,7 +39,7 @@ async function resolvePageFromServer(tenantId: string, path: string, locale?: st
 async function fetchStoreData(locale: string) {
   const baseUrl = getBaseUrl()
   const countryCode = LOCALE_TO_COUNTRY[locale?.toLowerCase()] || locale?.toLowerCase() || "us"
-  const publishableKey = getPublishableKey()
+  const publishableKey = getMedusaPublishableKey()
   const headers: Record<string, string> = {}
   if (publishableKey) headers["x-publishable-api-key"] = publishableKey
 

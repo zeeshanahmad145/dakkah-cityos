@@ -3,6 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
 import { createLogger } from "../../../lib/logger"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 const logger = createLogger("api:webhooks/erpnext")
 
 function verifyHMAC(payload: string, signature: string, secret: string): boolean {
@@ -271,12 +272,12 @@ async function handleStockReconciliation(payload: any, container: any) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const correlationId = crypto.randomUUID()
 
-  if (!process.env.ERPNEXT_API_KEY || !process.env.ERPNEXT_URL_DEV) {
+  if (!appConfig.erpnext.isConfigured) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "erpnext" })
   }
 
   try {
-    const secret = process.env.ERPNEXT_WEBHOOK_SECRET
+    const secret = appConfig.erpnext.webhookSecret
     if (secret) {
       const signature = req.headers["x-erpnext-signature"] as string || req.headers["x-erpnext-secret"] as string
       if (!signature) {

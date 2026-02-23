@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 
 /**
  * GET /store/features
@@ -90,7 +91,7 @@ export async function GET(
   
     // Simulating fetching from admin settings
     const adminFeaturesResponse = await fetch(
-      `${process.env.BACKEND_URL || process.env.MEDUSA_BACKEND_URL || ''}/admin/settings/features`,
+      `${appConfig.urls.backend}/admin/settings/features`,
       {
         headers: {
           'Authorization': req.headers.authorization || ''

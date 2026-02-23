@@ -1,5 +1,6 @@
 import { Storage, File } from "@google-cloud/storage";
 import { randomUUID } from "crypto";
+import { appConfig } from "../config";
 import {
   ObjectAclPolicy,
   ObjectPermission,
@@ -108,7 +109,7 @@ function evictOldestCacheEntry() {
 
 export class ObjectStorageService {
   getPublicObjectSearchPaths(): Array<string> {
-    const pathsStr = process.env.PUBLIC_OBJECT_SEARCH_PATHS || "";
+    const pathsStr = appConfig.storage.publicObjectSearchPaths || "";
     const paths = Array.from(
       new Set(
         pathsStr
@@ -124,7 +125,7 @@ export class ObjectStorageService {
   }
 
   getPrivateObjectDir(): string {
-    const dir = process.env.PRIVATE_OBJECT_DIR || "";
+    const dir = appConfig.storage.privateObjectDir || "";
     if (!dir) {
       throw new Error("PRIVATE_OBJECT_DIR not set.");
     }
@@ -132,7 +133,7 @@ export class ObjectStorageService {
   }
 
   getBucketName(): string {
-    const bucketId = process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID || "";
+    const bucketId = appConfig.storage.replitBucketId || "";
     if (!bucketId) {
       throw new Error("DEFAULT_OBJECT_STORAGE_BUCKET_ID not set.");
     }

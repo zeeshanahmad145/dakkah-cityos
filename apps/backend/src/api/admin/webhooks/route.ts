@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const endpoints = [
@@ -15,7 +16,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         "tenant.updated",
         "store.updated",
       ],
-      configured: !!process.env.PAYLOAD_WEBHOOK_SECRET,
+      configured: !!appConfig.payloadCms.webhookSecret,
       required_env_vars: ["PAYLOAD_WEBHOOK_SECRET"],
     },
     {
@@ -29,7 +30,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         "Stock Entry:on_submit",
         "Customer:on_update",
       ],
-      configured: !!process.env.ERPNEXT_WEBHOOK_SECRET,
+      configured: !!appConfig.erpnext.webhookSecret,
       required_env_vars: ["ERPNEXT_WEBHOOK_SECRET"],
     },
     {
@@ -42,7 +43,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         "order.driver_assigned",
         "tracking.updated",
       ],
-      configured: !!process.env.FLEETBASE_WEBHOOK_SECRET,
+      configured: !!appConfig.fleetbase.webhookSecret,
       required_env_vars: ["FLEETBASE_WEBHOOK_SECRET"],
     },
     {
@@ -56,7 +57,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         "account.updated",
         "checkout.session.completed",
       ],
-      configured: !!process.env.STRIPE_WEBHOOK_SECRET,
+      configured: !!appConfig.stripe.webhookSecret,
       required_env_vars: ["STRIPE_WEBHOOK_SECRET"],
     },
   ]

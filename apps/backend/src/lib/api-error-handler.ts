@@ -1,4 +1,5 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { appConfig } from "./config"
 import { createLogger } from "./logger"
 
 const logger = createLogger("api")
@@ -29,6 +30,6 @@ export function handleApiError(
 
   return res.status(500).json({
     message: `${context} failed`,
-    error: process.env.NODE_ENV !== "production" ? message : undefined,
+    error: appConfig.isDevelopment ? message : undefined,
   })
 }

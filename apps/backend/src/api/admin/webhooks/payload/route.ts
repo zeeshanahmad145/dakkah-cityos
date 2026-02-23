@@ -2,16 +2,17 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 const logger = createLogger("api:admin/webhooks")
 
 // Webhook payloads validated by signature verification
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  if (!process.env.PAYLOAD_CMS_URL_DEV && !process.env.PAYLOAD_CMS_URL) {
+  if (!appConfig.payloadCms.isConfigured) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "payload-cms" })
   }
 
   try {
-    const secret = process.env.PAYLOAD_WEBHOOK_SECRET
+    const secret = appConfig.payloadCms.webhookSecret
     if (secret) {
       const signature = req.headers["x-payload-signature"] as string
       const expectedSig = crypto.createHmac("sha256", secret).update(JSON.stringify(req.body)).digest("hex")
@@ -39,8 +40,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         if (contentId) {
           try {
             const { PayloadToMedusaSync } = await import("../../../../integrations/payload-sync/payload-to-medusa.js")
-            const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || ""
-            const payloadApiKey = process.env.PAYLOAD_API_KEY || ""
+            const payloadUrl = appConfig.payloadCms.url
+            const payloadApiKey = appConfig.payloadCms.apiKey
             if (payloadUrl && payloadApiKey) {
               const sync = new PayloadToMedusaSync(req.scope, { payloadUrl, payloadApiKey })
               await sync.syncProductContent(contentId)
@@ -60,8 +61,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         if (pageId) {
           try {
             const { PayloadToMedusaSync } = await import("../../../../integrations/payload-sync/payload-to-medusa.js")
-            const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || ""
-            const payloadApiKey = process.env.PAYLOAD_API_KEY || ""
+            const payloadUrl = appConfig.payloadCms.url
+            const payloadApiKey = appConfig.payloadCms.apiKey
             if (payloadUrl && payloadApiKey) {
               const sync = new PayloadToMedusaSync(req.scope, { payloadUrl, payloadApiKey })
               await sync.syncPage(pageId)
@@ -105,8 +106,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         if (mediaId) {
           try {
             const { PayloadToMedusaSync } = await import("../../../../integrations/payload-sync/payload-to-medusa.js")
-            const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || ""
-            const payloadApiKey = process.env.PAYLOAD_API_KEY || ""
+            const payloadUrl = appConfig.payloadCms.url
+            const payloadApiKey = appConfig.payloadCms.apiKey
             if (payloadUrl && payloadApiKey) {
               const sync = new PayloadToMedusaSync(req.scope, { payloadUrl, payloadApiKey })
               await sync.syncMedia(mediaId)

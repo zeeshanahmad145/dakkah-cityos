@@ -6,6 +6,7 @@ import {
 } from "@medusajs/framework/types";
 import { Client } from "@replit/object-storage";
 import { MedusaError } from "@medusajs/framework/utils";
+import { appConfig } from "../../lib/config";
 const fs = require("fs");
 
 type ReplitFileServiceOptions = {
@@ -21,11 +22,10 @@ export class ReplitFileService extends AbstractFileProviderService {
 
   constructor(container: any, options: ReplitFileServiceOptions) {
     super();
-    this.bucketId_ = options.bucket_id || process.env.REPLIT_BUCKET_ID || "";
+    this.bucketId_ = options.bucket_id || appConfig.storage.replitBucketId;
     this.backendUrl_ =
       options.backend_url ||
-      process.env.MEDUSA_BACKEND_URL ||
-      "";
+      appConfig.urls.backend;
     this.client_ = new Client();
   }
 

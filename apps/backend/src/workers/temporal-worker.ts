@@ -5,6 +5,7 @@ import { FleetbaseService } from "../integrations/fleetbase/service.js"
 import { WaltIdService } from "../integrations/waltid/service.js"
 import { durableSyncTracker } from "../lib/platform/sync-tracker.js"
 import axios from "axios"
+import { appConfig } from "../lib/config"
 import { createLogger } from "../lib/logger"
 const logger = createLogger("workers:temporal-worker")
 
@@ -29,33 +30,33 @@ async function loadConnectionSDK() {
 
 function createERPNextService() {
   return new ERPNextService({
-    siteUrl: process.env.ERPNEXT_URL_DEV || "",
-    apiKey: process.env.ERPNEXT_API_KEY || "",
-    apiSecret: process.env.ERPNEXT_API_SECRET || "",
+    siteUrl: appConfig.erpnext.url,
+    apiKey: appConfig.erpnext.apiKey,
+    apiSecret: appConfig.erpnext.apiSecret,
   })
 }
 
 function createFleetbaseService() {
   return new FleetbaseService({
-    apiUrl: process.env.FLEETBASE_URL_DEV || "",
-    apiKey: process.env.FLEETBASE_API_KEY || "",
-    organizationId: process.env.FLEETBASE_ORG_ID || "",
+    apiUrl: appConfig.fleetbase.url,
+    apiKey: appConfig.fleetbase.apiKey,
+    organizationId: appConfig.fleetbase.orgId,
   })
 }
 
 function createWaltIdService() {
   return new WaltIdService({
-    apiUrl: process.env.WALTID_URL_DEV || "",
-    apiKey: process.env.WALTID_API_KEY || "",
-    issuerDid: process.env.WALTID_ISSUER_DID || "",
+    apiUrl: appConfig.waltid.url,
+    apiKey: appConfig.waltid.apiKey,
+    issuerDid: appConfig.waltid.issuerDid,
   })
 }
 
 function createPayloadClient() {
   return axios.create({
-    baseURL: process.env.PAYLOAD_CMS_URL_DEV || "",
+    baseURL: appConfig.payloadCms.url,
     headers: {
-      Authorization: `Bearer ${process.env.PAYLOAD_API_KEY || ""}`,
+      Authorization: `Bearer ${appConfig.payloadCms.apiKey}`,
       "Content-Type": "application/json",
     },
   })
@@ -435,7 +436,7 @@ const activityImplementations = {
     logger.info(`[TemporalWorker] Executing scheduledProductSync: ${input.timestamp}`)
     try {
       const payloadClient = createPayloadClient()
-      const medusaUrl = process.env.MEDUSA_BACKEND_URL || ""
+      const medusaUrl = appConfig.urls.backend
       const productsResponse = await axios.get(`${medusaUrl}/store/products`, {
         params: { limit: 1000 },
       }).catch(() => ({ data: { products: [] } }))
@@ -541,7 +542,7 @@ const activityImplementations = {
 }
 
 export async function startWorker(): Promise<void> {
-  if (!process.env.TEMPORAL_API_KEY) {
+  if (!appConfig.temporal.isConfigured) {
     logger.warn("[TemporalWorker] TEMPORAL_API_KEY not set — skipping worker startup (graceful degradation)")
     return
   }
@@ -558,8 +559,8 @@ export async function startWorker(): Promise<void> {
     return
   }
 
-  const namespace = process.env.TEMPORAL_NAMESPACE || "dakkah-production"
-  const endpoint = process.env.TEMPORAL_ENDPOINT || "ap-northeast-1.aws.api.temporal.io:7233"
+  const namespace = appConfig.temporal.namespace || "dakkah-production"
+  const endpoint = appConfig.temporal.endpoint || "ap-northeast-1.aws.api.temporal.io:7233"
   const taskQueue = "cityos-workflow-queue"
 
   try {
@@ -571,7 +572,7 @@ export async function startWorker(): Promise<void> {
     const connection = await NativeConnection.connect({
       address: endpoint,
       tls: true,
-      apiKey: process.env.TEMPORAL_API_KEY,
+      apiKey: appConfig.temporal.apiKey,
     })
 
     logger.info("[TemporalWorker] Connected to Temporal Cloud successfully")

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/$tenant/$locale/event-ticketing/$id")({
     try {
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/event-ticketing/${params.id}`, {
-        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a" },
+        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) {
         const fallback = getFallbackItems().find((i) => i.id === params.id) || null

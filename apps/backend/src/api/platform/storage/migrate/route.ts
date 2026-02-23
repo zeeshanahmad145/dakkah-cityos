@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { buildTenantPath, MEDUSA_PRODUCT_PREFIX } from "../../../../lib/storage/prefixRegistry";
 import { put, list, copy } from "@vercel/blob";
+import { appConfig } from "../../../../lib/config";
 
 export const AUTHENTICATE = false;
 
@@ -32,7 +33,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       provider?: string;
     };
 
-    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    const token = appConfig.storage.blobToken;
     if (!token) {
       return res.status(500).json({
         success: false,
@@ -40,8 +41,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       });
     }
 
-    const tenantSlug = process.env.CITYOS_DEFAULT_TENANT || "dakkah";
-    const dbUrl = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL;
+    const tenantSlug = appConfig.tenant.defaultId;
+    const dbUrl = appConfig.database.url;
     if (!dbUrl) {
       return res.status(500).json({
         success: false,

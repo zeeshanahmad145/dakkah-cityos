@@ -2,20 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState, useMemo } from "react"
 import { t } from "@/lib/i18n"
 import ProductCard from "@/components/product-card"
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 
 const LOCALE_TO_COUNTRY: Record<string, string> = {
   en: "us",
   fr: "fr",
   ar: "sa",
-}
-
-function getPublishableKey() {
-  try {
-    return import.meta.env?.VITE_MEDUSA_PUBLISHABLE_KEY || ""
-  } catch {
-    return ""
-  }
 }
 
 function getBaseUrl() {
@@ -26,7 +18,7 @@ export const Route = createFileRoute("/$tenant/$locale/categories/$handle")({
   loader: async ({ params }) => {
     const { handle, locale } = params
     const baseUrl = getBaseUrl()
-    const publishableKey = getPublishableKey()
+    const publishableKey = getMedusaPublishableKey()
     const headers: Record<string, string> = {}
     if (publishableKey) headers["x-publishable-api-key"] = publishableKey
 

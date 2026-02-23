@@ -11,6 +11,7 @@ import {
   MEDUSA_PRODUCT_PREFIX,
   MEDUSA_CATALOG_PREFIX,
 } from "../../lib/storage/prefixRegistry";
+import { appConfig } from "../../lib/config";
 
 type VercelBlobFileServiceOptions = {
   token?: string;
@@ -27,11 +28,11 @@ export class VercelBlobFileService extends AbstractFileProviderService {
   constructor(container: any, options: VercelBlobFileServiceOptions) {
     super();
     this.token_ =
-      options.token || process.env.BLOB_READ_WRITE_TOKEN || "";
+      options.token || appConfig.storage.blobToken || "";
     this.access_ = options.access || "public";
     this.defaultTenantSlug_ =
       options.defaultTenantSlug ||
-      process.env.CITYOS_DEFAULT_TENANT ||
+      appConfig.tenant.defaultId ||
       "dakkah";
   }
 

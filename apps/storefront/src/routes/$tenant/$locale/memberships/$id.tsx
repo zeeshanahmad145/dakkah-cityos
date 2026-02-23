@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t, formatCurrency } from "@/lib/i18n"
 import type { SupportedLocale } from "@/lib/i18n"
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/$tenant/$locale/memberships/$id")({
     try {
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/memberships/${params.id}`, {
-        headers: { "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a" },
+        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) return { item: null }
       const data = await resp.json()

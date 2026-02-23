@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { isDevelopment } from "@/lib/utils/env"
 
 interface ErrorFallbackProps {
   error: Error;
@@ -8,7 +9,7 @@ interface ErrorFallbackProps {
 }
 
 const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
-  const isDev = import.meta.env.DEV;
+  const isDev = isDevelopment();
   const [showDetails, setShowDetails] = useState(false);
 
   return (

@@ -64,6 +64,24 @@ export function isProduction(): boolean {
   return import.meta.env.PROD
 }
 
+/**
+ * Get Medusa publishable API key
+ */
+export function getMedusaPublishableKey(): string {
+  return import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || ""
+}
+
+/**
+ * Get Payload CMS URL
+ */
+export function getPayloadCmsUrl(): string {
+  return (
+    import.meta.env?.VITE_PAYLOAD_CMS_URL ||
+    (typeof process !== "undefined" ? process.env?.PAYLOAD_CMS_URL : "") ||
+    "http://localhost:3001"
+  )
+}
+
 const DEFAULT_TIMEOUT_MS = 10000
 
 export function fetchWithTimeout(
@@ -72,7 +90,7 @@ export function fetchWithTimeout(
 ): Promise<Response> {
   const { timeoutMs = DEFAULT_TIMEOUT_MS, ...fetchOptions } = options || {}
 
-  const publishableKey = import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY
+  const publishableKey = getMedusaPublishableKey()
   const headers = new Headers(fetchOptions.headers)
   if (publishableKey && !headers.has("x-publishable-api-key")) {
     headers.set("x-publishable-api-key", publishableKey)

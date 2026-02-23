@@ -3,6 +3,8 @@
  * Replace console.log/error with structured logging
  */
 
+import { appConfig } from "./config"
+
 type LogLevel = "debug" | "info" | "warn" | "error"
 
 interface LogContext {
@@ -16,7 +18,7 @@ const LOG_LEVELS: Record<LogLevel, number> = {
   error: 3,
 }
 
-const currentLevel = (process.env.LOG_LEVEL as LogLevel) || "info"
+const currentLevel = (appConfig.logLevel as LogLevel) || "info"
 
 function shouldLog(level: LogLevel): boolean {
   return LOG_LEVELS[level] >= LOG_LEVELS[currentLevel]

@@ -2,16 +2,17 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import crypto from "crypto"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 const logger = createLogger("api:admin/webhooks")
 
 // Webhook payloads validated by signature verification
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  if (!process.env.ERPNEXT_API_KEY || !process.env.ERPNEXT_URL_DEV) {
+  if (!appConfig.erpnext.isConfigured) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "erpnext" })
   }
 
   try {
-    const secret = process.env.ERPNEXT_WEBHOOK_SECRET
+    const secret = appConfig.erpnext.webhookSecret
     if (secret) {
       const headerSecret = req.headers["x-erpnext-secret"] as string
       const expectedSig = crypto.createHmac("sha256", secret).update(JSON.stringify(req.body)).digest("hex")

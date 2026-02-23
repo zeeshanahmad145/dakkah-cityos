@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { PetProfileCardBlock } from "@/components/blocks/pet-profile-card-block"
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/pet-services/$id")({
       const baseUrl = getServerBaseUrl()
       const resp = await fetchWithTimeout(`${baseUrl}/store/pet-services/${params.id}`, {
         headers: {
-          "x-publishable-api-key": import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a",
+          "x-publishable-api-key": getMedusaPublishableKey(),
         },
       })
       if (!resp.ok) return { item: null }

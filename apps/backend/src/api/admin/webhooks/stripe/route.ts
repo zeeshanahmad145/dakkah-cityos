@@ -1,21 +1,22 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 const logger = createLogger("api:admin/webhooks")
 
 // Webhook payloads validated by signature verification
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!appConfig.stripe.secretKey) {
     return res.status(503).json({ success: false, message: "Service not configured", service: "stripe" })
   }
 
   try {
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+    const webhookSecret = appConfig.stripe.webhookSecret
     let stripeEvent: any
 
     if (webhookSecret) {
       const Stripe = (await import("stripe")).default
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "")
+      const stripe = new Stripe(appConfig.stripe.secretKey)
       const signature = req.headers["stripe-signature"] as string
 
       if (!signature) {

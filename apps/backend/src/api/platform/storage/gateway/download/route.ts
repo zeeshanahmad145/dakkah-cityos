@@ -5,6 +5,7 @@ import {
   parseTenantFromPath,
 } from "../../../../../lib/storage/prefixRegistry";
 import { randomUUID } from "crypto";
+import { appConfig } from "../../../../../lib/config";
 
 export const AUTHENTICATE = false;
 
@@ -127,7 +128,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       }
     }
 
-    const blobBaseUrl = process.env.VERCEL_BLOB_STORE_URL || "";
+    const blobBaseUrl = appConfig.storage.blobStoreUrl;
     const downloadUrl = blobBaseUrl
       ? `${blobBaseUrl}/${keyParam}`
       : keyParam.startsWith("http")

@@ -2,6 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { getCache } from "../../../lib/cache/redis-cache"
 import { metrics } from "../../../lib/monitoring/metrics"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { appConfig } from "../../../lib/config"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const startTime = Date.now()
@@ -33,37 +34,37 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
   checks.integrations = {
     stripe: {
-      status: process.env.STRIPE_API_KEY ? "configured" : "not_configured",
-      configured: !!process.env.STRIPE_API_KEY,
+      status: appConfig.stripe.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.stripe.isConfigured,
     },
     temporal: {
-      status: process.env.TEMPORAL_ENDPOINT ? "configured" : "not_configured",
-      configured: !!process.env.TEMPORAL_ENDPOINT,
-      namespace: process.env.TEMPORAL_NAMESPACE || "not_set",
+      status: appConfig.temporal.endpoint ? "configured" : "not_configured",
+      configured: !!appConfig.temporal.endpoint,
+      namespace: appConfig.temporal.namespace || "not_set",
     },
     payload_cms: {
-      status: process.env.PAYLOAD_CMS_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.PAYLOAD_CMS_URL_DEV,
+      status: appConfig.payloadCms.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.payloadCms.isConfigured,
     },
     erpnext: {
-      status: process.env.ERPNEXT_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.ERPNEXT_URL_DEV,
+      status: appConfig.erpnext.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.erpnext.isConfigured,
     },
     fleetbase: {
-      status: process.env.FLEETBASE_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.FLEETBASE_URL_DEV,
+      status: appConfig.fleetbase.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.fleetbase.isConfigured,
     },
     waltid: {
-      status: process.env.WALTID_URL_DEV ? "configured" : "not_configured",
-      configured: !!process.env.WALTID_URL_DEV,
+      status: appConfig.waltid.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.waltid.isConfigured,
     },
     sendgrid: {
-      status: process.env.SENDGRID_API_KEY ? "configured" : "not_configured",
-      configured: !!process.env.SENDGRID_API_KEY,
+      status: appConfig.sendgrid.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.sendgrid.isConfigured,
     },
     meilisearch: {
-      status: process.env.MEILISEARCH_HOST ? "configured" : "not_configured",
-      configured: !!process.env.MEILISEARCH_HOST,
+      status: appConfig.meilisearch.isConfigured ? "configured" : "not_configured",
+      configured: appConfig.meilisearch.isConfigured,
     },
   }
 
@@ -87,8 +88,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const health = {
     status: overallStatus,
     timestamp: new Date().toISOString(),
-    version: process.env.APP_VERSION || "1.0.0",
-    environment: process.env.NODE_ENV || "development",
+    version: appConfig.appVersion,
+    environment: appConfig.nodeEnv,
     checks,
     system: systemInfo,
     metrics: metrics.getSummary(),

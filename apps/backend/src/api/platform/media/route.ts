@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { get } from "@vercel/blob"
 import { Readable } from "stream"
+import { appConfig } from "../../../lib/config"
 
 export const AUTHENTICATE = false
 
@@ -10,7 +11,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     return res.status(400).json({ error: "Query parameter 'path' is required" })
   }
 
-  const token = process.env.BLOB_READ_WRITE_TOKEN
+  const token = appConfig.storage.blobToken
   if (!token) {
     return res.status(500).json({ error: "Storage not configured" })
   }

@@ -1,4 +1,5 @@
 import React from "react"
+import { isDevelopment } from "@/lib/utils/env"
 import { BLOCK_REGISTRY } from "./block-registry"
 
 interface BlockData {
@@ -22,7 +23,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({ blocks, className 
       {blocks.map((block, index) => {
         const Component = BLOCK_REGISTRY[block.blockType]
         if (!Component) {
-          if (process.env.NODE_ENV === "development") {
+          if (isDevelopment()) {
             return (
               <div
                 key={block.id || index}

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import axios, { AxiosInstance } from "axios"
 import { DurableSyncTracker, durableSyncTracker } from "../../lib/platform/sync-tracker"
+import { appConfig } from "../../lib/config"
 import { createLogger } from "../../lib/logger"
 const logger = createLogger("integration:cms-hierarchy-sync")
 
@@ -348,12 +349,12 @@ export class CMSHierarchySyncEngine {
 
 export function createHierarchySyncEngine(config?: Partial<CMSSyncConfig>): CMSHierarchySyncEngine | null {
   const fullConfig: CMSSyncConfig = {
-    payloadUrl: config?.payloadUrl || process.env.PAYLOAD_CMS_URL_DEV || "",
-    payloadApiKey: config?.payloadApiKey || process.env.PAYLOAD_API_KEY || "",
-    erpnextUrl: config?.erpnextUrl || process.env.ERPNEXT_URL_DEV || "",
-    erpnextApiKey: config?.erpnextApiKey || process.env.ERPNEXT_API_KEY || "",
-    erpnextApiSecret: config?.erpnextApiSecret || process.env.ERPNEXT_API_SECRET || "",
-    tenantId: config?.tenantId || process.env.DEFAULT_TENANT_ID || "system",
+    payloadUrl: config?.payloadUrl || appConfig.payloadCms.url,
+    payloadApiKey: config?.payloadApiKey || appConfig.payloadCms.apiKey,
+    erpnextUrl: config?.erpnextUrl || appConfig.erpnext.url,
+    erpnextApiKey: config?.erpnextApiKey || appConfig.erpnext.apiKey,
+    erpnextApiSecret: config?.erpnextApiSecret || appConfig.erpnext.apiSecret,
+    tenantId: config?.tenantId || appConfig.tenant.defaultId,
   }
 
   if (!fullConfig.payloadUrl || !fullConfig.payloadApiKey) {

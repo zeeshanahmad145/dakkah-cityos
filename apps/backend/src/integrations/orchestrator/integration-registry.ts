@@ -1,3 +1,4 @@
+import { appConfig } from "../../lib/config"
 import { createLogger } from "../../lib/logger"
 const logger = createLogger("integration:orchestrator")
 export interface IIntegrationAdapter {
@@ -69,12 +70,12 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
   const adapters: IIntegrationAdapter[] = [
     {
       name: "payload",
-      isConfigured: () => !!(process.env.PAYLOAD_CMS_URL_DEV && process.env.PAYLOAD_API_KEY),
+      isConfigured: () => appConfig.payloadCms.isConfigured && !!appConfig.payloadCms.apiKey,
       async healthCheck() {
         try {
           const axios = (await import("axios")).default
-          const res = await axios.get(`${process.env.PAYLOAD_CMS_URL_DEV}/api/health`, {
-            headers: { Authorization: `Bearer ${process.env.PAYLOAD_API_KEY}` },
+          const res = await axios.get(`${appConfig.payloadCms.url}/api/health`, {
+            headers: { Authorization: `Bearer ${appConfig.payloadCms.apiKey}` },
             timeout: 5000,
           })
           return { healthy: res.status === 200, message: "Payload CMS reachable" }
@@ -86,9 +87,9 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
         if (!this.isConfigured()) return { success: false, error: "Payload not configured" }
         try {
           const axios = (await import("axios")).default
-          await axios.post(`${process.env.PAYLOAD_CMS_URL_DEV}/api/${type}`, { medusaId: id, ...data }, {
+          await axios.post(`${appConfig.payloadCms.url}/api/${type}`, { medusaId: id, ...data }, {
             headers: {
-              Authorization: `Bearer ${process.env.PAYLOAD_API_KEY}`,
+              Authorization: `Bearer ${appConfig.payloadCms.apiKey}`,
               "Content-Type": "application/json",
             },
             timeout: 10000,
@@ -105,12 +106,12 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
     },
     {
       name: "erpnext",
-      isConfigured: () => !!(process.env.ERPNEXT_API_KEY && process.env.ERPNEXT_API_SECRET && process.env.ERPNEXT_URL_DEV),
+      isConfigured: () => appConfig.erpnext.isConfigured,
       async healthCheck() {
         try {
           const axios = (await import("axios")).default
-          const res = await axios.get(`${process.env.ERPNEXT_URL_DEV}/api/method/frappe.auth.get_logged_user`, {
-            headers: { Authorization: `token ${process.env.ERPNEXT_API_KEY}:${process.env.ERPNEXT_API_SECRET}` },
+          const res = await axios.get(`${appConfig.erpnext.url}/api/method/frappe.auth.get_logged_user`, {
+            headers: { Authorization: `token ${appConfig.erpnext.apiKey}:${appConfig.erpnext.apiSecret}` },
             timeout: 5000,
           })
           return { healthy: res.status === 200, message: "ERPNext reachable" }
@@ -122,9 +123,9 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
         if (!this.isConfigured()) return { success: false, error: "ERPNext not configured" }
         try {
           const axios = (await import("axios")).default
-          const res = await axios.post(`${process.env.ERPNEXT_URL_DEV}/api/resource/${type}`, { ...data, custom_medusa_id: id }, {
+          const res = await axios.post(`${appConfig.erpnext.url}/api/resource/${type}`, { ...data, custom_medusa_id: id }, {
             headers: {
-              Authorization: `token ${process.env.ERPNEXT_API_KEY}:${process.env.ERPNEXT_API_SECRET}`,
+              Authorization: `token ${appConfig.erpnext.apiKey}:${appConfig.erpnext.apiSecret}`,
               "Content-Type": "application/json",
             },
             timeout: 10000,
@@ -141,12 +142,12 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
     },
     {
       name: "fleetbase",
-      isConfigured: () => !!(process.env.FLEETBASE_API_KEY && process.env.FLEETBASE_URL_DEV),
+      isConfigured: () => appConfig.fleetbase.isConfigured,
       async healthCheck() {
         try {
           const axios = (await import("axios")).default
-          const res = await axios.get(`${process.env.FLEETBASE_URL_DEV}/health`, {
-            headers: { Authorization: `Bearer ${process.env.FLEETBASE_API_KEY}` },
+          const res = await axios.get(`${appConfig.fleetbase.url}/health`, {
+            headers: { Authorization: `Bearer ${appConfig.fleetbase.apiKey}` },
             timeout: 5000,
           })
           return { healthy: res.status === 200, message: "Fleetbase reachable" }
@@ -158,9 +159,9 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
         if (!this.isConfigured()) return { success: false, error: "Fleetbase not configured" }
         try {
           const axios = (await import("axios")).default
-          const res = await axios.post(`${process.env.FLEETBASE_URL_DEV}/${type}`, { medusa_id: id, ...data }, {
+          const res = await axios.post(`${appConfig.fleetbase.url}/${type}`, { medusa_id: id, ...data }, {
             headers: {
-              Authorization: `Bearer ${process.env.FLEETBASE_API_KEY}`,
+              Authorization: `Bearer ${appConfig.fleetbase.apiKey}`,
               "Content-Type": "application/json",
             },
             timeout: 10000,
@@ -177,12 +178,12 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
     },
     {
       name: "waltid",
-      isConfigured: () => !!(process.env.WALTID_URL_DEV && process.env.WALTID_API_KEY),
+      isConfigured: () => appConfig.waltid.isConfigured,
       async healthCheck() {
         try {
           const axios = (await import("axios")).default
-          const res = await axios.get(`${process.env.WALTID_URL_DEV}/health`, {
-            headers: { Authorization: `Bearer ${process.env.WALTID_API_KEY}` },
+          const res = await axios.get(`${appConfig.waltid.url}/health`, {
+            headers: { Authorization: `Bearer ${appConfig.waltid.apiKey}` },
             timeout: 5000,
           })
           return { healthy: res.status === 200, message: "Walt.id reachable" }
@@ -194,9 +195,9 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
         if (!this.isConfigured()) return { success: false, error: "Walt.id not configured" }
         try {
           const axios = (await import("axios")).default
-          const res = await axios.post(`${process.env.WALTID_URL_DEV}/credentials/${type}`, { subjectId: id, ...data }, {
+          const res = await axios.post(`${appConfig.waltid.url}/credentials/${type}`, { subjectId: id, ...data }, {
             headers: {
-              Authorization: `Bearer ${process.env.WALTID_API_KEY}`,
+              Authorization: `Bearer ${appConfig.waltid.apiKey}`,
               "Content-Type": "application/json",
             },
             timeout: 10000,
@@ -213,12 +214,12 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
     },
     {
       name: "stripe",
-      isConfigured: () => !!(process.env.STRIPE_SECRET_KEY),
+      isConfigured: () => !!appConfig.stripe.secretKey,
       async healthCheck() {
         try {
           const axios = (await import("axios")).default
           const res = await axios.get("https://api.stripe.com/v1/balance", {
-            headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` },
+            headers: { Authorization: `Bearer ${appConfig.stripe.secretKey}` },
             timeout: 5000,
           })
           return { healthy: res.status === 200, message: "Stripe reachable" }
@@ -232,7 +233,7 @@ export function createDefaultAdapters(): IIntegrationAdapter[] {
           const axios = (await import("axios")).default
           const res = await axios.post(`https://api.stripe.com/v1/${type}`, data, {
             headers: {
-              Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+              Authorization: `Bearer ${appConfig.stripe.secretKey}`,
               "Content-Type": "application/x-www-form-urlencoded",
             },
             timeout: 10000,

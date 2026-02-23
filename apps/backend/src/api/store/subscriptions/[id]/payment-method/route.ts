@@ -3,6 +3,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+import { appConfig } from "../../../../../lib/config"
 
 const updatePaymentMethodSchema = z.object({
   payment_method_id: z.string().min(1),
@@ -32,10 +33,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
     
     // If there's a payment method, get details from Stripe
-    if (subscription.payment_method_id && process.env.STRIPE_SECRET_KEY) {
+    if (subscription.payment_method_id && appConfig.stripe.secretKey) {
       try {
         const Stripe = require("stripe")
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+        const stripe = new Stripe(appConfig.stripe.secretKey)
         
         const paymentMethod = await stripe.paymentMethods.retrieve(
           subscription.payment_method_id
@@ -96,10 +97,10 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     }
     
     // Verify payment method belongs to customer in Stripe
-    if (process.env.STRIPE_SECRET_KEY) {
+    if (appConfig.stripe.secretKey) {
       try {
         const Stripe = require("stripe")
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+        const stripe = new Stripe(appConfig.stripe.secretKey)
         
         const paymentMethod = await stripe.paymentMethods.retrieve(payment_method_id)
         

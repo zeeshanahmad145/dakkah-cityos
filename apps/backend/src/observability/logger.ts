@@ -1,5 +1,6 @@
 import winston from "winston";
 import { Format } from "logform";
+import { appConfig } from "../lib/config";
 
 export interface LogContext {
   tenant_id?: string;
@@ -19,7 +20,7 @@ class Logger {
     ];
 
     // Add JSON format for production
-    if (process.env.NODE_ENV === "production") {
+    if (appConfig.isProduction) {
       formats.push(winston.format.json());
     } else {
       // Pretty print for development
@@ -36,16 +37,16 @@ class Logger {
     }
 
     this.logger = winston.createLogger({
-      level: process.env.LOG_LEVEL || "info",
+      level: appConfig.logLevel || "info",
       format: winston.format.combine(...formats),
       defaultMeta: {
         service: "medusa-backend",
-        environment: process.env.NODE_ENV || "development",
+        environment: appConfig.nodeEnv,
       },
       transports: [
         new winston.transports.Console(),
         // Add file transport for production
-        ...(process.env.NODE_ENV === "production"
+        ...(appConfig.isProduction
           ? [
               new winston.transports.File({
                 filename: "logs/error.log",

@@ -3,6 +3,7 @@ import { z } from "zod"
 import { createIntegrationOrchestrator } from "../../../../integrations/orchestrator/index"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 const logger = createLogger("api:admin/integrations")
 
 const VALID_SYSTEMS = ["payload", "erpnext", "fleetbase", "waltid", "stripe"]
@@ -29,7 +30,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const { startWorkflow } = await import("../../../../lib/temporal-client.js")
 
-    if (!process.env.TEMPORAL_API_KEY) {
+    if (!appConfig.temporal.isConfigured) {
       return res.status(503).json({ error: "Temporal not configured. Manual sync requires Temporal." })
     }
 

@@ -4,6 +4,7 @@ import {
   getAllSystemPolicies,
   getAllCollectionMappings,
 } from "../../../../lib/storage/prefixRegistry";
+import { appConfig } from "../../../../lib/config";
 
 export const AUTHENTICATE = false;
 
@@ -13,11 +14,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const policies = getAllSystemPolicies();
     const mappings = getAllCollectionMappings();
 
-    const activeProvider = process.env.BLOB_READ_WRITE_TOKEN
+    const activeProvider = appConfig.storage.isBlobConfigured
       ? "vercel-blob"
       : "replit-object-storage";
 
-    const storageProviderOverride = process.env.STORAGE_PROVIDER || null;
+    const storageProviderOverride = appConfig.storage.provider !== "vercel-blob" ? appConfig.storage.provider : null;
 
     return res.json({
       success: true,
@@ -25,13 +26,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         provider: {
           active: storageProviderOverride || activeProvider,
           override: storageProviderOverride,
-          vercelBlobConfigured: !!process.env.BLOB_READ_WRITE_TOKEN,
+          vercelBlobConfigured: appConfig.storage.isBlobConfigured,
           replitObjectStorageAvailable: true,
         },
         prefixCount: Object.keys(prefixes).length,
         systemPolicyCount: Object.keys(policies).length,
         collectionMappingCount: Object.keys(mappings).length,
-        defaultTenant: process.env.CITYOS_DEFAULT_TENANT || "dakkah",
+        defaultTenant: appConfig.tenant.defaultId,
         endpoints: {
           info: "/platform/storage/info",
           gateway: "/platform/storage/gateway/download?key={path}",

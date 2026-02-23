@@ -3,6 +3,7 @@ import { z } from "zod"
 import { NodeHierarchySyncService } from "../../../../../integrations/node-hierarchy-sync/index"
 import { createLogger } from "../../../../../lib/logger"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+import { appConfig } from "../../../../../lib/config"
 const logger = createLogger("api:admin/integrations")
 
 const nodeHierarchySyncSchema = z.object({
@@ -19,9 +20,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const { tenant_id, mode } = parsed.data
 
-    const syncMode = mode || (process.env.TEMPORAL_API_KEY ? "temporal" : "direct")
+    const syncMode = mode || (appConfig.temporal.isConfigured ? "temporal" : "direct")
 
-    if (syncMode === "temporal" && process.env.TEMPORAL_API_KEY) {
+    if (syncMode === "temporal" && appConfig.temporal.isConfigured) {
       logger.info(`[NodeHierarchySync] Dispatching hierarchy sync to Temporal for tenant: ${tenant_id}`)
 
       const { startWorkflow } = require("../../../../../lib/temporal-client")

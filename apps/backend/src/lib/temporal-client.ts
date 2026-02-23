@@ -1,3 +1,5 @@
+import { appConfig } from "./config"
+
 let client: any = null
 let temporalUnavailable = false
 
@@ -16,7 +18,7 @@ export async function getTemporalClient(): Promise<any> {
     throw new Error("Temporal SDK is not installed. Install @temporalio/client to enable Temporal integration.")
   }
 
-  if (!process.env.TEMPORAL_API_KEY) {
+  if (!appConfig.temporal.isConfigured) {
     throw new Error("TEMPORAL_API_KEY environment variable is not set")
   }
 
@@ -29,14 +31,14 @@ export async function getTemporalClient(): Promise<any> {
   const { Client, Connection } = sdk
 
   const connection = await Connection.connect({
-    address: process.env.TEMPORAL_ENDPOINT || "ap-northeast-1.aws.api.temporal.io:7233",
+    address: appConfig.temporal.endpoint || "ap-northeast-1.aws.api.temporal.io:7233",
     tls: true,
-    apiKey: process.env.TEMPORAL_API_KEY,
+    apiKey: appConfig.temporal.apiKey,
   })
 
   client = new Client({
     connection,
-    namespace: process.env.TEMPORAL_NAMESPACE || "quickstart-dakkah-cityos.djvai",
+    namespace: appConfig.temporal.namespace || "quickstart-dakkah-cityos.djvai",
   })
 
   return client

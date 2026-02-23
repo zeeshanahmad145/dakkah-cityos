@@ -2,6 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { checkTemporalHealth } from "../../../../lib/temporal-client"
 import { createLogger } from "../../../../lib/logger"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 const logger = createLogger("api:admin/integrations")
 
 interface SystemHealthCheck {
@@ -25,7 +26,14 @@ async function checkSystemHealth(system: SystemHealthCheck): Promise<{
   latency_ms: number
   error?: string
 }> {
-  const baseUrl = process.env[system.envVar]
+  const configMap: Record<string, string> = {
+    PAYLOAD_CMS_URL_DEV: appConfig.payloadCms.url,
+    ERPNEXT_URL_DEV: appConfig.erpnext.url,
+    FLEETBASE_URL_DEV: appConfig.fleetbase.url,
+    WALTID_URL_DEV: appConfig.waltid.url,
+    STRIPE_SECRET_KEY: appConfig.stripe.secretKey,
+  }
+  const baseUrl = configMap[system.envVar]
 
   if (!baseUrl) {
     return { name: system.name, status: "not_configured", latency_ms: 0 }
@@ -44,17 +52,17 @@ async function checkSystemHealth(system: SystemHealthCheck): Promise<{
     const axios = (await import("axios")).default
     const headers: Record<string, string> = { ...system.headers }
 
-    if (system.name === "payload" && process.env.PAYLOAD_API_KEY) {
-      headers["Authorization"] = `Bearer ${process.env.PAYLOAD_API_KEY}`
-    } else if (system.name === "erpnext" && process.env.ERPNEXT_API_KEY && process.env.ERPNEXT_API_SECRET) {
-      headers["Authorization"] = `token ${process.env.ERPNEXT_API_KEY}:${process.env.ERPNEXT_API_SECRET}`
-    } else if (system.name === "fleetbase" && process.env.FLEETBASE_API_KEY) {
-      headers["Authorization"] = `Bearer ${process.env.FLEETBASE_API_KEY}`
-      if (process.env.FLEETBASE_ORG_ID) {
-        headers["Organization-ID"] = process.env.FLEETBASE_ORG_ID
+    if (system.name === "payload" && appConfig.payloadCms.apiKey) {
+      headers["Authorization"] = `Bearer ${appConfig.payloadCms.apiKey}`
+    } else if (system.name === "erpnext" && appConfig.erpnext.apiKey && appConfig.erpnext.apiSecret) {
+      headers["Authorization"] = `token ${appConfig.erpnext.apiKey}:${appConfig.erpnext.apiSecret}`
+    } else if (system.name === "fleetbase" && appConfig.fleetbase.apiKey) {
+      headers["Authorization"] = `Bearer ${appConfig.fleetbase.apiKey}`
+      if (appConfig.fleetbase.orgId) {
+        headers["Organization-ID"] = appConfig.fleetbase.orgId
       }
-    } else if (system.name === "waltid" && process.env.WALTID_API_KEY) {
-      headers["Authorization"] = `Bearer ${process.env.WALTID_API_KEY}`
+    } else if (system.name === "waltid" && appConfig.waltid.apiKey) {
+      headers["Authorization"] = `Bearer ${appConfig.waltid.apiKey}`
     }
 
     await axios.get(baseUrl, {
@@ -88,7 +96,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       error?: string
     }
 
-    if (!process.env.TEMPORAL_API_KEY) {
+    if (!appConfig.temporal.isConfigured) {
       temporalResult = { name: "temporal", status: "not_configured", latency_ms: 0 }
     } else {
       const start = Date.now()

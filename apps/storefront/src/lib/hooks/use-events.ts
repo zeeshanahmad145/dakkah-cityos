@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { normalizeItem } from "@/lib/utils/normalize-item"
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 
 async function fetchEvents(filters?: Record<string, unknown>) {
   const params = new URLSearchParams()
@@ -20,8 +20,7 @@ async function fetchEvents(filters?: Record<string, unknown>) {
   const resp = await fetchWithTimeout(fullUrl, {
     headers: {
       "Content-Type": "application/json",
-      "x-publishable-api-key":
-        import.meta.env?.VITE_MEDUSA_PUBLISHABLE_KEY || "",
+      "x-publishable-api-key": getMedusaPublishableKey(),
     },
   })
   if (!resp.ok) throw new Error(`Events API error: ${resp.status}`)
@@ -48,8 +47,7 @@ export function useEvent(eventId: string) {
         {
           headers: {
             "Content-Type": "application/json",
-            "x-publishable-api-key":
-              import.meta.env?.VITE_MEDUSA_PUBLISHABLE_KEY || "",
+            "x-publishable-api-key": getMedusaPublishableKey(),
           },
         },
       )

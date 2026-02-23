@@ -8,6 +8,8 @@
  * - Audit trails
  */
 
+import { appConfig } from "../config"
+
 export type LogLevel = "debug" | "info" | "warn" | "error"
 
 export interface LogContext {
@@ -47,8 +49,8 @@ class CityOSLogger {
   private serviceName: string
 
   constructor() {
-    this.minLevel = (process.env.LOG_LEVEL as LogLevel) || "info"
-    this.serviceName = process.env.SERVICE_NAME || "cityos-backend"
+    this.minLevel = (appConfig.logLevel as LogLevel) || "info"
+    this.serviceName = appConfig.serviceName || "cityos-backend"
   }
 
   private shouldLog(level: LogLevel): boolean {
@@ -56,12 +58,12 @@ class CityOSLogger {
   }
 
   private formatEntry(entry: LogEntry): string {
-    if (process.env.NODE_ENV === "production") {
+    if (appConfig.isProduction) {
       // JSON format for production (easy to parse by log aggregators)
       return JSON.stringify({
         ...entry,
         service: this.serviceName,
-        env: process.env.NODE_ENV,
+        env: appConfig.nodeEnv,
       })
     }
 
@@ -108,7 +110,7 @@ class CityOSLogger {
     }
 
     // Send to external logging service in production
-    if (process.env.NODE_ENV === "production" && process.env.SENTRY_DSN) {
+    if (appConfig.isProduction && appConfig.sentry.dsn) {
       this.sendToSentry(entry)
     }
   }

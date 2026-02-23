@@ -1,14 +1,15 @@
 // @ts-nocheck
 import { MedusaContainer } from "@medusajs/framework/types"
+import { appConfig } from "../lib/config"
 import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:payload-cms-poll")
 
 export default async function payloadCmsPollJob(container: MedusaContainer) {
-  const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || process.env.PAYLOAD_CMS_URL
-  const payloadApiKey = process.env.PAYLOAD_API_KEY
-  const erpnextUrl = process.env.ERPNEXT_URL_DEV
-  const erpnextApiKey = process.env.ERPNEXT_API_KEY
-  const erpnextApiSecret = process.env.ERPNEXT_API_SECRET
+  const payloadUrl = appConfig.payloadCms.url
+  const payloadApiKey = appConfig.payloadCms.apiKey
+  const erpnextUrl = appConfig.erpnext.url
+  const erpnextApiKey = appConfig.erpnext.apiKey
+  const erpnextApiSecret = appConfig.erpnext.apiSecret
 
   if (!payloadUrl || !payloadApiKey) {
     logger.info("[PayloadCMSPoll] Payload CMS not configured, skipping poll")

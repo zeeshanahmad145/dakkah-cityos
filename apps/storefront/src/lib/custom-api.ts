@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout } from "@/lib/utils/env"
+import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 
-const API_KEY = import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY || "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a"
+const API_KEY = getMedusaPublishableKey()
 
 function getHeaders(): Record<string, string> {
   return {

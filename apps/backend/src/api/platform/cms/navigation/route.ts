@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { getLocalCMSNavigation } from "../../../../lib/platform/cms-registry"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { appConfig } from "../../../../lib/config"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
@@ -38,7 +39,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       })
     }
 
-    const payloadUrl = process.env.PAYLOAD_CMS_URL_DEV || process.env.PAYLOAD_CMS_URL || ""
+    const payloadUrl = appConfig.payloadCms.url
 
     const where: Record<string, any> = {
       tenant: { equals: tenant_id },
@@ -60,7 +61,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     })
 
     try {
-      const payloadApiKey = process.env.PAYLOAD_API_KEY || ""
+      const payloadApiKey = appConfig.payloadCms.apiKey
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       }

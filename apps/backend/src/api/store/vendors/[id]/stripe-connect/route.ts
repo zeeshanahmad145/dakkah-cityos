@@ -2,6 +2,7 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
+import { appConfig } from "../../../../../lib/config"
 
 const stripeConnectSchema = z.object({
   return_url: z.string().optional(),
@@ -66,7 +67,7 @@ export async function POST(
 
   const vendor = vendors[0]
 
-  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  const stripeSecretKey = appConfig.stripe.secretKey
   if (!stripeSecretKey) {
     return res.status(400).json({ 
       message: "Stripe is not configured. Please add STRIPE_SECRET_KEY to environment variables." 
@@ -108,8 +109,8 @@ export async function POST(
 
     const accountLink = await stripe.accountLinks.create({
       account: stripeAccountId,
-      refresh_url: refresh_url || `${process.env.STORE_URL}/vendor/onboarding/refresh`,
-      return_url: return_url || `${process.env.STORE_URL}/vendor/onboarding/complete`,
+      refresh_url: refresh_url || `${appConfig.urls.storefront}/vendor/onboarding/refresh`,
+      return_url: return_url || `${appConfig.urls.storefront}/vendor/onboarding/complete`,
       type: "account_onboarding",
     })
 

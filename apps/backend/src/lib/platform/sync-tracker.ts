@@ -1,6 +1,7 @@
 // @ts-nocheck
 import crypto from "crypto"
 import { createLogger } from "../../lib/logger"
+import { appConfig } from "../config"
 const logger = createLogger("lib:platform")
 
 export interface SyncEntry {
@@ -50,7 +51,7 @@ export class DurableSyncTracker {
     if (this.pool) return this.pool
     const pg = await import("pg")
     this.pool = new pg.Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: appConfig.database.url,
     })
     return this.pool
   }

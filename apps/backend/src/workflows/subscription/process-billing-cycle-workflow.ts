@@ -9,6 +9,7 @@ import {
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils";
 import { createCartWorkflow } from "@medusajs/medusa/core-flows";
 import Stripe from "stripe";
+import { appConfig } from "../../lib/config";
 
 interface ProcessBillingCycleInput {
   billing_cycle_id: string;
@@ -151,7 +152,7 @@ const processSubscriptionPaymentStep = createStep(
     const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
     
     // Check if Stripe is configured
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    const stripeSecretKey = appConfig.stripe.secretKey;
     if (!stripeSecretKey) {
       logger.warn("STRIPE_SECRET_KEY not configured - marking payment as simulated");
       return new StepResponse({ 
@@ -232,7 +233,7 @@ const processSubscriptionPaymentStep = createStep(
   async (compensationData: { payment_id: string | null } | undefined, { container }) => {
     if (!compensationData?.payment_id) return;
     try {
-      const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+      const stripeSecretKey = appConfig.stripe.secretKey;
       if (!stripeSecretKey) return;
       const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
       await stripe.refunds.create({ payment_intent: compensationData.payment_id });
