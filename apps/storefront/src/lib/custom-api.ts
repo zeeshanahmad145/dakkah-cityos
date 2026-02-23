@@ -12,7 +12,7 @@ function getHeaders(): Record<string, string> {
 
 function buildUrl(path: string, params?: Record<string, string | number | boolean | undefined>): string {
   const baseUrl = getServerBaseUrl()
-  const url = new URL(path, baseUrl || window?.location?.origin || "http://localhost:9000")
+  const url = new URL(path, baseUrl || (typeof window !== "undefined" ? window.location.origin : ""))
   if (params) {
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined && value !== null) {

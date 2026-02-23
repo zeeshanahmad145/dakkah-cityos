@@ -77,8 +77,7 @@ export function getMedusaPublishableKey(): string {
 export function getPayloadCmsUrl(): string {
   return (
     import.meta.env?.VITE_PAYLOAD_CMS_URL ||
-    (typeof process !== "undefined" ? process.env?.PAYLOAD_CMS_URL : "") ||
-    "http://localhost:3001"
+    ""
   )
 }
 
