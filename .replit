@@ -12,7 +12,6 @@ channel = "stable-25_05"
 STORE_CORS = "http://localhost:5000,https://*.replit.dev,https://*.replit.app,*"
 ADMIN_CORS = "http://localhost:5000,http://localhost:9000,https://*.replit.dev,https://*.replit.app,*"
 AUTH_CORS = "http://localhost:5000,http://localhost:9000,https://*.replit.dev,https://*.replit.app,*"
-VITE_MEDUSA_BACKEND_URL = "http://localhost:9000"
 TEMPORAL_ENDPOINT = "ap-northeast-1.aws.api.temporal.io:7233"
 TEMPORAL_NAMESPACE = "quickstart-dakkah-cityos.djvai"
 __MEDUSA_ADDITIONAL_ALLOWED_HOSTS = ".replit.dev,.replit.app"
@@ -26,10 +25,15 @@ PAYLOAD_CMS_URL_LOCAL = "http://localhost:3001"
 WALTID_URL_LOCAL = "http://localhost:7000"
 MEDUSA_BACKEND_URL_LOCAL = "http://localhost:9000"
 STOREFRONT_URL_LOCAL = "http://localhost:5000"
-VITE_MEDUSA_PUBLISHABLE_KEY = "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a"
 BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_IbLh48cuyUsSk964_alw7fQT1NHRj9OYHcXHBJFXVwl4EkM"
+JWT_SECRET = "39d12314e3a03ecf0e2c1d311e57640ccc229dce15a5f609a80311a45faf0d7a"
+COOKIE_SECRET = "d5a387b8538f680231e72c468b88cf4a74d399556d0f92195b61d78a27626c2c"
+MEDUSA_PUBLISHABLE_KEY = "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a"
+VITE_MEDUSA_PUBLISHABLE_KEY = "pk_b52dbbf895687445775c819d8cd5cb935f27231ef3a32ade606b58d9e5798d3a"
 
 [userenv.development]
+MEDUSA_BACKEND_URL = "http://localhost:9000"
+VITE_MEDUSA_BACKEND_URL = "http://localhost:9000"
 
 [userenv.production]
 ERPNEXT_URL_DEV = "https://ff049349-609e-450d-ab42-e289d89960bb-00-ujg6lz7mnzcy.pike.replit.dev:8080"
@@ -39,6 +43,8 @@ WALTID_URL_DEV = "https://9e78ac41-ae95-440f-9196-e9263c6eadda-00-130jbk279zua2.
 STOREFRONT_URL_DEV = "https://9e78ac41-ae95-440f-9196-e9263c6eadda-00-130jbk279zua2.janeway.replit.dev:5000"
 MEDUSA_BACKEND_URL_DEV = "https://f76865b8-a3a7-41f9-85b2-b0ade8a4fd85-00-3o74vg6b4mqvs.sisko.replit.dev:9000"
 SENDGRID_FROM = "dk_dev_22d60466c799dbf8d9af7d6af51244359d77d26c9cb7fe287515c8b6667977d2"
+MEDUSA_BACKEND_URL = "https://dakkah-cityos-medusa-backend.vercel.app"
+VITE_MEDUSA_BACKEND_URL = "https://dakkah-cityos-medusa-backend.vercel.app"
 
 [[ports]]
 localPort = 5000

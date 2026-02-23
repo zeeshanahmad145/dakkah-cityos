@@ -9,10 +9,19 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const isDev = mode === "development";
-  // Prioritize MEDUSA_BACKEND_URL from env, fallback to default
-  const backendUrl = env.MEDUSA_BACKEND_URL || "http://localhost:9000";
+  const backendUrl = env.MEDUSA_BACKEND_URL || env.VITE_MEDUSA_BACKEND_URL || "http://localhost:9000";
+  const publishableKey = env.MEDUSA_PUBLISHABLE_KEY || env.VITE_MEDUSA_PUBLISHABLE_KEY || "";
 
   return {
+    envPrefix: "VITE_",
+    define: {
+      "import.meta.env.VITE_MEDUSA_BACKEND_URL": JSON.stringify(
+        env.VITE_MEDUSA_BACKEND_URL || backendUrl
+      ),
+      "import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY": JSON.stringify(
+        env.VITE_MEDUSA_PUBLISHABLE_KEY || publishableKey
+      ),
+    },
     plugins: [
       Terminal({ console: "terminal", output: ["terminal"] }),
       viteTsConfigPaths({ projects: ["./tsconfig.json"] }),

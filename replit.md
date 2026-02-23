@@ -52,6 +52,29 @@ Neon PostgreSQL (`NEON_DATABASE_URL`) is used for production. Migrations are han
 - **Temporal Cloud (Workflow Orchestration):** Workflow execution, task queues, AI agents, event outbox.
 - **Walt.id (Decentralized Digital Identity):** DID management, verifiable credentials, wallet integration.
 
+### Environment Variable Strategy
+All env access is centralized:
+- **Backend:** `apps/backend/src/lib/config.ts` → `appConfig` object. No direct `process.env` in application code.
+- **Storefront:** `apps/storefront/src/lib/utils/env.ts` → getter functions. No direct `import.meta.env` or `process.env` in application code.
+- **Vite config:** `vite.config.ts` auto-forwards canonical env vars (e.g., `MEDUSA_BACKEND_URL`) as `VITE_` prefixed build-time values. Users only set the canonical name.
+
+Canonical env vars (set once, used everywhere):
+| Variable | Where | Purpose |
+|---|---|---|
+| `MEDUSA_BACKEND_URL` | dev=`localhost:9000`, prod=Vercel backend URL | Backend API origin |
+| `MEDUSA_PUBLISHABLE_KEY` | shared | Publishable API key for store requests |
+| `NEON_DATABASE_URL` | secret | Production PostgreSQL |
+| `REDIS_URL` | secret | Redis for cache/events |
+| `SENTRY_DSN` | secret | Error monitoring |
+| `JWT_SECRET` | shared | JWT signing |
+| `COOKIE_SECRET` | shared | Cookie signing |
+| `BLOB_READ_WRITE_TOKEN` | shared | Vercel Blob storage |
+
+For Vercel deployment, set `MEDUSA_BACKEND_URL`, `MEDUSA_PUBLISHABLE_KEY`, `NEON_DATABASE_URL`, `SENTRY_DSN`, `JWT_SECRET`, `COOKIE_SECRET`, `BLOB_READ_WRITE_TOKEN`, `REDIS_URL`, `STORE_CORS`, `ADMIN_CORS`, `AUTH_CORS` in the Vercel project settings.
+
+### Error Monitoring
+Sentry is integrated in the backend via `@sentry/node` in `instrumentation.ts`. All API errors are auto-captured via `api-error-handler.ts`. Sentry initializes when `SENTRY_DSN` is set.
+
 ## External Dependencies
 - **Database:** PostgreSQL (Neon, Replit's heliumdb)
 - **Frontend Framework:** TanStack Start, React

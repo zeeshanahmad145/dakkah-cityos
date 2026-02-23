@@ -1,101 +1,74 @@
 /**
- * Centralized environment configuration
- * All environment-dependent values should be accessed through these functions
+ * Centralized environment configuration for the storefront.
+ *
+ * Canonical env var names (set once in secrets / .env):
+ *   MEDUSA_BACKEND_URL         — backend API origin
+ *   MEDUSA_PUBLISHABLE_KEY     — publishable API key
+ *
+ * Vite requires the VITE_ prefix to embed values into client bundles at build
+ * time.  To avoid forcing users to duplicate every var, each getter checks
+ * both the canonical name (via process.env on the server) and the VITE_
+ * prefixed name (via import.meta.env, available on both client and server
+ * after the build).
  */
 
-/**
- * Get the backend URL for API requests
- * Uses VITE_BACKEND_URL environment variable with fallback.
- * On server (Vercel SSR), also checks process.env as runtime fallback
- * since VITE_ vars are baked at build time and may be missing from cached builds.
- */
+const isServer = typeof window === "undefined"
+
+function serverEnv(key: string): string {
+  if (!isServer) return ""
+  if (typeof process !== "undefined") return process.env?.[key] || ""
+  return ""
+}
+
 export function getBackendUrl(): string {
-  if (typeof window === "undefined") {
-    return (
-      import.meta.env.VITE_BACKEND_URL ||
-      import.meta.env.VITE_MEDUSA_BACKEND_URL ||
-      (typeof process !== "undefined" && process.env?.MEDUSA_BACKEND_URL) ||
-      (typeof process !== "undefined" && process.env?.BACKEND_URL) ||
-      ""
-    )
-  }
   return (
-    import.meta.env.VITE_BACKEND_URL ||
     import.meta.env.VITE_MEDUSA_BACKEND_URL ||
+    import.meta.env.VITE_BACKEND_URL ||
+    serverEnv("MEDUSA_BACKEND_URL") ||
+    serverEnv("BACKEND_URL") ||
     ""
   )
 }
 
 export function getServerBaseUrl(): string {
-  const isServer = typeof window === "undefined"
   if (isServer) return getBackendUrl()
   return ""
 }
 
-/**
- * Get the storefront URL
- * Uses VITE_STOREFRONT_URL environment variable with fallback
- */
 export function getStorefrontUrl(): string {
-  return import.meta.env.VITE_STOREFRONT_URL || ""
+  return import.meta.env.VITE_STOREFRONT_URL || serverEnv("STOREFRONT_URL") || ""
 }
 
-/**
- * Get Stripe publishable key
- */
 export function getStripePublishableKey(): string | undefined {
-  return import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+  return import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || serverEnv("STRIPE_PUBLISHABLE_KEY") || undefined
 }
 
-/**
- * Check if Stripe is configured
- */
 export function isStripeConfigured(): boolean {
   return !!getStripePublishableKey()
 }
 
-/**
- * Get the default country code
- */
 export function getDefaultCountryCode(): string {
-  return import.meta.env.VITE_DEFAULT_COUNTRY || "us"
+  return import.meta.env.VITE_DEFAULT_COUNTRY || serverEnv("DEFAULT_COUNTRY") || "us"
 }
 
-/**
- * Check if running in development mode
- */
 export function isDevelopment(): boolean {
   return import.meta.env.DEV
 }
 
-/**
- * Check if running in production mode
- */
 export function isProduction(): boolean {
   return import.meta.env.PROD
 }
 
-/**
- * Get Medusa publishable API key
- * On server, also checks process.env as runtime fallback for Vercel SSR.
- */
 export function getMedusaPublishableKey(): string {
-  const viteKey = import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY
-  if (viteKey) return viteKey
-  if (typeof window === "undefined" && typeof process !== "undefined") {
-    return process.env?.MEDUSA_PUBLISHABLE_KEY || process.env?.VITE_MEDUSA_PUBLISHABLE_KEY || ""
-  }
-  return ""
-}
-
-/**
- * Get Payload CMS URL
- */
-export function getPayloadCmsUrl(): string {
   return (
-    import.meta.env?.VITE_PAYLOAD_CMS_URL ||
+    import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY ||
+    serverEnv("MEDUSA_PUBLISHABLE_KEY") ||
     ""
   )
+}
+
+export function getPayloadCmsUrl(): string {
+  return import.meta.env.VITE_PAYLOAD_CMS_URL || serverEnv("PAYLOAD_CMS_URL") || ""
 }
 
 const DEFAULT_TIMEOUT_MS = 10000
