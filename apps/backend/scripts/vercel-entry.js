@@ -31,14 +31,20 @@ app.use((req, res, next) => {
 
 let initPromise = null;
 let initialized = false;
+let initError = null;
 
 async function initialize() {
   if (initialized) return;
+  if (initError) throw initError;
   if (initPromise) return initPromise;
 
   initPromise = (async () => {
     try {
-      const directory = path.resolve(__dirname, "..");
+      const directory = path.resolve(__dirname, "medusa-server");
+      console.log("[vercel-entry] Initializing Medusa from:", directory);
+      console.log("[vercel-entry] NODE_ENV:", process.env.NODE_ENV);
+      console.log("[vercel-entry] Database URL set:", !!process.env.NEON_DATABASE_URL);
+
       const loader = require("@medusajs/medusa/dist/loaders").default;
 
       const { shutdown } = await loader({
@@ -47,14 +53,16 @@ async function initialize() {
       });
 
       app.get("/health", (_, res) => {
-        res.status(200).send("OK");
+        res.status(200).json({ status: "ok", serverless: true });
       });
 
       initialized = true;
       console.log("[vercel-entry] Medusa initialized successfully");
     } catch (err) {
       initPromise = null;
-      console.error("[vercel-entry] Failed to initialize Medusa:", err);
+      initError = err;
+      console.error("[vercel-entry] Failed to initialize Medusa:", err.message);
+      console.error("[vercel-entry] Stack:", err.stack);
       throw err;
     }
   })();
@@ -70,8 +78,8 @@ module.exports = async (req, res) => {
     console.error("[vercel-entry] Request error:", err.message);
     res.status(500).json({
       error: "Internal Server Error",
-      message:
-        process.env.NODE_ENV === "development" ? err.message : undefined,
+      message: process.env.NODE_ENV !== "production" ? err.message : "Server initialization failed",
+      hint: "The Medusa backend may be experiencing cold start issues. Check Vercel function logs.",
     });
   }
 };
