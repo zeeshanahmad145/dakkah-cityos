@@ -3,7 +3,6 @@ import { TenantProvider } from "@/lib/context/tenant-context"
 import type { TenantConfig } from "@/lib/context/tenant-context"
 import { PlatformContextProvider } from "@/lib/context/platform-context"
 import { sdk } from "@/lib/utils/sdk"
-import { useEffect, useState } from "react"
 
 const SUPPORTED_LOCALES = ["en", "fr", "ar"]
 
@@ -51,37 +50,35 @@ export const Route = createFileRoute("/$tenant/$locale")({
       throw notFound()
     }
 
-    if (typeof window === "undefined") {
-      return {
-        tenant: tenant === "dakkah" ? DEFAULT_TENANT : null,
-        tenantSlug: tenant,
-        locale,
-        direction: locale === "ar" ? "rtl" : "ltr",
-        regions: null,
-      }
-    }
-
     let tenantConfig: TenantConfig | null = null
-    try {
-      const response = await sdk.client.fetch<{ tenant: Record<string, any> }>(`/store/cityos/tenant?slug=${encodeURIComponent(tenant)}`)
-      if (response.tenant) {
-        tenantConfig = mapApiTenantToConfig(response.tenant)
+
+    if (typeof window !== "undefined") {
+      try {
+        const response = await sdk.client.fetch<{ tenant: Record<string, any> }>(`/store/cityos/tenant?slug=${encodeURIComponent(tenant)}`)
+        if (response.tenant) {
+          tenantConfig = mapApiTenantToConfig(response.tenant)
+        }
+      } catch (e) {
       }
-    } catch (e) {
-      // Tenant resolution failed - expected during development or initial load
     }
 
     if (!tenantConfig && tenant === "dakkah") {
       tenantConfig = DEFAULT_TENANT
     }
 
-    const regions = await queryClient.ensureQueryData({
-      queryKey: ["regions"],
-      queryFn: async () => {
-        const { listRegions } = await import("@/lib/data/regions")
-        return listRegions({ fields: "currency_code, *countries" })
-      },
-    })
+    let regions = null
+    if (typeof window !== "undefined") {
+      try {
+        regions = await queryClient.ensureQueryData({
+          queryKey: ["regions"],
+          queryFn: async () => {
+            const { listRegions } = await import("@/lib/data/regions")
+            return listRegions({ fields: "currency_code, *countries" })
+          },
+        })
+      } catch (e) {
+      }
+    }
 
     return {
       tenant: tenantConfig,
@@ -96,19 +93,6 @@ export const Route = createFileRoute("/$tenant/$locale")({
 
 function TenantLocaleLayout() {
   const { tenant, tenantSlug, locale, direction } = Route.useLoaderData()
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
-  if (!isClient) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-      </div>
-    )
-  }
 
   return (
     <div dir={direction} lang={locale}>
