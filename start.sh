@@ -13,16 +13,35 @@ export MEDUSA_BACKEND_URL="http://127.0.0.1:9000"
 
 kill_port() {
   local port=$1
-  local pids=$(lsof -ti :$port 2>/dev/null)
+  local pids
+  pids=$(lsof -ti :"$port" 2>/dev/null)
   if [ -n "$pids" ]; then
     echo "Killing processes on port $port: $pids"
     echo "$pids" | xargs kill -9 2>/dev/null || true
   fi
 }
 
+wait_port_free() {
+  local port=$1
+  local max_wait=10
+  local count=0
+  while lsof -ti :"$port" >/dev/null 2>&1; do
+    count=$((count + 1))
+    if [ $count -ge $max_wait ]; then
+      echo "Warning: Port $port still occupied after ${max_wait}s, force killing again"
+      kill_port "$port"
+      sleep 1
+      break
+    fi
+    sleep 1
+  done
+}
+
 kill_port 9000
 kill_port 5000
-sleep 2
+kill_port 5001
+wait_port_free 9000
+wait_port_free 5000
 
 echo "Starting Medusa backend on port 9000..."
 cd /home/runner/workspace/apps/backend
@@ -31,4 +50,4 @@ BACKEND_PID=$!
 
 echo "Starting storefront on port 5000..."
 cd /home/runner/workspace/apps/storefront
-exec npm run dev -- --port 5000 --host 0.0.0.0
+exec npm run dev -- --port 5000 --host 0.0.0.0 --strictPort
