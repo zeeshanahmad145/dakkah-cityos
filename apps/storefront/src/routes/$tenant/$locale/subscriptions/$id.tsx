@@ -8,7 +8,7 @@ function normalizeDetail(item: any) {
   if (!item) return null
   const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
   return { ...meta, ...item,
-    thumbnail: item.thumbnail || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
+    thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
     images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
     price: item.price ?? meta.price ?? null,
