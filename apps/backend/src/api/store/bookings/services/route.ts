@@ -1,10 +1,141 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
-/**
- * GET /store/bookings/services
- * List available bookable services
- */
+const SEED_SERVICES = [
+  {
+    id: "bk-svc-1",
+    product_id: "bk-svc-1",
+    service_type: "appointment",
+    duration_minutes: 60,
+    max_capacity: 1,
+    location_type: "in_person",
+    metadata: {
+      name: "Deep Tissue Massage",
+      short_description: "Professional deep tissue massage therapy to relieve chronic muscle tension and improve circulation.",
+      description: "Experience a deeply relaxing and therapeutic deep tissue massage performed by certified therapists. This treatment targets chronic muscle tension, reduces stress, and promotes overall well-being.",
+      thumbnail: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&h=600&fit=crop",
+      images: ["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&h=600&fit=crop"],
+      price: 25000,
+      currency: "SAR",
+      category: "wellness",
+      provider_name: "Serenity Spa & Wellness",
+      rating: 4.8,
+      review_count: 124,
+      location: "Riyadh, Al Olaya District",
+    },
+  },
+  {
+    id: "bk-svc-2",
+    product_id: "bk-svc-2",
+    service_type: "appointment",
+    duration_minutes: 45,
+    max_capacity: 1,
+    location_type: "virtual",
+    metadata: {
+      name: "Business Strategy Consultation",
+      short_description: "One-on-one consultation with a senior business strategist to accelerate your company growth.",
+      description: "Get expert guidance on business planning, market analysis, and growth strategies from experienced consultants with 15+ years in the field.",
+      thumbnail: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop",
+      images: ["https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop"],
+      price: 35000,
+      currency: "SAR",
+      category: "consultation",
+      provider_name: "ProGrowth Advisors",
+      rating: 4.9,
+      review_count: 87,
+      location: "Online (Zoom)",
+    },
+  },
+  {
+    id: "bk-svc-3",
+    product_id: "bk-svc-3",
+    service_type: "class",
+    duration_minutes: 90,
+    max_capacity: 15,
+    location_type: "in_person",
+    metadata: {
+      name: "Yoga & Mindfulness Class",
+      short_description: "Beginner-friendly yoga class combining physical postures with guided mindfulness meditation.",
+      description: "Join our inclusive yoga sessions that blend Hatha and Vinyasa styles with breathwork and meditation. Suitable for all fitness levels.",
+      thumbnail: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=600&fit=crop",
+      images: ["https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=600&fit=crop"],
+      price: 8000,
+      currency: "SAR",
+      category: "fitness",
+      provider_name: "ZenFit Studio",
+      rating: 4.7,
+      review_count: 203,
+      location: "Jeddah, Corniche Area",
+    },
+  },
+  {
+    id: "bk-svc-4",
+    product_id: "bk-svc-4",
+    service_type: "appointment",
+    duration_minutes: 120,
+    max_capacity: 1,
+    location_type: "customer_location",
+    metadata: {
+      name: "Professional Photography Session",
+      short_description: "On-location professional photography for portraits, events, or product shoots.",
+      description: "Book a professional photographer for stunning portraits, family photos, corporate headshots, or product photography. Includes editing and digital delivery.",
+      thumbnail: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&h=600&fit=crop",
+      images: ["https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&h=600&fit=crop"],
+      price: 45000,
+      currency: "SAR",
+      category: "creative",
+      provider_name: "Lens & Light Studio",
+      rating: 4.9,
+      review_count: 56,
+      location: "Your Location (Riyadh Area)",
+    },
+  },
+  {
+    id: "bk-svc-5",
+    product_id: "bk-svc-5",
+    service_type: "appointment",
+    duration_minutes: 60,
+    max_capacity: 1,
+    location_type: "in_person",
+    metadata: {
+      name: "Premium Hair Styling",
+      short_description: "Expert hair styling, cutting, and treatment by award-winning stylists.",
+      description: "Transform your look with our premium hair styling services. Our experienced stylists provide personalized consultations, precision cuts, and luxury treatments.",
+      thumbnail: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop",
+      images: ["https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&h=600&fit=crop"],
+      price: 18000,
+      currency: "SAR",
+      category: "beauty",
+      provider_name: "Glamour Hair Lounge",
+      rating: 4.6,
+      review_count: 312,
+      location: "Riyadh, Kingdom Centre",
+    },
+  },
+  {
+    id: "bk-svc-6",
+    product_id: "bk-svc-6",
+    service_type: "class",
+    duration_minutes: 60,
+    max_capacity: 8,
+    location_type: "in_person",
+    metadata: {
+      name: "Arabic Calligraphy Workshop",
+      short_description: "Learn the beautiful art of Arabic calligraphy from master calligraphers.",
+      description: "Discover the centuries-old art of Arabic calligraphy. Our workshops cover Naskh and Thuluth scripts, tools, and techniques. All materials provided.",
+      thumbnail: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&h=600&fit=crop",
+      images: ["https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&h=600&fit=crop"],
+      price: 12000,
+      currency: "SAR",
+      category: "education",
+      provider_name: "Al-Khat Academy",
+      rating: 4.8,
+      review_count: 89,
+      location: "Riyadh, Diriyah",
+    },
+  },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const bookingModule = req.scope.resolve("booking") as any
   
@@ -27,18 +158,20 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       services = []
     }
     
+    const serviceList = services.length > 0 ? services : SEED_SERVICES
     res.json({
-      services,
-      count: services.length,
+      services: serviceList,
+      count: serviceList.length,
       offset: Number(offset),
       limit: Number(limit),
     })
   } catch (error: any) {
     res.json({
-      services: [],
-      count: 0,
+      services: SEED_SERVICES,
+      count: SEED_SERVICES.length,
       offset: Number(offset),
-      limit: Number(limit),})
+      limit: Number(limit),
+    })
   }
 }
 

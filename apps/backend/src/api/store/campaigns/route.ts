@@ -8,9 +8,9 @@ const SEED_DATA = [
     description: "Massive discounts on summer collections. Up to 60% off on selected items across all categories.",
     type: "seasonal",
     status: "active",
-    thumbnail: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
     metadata: {
-      image: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
       discount: "60%",
       discount_label: "Up to 60% Off",
     },
@@ -53,9 +53,9 @@ const SEED_DATA = [
     description: "Curated gift collections for everyone on your list. Special bundles and free gift wrapping.",
     type: "holiday",
     status: "active",
-    thumbnail: "https://images.unsplash.com/photo-1512909006721-3d6018887383?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1515562141589-67f0d6a4bf28?w=800&h=600&fit=crop",
     metadata: {
-      image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1515562141589-67f0d6a4bf28?w=800&h=600&fit=crop",
       discount: "30%",
       discount_label: "30% Off Bundles",
     },

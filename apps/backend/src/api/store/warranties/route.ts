@@ -56,7 +56,7 @@ const SEED_DATA = [
     is_active: true,
     price: 14999,
     rating: 4.9,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&h=600&fit=crop" },
   },
   {
     id: "warranty-seed-5",
@@ -70,7 +70,7 @@ const SEED_DATA = [
     is_active: true,
     price: 7999,
     rating: 4.4,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop" },
   },
 ]
 

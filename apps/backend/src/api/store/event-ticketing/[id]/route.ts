@@ -1,5 +1,4 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
 
 const SEED_DATA = [
   {
@@ -77,16 +76,15 @@ const SEED_DATA = [
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("eventTicketing") as any
-    const { limit = "20", offset = "0", tenant_id, event_type } = req.query as Record<string, string | undefined>
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (event_type) filters.event_type = event_type
-    filters.status = "published"
-    const items = await moduleService.listEvents(filters, { skip: Number(offset), take: Number(limit) })
-    const results = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
-    return res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
+    const { id } = req.params
+    const item = await moduleService.retrieveEvent(id)
+    if (!item) {
+      const seedItem = SEED_DATA.find(s => s.id === id) || SEED_DATA[0]
+      return res.json({ item: seedItem })
+    }
+    return res.json({ item })
   } catch (error: any) {
-    return res.json({ items: SEED_DATA, count: SEED_DATA.length, limit: 20, offset: 0 })
+    const seedItem = SEED_DATA.find(s => s.id === req.params.id) || SEED_DATA[0]
+    return res.json({ item: seedItem })
   }
 }
-

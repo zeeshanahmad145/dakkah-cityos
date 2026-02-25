@@ -12,7 +12,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "TechWave Supplies",
     shipping_time: "3-7 business days",
-    thumbnail: "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop",
   },
   {
     id: "ds_002",
@@ -24,7 +24,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "EcoWear Global",
     shipping_time: "5-10 business days",
-    thumbnail: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1560472355-536de3962603?w=800&h=600&fit=crop",
   },
   {
     id: "ds_003",
@@ -36,7 +36,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "BrightHome Co",
     shipping_time: "4-8 business days",
-    thumbnail: "https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&h=600&fit=crop",
   },
   {
     id: "ds_004",
@@ -48,7 +48,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "ZenFit Supplies",
     shipping_time: "3-6 business days",
-    thumbnail: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=600&fit=crop",
   },
   {
     id: "ds_005",
@@ -60,7 +60,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "HydroLife Direct",
     shipping_time: "2-5 business days",
-    thumbnail: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=600&fit=crop",
   },
 ]
 

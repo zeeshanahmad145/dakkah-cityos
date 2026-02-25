@@ -24,7 +24,7 @@ const SEED_DATA = [
     deposit: 9999,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop",
   },
   {
     id: "tby_003",
@@ -36,7 +36,7 @@ const SEED_DATA = [
     deposit: 2499,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
   },
   {
     id: "tby_004",
@@ -48,7 +48,7 @@ const SEED_DATA = [
     deposit: 3499,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=600&fit=crop",
   },
   {
     id: "tby_005",
@@ -60,7 +60,7 @@ const SEED_DATA = [
     deposit: 14999,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "https://images.unsplash.com/photo-1517353856937-f59195013237?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&h=600&fit=crop",
   },
 ]
 
