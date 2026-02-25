@@ -13,7 +13,10 @@
     "backend:dev": "turbo dev --filter=backend",
     "storefront:dev": "turbo dev --filter=storefront",
     "build:prod": "bash scripts/build-production.sh",
-    "start:prod": "bash scripts/start-production.sh"
+    "start:prod": "bash scripts/start-production.sh",
+    "db:migrate": "cd apps/backend && npx medusa db:migrate",
+    "db:generate": "cd apps/backend && npx medusa db:generate",
+    "db:seed": "cd apps/backend && npx medusa exec ./src/scripts/seed.ts"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
