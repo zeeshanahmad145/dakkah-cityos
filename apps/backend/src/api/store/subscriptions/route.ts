@@ -1,6 +1,21 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
 
+const PLAN_IMAGES: Record<string, string> = {
+  "CityOS Pilot": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+  "CityOS District": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+  "CityOS Metro": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
+  "CityOS Enterprise": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+  "CityOS Sovereign": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&h=600&fit=crop",
+}
+
+function enrichWithImages(plans: any[]) {
+  return plans.map((p: any) => ({
+    ...p,
+    thumbnail: p.thumbnail || PLAN_IMAGES[p.name] || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+  }))
+}
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("subscription") as any
@@ -23,7 +38,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       take: Number(limit),
     })
 
-    const items = Array.isArray(plans) ? plans : []
+    const items = enrichWithImages(Array.isArray(plans) ? plans : [])
 
     if (search) {
       const q = search.toLowerCase()
@@ -33,6 +48,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       )
       return res.json({
         subscriptions: filtered,
+        items: filtered,
         count: filtered.length,
         limit: Number(limit),
         offset: Number(offset),
@@ -41,6 +57,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     return res.json({
       subscriptions: items,
+      items,
       count: items.length,
       limit: Number(limit),
       offset: Number(offset),

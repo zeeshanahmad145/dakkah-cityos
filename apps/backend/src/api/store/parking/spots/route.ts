@@ -1,5 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import { handleApiError } from "../../../../lib/api-error-handler"
 
 const SEED_DATA = [
   {
@@ -23,7 +23,7 @@ const SEED_DATA = [
   {
     id: "park-seed-002",
     name: "Mall Underground Garage",
-    description: "Spacious underground parking with direct mall access, CCTV monitoring, and valet service.",
+    description: "Spacious underground parking with direct mall access, CCTV monitoring, and valet service available.",
     zone_type: "underground",
     metadata: {
       thumbnail: "https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?w=800&h=600&fit=crop",
@@ -118,16 +118,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (is_available !== undefined) filters.is_available = is_available === "true"
     if (search) filters.name = { $like: `%${search}%` }
 
-    const [items, count] = await Promise.all([
-      parkingService.listParkingZones(filters, {
-        skip: Number(offset),
-        take: Number(limit),
-        order: { created_at: "DESC" },
-      }),
-      parkingService.listParkingZones(filters, { skip: 0, take: 0 }).then(
-        (r: any) => (Array.isArray(r) ? r.length : 0)
-      ).catch(() => 0),
-    ])
+    const items = await parkingService.listParkingZones(filters, {
+      skip: Number(offset),
+      take: Number(limit),
+      order: { created_at: "DESC" },
+    })
 
     const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
 
@@ -146,4 +141,3 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     })
   }
 }
-

@@ -1,11 +1,11 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import { handleApiError } from "../../../../lib/api-error-handler"
 
-const SEED_CLASSES = [
+const SEED_DATA = [
   {
     id: "fit-seed-001",
     name: "Morning Vinyasa Yoga",
-    description: "Start your day with a flowing yoga practice that builds strength, flexibility, and mindfulness.",
+    description: "Start your day with a flowing yoga practice that builds strength, flexibility, and mindfulness. Suitable for all levels.",
     class_type: "yoga",
     instructor: "Sarah Chen",
     schedule: "Mon, Wed, Fri 7:00 AM",
@@ -43,7 +43,7 @@ const SEED_CLASSES = [
   {
     id: "fit-seed-003",
     name: "Personal Training Session",
-    description: "One-on-one customized training program designed to meet your specific fitness goals.",
+    description: "One-on-one customized training program designed to meet your specific fitness goals and needs.",
     class_type: "hiit",
     instructor: "Alex Rivera",
     schedule: "By Appointment",
@@ -81,7 +81,7 @@ const SEED_CLASSES = [
   {
     id: "fit-seed-005",
     name: "Kickboxing & Martial Arts",
-    description: "Learn striking techniques while getting an incredible full-body workout.",
+    description: "Learn striking techniques while getting an incredible full-body workout. Build confidence and self-defense skills.",
     class_type: "boxing",
     instructor: "Kenji Tanaka",
     schedule: "Mon, Wed, Fri 6:00 PM",
@@ -96,23 +96,6 @@ const SEED_CLASSES = [
     location: "Combat Athletics Academy",
     type: "class",
     is_active: true,
-  },
-]
-
-const SEED_TRAINERS = [
-  {
-    id: "trainer-seed-001",
-    name: "Sarah Chen",
-    specialization: "Yoga & Pilates",
-    thumbnail: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&h=600&fit=crop",
-    rating: 4.8,
-  },
-  {
-    id: "trainer-seed-002",
-    name: "Marcus Johnson",
-    specialization: "CrossFit & Strength",
-    thumbnail: "https://images.unsplash.com/photo-1567013127542-490d483ef658?w=800&h=600&fit=crop",
-    rating: 4.9,
   },
 ]
 
@@ -138,37 +121,28 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (is_active !== undefined) filters.is_active = is_active === "true"
     if (search) filters.name = { $like: `%${search}%` }
 
-    const paginationOpts = {
+    const items = await fitnessService.listClassSchedules(filters, {
       skip: Number(offset),
       take: Number(limit),
       order: { created_at: "DESC" },
-    }
+    })
 
-    const [classes, trainers] = await Promise.all([
-      fitnessService.listClassSchedules(filters, paginationOpts),
-      fitnessService.listTrainerProfiles(filters, paginationOpts),
-    ])
-
-    const classList = Array.isArray(classes) && classes.length > 0 ? classes : SEED_CLASSES
-    const trainerList = Array.isArray(trainers) && trainers.length > 0 ? trainers : SEED_TRAINERS
+    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
 
     return res.json({
-      classes: classList,
-      items: classList,
-      trainers: trainerList,
-      count: classList.length + trainerList.length,
+      classes: itemList,
+      items: itemList,
+      count: itemList.length,
       limit: Number(limit),
       offset: Number(offset),
     })
   } catch (error: any) {
     return res.json({
-      classes: SEED_CLASSES,
-      items: SEED_CLASSES,
-      trainers: SEED_TRAINERS,
-      count: SEED_CLASSES.length + SEED_TRAINERS.length,
+      classes: SEED_DATA,
+      items: SEED_DATA,
+      count: SEED_DATA.length,
       limit: 20,
       offset: 0,
     })
   }
 }
-

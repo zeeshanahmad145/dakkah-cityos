@@ -26,10 +26,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           "Birthday rewards and special bonuses",
         ],
         tiers: [
-          { name: "Bronze", min_points: 0, perks: ["1x points earning", "Member-only deals"] },
-          { name: "Silver", min_points: 500, perks: ["1.5x points earning", "Free shipping on orders over $50"] },
-          { name: "Gold", min_points: 2000, perks: ["2x points earning", "Free shipping on all orders", "Early access to sales"] },
-          { name: "Platinum", min_points: 5000, perks: ["3x points earning", "Free shipping", "Priority support", "Exclusive events"] },
+          { name: "Bronze", min_points: 0, perks: ["1x points earning", "Member-only deals"], thumbnail: "https://images.unsplash.com/photo-1553729459-afe8f2e2ed65?w=800&h=600&fit=crop" },
+          { name: "Silver", min_points: 500, perks: ["1.5x points earning", "Free shipping on orders over $50"], thumbnail: "https://images.unsplash.com/photo-1612404730960-5c71577fca11?w=800&h=600&fit=crop" },
+          { name: "Gold", min_points: 2000, perks: ["2x points earning", "Free shipping on all orders", "Early access to sales"], thumbnail: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=800&h=600&fit=crop" },
+          { name: "Platinum", min_points: 5000, perks: ["3x points earning", "Free shipping", "Priority support", "Exclusive events"], thumbnail: "https://images.unsplash.com/photo-1579547945413-497e1b99dac0?w=800&h=600&fit=crop" },
         ],
       },
     })

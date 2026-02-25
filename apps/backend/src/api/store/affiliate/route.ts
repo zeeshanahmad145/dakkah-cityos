@@ -18,6 +18,69 @@ const createAffiliateSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 })
 
+const SEED_DATA = [
+  {
+    id: "aff_001",
+    name: "Tech Reviews Pro",
+    email: "partners@techreviewspro.com",
+    affiliate_type: "influencer",
+    status: "active",
+    commission_rate: 12,
+    commission_type: "percentage",
+    bio: "Leading tech review channel with 500K+ followers. Specializing in consumer electronics and smart home devices.",
+    category: "Electronics",
+    thumbnail: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=600&fit=crop",
+  },
+  {
+    id: "aff_002",
+    name: "Fashion Forward Blog",
+    email: "collab@fashionforward.com",
+    affiliate_type: "ambassador",
+    status: "active",
+    commission_rate: 15,
+    commission_type: "percentage",
+    bio: "Award-winning fashion blog featuring sustainable and luxury brands. 250K monthly readers.",
+    category: "Fashion",
+    thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
+  },
+  {
+    id: "aff_003",
+    name: "Healthy Living Hub",
+    email: "affiliate@healthylivinghub.com",
+    affiliate_type: "partner",
+    status: "active",
+    commission_rate: 10,
+    commission_type: "percentage",
+    bio: "Health and wellness platform covering nutrition, fitness, and mental health. Trusted by 1M+ subscribers.",
+    category: "Health & Wellness",
+    thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=600&fit=crop",
+  },
+  {
+    id: "aff_004",
+    name: "Home Decor Digest",
+    email: "partners@homedecordigest.com",
+    affiliate_type: "standard",
+    status: "active",
+    commission_rate: 8,
+    commission_type: "percentage",
+    bio: "Interior design inspiration and product recommendations for modern homes. Featured in top design magazines.",
+    category: "Home & Garden",
+    thumbnail: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+  },
+  {
+    id: "aff_005",
+    name: "Outdoor Adventures Channel",
+    email: "affiliate@outdooradventures.com",
+    affiliate_type: "influencer",
+    status: "active",
+    commission_rate: 11,
+    commission_type: "percentage",
+    bio: "Adventure sports and outdoor gear reviews. 300K YouTube subscribers passionate about camping, hiking, and travel.",
+    category: "Sports & Outdoors",
+    thumbnail: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop",
+  },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("affiliate") as any
@@ -39,9 +102,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (search) filters.search = search
 
     const items = await mod.listAffiliates(filters, { skip: Number(offset), take: Number(limit) })
+    const results = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
     return res.json({
-      items,
-      count: Array.isArray(items) ? items.length : 0,
+      items: results,
+      count: results.length,
       limit: Number(limit),
       offset: Number(offset),
     })

@@ -3,34 +3,17 @@ import { handleApiError } from "../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
+    const items = [
+      { id: "nl-1", name: "Tech Trends Weekly", topic: "technology", thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop", edition_date: "2026-02-10", topics_covered: ["AI & Machine Learning", "Web3 Updates", "Cloud Computing"], description: "Stay ahead with the latest technology trends, product launches, and industry insights." },
+      { id: "nl-2", name: "Style & Living", topic: "lifestyle", thumbnail: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800&h=600&fit=crop", edition_date: "2026-02-08", topics_covered: ["Fashion Tips", "Interior Design", "Wellness"], description: "Your weekly guide to fashion, home design, and modern living." },
+      { id: "nl-3", name: "Business Insider Report", topic: "business", thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop", edition_date: "2026-02-12", topics_covered: ["Market Analysis", "Startup News", "Investment Tips"], description: "Comprehensive business intelligence and market analysis for professionals." },
+      { id: "nl-4", name: "Green Planet Digest", topic: "sustainability", thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop", edition_date: "2026-02-05", topics_covered: ["Climate Action", "Sustainable Products", "Eco-Innovations"], description: "Environmental news, sustainable living tips, and eco-friendly product reviews." },
+      { id: "nl-5", name: "Health & Wellness Focus", topic: "health", thumbnail: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop", edition_date: "2026-02-11", topics_covered: ["Nutrition Guide", "Fitness Plans", "Mental Health"], description: "Expert-backed health advice, workout routines, and nutrition guides." },
+    ]
     return res.json({
-      items: [
-        {
-          id: "nl_1",
-          title: "Weekly Deals & Offers",
-          description: "Get exclusive deals delivered every week",
-          frequency: "weekly",
-          subscriber_count: 12500,
-          category: "deals",
-        },
-        {
-          id: "nl_2",
-          title: "New Arrivals",
-          description: "Be first to know about new products",
-          frequency: "weekly",
-          subscriber_count: 8300,
-          category: "products",
-        },
-        {
-          id: "nl_3",
-          title: "Community Events",
-          description: "Stay updated on events near you",
-          frequency: "monthly",
-          subscriber_count: 5200,
-          category: "events",
-        },
-      ],
-      count: 3,
+      items,
+      newsletters: items,
+      count: items.length,
     });
   } catch (error: any) {
     handleApiError(res, error, "GET store newsletters");

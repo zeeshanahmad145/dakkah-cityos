@@ -2,6 +2,59 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
 
+const SEED_ITEMS = [
+  {
+    id: "ti-seed-1",
+    name: "iPhone 15 Pro",
+    category: "phones",
+    thumbnail: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&h=600&fit=crop",
+    description: "Trade in your iPhone 15 Pro for store credit. All storage sizes accepted.",
+    condition_requirements: "Powers on, no cracks, iCloud unlocked",
+    trade_in_min: 35000,
+    trade_in_max: 65000,
+  },
+  {
+    id: "ti-seed-2",
+    name: "MacBook Pro 14\"",
+    category: "laptops",
+    thumbnail: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=600&fit=crop",
+    description: "Trade in your MacBook Pro for instant credit. M1, M2, and M3 models accepted.",
+    condition_requirements: "Functional display, keyboard works, no water damage",
+    trade_in_min: 45000,
+    trade_in_max: 120000,
+  },
+  {
+    id: "ti-seed-3",
+    name: "iPad Air / Pro",
+    category: "tablets",
+    thumbnail: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=600&fit=crop",
+    description: "Get credit for your used iPad. All generations and sizes welcome.",
+    condition_requirements: "Screen intact, charges properly, factory reset",
+    trade_in_min: 15000,
+    trade_in_max: 55000,
+  },
+  {
+    id: "ti-seed-4",
+    name: "PlayStation 5",
+    category: "gaming",
+    thumbnail: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=800&h=600&fit=crop",
+    description: "Trade your PS5 console for credit towards new gaming gear.",
+    condition_requirements: "Disc drive works (if applicable), controller included",
+    trade_in_min: 20000,
+    trade_in_max: 35000,
+  },
+  {
+    id: "ti-seed-5",
+    name: "Samsung Galaxy S24 Ultra",
+    category: "phones",
+    thumbnail: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&h=600&fit=crop",
+    description: "Trade in your Galaxy S24 Ultra. Unlocked and carrier models accepted.",
+    condition_requirements: "Screen works, no cracks, Google account removed",
+    trade_in_min: 30000,
+    trade_in_max: 55000,
+  },
+]
+
 const createTradeInSchema = z.object({
   tenant_id: z.string().min(1),
   listing_id: z.string().optional(),
@@ -23,15 +76,16 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   if (!customerId) {
     return res.json({
       trade_ins: [],
-      count: 0,
+      items: SEED_ITEMS,
+      count: SEED_ITEMS.length,
       limit: 20,
       offset: 0,
       public_info: {
         eligible_categories: [
-          { name: "Electronics", description: "Smartphones, laptops, tablets and more", estimated_value_range: "$50 - $800" },
-          { name: "Automotive", description: "Vehicles, parts, and accessories", estimated_value_range: "$100 - $25000" },
-          { name: "Furniture", description: "Home and office furniture", estimated_value_range: "$25 - $500" },
-          { name: "Appliances", description: "Home appliances in working condition", estimated_value_range: "$30 - $400" },
+          { name: "Electronics", description: "Smartphones, laptops, tablets and more", estimated_value_range: "$50 - $800", thumbnail: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=600&fit=crop" },
+          { name: "Automotive", description: "Vehicles, parts, and accessories", estimated_value_range: "$100 - $25000", thumbnail: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop" },
+          { name: "Furniture", description: "Home and office furniture", estimated_value_range: "$25 - $500", thumbnail: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop" },
+          { name: "Appliances", description: "Home appliances in working condition", estimated_value_range: "$30 - $400", thumbnail: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop" },
         ],
         how_it_works: [
           "Submit your item details and photos",

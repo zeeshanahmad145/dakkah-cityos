@@ -20,6 +20,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 12900,
     likes: 18200,
     tags: ["fashion", "abayas", "streetwear", "saudi"],
+    thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
   },
   {
     id: "sc_002",
@@ -39,6 +40,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 7500,
     likes: 24500,
     tags: ["skincare", "beauty", "natural", "handmade"],
+    thumbnail: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=600&fit=crop",
   },
   {
     id: "sc_003",
@@ -58,6 +60,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 35000,
     likes: 42100,
     tags: ["oud", "bakhoor", "perfume", "fragrance"],
+    thumbnail: "https://images.unsplash.com/photo-1594035910387-fea081e66b5d?w=800&h=600&fit=crop",
   },
   {
     id: "sc_004",
@@ -77,6 +80,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 4500,
     likes: 8900,
     tags: ["sweets", "dates", "traditional", "gifts"],
+    thumbnail: "https://images.unsplash.com/photo-1548848221-0c2e497ed557?w=800&h=600&fit=crop",
   },
   {
     id: "sc_005",
@@ -96,6 +100,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 9900,
     likes: 56700,
     tags: ["tech", "gadgets", "accessories", "electronics"],
+    thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
   },
   {
     id: "sc_006",
@@ -115,6 +120,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 19900,
     likes: 12300,
     tags: ["fitness", "gym", "supplements", "sportswear"],
+    thumbnail: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop",
   },
   {
     id: "sc_007",
@@ -134,6 +140,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 24900,
     likes: 31500,
     tags: ["jewelry", "handmade", "gold", "accessories"],
+    thumbnail: "https://images.unsplash.com/photo-1515562141589-67f0d6a4bf28?w=800&h=600&fit=crop",
   },
 ]
 

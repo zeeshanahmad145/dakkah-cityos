@@ -1,5 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import { handleApiError } from "../../../../lib/api-error-handler"
 
 const SEED_DATA = [
   {
@@ -102,39 +102,12 @@ const SEED_DATA = [
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("travel") as any
-    const {
-      limit = "20",
-      offset = "0",
-      tenant_id,
-      city,
-      property_type,
-      destination,
-      duration,
-      min_price,
-      max_price,
-      search,
-    } = req.query as Record<string, string | undefined>
-
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (city) filters.city = city
-    if (property_type) filters.property_type = property_type
-    if (destination) filters.destination = destination
-    if (duration) filters.duration = Number(duration)
-    if (min_price) filters.min_price = Number(min_price)
-    if (max_price) filters.max_price = Number(max_price)
-    if (search) filters.search = search
-    filters.is_active = true
-
+    const { limit = "20", offset = "0" } = req.query as Record<string, string | undefined>
+    const filters: Record<string, any> = { is_active: true }
     const dbItems = await mod.listTravelProperties(filters, { skip: Number(offset), take: Number(limit) })
     const items = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
-    return res.json({
-      items,
-      count: items.length,
-      limit: Number(limit),
-      offset: Number(offset),
-    })
+    return res.json({ items, count: items.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
-    handleApiError(res, error, "STORE-TRAVEL")}
+    return handleApiError(res, error, "STORE-TRAVEL-PACKAGES")
+  }
 }
-

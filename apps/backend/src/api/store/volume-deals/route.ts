@@ -2,6 +2,59 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../lib/api-error-handler"
 
+const SEED_DATA = [
+  {
+    id: "vd-seed-1",
+    name: "Premium Ballpoint Pens",
+    description: "Smooth-writing metal ballpoint pens with ergonomic grip. Blue ink. Ideal for corporate gifts.",
+    category: "office",
+    thumbnail: "https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=800&h=600&fit=crop",
+    status: "active",
+    tiers: [{ qty: "10+", min_quantity: 10, max_quantity: 49, discount_percentage: 15, price: 499 }, { qty: "50+", min_quantity: 50, max_quantity: 99, discount_percentage: 30, price: 399 }, { qty: "100+", min_quantity: 100, max_quantity: null, discount_percentage: 40, price: 299 }],
+    max_savings: 40,
+  },
+  {
+    id: "vd-seed-2",
+    name: "Reusable Shopping Bags",
+    description: "Eco-friendly non-woven bags, full-color printing available. Perfect for retail promotions.",
+    category: "retail",
+    thumbnail: "https://images.unsplash.com/photo-1591438252948-27968a843742?w=800&h=600&fit=crop",
+    status: "active",
+    tiers: [{ qty: "10+", min_quantity: 10, max_quantity: 49, discount_percentage: 20, price: 350 }, { qty: "50+", min_quantity: 50, max_quantity: 99, discount_percentage: 40, price: 250 }, { qty: "100+", min_quantity: 100, max_quantity: null, discount_percentage: 57, price: 150 }],
+    max_savings: 57,
+  },
+  {
+    id: "vd-seed-3",
+    name: "USB Flash Drives 32GB",
+    description: "Compact USB 3.0 flash drives with custom logo area. Bulk pricing for events and conferences.",
+    category: "electronics",
+    thumbnail: "https://images.unsplash.com/photo-1618410320928-25228d811631?w=800&h=600&fit=crop",
+    status: "active",
+    tiers: [{ qty: "10+", min_quantity: 10, max_quantity: 49, discount_percentage: 10, price: 899 }, { qty: "50+", min_quantity: 50, max_quantity: 99, discount_percentage: 25, price: 699 }, { qty: "100+", min_quantity: 100, max_quantity: null, discount_percentage: 45, price: 499 }],
+    max_savings: 45,
+  },
+  {
+    id: "vd-seed-4",
+    name: "Cotton Face Towels",
+    description: "500 GSM premium cotton towels. Machine washable, quick-drying. Hotel and spa grade quality.",
+    category: "hospitality",
+    thumbnail: "https://images.unsplash.com/photo-1583922146651-9b1a46c5b33e?w=800&h=600&fit=crop",
+    status: "active",
+    tiers: [{ qty: "10+", min_quantity: 10, max_quantity: 49, discount_percentage: 15, price: 699 }, { qty: "50+", min_quantity: 50, max_quantity: 99, discount_percentage: 30, price: 549 }, { qty: "100+", min_quantity: 100, max_quantity: null, discount_percentage: 43, price: 399 }],
+    max_savings: 43,
+  },
+  {
+    id: "vd-seed-5",
+    name: "Corrugated Shipping Boxes",
+    description: "Heavy-duty double-wall corrugated boxes. Standard sizes available. Custom sizes on request.",
+    category: "packaging",
+    thumbnail: "https://images.unsplash.com/photo-1607166452427-7e4477c8d5a8?w=800&h=600&fit=crop",
+    status: "active",
+    tiers: [{ qty: "10+", min_quantity: 10, max_quantity: 49, discount_percentage: 20, price: 299 }, { qty: "50+", min_quantity: 50, max_quantity: 99, discount_percentage: 40, price: 199 }, { qty: "100+", min_quantity: 100, max_quantity: null, discount_percentage: 57, price: 129 }],
+    max_savings: 57,
+  },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
@@ -24,7 +77,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       })
       return { ...rule, tiers }
     }))
-    res.json({ items: enrichedRules, count: enrichedRules.length, limit: Number(limit), offset: Number(offset) })
+    const results = Array.isArray(enrichedRules) && enrichedRules.length > 0 ? enrichedRules : SEED_DATA
+    res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-VOLUME-DEALS")
   }
