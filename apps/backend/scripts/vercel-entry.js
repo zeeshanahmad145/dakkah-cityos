@@ -1,59 +1,21 @@
 /**
  * Vercel Serverless Entry for Medusa v2
  *
- * Medusa v2 `medusa build` output in .medusa/server is a self-contained
- * Node.js server. We load it here as a serverless function by requiring
- * its built Express app and re-using it across invocations.
+ * Medusa v2 uses the same `loader({ directory, expressApp })` API as v1.
+ * The built .medusa/server directory is mounted as "medusa-server/" inside
+ * this function, so we resolve the loader from that bundled node_modules.
  */
+const express = require("express");
 const path = require("path");
 
-// The post-build script copies .medusa/server → medusa-server/ inside this func dir
+// Post-build copies .medusa/server → medusa-server/ inside the function dir
 const MEDUSA_SERVER = path.resolve(__dirname, "medusa-server");
 
-let appPromise = null;
+const app = express();
 
-async function getApp() {
-  if (appPromise) return appPromise;
-
-  appPromise = (async () => {
-    try {
-      console.log("[vercel-entry] Loading Medusa v2 from:", MEDUSA_SERVER);
-      console.log(
-        "[vercel-entry] DATABASE_URL set:",
-        !!process.env.DATABASE_URL,
-      );
-      console.log("[vercel-entry] REDIS_URL set:", !!process.env.REDIS_URL);
-      console.log("[vercel-entry] JWT_SECRET set:", !!process.env.JWT_SECRET);
-
-      // Medusa v2 exports the Express app from its main entry
-      // The built server main file is at medusa-server/index.js
-      const medusaMain = require(path.join(MEDUSA_SERVER, "index.js"));
-
-      // Medusa v2 may export { app } or default export the app
-      const app = medusaMain?.app || medusaMain?.default?.app || medusaMain;
-
-      if (typeof app !== "function") {
-        throw new Error(
-          `Medusa v2 index.js did not export a callable app. Got: ${typeof app}. ` +
-            `Keys: ${Object.keys(medusaMain || {}).join(", ")}`,
-        );
-      }
-
-      console.log("[vercel-entry] Medusa v2 app loaded successfully");
-      return app;
-    } catch (err) {
-      appPromise = null; // Allow retry on next request
-      console.error("[vercel-entry] Failed to load Medusa:", err.message);
-      console.error("[vercel-entry] Stack:", err.stack);
-      throw err;
-    }
-  })();
-
-  return appPromise;
-}
-
-// CORS headers applied to all responses
-function addCors(res, origin) {
+// CORS for all routes
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
   res.setHeader("Access-Control-Allow-Origin", origin || "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
@@ -65,36 +27,105 @@ function addCors(res, origin) {
     "Content-Type,Authorization,x-publishable-api-key,x-medusa-access-token",
   );
   res.setHeader("Access-Control-Max-Age", "86400");
+  if (req.method === "OPTIONS") return res.status(204).end();
+  next();
+});
+
+let initPromise = null;
+let initialized = false;
+let initError = null;
+
+async function initialize() {
+  if (initialized) return;
+  if (initError) throw initError;
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
+    try {
+      console.log("[vercel-entry] Starting Medusa v2 from:", MEDUSA_SERVER);
+      console.log(
+        "[vercel-entry] DATABASE_URL set:",
+        !!process.env.DATABASE_URL,
+      );
+      console.log("[vercel-entry] REDIS_URL set:", !!process.env.REDIS_URL);
+      console.log("[vercel-entry] JWT_SECRET set:", !!process.env.JWT_SECRET);
+      console.log("[vercel-entry] NODE_ENV:", process.env.NODE_ENV);
+
+      // Load the Medusa loader from the bundled server output.
+      // The .medusa/server directory has its own node_modules with @medusajs/medusa.
+      const loaderPath = path.join(
+        MEDUSA_SERVER,
+        "node_modules",
+        "@medusajs",
+        "medusa",
+        "dist",
+        "loaders",
+      );
+      console.log("[vercel-entry] Loading loader from:", loaderPath);
+
+      let loadMedusa;
+      try {
+        loadMedusa = require(loaderPath).default;
+      } catch (e) {
+        // Fallback: try loading from the medusa-server directory itself
+        // (medusa build may produce a self-contained index.js that starts a server)
+        console.warn(
+          "[vercel-entry] Loader not found in medusa-server/node_modules, trying medusa-server/index.js",
+        );
+        const serverIndex = require(path.join(MEDUSA_SERVER, "index.js"));
+        // If it exports an express app directly, use it
+        if (typeof serverIndex === "function") {
+          // Already an Express app or handler — attach health route
+          serverIndex.get?.("/health", (_, res) =>
+            res.status(200).json({ status: "ok" }),
+          );
+          initialized = true;
+          // Replace app handlers with the server index
+          app.use(serverIndex);
+          console.log("[vercel-entry] Using medusa-server/index.js as handler");
+          return;
+        }
+        throw new Error(
+          `Cannot find Medusa loader. Loader error: ${e.message}`,
+        );
+      }
+
+      await loadMedusa({
+        directory: MEDUSA_SERVER,
+        expressApp: app,
+      });
+
+      // Health check not mounted by Medusa v2 loader by default
+      app.get("/health", (_, res) =>
+        res.status(200).json({ status: "ok", serverless: true }),
+      );
+
+      initialized = true;
+      console.log("[vercel-entry] Medusa v2 initialized successfully");
+    } catch (err) {
+      initPromise = null;
+      initError = err;
+      console.error("[vercel-entry] INIT FAILED:", err.message);
+      console.error("[vercel-entry] Stack:", err.stack);
+      throw err;
+    }
+  })();
+
+  return initPromise;
 }
 
 module.exports = async (req, res) => {
-  const origin = req.headers?.origin;
-  addCors(res, origin);
-
-  if (req.method === "OPTIONS") {
-    res.status(204).end();
-    return;
-  }
-
   try {
-    const app = await getApp();
+    await initialize();
     app(req, res);
   } catch (err) {
-    console.error("[vercel-entry] Handler error:", err.message);
-
-    const body = {
-      error: "Internal Server Error",
-      hint: "Medusa backend failed to initialize. Check Vercel function logs.",
-    };
-
-    // Expose error details in non-production for debugging
-    if (process.env.NODE_ENV !== "production") {
-      body.message = err.message;
-      body.stack = err.stack;
-    }
-
+    console.error("[vercel-entry] Request failed:", err.message);
     if (!res.headersSent) {
-      res.status(500).json(body);
+      res.status(500).json({
+        error: "Internal Server Error",
+        message: err.message, // Always expose for debugging
+        hint: "Check Vercel function logs for full stack trace",
+      });
     }
   }
 };
