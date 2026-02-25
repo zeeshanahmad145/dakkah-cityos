@@ -27,10 +27,10 @@ export const Route = createFileRoute("/$tenant/$locale/print-on-demand/")({
         const meta = item.metadata || {}
         return {
           id: item.id,
-          name: item.name || meta.name || "Untitled Product",
+          name: item.name || item.title || meta.name || "Untitled Product",
           description: item.description || meta.description || "",
           startingAt: meta.starting_at || item.starting_at || null,
-          image: meta.thumbnail || meta.image || meta.images?.[0] || null,
+          image: item.thumbnail || item.image || meta.thumbnail || meta.image || meta.images?.[0] || null,
           price: item.price || meta.price || null,
           currency: item.currency_code || meta.currency || "SAR",
           category: item.category || meta.category || null,

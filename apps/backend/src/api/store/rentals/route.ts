@@ -43,8 +43,8 @@ const SEED_DATA = [
     total_rentals: 120,
     category: "vehicles",
     rating: 4.5,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop", price: 5000 },
-    thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "https://images.unsplash.com/photo-1604868189046-636c2e07e6b0?w=800&h=600&fit=crop", price: 5000 },
+    thumbnail: "https://images.unsplash.com/photo-1604868189046-636c2e07e6b0?w=800&h=600&fit=crop",
     price: 5000,
   },
   {

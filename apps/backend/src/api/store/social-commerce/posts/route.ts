@@ -14,7 +14,7 @@ const SEED_DATA = [
     rating: 4.8,
     total_reviews: 3200,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop" },
   },
   {
     id: "sc_002",
@@ -44,7 +44,7 @@ const SEED_DATA = [
     rating: 4.9,
     total_reviews: 8900,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1594035910387-fea081e66b5d?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800&h=600&fit=crop" },
   },
   {
     id: "sc_004",

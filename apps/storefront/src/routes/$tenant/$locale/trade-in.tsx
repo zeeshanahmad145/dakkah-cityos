@@ -25,13 +25,6 @@ const conditionMultipliers: Record<string, number> = {
   poor: 0.25,
 }
 
-const howItWorksSteps = [
-  { step: 1, title: t(locale, "tradeIn.title1_select_your_item", "Select Your Item"), description: t(locale, "tradeIn.description2_choose_the_product_y", "Choose the product you'd like to trade in from your order history or search our catalog."), icon: "📦" },
-  { step: 2, title: t(locale, "tradeIn.title3_grade_condition", "Grade Condition"), description: t(locale, "tradeIn.description4_honestly_assess_the", "Honestly assess the condition of your item using our simple grading tool."), icon: "🔍" },
-  { step: 3, title: t(locale, "tradeIn.title5_get_your_estimate", "Get Your Estimate"), description: t(locale, "tradeIn.description6_receive_an_instant_e", "Receive an instant estimated trade-in value based on the item and its condition."), icon: "💰" },
-  { step: 4, title: t(locale, "tradeIn.title7_ship___get_credit", "Ship & Get Credit"), description: t(locale, "tradeIn.description8_ship_your_item_to_us", "Ship your item to us for free and receive store credit once verified."), icon: "🚀" },
-]
-
 const sampleCategories = [
   "electronics",
   "phones",
@@ -42,6 +35,13 @@ const sampleCategories = [
 
 function TradeInPage() {
   const { locale } = Route.useParams() as { tenant: string; locale: string }
+
+  const howItWorksSteps = [
+    { step: 1, title: "Select Your Item", description: "Choose the product you'd like to trade in from your order history or search our catalog.", icon: "📦" },
+    { step: 2, title: "Grade Condition", description: "Honestly assess the condition of your item using our simple grading tool.", icon: "🔍" },
+    { step: 3, title: "Get Your Estimate", description: "Receive an instant estimated trade-in value based on the item and its condition.", icon: "💰" },
+    { step: 4, title: "Ship & Get Credit", description: "Ship your item to us for free and receive store credit once verified.", icon: "🚀" },
+  ]
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCondition, setSelectedCondition] = useState<string | undefined>("good")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)

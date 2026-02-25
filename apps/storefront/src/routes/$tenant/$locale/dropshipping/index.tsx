@@ -14,18 +14,18 @@ export const Route = createFileRoute("/$tenant/$locale/dropshipping/")({
   loader: async () => {
     try {
       const features = [
-        { id: "1", title: t(locale, "dropshipping.title1_no_inventory_needed", "No Inventory Needed"), description: t(locale, "dropshipping.description2_sell_products_withou", "Sell products without stocking them. We handle warehousing and fulfillment for you."), icon: "📦", color: "violet" },
-        { id: "2", title: t(locale, "dropshipping.title3_global_supplier_netw", "Global Supplier Network"), description: t(locale, "dropshipping.description4_access_500__verified", "Access 500+ verified suppliers across electronics, fashion, home goods, and more."), icon: "🌐", color: "purple" },
-        { id: "3", title: t(locale, "dropshipping.title5_automated_fulfillmen", "Automated Fulfillment"), description: t(locale, "dropshipping.description6_orders_are_automatic", "Orders are automatically routed to suppliers for fast processing and shipping."), icon: "⚡", color: "blue" },
-        { id: "4", title: t(locale, "dropshipping.title7_brand_customization", "Brand Customization"), description: t(locale, "dropshipping.description8_add_your_branding_to", "Add your branding to packaging, invoices, and shipping labels for a professional look."), icon: "🎨", color: "pink" },
-        { id: "5", title: t(locale, "dropshipping.title9_real_time_analytics", "Real-Time Analytics"), description: t(locale, "dropshipping.description10_track_sales__profits", "Track sales, profits, and inventory levels with comprehensive dashboards."), icon: "📊", color: "green" },
-        { id: "6", title: "24/7 Support", description: t(locale, "dropshipping.description11_dedicated_support_te", "Dedicated support team to help with orders, returns, and supplier issues."), icon: "🛟", color: "amber" },
+        { id: "1", title: "No Inventory Needed", description: "Sell products without stocking them. We handle warehousing and fulfillment for you.", icon: "📦", color: "violet" },
+        { id: "2", title: "Global Supplier Network", description: "Access 500+ verified suppliers across electronics, fashion, home goods, and more.", icon: "🌐", color: "purple" },
+        { id: "3", title: "Automated Fulfillment", description: "Orders are automatically routed to suppliers for fast processing and shipping.", icon: "⚡", color: "blue" },
+        { id: "4", title: "Brand Customization", description: "Add your branding to packaging, invoices, and shipping labels for a professional look.", icon: "🎨", color: "pink" },
+        { id: "5", title: "Real-Time Analytics", description: "Track sales, profits, and inventory levels with comprehensive dashboards.", icon: "📊", color: "green" },
+        { id: "6", title: "24/7 Support", description: "Dedicated support team to help with orders, returns, and supplier issues.", icon: "🛟", color: "amber" },
       ]
       const stats = [
-        { label: t(locale, "dropshipping.label_active_dropshippers", "Active Dropshippers"), value: "5,000+" },
-        { label: t(locale, "dropshipping.label_verified_suppliers", "Verified Suppliers"), value: "500+" },
-        { label: t(locale, "dropshipping.label_products_available", "Products Available"), value: "50,000+" },
-        { label: t(locale, "dropshipping.label_countries_shipped", "Countries Shipped"), value: "30+" },
+        { label: "Active Dropshippers", value: "5,000+" },
+        { label: "Verified Suppliers", value: "500+" },
+        { label: "Products Available", value: "50,000+" },
+        { label: "Countries Shipped", value: "30+" },
       ]
       const plans = [
         { name: "Starter", price: "Free", features: ["Up to 50 products", "Basic analytics", "Standard shipping", "Email support"], cta: "Start Free" },

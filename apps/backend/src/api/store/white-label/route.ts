@@ -52,7 +52,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         category: "Fashion",
         base_price: 19999,
         currency_code: "usd",
-        thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
+        thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
         status: "available",
         min_order_quantity: 200,
         lead_time: "8-12 weeks",

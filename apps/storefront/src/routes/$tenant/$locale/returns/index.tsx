@@ -14,16 +14,16 @@ export const Route = createFileRoute("/$tenant/$locale/returns/")({
   loader: async () => {
     try {
       const steps = [
-        { id: "1", title: t(locale, "returns.title1_initiate_return", "Initiate Return"), description: t(locale, "returns.description2_log_into_your_accoun", "Log into your account, go to 'My Orders', select the item, and click 'Return Item'. Fill in the reason for return."), icon: "📋" },
-        { id: "2", title: t(locale, "returns.title3_print_label", "Print Label"), description: t(locale, "returns.description4_download_and_print_t", "Download and print the prepaid return shipping label. Attach it securely to your package."), icon: "🏷️" },
-        { id: "3", title: t(locale, "returns.title5_ship_item", "Ship Item"), description: t(locale, "returns.description6_drop_off_the_package", "Drop off the package at any authorized shipping location or schedule a free pickup."), icon: "📦" },
-        { id: "4", title: t(locale, "returns.title7_get_refund", "Get Refund"), description: t(locale, "returns.description8_once_we_receive_and", "Once we receive and inspect the item, your refund is processed within 5-7 business days."), icon: "💰" },
+        { id: "1", title: "Initiate Return", description: "Log into your account, go to 'My Orders', select the item, and click 'Return Item'. Fill in the reason for return.", icon: "📋" },
+        { id: "2", title: "Print Label", description: "Download and print the prepaid return shipping label. Attach it securely to your package.", icon: "🏷️" },
+        { id: "3", title: "Ship Item", description: "Drop off the package at any authorized shipping location or schedule a free pickup.", icon: "📦" },
+        { id: "4", title: "Get Refund", description: "Once we receive and inspect the item, your refund is processed within 5-7 business days.", icon: "💰" },
       ]
       const policies = [
-        { title: "30-Day Return Window", description: t(locale, "returns.description9_most_items_can_be_re", "Most items can be returned within 30 days of delivery for a full refund.") },
-        { title: t(locale, "returns.title10_free_return_shipping", "Free Return Shipping"), description: t(locale, "returns.description11_we_provide_prepaid_r", "We provide prepaid return labels at no cost for all eligible returns.") },
-        { title: t(locale, "returns.title12_original_condition_r", "Original Condition Required"), description: t(locale, "returns.description13_items_must_be_unused", "Items must be unused, unworn, and in original packaging with all tags attached.") },
-        { title: t(locale, "returns.title14_non_returnable_items", "Non-Returnable Items"), description: t(locale, "returns.description15_perishable_goods__pe", "Perishable goods, personal care items, and custom orders cannot be returned.") },
+        { title: "30-Day Return Window", description: "Most items can be returned within 30 days of delivery for a full refund." },
+        { title: "Free Return Shipping", description: "We provide prepaid return labels at no cost for all eligible returns." },
+        { title: "Original Condition Required", description: "Items must be unused, unworn, and in original packaging with all tags attached." },
+        { title: "Non-Returnable Items", description: "Perishable goods, personal care items, and custom orders cannot be returned." },
       ]
       const faqs = [
         { id: "r1", question: "How long do I have to return an item?", answer: "You have 30 days from the delivery date to initiate a return for most items. Some categories like electronics have a 15-day window." },

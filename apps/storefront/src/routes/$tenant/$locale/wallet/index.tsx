@@ -14,19 +14,19 @@ export const Route = createFileRoute("/$tenant/$locale/wallet/")({
   loader: async () => {
     try {
       const features = [
-        { id: "1", name: "Top Up", description: t(locale, "wallet.description1_add_funds_to_your_wa", "Add funds to your wallet instantly via card, bank transfer, or Apple Pay."), icon: "plus-circle", color: "emerald" },
-        { id: "2", name: "Send Money", description: t(locale, "wallet.description2_transfer_funds_to_fr", "Transfer funds to friends, family, or other wallet users seamlessly."), icon: "arrow-right", color: "blue" },
-        { id: "3", name: "Transaction History", description: t(locale, "wallet.description3_view_detailed_record", "View detailed records of all your deposits, withdrawals, and transfers."), icon: "clock", color: "purple" },
-        { id: "4", name: "Rewards", description: t(locale, "wallet.description4_earn_cashback_and_lo", "Earn cashback and loyalty points on every transaction you make."), icon: "star", color: "amber" },
-        { id: "5", name: "Linked Cards", description: t(locale, "wallet.description5_connect_your_debit_o", "Connect your debit or credit cards for quick top-ups and payments."), icon: "credit-card", color: "rose" },
-        { id: "6", name: "Bill Payments", description: t(locale, "wallet.description6_pay_utility_bills__s", "Pay utility bills, subscriptions, and services directly from your wallet."), icon: "document", color: "teal" },
+        { id: "1", name: "Top Up", description: "Add funds to your wallet instantly via card, bank transfer, or Apple Pay.", icon: "plus-circle", color: "emerald" },
+        { id: "2", name: "Send Money", description: "Transfer funds to friends, family, or other wallet users seamlessly.", icon: "arrow-right", color: "blue" },
+        { id: "3", name: "Transaction History", description: "View detailed records of all your deposits, withdrawals, and transfers.", icon: "clock", color: "purple" },
+        { id: "4", name: "Rewards", description: "Earn cashback and loyalty points on every transaction you make.", icon: "star", color: "amber" },
+        { id: "5", name: "Linked Cards", description: "Connect your debit or credit cards for quick top-ups and payments.", icon: "credit-card", color: "rose" },
+        { id: "6", name: "Bill Payments", description: "Pay utility bills, subscriptions, and services directly from your wallet.", icon: "document", color: "teal" },
       ]
       const transactions = [
-        { id: "t1", description: t(locale, "wallet.description7_top_up_via_visa____4", "Top Up via Visa •••4521"), type: "credit", amount: 500, created_at: "2026-02-14T10:30:00Z" },
-        { id: "t2", description: t(locale, "wallet.description8_purchase_at_electron", "Purchase at Electronics Store"), type: "debit", amount: 129.99, created_at: "2026-02-13T15:20:00Z" },
-        { id: "t3", description: t(locale, "wallet.description9_cashback_reward", "Cashback Reward"), type: "credit", amount: 12.50, created_at: "2026-02-12T09:00:00Z" },
-        { id: "t4", description: t(locale, "wallet.description10_transfer_to_ahmed_m", "Transfer to Ahmed M."), type: "debit", amount: 200, created_at: "2026-02-11T14:45:00Z" },
-        { id: "t5", description: t(locale, "wallet.description11_refund___order__8821", "Refund - Order #8821"), type: "credit", amount: 75, created_at: "2026-02-10T11:15:00Z" },
+        { id: "t1", description: "Top Up via Visa •••4521", type: "credit", amount: 500, created_at: "2026-02-14T10:30:00Z" },
+        { id: "t2", description: "Purchase at Electronics Store", type: "debit", amount: 129.99, created_at: "2026-02-13T15:20:00Z" },
+        { id: "t3", description: "Cashback Reward", type: "credit", amount: 12.50, created_at: "2026-02-12T09:00:00Z" },
+        { id: "t4", description: "Transfer to Ahmed M.", type: "debit", amount: 200, created_at: "2026-02-11T14:45:00Z" },
+        { id: "t5", description: "Refund - Order #8821", type: "credit", amount: 75, created_at: "2026-02-10T11:15:00Z" },
       ]
       return { features, transactions, balance: 1258.51, currency: "SAR" }
     } catch {

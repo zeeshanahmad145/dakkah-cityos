@@ -48,7 +48,7 @@ const SEED_DATA = [
     id: "bundle-seed-4",
     name: "Smart Home Bundle",
     description: "Transform your home with smart speakers, smart plugs, LED bulbs, and a hub controller.",
-    thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&h=600&fit=crop",
     price: 24999,
     original_price: 34999,
     savings: 10000,

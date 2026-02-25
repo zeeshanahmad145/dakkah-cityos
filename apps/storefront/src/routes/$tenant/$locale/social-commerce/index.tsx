@@ -38,7 +38,7 @@ export const Route = createFileRoute("/$tenant/$locale/social-commerce/")({
           rating: item.rating || meta.rating || null,
           total_reviews: item.total_reviews || meta.total_reviews || 0,
           is_active: item.is_active !== false,
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
         }
       })

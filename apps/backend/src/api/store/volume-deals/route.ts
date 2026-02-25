@@ -18,7 +18,7 @@ const SEED_DATA = [
     name: "Reusable Shopping Bags",
     description: "Eco-friendly non-woven bags, full-color printing available. Perfect for retail promotions.",
     category: "retail",
-    thumbnail: "https://images.unsplash.com/photo-1591438252948-27968a843742?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&h=600&fit=crop",
     status: "active",
     tiers: [{ qty: "10+", min_quantity: 10, max_quantity: 49, discount_percentage: 20, price: 350 }, { qty: "50+", min_quantity: 50, max_quantity: 99, discount_percentage: 40, price: 250 }, { qty: "100+", min_quantity: 100, max_quantity: null, discount_percentage: 57, price: 150 }],
     max_savings: 57,

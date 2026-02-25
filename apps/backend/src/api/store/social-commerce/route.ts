@@ -20,7 +20,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 12900,
     likes: 18200,
     tags: ["fashion", "abayas", "streetwear", "saudi"],
-    thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
   },
   {
     id: "sc_002",
@@ -60,7 +60,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 35000,
     likes: 42100,
     tags: ["oud", "bakhoor", "perfume", "fragrance"],
-    thumbnail: "https://images.unsplash.com/photo-1594035910387-fea081e66b5d?w=800&h=600&fit=crop",
+    thumbnail: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800&h=600&fit=crop",
   },
   {
     id: "sc_004",

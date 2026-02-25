@@ -14,17 +14,17 @@ export const Route = createFileRoute("/$tenant/$locale/white-label/")({
   loader: async () => {
     try {
       const packages = [
-        { id: "1", name: "Starter", price: "999", period: "mo", description: t(locale, "whiteLabel.description1_essential_white_labe", "Essential white-label tools for small businesses launching their brand."), features: ["Custom domain", "Logo & color branding", "Up to 100 products", "Basic analytics", "Email support", "SSL certificate"], color: "gray", cta: "Get Started" },
-        { id: "2", name: "Business", price: "2,499", period: "mo", description: t(locale, "whiteLabel.description2_complete_branding_so", "Complete branding solution for growing businesses that need full customization."), features: ["Everything in Starter", "Up to 1,000 products", "Custom checkout flow", "Advanced analytics", "Priority support", "Custom email templates", "Mobile app branding"], color: "slate", cta: "Start Building", popular: true },
-        { id: "3", name: "Enterprise", price: "Custom", period: "", description: t(locale, "whiteLabel.description3_fully_tailored_solut", "Fully tailored solution for large organizations with dedicated infrastructure."), features: ["Everything in Business", "Unlimited products", "Dedicated infrastructure", "Custom integrations", "SLA guarantee", "Dedicated account team", "API access", "Multi-region deployment"], color: "dark", cta: "Contact Sales" },
+        { id: "1", name: "Starter", price: "999", period: "mo", description: "Essential white-label tools for small businesses launching their brand.", features: ["Custom domain", "Logo & color branding", "Up to 100 products", "Basic analytics", "Email support", "SSL certificate"], color: "gray", cta: "Get Started" },
+        { id: "2", name: "Business", price: "2,499", period: "mo", description: "Complete branding solution for growing businesses that need full customization.", features: ["Everything in Starter", "Up to 1,000 products", "Custom checkout flow", "Advanced analytics", "Priority support", "Custom email templates", "Mobile app branding"], color: "slate", cta: "Start Building", popular: true },
+        { id: "3", name: "Enterprise", price: "Custom", period: "", description: "Fully tailored solution for large organizations with dedicated infrastructure.", features: ["Everything in Business", "Unlimited products", "Dedicated infrastructure", "Custom integrations", "SLA guarantee", "Dedicated account team", "API access", "Multi-region deployment"], color: "dark", cta: "Contact Sales" },
       ]
       const features = [
-        { title: t(locale, "whiteLabel.title4_complete_brand_contr", "Complete Brand Control"), description: t(locale, "whiteLabel.description5_your_logo__colors__d", "Your logo, colors, domain, and identity — no trace of our platform visible to your customers."), icon: "🎨" },
-        { title: t(locale, "whiteLabel.title6_custom_storefront", "Custom Storefront"), description: t(locale, "whiteLabel.description7_fully_customizable_s", "Fully customizable storefront with your branding, layout preferences, and design language."), icon: "🏪" },
-        { title: t(locale, "whiteLabel.title8_branded_mobile_app", "Branded Mobile App"), description: t(locale, "whiteLabel.description9_launch_your_own_bran", "Launch your own branded mobile app on iOS and Android app stores."), icon: "📱" },
-        { title: t(locale, "whiteLabel.title10_payment_integration", "Payment Integration"), description: t(locale, "whiteLabel.description11_integrate_your_prefe", "Integrate your preferred payment gateways with your brand's checkout experience."), icon: "💳" },
-        { title: t(locale, "whiteLabel.title12_custom_analytics", "Custom Analytics"), description: t(locale, "whiteLabel.description13_white_labeled_dashbo", "White-labeled dashboards and reports with your branding for internal and client use."), icon: "📊" },
-        { title: t(locale, "whiteLabel.title14_api___integrations", "API & Integrations"), description: t(locale, "whiteLabel.description15_full_api_access_to_i", "Full API access to integrate with your existing systems, CRM, and ERP tools."), icon: "🔗" },
+        { title: "Complete Brand Control", description: "Your logo, colors, domain, and identity — no trace of our platform visible to your customers.", icon: "🎨" },
+        { title: "Custom Storefront", description: "Fully customizable storefront with your branding, layout preferences, and design language.", icon: "🏪" },
+        { title: "Branded Mobile App", description: "Launch your own branded mobile app on iOS and Android app stores.", icon: "📱" },
+        { title: "Payment Integration", description: "Integrate your preferred payment gateways with your brand's checkout experience.", icon: "💳" },
+        { title: "Custom Analytics", description: "White-labeled dashboards and reports with your branding for internal and client use.", icon: "📊" },
+        { title: "API & Integrations", description: "Full API access to integrate with your existing systems, CRM, and ERP tools.", icon: "🔗" },
       ]
       const comparisons = [
         { feature: "Custom Domain", starter: true, business: true, enterprise: true },

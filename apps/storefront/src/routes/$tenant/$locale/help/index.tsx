@@ -14,10 +14,10 @@ export const Route = createFileRoute("/$tenant/$locale/help/")({
   loader: async () => {
     try {
       const categories = [
-        { id: "1", name: "Orders", icon: "📦", description: t(locale, "help.description1_track_orders__order", "Track orders, order issues, cancellations, and modifications."), count: 24 },
-        { id: "2", name: "Payments", icon: "💳", description: t(locale, "help.description2_payment_methods__bil", "Payment methods, billing issues, refunds, and invoices."), count: 18 },
-        { id: "3", name: "Shipping", icon: "🚚", description: t(locale, "help.description3_delivery_times__trac", "Delivery times, tracking, international shipping, and fees."), count: 15 },
-        { id: "4", name: "Account", icon: "👤", description: t(locale, "help.description4_profile_settings__se", "Profile settings, security, notifications, and preferences."), count: 12 },
+        { id: "1", name: "Orders", icon: "📦", description: "Track orders, order issues, cancellations, and modifications.", count: 24 },
+        { id: "2", name: "Payments", icon: "💳", description: "Payment methods, billing issues, refunds, and invoices.", count: 18 },
+        { id: "3", name: "Shipping", icon: "🚚", description: "Delivery times, tracking, international shipping, and fees.", count: 15 },
+        { id: "4", name: "Account", icon: "👤", description: "Profile settings, security, notifications, and preferences.", count: 12 },
       ]
       const faqs = [
         { id: "f1", question: "How do I track my order?", answer: "You can track your order by visiting your account dashboard and clicking on 'My Orders'. Each order has a tracking number that you can use to see real-time delivery updates.", category: "Orders" },

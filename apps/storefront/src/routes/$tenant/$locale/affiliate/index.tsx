@@ -20,10 +20,10 @@ export const Route = createFileRoute("/$tenant/$locale/affiliate/")({
         { id: "4", name: "Partner", commission: "20%", requirement: "100+ sales/month", earnings: "Unlimited", color: "amber", features: ["White-label tools", "Custom integrations", "Daily payouts", "Strategic partnership"], icon: "👑" },
       ]
       const stats = [
-        { label: t(locale, "affiliate.label_active_affiliates", "Active Affiliates"), value: "2,500+" },
-        { label: t(locale, "affiliate.label_total_commissions_paid", "Total Commissions Paid"), value: "4.2M SAR" },
-        { label: t(locale, "affiliate.label_avg__monthly_earning", "Avg. Monthly Earning"), value: "1,680 SAR" },
-        { label: t(locale, "affiliate.label_products_available", "Products Available"), value: "10,000+" },
+        { label: "Active Affiliates", value: "2,500+" },
+        { label: "Total Commissions Paid", value: "4.2M SAR" },
+        { label: "Avg. Monthly Earning", value: "1,680 SAR" },
+        { label: "Products Available", value: "10,000+" },
       ]
       return { tiers, stats }
     } catch {
