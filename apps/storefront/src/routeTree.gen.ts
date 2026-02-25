@@ -82,6 +82,7 @@ import { Route as TenantLocaleConsignmentIndexRouteImport } from './routes/$tena
 import { Route as TenantLocaleConsignmentShopIndexRouteImport } from './routes/$tenant/$locale/consignment-shop/index'
 import { Route as TenantLocaleClassifiedsIndexRouteImport } from './routes/$tenant/$locale/classifieds/index'
 import { Route as TenantLocaleCharityIndexRouteImport } from './routes/$tenant/$locale/charity/index'
+import { Route as TenantLocaleCategoriesIndexRouteImport } from './routes/$tenant/$locale/categories/index'
 import { Route as TenantLocaleCampaignsIndexRouteImport } from './routes/$tenant/$locale/campaigns/index'
 import { Route as TenantLocaleBusinessIndexRouteImport } from './routes/$tenant/$locale/business/index'
 import { Route as TenantLocaleBundlesIndexRouteImport } from './routes/$tenant/$locale/bundles/index'
@@ -737,6 +738,12 @@ const TenantLocaleCharityIndexRoute =
   TenantLocaleCharityIndexRouteImport.update({
     id: '/charity/',
     path: '/charity/',
+    getParentRoute: () => TenantLocaleRoute,
+  } as any)
+const TenantLocaleCategoriesIndexRoute =
+  TenantLocaleCategoriesIndexRouteImport.update({
+    id: '/categories/',
+    path: '/categories/',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
 const TenantLocaleCampaignsIndexRoute =
@@ -2614,6 +2621,7 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/bundles': typeof TenantLocaleBundlesIndexRoute
   '/$tenant/$locale/business': typeof TenantLocaleBusinessIndexRoute
   '/$tenant/$locale/campaigns': typeof TenantLocaleCampaignsIndexRoute
+  '/$tenant/$locale/categories': typeof TenantLocaleCategoriesIndexRoute
   '/$tenant/$locale/charity': typeof TenantLocaleCharityIndexRoute
   '/$tenant/$locale/classifieds': typeof TenantLocaleClassifiedsIndexRoute
   '/$tenant/$locale/consignment-shop': typeof TenantLocaleConsignmentShopIndexRoute
@@ -2954,6 +2962,7 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/bundles': typeof TenantLocaleBundlesIndexRoute
   '/$tenant/$locale/business': typeof TenantLocaleBusinessIndexRoute
   '/$tenant/$locale/campaigns': typeof TenantLocaleCampaignsIndexRoute
+  '/$tenant/$locale/categories': typeof TenantLocaleCategoriesIndexRoute
   '/$tenant/$locale/charity': typeof TenantLocaleCharityIndexRoute
   '/$tenant/$locale/classifieds': typeof TenantLocaleClassifiedsIndexRoute
   '/$tenant/$locale/consignment-shop': typeof TenantLocaleConsignmentShopIndexRoute
@@ -3298,6 +3307,7 @@ export interface FileRoutesById {
   '/$tenant/$locale/bundles/': typeof TenantLocaleBundlesIndexRoute
   '/$tenant/$locale/business/': typeof TenantLocaleBusinessIndexRoute
   '/$tenant/$locale/campaigns/': typeof TenantLocaleCampaignsIndexRoute
+  '/$tenant/$locale/categories/': typeof TenantLocaleCategoriesIndexRoute
   '/$tenant/$locale/charity/': typeof TenantLocaleCharityIndexRoute
   '/$tenant/$locale/classifieds/': typeof TenantLocaleClassifiedsIndexRoute
   '/$tenant/$locale/consignment-shop/': typeof TenantLocaleConsignmentShopIndexRoute
@@ -3643,6 +3653,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/bundles'
     | '/$tenant/$locale/business'
     | '/$tenant/$locale/campaigns'
+    | '/$tenant/$locale/categories'
     | '/$tenant/$locale/charity'
     | '/$tenant/$locale/classifieds'
     | '/$tenant/$locale/consignment-shop'
@@ -3983,6 +3994,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/bundles'
     | '/$tenant/$locale/business'
     | '/$tenant/$locale/campaigns'
+    | '/$tenant/$locale/categories'
     | '/$tenant/$locale/charity'
     | '/$tenant/$locale/classifieds'
     | '/$tenant/$locale/consignment-shop'
@@ -4326,6 +4338,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/bundles/'
     | '/$tenant/$locale/business/'
     | '/$tenant/$locale/campaigns/'
+    | '/$tenant/$locale/categories/'
     | '/$tenant/$locale/charity/'
     | '/$tenant/$locale/classifieds/'
     | '/$tenant/$locale/consignment-shop/'
@@ -4902,6 +4915,13 @@ declare module '@tanstack/react-router' {
       path: '/charity'
       fullPath: '/$tenant/$locale/charity'
       preLoaderRoute: typeof TenantLocaleCharityIndexRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
+    '/$tenant/$locale/categories/': {
+      id: '/$tenant/$locale/categories/'
+      path: '/categories'
+      fullPath: '/$tenant/$locale/categories'
+      preLoaderRoute: typeof TenantLocaleCategoriesIndexRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
     '/$tenant/$locale/campaigns/': {
@@ -7156,6 +7176,7 @@ interface TenantLocaleRouteChildren {
   TenantLocaleBundlesIndexRoute: typeof TenantLocaleBundlesIndexRoute
   TenantLocaleBusinessIndexRoute: typeof TenantLocaleBusinessIndexRoute
   TenantLocaleCampaignsIndexRoute: typeof TenantLocaleCampaignsIndexRoute
+  TenantLocaleCategoriesIndexRoute: typeof TenantLocaleCategoriesIndexRoute
   TenantLocaleCharityIndexRoute: typeof TenantLocaleCharityIndexRoute
   TenantLocaleClassifiedsIndexRoute: typeof TenantLocaleClassifiedsIndexRoute
   TenantLocaleConsignmentShopIndexRoute: typeof TenantLocaleConsignmentShopIndexRoute
@@ -7510,6 +7531,7 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleBundlesIndexRoute: TenantLocaleBundlesIndexRoute,
   TenantLocaleBusinessIndexRoute: TenantLocaleBusinessIndexRoute,
   TenantLocaleCampaignsIndexRoute: TenantLocaleCampaignsIndexRoute,
+  TenantLocaleCategoriesIndexRoute: TenantLocaleCategoriesIndexRoute,
   TenantLocaleCharityIndexRoute: TenantLocaleCharityIndexRoute,
   TenantLocaleClassifiedsIndexRoute: TenantLocaleClassifiedsIndexRoute,
   TenantLocaleConsignmentShopIndexRoute: TenantLocaleConsignmentShopIndexRoute,

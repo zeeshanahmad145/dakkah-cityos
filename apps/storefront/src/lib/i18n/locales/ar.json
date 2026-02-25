@@ -3731,7 +3731,8 @@
   "categories": {
     "search_placeholder": "Search products...",
     "hero_title": "Browse Categories",
-    "hero_subtitle": "Find products across all categories"
+    "hero_subtitle": "Find products across all categories",
+    "title": "الفئات"
   },
   "auth": {
     "passwords_do_not_match": "كلمات المرور غير متطابقة",

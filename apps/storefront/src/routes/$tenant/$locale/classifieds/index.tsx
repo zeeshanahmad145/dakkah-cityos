@@ -89,9 +89,9 @@ function ClassifiedsPage() {
     return "bg-ds-destructive text-white"
   }
 
-  const listingTypeLabel = (t: string) => {
+  const listingTypeLabel = (type: string) => {
     const map: Record<string, string> = { sale: t(locale, 'verticals.for_sale'), wanted: "Wanted", trade: "Trade" }
-    return map[t] || t
+    return map[type] || type
   }
 
   return (

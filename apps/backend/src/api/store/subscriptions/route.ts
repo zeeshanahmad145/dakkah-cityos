@@ -17,23 +17,35 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (tenant_id) filters.tenant_id = tenant_id
     if (status) filters.status = status
     if (billing_interval) filters.billing_interval = billing_interval
-    if (search) filters.search = search
 
-    const customerId = req.auth_context?.actor_id
-    if (customerId) {
-      filters.customer_id = customerId
+    const plans = await mod.listSubscriptionPlans(filters, {
+      skip: Number(offset),
+      take: Number(limit),
+    })
+
+    const items = Array.isArray(plans) ? plans : []
+
+    if (search) {
+      const q = search.toLowerCase()
+      const filtered = items.filter((p: any) =>
+        (p.name || "").toLowerCase().includes(q) ||
+        (p.description || "").toLowerCase().includes(q)
+      )
+      return res.json({
+        subscriptions: filtered,
+        count: filtered.length,
+        limit: Number(limit),
+        offset: Number(offset),
+      })
     }
 
-    const [items, count] = await mod.listAndCountSubscriptions(filters, { skip: Number(offset), take: Number(limit) }).catch(() => [
-      mod.listSubscriptions(filters, { skip: Number(offset), take: Number(limit) }).then((r: any) => [r, Array.isArray(r) ? r.length : 0]),
-    ].flat())
     return res.json({
-      items: Array.isArray(items) ? items : [],
-      count: typeof count === "number" ? count : 0,
+      subscriptions: items,
+      count: items.length,
       limit: Number(limit),
       offset: Number(offset),
     })
   } catch (error: any) {
-    handleApiError(res, error, "STORE-SUBSCRIPTIONS")}
+    handleApiError(res, error, "STORE-SUBSCRIPTIONS")
+  }
 }
-
