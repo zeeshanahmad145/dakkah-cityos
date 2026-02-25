@@ -5,7 +5,7 @@ import { validateEnvironment, validateDatabaseConnection } from "./src/lib/env-v
 
 const logger = createLogger("instrumentation")
 
-export async function register() {
+export function register() {
   initGracefulShutdown()
 
   const envResult = validateEnvironment()
@@ -15,12 +15,17 @@ export async function register() {
     logger.error("Startup blocked: required environment variables are missing. See above.")
   }
 
-  const dbResult = await validateDatabaseConnection()
-  if (dbResult.connected) {
-    console.log(`[DB] Connected successfully — ${dbResult.tableCount} tables in public schema`)
-  } else {
-    console.error(`[DB] Connection FAILED: ${dbResult.error}`)
-  }
+  validateDatabaseConnection()
+    .then((dbResult) => {
+      if (dbResult.connected) {
+        console.log(`[DB] Connected successfully — ${dbResult.tableCount} tables in public schema`)
+      } else {
+        console.error(`[DB] Connection FAILED: ${dbResult.error}`)
+      }
+    })
+    .catch((err) => {
+      console.error(`[DB] Connection check error: ${err.message || err}`)
+    })
 
   const startupLog = {
     timestamp: new Date().toISOString(),
