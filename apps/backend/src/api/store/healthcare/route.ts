@@ -1,11 +1,12 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { enrichListItems } from "../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
     id: "health_seed_01",
     tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/government%2F1559839734-2b71ea197ec2.jpg",
+    thumbnail: "/seed-images/government/1559839734-2b71ea197ec2.jpg",
     name: "Amira Hassan",
     title: "Board Certified Cardiologist",
     specialization: "cardiology",
@@ -20,8 +21,8 @@ const SEED_DATA = [
     location: "Downtown Medical Center",
     rating: 4.9,
     metadata: {
-      thumbnail: "/seed-images/government%2F1559839734-2b71ea197ec2.jpg",
-      images: ["/seed-images/government%2F1559839734-2b71ea197ec2.jpg"],
+      thumbnail: "/seed-images/government/1559839734-2b71ea197ec2.jpg",
+      images: ["/seed-images/government/1559839734-2b71ea197ec2.jpg"],
       rating: 4.9,
       consultation_fee: 25000,
     },
@@ -30,7 +31,7 @@ const SEED_DATA = [
   {
     id: "health_seed_02",
     tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg",
+    thumbnail: "/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg",
     name: "David Kim",
     title: "Dermatology Specialist",
     specialization: "dermatology",
@@ -45,8 +46,8 @@ const SEED_DATA = [
     location: "Westside Skin Clinic",
     rating: 4.7,
     metadata: {
-      thumbnail: "/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg",
-      images: ["/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg"],
+      thumbnail: "/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg",
+      images: ["/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg"],
       rating: 4.7,
       consultation_fee: 20000,
     },
@@ -55,7 +56,7 @@ const SEED_DATA = [
   {
     id: "health_seed_03",
     tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
+    thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
     name: "Maria Santos",
     title: "Pediatrics & Child Development",
     specialization: "pediatrics",
@@ -70,8 +71,8 @@ const SEED_DATA = [
     location: "Family Health Center",
     rating: 4.9,
     metadata: {
-      thumbnail: "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
-      images: ["/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg"],
+      thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
+      images: ["/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg"],
       rating: 4.9,
       consultation_fee: 18000,
     },
@@ -80,7 +81,7 @@ const SEED_DATA = [
   {
     id: "health_seed_04",
     tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg",
+    thumbnail: "/seed-images/healthcare/1622253692010-333f2da6031d.jpg",
     name: "James Mitchell",
     title: "Orthopedic Surgeon",
     specialization: "orthopedics",
@@ -95,8 +96,8 @@ const SEED_DATA = [
     location: "Sports Medicine Institute",
     rating: 4.8,
     metadata: {
-      thumbnail: "/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg",
-      images: ["/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg"],
+      thumbnail: "/seed-images/healthcare/1622253692010-333f2da6031d.jpg",
+      images: ["/seed-images/healthcare/1622253692010-333f2da6031d.jpg"],
       rating: 4.8,
       consultation_fee: 30000,
     },
@@ -105,7 +106,7 @@ const SEED_DATA = [
   {
     id: "health_seed_05",
     tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
+    thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
     name: "Nadia Petrova",
     title: "Psychiatrist & Mental Health Expert",
     specialization: "psychiatry",
@@ -120,8 +121,8 @@ const SEED_DATA = [
     location: "Mind & Wellness Center",
     rating: 4.8,
     metadata: {
-      thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
-      images: ["/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg"],
+      thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
+      images: ["/seed-images/healthcare/1551836022-d5d88e9218df.jpg"],
       rating: 4.8,
       consultation_fee: 22000,
     },
@@ -163,7 +164,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       order: { created_at: "DESC" },
     })
 
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const raw = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const itemList = enrichListItems(raw, "healthcare")
 
     return res.json({
       items: itemList,

@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/grocery/")({
           id: s.id,
           name: meta.name || s.product_id || "Grocery Item",
           description: meta.description || meta.short_description || "",
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           price: meta.price || null,
           currency: meta.currency || "SAR",

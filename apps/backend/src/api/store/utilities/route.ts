@@ -10,7 +10,7 @@ const SEED_DATA = [
     monthly_cost: 12500,
     currency: "USD",
     status: "active",
-    thumbnail: "/seed-images/utilities%2F1450101499163-c8848c66ca85.jpg",
+    thumbnail: "/seed-images/utilities/1450101499163-c8848c66ca85.jpg",
   },
   {
     id: "utility-seed-2",
@@ -20,7 +20,7 @@ const SEED_DATA = [
     monthly_cost: 4500,
     currency: "USD",
     status: "active",
-    thumbnail: "/seed-images/utilities%2F1564013799919-ab600027ffc6.jpg",
+    thumbnail: "/seed-images/utilities/1564013799919-ab600027ffc6.jpg",
   },
   {
     id: "utility-seed-3",
@@ -30,7 +30,7 @@ const SEED_DATA = [
     monthly_cost: 8900,
     currency: "USD",
     status: "active",
-    thumbnail: "/seed-images/utilities%2F1559839734-2b71ea197ec2.jpg",
+    thumbnail: "/seed-images/utilities/1559839734-2b71ea197ec2.jpg",
   },
   {
     id: "utility-seed-4",
@@ -40,7 +40,7 @@ const SEED_DATA = [
     monthly_cost: 6999,
     currency: "USD",
     status: "active",
-    thumbnail: "/seed-images/utilities%2F1450101499163-c8848c66ca85.jpg",
+    thumbnail: "/seed-images/utilities/1450101499163-c8848c66ca85.jpg",
   },
   {
     id: "utility-seed-5",
@@ -50,7 +50,7 @@ const SEED_DATA = [
     monthly_cost: 3500,
     currency: "USD",
     status: "active",
-    thumbnail: "/seed-images/utilities%2F1564013799919-ab600027ffc6.jpg",
+    thumbnail: "/seed-images/utilities/1564013799919-ab600027ffc6.jpg",
   },
 ]
 

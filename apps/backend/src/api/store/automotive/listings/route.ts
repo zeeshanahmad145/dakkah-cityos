@@ -24,8 +24,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg",
   },
   {
     id: "auto_seed_2",
@@ -49,8 +49,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg",
   },
   {
     id: "auto_seed_3",
@@ -74,8 +74,8 @@ const SEED_DATA = [
     location_city: "Dammam",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
   },
   {
     id: "auto_seed_4",
@@ -99,8 +99,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg",
   },
   {
     id: "auto_seed_5",
@@ -124,8 +124,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg",
   },
 ]
 
@@ -135,7 +135,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const { limit = "20", offset = "0" } = req.query as Record<string, string | undefined>
     const filters: Record<string, any> = { status: "active" }
     const dbItems = await mod.listVehicleListings(filters, { skip: Number(offset), take: Number(limit) })
-    const items = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const rawItems = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const items = rawItems.map((item: any) => {
+      const thumb = item.thumbnail || item.metadata?.thumbnail || null
+      return { ...item, thumbnail: thumb ? thumb.replace(/%2F/gi, "/") : null }
+    })
     return res.json({ items, count: items.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-AUTOMOTIVE-LISTINGS")

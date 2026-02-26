@@ -4,7 +4,7 @@ import { handleApiError } from "../../../lib/api-error-handler"
 const SEED_DATA = [
   {
     id: "warranty-seed-1",
-    thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg",
+    thumbnail: "/seed-images/content/1454165804606-c3d57bc86b40.jpg",
     name: "Essential Protection Plan",
     description: "Basic warranty coverage for manufacturing defects and hardware failures. Ideal for everyday electronics.",
     plan_type: "basic",
@@ -15,11 +15,11 @@ const SEED_DATA = [
     is_active: true,
     price: 2999,
     rating: 4.2,
-    metadata: { thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg" },
+    metadata: { thumbnail: "/seed-images/content/1454165804606-c3d57bc86b40.jpg" },
   },
   {
     id: "warranty-seed-2",
-    thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg",
+    thumbnail: "/seed-images/government/1450101499163-c8848c66ca85.jpg",
     name: "Standard Care Plan",
     description: "Extended warranty with accidental damage protection. Covers drops, spills, and mechanical failures.",
     plan_type: "standard",
@@ -30,11 +30,11 @@ const SEED_DATA = [
     is_active: true,
     price: 5999,
     rating: 4.5,
-    metadata: { thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg" },
+    metadata: { thumbnail: "/seed-images/government/1450101499163-c8848c66ca85.jpg" },
   },
   {
     id: "warranty-seed-3",
-    thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg",
+    thumbnail: "/seed-images/warranties/1589829545856-d10d557cf95f.jpg",
     name: "Premium Shield Plan",
     description: "Comprehensive coverage including accidental damage, water damage, and theft protection with same-day replacement.",
     plan_type: "premium",
@@ -45,11 +45,11 @@ const SEED_DATA = [
     is_active: true,
     price: 9999,
     rating: 4.8,
-    metadata: { thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg" },
+    metadata: { thumbnail: "/seed-images/warranties/1589829545856-d10d557cf95f.jpg" },
   },
   {
     id: "warranty-seed-4",
-    thumbnail: "/seed-images/warranties%2F1506784983877-45594efa4cbe.jpg",
+    thumbnail: "/seed-images/warranties/1506784983877-45594efa4cbe.jpg",
     name: "Extended MaxCare",
     description: "Our longest warranty plan with 4 years of full coverage. Includes annual maintenance and priority repair service.",
     plan_type: "extended",
@@ -60,11 +60,11 @@ const SEED_DATA = [
     is_active: true,
     price: 14999,
     rating: 4.9,
-    metadata: { thumbnail: "/seed-images/warranties%2F1506784983877-45594efa4cbe.jpg" },
+    metadata: { thumbnail: "/seed-images/warranties/1506784983877-45594efa4cbe.jpg" },
   },
   {
     id: "warranty-seed-5",
-    thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg",
+    thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg",
     name: "Home Appliance Guard",
     description: "Specialized warranty for home appliances. Covers refrigerators, washers, dryers, and kitchen appliances.",
     plan_type: "standard",
@@ -75,7 +75,7 @@ const SEED_DATA = [
     is_active: true,
     price: 7999,
     rating: 4.4,
-    metadata: { thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg" },
+    metadata: { thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg" },
   },
 ]
 

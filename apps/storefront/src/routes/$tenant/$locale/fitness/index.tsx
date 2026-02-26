@@ -36,7 +36,7 @@ export const Route = createFileRoute("/$tenant/$locale/fitness/")({
           capacity: meta.capacity || c.capacity || c.max_capacity || null,
           price: meta.price || c.price || null,
           currency: meta.currency || c.currency || "USD",
-          thumbnail: meta.thumbnail || meta.image || c.image_url || c.thumbnail || null,
+          thumbnail: c.thumbnail || meta.thumbnail || meta.image || c.image_url || c.thumbnail || null,
           level: meta.level || c.level || null,
           rating: meta.rating || c.rating || null,
           review_count: meta.review_count || c.review_count || 0,

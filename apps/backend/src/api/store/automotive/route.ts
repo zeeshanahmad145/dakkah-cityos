@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { enrichListItems } from "../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -25,8 +26,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg",
   },
   {
     id: "auto_seed_2",
@@ -50,8 +51,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg",
   },
   {
     id: "auto_seed_3",
@@ -75,8 +76,8 @@ const SEED_DATA = [
     location_city: "Dammam",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
   },
   {
     id: "auto_seed_4",
@@ -100,8 +101,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg",
   },
   {
     id: "auto_seed_5",
@@ -125,8 +126,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg",
+    metadata: { thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg",
   },
 ]
 
@@ -187,7 +188,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (search) filters.search = search
 
     const dbItems = await mod.listVehicleListings(filters, { skip: Number(offset), take: Number(limit) })
-    const items = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const raw = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const items = enrichListItems(raw, "automotive")
     return res.json({
       items,
       count: items.length,

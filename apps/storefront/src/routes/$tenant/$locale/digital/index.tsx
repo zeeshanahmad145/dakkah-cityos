@@ -35,7 +35,7 @@ export const Route = createFileRoute("/$tenant/$locale/digital/")({
           version: item.version || meta.version || null,
           max_downloads: item.max_downloads || meta.max_downloads || null,
           is_active: item.is_active !== false,
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           price: meta.price || item.price || null,
           category: meta.category || item.category || null,

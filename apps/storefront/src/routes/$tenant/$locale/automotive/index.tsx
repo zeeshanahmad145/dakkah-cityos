@@ -36,7 +36,7 @@ export const Route = createFileRoute("/$tenant/$locale/automotive/")({
           transmission: s.transmission || null,
           body_type: s.body_type || null,
           listing_type: s.listing_type || null,
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           price: meta.price || null,
           currency: meta.currency || "SAR",

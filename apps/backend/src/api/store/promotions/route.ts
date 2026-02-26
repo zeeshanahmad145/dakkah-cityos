@@ -16,7 +16,7 @@ const SEED_PROMOTIONS = [
     usage_limit: 500,
     usage_count: 187,
     min_order_amount: 10000,
-    thumbnail: "/seed-images/flash-sales%2F1495474472287-4d71bcdd2085.jpg",
+    thumbnail: "/seed-images/flash-sales/1495474472287-4d71bcdd2085.jpg",
   },
   {
     id: "promo_002",
@@ -32,7 +32,7 @@ const SEED_PROMOTIONS = [
     usage_limit: 10000,
     usage_count: 3421,
     min_order_amount: 0,
-    thumbnail: "/seed-images/memberships%2F1441986300917-64674bd600d8.jpg",
+    thumbnail: "/seed-images/memberships/1441986300917-64674bd600d8.jpg",
   },
   {
     id: "promo_003",
@@ -48,7 +48,7 @@ const SEED_PROMOTIONS = [
     usage_limit: 0,
     usage_count: 8920,
     min_order_amount: 20000,
-    thumbnail: "/seed-images/consignments%2F1548036328-c9fa89d128fa.jpg",
+    thumbnail: "/seed-images/consignments/1548036328-c9fa89d128fa.jpg",
   },
   {
     id: "promo_004",
@@ -64,7 +64,7 @@ const SEED_PROMOTIONS = [
     usage_limit: 1000,
     usage_count: 342,
     min_order_amount: 0,
-    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
+    thumbnail: "/seed-images/social-commerce/1547887538-e3a2f32cb1cc.jpg",
   },
   {
     id: "promo_005",
@@ -80,7 +80,7 @@ const SEED_PROMOTIONS = [
     usage_limit: 2000,
     usage_count: 876,
     min_order_amount: 30000,
-    thumbnail: "/seed-images/charity%2F1469854523086-cc02fe5d8800.jpg",
+    thumbnail: "/seed-images/charity/1469854523086-cc02fe5d8800.jpg",
   },
 ]
 

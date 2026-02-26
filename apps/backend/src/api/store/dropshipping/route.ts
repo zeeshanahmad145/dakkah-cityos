@@ -12,7 +12,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "TechWave Supplies",
     shipping_time: "3-7 business days",
-    thumbnail: "/seed-images/auctions%2F1505740420928-5e560c06d30e.jpg",
+    thumbnail: "/seed-images/auctions/1505740420928-5e560c06d30e.jpg",
   },
   {
     id: "ds_002",
@@ -24,7 +24,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "EcoWear Global",
     shipping_time: "5-10 business days",
-    thumbnail: "/seed-images/crowdfunding%2F1560472355-536de3962603.jpg",
+    thumbnail: "/seed-images/crowdfunding/1560472355-536de3962603.jpg",
   },
   {
     id: "ds_003",
@@ -36,7 +36,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "BrightHome Co",
     shipping_time: "4-8 business days",
-    thumbnail: "/seed-images/bundles%2F1558002038-1055907df827.jpg",
+    thumbnail: "/seed-images/bundles/1558002038-1055907df827.jpg",
   },
   {
     id: "ds_004",
@@ -48,7 +48,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "ZenFit Supplies",
     shipping_time: "3-6 business days",
-    thumbnail: "/seed-images/affiliate%2F1544367567-0f2fcb009e0b.jpg",
+    thumbnail: "/seed-images/affiliate/1544367567-0f2fcb009e0b.jpg",
   },
   {
     id: "ds_005",
@@ -60,7 +60,7 @@ const SEED_DATA = [
     status: "approved",
     supplier: "HydroLife Direct",
     shipping_time: "2-5 business days",
-    thumbnail: "/seed-images/auctions%2F1523275335684-37898b6baf30.jpg",
+    thumbnail: "/seed-images/auctions/1523275335684-37898b6baf30.jpg",
   },
 ]
 

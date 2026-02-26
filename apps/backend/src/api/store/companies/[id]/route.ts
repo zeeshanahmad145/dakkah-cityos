@@ -14,7 +14,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0100",
     credit_limit: 50000000,
     credit_used: 12500000,
-    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
+    thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
     reviews: [
       { author: "John Mitchell", rating: 5, comment: "Excellent manufacturing partner. Consistently delivers quality products on time.", created_at: "2025-04-15T00:00:00Z" },
       { author: "Sarah Chen", rating: 4, comment: "Great communication and reliable supply chain. Highly recommended for bulk orders.", created_at: "2025-04-10T00:00:00Z" },
@@ -36,7 +36,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0200",
     credit_limit: 25000000,
     credit_used: 8200000,
-    thumbnail: "/seed-images/b2b%2F1504384308090-c894fdcc538d.jpg",
+    thumbnail: "/seed-images/b2b/1504384308090-c894fdcc538d.jpg",
     reviews: [
       { author: "Lisa Wang", rating: 5, comment: "TechStart transformed our digital infrastructure. Their cloud solutions are top-notch.", created_at: "2025-04-12T00:00:00Z" },
       { author: "James O'Brien", rating: 4, comment: "Responsive support team and modern technology stack. Great partner for startups.", created_at: "2025-04-08T00:00:00Z" },
@@ -58,7 +58,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0300",
     credit_limit: 100000000,
     credit_used: 45000000,
-    thumbnail: "/seed-images/consignments%2F1548036328-c9fa89d128fa.jpg",
+    thumbnail: "/seed-images/consignments/1548036328-c9fa89d128fa.jpg",
     reviews: [
       { author: "Ahmad Hassan", rating: 5, comment: "Global Logistics handles our international shipments flawlessly. Platinum service is unmatched.", created_at: "2025-04-14T00:00:00Z" },
       { author: "Catherine Moore", rating: 5, comment: "Their warehousing solutions saved us 30% on storage costs. Exceptional efficiency.", created_at: "2025-04-09T00:00:00Z" },
@@ -80,7 +80,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0400",
     credit_limit: 10000000,
     credit_used: 0,
-    thumbnail: "/seed-images/charity%2F1469571486292-0ba58a3f068b.jpg",
+    thumbnail: "/seed-images/charity/1469571486292-0ba58a3f068b.jpg",
     reviews: [
       { author: "Emily Green", rating: 5, comment: "Finally a supplier that takes sustainability seriously. Their biodegradable packaging is excellent.", created_at: "2025-04-11T00:00:00Z" },
       { author: "Tom Richards", rating: 4, comment: "Love the eco-friendly mission. Products are high quality and competitively priced.", created_at: "2025-04-06T00:00:00Z" },
@@ -102,7 +102,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0500",
     credit_limit: 75000000,
     credit_used: 22000000,
-    thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
+    thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
     reviews: [
       { author: "Dr. Rachel Adams", rating: 5, comment: "MediSupply is our primary vendor for clinical supplies. Reliable and FDA-compliant.", created_at: "2025-04-13T00:00:00Z" },
       { author: "Mark Johnson", rating: 5, comment: "Fast delivery of critical medical equipment. Their gold tier service is essential for hospitals.", created_at: "2025-04-07T00:00:00Z" },

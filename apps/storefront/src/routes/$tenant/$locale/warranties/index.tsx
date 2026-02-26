@@ -35,7 +35,7 @@ export const Route = createFileRoute("/$tenant/$locale/warranties/")({
           coverage: (() => { const c = item.coverage || meta.coverage; if (!c) return null; if (typeof c === 'string') return [c]; if (Array.isArray(c)) return c.map((x: any) => typeof x === 'string' ? x : String(x)); return Object.keys(c).filter((k: string) => c[k]); })(),
           exclusions: (() => { const e = item.exclusions || meta.exclusions; if (!e) return null; if (typeof e === 'string') return [e]; if (Array.isArray(e)) return e.map((x: any) => typeof x === 'string' ? x : String(x)); return Object.keys(e).filter((k: string) => e[k]); })(),
           is_active: item.is_active !== false,
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           price: meta.price || item.price || null,
           rating: meta.rating || item.rating || null,

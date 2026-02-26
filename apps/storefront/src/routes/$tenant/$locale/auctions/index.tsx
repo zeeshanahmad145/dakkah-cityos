@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/auctions/")({
           id: s.id,
           title: s.title || meta.title || "Untitled Auction",
           description: s.description || meta.description || "",
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           auction_type: s.auction_type || meta.auction_type || null,
           status: s.status || meta.status || null,

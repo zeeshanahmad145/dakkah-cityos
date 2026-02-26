@@ -35,7 +35,7 @@ export const Route = createFileRoute("/$tenant/$locale/legal/")({
           education: item.education || meta.education || null,
           experience_years: item.experience_years || meta.experience_years || 0,
           currency_code: item.currency_code || meta.currency_code || "USD",
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           rating: meta.rating || item.rating || null,
           hourly_rate: meta.hourly_rate || item.hourly_rate || null,

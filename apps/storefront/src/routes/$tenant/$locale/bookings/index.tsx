@@ -31,7 +31,7 @@ export const Route = createFileRoute("/$tenant/$locale/bookings/")({
           name: meta.name || s.product_id || "Untitled Service",
           description: meta.short_description || meta.description || "",
           fullDescription: meta.description || "",
-          thumbnail: meta.thumbnail || (meta.images && meta.images[0]) || null,
+          thumbnail: s.thumbnail || meta.thumbnail || (meta.images && meta.images[0]) || null,
           images: meta.images || [],
           price: meta.price || null,
           currency: meta.currency || "SAR",

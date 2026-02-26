@@ -12,7 +12,7 @@ const SEED_DATA = [
     deposit: 4999,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "/seed-images/auctions%2F1505740420928-5e560c06d30e.jpg",
+    thumbnail: "/seed-images/auctions/1505740420928-5e560c06d30e.jpg",
   },
   {
     id: "tby_002",
@@ -24,7 +24,7 @@ const SEED_DATA = [
     deposit: 9999,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg",
+    thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg",
   },
   {
     id: "tby_003",
@@ -36,7 +36,7 @@ const SEED_DATA = [
     deposit: 2499,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "/seed-images/bundles%2F1571019613454-1cb2f99b2d8b.jpg",
+    thumbnail: "/seed-images/bundles/1571019613454-1cb2f99b2d8b.jpg",
   },
   {
     id: "tby_004",
@@ -48,7 +48,7 @@ const SEED_DATA = [
     deposit: 3499,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "/seed-images/trade-in%2F1542291026-7eec264c27ff.jpg",
+    thumbnail: "/seed-images/trade-in/1542291026-7eec264c27ff.jpg",
   },
   {
     id: "tby_005",
@@ -60,7 +60,7 @@ const SEED_DATA = [
     deposit: 14999,
     currency_code: "usd",
     status: "approved",
-    thumbnail: "/seed-images/trade-in%2F1524758631624-e2822e304c36.jpg",
+    thumbnail: "/seed-images/trade-in/1524758631624-e2822e304c36.jpg",
   },
 ]
 

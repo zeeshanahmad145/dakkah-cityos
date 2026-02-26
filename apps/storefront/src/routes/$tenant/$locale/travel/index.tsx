@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/travel/")({
           id: s.id,
           name: s.name || meta.name || "Untitled Stay",
           description: s.description || meta.description || "",
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           property_type: s.property_type || meta.property_type || null,
           star_rating: s.star_rating || meta.star_rating || null,

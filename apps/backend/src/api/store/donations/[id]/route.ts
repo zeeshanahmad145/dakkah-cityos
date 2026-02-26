@@ -11,7 +11,7 @@ const SEED_DONATIONS = [
     category: "environment",
     status: "active",
     donor_count: 482,
-    thumbnail: "/seed-images/charity%2F1469571486292-0ba58a3f068b.jpg",
+    thumbnail: "/seed-images/charity/1469571486292-0ba58a3f068b.jpg",
     reviews: [
       { author: "Ahmed Al-Rashid", rating: 5, comment: "Transparent organization with real impact. Every donation is tracked and I can see the wells being built.", created_at: "2025-05-10T00:00:00Z" },
       { author: "Sarah Johnson", rating: 5, comment: "This initiative has already changed thousands of lives. Clean water is a basic human right.", created_at: "2025-05-05T00:00:00Z" },
@@ -30,7 +30,7 @@ const SEED_DONATIONS = [
     category: "education",
     status: "active",
     donor_count: 315,
-    thumbnail: "/seed-images/charity%2F1497486751825-1233686d5d80.jpg",
+    thumbnail: "/seed-images/charity/1497486751825-1233686d5d80.jpg",
     reviews: [
       { author: "Education First Trust", rating: 5, comment: "Outstanding program that has built 3 new schools this year. Every dollar makes a difference.", created_at: "2025-05-11T00:00:00Z" },
       { author: "Priya Sharma", rating: 5, comment: "Seeing children gain access to quality education is heartwarming. This fund delivers real results.", created_at: "2025-05-06T00:00:00Z" },
@@ -49,7 +49,7 @@ const SEED_DONATIONS = [
     category: "wildlife",
     status: "active",
     donor_count: 627,
-    thumbnail: "/seed-images/charity%2F1469854523086-cc02fe5d8800.jpg",
+    thumbnail: "/seed-images/charity/1469854523086-cc02fe5d8800.jpg",
     reviews: [
       { author: "Wildlife Alliance", rating: 5, comment: "Essential conservation work protecting endangered species. Anti-poaching efforts have saved countless animals.", created_at: "2025-05-10T00:00:00Z" },
       { author: "Peter Anderson", rating: 5, comment: "Habitat restoration work is visually documented and inspiring. Every hectare matters.", created_at: "2025-05-05T00:00:00Z" },
@@ -68,7 +68,7 @@ const SEED_DONATIONS = [
     category: "hunger",
     status: "active",
     donor_count: 1203,
-    thumbnail: "/seed-images/charity%2F1541544537156-7627a7a4aa1c.jpg",
+    thumbnail: "/seed-images/charity/1541544537156-7627a7a4aa1c.jpg",
     reviews: [
       { author: "Feed the Future Fund", rating: 5, comment: "Over 1 million meals served this year. One of the most efficient hunger relief programs.", created_at: "2025-05-13T00:00:00Z" },
       { author: "Hassan Al-Fahad", rating: 5, comment: "Farm partnerships ensure fresh, nutritious food reaches families. Brilliant approach.", created_at: "2025-05-09T00:00:00Z" },
@@ -87,7 +87,7 @@ const SEED_DONATIONS = [
     category: "disaster-relief",
     status: "active",
     donor_count: 2841,
-    thumbnail: "/seed-images/charity%2F1488521787991-ed7bbaae773c.jpg",
+    thumbnail: "/seed-images/charity/1488521787991-ed7bbaae773c.jpg",
     reviews: [
       { author: "Global Corp Foundation", rating: 5, comment: "Rapid deployment and efficient use of resources. Trusted disaster response partner.", created_at: "2025-05-12T00:00:00Z" },
       { author: "Lisa Martinez", rating: 5, comment: "They respond within hours of a disaster. Emergency supply kits save lives immediately.", created_at: "2025-05-08T00:00:00Z" },

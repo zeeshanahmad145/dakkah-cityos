@@ -33,7 +33,7 @@ export const Route = createFileRoute("/$tenant/$locale/pet-services/")({
           weight: item.weight || meta.weight || null,
           gender: item.gender || meta.gender || null,
           age: item.age || meta.age || null,
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           description: item.description || meta.description || "",
           color: item.color || meta.color || null,

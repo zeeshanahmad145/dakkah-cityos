@@ -14,7 +14,7 @@ const SEED_VEHICLES = [
     condition: "certified-pre-owned",
     description: "Well-maintained Toyota Camry Hybrid with excellent fuel economy, advanced safety features, and a comfortable interior. Perfect for daily commuting and family use.",
     features: ["Adaptive Cruise Control", "Lane Departure Warning", "Apple CarPlay", "Android Auto", "Heated Seats", "Backup Camera"],
-    thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg",
+    thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg",
     reviews: [
       { author: "Michael Torres", rating: 5, comment: "Best hybrid sedan on the market. Fuel economy is outstanding and the ride is smooth.", created_at: "2025-04-15T00:00:00Z" },
       { author: "Sarah Mitchell", rating: 4, comment: "Reliable and comfortable. The Camry Hybrid is perfect for my daily commute.", created_at: "2025-04-10T00:00:00Z" },
@@ -36,7 +36,7 @@ const SEED_VEHICLES = [
     condition: "new",
     description: "Brand new Tesla Model 3 with Long Range battery, Autopilot, and premium interior. Zero emissions driving with cutting-edge technology and over-the-air updates.",
     features: ["Autopilot", "Long Range Battery", "Premium Interior", "Glass Roof", "15-inch Touchscreen", "Sentry Mode"],
-    thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg",
+    thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg",
     reviews: [
       { author: "Alex Rivera", rating: 5, comment: "The future of driving is here. Autopilot and over-the-air updates keep getting better.", created_at: "2025-04-12T00:00:00Z" },
       { author: "Emma Watson", rating: 5, comment: "Incredible acceleration and zero emissions. The 15-inch touchscreen is amazing.", created_at: "2025-04-08T00:00:00Z" },
@@ -58,7 +58,7 @@ const SEED_VEHICLES = [
     condition: "certified-pre-owned",
     description: "Honda CR-V with low mileage and full service history. Spacious interior, Honda Sensing safety suite, and excellent reliability ratings make this the ideal family SUV.",
     features: ["Honda Sensing", "AWD", "Heated Seats", "Power Liftgate", "Wireless Charging", "Blind Spot Monitor"],
-    thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg",
+    thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg",
     reviews: [
       { author: "Patricia Garcia", rating: 5, comment: "Honda CR-V is the gold standard for compact SUVs. Spacious and fuel efficient.", created_at: "2025-04-14T00:00:00Z" },
       { author: "Brian Thompson", rating: 4, comment: "AWD handles great in all weather conditions. Power liftgate is super convenient.", created_at: "2025-04-09T00:00:00Z" },
@@ -80,7 +80,7 @@ const SEED_VEHICLES = [
     condition: "new",
     description: "All-new BMW X5 xDrive45e plug-in hybrid with M Sport package. Combining luxury, performance, and efficiency with electric-only range for daily driving.",
     features: ["M Sport Package", "Panoramic Sunroof", "Harman Kardon Audio", "Head-Up Display", "Parking Assistant Plus", "Gesture Control"],
-    thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg",
+    thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg",
     reviews: [
       { author: "Richard Martinez", rating: 5, comment: "The X5 hybrid is the perfect blend of luxury and efficiency. M Sport styling is aggressive.", created_at: "2025-04-13T00:00:00Z" },
       { author: "Diana Lee", rating: 5, comment: "Panoramic sunroof and Harman Kardon audio create an incredible driving experience.", created_at: "2025-04-07T00:00:00Z" },
@@ -102,7 +102,7 @@ const SEED_VEHICLES = [
     condition: "used",
     description: "Ford F-150 XLT with towing package, bed liner, and SYNC 4 infotainment. America's best-selling truck with proven capability and modern technology.",
     features: ["Towing Package", "Bed Liner", "SYNC 4", "Pro Trailer Backup Assist", "360-Degree Camera", "FordPass Connect"],
-    thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
+    thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
     reviews: [
       { author: "Jake Morrison", rating: 5, comment: "The F-150 is the ultimate work truck. Towing package handles my boat trailer effortlessly.", created_at: "2025-04-11T00:00:00Z" },
       { author: "Mike Johnson", rating: 4, comment: "SYNC 4 is a huge upgrade. Pro Trailer Backup Assist is worth its weight in gold.", created_at: "2025-04-06T00:00:00Z" },

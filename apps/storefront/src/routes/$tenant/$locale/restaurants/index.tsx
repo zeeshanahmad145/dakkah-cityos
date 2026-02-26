@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/restaurants/")({
           id: s.id,
           name: s.name || meta.name || "Untitled Restaurant",
           description: s.description || meta.description || "",
-          thumbnail: meta.thumbnail || meta.images?.[0] || meta.image_url || s.banner_url || s.logo_url || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || meta.image_url || s.banner_url || s.logo_url || null,
           images: meta.images || [],
           cuisine_type: s.cuisine_type || s.cuisine_types || meta.cuisine_type || null,
           city: s.city || meta.city || null,

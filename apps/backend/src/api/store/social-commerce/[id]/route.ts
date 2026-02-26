@@ -20,7 +20,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 12900,
     likes: 18200,
     tags: ["fashion", "abayas", "streetwear", "saudi"],
-    thumbnail: "/seed-images/affiliate%2F1483985988355-763728e1935b.jpg",
+    thumbnail: "/seed-images/affiliate/1483985988355-763728e1935b.jpg",
     reviews: [
       { rating: 5, author: "Lama S.", comment: "Amazing quality abayas! Fast shipping and great customer service." , created_at: "2024-08-15T00:00:00Z" },
       { rating: 4, author: "Hind K.", comment: "Beautiful designs. The streetwear collection is trendy and unique." , created_at: "2024-08-10T00:00:00Z" },
@@ -47,7 +47,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 7500,
     likes: 24500,
     tags: ["skincare", "beauty", "natural", "handmade"],
-    thumbnail: "/seed-images/bundles%2F1556228578-0d85b1a4d571.jpg",
+    thumbnail: "/seed-images/bundles/1556228578-0d85b1a4d571.jpg",
     reviews: [
       { rating: 5, author: "Sara H.", comment: "The natural ingredients made a huge difference for my skin!" , created_at: "2024-06-15T00:00:00Z" },
       { rating: 5, author: "Nouf B.", comment: "Best skincare brand I've tried. Love the Arabian botanical scents." , created_at: "2024-06-10T00:00:00Z" },
@@ -74,7 +74,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 35000,
     likes: 42100,
     tags: ["oud", "bakhoor", "perfume", "fragrance"],
-    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
+    thumbnail: "/seed-images/social-commerce/1547887538-e3a2f32cb1cc.jpg",
     reviews: [
       { rating: 5, author: "Mohammed A.", comment: "The oud quality is exceptional. Authentic and long-lasting fragrance." , created_at: "2024-05-15T00:00:00Z" },
       { rating: 5, author: "Abdullah R.", comment: "Best oud I've purchased online. Perfect for gifting." , created_at: "2024-05-10T00:00:00Z" },
@@ -101,7 +101,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 4500,
     likes: 8900,
     tags: ["sweets", "dates", "traditional", "gifts"],
-    thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg",
+    thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg",
     reviews: [
       { rating: 5, author: "Salma J.", comment: "The Eid gift boxes are beautiful and taste amazing!" , created_at: "2024-04-10T00:00:00Z" },
       { rating: 5, author: "Khadija N.", comment: "Authentic homemade sweets. Reminds me of my grandmother's recipes." , created_at: "2024-03-28T00:00:00Z" },
@@ -128,7 +128,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 9900,
     likes: 56700,
     tags: ["tech", "gadgets", "accessories", "electronics"],
-    thumbnail: "/seed-images/bundles%2F1519389950473-47ba0277781c.jpg",
+    thumbnail: "/seed-images/bundles/1519389950473-47ba0277781c.jpg",
     reviews: [
       { rating: 5, author: "Turki S.", comment: "Got the latest phone case at 50% off in the group buy. Amazing deal!" , created_at: "2024-02-28T00:00:00Z" },
       { rating: 4, author: "Yazeed K.", comment: "Good selection of gadgets. Fast delivery within Saudi." , created_at: "2024-02-20T00:00:00Z" },
@@ -155,7 +155,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 19900,
     likes: 12300,
     tags: ["fitness", "gym", "supplements", "sportswear"],
-    thumbnail: "/seed-images/bookings%2F1534438327276-14e5300c3a48.jpg",
+    thumbnail: "/seed-images/bookings/1534438327276-14e5300c3a48.jpg",
     reviews: [
       { rating: 5, author: "Rashid F.", comment: "Great quality gym equipment. The group buy saved me a lot!" , created_at: "2024-01-28T00:00:00Z" },
       { rating: 4, author: "Ali B.", comment: "Good supplements selection and competitive prices." , created_at: "2024-01-20T00:00:00Z" },
@@ -182,7 +182,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 24900,
     likes: 31500,
     tags: ["jewelry", "handmade", "gold", "accessories"],
-    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
+    thumbnail: "/seed-images/social-commerce/1547887538-e3a2f32cb1cc.jpg",
     reviews: [
       { rating: 5, author: "Lina A.", comment: "The craftsmanship is exquisite. Each piece feels truly unique." , created_at: "2023-12-28T00:00:00Z" },
       { rating: 5, author: "Ghada M.", comment: "Ordered a custom necklace and it exceeded my expectations." , created_at: "2023-12-20T00:00:00Z" },

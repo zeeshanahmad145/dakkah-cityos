@@ -10,21 +10,21 @@ const LOCALE_TO_COUNTRY: Record<string, string> = {
 }
 
 const categoryImages: Record<string, string> = {
-  "clothing": "/seed-images/content%2F1548013146-72479768bada.jpg",
-  "electronics": "/seed-images/content%2F1573164713988-8665fc963095.jpg",
-  "home-garden": "/seed-images/content%2F1519167758481-83f550bb49b3.jpg",
-  "food-beverage": "/seed-images/volume-deals%2F1504674900247-0877df9cc836.jpg",
-  "health-beauty": "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
-  "sports-outdoors": "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
-  "automotive": "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
-  "books-media": "/seed-images/education%2F1509062522246-3755977927d7.jpg",
-  "toys-games": "/seed-images/content%2F1558171813-4c088753af8f.jpg",
-  "jewelry": "/seed-images/content%2F1578662996442-48f60103fc96.jpg",
-  "pets": "/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg",
-  "office-supplies": "/seed-images/b2b%2F1504384308090-c894fdcc538d.jpg",
-  "real-estate": "/seed-images/real-estate%2F1600585154340-be6161a56a0c.jpg",
-  "travel": "/seed-images/event-ticketing%2F1488646953014-85cb44e25828.jpg",
-  "education": "/seed-images/education%2F1503676260728-1c00da094a0b.jpg",
+  "clothing": "/seed-images/content/1548013146-72479768bada.jpg",
+  "electronics": "/seed-images/content/1573164713988-8665fc963095.jpg",
+  "home-garden": "/seed-images/content/1519167758481-83f550bb49b3.jpg",
+  "food-beverage": "/seed-images/volume-deals/1504674900247-0877df9cc836.jpg",
+  "health-beauty": "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
+  "sports-outdoors": "/seed-images/events/1501281668745-f7f57925c3b4.jpg",
+  "automotive": "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
+  "books-media": "/seed-images/education/1509062522246-3755977927d7.jpg",
+  "toys-games": "/seed-images/content/1558171813-4c088753af8f.jpg",
+  "jewelry": "/seed-images/content/1578662996442-48f60103fc96.jpg",
+  "pets": "/seed-images/pet-services/1587300003388-59208cc962cb.jpg",
+  "office-supplies": "/seed-images/b2b/1504384308090-c894fdcc538d.jpg",
+  "real-estate": "/seed-images/real-estate/1600585154340-be6161a56a0c.jpg",
+  "travel": "/seed-images/event-ticketing/1488646953014-85cb44e25828.jpg",
+  "education": "/seed-images/education/1503676260728-1c00da094a0b.jpg",
 }
 
 function getCategoryImage(handle: string, name: string): string {
@@ -33,7 +33,7 @@ function getCategoryImage(handle: string, name: string): string {
   for (const [key, url] of Object.entries(categoryImages)) {
     if (lowerName.includes(key.split("-")[0])) return url
   }
-  return "/seed-images/content%2F1682687220742-aba13b6e50ba.jpg"
+  return "/seed-images/content/1682687220742-aba13b6e50ba.jpg"
 }
 
 export const Route = createFileRoute("/$tenant/$locale/categories/")({

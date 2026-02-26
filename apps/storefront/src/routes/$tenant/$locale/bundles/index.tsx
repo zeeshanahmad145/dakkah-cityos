@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/bundles/")({
           id: b.id,
           name: meta.name || b.name || b.title || "Untitled Bundle",
           description: meta.description || b.description || "",
-          thumbnail: meta.thumbnail || meta.image || (meta.images && meta.images[0]) || b.thumbnail || null,
+          thumbnail: b.thumbnail || meta.thumbnail || meta.image || (meta.images && meta.images[0]) || b.thumbnail || null,
           images: meta.images || b.images || [],
           price: meta.price || b.price || null,
           original_price: meta.original_price || b.original_price || null,

@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/events/")({
           id: s.id,
           title: s.title || s.name || meta.title || "Untitled Event",
           description: s.description || meta.description || "",
-          thumbnail: meta.thumbnail || meta.images?.[0] || meta.image_url || s.image_url || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || meta.image_url || s.image_url || null,
           images: meta.images || [],
           event_type: s.event_type || meta.event_type || null,
           venue: s.venue || meta.venue || null,

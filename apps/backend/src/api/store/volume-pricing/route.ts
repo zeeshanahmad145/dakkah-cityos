@@ -5,7 +5,7 @@ import { handleApiError } from "../../../lib/api-error-handler"
 const SEED_RULES = [
   {
     id: "vp-seed-1",
-    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
+    thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
     name: "Bulk Office Supplies Discount",
     description: "Volume-based pricing for office supply orders.",
     applies_to: "product",
@@ -19,7 +19,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-2",
-    thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
+    thumbnail: "/seed-images/b2b/1551288049-bebda4e38f71.jpg",
     name: "Wholesale Electronics Pricing",
     description: "Tiered pricing for electronics resellers.",
     applies_to: "product",
@@ -33,7 +33,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-3",
-    thumbnail: "/seed-images/b2b%2F1519494026892-80bbd2d6fd0d.jpg",
+    thumbnail: "/seed-images/b2b/1519494026892-80bbd2d6fd0d.jpg",
     name: "Raw Materials Volume Pricing",
     description: "Industrial raw material pricing tiers.",
     applies_to: "product",
@@ -47,7 +47,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-4",
-    thumbnail: "/seed-images/b2b%2F1606787366850-de6330128bfc.jpg",
+    thumbnail: "/seed-images/b2b/1606787366850-de6330128bfc.jpg",
     name: "Food Service Bulk Rates",
     description: "Special pricing for restaurants and catering companies.",
     applies_to: "category",
@@ -60,7 +60,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-5",
-    thumbnail: "/seed-images/b2b%2F1497435334941-8c899ee9e8e9.jpg",
+    thumbnail: "/seed-images/b2b/1497435334941-8c899ee9e8e9.jpg",
     name: "Apparel Wholesale Tiers",
     description: "Volume pricing for fashion retailers and boutiques.",
     applies_to: "product",

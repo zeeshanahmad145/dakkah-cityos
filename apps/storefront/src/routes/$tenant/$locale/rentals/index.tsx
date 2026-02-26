@@ -36,7 +36,7 @@ export const Route = createFileRoute("/$tenant/$locale/rentals/")({
           is_available: item.is_available !== false,
           condition_on_listing: item.condition_on_listing || meta.condition || null,
           total_rentals: item.total_rentals || meta.total_rentals || 0,
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           price: meta.price || item.price || null,
           category: meta.category || item.category || null,

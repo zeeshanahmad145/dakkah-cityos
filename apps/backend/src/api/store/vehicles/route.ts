@@ -12,7 +12,7 @@ const SEED_DATA = [
     fuel_type: "hybrid",
     transmission: "automatic",
     condition: "certified-pre-owned",
-    thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg",
+    thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg",
   },
   {
     id: "vehicle-seed-2",
@@ -25,7 +25,7 @@ const SEED_DATA = [
     fuel_type: "electric",
     transmission: "automatic",
     condition: "new",
-    thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg",
+    thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg",
   },
   {
     id: "vehicle-seed-3",
@@ -38,7 +38,7 @@ const SEED_DATA = [
     fuel_type: "gasoline",
     transmission: "automatic",
     condition: "certified-pre-owned",
-    thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg",
+    thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg",
   },
   {
     id: "vehicle-seed-4",
@@ -51,7 +51,7 @@ const SEED_DATA = [
     fuel_type: "hybrid",
     transmission: "automatic",
     condition: "new",
-    thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg",
+    thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg",
   },
   {
     id: "vehicle-seed-5",
@@ -64,7 +64,7 @@ const SEED_DATA = [
     fuel_type: "gasoline",
     transmission: "automatic",
     condition: "used",
-    thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
+    thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
   },
 ]
 

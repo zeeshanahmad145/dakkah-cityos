@@ -2,7 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 
 const SEED_GIFT_CARDS = [
   {
-    id: "gc-1", name: "Birthday Celebration", theme: "birthday", thumbnail: "/seed-images/gift-cards%2F1558636508-e0db3814bd1d.jpg", denominations: [25, 50, 100, 200], message_preview: "Wishing you a wonderful birthday filled with joy!", description: "Colorful birthday-themed gift card with balloons and confetti design", remaining_value: 100, is_active: true,
+    id: "gc-1", name: "Birthday Celebration", theme: "birthday", thumbnail: "/seed-images/gift-cards/1558636508-e0db3814bd1d.jpg", denominations: [25, 50, 100, 200], message_preview: "Wishing you a wonderful birthday filled with joy!", description: "Colorful birthday-themed gift card with balloons and confetti design", remaining_value: 100, is_active: true,
     reviews: [
       { author: "Jessica M.", rating: 5, comment: "Perfect birthday gift for my niece! She loved the colorful design and picked out exactly what she wanted.", created_at: "2025-04-10T12:00:00Z" },
       { author: "Andrew P.", rating: 5, comment: "Easy to purchase and send. The birthday theme was festive and my friend was thrilled to receive it.", created_at: "2025-03-28T15:30:00Z" },
@@ -12,7 +12,7 @@ const SEED_GIFT_CARDS = [
     ],
   },
   {
-    id: "gc-2", name: "Wedding Wishes", theme: "wedding", thumbnail: "/seed-images/gift-cards%2F1519741497674-611481863552.jpg", denominations: [50, 100, 250, 500], message_preview: "Congratulations on your special day!", description: "Elegant wedding gift card with floral accents", remaining_value: 250, is_active: true,
+    id: "gc-2", name: "Wedding Wishes", theme: "wedding", thumbnail: "/seed-images/gift-cards/1519741497674-611481863552.jpg", denominations: [50, 100, 250, 500], message_preview: "Congratulations on your special day!", description: "Elegant wedding gift card with floral accents", remaining_value: 250, is_active: true,
     reviews: [
       { author: "Stephanie B.", rating: 5, comment: "Such an elegant design for a wedding gift. The couple appreciated being able to choose their own gift.", created_at: "2025-04-08T10:00:00Z" },
       { author: "Michael C.", rating: 5, comment: "The floral design is beautiful and appropriate for a wedding. Higher denominations make it a generous gift.", created_at: "2025-03-25T13:00:00Z" },
@@ -22,7 +22,7 @@ const SEED_GIFT_CARDS = [
     ],
   },
   {
-    id: "gc-3", name: "Holiday Cheer", theme: "holiday", thumbnail: "/seed-images/gift-cards%2F1559056199-641a0ac8b55e.jpg", denominations: [25, 50, 100], message_preview: "Happy Holidays! Enjoy this gift from the heart.", description: "Festive holiday design with snowflakes and warm colors", remaining_value: 50, is_active: true,
+    id: "gc-3", name: "Holiday Cheer", theme: "holiday", thumbnail: "/seed-images/gift-cards/1559056199-641a0ac8b55e.jpg", denominations: [25, 50, 100], message_preview: "Happy Holidays! Enjoy this gift from the heart.", description: "Festive holiday design with snowflakes and warm colors", remaining_value: 50, is_active: true,
     reviews: [
       { author: "Robert K.", rating: 5, comment: "Bought these for all my coworkers during the holidays. The festive design was perfect and everyone loved them.", created_at: "2025-04-05T14:00:00Z" },
       { author: "Linda M.", rating: 4, comment: "Great stocking stuffer idea. The snowflake design is beautiful. Wish there was a $10 denomination too.", created_at: "2025-03-20T10:00:00Z" },
@@ -32,7 +32,7 @@ const SEED_GIFT_CARDS = [
     ],
   },
   {
-    id: "gc-4", name: "Thank You", theme: "thank_you", thumbnail: "/seed-images/gift-cards%2F1606293926075-69a00dbfde81.jpg", denominations: [10, 25, 50, 100], message_preview: "Thank you for being amazing!", description: "Heartfelt thank you card with elegant typography", remaining_value: 25, is_active: true,
+    id: "gc-4", name: "Thank You", theme: "thank_you", thumbnail: "/seed-images/gift-cards/1606293926075-69a00dbfde81.jpg", denominations: [10, 25, 50, 100], message_preview: "Thank you for being amazing!", description: "Heartfelt thank you card with elegant typography", remaining_value: 25, is_active: true,
     reviews: [
       { author: "Amanda T.", rating: 5, comment: "Sent this to my mentor as a thank you. The message and design perfectly conveyed my gratitude.", created_at: "2025-04-09T11:00:00Z" },
       { author: "Brian J.", rating: 5, comment: "Love the elegant typography. Used these to thank volunteers at our event. They were genuinely touched.", created_at: "2025-03-26T09:30:00Z" },
@@ -42,7 +42,7 @@ const SEED_GIFT_CARDS = [
     ],
   },
   {
-    id: "gc-5", name: "Graduation Achievement", theme: "graduate", thumbnail: "/seed-images/gift-cards%2F1602028915047-37269d1a73f7.jpg", denominations: [50, 100, 200, 500], message_preview: "Congratulations, Graduate! The future is yours!", description: "Graduation-themed card celebrating academic achievement", remaining_value: 200, is_active: true,
+    id: "gc-5", name: "Graduation Achievement", theme: "graduate", thumbnail: "/seed-images/gift-cards/1602028915047-37269d1a73f7.jpg", denominations: [50, 100, 200, 500], message_preview: "Congratulations, Graduate! The future is yours!", description: "Graduation-themed card celebrating academic achievement", remaining_value: 200, is_active: true,
     reviews: [
       { author: "Patricia L.", rating: 5, comment: "Gave this to my daughter for her college graduation. She used it to buy things for her new apartment.", created_at: "2025-04-11T16:00:00Z" },
       { author: "George H.", rating: 5, comment: "The graduation theme is celebratory and the higher denomination options make it a meaningful gift.", created_at: "2025-03-30T12:00:00Z" },

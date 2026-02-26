@@ -34,7 +34,7 @@ export const Route = createFileRoute("/$tenant/$locale/healthcare/")({
           education: typeof (item.education || meta.education) === 'string' ? (item.education || meta.education) : Array.isArray(item.education || meta.education) ? (item.education || meta.education).map((e: any) => typeof e === 'string' ? e : (e.degree || e.institution || '')).join(', ') : null,
           experience_years: item.experience_years || meta.experience_years || 0,
           languages: item.languages || meta.languages || [],
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: item.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           rating: meta.rating || item.rating || null,
           consultation_fee: meta.consultation_fee || item.consultation_fee || null,

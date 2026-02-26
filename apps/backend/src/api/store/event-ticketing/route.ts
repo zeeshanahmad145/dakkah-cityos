@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { enrichListItems } from "../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -14,7 +15,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 250,
     status: "published",
-    thumbnail: "/seed-images/event-ticketing%2F1488646953014-85cb44e25828.jpg",
+    thumbnail: "/seed-images/event-ticketing/1488646953014-85cb44e25828.jpg",
   },
   {
     id: "et_002",
@@ -28,7 +29,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 500,
     status: "published",
-    thumbnail: "/seed-images/bookings%2F1534438327276-14e5300c3a48.jpg",
+    thumbnail: "/seed-images/bookings/1534438327276-14e5300c3a48.jpg",
   },
   {
     id: "et_003",
@@ -42,7 +43,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 120,
     status: "published",
-    thumbnail: "/seed-images/event-ticketing%2F1507525428034-b723cf961d3e.jpg",
+    thumbnail: "/seed-images/event-ticketing/1507525428034-b723cf961d3e.jpg",
   },
   {
     id: "et_004",
@@ -56,7 +57,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 1000,
     status: "published",
-    thumbnail: "/seed-images/bundles%2F1519389950473-47ba0277781c.jpg",
+    thumbnail: "/seed-images/bundles/1519389950473-47ba0277781c.jpg",
   },
   {
     id: "et_005",
@@ -70,7 +71,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 350,
     status: "published",
-    thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg",
+    thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg",
   },
 ]
 
@@ -83,7 +84,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (event_type) filters.event_type = event_type
     filters.status = "published"
     const items = await moduleService.listEvents(filters, { skip: Number(offset), take: Number(limit) })
-    const results = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const raw = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const results = enrichListItems(raw, "event-ticketing")
     return res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
     return res.json({ items: SEED_DATA, count: SEED_DATA.length, limit: 20, offset: 0 })

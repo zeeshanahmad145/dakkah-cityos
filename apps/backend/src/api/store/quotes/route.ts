@@ -13,7 +13,7 @@ const SEED_QUOTES = [
     currency: "USD",
     items_count: 12,
     created_at: "2026-02-10T09:00:00Z",
-    thumbnail: "/seed-images/quotes%2F1504384308090-c894fdcc538d.jpg",
+    thumbnail: "/seed-images/quotes/1504384308090-c894fdcc538d.jpg",
   },
   {
     id: "quote-seed-2",
@@ -24,7 +24,7 @@ const SEED_QUOTES = [
     currency: "USD",
     items_count: 8,
     created_at: "2026-02-08T14:30:00Z",
-    thumbnail: "/seed-images/quotes%2F1551288049-bebda4e38f71.jpg",
+    thumbnail: "/seed-images/quotes/1551288049-bebda4e38f71.jpg",
   },
   {
     id: "quote-seed-3",
@@ -35,7 +35,7 @@ const SEED_QUOTES = [
     currency: "USD",
     items_count: 25,
     created_at: "2026-02-05T11:00:00Z",
-    thumbnail: "/seed-images/quotes%2F1519494026892-80bbd2d6fd0d.jpg",
+    thumbnail: "/seed-images/quotes/1519494026892-80bbd2d6fd0d.jpg",
   },
   {
     id: "quote-seed-4",
@@ -46,7 +46,7 @@ const SEED_QUOTES = [
     currency: "USD",
     items_count: 15,
     created_at: "2026-02-03T08:00:00Z",
-    thumbnail: "/seed-images/quotes%2F1504384308090-c894fdcc538d.jpg",
+    thumbnail: "/seed-images/quotes/1504384308090-c894fdcc538d.jpg",
   },
   {
     id: "quote-seed-5",
@@ -57,7 +57,7 @@ const SEED_QUOTES = [
     currency: "USD",
     items_count: 6,
     created_at: "2026-01-28T16:00:00Z",
-    thumbnail: "/seed-images/quotes%2F1551288049-bebda4e38f71.jpg",
+    thumbnail: "/seed-images/quotes/1551288049-bebda4e38f71.jpg",
   },
 ]
 

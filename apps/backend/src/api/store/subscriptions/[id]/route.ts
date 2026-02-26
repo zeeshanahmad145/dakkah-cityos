@@ -11,7 +11,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["1 Storefront", "Basic Analytics", "Email Support", "5 Products"],
-    thumbnail: "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
+    thumbnail: "/seed-images/content/1460925895917-afdab827c52f.jpg",
     included: ["Single storefront setup", "Basic sales dashboard", "Email support (48h response)", "Up to 5 product listings", "Standard checkout flow"],
     faq: [
       { question: "Can I upgrade my plan later?", answer: "Yes, you can upgrade to any higher plan at any time. Your billing will be prorated for the remaining period." },
@@ -36,7 +36,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["3 Storefronts", "Advanced Analytics", "Priority Support", "50 Products", "Multi-Vertical"],
-    thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
+    thumbnail: "/seed-images/b2b/1551288049-bebda4e38f71.jpg",
     included: ["Up to 3 storefronts", "Advanced analytics & reports", "Priority email & chat support", "Up to 50 product listings", "Multi-vertical commerce support"],
     faq: [
       { question: "What verticals are supported?", answer: "District supports all CityOS verticals including retail, food, services, bookings, and more." },
@@ -61,7 +61,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["Unlimited Storefronts", "Custom Analytics", "Dedicated Support", "Unlimited Products", "API Access", "Custom Domain"],
-    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
+    thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
     included: ["Unlimited storefronts & products", "Custom analytics dashboards", "Dedicated account manager", "Full API access & webhooks", "Custom domain support"],
     faq: [
       { question: "Do I get a dedicated account manager?", answer: "Yes, Metro plan customers receive a dedicated account manager for personalized onboarding and ongoing support." },
@@ -86,7 +86,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["White-Label", "SLA Guarantee", "On-Premise Option", "Unlimited Everything", "24/7 Phone Support", "Custom Development"],
-    thumbnail: "/seed-images/parking%2F1497366216548-37526070297c.jpg",
+    thumbnail: "/seed-images/parking/1497366216548-37526070297c.jpg",
     included: ["Full white-label customization", "99.99% SLA guarantee", "On-premise deployment option", "Unlimited everything", "24/7 phone & dedicated support"],
     faq: [
       { question: "What does white-label include?", answer: "Full white-label includes custom branding, domain, emails, and complete removal of CityOS branding." },

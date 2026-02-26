@@ -21,8 +21,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "General Entertainment Authority",
     tags: ["entertainment", "music", "food", "culture"],
-    image_url: "/seed-images/events%2F1540575467063-178a50c2df87.jpg",
-    thumbnail: "/seed-images/events%2F1540575467063-178a50c2df87.jpg",
+    image_url: "/seed-images/events/1540575467063-178a50c2df87.jpg",
+    thumbnail: "/seed-images/events/1540575467063-178a50c2df87.jpg",
   },
   {
     id: "evt_002",
@@ -43,8 +43,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Ministry of Communications and IT",
     tags: ["technology", "innovation", "startup", "ai"],
-    image_url: "/seed-images/events%2F1505373877841-8d25f7d46678.jpg",
-    thumbnail: "/seed-images/events%2F1505373877841-8d25f7d46678.jpg",
+    image_url: "/seed-images/events/1505373877841-8d25f7d46678.jpg",
+    thumbnail: "/seed-images/events/1505373877841-8d25f7d46678.jpg",
   },
   {
     id: "evt_003",
@@ -65,8 +65,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Jeddah Entertainment Co.",
     tags: ["music", "jazz", "live", "concert"],
-    image_url: "/seed-images/events%2F1514525253161-7a46d19cd819.jpg",
-    thumbnail: "/seed-images/events%2F1514525253161-7a46d19cd819.jpg",
+    image_url: "/seed-images/events/1514525253161-7a46d19cd819.jpg",
+    thumbnail: "/seed-images/events/1514525253161-7a46d19cd819.jpg",
   },
   {
     id: "evt_004",
@@ -87,8 +87,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Saudi Culinary Association",
     tags: ["food", "cooking", "culture", "family"],
-    image_url: "/seed-images/events%2F1555939594-58d7cb561ad1.jpg",
-    thumbnail: "/seed-images/events%2F1555939594-58d7cb561ad1.jpg",
+    image_url: "/seed-images/events/1555939594-58d7cb561ad1.jpg",
+    thumbnail: "/seed-images/events/1555939594-58d7cb561ad1.jpg",
   },
   {
     id: "evt_005",
@@ -109,8 +109,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Royal Commission for AlUla",
     tags: ["art", "culture", "heritage", "exhibition"],
-    image_url: "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
-    thumbnail: "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
+    image_url: "/seed-images/events/1501281668745-f7f57925c3b4.jpg",
+    thumbnail: "/seed-images/events/1501281668745-f7f57925c3b4.jpg",
   },
   {
     id: "evt_006",
@@ -131,8 +131,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Saudi Motorsport Company",
     tags: ["sports", "racing", "adventure", "motorsport"],
-    image_url: "/seed-images/events%2F1568605117036-5fe5e7bab0b7.jpg",
-    thumbnail: "/seed-images/events%2F1568605117036-5fe5e7bab0b7.jpg",
+    image_url: "/seed-images/events/1568605117036-5fe5e7bab0b7.jpg",
+    thumbnail: "/seed-images/events/1568605117036-5fe5e7bab0b7.jpg",
   },
   {
     id: "evt_007",
@@ -153,8 +153,8 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Saudi Motorsport Company",
     tags: ["f1", "racing", "sports", "motorsport"],
-    image_url: "/seed-images/events%2F1511578314322-379afb476865.jpg",
-    thumbnail: "/seed-images/events%2F1511578314322-379afb476865.jpg",
+    image_url: "/seed-images/events/1511578314322-379afb476865.jpg",
+    thumbnail: "/seed-images/events/1511578314322-379afb476865.jpg",
   },
   {
     id: "evt_008",
@@ -175,7 +175,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "MDLBEAST",
     tags: ["music", "edm", "festival", "entertainment"],
-    image_url: "/seed-images/events%2F1459749411175-04bf5292ceea.jpg",
+    image_url: "/seed-images/events/1459749411175-04bf5292ceea.jpg",
   },
 ]
 

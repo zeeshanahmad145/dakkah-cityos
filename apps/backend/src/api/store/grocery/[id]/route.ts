@@ -5,12 +5,12 @@ const SEED_DATA = [
   {
     id: "groc-seed-001",
     product_id: "groc-seed-001",
-    thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg",
+    thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg",
     metadata: {
       name: "Organic Fresh Strawberries",
       description: "Hand-picked organic strawberries from local farms. Sweet, juicy, and perfect for smoothies or snacking.",
-      thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg",
-      images: ["/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg"],
+      thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg",
+      images: ["/seed-images/grocery/1540189549336-e6e99c3679fe.jpg"],
       price: 1299,
       currency: "SAR",
       category: "fruits",
@@ -23,9 +23,9 @@ const SEED_DATA = [
     nutrition_facts: [{ label: "Calories", value: "32 per 100g" }, { label: "Protein", value: "0.7g" }, { label: "Carbs", value: "7.7g" }, { label: "Fat", value: "0.3g" }],
     allergens: ["Strawberry"],
     related_products: [
-      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
-      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
-      { id: "groc-seed-002", name: "Artisan Sourdough Bread", price: 899, thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg" },
+      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-002", name: "Artisan Sourdough Bread", price: 899, thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg" },
     ],
     dietary: ["Vegan", "Gluten-Free", "Keto-Friendly", "Paleo"],
     reviews: [
@@ -39,12 +39,12 @@ const SEED_DATA = [
   {
     id: "groc-seed-002",
     product_id: "groc-seed-002",
-    thumbnail: "/seed-images/grocery%2F1464965911861-746a04b4bca6.jpg",
+    thumbnail: "/seed-images/grocery/1464965911861-746a04b4bca6.jpg",
     metadata: {
       name: "Artisan Sourdough Bread",
       description: "Freshly baked sourdough bread made with traditional fermentation methods. Crispy crust, soft interior.",
-      thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg",
-      images: ["/seed-images/bundles%2F1504674900247-0877df9cc836.jpg"],
+      thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg",
+      images: ["/seed-images/bundles/1504674900247-0877df9cc836.jpg"],
       price: 899,
       currency: "SAR",
       category: "bakery",
@@ -57,9 +57,9 @@ const SEED_DATA = [
     nutrition_facts: [{ label: "Calories", value: "259 per 100g" }, { label: "Protein", value: "8.5g" }, { label: "Carbs", value: "51g" }, { label: "Fat", value: "1.2g" }],
     allergens: ["Wheat", "Gluten"],
     related_products: [
-      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
-      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
-      { id: "groc-seed-004", name: "Premium Wagyu Beef Steaks", price: 12999, thumbnail: "/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg" },
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-004", name: "Premium Wagyu Beef Steaks", price: 12999, thumbnail: "/seed-images/grocery/1414235077428-338989a2e8c0.jpg" },
     ],
     dietary: ["Vegetarian", "Vegan", "Dairy-Free"],
     reviews: [
@@ -73,12 +73,12 @@ const SEED_DATA = [
   {
     id: "groc-seed-003",
     product_id: "groc-seed-003",
-    thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg",
+    thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg",
     metadata: {
       name: "Farm Fresh Free-Range Eggs",
       description: "Premium free-range eggs from pasture-raised hens. Rich in omega-3 and packed with flavor.",
-      thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg",
-      images: ["/seed-images/grocery%2F1548848221-0c2e497ed557.jpg"],
+      thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg",
+      images: ["/seed-images/grocery/1548848221-0c2e497ed557.jpg"],
       price: 1599,
       currency: "SAR",
       category: "dairy",
@@ -91,9 +91,9 @@ const SEED_DATA = [
     nutrition_facts: [{ label: "Calories", value: "155 per 2 eggs" }, { label: "Protein", value: "13g" }, { label: "Carbs", value: "1.1g" }, { label: "Fat", value: "11g" }],
     allergens: ["Eggs"],
     related_products: [
-      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
-      { id: "groc-seed-002", name: "Artisan Sourdough Bread", price: 899, thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg" },
-      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-002", name: "Artisan Sourdough Bread", price: 899, thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg" },
+      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
     ],
     dietary: ["Gluten-Free", "Keto-Friendly", "Paleo", "Vegetarian"],
     reviews: [
@@ -107,12 +107,12 @@ const SEED_DATA = [
   {
     id: "groc-seed-004",
     product_id: "groc-seed-004",
-    thumbnail: "/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg",
+    thumbnail: "/seed-images/grocery/1414235077428-338989a2e8c0.jpg",
     metadata: {
       name: "Premium Wagyu Beef Steaks",
       description: "A5 grade Wagyu beef steaks with exceptional marbling. Perfect for grilling or pan-searing.",
-      thumbnail: "/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg",
-      images: ["/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg"],
+      thumbnail: "/seed-images/grocery/1414235077428-338989a2e8c0.jpg",
+      images: ["/seed-images/grocery/1414235077428-338989a2e8c0.jpg"],
       price: 12999,
       currency: "SAR",
       category: "meat",
@@ -125,9 +125,9 @@ const SEED_DATA = [
     nutrition_facts: [{ label: "Calories", value: "250 per 100g" }, { label: "Protein", value: "17g" }, { label: "Carbs", value: "0g" }, { label: "Fat", value: "20g" }],
     allergens: ["Soy"],
     related_products: [
-      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
-      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
-      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
     ],
     dietary: ["Gluten-Free", "Keto-Friendly", "Paleo", "Low-Carb"],
     reviews: [
@@ -141,12 +141,12 @@ const SEED_DATA = [
   {
     id: "groc-seed-005",
     product_id: "groc-seed-005",
-    thumbnail: "/seed-images/grocery%2F1540420773420-3366772f4999.jpg",
+    thumbnail: "/seed-images/grocery/1540420773420-3366772f4999.jpg",
     metadata: {
       name: "Organic Mixed Vegetables Box",
       description: "A curated box of seasonal organic vegetables including tomatoes, peppers, zucchini, and leafy greens.",
-      thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg",
-      images: ["/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg"],
+      thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg",
+      images: ["/seed-images/grocery/1540189549336-e6e99c3679fe.jpg"],
       price: 2499,
       currency: "SAR",
       category: "vegetables",
@@ -159,9 +159,9 @@ const SEED_DATA = [
     nutrition_facts: [{ label: "Calories", value: "25 per 100g" }, { label: "Protein", value: "1.5g" }, { label: "Carbs", value: "5g" }, { label: "Fat", value: "0.2g" }],
     allergens: ["Celery", "Mustard"],
     related_products: [
-      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
-      { id: "groc-seed-004", name: "Premium Wagyu Beef Steaks", price: 12999, thumbnail: "/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg" },
-      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery/1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-004", name: "Premium Wagyu Beef Steaks", price: 12999, thumbnail: "/seed-images/grocery/1414235077428-338989a2e8c0.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg" },
     ],
     dietary: ["Vegan", "Gluten-Free", "Keto-Friendly", "Paleo", "Whole30"],
     reviews: [

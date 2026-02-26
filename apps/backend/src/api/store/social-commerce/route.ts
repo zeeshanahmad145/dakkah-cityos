@@ -20,7 +20,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 12900,
     likes: 18200,
     tags: ["fashion", "abayas", "streetwear", "saudi"],
-    thumbnail: "/seed-images/affiliate%2F1483985988355-763728e1935b.jpg",
+    thumbnail: "/seed-images/affiliate/1483985988355-763728e1935b.jpg",
   },
   {
     id: "sc_002",
@@ -40,7 +40,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 7500,
     likes: 24500,
     tags: ["skincare", "beauty", "natural", "handmade"],
-    thumbnail: "/seed-images/bundles%2F1556228578-0d85b1a4d571.jpg",
+    thumbnail: "/seed-images/bundles/1556228578-0d85b1a4d571.jpg",
   },
   {
     id: "sc_003",
@@ -60,7 +60,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 35000,
     likes: 42100,
     tags: ["oud", "bakhoor", "perfume", "fragrance"],
-    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
+    thumbnail: "/seed-images/social-commerce/1547887538-e3a2f32cb1cc.jpg",
   },
   {
     id: "sc_004",
@@ -80,7 +80,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 4500,
     likes: 8900,
     tags: ["sweets", "dates", "traditional", "gifts"],
-    thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg",
+    thumbnail: "/seed-images/grocery/1548848221-0c2e497ed557.jpg",
   },
   {
     id: "sc_005",
@@ -100,7 +100,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 9900,
     likes: 56700,
     tags: ["tech", "gadgets", "accessories", "electronics"],
-    thumbnail: "/seed-images/bundles%2F1519389950473-47ba0277781c.jpg",
+    thumbnail: "/seed-images/bundles/1519389950473-47ba0277781c.jpg",
   },
   {
     id: "sc_006",
@@ -120,7 +120,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 19900,
     likes: 12300,
     tags: ["fitness", "gym", "supplements", "sportswear"],
-    thumbnail: "/seed-images/bookings%2F1534438327276-14e5300c3a48.jpg",
+    thumbnail: "/seed-images/bookings/1534438327276-14e5300c3a48.jpg",
   },
   {
     id: "sc_007",
@@ -140,7 +140,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 24900,
     likes: 31500,
     tags: ["jewelry", "handmade", "gold", "accessories"],
-    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
+    thumbnail: "/seed-images/social-commerce/1547887538-e3a2f32cb1cc.jpg",
   },
 ]
 

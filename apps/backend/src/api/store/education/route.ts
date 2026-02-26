@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { enrichListItems } from "../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -19,10 +20,10 @@ const SEED_DATA = [
     instructor_name: "Sarah Chen",
     enrolled_count: 3450,
     status: "published",
-    thumbnail: "/seed-images/digital-products%2F1517694712202-14dd9538aa97.jpg",
+    thumbnail: "/seed-images/digital-products/1517694712202-14dd9538aa97.jpg",
     metadata: {
-      thumbnail: "/seed-images/digital-products%2F1517694712202-14dd9538aa97.jpg",
-      images: ["/seed-images/digital-products%2F1517694712202-14dd9538aa97.jpg"],
+      thumbnail: "/seed-images/digital-products/1517694712202-14dd9538aa97.jpg",
+      images: ["/seed-images/digital-products/1517694712202-14dd9538aa97.jpg"],
       price: 19900,
       rating: 4.8,
       instructor_name: "Sarah Chen",
@@ -47,10 +48,10 @@ const SEED_DATA = [
     instructor_name: "Prof. Michael Torres",
     enrolled_count: 1890,
     status: "published",
-    thumbnail: "/seed-images/education%2F1552664730-d307ca884978.jpg",
+    thumbnail: "/seed-images/education/1552664730-d307ca884978.jpg",
     metadata: {
-      thumbnail: "/seed-images/education%2F1552664730-d307ca884978.jpg",
-      images: ["/seed-images/education%2F1552664730-d307ca884978.jpg"],
+      thumbnail: "/seed-images/education/1552664730-d307ca884978.jpg",
+      images: ["/seed-images/education/1552664730-d307ca884978.jpg"],
       price: 29900,
       rating: 4.6,
       instructor_name: "Prof. Michael Torres",
@@ -75,10 +76,10 @@ const SEED_DATA = [
     instructor_name: "Dr. Fatima Al-Rashid",
     enrolled_count: 2780,
     status: "published",
-    thumbnail: "/seed-images/campaigns%2F1503676260728-1c00da094a0b.jpg",
+    thumbnail: "/seed-images/campaigns/1503676260728-1c00da094a0b.jpg",
     metadata: {
-      thumbnail: "/seed-images/campaigns%2F1503676260728-1c00da094a0b.jpg",
-      images: ["/seed-images/campaigns%2F1503676260728-1c00da094a0b.jpg"],
+      thumbnail: "/seed-images/campaigns/1503676260728-1c00da094a0b.jpg",
+      images: ["/seed-images/campaigns/1503676260728-1c00da094a0b.jpg"],
       price: 14900,
       rating: 4.9,
       instructor_name: "Dr. Fatima Al-Rashid",
@@ -103,10 +104,10 @@ const SEED_DATA = [
     instructor_name: "Alex Rivera",
     enrolled_count: 1560,
     status: "published",
-    thumbnail: "/seed-images/bookings%2F1542038784456-1ea8e935640e.jpg",
+    thumbnail: "/seed-images/bookings/1542038784456-1ea8e935640e.jpg",
     metadata: {
-      thumbnail: "/seed-images/bookings%2F1542038784456-1ea8e935640e.jpg",
-      images: ["/seed-images/bookings%2F1542038784456-1ea8e935640e.jpg"],
+      thumbnail: "/seed-images/bookings/1542038784456-1ea8e935640e.jpg",
+      images: ["/seed-images/bookings/1542038784456-1ea8e935640e.jpg"],
       price: 24900,
       rating: 4.7,
       instructor_name: "Alex Rivera",
@@ -131,10 +132,10 @@ const SEED_DATA = [
     instructor_name: "Dr. James Park",
     enrolled_count: 4120,
     status: "published",
-    thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
+    thumbnail: "/seed-images/b2b/1551288049-bebda4e38f71.jpg",
     metadata: {
-      thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
-      images: ["/seed-images/b2b%2F1551288049-bebda4e38f71.jpg"],
+      thumbnail: "/seed-images/b2b/1551288049-bebda4e38f71.jpg",
+      images: ["/seed-images/b2b/1551288049-bebda4e38f71.jpg"],
       price: 34900,
       rating: 4.9,
       instructor_name: "Dr. James Park",
@@ -176,7 +177,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       order: { created_at: "DESC" },
     })
 
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const raw = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const itemList = enrichListItems(raw, "education")
 
     return res.json({
       items: itemList,

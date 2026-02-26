@@ -33,7 +33,7 @@ export const Route = createFileRoute("/$tenant/$locale/subscriptions/")({
           currency: meta.currency || s.currency || "USD",
           billing_interval: meta.billing_interval || s.billing_interval || s.interval || "monthly",
           features: meta.features || s.features || [],
-          thumbnail: meta.thumbnail || meta.image || s.thumbnail || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.image || s.thumbnail || null,
           is_popular: meta.is_popular || s.is_popular || false,
           trial_days: meta.trial_days || s.trial_days || 0,
           status: s.status || "active",

@@ -5,7 +5,7 @@ function getFlashSalesSeedData() {
   const now = Date.now()
   return [
     {
-      id: "fs-1", name: "Wireless Noise-Cancelling Headphones", category: "electronics", thumbnail: "/seed-images/auctions%2F1505740420928-5e560c06d30e.jpg", original_price: 29999, sale_price: 14999, discount_percentage: 50, end_date: new Date(now + 3 * 60 * 60 * 1000).toISOString(), stock_remaining: 12, description: "Premium ANC headphones with 30hr battery life",
+      id: "fs-1", name: "Wireless Noise-Cancelling Headphones", category: "electronics", thumbnail: "/seed-images/auctions/1505740420928-5e560c06d30e.jpg", original_price: 29999, sale_price: 14999, discount_percentage: 50, end_date: new Date(now + 3 * 60 * 60 * 1000).toISOString(), stock_remaining: 12, description: "Premium ANC headphones with 30hr battery life",
       reviews: [
         { author: "Mark T.", rating: 5, comment: "Incredible noise cancellation and the sound quality is pristine. Got them at half price during the flash sale!", created_at: "2025-04-10T14:00:00Z" },
         { author: "Jenny L.", rating: 4, comment: "Great headphones for the price. Battery life is as advertised. Comfortable for long listening sessions.", created_at: "2025-03-28T16:30:00Z" },
@@ -15,7 +15,7 @@ function getFlashSalesSeedData() {
       ],
     },
     {
-      id: "fs-2", name: "Smart Fitness Watch Pro", category: "electronics", thumbnail: "/seed-images/auctions%2F1523275335684-37898b6baf30.jpg", original_price: 19999, sale_price: 9999, discount_percentage: 50, end_date: new Date(now + 5 * 60 * 60 * 1000).toISOString(), stock_remaining: 8, description: "Heart rate, GPS, and sleep tracking",
+      id: "fs-2", name: "Smart Fitness Watch Pro", category: "electronics", thumbnail: "/seed-images/auctions/1523275335684-37898b6baf30.jpg", original_price: 19999, sale_price: 9999, discount_percentage: 50, end_date: new Date(now + 5 * 60 * 60 * 1000).toISOString(), stock_remaining: 8, description: "Heart rate, GPS, and sleep tracking",
       reviews: [
         { author: "Chris W.", rating: 5, comment: "Accurate GPS tracking and the sleep analysis has helped me improve my rest. Amazing value at this price.", created_at: "2025-04-08T08:00:00Z" },
         { author: "Lisa M.", rating: 5, comment: "Love the heart rate monitoring during workouts. Battery lasts almost a week. Best fitness watch under $100.", created_at: "2025-03-25T10:30:00Z" },
@@ -25,7 +25,7 @@ function getFlashSalesSeedData() {
       ],
     },
     {
-      id: "fs-3", name: "Designer Leather Handbag", category: "fashion", thumbnail: "/seed-images/consignments%2F1548036328-c9fa89d128fa.jpg", original_price: 24999, sale_price: 12499, discount_percentage: 50, end_date: new Date(now + 2 * 60 * 60 * 1000).toISOString(), stock_remaining: 5, description: "Italian genuine leather, limited edition",
+      id: "fs-3", name: "Designer Leather Handbag", category: "fashion", thumbnail: "/seed-images/consignments/1548036328-c9fa89d128fa.jpg", original_price: 24999, sale_price: 12499, discount_percentage: 50, end_date: new Date(now + 2 * 60 * 60 * 1000).toISOString(), stock_remaining: 5, description: "Italian genuine leather, limited edition",
       reviews: [
         { author: "Victoria S.", rating: 5, comment: "The leather quality is exceptional. You can smell the genuine Italian craftsmanship. Worth every penny even at full price.", created_at: "2025-04-06T11:00:00Z" },
         { author: "Amanda C.", rating: 5, comment: "Bought this as a gift and she absolutely loves it. The stitching and hardware are top-notch.", created_at: "2025-03-22T14:30:00Z" },
@@ -35,7 +35,7 @@ function getFlashSalesSeedData() {
       ],
     },
     {
-      id: "fs-4", name: "Organic Skincare Bundle", category: "beauty", thumbnail: "/seed-images/bundles%2F1556228578-0d85b1a4d571.jpg", original_price: 8999, sale_price: 3599, discount_percentage: 60, end_date: new Date(now + 8 * 60 * 60 * 1000).toISOString(), stock_remaining: 23, description: "5-piece set with cleanser, toner, serum, moisturizer & mask",
+      id: "fs-4", name: "Organic Skincare Bundle", category: "beauty", thumbnail: "/seed-images/bundles/1556228578-0d85b1a4d571.jpg", original_price: 8999, sale_price: 3599, discount_percentage: 60, end_date: new Date(now + 8 * 60 * 60 * 1000).toISOString(), stock_remaining: 23, description: "5-piece set with cleanser, toner, serum, moisturizer & mask",
       reviews: [
         { author: "Mia J.", rating: 5, comment: "My skin has never looked better! The serum is my favorite — it absorbs quickly and leaves skin glowing.", created_at: "2025-04-09T09:00:00Z" },
         { author: "Olivia D.", rating: 4, comment: "Love that everything is organic. The mask is incredibly hydrating. Great value at the sale price.", created_at: "2025-03-26T11:30:00Z" },
@@ -45,7 +45,7 @@ function getFlashSalesSeedData() {
       ],
     },
     {
-      id: "fs-5", name: "Premium Coffee Machine", category: "home", thumbnail: "/seed-images/flash-sales%2F1495474472287-4d71bcdd2085.jpg", original_price: 44999, sale_price: 22499, discount_percentage: 50, end_date: new Date(now + 1 * 60 * 60 * 1000).toISOString(), stock_remaining: 3, description: "Espresso, cappuccino & latte with built-in grinder",
+      id: "fs-5", name: "Premium Coffee Machine", category: "home", thumbnail: "/seed-images/flash-sales/1495474472287-4d71bcdd2085.jpg", original_price: 44999, sale_price: 22499, discount_percentage: 50, end_date: new Date(now + 1 * 60 * 60 * 1000).toISOString(), stock_remaining: 3, description: "Espresso, cappuccino & latte with built-in grinder",
       reviews: [
         { author: "Roberto M.", rating: 5, comment: "The built-in grinder makes all the difference. Fresh espresso every morning that rivals my local café.", created_at: "2025-04-11T07:00:00Z" },
         { author: "Karen S.", rating: 5, comment: "Saving so much money not buying lattes anymore. This machine pays for itself in a month. Beautiful design too.", created_at: "2025-03-29T08:30:00Z" },

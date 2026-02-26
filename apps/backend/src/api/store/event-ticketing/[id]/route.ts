@@ -13,7 +13,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 250,
     status: "published",
-    thumbnail: "/seed-images/event-ticketing%2F1488646953014-85cb44e25828.jpg",
+    thumbnail: "/seed-images/event-ticketing/1488646953014-85cb44e25828.jpg",
     reviews: [
       { author: "Alex D.", rating: 5, comment: "Incredible lineup and amazing atmosphere. The multiple stages meant no waiting between acts.", created_at: "2025-12-10T10:00:00Z" },
       { author: "Maria S.", rating: 5, comment: "Best festival I've attended! Sound quality was perfect and the venue was well-organized.", created_at: "2025-12-07T14:30:00Z" },
@@ -34,7 +34,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 500,
     status: "published",
-    thumbnail: "/seed-images/bookings%2F1534438327276-14e5300c3a48.jpg",
+    thumbnail: "/seed-images/bookings/1534438327276-14e5300c3a48.jpg",
     reviews: [
       { author: "Marco P.", rating: 5, comment: "Electric atmosphere! Watching with hundreds of fans made it so much better than home.", created_at: "2025-12-09T13:20:00Z" },
       { author: "Fatima H.", rating: 4, comment: "Great big screen quality. Food and drinks were reasonably priced. Fun evening out.", created_at: "2025-12-05T10:00:00Z" },
@@ -55,7 +55,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 120,
     status: "published",
-    thumbnail: "/seed-images/event-ticketing%2F1507525428034-b723cf961d3e.jpg",
+    thumbnail: "/seed-images/event-ticketing/1507525428034-b723cf961d3e.jpg",
     reviews: [
       { author: "Eleanor V.", rating: 5, comment: "Magical performance under the stars. The modern take on Shakespeare was refreshing and engaging.", created_at: "2025-12-08T11:30:00Z" },
       { author: "William C.", rating: 5, comment: "The actors were phenomenal. Riverside Theater setting added so much to the atmosphere.", created_at: "2025-12-04T14:00:00Z" },
@@ -76,7 +76,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 1000,
     status: "published",
-    thumbnail: "/seed-images/bundles%2F1519389950473-47ba0277781c.jpg",
+    thumbnail: "/seed-images/bundles/1519389950473-47ba0277781c.jpg",
     reviews: [
       { author: "Raj P.", rating: 5, comment: "World-class speakers and cutting-edge content. The AI workshop alone was worth the ticket.", created_at: "2025-12-10T09:00:00Z" },
       { author: "Samantha F.", rating: 4, comment: "Excellent networking opportunities. Met my next business partner here. Well-organized event.", created_at: "2025-12-06T12:45:00Z" },
@@ -97,7 +97,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 350,
     status: "published",
-    thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg",
+    thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg",
     reviews: [
       { author: "Julia C.", rating: 5, comment: "50+ restaurants and the quality was consistently high. Live cooking demos were entertaining.", created_at: "2025-12-09T10:30:00Z" },
       { author: "Pierre M.", rating: 5, comment: "Wine tasting selection was incredible. Discovered several new favorite wineries.", created_at: "2025-12-05T15:00:00Z" },

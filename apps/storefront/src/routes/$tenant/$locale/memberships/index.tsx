@@ -34,7 +34,7 @@ export const Route = createFileRoute("/$tenant/$locale/memberships/")({
           price: meta.price || m.price || null,
           currency: meta.currency || m.currency || "USD",
           interval: meta.interval || m.billing_interval || "monthly",
-          thumbnail: meta.thumbnail || meta.image || m.logo_url || null,
+          thumbnail: m.thumbnail || meta.thumbnail || meta.image || m.logo_url || null,
           is_popular: meta.is_popular || m.is_popular || false,
           max_members: meta.max_members || m.max_members || null,
         }

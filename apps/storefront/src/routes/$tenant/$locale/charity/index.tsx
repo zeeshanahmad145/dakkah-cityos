@@ -30,7 +30,7 @@ export const Route = createFileRoute("/$tenant/$locale/charity/")({
           title: meta.title || c.title || c.name || meta.name || "Untitled Campaign",
           description: meta.description || c.description || "",
           campaign_type: meta.campaign_type || c.campaign_type || c.type || c.category || null,
-          thumbnail: meta.thumbnail || meta.image || c.logo_url || c.thumbnail || null,
+          thumbnail: c.thumbnail || meta.thumbnail || meta.image || c.logo_url || c.thumbnail || null,
           goal: meta.goal || c.goal || c.target_amount || 0,
           raised: meta.raised || c.raised || c.amount_raised || c.current_amount || 0,
           donor_count: meta.donor_count || c.donor_count || c.backers || 0,

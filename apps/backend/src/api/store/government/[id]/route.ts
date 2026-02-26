@@ -13,7 +13,7 @@ const SEED_DATA = [
     processing_time: "5-7 business days",
     fee: 25000,
     status: "available",
-    thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg",
+    thumbnail: "/seed-images/government/1450101499163-c8848c66ca85.jpg",
     steps: [
       { title: "Submit Application", description: "Complete the online application form with your business details" },
       { title: "Upload Documents", description: "Attach all required documents in PDF or image format" },
@@ -41,7 +41,7 @@ const SEED_DATA = [
     processing_time: "15-30 business days",
     fee: 50000,
     status: "available",
-    thumbnail: "/seed-images/government%2F1564013799919-ab600027ffc6.jpg",
+    thumbnail: "/seed-images/government/1564013799919-ab600027ffc6.jpg",
     steps: [
       { title: "Pre-consultation", description: "Schedule a meeting with the planning department" },
       { title: "Submit Plans", description: "Upload architectural and engineering drawings" },
@@ -69,7 +69,7 @@ const SEED_DATA = [
     processing_time: "10-14 business days",
     fee: 15000,
     status: "available",
-    thumbnail: "/seed-images/government%2F1559839734-2b71ea197ec2.jpg",
+    thumbnail: "/seed-images/government/1559839734-2b71ea197ec2.jpg",
     steps: [
       { title: "Submit Proposal", description: "Complete the event proposal form with date, venue, and expected attendance" },
       { title: "Security Review", description: "Security plan reviewed by public safety department" },
@@ -96,7 +96,7 @@ const SEED_DATA = [
     processing_time: "7-10 business days",
     fee: 35000,
     status: "available",
-    thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg",
+    thumbnail: "/seed-images/content/1454165804606-c3d57bc86b40.jpg",
     steps: [
       { title: "Register Business", description: "Ensure your business is registered with the trade ministry" },
       { title: "Submit Trade Application", description: "Complete the trade license application with commodity details" },
@@ -123,7 +123,7 @@ const SEED_DATA = [
     processing_time: "10-15 business days",
     fee: 20000,
     status: "available",
-    thumbnail: "/seed-images/government%2F1579684385127-1ef15d508118.jpg",
+    thumbnail: "/seed-images/government/1579684385127-1ef15d508118.jpg",
     steps: [
       { title: "Schedule Inspection", description: "Book a facility inspection with the health department" },
       { title: "Prepare Documentation", description: "Gather all staff health records and safety plans" },

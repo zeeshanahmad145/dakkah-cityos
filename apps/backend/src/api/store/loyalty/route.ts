@@ -9,7 +9,7 @@ const SEED_PROGRAMS = [
     description: "Earn points on every purchase and unlock exclusive member benefits.",
     points_per_dollar: 1,
     tier: "Bronze",
-    thumbnail: "/seed-images/loyalty%2F1563013544-824ae1b704d3.jpg",
+    thumbnail: "/seed-images/loyalty/1563013544-824ae1b704d3.jpg",
   },
   {
     id: "loyalty-prog-2",
@@ -17,7 +17,7 @@ const SEED_PROGRAMS = [
     description: "Premium loyalty program with accelerated earning and priority perks.",
     points_per_dollar: 2,
     tier: "Silver",
-    thumbnail: "/seed-images/loyalty%2F1612404730960-5c71577fca11.jpg",
+    thumbnail: "/seed-images/loyalty/1612404730960-5c71577fca11.jpg",
   },
   {
     id: "loyalty-prog-3",
@@ -25,7 +25,7 @@ const SEED_PROGRAMS = [
     description: "Our top-tier program for frequent shoppers with the best rewards.",
     points_per_dollar: 3,
     tier: "Gold",
-    thumbnail: "/seed-images/loyalty%2F1610375461246-83df859d849d.jpg",
+    thumbnail: "/seed-images/loyalty/1610375461246-83df859d849d.jpg",
   },
   {
     id: "loyalty-prog-4",
@@ -33,7 +33,7 @@ const SEED_PROGRAMS = [
     description: "Simple cashback rewards — earn store credit on every order.",
     points_per_dollar: 1.5,
     tier: "Bronze",
-    thumbnail: "/seed-images/loyalty%2F1579547945413-497e1b99dac0.jpg",
+    thumbnail: "/seed-images/loyalty/1579547945413-497e1b99dac0.jpg",
   },
   {
     id: "loyalty-prog-5",
@@ -41,7 +41,7 @@ const SEED_PROGRAMS = [
     description: "Support local causes while earning points on your purchases.",
     points_per_dollar: 1,
     tier: "Bronze",
-    thumbnail: "/seed-images/loyalty%2F1563013544-824ae1b704d3.jpg",
+    thumbnail: "/seed-images/loyalty/1563013544-824ae1b704d3.jpg",
   },
 ]
 
@@ -70,10 +70,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           "Birthday rewards and special bonuses",
         ],
         tiers: [
-          { name: "Bronze", min_points: 0, perks: ["1x points earning", "Member-only deals"], thumbnail: "/seed-images/loyalty%2F1563013544-824ae1b704d3.jpg" },
-          { name: "Silver", min_points: 500, perks: ["1.5x points earning", "Free shipping on orders over $50"], thumbnail: "/seed-images/loyalty%2F1612404730960-5c71577fca11.jpg" },
-          { name: "Gold", min_points: 2000, perks: ["2x points earning", "Free shipping on all orders", "Early access to sales"], thumbnail: "/seed-images/loyalty%2F1610375461246-83df859d849d.jpg" },
-          { name: "Platinum", min_points: 5000, perks: ["3x points earning", "Free shipping", "Priority support", "Exclusive events"], thumbnail: "/seed-images/loyalty%2F1579547945413-497e1b99dac0.jpg" },
+          { name: "Bronze", min_points: 0, perks: ["1x points earning", "Member-only deals"], thumbnail: "/seed-images/loyalty/1563013544-824ae1b704d3.jpg" },
+          { name: "Silver", min_points: 500, perks: ["1.5x points earning", "Free shipping on orders over $50"], thumbnail: "/seed-images/loyalty/1612404730960-5c71577fca11.jpg" },
+          { name: "Gold", min_points: 2000, perks: ["2x points earning", "Free shipping on all orders", "Early access to sales"], thumbnail: "/seed-images/loyalty/1610375461246-83df859d849d.jpg" },
+          { name: "Platinum", min_points: 5000, perks: ["3x points earning", "Free shipping", "Priority support", "Exclusive events"], thumbnail: "/seed-images/loyalty/1579547945413-497e1b99dac0.jpg" },
         ],
       },
     })

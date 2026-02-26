@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { enrichListItems } from "../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -21,8 +22,8 @@ const SEED_DATA = [
     total_rentals: 48,
     category: "electronics",
     rating: 4.8,
-    metadata: { thumbnail: "/seed-images/rentals%2F1516035069371-29a1b244cc32.jpg", price: 15000 },
-    thumbnail: "/seed-images/rentals%2F1516035069371-29a1b244cc32.jpg",
+    metadata: { thumbnail: "/seed-images/rentals/1516035069371-29a1b244cc32.jpg", price: 15000 },
+    thumbnail: "/seed-images/rentals/1516035069371-29a1b244cc32.jpg",
     price: 15000,
   },
   {
@@ -43,8 +44,8 @@ const SEED_DATA = [
     total_rentals: 120,
     category: "vehicles",
     rating: 4.5,
-    metadata: { thumbnail: "/seed-images/rentals%2F1516035069371-29a1b244cc32.jpg", price: 5000 },
-    thumbnail: "/seed-images/rentals%2F1516035069371-29a1b244cc32.jpg",
+    metadata: { thumbnail: "/seed-images/rentals/1516035069371-29a1b244cc32.jpg", price: 5000 },
+    thumbnail: "/seed-images/rentals/1516035069371-29a1b244cc32.jpg",
     price: 5000,
   },
   {
@@ -65,8 +66,8 @@ const SEED_DATA = [
     total_rentals: 65,
     category: "sports",
     rating: 4.6,
-    metadata: { thumbnail: "/seed-images/rentals%2F1504280390367-361c6d9f38f4.jpg", price: 50000 },
-    thumbnail: "/seed-images/rentals%2F1504280390367-361c6d9f38f4.jpg",
+    metadata: { thumbnail: "/seed-images/rentals/1504280390367-361c6d9f38f4.jpg", price: 50000 },
+    thumbnail: "/seed-images/rentals/1504280390367-361c6d9f38f4.jpg",
     price: 50000,
   },
   {
@@ -87,8 +88,8 @@ const SEED_DATA = [
     total_rentals: 32,
     category: "furniture",
     rating: 4.9,
-    metadata: { thumbnail: "/seed-images/classifieds%2F1593062096033-9a26b09da705.jpg", price: 120000 },
-    thumbnail: "/seed-images/classifieds%2F1593062096033-9a26b09da705.jpg",
+    metadata: { thumbnail: "/seed-images/classifieds/1593062096033-9a26b09da705.jpg", price: 120000 },
+    thumbnail: "/seed-images/classifieds/1593062096033-9a26b09da705.jpg",
     price: 120000,
   },
   {
@@ -109,8 +110,8 @@ const SEED_DATA = [
     total_rentals: 87,
     category: "tools",
     rating: 4.7,
-    metadata: { thumbnail: "/seed-images/rentals%2F1504148455328-c376907d081c.jpg", price: 12000 },
-    thumbnail: "/seed-images/rentals%2F1504148455328-c376907d081c.jpg",
+    metadata: { thumbnail: "/seed-images/rentals/1504148455328-c376907d081c.jpg", price: 12000 },
+    thumbnail: "/seed-images/rentals/1504148455328-c376907d081c.jpg",
     price: 12000,
   },
 ]
@@ -139,7 +140,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (rental_type) filters.rental_type = rental_type
     filters.is_available = true
     const dbItems = await mod.listRentalProducts(filters, { skip: Number(offset), take: Number(limit) })
-    const items = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const raw = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const items = enrichListItems(raw, "rentals")
     return res.json({ items, count: items.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
     handleApiError(res, error, "STORE-RENTALS")}

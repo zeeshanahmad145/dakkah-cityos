@@ -29,7 +29,7 @@ export const Route = createFileRoute("/$tenant/$locale/classifieds/")({
           id: s.id,
           title: s.title || meta.title || "Untitled Listing",
           description: s.description || meta.description || "",
-          thumbnail: meta.thumbnail || meta.images?.[0] || null,
+          thumbnail: s.thumbnail || meta.thumbnail || meta.images?.[0] || null,
           images: meta.images || [],
           price: meta.price || null,
           currency: s.currency_code || meta.currency || "SAR",

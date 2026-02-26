@@ -9,8 +9,8 @@ const SEED_DATA = [
     breed: "All Breeds",
     description: "Full-service grooming including bath, haircut, nail trim, and ear cleaning. Experienced groomers for all breeds.",
     metadata: {
-      thumbnail: "/seed-images/pet-services%2F1542838132-92c53300491e.jpg",
-      images: ["/seed-images/pet-services%2F1542838132-92c53300491e.jpg"],
+      thumbnail: "/seed-images/pet-services/1542838132-92c53300491e.jpg",
+      images: ["/seed-images/pet-services/1542838132-92c53300491e.jpg"],
     },
     weight: null,
     gender: null,
@@ -18,7 +18,7 @@ const SEED_DATA = [
     color: null,
     service_type: "grooming",
     is_active: true,
-    thumbnail: "/seed-images/pet-services%2F1542838132-92c53300491e.jpg",
+    thumbnail: "/seed-images/pet-services/1542838132-92c53300491e.jpg",
     packages: [
       { name: "Basic Bath", price: 120, duration: "45 min", description: "Bath, blow-dry, and brush out" },
       { name: "Full Groom", price: 250, duration: "90 min", description: "Bath, haircut, nail trim, ear cleaning, and finishing spray" },
@@ -39,8 +39,8 @@ const SEED_DATA = [
     breed: "All Breeds",
     description: "Safe and comfortable boarding facility with individual suites, play areas, and 24/7 veterinary care on call.",
     metadata: {
-      thumbnail: "/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg",
-      images: ["/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg"],
+      thumbnail: "/seed-images/pet-services/1587300003388-59208cc962cb.jpg",
+      images: ["/seed-images/pet-services/1587300003388-59208cc962cb.jpg"],
     },
     weight: null,
     gender: null,
@@ -48,7 +48,7 @@ const SEED_DATA = [
     color: null,
     service_type: "boarding",
     is_active: true,
-    thumbnail: "/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg",
+    thumbnail: "/seed-images/pet-services/1587300003388-59208cc962cb.jpg",
     packages: [
       { name: "Day Care", price: 80, duration: "Full day", description: "Supervised play, meals, and rest in individual suite" },
       { name: "Overnight Stay", price: 150, duration: "24 hours", description: "Private suite with bedding, meals, and evening playtime" },
@@ -69,8 +69,8 @@ const SEED_DATA = [
     breed: "All Breeds",
     description: "Comprehensive health examination including vaccinations, dental check, blood work, and nutrition consultation.",
     metadata: {
-      thumbnail: "/seed-images/pet-services%2F1542838132-92c53300491e.jpg",
-      images: ["/seed-images/pet-services%2F1542838132-92c53300491e.jpg"],
+      thumbnail: "/seed-images/pet-services/1542838132-92c53300491e.jpg",
+      images: ["/seed-images/pet-services/1542838132-92c53300491e.jpg"],
     },
     weight: null,
     gender: null,
@@ -78,7 +78,7 @@ const SEED_DATA = [
     color: null,
     service_type: "veterinary",
     is_active: true,
-    thumbnail: "/seed-images/pet-services%2F1514888286974-6c03e2ca1dba.jpg",
+    thumbnail: "/seed-images/pet-services/1514888286974-6c03e2ca1dba.jpg",
     packages: [
       { name: "Basic Checkup", price: 200, duration: "30 min", description: "Physical exam, weight check, and vaccination review" },
       { name: "Comprehensive Wellness", price: 450, duration: "60 min", description: "Full exam, blood work, dental check, and nutrition consultation" },
@@ -99,8 +99,8 @@ const SEED_DATA = [
     breed: "All Breeds",
     description: "Professional dog training programs from puppy basics to advanced obedience. Group and private sessions available.",
     metadata: {
-      thumbnail: "/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg",
-      images: ["/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg"],
+      thumbnail: "/seed-images/pet-services/1587300003388-59208cc962cb.jpg",
+      images: ["/seed-images/pet-services/1587300003388-59208cc962cb.jpg"],
     },
     weight: null,
     gender: null,
@@ -108,7 +108,7 @@ const SEED_DATA = [
     color: null,
     service_type: "training",
     is_active: true,
-    thumbnail: "/seed-images/pet-services%2F1516734212186-a967f81ad0d7.jpg",
+    thumbnail: "/seed-images/pet-services/1516734212186-a967f81ad0d7.jpg",
     packages: [
       { name: "Puppy Basics", price: 300, duration: "4 weeks", description: "Sit, stay, come, and leash walking fundamentals" },
       { name: "Obedience Program", price: 600, duration: "8 weeks", description: "Advanced commands, off-leash training, and behavioral correction" },
@@ -129,8 +129,8 @@ const SEED_DATA = [
     breed: "All Breeds",
     description: "Reliable pet sitting and daily dog walking services. GPS-tracked walks with photo updates sent to your phone.",
     metadata: {
-      thumbnail: "/seed-images/pet-services%2F1542838132-92c53300491e.jpg",
-      images: ["/seed-images/pet-services%2F1542838132-92c53300491e.jpg"],
+      thumbnail: "/seed-images/pet-services/1542838132-92c53300491e.jpg",
+      images: ["/seed-images/pet-services/1542838132-92c53300491e.jpg"],
     },
     weight: null,
     gender: null,
@@ -138,7 +138,7 @@ const SEED_DATA = [
     color: null,
     service_type: "walking",
     is_active: true,
-    thumbnail: "/seed-images/pet-services%2F1601758228041-f3b2795255f1.jpg",
+    thumbnail: "/seed-images/pet-services/1601758228041-f3b2795255f1.jpg",
     packages: [
       { name: "Single Walk", price: 50, duration: "30 min", description: "GPS-tracked walk with photo updates" },
       { name: "Daily Walk Plan", price: 800, duration: "Monthly", description: "One 30-minute walk per day, Monday through Friday" },

@@ -21,7 +21,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "General Entertainment Authority",
     tags: ["entertainment", "music", "food", "culture"],
-    image_url: "/seed-images/events%2F1540575467063-178a50c2df87.jpg",
+    image_url: "/seed-images/events/1540575467063-178a50c2df87.jpg",
     reviews: [
       { author: "Faisal A.", rating: 5, comment: "Riyadh Season never disappoints! World-class entertainment in the heart of the city.", created_at: "2025-12-10T10:00:00Z" },
       { author: "Noura K.", rating: 5, comment: "So many things to do. We spent the whole weekend and didn't see everything. Amazing!", created_at: "2025-12-07T14:30:00Z" },
@@ -49,7 +49,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Ministry of Communications and IT",
     tags: ["technology", "innovation", "startup", "ai"],
-    image_url: "/seed-images/events%2F1505373877841-8d25f7d46678.jpg",
+    image_url: "/seed-images/events/1505373877841-8d25f7d46678.jpg",
     reviews: [
       { author: "Khalid B.", rating: 5, comment: "LEAP is the premier tech event in the region. Keynotes from global leaders were inspiring.", created_at: "2025-12-09T13:20:00Z" },
       { author: "Reem F.", rating: 5, comment: "Incredible networking opportunities. Met investors and partners that changed our trajectory.", created_at: "2025-12-05T10:00:00Z" },
@@ -77,7 +77,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Jeddah Entertainment Co.",
     tags: ["music", "jazz", "live", "concert"],
-    image_url: "/seed-images/events%2F1514525253161-7a46d19cd819.jpg",
+    image_url: "/seed-images/events/1514525253161-7a46d19cd819.jpg",
     reviews: [
       { author: "Tariq W.", rating: 5, comment: "Jazz by the corniche was magical. International artists blended beautifully with local talent.", created_at: "2025-12-08T11:30:00Z" },
       { author: "Dalal N.", rating: 4, comment: "Wonderful evening of music. Jeddah Superdome acoustics are excellent for jazz.", created_at: "2025-12-04T14:00:00Z" },
@@ -105,7 +105,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Saudi Culinary Association",
     tags: ["food", "cooking", "culture", "family"],
-    image_url: "/seed-images/events%2F1555939594-58d7cb561ad1.jpg",
+    image_url: "/seed-images/events/1555939594-58d7cb561ad1.jpg",
     reviews: [
       { author: "Salma R.", rating: 5, comment: "Saudi cuisine showcased beautifully. Live cooking demos by renowned chefs were a highlight.", created_at: "2025-12-10T09:00:00Z" },
       { author: "Hamad K.", rating: 5, comment: "Food stalls were amazing. Tried dishes from every region of Saudi Arabia. Must-attend!", created_at: "2025-12-06T12:45:00Z" },
@@ -133,7 +133,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Royal Commission for AlUla",
     tags: ["art", "culture", "heritage", "exhibition"],
-    image_url: "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
+    image_url: "/seed-images/events/1501281668745-f7f57925c3b4.jpg",
     reviews: [
       { author: "Lulwa M.", rating: 5, comment: "AlUla is breathtaking and the art installations are world-class. A truly immersive experience.", created_at: "2025-12-09T10:30:00Z" },
       { author: "Nawaf A.", rating: 5, comment: "The ancient landscapes combined with modern art created something extraordinary.", created_at: "2025-12-05T15:00:00Z" },
@@ -161,7 +161,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Saudi Motorsport Company",
     tags: ["sports", "racing", "adventure", "motorsport"],
-    image_url: "/seed-images/events%2F1568605117036-5fe5e7bab0b7.jpg",
+    image_url: "/seed-images/events/1568605117036-5fe5e7bab0b7.jpg",
     reviews: [
       { author: "Faris D.", rating: 5, comment: "The Dakar Rally through Saudi terrain is unbelievable. Desert landscapes make for epic racing.", created_at: "2025-12-08T11:00:00Z" },
       { author: "Sara N.", rating: 4, comment: "Free entry and incredible motorsport action. The stage finishes are exciting to watch.", created_at: "2025-12-04T14:30:00Z" },
@@ -189,7 +189,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "Saudi Motorsport Company",
     tags: ["f1", "racing", "sports", "motorsport"],
-    image_url: "/seed-images/events%2F1511578314322-379afb476865.jpg",
+    image_url: "/seed-images/events/1511578314322-379afb476865.jpg",
     reviews: [
       { author: "Rania B.", rating: 5, comment: "F1 under the lights in Jeddah is spectacular. The Corniche Circuit is incredibly fast.", created_at: "2025-12-10T09:30:00Z" },
       { author: "Fahad M.", rating: 5, comment: "Best F1 race on the calendar. The atmosphere along the Jeddah waterfront is electric.", created_at: "2025-12-06T13:00:00Z" },
@@ -217,7 +217,7 @@ const EVENTS_SEED = [
     is_active: true,
     organizer: "MDLBEAST",
     tags: ["music", "edm", "festival", "entertainment"],
-    image_url: "/seed-images/events%2F1459749411175-04bf5292ceea.jpg",
+    image_url: "/seed-images/events/1459749411175-04bf5292ceea.jpg",
     reviews: [
       { author: "Ziad H.", rating: 5, comment: "MDLBEAST knows how to throw a festival. Global DJ headliners and insane production quality.", created_at: "2025-12-09T11:00:00Z" },
       { author: "Nouf S.", rating: 5, comment: "Best music festival in the Middle East. The energy of 200,000 people is indescribable.", created_at: "2025-12-05T14:30:00Z" },

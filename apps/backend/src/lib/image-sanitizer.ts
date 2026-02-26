@@ -19,7 +19,7 @@ function getLocalImages(vertical: string): string[] {
 }
 
 function toLocalUrl(vertical: string, filename: string): string {
-  return `/seed-images/${vertical}%2F${filename}`
+  return `/seed-images/${vertical}/${filename}`
 }
 
 function isUnsplashUrl(url: string): boolean {

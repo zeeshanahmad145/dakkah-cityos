@@ -2,11 +2,11 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
 
 const PLAN_IMAGES: Record<string, string> = {
-  "CityOS Pilot": "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
-  "CityOS District": "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
-  "CityOS Metro": "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
-  "CityOS Enterprise": "/seed-images/parking%2F1497366216548-37526070297c.jpg",
-  "CityOS Sovereign": "/seed-images/subscriptions%2F1477959858617-67f85cf4f1df.jpg",
+  "CityOS Pilot": "/seed-images/content/1460925895917-afdab827c52f.jpg",
+  "CityOS District": "/seed-images/b2b/1551288049-bebda4e38f71.jpg",
+  "CityOS Metro": "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
+  "CityOS Enterprise": "/seed-images/parking/1497366216548-37526070297c.jpg",
+  "CityOS Sovereign": "/seed-images/subscriptions/1477959858617-67f85cf4f1df.jpg",
 }
 
 const SEED_SUBSCRIPTIONS = [
@@ -19,7 +19,7 @@ const SEED_SUBSCRIPTIONS = [
     currency_code: "SAR",
     status: "active",
     features: ["1 Storefront", "Basic Analytics", "Email Support", "5 Products"],
-    thumbnail: "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
+    thumbnail: "/seed-images/content/1460925895917-afdab827c52f.jpg",
   },
   {
     id: "sub-plan-2",
@@ -30,7 +30,7 @@ const SEED_SUBSCRIPTIONS = [
     currency_code: "SAR",
     status: "active",
     features: ["3 Storefronts", "Advanced Analytics", "Priority Support", "50 Products", "Multi-Vertical"],
-    thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
+    thumbnail: "/seed-images/b2b/1551288049-bebda4e38f71.jpg",
   },
   {
     id: "sub-plan-3",
@@ -41,7 +41,7 @@ const SEED_SUBSCRIPTIONS = [
     currency_code: "SAR",
     status: "active",
     features: ["Unlimited Storefronts", "Custom Analytics", "Dedicated Support", "Unlimited Products", "API Access", "Custom Domain"],
-    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
+    thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
   },
   {
     id: "sub-plan-4",
@@ -52,14 +52,14 @@ const SEED_SUBSCRIPTIONS = [
     currency_code: "SAR",
     status: "active",
     features: ["White-Label", "SLA Guarantee", "On-Premise Option", "Unlimited Everything", "24/7 Phone Support", "Custom Development"],
-    thumbnail: "/seed-images/parking%2F1497366216548-37526070297c.jpg",
+    thumbnail: "/seed-images/parking/1497366216548-37526070297c.jpg",
   },
 ]
 
 function enrichWithImages(plans: any[]) {
   return plans.map((p: any) => ({
     ...p,
-    thumbnail: p.thumbnail || PLAN_IMAGES[p.name] || "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
+    thumbnail: p.thumbnail || PLAN_IMAGES[p.name] || "/seed-images/content/1460925895917-afdab827c52f.jpg",
   }))
 }
 

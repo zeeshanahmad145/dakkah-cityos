@@ -5,7 +5,7 @@ import { sanitizeList } from "../../../lib/image-sanitizer"
 const SEED_RESTAURANTS = [
   {
     id: "rst-1",
-    thumbnail: "/seed-images/restaurants%2F1555396273-367ea4eb4db5.jpg",
+    thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg",
     name: "Al Najd Village",
     description: "Authentic Najdi cuisine served in a traditional setting with live oud music. Famous for kabsa, jareesh, and haneeth.",
     cuisine_type: "najdi",
@@ -18,11 +18,11 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants%2F1555396273-367ea4eb4db5.jpg" },
+    metadata: { thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg" },
   },
   {
     id: "rst-2",
-    thumbnail: "/seed-images/restaurants%2F1579871494447-9811cf80d66c.jpg",
+    thumbnail: "/seed-images/restaurants/1579871494447-9811cf80d66c.jpg",
     name: "Sakura Japanese Kitchen",
     description: "Premium Japanese dining featuring fresh sushi, sashimi, and teppanyaki prepared by Tokyo-trained chefs.",
     cuisine_type: "japanese",
@@ -35,11 +35,11 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants%2F1579871494447-9811cf80d66c.jpg" },
+    metadata: { thumbnail: "/seed-images/restaurants/1579871494447-9811cf80d66c.jpg" },
   },
   {
     id: "rst-3",
-    thumbnail: "/seed-images/restaurants%2F1517248135467-4c7edcad34c4.jpg",
+    thumbnail: "/seed-images/restaurants/1517248135467-4c7edcad34c4.jpg",
     name: "Mama's Italian Kitchen",
     description: "Family-style Italian restaurant with handmade pasta, wood-fired pizzas, and an extensive selection of desserts.",
     cuisine_type: "italian",
@@ -52,11 +52,11 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants%2F1517248135467-4c7edcad34c4.jpg" },
+    metadata: { thumbnail: "/seed-images/restaurants/1517248135467-4c7edcad34c4.jpg" },
   },
   {
     id: "rst-4",
-    thumbnail: "/seed-images/restaurants%2F1585937421612-70a008356fbe.jpg",
+    thumbnail: "/seed-images/restaurants/1585937421612-70a008356fbe.jpg",
     name: "Spice Route Indian Bistro",
     description: "Vibrant Indian flavors from North and South India. Signature tandoori dishes, biryanis, and freshly baked naan bread.",
     cuisine_type: "indian",
@@ -69,11 +69,11 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants%2F1585937421612-70a008356fbe.jpg" },
+    metadata: { thumbnail: "/seed-images/restaurants/1585937421612-70a008356fbe.jpg" },
   },
   {
     id: "rst-5",
-    thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg",
+    thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg",
     name: "The Arabian Table",
     description: "Modern Arabic cuisine with a contemporary twist. Featuring mezzeh platters, grilled meats, and traditional sweets.",
     cuisine_type: "arabic",
@@ -86,11 +86,11 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: false,
     dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg" },
+    metadata: { thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg" },
   },
   {
     id: "rst-6",
-    thumbnail: "/seed-images/restaurants%2F1562565652-a0d8f0c59eb4.jpg",
+    thumbnail: "/seed-images/restaurants/1562565652-a0d8f0c59eb4.jpg",
     name: "Bangkok Street Kitchen",
     description: "Authentic Thai street food brought to life with bold flavors. Known for pad thai, green curry, and mango sticky rice.",
     cuisine_type: "thai",
@@ -103,7 +103,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: false,
-    metadata: { thumbnail: "/seed-images/restaurants%2F1562565652-a0d8f0c59eb4.jpg" },
+    metadata: { thumbnail: "/seed-images/restaurants/1562565652-a0d8f0c59eb4.jpg" },
   },
 ]
 
@@ -145,10 +145,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_RESTAURANTS
     const sanitized = sanitizeList(rawList, "restaurants")
-    const itemList = sanitized.map((r: any) => ({
-      ...r,
-      thumbnail: r.thumbnail || r.banner_url || r.metadata?.thumbnail || null,
-    }))
+    const itemList = sanitized.map((r: any) => {
+      const raw = r.thumbnail || r.banner_url || r.metadata?.thumbnail || null
+      return { ...r, thumbnail: raw ? raw.replace(/%2F/gi, "/") : null }
+    })
 
     return res.json({
       items: itemList,

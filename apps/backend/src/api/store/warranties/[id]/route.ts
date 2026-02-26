@@ -16,8 +16,8 @@ const SEED_DATA = [
     is_active: true,
     price: 2999,
     rating: 4.2,
-    thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg",
-    metadata: { thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg" },
+    thumbnail: "/seed-images/warranties/1589829545856-d10d557cf95f.jpg",
+    metadata: { thumbnail: "/seed-images/content/1454165804606-c3d57bc86b40.jpg" },
     highlights: ["12-month coverage", "No deductible", "Free battery replacement", "24/7 support hotline"],
     faq: [
       { question: "What does this warranty cover?", answer: "This plan covers manufacturing defects, hardware failures, and battery replacement for 12 months from the date of purchase." },
@@ -51,8 +51,8 @@ const SEED_DATA = [
     is_active: true,
     price: 5999,
     rating: 4.5,
-    thumbnail: "/seed-images/warranties%2F1506784983877-45594efa4cbe.jpg",
-    metadata: { thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg" },
+    thumbnail: "/seed-images/warranties/1506784983877-45594efa4cbe.jpg",
+    metadata: { thumbnail: "/seed-images/government/1450101499163-c8848c66ca85.jpg" },
     highlights: ["24-month coverage", "Accidental damage protection", "Screen repair included", "Priority service queue"],
     faq: [
       { question: "Does this cover screen cracks?", answer: "Yes, screen repair is fully covered under this plan with no additional cost." },
@@ -86,7 +86,7 @@ const SEED_DATA = [
     is_active: true,
     price: 9999,
     rating: 4.8,
-    metadata: { thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg" },
+    metadata: { thumbnail: "/seed-images/warranties/1589829545856-d10d557cf95f.jpg" },
     highlights: ["36-month coverage", "Same-day replacement", "Theft protection", "Water damage covered", "Zero deductible"],
     faq: [
       { question: "What is same-day replacement?", answer: "If your device qualifies, we'll ship a replacement the same day your claim is approved." },
@@ -121,7 +121,7 @@ const SEED_DATA = [
     is_active: true,
     price: 14999,
     rating: 4.9,
-    metadata: { thumbnail: "/seed-images/warranties%2F1506784983877-45594efa4cbe.jpg" },
+    metadata: { thumbnail: "/seed-images/warranties/1506784983877-45594efa4cbe.jpg" },
     highlights: ["48-month coverage", "Annual maintenance included", "Loaner device provided", "Priority repair service", "Comprehensive protection"],
     faq: [
       { question: "What is the annual maintenance?", answer: "Once per year, send in your device for a professional cleaning, diagnostic check, and preventive maintenance at no extra cost." },
@@ -156,8 +156,8 @@ const SEED_DATA = [
     is_active: true,
     price: 7999,
     rating: 4.4,
-    thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg",
-    metadata: { thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg" },
+    thumbnail: "/seed-images/warranties/1589829545856-d10d557cf95f.jpg",
+    metadata: { thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg" },
     highlights: ["24-month coverage", "In-home service", "Multiple appliance coverage", "No hidden fees"],
     faq: [
       { question: "Which appliances are covered?", answer: "Refrigerators, washers, dryers, dishwashers, ovens, and microwaves are all covered under this plan." },

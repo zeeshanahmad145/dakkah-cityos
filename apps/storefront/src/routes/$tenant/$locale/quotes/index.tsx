@@ -14,12 +14,12 @@ export const Route = createFileRoute("/$tenant/$locale/quotes/")({
   loader: async () => {
     try {
       const categories = [
-        { id: "1", name: "Construction", description: "Building, renovation, and infrastructure projects of any scale.", icon: "🏗️", image: "/seed-images/b2b%2F1504384308090-c894fdcc538d.jpg", avgTime: "2-3 days" },
-        { id: "2", name: "Catering", description: "Food services for events, corporate functions, and celebrations.", icon: "🍽️", image: "/seed-images/restaurants%2F1555396273-367ea4eb4db5.jpg", avgTime: "1-2 days" },
-        { id: "3", name: "Events", description: "Event planning, venues, entertainment, and production services.", icon: "🎪", image: "/seed-images/events%2F1540575467063-178a50c2df87.jpg", avgTime: "1-3 days" },
-        { id: "4", name: "IT Services", description: "Software development, cloud solutions, cybersecurity, and IT support.", icon: "💻", image: "/seed-images/digital-products%2F1506744038136-46273834b3fb.jpg", avgTime: "2-5 days" },
-        { id: "5", name: "Marketing", description: "Digital marketing, branding, social media, and advertising campaigns.", icon: "📣", image: "/seed-images/freelance%2F1498050108023-c5249f4df085.jpg", avgTime: "1-2 days" },
-        { id: "6", name: "Consulting", description: "Business strategy, management consulting, and professional advisory.", icon: "📊", image: "/seed-images/financial-products%2F1560518883-ce09059eeffa.jpg", avgTime: "1-3 days" },
+        { id: "1", name: "Construction", description: "Building, renovation, and infrastructure projects of any scale.", icon: "🏗️", image: "/seed-images/b2b/1504384308090-c894fdcc538d.jpg", avgTime: "2-3 days" },
+        { id: "2", name: "Catering", description: "Food services for events, corporate functions, and celebrations.", icon: "🍽️", image: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg", avgTime: "1-2 days" },
+        { id: "3", name: "Events", description: "Event planning, venues, entertainment, and production services.", icon: "🎪", image: "/seed-images/events/1540575467063-178a50c2df87.jpg", avgTime: "1-3 days" },
+        { id: "4", name: "IT Services", description: "Software development, cloud solutions, cybersecurity, and IT support.", icon: "💻", image: "/seed-images/digital-products/1506744038136-46273834b3fb.jpg", avgTime: "2-5 days" },
+        { id: "5", name: "Marketing", description: "Digital marketing, branding, social media, and advertising campaigns.", icon: "📣", image: "/seed-images/freelance/1498050108023-c5249f4df085.jpg", avgTime: "1-2 days" },
+        { id: "6", name: "Consulting", description: "Business strategy, management consulting, and professional advisory.", icon: "📊", image: "/seed-images/financial-products/1560518883-ce09059eeffa.jpg", avgTime: "1-3 days" },
       ]
       return { categories }
     } catch {

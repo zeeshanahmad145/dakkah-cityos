@@ -29,7 +29,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0100",
     credit_limit: 50000000,
     credit_used: 12500000,
-    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
+    thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
   },
   {
     id: "company-seed-2",
@@ -43,7 +43,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0200",
     credit_limit: 25000000,
     credit_used: 8200000,
-    thumbnail: "/seed-images/b2b%2F1504384308090-c894fdcc538d.jpg",
+    thumbnail: "/seed-images/b2b/1504384308090-c894fdcc538d.jpg",
   },
   {
     id: "company-seed-3",
@@ -57,7 +57,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0300",
     credit_limit: 100000000,
     credit_used: 45000000,
-    thumbnail: "/seed-images/consignments%2F1548036328-c9fa89d128fa.jpg",
+    thumbnail: "/seed-images/consignments/1548036328-c9fa89d128fa.jpg",
   },
   {
     id: "company-seed-4",
@@ -71,7 +71,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0400",
     credit_limit: 10000000,
     credit_used: 0,
-    thumbnail: "/seed-images/charity%2F1469571486292-0ba58a3f068b.jpg",
+    thumbnail: "/seed-images/charity/1469571486292-0ba58a3f068b.jpg",
   },
   {
     id: "company-seed-5",
@@ -85,7 +85,7 @@ const SEED_COMPANIES = [
     phone: "+1-555-0500",
     credit_limit: 75000000,
     credit_used: 22000000,
-    thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
+    thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
   },
 ]
 
