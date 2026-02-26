@@ -1,6 +1,8 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
+export const AUTHENTICATE = false
+
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const auctionId = req.params.id;
   const { bidder_id, amount } = req.body as {

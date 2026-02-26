@@ -128,6 +128,14 @@ function generateSeedBids(currentPrice: number, increment: number, count: number
   return bids
 }
 
+const SEED_REVIEWS = [
+  { author: "Hassan Al-Rashid", rating: 5, comment: "Exceptional item, exactly as described. The auction process was transparent and exciting.", created_at: "2025-01-15T00:00:00Z" },
+  { author: "Victoria Chen", rating: 5, comment: "Superb quality. Authentication was thorough and reassuring.", created_at: "2025-01-12T00:00:00Z" },
+  { author: "Pierre Dubois", rating: 4, comment: "Beautiful piece. Bidding was competitive but fair and well-managed.", created_at: "2025-01-10T00:00:00Z" },
+  { author: "Amira Nasser", rating: 5, comment: "A truly rare find. The platform made the process smooth.", created_at: "2025-01-08T00:00:00Z" },
+  { author: "Marco Bianchi", rating: 4, comment: "Impressive quality. Delivery was prompt and well-packaged.", created_at: "2025-01-05T00:00:00Z" },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("auction") as any
@@ -138,7 +146,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return res.json({ item: { ...seedItem, bids: generateSeedBids(seedItem.current_price, seedItem.bid_increment, seedItem.bid_count) } })
     }
     const bids = await mod.listBids({ auction_id: id }, { take: 100 })
-    return res.json({ item: { ...item, bids } })
+    const bidList = Array.isArray(bids) ? bids : []
+    const enriched = {
+      ...item,
+      thumbnail: item.metadata?.thumbnail || `/seed-images/auctions%2F1523170335258-f5ed11844a49.jpg`,
+      bids: bidList.length > 0 ? bidList : generateSeedBids(Number(item.current_price || item.starting_price || 10000), Number(item.bid_increment || 1000), Number(item.total_bids || 5)),
+      reviews: SEED_REVIEWS,
+    }
+    return res.json({ item: enriched })
   } catch (error: any) {
     const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
     return res.json({ item: { ...seedItem, bids: generateSeedBids(seedItem.current_price, seedItem.bid_increment, seedItem.bid_count) } })

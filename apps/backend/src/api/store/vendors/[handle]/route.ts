@@ -64,6 +64,7 @@ function enrichVendorProfile(raw: any, handle: string) {
     name,
     title: name,
     logo: raw.logo_url,
+    thumbnail: raw.logo_url || raw.banner_url || "/seed-images/vendors%2F1531297484001-80022131f5a1.jpg",
     product_count: raw.total_products || products.length,
     products,
     reviews: SEED_REVIEWS,

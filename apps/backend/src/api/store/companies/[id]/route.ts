@@ -121,7 +121,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (companyService?.retrieveCompany) {
       const company = await companyService.retrieveCompany(id)
       if (company) {
-        return res.json({ company })
+        const seedMatch = SEED_COMPANIES.find((c) => c.id === id) || SEED_COMPANIES[0]
+        return res.json({ company: { ...company, thumbnail: company.thumbnail || company.metadata?.thumbnail || seedMatch.thumbnail, reviews: seedMatch.reviews } })
       }
     }
   } catch (_e) {

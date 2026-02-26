@@ -46,6 +46,14 @@ const SEED_CLASSIFIEDS = [
   ] },
 ]
 
+const SEED_REVIEWS = [
+  { author: "Mohammed A.", rating: 5, comment: "Excellent condition, exactly as described. Seller was very responsive.", created_at: "2025-12-10T14:30:00Z" },
+  { author: "Sara K.", rating: 4, comment: "Great deal. Minor differences from photos but overall happy with purchase.", created_at: "2025-12-08T09:15:00Z" },
+  { author: "Khalid R.", rating: 5, comment: "Smooth transaction, met in a safe location. Highly recommend this seller.", created_at: "2025-12-05T16:45:00Z" },
+  { author: "Nora M.", rating: 4, comment: "Good price and quick communication. Would buy from again.", created_at: "2025-12-01T11:20:00Z" },
+  { author: "Omar H.", rating: 4, comment: "Fair deal overall. Product works perfectly.", created_at: "2025-11-28T08:00:00Z" },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("classified") as any
@@ -55,7 +63,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seed = SEED_CLASSIFIEDS.find((s) => s.id === id) || SEED_CLASSIFIEDS[0]
       return res.json({ item: { ...seed, id } })
     }
-    return res.json({ item })
+    const enriched = {
+      ...item,
+      thumbnail: item.metadata?.thumbnail || `/seed-images/classifieds%2F1592750475338-74b7b21085ab.jpg`,
+      images: item.metadata?.images || [item.metadata?.thumbnail || `/seed-images/classifieds%2F1592750475338-74b7b21085ab.jpg`],
+      reviews: SEED_REVIEWS,
+    }
+    return res.json({ item: enriched })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_CLASSIFIEDS.find((s) => s.id === id) || SEED_CLASSIFIEDS[0]

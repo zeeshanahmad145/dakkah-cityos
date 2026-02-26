@@ -38,8 +38,9 @@ class AuctionModuleService extends MedusaService({
     }
 
     const bid = await (this as any).createBids({
+      tenant_id: "default",
       auction_id: auctionId,
-      bidder_id: bidderId,
+      customer_id: bidderId,
       amount,
       status: "active",
       placed_at: new Date(),
