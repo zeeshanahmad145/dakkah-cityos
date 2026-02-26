@@ -10,21 +10,21 @@ const LOCALE_TO_COUNTRY: Record<string, string> = {
 }
 
 const categoryImages: Record<string, string> = {
-  "clothing": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop",
-  "electronics": "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=300&fit=crop",
-  "home-garden": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-  "food-beverage": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop",
-  "health-beauty": "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=300&fit=crop",
-  "sports-outdoors": "https://images.unsplash.com/photo-1461896836934-bd45ba8a0a86?w=400&h=300&fit=crop",
-  "automotive": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&h=300&fit=crop",
-  "books-media": "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=300&fit=crop",
-  "toys-games": "https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=400&h=300&fit=crop",
-  "jewelry": "https://images.unsplash.com/photo-1515562141589-67f0d999b799?w=400&h=300&fit=crop",
-  "pets": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop",
-  "office-supplies": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop",
-  "real-estate": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop",
-  "travel": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop",
-  "education": "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=400&h=300&fit=crop",
+  "clothing": "/seed-images/content%2F1548013146-72479768bada.jpg",
+  "electronics": "/seed-images/content%2F1573164713988-8665fc963095.jpg",
+  "home-garden": "/seed-images/content%2F1519167758481-83f550bb49b3.jpg",
+  "food-beverage": "/seed-images/volume-deals%2F1504674900247-0877df9cc836.jpg",
+  "health-beauty": "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
+  "sports-outdoors": "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
+  "automotive": "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
+  "books-media": "/seed-images/education%2F1509062522246-3755977927d7.jpg",
+  "toys-games": "/seed-images/content%2F1558171813-4c088753af8f.jpg",
+  "jewelry": "/seed-images/content%2F1578662996442-48f60103fc96.jpg",
+  "pets": "/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg",
+  "office-supplies": "/seed-images/b2b%2F1504384308090-c894fdcc538d.jpg",
+  "real-estate": "/seed-images/real-estate%2F1600585154340-be6161a56a0c.jpg",
+  "travel": "/seed-images/event-ticketing%2F1488646953014-85cb44e25828.jpg",
+  "education": "/seed-images/education%2F1503676260728-1c00da094a0b.jpg",
 }
 
 function getCategoryImage(handle: string, name: string): string {
@@ -33,7 +33,7 @@ function getCategoryImage(handle: string, name: string): string {
   for (const [key, url] of Object.entries(categoryImages)) {
     if (lowerName.includes(key.split("-")[0])) return url
   }
-  return `https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=400&h=300&fit=crop`
+  return "/seed-images/content%2F1682687220742-aba13b6e50ba.jpg"
 }
 
 export const Route = createFileRoute("/$tenant/$locale/categories/")({

@@ -5,12 +5,12 @@ import { useState } from "react"
 import { t } from "@/lib/i18n"
 
 const fallbackItems = [
-  { id: "tby-1", name: "Premium Noise-Cancelling Headphones", category: "electronics", thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80", description: "Experience world-class ANC with 30hr battery. Try them for 14 days risk-free.", trial_period: 14, deposit: 4999 },
-  { id: "tby-2", name: "Ergonomic Office Chair", category: "furniture", thumbnail: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80", description: "Adjustable lumbar support, breathable mesh, and armrests. Perfect for home office.", trial_period: 30, deposit: 9999 },
-  { id: "tby-3", name: "Smart Fitness Tracker", category: "electronics", thumbnail: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=600&q=80", description: "Track steps, heart rate, sleep, and workouts. Water-resistant to 50m.", trial_period: 14, deposit: 2499 },
-  { id: "tby-4", name: "Designer Sunglasses", category: "fashion", thumbnail: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80", description: "Polarized lenses, UV400 protection. Italian acetate frames.", trial_period: 7, deposit: 3499 },
-  { id: "tby-5", name: "Professional Espresso Machine", category: "home", thumbnail: "https://images.unsplash.com/photo-1517353856937-f59195013237?w=600&q=80", description: "Dual boiler system with PID temperature control. Barista-grade at home.", trial_period: 30, deposit: 14999 },
-  { id: "tby-6", name: "Luxury Skincare Set", category: "beauty", thumbnail: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80", description: "5-piece premium skincare routine with cleanser, serum, moisturizer, eye cream & mask.", trial_period: 14, deposit: 4999 },
+  { id: "tby-1", name: "Premium Noise-Cancelling Headphones", category: "electronics", thumbnail: "/seed-images/try-before-you-buy%2F1504148455328-c376907d081c.jpg", description: "Experience world-class ANC with 30hr battery. Try them for 14 days risk-free.", trial_period: 14, deposit: 4999 },
+  { id: "tby-2", name: "Ergonomic Office Chair", category: "furniture", thumbnail: "/seed-images/try-before-you-buy%2F1504280390367-361c6d9f38f4.jpg", description: "Adjustable lumbar support, breathable mesh, and armrests. Perfect for home office.", trial_period: 30, deposit: 9999 },
+  { id: "tby-3", name: "Smart Fitness Tracker", category: "electronics", thumbnail: "/seed-images/try-before-you-buy%2F1516035069371-29a1b244cc32.jpg", description: "Track steps, heart rate, sleep, and workouts. Water-resistant to 50m.", trial_period: 14, deposit: 2499 },
+  { id: "tby-4", name: "Designer Sunglasses", category: "fashion", thumbnail: "/seed-images/try-before-you-buy%2F1504148455328-c376907d081c.jpg", description: "Polarized lenses, UV400 protection. Italian acetate frames.", trial_period: 7, deposit: 3499 },
+  { id: "tby-5", name: "Professional Espresso Machine", category: "home", thumbnail: "/seed-images/try-before-you-buy%2F1504280390367-361c6d9f38f4.jpg", description: "Dual boiler system with PID temperature control. Barista-grade at home.", trial_period: 30, deposit: 14999 },
+  { id: "tby-6", name: "Luxury Skincare Set", category: "beauty", thumbnail: "/seed-images/try-before-you-buy%2F1516035069371-29a1b244cc32.jpg", description: "5-piece premium skincare routine with cleanser, serum, moisturizer, eye cream & mask.", trial_period: 14, deposit: 4999 },
 ]
 
 export const Route = createFileRoute("/$tenant/$locale/try-before-you-buy/")({
