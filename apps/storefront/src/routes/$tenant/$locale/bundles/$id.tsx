@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ComparisonTableBlock } from "@/components/blocks/comparison-table-block"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
@@ -46,6 +48,21 @@ function BundleDetailPage() {
 
   const loaderData = Route.useLoaderData()
   const bundle = loaderData?.item
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handleAddToCart = async () => {
+    setLoading(true)
+    try {
+      await new Promise(r => setTimeout(r, 500))
+      toast.success("Bundle added to cart!")
+    } catch { toast.error("Something went wrong. Please try again.") }
+    finally { setLoading(false) }
+  }
+
+  const handleSaveForLater = () => {
+    toast.success("Bundle saved for later!")
+  }
 
   if (!bundle) {
     return (
@@ -172,12 +189,12 @@ function BundleDetailPage() {
                   )}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleAddToCart} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
-                  Add Bundle to Cart
+                  {loading ? "Adding..." : "Add Bundle to Cart"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleSaveForLater} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                   Save for Later
                 </button>

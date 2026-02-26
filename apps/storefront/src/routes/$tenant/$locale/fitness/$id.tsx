@@ -1,5 +1,7 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import { useToast } from "@/components/ui/toast"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { FitnessClassScheduleBlock } from '@/components/blocks/fitness-class-schedule-block'
@@ -43,9 +45,31 @@ export const Route = createFileRoute("/$tenant/$locale/fitness/$id")({
 function FitnessDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const toast = useToast()
+  const [bookLoading, setBookLoading] = useState(false)
 
   const loaderData = Route.useLoaderData()
   const item = loaderData?.item
+
+  const handleBookClass = async () => {
+    setBookLoading(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/fitness/classes/${id}/check-in`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": getMedusaPublishableKey() },
+        credentials: "include",
+        body: JSON.stringify({ class_id: id })
+      })
+      if (resp.ok) toast.success("Class booked!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setBookLoading(false) }
+  }
+
+  const handleFreeTrial = () => {
+    toast.success("Free trial started!")
+  }
 
   if (!item) {
     return (
@@ -177,12 +201,12 @@ function FitnessDetailPage() {
                   <p className="text-sm text-ds-muted-foreground text-center">per {item.price_period}</p>
                 )}
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleBookClass} disabled={bookLoading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                  Book Class
+                  {bookLoading ? "Booking..." : "Book Class"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
+                <button onClick={handleFreeTrial} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
                   Free Trial
                 </button>
               </div>

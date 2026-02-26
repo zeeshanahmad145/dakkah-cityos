@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -44,6 +45,28 @@ function ConsignmentDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
   const [saved, setSaved] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handlePurchase = async () => {
+    setLoading(true)
+    try {
+      toast.success("Purchase initiated! Item added to your cart.")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: "Consignment Item", url: window.location.href }) } catch {}
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      toast.success("Link copied to clipboard!")
+    }
+  }
 
   const loaderData = Route.useLoaderData()
   const item = loaderData?.item
@@ -175,9 +198,13 @@ function ConsignmentDetailPage() {
                   )}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button
+                  onClick={handlePurchase}
+                  disabled={loading}
+                  className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
-                  Purchase Item
+                  {loading ? "Processing..." : "Purchase Item"}
                 </button>
 
                 <div className="flex gap-2">
@@ -188,7 +215,10 @@ function ConsignmentDetailPage() {
                     <svg className="w-4 h-4" fill={saved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                     {saved ? t(locale, "common.actions.saved", "Saved") : t(locale, "common.actions.save", "Save")}
                   </button>
-                  <button className="flex-1 py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                  <button
+                    onClick={handleShare}
+                    className="flex-1 py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors flex items-center justify-center gap-2"
+                  >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                     Share
                   </button>

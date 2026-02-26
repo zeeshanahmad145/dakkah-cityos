@@ -1,8 +1,10 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t, formatCurrency } from "@/lib/i18n"
 import type { SupportedLocale } from "@/lib/i18n"
+import { useToast } from "@/components/ui/toast"
 import { BenefitsList } from "@/components/memberships/benefits-list"
 import { MembershipTiersBlock } from "@/components/blocks/membership-tiers-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
@@ -63,9 +65,28 @@ function MembershipDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
   const loc = locale as SupportedLocale
+  const toast = useToast()
+  const [joining, setJoining] = useState(false)
 
   const loaderData = Route.useLoaderData()
   const tier = loaderData?.item
+
+  const handleJoin = async () => {
+    setJoining(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const publishableKey = getMedusaPublishableKey()
+      const resp = await fetch(`${baseUrl}/store/memberships`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ membership_id: id })
+      })
+      if (resp.ok) toast.success("Membership activated successfully!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setJoining(false) }
+  }
 
   if (!tier) {
     return (
@@ -164,8 +185,8 @@ function MembershipDetailPage() {
                 </span>
               </div>
 
-              <button className="w-full px-6 py-3 text-sm font-semibold rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors">
-                {t(locale, "blocks.get_started")}
+              <button onClick={handleJoin} disabled={joining} className="w-full px-6 py-3 text-sm font-semibold rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors disabled:opacity-50">
+                {joining ? "Processing..." : t(locale, "blocks.get_started")}
               </button>
 
               <Link

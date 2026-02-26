@@ -4,6 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { NewsletterBlock } from "@/components/blocks/newsletter-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { t } from "@/lib/i18n"
 
 function normalizeDetail(item: any) {
@@ -46,6 +47,10 @@ function NewsletterDetailPage() {
   const prefix = `/${tenant}/${locale}`
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
 
   const loaderData = Route.useLoaderData()
   const newsletter = loaderData?.item
@@ -72,7 +77,20 @@ function NewsletterDetailPage() {
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
-    setSubscribed(true)
+    setLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/newsletters`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ email, newsletter_id: id })
+      })
+      if (resp.ok) {
+        setSubscribed(true)
+        toast.success("Successfully subscribed to the newsletter!")
+      } else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setLoading(false) }
   }
 
   const sampleContent = newsletter.sample_content || newsletter.preview || newsletter.recent_issues || []
@@ -217,9 +235,9 @@ function NewsletterDetailPage() {
                       required
                       className="w-full px-3 py-2 border border-ds-border rounded-lg text-ds-foreground bg-ds-background focus:outline-none focus:ring-2 focus:ring-ds-primary text-sm"
                     />
-                    <button type="submit" className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                    <button type="submit" disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                      Subscribe
+                      {loading ? "Subscribing..." : "Subscribe"}
                     </button>
                   </form>
                 )}

@@ -7,6 +7,8 @@ import { RewardTier } from "@/components/campaigns/reward-tier"
 import { CountdownTimer } from "@/components/campaigns/countdown-timer"
 import { CrowdfundingProgressBlock } from "@/components/blocks/crowdfunding-progress-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -49,6 +51,31 @@ function CampaignDetailPage() {
 
   const loaderData = Route.useLoaderData()
   const campaign = loaderData?.item
+  const [pledgeLoading, setPledgeLoading] = useState(false)
+  const [pledgeAmount, setPledgeAmount] = useState("")
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
+
+  const handlePledge = async (amount?: number) => {
+    const finalAmount = amount || Number(pledgeAmount)
+    if (!finalAmount || finalAmount <= 0) {
+      toast.error("Please enter a valid pledge amount.")
+      return
+    }
+    setPledgeLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/campaigns/${id}/pledge`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ amount: finalAmount })
+      })
+      if (resp.ok) toast.success("Pledge submitted successfully! Thank you for your support!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setPledgeLoading(false) }
+  }
 
   if (!campaign) {
     return (
@@ -158,7 +185,31 @@ function CampaignDetailPage() {
             )}
           </div>
 
-          <div>
+          <div className="space-y-6">
+            <div className="bg-ds-background rounded-lg border border-ds-border p-6">
+              <h2 className="text-xl font-bold text-ds-foreground mb-4">Back This Project</h2>
+              <div className="space-y-3">
+                <div className="relative">
+                  <span className="absolute start-3 top-1/2 -translate-y-1/2 text-ds-muted-foreground text-sm">{campaign.currency_code || "USD"}</span>
+                  <input
+                    type="number"
+                    min={1}
+                    placeholder="Enter pledge amount"
+                    value={pledgeAmount}
+                    onChange={(e) => setPledgeAmount(e.target.value)}
+                    className="w-full ps-14 pe-3 py-3 text-sm bg-ds-background border border-ds-border rounded-lg text-ds-foreground focus:outline-none focus:ring-2 focus:ring-ds-ring"
+                  />
+                </div>
+                <button
+                  onClick={() => handlePledge()}
+                  disabled={pledgeLoading}
+                  className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-semibold hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {pledgeLoading ? "Processing..." : "Back This Project"}
+                </button>
+              </div>
+            </div>
+
             {campaign.reward_tiers && campaign.reward_tiers.length > 0 && (
               <div>
                 <h2 className="text-xl font-bold text-ds-foreground mb-4">Reward Tiers</h2>
@@ -175,7 +226,7 @@ function CampaignDetailPage() {
                       limitedQuantity={tier.limited_quantity}
                       claimed={tier.claimed}
                       includes={tier.includes}
-                      onPledge={() => {}}
+                      onPledge={() => handlePledge(tier.pledge_amount)}
                     />
                   ))}
                 </div>

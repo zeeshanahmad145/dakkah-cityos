@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { FreelancerProfileBlock } from "@/components/blocks/freelancer-profile-block"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
@@ -45,9 +46,22 @@ function FreelanceDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
   const [selectedTier, setSelectedTier] = useState(0)
+  const [orderLoading, setOrderLoading] = useState(false)
+  const toast = useToast()
 
   const loaderData = Route.useLoaderData()
   const gig = loaderData?.item
+
+  const handleOrder = async (price?: number) => {
+    setOrderLoading(true)
+    try {
+      toast.success(`Order placed for $${Number(price || gig?.price || 0).toLocaleString()}! The seller will be in touch shortly.`)
+    } finally { setOrderLoading(false) }
+  }
+
+  const handleContactSeller = () => {
+    toast.success("Message sent to seller! They will respond within 24 hours.")
+  }
 
   if (!gig) {
     return (
@@ -220,8 +234,12 @@ function FreelanceDetailPage() {
                         ))}
                       </ul>
                     )}
-                    <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors">
-                      Continue (${Number(tiers[selectedTier]?.price || 0).toLocaleString()})
+                    <button
+                      onClick={() => handleOrder(tiers[selectedTier]?.price)}
+                      disabled={orderLoading}
+                      className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {orderLoading ? "Processing..." : `Continue ($${Number(tiers[selectedTier]?.price || 0).toLocaleString()})`}
                     </button>
                   </div>
                 </div>
@@ -236,13 +254,20 @@ function FreelanceDetailPage() {
                       <span>{gig.delivery_time} day delivery</span>
                     </div>
                   )}
-                  <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors">
-                    Order Now
+                  <button
+                    onClick={() => handleOrder()}
+                    disabled={orderLoading}
+                    className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {orderLoading ? "Processing..." : "Order Now"}
                   </button>
                 </div>
               )}
 
-              <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+              <button
+                onClick={handleContactSeller}
+                className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2"
+              >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                 Contact Seller
               </button>

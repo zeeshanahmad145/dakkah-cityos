@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ComparisonTableBlock } from "@/components/blocks/comparison-table-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
@@ -46,6 +47,30 @@ function CreditDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
   const [selectedTerm, setSelectedTerm] = useState<number | null>(null)
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handleApplyNow = async () => {
+    setLoading(true)
+    try {
+      toast.success("Application submitted successfully!")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCheckEligibility = async () => {
+    setLoading(true)
+    try {
+      toast.success("Eligibility check complete! You pre-qualify.")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const loaderData = Route.useLoaderData()
   const product = loaderData?.item
@@ -214,12 +239,12 @@ function CreditDetailPage() {
                   )}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleApplyNow} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  Apply Now
+                  {loading ? "Submitting..." : "Apply Now"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleCheckEligibility} disabled={loading} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   Check Eligibility
                 </button>

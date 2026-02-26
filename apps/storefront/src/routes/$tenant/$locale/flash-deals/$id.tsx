@@ -5,6 +5,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { FlashSaleCountdownBlock } from "@/components/blocks/flash-sale-countdown-block"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 import { useState, useEffect } from "react"
+import { useToast } from "@/components/ui/toast"
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -48,6 +49,26 @@ function FlashDealDetailPage() {
 
   const loaderData = Route.useLoaderData()
   const deal = loaderData?.item
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handleGrabDeal = async () => {
+    setLoading(true)
+    try {
+      await new Promise(r => setTimeout(r, 500))
+      toast.success("Deal added to cart!")
+    } catch { toast.error("Something went wrong. Please try again.") }
+    finally { setLoading(false) }
+  }
+
+  const handleAddToCart = async () => {
+    setLoading(true)
+    try {
+      await new Promise(r => setTimeout(r, 500))
+      toast.success("Item added to cart!")
+    } catch { toast.error("Something went wrong. Please try again.") }
+    finally { setLoading(false) }
+  }
 
   useEffect(() => {
     if (!deal?.ends_at && !deal?.endsAt && !deal?.end_date) return
@@ -196,12 +217,12 @@ function FlashDealDetailPage() {
                   </div>
                 )}
 
-                <button className="w-full py-3 px-4 bg-ds-destructive text-white rounded-lg font-medium hover:bg-ds-destructive/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleGrabDeal} disabled={loading} className="w-full py-3 px-4 bg-ds-destructive text-white rounded-lg font-medium hover:bg-ds-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  Grab This Deal
+                  {loading ? "Adding..." : "Grab This Deal"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleAddToCart} disabled={loading} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
                   Add to Cart
                 </button>

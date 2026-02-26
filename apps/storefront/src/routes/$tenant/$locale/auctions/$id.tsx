@@ -8,6 +8,8 @@ import { AuctionCountdown } from "@/components/auctions/auction-countdown"
 import { BidPanel } from "@/components/auctions/bid-panel"
 import { BidHistory } from "@/components/auctions/bid-history"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 
 function normalizePriceField(val: any, currency: string) {
   if (val == null) return null
@@ -79,6 +81,40 @@ function AuctionDetailPage() {
   const loaderData = Route.useLoaderData()
   const auction = loaderData?.item
   const { data: bids, isLoading: bidsLoading } = useAuctionBids(id)
+  const [bidLoading, setBidLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
+
+  const handlePlaceBid = async (amount: number) => {
+    setBidLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/auctions/${id}/bid`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ amount })
+      })
+      if (resp.ok) toast.success("Bid placed successfully!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setBidLoading(false) }
+  }
+
+  const handleBuyNow = async () => {
+    setBidLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/auctions/${id}/bid`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ amount: auction?.buyNowPrice?.amount, buy_now: true })
+      })
+      if (resp.ok) toast.success("Buy Now completed successfully!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setBidLoading(false) }
+  }
 
   if (!auction) {
     return (
@@ -241,6 +277,8 @@ function AuctionDetailPage() {
                 currentPrice={auction.currentPrice}
                 buyNowPrice={auction.buyNowPrice}
                 auctionStatus={auction.status}
+                onPlaceBid={handlePlaceBid}
+                onBuyNow={handleBuyNow}
               />
             </div>
 
@@ -258,6 +296,8 @@ function AuctionDetailPage() {
                 currentPrice={auction.currentPrice}
                 buyNowPrice={auction.buyNowPrice}
                 auctionStatus={auction.status}
+                onPlaceBid={handlePlaceBid}
+                onBuyNow={handleBuyNow}
               />
 
               {auction.status === "active" && (

@@ -1,7 +1,9 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useToast } from "@/components/ui/toast"
 import { DonationCampaignBlock } from "@/components/blocks/donation-campaign-block"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
@@ -43,9 +45,44 @@ export const Route = createFileRoute("/$tenant/$locale/charity/$id")({
 function CharityDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const toast = useToast()
+  const [donating, setDonating] = useState(false)
+  const [donationAmount, setDonationAmount] = useState("25")
 
   const loaderData = Route.useLoaderData()
   const campaign = loaderData?.item
+
+  const handleDonate = async () => {
+    const amount = Number(donationAmount)
+    if (!amount || amount <= 0) {
+      toast.error("Please enter a valid donation amount.")
+      return
+    }
+    setDonating(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const publishableKey = getMedusaPublishableKey()
+      const resp = await fetch(`${baseUrl}/store/donations/recurring`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ campaign_id: id, amount })
+      })
+      if (resp.ok) toast.success("Thank you for your donation!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setDonating(false) }
+  }
+
+  const handleShare = async () => {
+    const shareData = { title: campaign?.name || campaign?.title || "Charity Campaign", url: window.location.href }
+    if (navigator.share) {
+      try { await navigator.share(shareData) } catch {}
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      toast.success("Link copied to clipboard!")
+    }
+  }
 
   if (!campaign) {
     return (
@@ -189,12 +226,31 @@ function CharityDetailPage() {
           <aside className="space-y-6">
             <div className="sticky top-4 space-y-6">
               <div className="bg-ds-background border border-ds-border rounded-xl p-6 space-y-4">
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 text-lg">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-ds-muted-foreground">$</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={donationAmount}
+                    onChange={(e) => setDonationAmount(e.target.value)}
+                    className="w-full px-3 py-2 border border-ds-border rounded-lg text-ds-foreground bg-ds-background text-sm focus:outline-none focus:ring-2 focus:ring-ds-primary"
+                    placeholder="Enter amount"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  {[10, 25, 50, 100].map((amt) => (
+                    <button key={amt} onClick={() => setDonationAmount(String(amt))} className={`flex-1 py-1.5 text-xs font-medium rounded-lg border transition-colors ${donationAmount === String(amt) ? "bg-ds-primary text-ds-primary-foreground border-ds-primary" : "border-ds-border text-ds-muted-foreground hover:bg-ds-muted"}`}>
+                      ${amt}
+                    </button>
+                  ))}
+                </div>
+
+                <button onClick={handleDonate} disabled={donating} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 text-lg disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                  Donate Now
+                  {donating ? "Processing..." : "Donate Now"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleShare} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                   Share Campaign
                 </button>

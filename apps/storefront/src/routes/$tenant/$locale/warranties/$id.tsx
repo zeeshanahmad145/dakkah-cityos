@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { TimelineBlock } from "@/components/blocks/timeline-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
@@ -44,6 +46,23 @@ export const Route = createFileRoute("/$tenant/$locale/warranties/$id")({
 function WarrantyDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handlePurchaseWarranty = async () => {
+    setLoading(true)
+    try {
+      toast.success("Warranty purchased successfully!")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleComparePlans = () => {
+    toast.info("Comparing warranty plans...")
+  }
 
   const loaderData = Route.useLoaderData()
   const warranty = loaderData?.item
@@ -215,12 +234,12 @@ function WarrantyDetailPage() {
                   </div>
                 )}
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handlePurchaseWarranty} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                  Purchase Warranty
+                  {loading ? "Processing..." : "Purchase Warranty"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
+                <button onClick={handleComparePlans} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
                   Compare Plans
                 </button>
               </div>

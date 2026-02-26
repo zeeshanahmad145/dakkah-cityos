@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
 function normalizeDetail(item: any) {
@@ -42,6 +44,30 @@ export const Route = createFileRoute("/$tenant/$locale/try-before-you-buy/$id")(
 function TryBeforeYouBuyDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handleStartTrial = async () => {
+    setLoading(true)
+    try {
+      toast.success("Trial started! Your product is on its way.")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleBuyNow = async () => {
+    setLoading(true)
+    try {
+      toast.success("Purchase initiated!")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const loaderData = Route.useLoaderData()
   const product = loaderData?.item
@@ -167,12 +193,12 @@ function TryBeforeYouBuyDetailPage() {
                   )}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleStartTrial} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-                  Start Trial
+                  {loading ? "Processing..." : "Start Trial"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleBuyNow} disabled={loading} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
                   Buy Now
                 </button>

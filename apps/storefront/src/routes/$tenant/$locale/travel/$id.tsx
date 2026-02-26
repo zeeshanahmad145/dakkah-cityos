@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { MapBlock } from '@/components/blocks/map-block'
 import { ImageGalleryBlock } from '@/components/blocks/image-gallery-block'
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
@@ -45,8 +47,38 @@ function TravelDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
 
+  const [bookingLoading, setBookingLoading] = useState(false)
+  const [inquireLoading, setInquireLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
+
   const loaderData = Route.useLoaderData()
   const pkg = loaderData?.item
+
+  const handleBookNow = async () => {
+    setBookingLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/travel/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ travel_id: id })
+      })
+      if (resp.ok) toast.success("Booking request submitted!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setBookingLoading(false) }
+  }
+
+  const handleInquire = async () => {
+    setInquireLoading(true)
+    try {
+      await new Promise(r => setTimeout(r, 500))
+      toast.success("Inquiry sent! We'll get back to you shortly.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setInquireLoading(false) }
+  }
 
   if (!pkg) {
     return (
@@ -218,14 +250,30 @@ function TravelDetailPage() {
                   {pkg.price_per && <p className="text-sm text-ds-muted-foreground">per {pkg.price_per}</p>}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                  Book Now
+                <button
+                  onClick={handleBookNow}
+                  disabled={bookingLoading}
+                  className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {bookingLoading ? (
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  )}
+                  {bookingLoading ? "Submitting..." : "Book Now"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  Inquire
+                <button
+                  onClick={handleInquire}
+                  disabled={inquireLoading}
+                  className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {inquireLoading ? (
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                  )}
+                  {inquireLoading ? "Sending..." : "Inquire"}
                 </button>
               </div>
 

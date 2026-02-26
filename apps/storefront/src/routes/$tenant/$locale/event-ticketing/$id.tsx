@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function getFallbackItems() {
@@ -61,8 +62,32 @@ function EventTicketingDetailPage() {
   const prefix = `/${tenant}/${locale}`
   const [selectedTicketType, setSelectedTicketType] = useState(0)
   const [quantity, setQuantity] = useState(1)
+  const [buyLoading, setBuyLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
 
   const event = Route.useLoaderData()
+
+  const handleBuyTickets = async () => {
+    setBuyLoading(true)
+    try {
+      const ticketTypes = event?.ticket_types || [{ name: "General Admission", price: event?.price || 0 }]
+      const resp = await fetch(`${baseUrl}/store/event-ticketing/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({
+          event_id: id,
+          ticket_type: ticketTypes[selectedTicketType]?.name,
+          quantity
+        })
+      })
+      if (resp.ok) toast.success(`${quantity} ticket${quantity > 1 ? "s" : ""} purchased successfully!`)
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setBuyLoading(false) }
+  }
 
   const formatPrice = (price: number) => {
     const amount = price >= 100 ? price / 100 : price
@@ -215,9 +240,17 @@ function EventTicketingDetailPage() {
                   </div>
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-white rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
-                  Buy Tickets
+                <button
+                  onClick={handleBuyTickets}
+                  disabled={buyLoading}
+                  className="w-full py-3 px-4 bg-ds-primary text-white rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {buyLoading ? (
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                  )}
+                  {buyLoading ? "Processing..." : "Buy Tickets"}
                 </button>
               </div>
 

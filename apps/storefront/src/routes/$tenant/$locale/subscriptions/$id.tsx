@@ -1,7 +1,9 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useToast } from "@/components/ui/toast"
 import { SubscriptionManageBlock } from "@/components/blocks/subscription-manage-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
@@ -43,9 +45,32 @@ export const Route = createFileRoute("/$tenant/$locale/subscriptions/$id")({
 function SubscriptionDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const toast = useToast()
+  const [subscribing, setSubscribing] = useState(false)
 
   const loaderData = Route.useLoaderData()
   const plan = loaderData?.item
+
+  const handleSubscribe = async () => {
+    setSubscribing(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const publishableKey = getMedusaPublishableKey()
+      const resp = await fetch(`${baseUrl}/store/subscriptions/checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ plan_id: id })
+      })
+      if (resp.ok) toast.success("Subscription started successfully!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setSubscribing(false) }
+  }
+
+  const handleComparePlans = () => {
+    toast.info("Scroll down to compare all available plans.")
+  }
 
   if (!plan) {
     return (
@@ -190,9 +215,9 @@ function SubscriptionDetailPage() {
                   )}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleSubscribe} disabled={subscribing} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  Subscribe Now
+                  {subscribing ? "Processing..." : "Subscribe Now"}
                 </button>
 
                 {plan.trial_days && (
@@ -201,7 +226,7 @@ function SubscriptionDetailPage() {
                   </p>
                 )}
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleComparePlans} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   Compare Plans
                 </button>

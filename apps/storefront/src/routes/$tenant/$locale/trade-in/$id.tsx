@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ComparisonTableBlock } from "@/components/blocks/comparison-table-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
@@ -43,9 +45,32 @@ export const Route = createFileRoute("/$tenant/$locale/trade-in/$id")({
 function TradeInDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
 
   const loaderData = Route.useLoaderData()
   const item = loaderData?.item
+
+  const handleStartTradeIn = async () => {
+    setLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/trade-in`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ trade_in_item_id: id })
+      })
+      if (resp.ok) toast.success("Trade-in request submitted successfully!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setLoading(false) }
+  }
+
+  const handleGetQuote = () => {
+    toast.success("Quote request sent! We'll email you shortly.")
+  }
 
   if (!item) {
     return (
@@ -187,12 +212,12 @@ function TradeInDetailPage() {
                   )}
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleStartTradeIn} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  Start Trade-In
+                  {loading ? "Submitting..." : "Start Trade-In"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleGetQuote} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   Get Quote
                 </button>

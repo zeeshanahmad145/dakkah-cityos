@@ -6,6 +6,7 @@ import type { SupportedLocale } from "@/lib/i18n"
 import { RentalCalendar } from "@/components/rentals/rental-calendar"
 import { RentalPricingTable } from "@/components/rentals/rental-pricing-table"
 import { useState, useMemo } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 import { MapBlock } from "@/components/blocks/map-block"
 
@@ -89,6 +90,29 @@ function RentalDetailPage() {
   const rental = loaderData?.item
   const [selectedRange, setSelectedRange] = useState<{ start: string; end: string } | null>(null)
   const [activeImage, setActiveImage] = useState(0)
+  const [rentLoading, setRentLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
+
+  const handleRentNow = async () => {
+    if (!selectedRange) {
+      toast.error("Please select rental dates first.")
+      return
+    }
+    setRentLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/rentals`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ rental_id: id, start_date: selectedRange.start, end_date: selectedRange.end })
+      })
+      if (resp.ok) toast.success("Rental reservation submitted successfully!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setRentLoading(false) }
+  }
 
   const selectedDays = useMemo(() => {
     if (!selectedRange) return 0
@@ -300,8 +324,12 @@ function RentalDetailPage() {
               </div>
             )}
 
-            <button className="w-full px-6 py-3 text-sm font-semibold rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors">
-              {t(locale, "rental.rent_now")}
+            <button
+              onClick={handleRentNow}
+              disabled={rentLoading}
+              className="w-full px-6 py-3 text-sm font-semibold rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {rentLoading ? "Processing..." : t(locale, "rental.rent_now")}
             </button>
 
             {rental.vendor && (

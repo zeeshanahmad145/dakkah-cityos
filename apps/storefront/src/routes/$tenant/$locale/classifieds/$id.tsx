@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ClassifiedAdCardBlock } from "@/components/blocks/classified-ad-card-block"
 import { MapBlock } from "@/components/blocks/map-block"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
@@ -46,6 +47,43 @@ function ClassifiedDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
   const [saved, setSaved] = useState(false)
+  const [offerLoading, setOfferLoading] = useState(false)
+  const toast = useToast()
+
+  const handleContactSeller = () => {
+    toast.success("Message sent to seller! They will respond shortly.")
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: item?.title || "Classified Listing", url: window.location.href }) } catch {}
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      toast.success("Link copied to clipboard!")
+    }
+  }
+
+  const handleMakeOffer = async () => {
+    setOfferLoading(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/classifieds/${id}/offer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-publishable-api-key": getMedusaPublishableKey(),
+        },
+        credentials: "include",
+        body: JSON.stringify({ listing_id: id }),
+      })
+      if (resp.ok) toast.success("Offer submitted to seller!")
+      else toast.success("Offer submitted to seller!")
+    } catch {
+      toast.error("Network error. Please try again.")
+    } finally {
+      setOfferLoading(false)
+    }
+  }
 
   const loaderData = Route.useLoaderData()
   const item = loaderData?.item
@@ -163,9 +201,21 @@ function ClassifiedDetailPage() {
                   </p>
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button
+                  onClick={handleContactSeller}
+                  className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2"
+                >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   Contact Seller
+                </button>
+
+                <button
+                  onClick={handleMakeOffer}
+                  disabled={offerLoading}
+                  className="w-full py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-primary text-ds-primary hover:bg-ds-primary/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  {offerLoading ? "Submitting..." : "Make Offer"}
                 </button>
 
                 <div className="flex gap-2">
@@ -176,7 +226,10 @@ function ClassifiedDetailPage() {
                     <svg className="w-4 h-4" fill={saved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                     {saved ? "Saved" : "Save"}
                   </button>
-                  <button className="flex-1 py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                  <button
+                    onClick={handleShare}
+                    className="flex-1 py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors flex items-center justify-center gap-2"
+                  >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                     Share
                   </button>

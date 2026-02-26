@@ -1,7 +1,9 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useToast } from "@/components/ui/toast"
 import { ComparisonTableBlock } from "@/components/blocks/comparison-table-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
@@ -44,9 +46,32 @@ export const Route = createFileRoute("/$tenant/$locale/insurance/$id")({
 function InsuranceDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const toast = useToast()
+  const [quoting, setQuoting] = useState(false)
 
   const loaderData = Route.useLoaderData()
   const plan = loaderData?.item
+
+  const handleGetQuote = async () => {
+    setQuoting(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const publishableKey = getMedusaPublishableKey()
+      const resp = await fetch(`${baseUrl}/store/insurance/policies`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ plan_id: id })
+      })
+      if (resp.ok) toast.success("Quote generated! Check your email for details.")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setQuoting(false) }
+  }
+
+  const handleComparePlans = () => {
+    toast.info("Scroll down to compare all available plans.")
+  }
 
   if (!plan) {
     return (
@@ -200,12 +225,12 @@ function InsuranceDetailPage() {
                   </div>
                 )}
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleGetQuote} disabled={quoting} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                  Get Quote
+                  {quoting ? "Generating Quote..." : "Get Quote"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
+                <button onClick={handleComparePlans} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
                   Compare Plans
                 </button>
               </div>

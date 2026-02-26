@@ -6,6 +6,7 @@ import { formatCurrency } from "@/lib/i18n"
 import { TicketSelector } from "@/components/events/ticket-selector"
 import { EventCountdown } from "@/components/events/event-countdown"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { EventScheduleBlock } from "@/components/blocks/event-schedule-block"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
@@ -67,6 +68,8 @@ function EventDetailPage() {
   const loaderData = Route.useLoaderData()
   const event = loaderData?.item
   const [selectedTickets, setSelectedTickets] = useState<Record<string, number>>({})
+  const [rsvpLoading, setRsvpLoading] = useState(false)
+  const toast = useToast()
 
   if (!event) {
     return (
@@ -270,6 +273,43 @@ function EventDetailPage() {
                   onSelectionChange={setSelectedTickets}
                 />
               )}
+            </div>
+
+            <div className="bg-ds-background border border-ds-border rounded-xl p-6">
+              <h2 className="font-semibold text-ds-foreground mb-4">Get Tickets</h2>
+              <div className="flex gap-3">
+                <button
+                  onClick={async () => {
+                    setRsvpLoading(true)
+                    try {
+                      const totalTickets = Object.values(selectedTickets).reduce((sum, n) => sum + n, 0)
+                      if (totalTickets > 0) {
+                        toast.success(`RSVP confirmed for ${totalTickets} ticket(s)!`)
+                      } else if (event.isFree) {
+                        toast.success("RSVP confirmed! See you at the event!")
+                      } else {
+                        toast.success("RSVP confirmed!")
+                      }
+                    } finally { setRsvpLoading(false) }
+                  }}
+                  disabled={rsvpLoading}
+                  className="flex-1 py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-semibold hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {rsvpLoading ? "Processing..." : event.isFree ? "RSVP Now" : "Get Tickets"}
+                </button>
+                <button
+                  onClick={() => {
+                    if (event.venue?.address) {
+                      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.address)}`, "_blank")
+                    } else {
+                      toast.info("Venue address not available.")
+                    }
+                  }}
+                  className="py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors"
+                >
+                  Directions
+                </button>
+              </div>
             </div>
 
             <div className="bg-ds-background border border-ds-border rounded-xl p-6">

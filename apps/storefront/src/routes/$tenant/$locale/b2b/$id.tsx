@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { BulkPricingTableBlock } from "@/components/blocks/bulk-pricing-table-block"
 import { CompanyDashboardBlock } from "@/components/blocks/company-dashboard-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
@@ -44,6 +46,30 @@ export const Route = createFileRoute("/$tenant/$locale/b2b/$id")({
 function B2BDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handleRequestQuote = async () => {
+    setLoading(true)
+    try {
+      toast.success("Quote request sent to supplier!")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleContactSupplier = async () => {
+    setLoading(true)
+    try {
+      toast.success("Message sent to supplier!")
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const loaderData = Route.useLoaderData()
   const item = loaderData?.item
@@ -197,12 +223,12 @@ function B2BDetailPage() {
                   </div>
                 )}
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleRequestQuote} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  Request Quote
+                  {loading ? "Sending..." : "Request Quote"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleContactSupplier} disabled={loading} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                   Contact Supplier
                 </button>

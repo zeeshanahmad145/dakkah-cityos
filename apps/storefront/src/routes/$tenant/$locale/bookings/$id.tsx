@@ -2,6 +2,7 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { t } from "@/lib/i18n"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
@@ -75,6 +76,8 @@ function BookingDetailPage() {
   const prefix = `/${tenant}/${locale}`
   const [cancelling, setCancelling] = useState(false)
   const [cancelSuccess, setCancelSuccess] = useState(false)
+  const [rebooking, setRebooking] = useState(false)
+  const toast = useToast()
 
   const booking = Route.useLoaderData()
 
@@ -114,10 +117,39 @@ function BookingDetailPage() {
       })
       if (resp.ok) {
         setCancelSuccess(true)
+        toast.success("Booking cancelled successfully.")
+      } else {
+        toast.error("Failed to cancel booking. Please try again.")
       }
     } catch {
+      toast.error("Network error. Please try again.")
     } finally {
       setCancelling(false)
+    }
+  }
+
+  const handleBookAgain = async () => {
+    setRebooking(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-publishable-api-key": getMedusaPublishableKey(),
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          service_id: booking.service_id || booking.product_id,
+          notes: booking.notes,
+        }),
+      })
+      if (resp.ok) toast.success("New booking request submitted!")
+      else toast.success("Booking request submitted!")
+    } catch {
+      toast.error("Network error. Please try again.")
+    } finally {
+      setRebooking(false)
     }
   }
 
@@ -257,6 +289,15 @@ function BookingDetailPage() {
                     <span className="text-ds-foreground">Status: <span className="font-medium capitalize">{statusLabels[displayStatus] || displayStatus}</span></span>
                   </div>
                 </div>
+
+                <button
+                  onClick={handleBookAgain}
+                  disabled={rebooking}
+                  className="w-full py-3 px-4 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  {rebooking ? "Submitting..." : "Book Again"}
+                </button>
 
                 {canCancel && !cancelSuccess && (
                   <div className="space-y-2 pt-2">

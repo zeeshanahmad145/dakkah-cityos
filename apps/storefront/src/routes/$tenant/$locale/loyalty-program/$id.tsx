@@ -2,6 +2,8 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { LoyaltyPointsDisplayBlock } from "@/components/blocks/loyalty-points-display-block"
 import { LoyaltyDashboardBlock } from "@/components/blocks/loyalty-dashboard-block"
 import { ReviewListBlock } from '@/components/blocks/review-list-block'
@@ -44,9 +46,34 @@ export const Route = createFileRoute("/$tenant/$locale/loyalty-program/$id")({
 function LoyaltyProgramDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const baseUrl = getServerBaseUrl()
+  const publishableKey = getMedusaPublishableKey()
 
   const loaderData = Route.useLoaderData()
   const program = loaderData?.item
+
+  const handleJoinProgram = async () => {
+    setLoading(true)
+    try {
+      const resp = await fetch(`${baseUrl}/store/loyalty`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        credentials: "include",
+        body: JSON.stringify({ loyalty_program_id: id })
+      })
+      if (resp.ok) toast.success("Successfully joined the loyalty program!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setLoading(false) }
+  }
+
+  const handleLearnMore = () => {
+    const aboutSection = document.querySelector('[data-section="about"]')
+    if (aboutSection) aboutSection.scrollIntoView({ behavior: "smooth" })
+    else toast.info("Scroll down to learn more about this program.")
+  }
 
   if (!program) {
     return (
@@ -172,12 +199,12 @@ function LoyaltyProgramDetailPage() {
                   <p className="text-sm text-ds-muted-foreground">points per dollar</p>
                 </div>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleJoinProgram} disabled={loading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-                  Join Program
+                  {loading ? "Joining..." : "Join Program"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleLearnMore} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   Learn More
                 </button>

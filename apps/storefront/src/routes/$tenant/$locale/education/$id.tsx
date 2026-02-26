@@ -1,5 +1,7 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import { useToast } from "@/components/ui/toast"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { CourseCurriculumBlock } from '@/components/blocks/course-curriculum-block'
@@ -43,9 +45,31 @@ export const Route = createFileRoute("/$tenant/$locale/education/$id")({
 function EducationDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const toast = useToast()
+  const [enrollLoading, setEnrollLoading] = useState(false)
 
   const loaderData = Route.useLoaderData()
   const course = loaderData?.item
+
+  const handleEnroll = async () => {
+    setEnrollLoading(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/education/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": getMedusaPublishableKey() },
+        credentials: "include",
+        body: JSON.stringify({ course_id: id })
+      })
+      if (resp.ok) toast.success("Enrollment request submitted!")
+      else toast.error("Something went wrong. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setEnrollLoading(false) }
+  }
+
+  const handleWishlist = () => {
+    toast.success("Added to your wishlist!")
+  }
 
   if (!course) {
     return (
@@ -208,11 +232,11 @@ function EducationDetailPage() {
                   {course.price != null ? (course.price === 0 ? "Free" : `$${Number(course.price || 0).toLocaleString()}`) : t(locale, 'verticals.contact_pricing')}
                 </p>
 
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors">
-                  Enroll Now
+                <button onClick={handleEnroll} disabled={enrollLoading} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors disabled:opacity-50">
+                  {enrollLoading ? "Enrolling..." : "Enroll Now"}
                 </button>
 
-                <button className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
+                <button onClick={handleWishlist} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
                   Add to Wishlist
                 </button>
 

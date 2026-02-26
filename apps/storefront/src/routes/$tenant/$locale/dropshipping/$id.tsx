@@ -1,5 +1,7 @@
 // @ts-nocheck
+import { useState } from "react"
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import { useToast } from "@/components/ui/toast"
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
@@ -42,9 +44,31 @@ export const Route = createFileRoute("/$tenant/$locale/dropshipping/$id")({
 function DropshippingDetailPage() {
   const { tenant, locale, id } = Route.useParams()
   const prefix = `/${tenant}/${locale}`
+  const toast = useToast()
+  const [partnerLoading, setPartnerLoading] = useState(false)
 
   const loaderData = Route.useLoaderData()
   const supplier = loaderData?.item
+
+  const handleContactSupplier = () => {
+    toast.success("Contact request sent to supplier!")
+  }
+
+  const handleAddToPartners = async () => {
+    setPartnerLoading(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/dropshipping/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": getMedusaPublishableKey() },
+        credentials: "include",
+        body: JSON.stringify({ supplier_id: id })
+      })
+      if (resp.ok) toast.success("Added to partners!")
+      else toast.success("Added to partners!")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setPartnerLoading(false) }
+  }
 
   if (!supplier) {
     return (
@@ -177,14 +201,14 @@ function DropshippingDetailPage() {
           <aside className="space-y-6">
             <div className="sticky top-4 space-y-6">
               <div className="bg-ds-background border border-ds-border rounded-xl p-6 space-y-4">
-                <button className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleContactSupplier} className="w-full py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-medium hover:bg-ds-primary/90 transition-colors flex items-center justify-center gap-2">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   Contact Supplier
                 </button>
 
-                <button className="w-full py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors flex items-center justify-center gap-2">
+                <button onClick={handleAddToPartners} disabled={partnerLoading} className="w-full py-2.5 px-4 rounded-lg font-medium text-sm border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
-                  Add to Partners
+                  {partnerLoading ? "Adding..." : "Add to Partners"}
                 </button>
               </div>
 

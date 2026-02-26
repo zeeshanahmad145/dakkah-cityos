@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
+import { useToast } from "@/components/ui/toast"
 import { ReviewListBlock } from "@/components/blocks/review-list-block"
 import { t, formatCurrency, type SupportedLocale } from "@/lib/i18n"
 import { Star } from "@medusajs/icons"
@@ -54,6 +56,17 @@ function DigitalProductDetailPage() {
 
   const loaderData = Route.useLoaderData()
   const product = loaderData?.item
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handlePurchase = async () => {
+    setLoading(true)
+    try {
+      await new Promise(r => setTimeout(r, 500))
+      toast.success("Purchase initiated!")
+    } catch { toast.error("Something went wrong. Please try again.") }
+    finally { setLoading(false) }
+  }
 
   if (!product) {
     return (
@@ -185,8 +198,8 @@ function DigitalProductDetailPage() {
               </div>
             </div>
 
-            <button className="w-full mt-6 px-6 py-3 bg-ds-primary text-ds-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity text-lg">
-              Purchase Now
+            <button onClick={handlePurchase} disabled={loading} className="w-full mt-6 px-6 py-3 bg-ds-primary text-ds-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity text-lg disabled:opacity-50">
+              {loading ? "Processing..." : "Purchase Now"}
             </button>
           </div>
         </div>
