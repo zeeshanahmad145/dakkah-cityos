@@ -146,7 +146,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     const items = await mod.listClassifiedListings(filters, { skip: Number(offset), take: Number(limit) })
     const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_CLASSIFIEDS
-    const itemList = sanitizeList(rawList, "classifieds")
+    const sanitized = sanitizeList(rawList, "classifieds")
+    const itemList = sanitized.map((c: any) => ({
+      ...c,
+      thumbnail: c.thumbnail || c.metadata?.thumbnail || c.metadata?.images?.[0] || c.images?.[0] || null,
+    }))
     return res.json({
       items: itemList,
       count: itemList.length,

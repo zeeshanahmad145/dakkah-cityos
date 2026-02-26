@@ -22,6 +22,7 @@ const EVENTS_SEED = [
     organizer: "General Entertainment Authority",
     tags: ["entertainment", "music", "food", "culture"],
     image_url: "/seed-images/events%2F1540575467063-178a50c2df87.jpg",
+    thumbnail: "/seed-images/events%2F1540575467063-178a50c2df87.jpg",
   },
   {
     id: "evt_002",
@@ -43,6 +44,7 @@ const EVENTS_SEED = [
     organizer: "Ministry of Communications and IT",
     tags: ["technology", "innovation", "startup", "ai"],
     image_url: "/seed-images/events%2F1505373877841-8d25f7d46678.jpg",
+    thumbnail: "/seed-images/events%2F1505373877841-8d25f7d46678.jpg",
   },
   {
     id: "evt_003",
@@ -64,6 +66,7 @@ const EVENTS_SEED = [
     organizer: "Jeddah Entertainment Co.",
     tags: ["music", "jazz", "live", "concert"],
     image_url: "/seed-images/events%2F1514525253161-7a46d19cd819.jpg",
+    thumbnail: "/seed-images/events%2F1514525253161-7a46d19cd819.jpg",
   },
   {
     id: "evt_004",
@@ -85,6 +88,7 @@ const EVENTS_SEED = [
     organizer: "Saudi Culinary Association",
     tags: ["food", "cooking", "culture", "family"],
     image_url: "/seed-images/events%2F1555939594-58d7cb561ad1.jpg",
+    thumbnail: "/seed-images/events%2F1555939594-58d7cb561ad1.jpg",
   },
   {
     id: "evt_005",
@@ -106,6 +110,7 @@ const EVENTS_SEED = [
     organizer: "Royal Commission for AlUla",
     tags: ["art", "culture", "heritage", "exhibition"],
     image_url: "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
+    thumbnail: "/seed-images/events%2F1501281668745-f7f57925c3b4.jpg",
   },
   {
     id: "evt_006",
@@ -127,6 +132,7 @@ const EVENTS_SEED = [
     organizer: "Saudi Motorsport Company",
     tags: ["sports", "racing", "adventure", "motorsport"],
     image_url: "/seed-images/events%2F1568605117036-5fe5e7bab0b7.jpg",
+    thumbnail: "/seed-images/events%2F1568605117036-5fe5e7bab0b7.jpg",
   },
   {
     id: "evt_007",
@@ -148,6 +154,7 @@ const EVENTS_SEED = [
     organizer: "Saudi Motorsport Company",
     tags: ["f1", "racing", "sports", "motorsport"],
     image_url: "/seed-images/events%2F1511578314322-379afb476865.jpg",
+    thumbnail: "/seed-images/events%2F1511578314322-379afb476865.jpg",
   },
   {
     id: "evt_008",
@@ -192,7 +199,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     const start = Number(offset)
     const end = start + Number(limit)
-    const paged = items.slice(start, end)
+    const paged = items.slice(start, end).map(e => ({ ...e, thumbnail: e.thumbnail || e.image_url }))
 
     res.json({ items: paged, count: items.length, limit: Number(limit), offset: start })
   } catch (error: any) {

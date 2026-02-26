@@ -165,7 +165,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       services = []
     }
     
-    const serviceList = services.length > 0 ? sanitizeList(services, "bookings") : SEED_SERVICES
+    const sanitized = services.length > 0 ? sanitizeList(services, "bookings") : SEED_SERVICES
+    const serviceList = sanitized.map((s: any) => ({
+      ...s,
+      thumbnail: s.thumbnail || s.metadata?.thumbnail || s.metadata?.images?.[0] || null,
+    }))
     res.json({
       services: serviceList,
       count: serviceList.length,

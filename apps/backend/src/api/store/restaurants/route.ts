@@ -144,7 +144,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     })
 
     const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_RESTAURANTS
-    const itemList = sanitizeList(rawList, "restaurants")
+    const sanitized = sanitizeList(rawList, "restaurants")
+    const itemList = sanitized.map((r: any) => ({
+      ...r,
+      thumbnail: r.thumbnail || r.banner_url || r.metadata?.thumbnail || null,
+    }))
 
     return res.json({
       items: itemList,

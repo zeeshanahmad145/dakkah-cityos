@@ -232,6 +232,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
 
   const seedItem = EVENTS_SEED.find(e => e.id === id || e.handle === id) || EVENTS_SEED[0]
-  return res.json({ item: seedItem })
+  return res.json({ item: { ...seedItem, thumbnail: seedItem.thumbnail || seedItem.image_url } })
 }
 

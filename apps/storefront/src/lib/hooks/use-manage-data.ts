@@ -51,19 +51,29 @@ export function useManageStats() {
   return useQuery({
     queryKey: ["manage", "stats"],
     queryFn: async () => {
-      const [productsRes] = await Promise.all([
-        sdk.client.fetch("/store/products", {
-          method: "GET",
-          query: { limit: 0, offset: 0 },
-        }),
-      ])
-      return {
-        totalProducts: (productsRes as any)?.count || 0,
-        totalOrders: 0,
-        totalRevenue: 0,
-        teamMembers: 0,
+      try {
+        const [productsRes] = await Promise.all([
+          sdk.client.fetch("/store/products", {
+            method: "GET",
+            query: { limit: 0, offset: 0 },
+          }),
+        ])
+        return {
+          totalProducts: (productsRes as any)?.count || 0,
+          totalOrders: 0,
+          totalRevenue: 0,
+          teamMembers: 0,
+        }
+      } catch {
+        return {
+          totalProducts: 0,
+          totalOrders: 0,
+          totalRevenue: 0,
+          teamMembers: 0,
+        }
       }
     },
     enabled: typeof window !== "undefined",
+    retry: false,
   })
 }
