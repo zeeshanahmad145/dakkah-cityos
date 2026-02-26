@@ -13,6 +13,7 @@ const SEED_DATA = [
     currency_code: "usd",
     status: "approved",
     thumbnail: "/seed-images/auctions%2F1505740420928-5e560c06d30e.jpg",
+    included: ["Free shipping both ways", "14-day risk-free trial", "Full refund if returned", "Original packaging included"],
   },
   {
     id: "tby_002",
@@ -25,6 +26,7 @@ const SEED_DATA = [
     currency_code: "usd",
     status: "approved",
     thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg",
+    included: ["Free delivery and pickup", "30-day home trial", "No questions asked returns", "Assembly service included"],
   },
   {
     id: "tby_003",
@@ -37,6 +39,7 @@ const SEED_DATA = [
     currency_code: "usd",
     status: "approved",
     thumbnail: "/seed-images/bundles%2F1571019613454-1cb2f99b2d8b.jpg",
+    included: ["Free shipping both ways", "14-day trial period", "Charging cable and dock", "Quick start guide"],
   },
   {
     id: "tby_004",
@@ -49,6 +52,7 @@ const SEED_DATA = [
     currency_code: "usd",
     status: "approved",
     thumbnail: "/seed-images/trade-in%2F1542291026-7eec264c27ff.jpg",
+    included: ["Free express shipping", "7-day home trial", "Protective case included", "Free return shipping label"],
   },
   {
     id: "tby_005",
@@ -61,6 +65,7 @@ const SEED_DATA = [
     currency_code: "usd",
     status: "approved",
     thumbnail: "/seed-images/trade-in%2F1524758631624-e2822e304c36.jpg",
+    included: ["Free white-glove delivery", "30-day trial period", "All accessories and portafilter", "Barista starter kit with beans"],
   },
 ]
 

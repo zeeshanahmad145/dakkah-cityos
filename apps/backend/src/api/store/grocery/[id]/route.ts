@@ -20,6 +20,11 @@ const SEED_DATA = [
     shelf_life_days: 5,
     nutrition: { calories: "32 per 100g", protein: "0.7g", carbohydrates: "7.7g", fiber: "2g", sugar: "4.9g", fat: "0.3g", vitamin_c: "58.8mg" },
     allergens: [],
+    related_products: [
+      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-002", name: "Artisan Sourdough Bread", price: 899, thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg" },
+    ],
     dietary: ["Vegan", "Gluten-Free", "Keto-Friendly", "Paleo"],
   },
   {
@@ -40,6 +45,11 @@ const SEED_DATA = [
     shelf_life_days: 3,
     nutrition: { calories: "259 per 100g", protein: "8.5g", carbohydrates: "51g", fiber: "2.7g", sugar: "3.5g", fat: "1.2g", sodium: "500mg" },
     allergens: ["Wheat", "Gluten"],
+    related_products: [
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-004", name: "Premium Wagyu Beef Steaks", price: 12999, thumbnail: "/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg" },
+    ],
     dietary: ["Vegetarian", "Vegan", "Dairy-Free"],
   },
   {
@@ -60,6 +70,11 @@ const SEED_DATA = [
     shelf_life_days: 21,
     nutrition: { calories: "155 per 2 eggs", protein: "13g", carbohydrates: "1.1g", fiber: "0g", sugar: "1.1g", fat: "11g", cholesterol: "373mg" },
     allergens: ["Eggs"],
+    related_products: [
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-002", name: "Artisan Sourdough Bread", price: 899, thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg" },
+      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+    ],
     dietary: ["Gluten-Free", "Keto-Friendly", "Paleo", "Vegetarian"],
   },
   {
@@ -79,7 +94,12 @@ const SEED_DATA = [
     storage_type: "frozen",
     shelf_life_days: 90,
     nutrition: { calories: "250 per 100g", protein: "17g", carbohydrates: "0g", fiber: "0g", sugar: "0g", fat: "20g", iron: "2.6mg" },
-    allergens: [],
+    allergens: ["Soy"],
+    related_products: [
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+    ],
     dietary: ["Gluten-Free", "Keto-Friendly", "Paleo", "Low-Carb"],
   },
   {
@@ -99,7 +119,12 @@ const SEED_DATA = [
     storage_type: "refrigerated",
     shelf_life_days: 7,
     nutrition: { calories: "25 per 100g", protein: "1.5g", carbohydrates: "5g", fiber: "2.5g", sugar: "3g", fat: "0.2g", vitamin_a: "42% DV" },
-    allergens: [],
+    allergens: ["Celery", "Mustard"],
+    related_products: [
+      { id: "groc-seed-001", name: "Organic Fresh Strawberries", price: 1299, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
+      { id: "groc-seed-004", name: "Premium Wagyu Beef Steaks", price: 12999, thumbnail: "/seed-images/grocery%2F1414235077428-338989a2e8c0.jpg" },
+      { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
+    ],
     dietary: ["Vegan", "Gluten-Free", "Keto-Friendly", "Paleo", "Whole30"],
   },
 ]

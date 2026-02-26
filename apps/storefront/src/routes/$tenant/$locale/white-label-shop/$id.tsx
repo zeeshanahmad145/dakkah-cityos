@@ -16,7 +16,7 @@ export const Route = createFileRoute("/$tenant/$locale/white-label-shop/$id")({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/white-label/products/${params.id}`, {
+      const resp = await fetchWithTimeout(`${baseUrl}/store/white-label/${params.id}`, {
         headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) return { item: null }

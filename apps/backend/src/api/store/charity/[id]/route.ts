@@ -25,6 +25,18 @@ const SEED_CHARITIES = [
     status: "active",
     metadata: {},
     created_at: "2025-01-01T00:00:00Z",
+    donors: [
+      { name: "Ahmed Al-Rashid", amount: 50000, date: "2025-05-10T00:00:00Z" },
+      { name: "Sarah Johnson", amount: 25000, date: "2025-05-08T00:00:00Z" },
+      { name: "Mohammed Hassan", amount: 100000, date: "2025-05-05T00:00:00Z" },
+      { name: "Emily Chen", amount: 15000, date: "2025-05-01T00:00:00Z" },
+      { name: "Anonymous", amount: 75000, date: "2025-04-28T00:00:00Z" },
+    ],
+    updates: [
+      { date: "2025-05-01T00:00:00Z", title: "New Well Completed", content: "We have successfully completed construction of a new well in the Sahel region, providing clean water to over 500 families." },
+      { date: "2025-04-15T00:00:00Z", title: "Milestone Reached", content: "Thanks to your generous donations, we have now surpassed 60% of our fundraising goal!" },
+      { date: "2025-03-20T00:00:00Z", title: "Partnership Announcement", content: "We are excited to announce a new partnership with local governments to expand our water purification programs." },
+    ],
   },
   {
     id: "charity_seed_02",
@@ -49,6 +61,18 @@ const SEED_CHARITIES = [
     status: "active",
     metadata: {},
     created_at: "2025-01-05T00:00:00Z",
+    donors: [
+      { name: "Global Corp Foundation", amount: 500000, date: "2025-05-12T00:00:00Z" },
+      { name: "James Williams", amount: 30000, date: "2025-05-09T00:00:00Z" },
+      { name: "Fatima Al-Sayed", amount: 45000, date: "2025-05-06T00:00:00Z" },
+      { name: "Robert Kim", amount: 20000, date: "2025-05-03T00:00:00Z" },
+      { name: "Lisa Martinez", amount: 10000, date: "2025-04-30T00:00:00Z" },
+    ],
+    updates: [
+      { date: "2025-05-05T00:00:00Z", title: "Emergency Response Deployed", content: "Our rapid response team has been deployed to assist communities affected by recent flooding." },
+      { date: "2025-04-20T00:00:00Z", title: "Supply Distribution Complete", content: "Over 10,000 emergency supply kits have been distributed to families in the affected region." },
+      { date: "2025-04-01T00:00:00Z", title: "Volunteer Drive Success", content: "Our volunteer recruitment drive brought in 200 new volunteers ready to assist in disaster relief efforts." },
+    ],
   },
   {
     id: "charity_seed_03",
@@ -73,6 +97,18 @@ const SEED_CHARITIES = [
     status: "active",
     metadata: {},
     created_at: "2025-01-10T00:00:00Z",
+    donors: [
+      { name: "Education First Trust", amount: 200000, date: "2025-05-11T00:00:00Z" },
+      { name: "David Park", amount: 15000, date: "2025-05-07T00:00:00Z" },
+      { name: "Nora Ibrahim", amount: 35000, date: "2025-05-04T00:00:00Z" },
+      { name: "Carlos Mendez", amount: 8000, date: "2025-05-02T00:00:00Z" },
+      { name: "Anonymous", amount: 50000, date: "2025-04-25T00:00:00Z" },
+    ],
+    updates: [
+      { date: "2025-04-28T00:00:00Z", title: "New Schools Opened", content: "Three new community schools have opened their doors, welcoming 450 students who previously had no access to education." },
+      { date: "2025-04-10T00:00:00Z", title: "Scholarship Awards", content: "120 students received full scholarships for the upcoming academic year." },
+      { date: "2025-03-15T00:00:00Z", title: "Teacher Training Program", content: "We have completed training for 50 new teachers who will serve in underserved communities." },
+    ],
   },
   {
     id: "charity_seed_04",
@@ -97,6 +133,18 @@ const SEED_CHARITIES = [
     status: "active",
     metadata: {},
     created_at: "2025-01-15T00:00:00Z",
+    donors: [
+      { name: "Wildlife Alliance", amount: 150000, date: "2025-05-10T00:00:00Z" },
+      { name: "Peter Anderson", amount: 40000, date: "2025-05-06T00:00:00Z" },
+      { name: "Yuki Tanaka", amount: 25000, date: "2025-05-03T00:00:00Z" },
+      { name: "Maria Silva", amount: 12000, date: "2025-04-29T00:00:00Z" },
+      { name: "Anonymous", amount: 60000, date: "2025-04-22T00:00:00Z" },
+    ],
+    updates: [
+      { date: "2025-05-02T00:00:00Z", title: "Anti-Poaching Success", content: "Our ranger patrols have prevented 15 poaching incidents this quarter, protecting endangered rhino populations." },
+      { date: "2025-04-12T00:00:00Z", title: "Habitat Restoration", content: "50 hectares of critical habitat have been restored, providing safe corridors for wildlife migration." },
+      { date: "2025-03-25T00:00:00Z", title: "Community Engagement", content: "Local community workshops have educated over 1,000 residents about wildlife conservation and sustainable practices." },
+    ],
   },
   {
     id: "charity_seed_05",
@@ -121,6 +169,18 @@ const SEED_CHARITIES = [
     status: "active",
     metadata: {},
     created_at: "2025-01-20T00:00:00Z",
+    donors: [
+      { name: "Feed the Future Fund", amount: 300000, date: "2025-05-13T00:00:00Z" },
+      { name: "Hassan Al-Fahad", amount: 55000, date: "2025-05-09T00:00:00Z" },
+      { name: "Jennifer Brown", amount: 18000, date: "2025-05-05T00:00:00Z" },
+      { name: "Wei Zhang", amount: 22000, date: "2025-05-01T00:00:00Z" },
+      { name: "Anonymous", amount: 40000, date: "2025-04-27T00:00:00Z" },
+    ],
+    updates: [
+      { date: "2025-05-08T00:00:00Z", title: "1 Million Meals Served", content: "We have reached the incredible milestone of distributing 1 million meals to families in need this year." },
+      { date: "2025-04-22T00:00:00Z", title: "New Food Bank Opened", content: "A new community food bank has been established, serving 200 families weekly with fresh produce and essentials." },
+      { date: "2025-04-05T00:00:00Z", title: "Farm Partnership", content: "We have partnered with 15 local farms to source fresh produce directly for our meal distribution programs." },
+    ],
   },
 ]
 

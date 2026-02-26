@@ -16,7 +16,7 @@ export const Route = createFileRoute("/$tenant/$locale/crowdfunding/$id")({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/crowdfunding/campaigns/${params.id}`, {
+      const resp = await fetchWithTimeout(`${baseUrl}/store/crowdfunding/${params.id}`, {
         headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) return { item: null }

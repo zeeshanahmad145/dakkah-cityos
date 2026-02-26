@@ -16,7 +16,7 @@ export const Route = createFileRoute("/$tenant/$locale/print-on-demand-shop/$id"
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/print-on-demand/products/${params.id}`, {
+      const resp = await fetchWithTimeout(`${baseUrl}/store/print-on-demand/${params.id}`, {
         headers: { "x-publishable-api-key": getMedusaPublishableKey() },
       })
       if (!resp.ok) return { item: null }

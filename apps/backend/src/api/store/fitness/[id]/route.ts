@@ -21,6 +21,11 @@ const SEED_DATA = [
     type: "class",
     is_active: true,
     benefits: ["Improved flexibility and balance", "Stress relief and mental clarity", "Full-body strength building", "Better posture and alignment"],
+    membership_options: [
+      { name: "Drop-In Class", price: 2500, period: "session", description: "Pay per individual class session" },
+      { name: "Monthly Unlimited", price: 15000, period: "month", description: "Unlimited classes for 30 days" },
+      { name: "Annual Membership", price: 144000, period: "year", description: "Best value - save 20% with annual commitment" },
+    ],
   },
   {
     id: "fit-seed-002",
@@ -41,6 +46,11 @@ const SEED_DATA = [
     type: "class",
     is_active: true,
     benefits: ["Increased cardiovascular endurance", "Functional strength gains", "Community-driven motivation", "Scalable for all fitness levels"],
+    membership_options: [
+      { name: "Single Session", price: 3500, period: "session", description: "One CrossFit WOD session" },
+      { name: "10-Class Pack", price: 30000, period: "pack", description: "Save 15% with a 10-class bundle" },
+      { name: "Unlimited Monthly", price: 20000, period: "month", description: "Unlimited CrossFit classes all month" },
+    ],
   },
   {
     id: "fit-seed-003",
@@ -61,6 +71,11 @@ const SEED_DATA = [
     type: "personal",
     is_active: true,
     benefits: ["Personalized workout plans", "One-on-one coaching", "Faster results with accountability", "Injury prevention guidance"],
+    membership_options: [
+      { name: "Single Session", price: 7500, period: "session", description: "One personal training session" },
+      { name: "4-Session Pack", price: 26000, period: "month", description: "Weekly sessions - save 13%" },
+      { name: "12-Session Pack", price: 72000, period: "3 months", description: "Best value - save 20% on personal training" },
+    ],
   },
   {
     id: "fit-seed-004",
@@ -81,6 +96,11 @@ const SEED_DATA = [
     type: "class",
     is_active: true,
     benefits: ["Low-impact full-body workout", "Joint-friendly exercise", "Improved cardiovascular health", "Enhanced muscle recovery"],
+    membership_options: [
+      { name: "Day Pass", price: 2000, period: "day", description: "Full-day access to pool facilities" },
+      { name: "Monthly Pool Access", price: 12000, period: "month", description: "Unlimited pool access for 30 days" },
+      { name: "Family Monthly", price: 25000, period: "month", description: "Pool access for up to 4 family members" },
+    ],
   },
   {
     id: "fit-seed-005",
@@ -101,6 +121,11 @@ const SEED_DATA = [
     type: "class",
     is_active: true,
     benefits: ["Self-defense skills", "Full-body conditioning", "Improved coordination and agility", "Stress release and confidence building"],
+    membership_options: [
+      { name: "Trial Class", price: 1500, period: "session", description: "First-time introductory class" },
+      { name: "8-Class Pack", price: 20000, period: "pack", description: "Flexible 8-class bundle" },
+      { name: "Unlimited Monthly", price: 18000, period: "month", description: "Unlimited martial arts classes" },
+    ],
   },
 ]
 
