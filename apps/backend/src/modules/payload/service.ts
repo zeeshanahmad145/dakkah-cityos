@@ -35,7 +35,7 @@ export default class PayloadModuleService extends MedusaService({
     docId: string,
     payload: Record<string, any>,
   ) {
-    const url = `${this.apiUrl}/api/${collectionSlug}/${docId}`;
+    const url = `${this.apiUrl}/api/${collectionSlug}/${docId}?source=medusa_sync`;
     this.logger_.info(`[PayloadModule] PATCH ${url}`);
 
     const response = await fetch(url, {

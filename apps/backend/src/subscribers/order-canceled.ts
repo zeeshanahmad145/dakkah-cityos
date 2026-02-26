@@ -1,17 +1,16 @@
 import { SubscriberArgs, type SubscriberConfig } from "@medusajs/framework";
 import { syncInventoryToPayloadWorkflow } from "../workflows/sync-inventory-to-payload";
 
-export default async function orderPlacedHandler({
+export default async function orderCanceledHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
   const logger = container.resolve("logger");
   logger.info(
-    `[PayloadSync] order.placed received for ${data.id}. Discovering inventory to sync...`,
+    `[PayloadSync] order.canceled received for ${data.id}. Restoring Payload availability...`,
   );
 
   try {
-    // 1. Fetch the order and its items
     const query = container.resolve("query");
     const { data: orders } = await query.graph({
       entity: "order",
@@ -22,7 +21,6 @@ export default async function orderPlacedHandler({
     const order = orders?.[0];
     if (!order || !order.items) return;
 
-    // 2. Fetch inventory items linked to the ordered variants
     const variantIds = order.items
       .map((i: any) => i.variant_id)
       .filter(Boolean);
@@ -43,7 +41,6 @@ export default async function orderPlacedHandler({
       ),
     );
 
-    // 3. Trigger inventory sync workflow for each affected inventory item
     for (const inventoryItemId of inventoryItemIds) {
       await syncInventoryToPayloadWorkflow(container).run({
         input: { inventoryItemId },
@@ -51,11 +48,11 @@ export default async function orderPlacedHandler({
     }
   } catch (error: any) {
     logger.error(
-      `[PayloadSync] Order workflow failed for order ${data.id}: ${error.message}`,
+      `[PayloadSync] Order cancel workflow failed for order ${data.id}: ${error.message}`,
     );
   }
 }
 
 export const config: SubscriberConfig = {
-  event: "order.placed",
+  event: "order.canceled",
 };

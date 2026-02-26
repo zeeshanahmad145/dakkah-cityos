@@ -7,7 +7,9 @@ import { useQueryGraphStep } from "@medusajs/medusa/core-flows";
 import { updatePayloadDocStep } from "./steps/update-payload-doc";
 
 export const syncProductToPayloadWorkflow = createWorkflow(
-  "sync-product-to-payload",
+  {
+    name: "sync-product-to-payload",
+  },
   (input: { productId: string }) => {
     // 1. Fetch exactly the product and its linked payload record
     const { data: products } = useQueryGraphStep({
