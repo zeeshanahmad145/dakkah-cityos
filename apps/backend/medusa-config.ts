@@ -17,9 +17,14 @@ module.exports = defineConfig({
   admin: {
     path: "/commerce/admin",
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
-    backendUrl: process.env.MEDUSA_BACKEND_URL
-      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
-      || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined),
+    backendUrl:
+      process.env.MEDUSA_BACKEND_URL ||
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : undefined) ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : undefined),
     vite: () => {
       let allowedHosts: string[] | true = true;
       if (process.env.__MEDUSA_ADDITIONAL_ALLOWED_HOSTS) {
@@ -695,8 +700,8 @@ module.exports = defineConfig({
       key: "wallet",
       options: {
         definition: {
-          isQueryable: true
-        }
+          isQueryable: true,
+        },
       },
     },
     {
@@ -704,8 +709,8 @@ module.exports = defineConfig({
       key: "insurance",
       options: {
         definition: {
-          isQueryable: true
-        }
+          isQueryable: true,
+        },
       },
     },
     {
@@ -717,6 +722,15 @@ module.exports = defineConfig({
       resolve: "./src/modules/white-label",
       key: "whiteLabel",
       options: {},
+    },
+    {
+      resolve: "./src/modules/payload",
+      key: "payload",
+      options: {
+        definition: {
+          isQueryable: true,
+        },
+      },
     },
   ],
 });
