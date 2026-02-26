@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { sanitizeList } from "../../../lib/image-sanitizer"
 
 const SEED_RESTAURANTS = [
   {
@@ -136,7 +137,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       order: { created_at: "DESC" },
     })
 
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_RESTAURANTS
+    const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_RESTAURANTS
+    const itemList = sanitizeList(rawList, "restaurants")
 
     return res.json({
       items: itemList,

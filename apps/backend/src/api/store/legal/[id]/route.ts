@@ -26,6 +26,13 @@ const SEED_DATA = [
       hourly_rate: 45000,
     },
     created_at: "2025-01-01T00:00:00Z",
+    case_types: ["Mergers & Acquisitions", "Corporate Formation", "Patent Prosecution", "Trademark Registration", "Securities Regulation", "Contract Disputes"],
+    bar_associations: ["New York State Bar Association", "American Bar Association", "International Bar Association"],
+    languages: ["English", "Mandarin"],
+    office_locations: [
+      { name: "Financial District Office", address: "100 Wall Street, Suite 2500, New York, NY 10005", hours: "Mon-Fri 8:00 AM - 7:00 PM" },
+      { name: "Midtown Office", address: "450 Lexington Ave, Floor 30, New York, NY 10017", hours: "Mon-Fri 9:00 AM - 6:00 PM" },
+    ],
   },
   {
     id: "legal_seed_02",
@@ -51,6 +58,12 @@ const SEED_DATA = [
       hourly_rate: 50000,
     },
     created_at: "2025-01-05T00:00:00Z",
+    case_types: ["Criminal Defense", "White Collar Crime", "Appeals", "DUI Defense", "Federal Crimes", "Juvenile Defense"],
+    bar_associations: ["New York State Bar Association", "National Association of Criminal Defense Lawyers"],
+    languages: ["English"],
+    office_locations: [
+      { name: "Midtown Manhattan Office", address: "1345 6th Avenue, Suite 800, New York, NY 10105", hours: "Mon-Fri 8:00 AM - 8:00 PM" },
+    ],
   },
   {
     id: "legal_seed_03",
@@ -76,6 +89,13 @@ const SEED_DATA = [
       hourly_rate: 35000,
     },
     created_at: "2025-01-10T00:00:00Z",
+    case_types: ["Family Law", "Immigration", "Child Custody", "Divorce", "Adoption", "Visa Applications"],
+    bar_associations: ["State Bar of Texas", "American Immigration Lawyers Association"],
+    languages: ["English", "Spanish", "Portuguese"],
+    office_locations: [
+      { name: "Austin Office", address: "300 West 6th Street, Suite 1200, Austin, TX 78701", hours: "Mon-Fri 9:00 AM - 6:00 PM" },
+      { name: "San Antonio Office", address: "112 East Pecan Street, Suite 900, San Antonio, TX 78205", hours: "Mon-Thu 9:00 AM - 5:00 PM" },
+    ],
   },
   {
     id: "legal_seed_04",
@@ -101,6 +121,12 @@ const SEED_DATA = [
       hourly_rate: 40000,
     },
     created_at: "2025-01-15T00:00:00Z",
+    case_types: ["Real Estate Transactions", "Property Disputes", "Commercial Leasing", "Zoning Appeals", "Title Issues", "Landlord-Tenant Disputes"],
+    bar_associations: ["State Bar of California", "American College of Real Estate Lawyers"],
+    languages: ["English", "Korean"],
+    office_locations: [
+      { name: "San Francisco Office", address: "555 California Street, Suite 4000, San Francisco, CA 94104", hours: "Mon-Fri 8:30 AM - 6:30 PM" },
+    ],
   },
   {
     id: "legal_seed_05",
@@ -126,6 +152,13 @@ const SEED_DATA = [
       hourly_rate: 38000,
     },
     created_at: "2025-01-20T00:00:00Z",
+    case_types: ["Patent Law", "Trademark Registration", "IP Litigation", "Trade Secrets", "Licensing Agreements", "Startup Legal Strategy"],
+    bar_associations: ["Illinois State Bar Association", "American Intellectual Property Law Association", "International Trademark Association"],
+    languages: ["English", "Hindi", "Gujarati"],
+    office_locations: [
+      { name: "Chicago Loop Office", address: "233 South Wacker Drive, Suite 6100, Chicago, IL 60606", hours: "Mon-Fri 8:00 AM - 6:00 PM" },
+      { name: "Evanston Office", address: "1800 Sherman Avenue, Suite 200, Evanston, IL 60201", hours: "Tue-Thu 10:00 AM - 4:00 PM" },
+    ],
   },
 ]
 

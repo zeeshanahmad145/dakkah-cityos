@@ -18,6 +18,9 @@ const SEED_DATA = [
     unit_type: "kg",
     storage_type: "refrigerated",
     shelf_life_days: 5,
+    nutrition: { calories: "32 per 100g", protein: "0.7g", carbohydrates: "7.7g", fiber: "2g", sugar: "4.9g", fat: "0.3g", vitamin_c: "58.8mg" },
+    allergens: [],
+    dietary: ["Vegan", "Gluten-Free", "Keto-Friendly", "Paleo"],
   },
   {
     id: "groc-seed-002",
@@ -35,6 +38,9 @@ const SEED_DATA = [
     unit_type: "loaf",
     storage_type: "ambient",
     shelf_life_days: 3,
+    nutrition: { calories: "259 per 100g", protein: "8.5g", carbohydrates: "51g", fiber: "2.7g", sugar: "3.5g", fat: "1.2g", sodium: "500mg" },
+    allergens: ["Wheat", "Gluten"],
+    dietary: ["Vegetarian", "Vegan", "Dairy-Free"],
   },
   {
     id: "groc-seed-003",
@@ -52,6 +58,9 @@ const SEED_DATA = [
     unit_type: "dozen",
     storage_type: "refrigerated",
     shelf_life_days: 21,
+    nutrition: { calories: "155 per 2 eggs", protein: "13g", carbohydrates: "1.1g", fiber: "0g", sugar: "1.1g", fat: "11g", cholesterol: "373mg" },
+    allergens: ["Eggs"],
+    dietary: ["Gluten-Free", "Keto-Friendly", "Paleo", "Vegetarian"],
   },
   {
     id: "groc-seed-004",
@@ -69,6 +78,9 @@ const SEED_DATA = [
     unit_type: "kg",
     storage_type: "frozen",
     shelf_life_days: 90,
+    nutrition: { calories: "250 per 100g", protein: "17g", carbohydrates: "0g", fiber: "0g", sugar: "0g", fat: "20g", iron: "2.6mg" },
+    allergens: [],
+    dietary: ["Gluten-Free", "Keto-Friendly", "Paleo", "Low-Carb"],
   },
   {
     id: "groc-seed-005",
@@ -86,6 +98,9 @@ const SEED_DATA = [
     unit_type: "box",
     storage_type: "refrigerated",
     shelf_life_days: 7,
+    nutrition: { calories: "25 per 100g", protein: "1.5g", carbohydrates: "5g", fiber: "2.5g", sugar: "3g", fat: "0.2g", vitamin_a: "42% DV" },
+    allergens: [],
+    dietary: ["Vegan", "Gluten-Free", "Keto-Friendly", "Paleo", "Whole30"],
   },
 ]
 

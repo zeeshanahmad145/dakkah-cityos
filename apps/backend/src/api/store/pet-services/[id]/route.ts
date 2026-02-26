@@ -18,6 +18,11 @@ const SEED_DATA = [
     color: null,
     service_type: "grooming",
     is_active: true,
+    packages: [
+      { name: "Basic Bath", price: 120, duration: "45 min", description: "Bath, blow-dry, and brush out" },
+      { name: "Full Groom", price: 250, duration: "90 min", description: "Bath, haircut, nail trim, ear cleaning, and finishing spray" },
+      { name: "Puppy Package", price: 150, duration: "60 min", description: "Gentle bath, light trim, nail clip, and socialization" },
+    ],
   },
   {
     id: "pet-seed-002",
@@ -35,6 +40,11 @@ const SEED_DATA = [
     color: null,
     service_type: "boarding",
     is_active: true,
+    packages: [
+      { name: "Day Care", price: 80, duration: "Full day", description: "Supervised play, meals, and rest in individual suite" },
+      { name: "Overnight Stay", price: 150, duration: "24 hours", description: "Private suite with bedding, meals, and evening playtime" },
+      { name: "Extended Stay (7 days)", price: 900, duration: "7 days", description: "Weekly boarding with daily enrichment and photo updates" },
+    ],
   },
   {
     id: "pet-seed-003",
@@ -52,6 +62,11 @@ const SEED_DATA = [
     color: null,
     service_type: "veterinary",
     is_active: true,
+    packages: [
+      { name: "Basic Checkup", price: 200, duration: "30 min", description: "Physical exam, weight check, and vaccination review" },
+      { name: "Comprehensive Wellness", price: 450, duration: "60 min", description: "Full exam, blood work, dental check, and nutrition consultation" },
+      { name: "Senior Pet Wellness", price: 600, duration: "90 min", description: "Extended exam with X-rays, blood panel, joint assessment, and diet plan" },
+    ],
   },
   {
     id: "pet-seed-004",
@@ -69,6 +84,11 @@ const SEED_DATA = [
     color: null,
     service_type: "training",
     is_active: true,
+    packages: [
+      { name: "Puppy Basics", price: 300, duration: "4 weeks", description: "Sit, stay, come, and leash walking fundamentals" },
+      { name: "Obedience Program", price: 600, duration: "8 weeks", description: "Advanced commands, off-leash training, and behavioral correction" },
+      { name: "Private Sessions", price: 150, duration: "60 min", description: "One-on-one training tailored to your dog's specific needs" },
+    ],
   },
   {
     id: "pet-seed-005",
@@ -86,6 +106,11 @@ const SEED_DATA = [
     color: null,
     service_type: "walking",
     is_active: true,
+    packages: [
+      { name: "Single Walk", price: 50, duration: "30 min", description: "GPS-tracked walk with photo updates" },
+      { name: "Daily Walk Plan", price: 800, duration: "Monthly", description: "One 30-minute walk per day, Monday through Friday" },
+      { name: "Premium Plan", price: 1400, duration: "Monthly", description: "Two walks per day with weekend coverage and pet sitting" },
+    ],
   },
 ]
 

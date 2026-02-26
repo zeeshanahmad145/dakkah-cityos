@@ -26,6 +26,13 @@ const SEED_DATA = [
       consultation_fee: 25000,
     },
     created_at: "2025-01-01T00:00:00Z",
+    services: ["Interventional Cardiology", "Heart Failure Management", "Cardiac Catheterization", "Echocardiography", "Preventive Cardiac Care", "Stress Testing"],
+    insurance_accepted: ["Bupa", "Tawuniya", "Medgulf", "AXA", "Cigna", "United Healthcare"],
+    availability: [
+      { day: "Monday", time: "9:00 AM - 1:00 PM" },
+      { day: "Wednesday", time: "2:00 PM - 6:00 PM" },
+      { day: "Thursday", time: "9:00 AM - 12:00 PM" },
+    ],
   },
   {
     id: "health_seed_02",
@@ -51,6 +58,13 @@ const SEED_DATA = [
       consultation_fee: 20000,
     },
     created_at: "2025-01-05T00:00:00Z",
+    services: ["Cosmetic Dermatology", "Skin Cancer Screening", "Laser Treatments", "Acne Treatment", "Botox & Fillers", "Chemical Peels"],
+    insurance_accepted: ["Bupa", "Tawuniya", "AXA", "Allianz"],
+    availability: [
+      { day: "Tuesday", time: "10:00 AM - 4:00 PM" },
+      { day: "Thursday", time: "10:00 AM - 4:00 PM" },
+      { day: "Saturday", time: "9:00 AM - 1:00 PM" },
+    ],
   },
   {
     id: "health_seed_03",
@@ -76,6 +90,13 @@ const SEED_DATA = [
       consultation_fee: 18000,
     },
     created_at: "2025-01-10T00:00:00Z",
+    services: ["Well-child Visits", "Childhood Nutrition", "Behavioral Development", "Vaccinations", "Growth Monitoring", "Developmental Screening"],
+    insurance_accepted: ["Bupa", "Tawuniya", "Medgulf", "Cigna", "MetLife"],
+    availability: [
+      { day: "Monday", time: "8:00 AM - 3:00 PM" },
+      { day: "Wednesday", time: "8:00 AM - 3:00 PM" },
+      { day: "Friday", time: "9:00 AM - 12:00 PM" },
+    ],
   },
   {
     id: "health_seed_04",
@@ -101,6 +122,13 @@ const SEED_DATA = [
       consultation_fee: 30000,
     },
     created_at: "2025-01-15T00:00:00Z",
+    services: ["Sports Medicine", "Joint Replacement", "Arthroscopy", "Fracture Treatment", "Spine Surgery", "Physical Rehabilitation"],
+    insurance_accepted: ["Bupa", "Tawuniya", "AXA", "Cigna", "Aetna"],
+    availability: [
+      { day: "Monday", time: "7:00 AM - 2:00 PM" },
+      { day: "Thursday", time: "7:00 AM - 2:00 PM" },
+      { day: "Saturday", time: "8:00 AM - 12:00 PM" },
+    ],
   },
   {
     id: "health_seed_05",
@@ -126,6 +154,13 @@ const SEED_DATA = [
       consultation_fee: 22000,
     },
     created_at: "2025-01-20T00:00:00Z",
+    services: ["Cognitive Behavioral Therapy", "Medication Management", "Anxiety Treatment", "Depression Treatment", "Mindfulness Therapy", "Couples Counseling"],
+    insurance_accepted: ["Bupa", "Tawuniya", "Cigna", "United Healthcare", "Aetna"],
+    availability: [
+      { day: "Tuesday", time: "10:00 AM - 6:00 PM" },
+      { day: "Wednesday", time: "10:00 AM - 6:00 PM" },
+      { day: "Friday", time: "10:00 AM - 2:00 PM" },
+    ],
   },
 ]
 

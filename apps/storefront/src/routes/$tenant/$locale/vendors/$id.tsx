@@ -10,6 +10,8 @@ function normalizeDetail(item: any) {
   if (!item) return null
   const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
   return { ...meta, ...item,
+    name: item.name || item.business_name || item.title || "",
+    logo: item.logo || item.logo_url || null,
     thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
     images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
@@ -17,6 +19,9 @@ function normalizeDetail(item: any) {
     rating: item.rating ?? item.avg_rating ?? meta.rating ?? null,
     review_count: item.review_count ?? meta.review_count ?? null,
     location: item.location || item.city || item.address || meta.location || null,
+    product_count: item.product_count || item.total_products || 0,
+    products: item.products || [],
+    reviews: item.reviews || [],
   }
 }
 
@@ -49,10 +54,6 @@ function VendorDetailPage() {
   const loaderData = Route.useLoaderData()
   const vendor = loaderData?.item
 
-  const products = null
-  const productsLoading = false
-  const reviews = null
-
   if (!vendor) {
     return (
       <div className="min-h-screen bg-ds-background">
@@ -71,6 +72,10 @@ function VendorDetailPage() {
       </div>
     )
   }
+
+  const products = vendor.products || null
+  const productsLoading = false
+  const reviews = vendor.reviews || null
 
   const renderStars = (rating: number) => {
     return (

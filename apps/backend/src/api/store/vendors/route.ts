@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { sanitizeList } from "../../../lib/image-sanitizer"
 
 const SEED_VENDORS = [
   { id: "v-1", handle: "tech-haven", business_name: "Tech Haven Electronics", description: "Premium consumer electronics, gadgets, and accessories from top global brands.", logo_url: "/seed-images/vendors%2F1531297484001-80022131f5a1.jpg", banner_url: "/seed-images/vendors%2F1518770660439-4636190af475.jpg", is_verified: true, total_products: 245, total_orders: 1820, rating: 4.8, review_count: 342, categories: ["Electronics", "Gadgets"], verticals: ["retail"], created_at: "2025-01-15T00:00:00Z" },
@@ -105,7 +106,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       created_at: vendor.created_at,
     }))
     
-    const result = publicVendors.length > 0 ? publicVendors : SEED_VENDORS
+    const result = publicVendors.length > 0 ? sanitizeList(publicVendors, "vendors") : SEED_VENDORS
     res.json({
       vendors: result,
       items: result,

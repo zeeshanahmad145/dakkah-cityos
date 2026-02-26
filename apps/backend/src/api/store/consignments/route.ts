@@ -1,13 +1,22 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
 
+const SEED_CONSIGNMENTS = [
+  { id: "con-1", title: "Vintage Rolex Submariner", description: "1978 Rolex Submariner in excellent condition with original box and papers.", category: "Jewelry & Watches", condition: "Excellent", estimated_value: 1250000, currency_code: "usd", status: "listed", thumbnail: "/seed-images/consignments%2Fwatch-vintage.jpg", consignment_rate: 15, created_at: "2025-04-15T10:00:00Z" },
+  { id: "con-2", title: "Herman Miller Eames Lounge Chair", description: "Authentic mid-century Eames lounge chair and ottoman in walnut and black leather.", category: "Furniture", condition: "Good", estimated_value: 450000, currency_code: "usd", status: "listed", thumbnail: "/seed-images/consignments%2Feames-chair.jpg", consignment_rate: 20, created_at: "2025-04-20T14:30:00Z" },
+  { id: "con-3", title: "Louis Vuitton Neverfull MM", description: "Gently used Louis Vuitton Neverfull MM in Damier Ebene with original dust bag.", category: "Fashion & Apparel", condition: "Very Good", estimated_value: 120000, currency_code: "usd", status: "listed", thumbnail: "/seed-images/consignments%2Flv-bag.jpg", consignment_rate: 18, created_at: "2025-05-01T09:15:00Z" },
+  { id: "con-4", title: "Original Andy Warhol Print", description: "Authenticated Andy Warhol Campbell's Soup screen print, numbered edition.", category: "Art & Collectibles", condition: "Excellent", estimated_value: 850000, currency_code: "usd", status: "listed", thumbnail: "/seed-images/consignments%2Fwarhol-print.jpg", consignment_rate: 12, created_at: "2025-03-28T11:00:00Z" },
+  { id: "con-5", title: "MacBook Pro 16\" M3 Max", description: "Apple MacBook Pro 16-inch with M3 Max chip, 64GB RAM, barely used with AppleCare+.", category: "Electronics", condition: "Like New", estimated_value: 280000, currency_code: "usd", status: "listed", thumbnail: "/seed-images/consignments%2Fmacbook-pro.jpg", consignment_rate: 15, created_at: "2025-05-10T16:45:00Z" },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context?.actor_id
 
   if (!customerId) {
     return res.json({
-      consignments: [],
-      count: 0,
+      consignments: SEED_CONSIGNMENTS,
+      items: SEED_CONSIGNMENTS,
+      count: SEED_CONSIGNMENTS.length,
       limit: 20,
       offset: 0,
       public_info: {

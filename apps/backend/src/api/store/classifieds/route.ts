@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
+import { sanitizeList } from "../../../lib/image-sanitizer"
 
 const SEED_CLASSIFIEDS = [
   {
@@ -138,7 +139,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     filters.status = "active"
 
     const items = await mod.listClassifiedListings(filters, { skip: Number(offset), take: Number(limit) })
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_CLASSIFIEDS
+    const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_CLASSIFIEDS
+    const itemList = sanitizeList(rawList, "classifieds")
     return res.json({
       items: itemList,
       count: itemList.length,

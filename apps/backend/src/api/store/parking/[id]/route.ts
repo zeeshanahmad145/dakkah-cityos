@@ -20,6 +20,13 @@ const SEED_DATA = [
     operating_hours: "24/7",
     is_available: true,
     features: ["EV charging stations", "24/7 security cameras", "Covered parking", "Wheelchair accessible"],
+    rates: [
+      { label: "Hourly", price: 5.00, name: "Hourly Rate" },
+      { label: "Daily Max", price: 40.00, name: "Daily Maximum" },
+      { label: "Monthly Pass", price: 600.00, name: "Monthly Subscription" },
+      { label: "Weekend Rate", price: 3.00, name: "Weekend Hourly" },
+    ],
+    rules: ["No overnight parking without monthly pass", "Speed limit 10 km/h", "No vehicle washing on premises", "Motorcycles use designated spots only"],
   },
   {
     id: "park-seed-002",
@@ -39,6 +46,12 @@ const SEED_DATA = [
     operating_hours: "6:00 AM - 12:00 AM",
     is_available: true,
     features: ["Direct mall access", "CCTV monitoring", "Valet service available", "Family parking zones"],
+    rates: [
+      { label: "Hourly", price: 8.00, name: "Hourly Rate" },
+      { label: "Daily Max", price: 60.00, name: "Daily Maximum" },
+      { label: "Valet", price: 25.00, name: "Valet Service" },
+    ],
+    rules: ["Maximum vehicle height 2.1m", "No idling in parking areas", "Follow directional arrows", "Report accidents to security immediately"],
   },
   {
     id: "park-seed-003",
@@ -58,6 +71,13 @@ const SEED_DATA = [
     operating_hours: "24/7",
     is_available: true,
     features: ["Free shuttle service", "Long-term discounts", "Well-lit grounds", "Luggage assistance"],
+    rates: [
+      { label: "Hourly", price: 3.00, name: "Hourly Rate" },
+      { label: "Daily", price: 25.00, name: "Daily Rate" },
+      { label: "Weekly", price: 120.00, name: "Weekly Rate" },
+      { label: "Monthly", price: 400.00, name: "Monthly Rate" },
+    ],
+    rules: ["Leave keys in vehicle if using valet", "Maximum stay 60 days", "No vehicle maintenance in lot", "Shuttle runs every 15 minutes"],
   },
   {
     id: "park-seed-004",
@@ -77,6 +97,13 @@ const SEED_DATA = [
     operating_hours: "5:00 AM - 11:00 PM",
     is_available: true,
     features: ["Automated parking system", "Reserved premium spots", "Monthly subscriptions", "Mobile app access"],
+    rates: [
+      { label: "Hourly", price: 6.00, name: "Hourly Rate" },
+      { label: "Daily Max", price: 50.00, name: "Daily Maximum" },
+      { label: "Monthly Standard", price: 800.00, name: "Monthly Standard" },
+      { label: "Monthly Premium", price: 1200.00, name: "Monthly Reserved" },
+    ],
+    rules: ["Reserved spots are for permit holders only", "No oversized vehicles (max 2.0m height)", "Park within designated lines", "Report malfunctions to management"],
   },
   {
     id: "park-seed-005",
@@ -96,6 +123,14 @@ const SEED_DATA = [
     operating_hours: "24/7",
     is_available: true,
     features: ["White-glove valet service", "Car wash & detailing", "Climate-controlled garage", "VIP lounge access"],
+    rates: [
+      { label: "Valet (per entry)", price: 15.00, name: "Valet Per Entry" },
+      { label: "Hourly", price: 15.00, name: "Hourly Rate" },
+      { label: "Daily", price: 100.00, name: "Daily Rate" },
+      { label: "Car Wash Add-on", price: 50.00, name: "Car Wash" },
+      { label: "Full Detail Add-on", price: 150.00, name: "Full Detailing" },
+    ],
+    rules: ["Valet-only parking (no self-park)", "Valuables must be removed from vehicle", "Tip not included in parking fee", "Vehicle must be claimed by midnight unless overnight booked"],
   },
 ]
 

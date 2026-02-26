@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { sanitizeList } from "../../../../lib/image-sanitizer"
 
 const SEED_SERVICES = [
   {
@@ -158,7 +159,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       services = []
     }
     
-    const serviceList = services.length > 0 ? services : SEED_SERVICES
+    const serviceList = services.length > 0 ? sanitizeList(services, "bookings") : SEED_SERVICES
     res.json({
       services: serviceList,
       count: serviceList.length,

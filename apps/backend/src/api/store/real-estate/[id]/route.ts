@@ -19,6 +19,7 @@ const SEED_DATA = [
     area_sqm: 650,
     metadata: { thumbnail: "/seed-images/real-estate%2F1600596542815-ffad4c1539a9.jpg" },
     thumbnail: "/seed-images/real-estate%2F1600596542815-ffad4c1539a9.jpg",
+    amenities: ["Private pool", "Landscaped garden", "Smart home system", "Private garage", "Sea views", "Maid's room", "Central A/C", "Security system"],
   },
   {
     id: "re_seed_2",
@@ -37,6 +38,7 @@ const SEED_DATA = [
     area_sqm: 120,
     metadata: { thumbnail: "/seed-images/financial-products%2F1560518883-ce09059eeffa.jpg" },
     thumbnail: "/seed-images/financial-products%2F1560518883-ce09059eeffa.jpg",
+    amenities: ["Rooftop pool", "Gym", "Concierge", "Underground parking", "Floor-to-ceiling windows", "Modern kitchen", "Balcony"],
   },
   {
     id: "re_seed_3",
@@ -55,6 +57,7 @@ const SEED_DATA = [
     area_sqm: 500,
     metadata: { thumbnail: "/seed-images/government%2F1564013799919-ab600027ffc6.jpg" },
     thumbnail: "/seed-images/government%2F1564013799919-ab600027ffc6.jpg",
+    amenities: ["Dedicated parking", "Meeting rooms", "High-speed internet", "Reception area", "24/7 access", "Pantry", "Prayer room"],
   },
   {
     id: "re_seed_4",
@@ -73,6 +76,7 @@ const SEED_DATA = [
     area_sqm: 450,
     metadata: { thumbnail: "/seed-images/real-estate%2F1600585154340-be6161a56a0c.jpg" },
     thumbnail: "/seed-images/real-estate%2F1600585154340-be6161a56a0c.jpg",
+    amenities: ["360-degree views", "Private terrace", "Chef's kitchen", "Dedicated elevator", "Wine cellar", "Home theater", "Heated pool", "Smart home"],
   },
   {
     id: "re_seed_5",
@@ -91,6 +95,7 @@ const SEED_DATA = [
     area_sqm: 320,
     metadata: { thumbnail: "/seed-images/real-estate%2F1502672260266-1c1ef2d93688.jpg" },
     thumbnail: "/seed-images/real-estate%2F1502672260266-1c1ef2d93688.jpg",
+    amenities: ["Shared pool", "Playground", "24/7 security", "Gated community", "Garden", "Covered parking", "Mosque nearby", "Community center"],
   },
 ]
 
