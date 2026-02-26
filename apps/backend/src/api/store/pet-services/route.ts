@@ -4,6 +4,7 @@ import { handleApiError } from "../../../lib/api-error-handler"
 const SEED_DATA = [
   {
     id: "pet-seed-001",
+    thumbnail: "/seed-images/pet-services%2F1516734212186-a967f81ad0d7.jpg",
     name: "Professional Dog Grooming",
     species: "dog",
     breed: "All Breeds",
@@ -21,6 +22,7 @@ const SEED_DATA = [
   },
   {
     id: "pet-seed-002",
+    thumbnail: "/seed-images/pet-services%2F1514888286974-6c03e2ca1dba.jpg",
     name: "Cat Boarding & Daycare",
     species: "cat",
     breed: "All Breeds",
@@ -38,6 +40,7 @@ const SEED_DATA = [
   },
   {
     id: "pet-seed-003",
+    thumbnail: "/seed-images/pet-services%2F1628009368231-7bb7cfcb0def.jpg",
     name: "Veterinary Wellness Check",
     species: "dog",
     breed: "All Breeds",
@@ -55,6 +58,7 @@ const SEED_DATA = [
   },
   {
     id: "pet-seed-004",
+    thumbnail: "/seed-images/pet-services%2F1587300003388-59208cc962cb.jpg",
     name: "Dog Training & Obedience",
     species: "dog",
     breed: "All Breeds",
@@ -72,6 +76,7 @@ const SEED_DATA = [
   },
   {
     id: "pet-seed-005",
+    thumbnail: "/seed-images/pet-services%2F1601758228041-f3b2795255f1.jpg",
     name: "Pet Sitting & Dog Walking",
     species: "dog",
     breed: "All Breeds",

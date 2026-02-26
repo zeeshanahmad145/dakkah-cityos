@@ -24,6 +24,7 @@ const createGigListingSchema = z.object({
 const SEED_DATA = [
   {
     id: "free-seed-001",
+    thumbnail: "/seed-images/freelance%2F1498050108023-c5249f4df085.jpg",
     title: "Professional Website Development",
     description: "Full-stack web development using React, Node.js, and modern frameworks. Responsive design, SEO optimization, and performance tuning included.",
     category: "web_development",
@@ -42,6 +43,7 @@ const SEED_DATA = [
   },
   {
     id: "free-seed-002",
+    thumbnail: "/seed-images/freelance%2F1626785774573-4b799315345d.jpg",
     title: "Brand Identity & Logo Design",
     description: "Complete brand identity package including logo, color palette, typography, and brand guidelines. Unique, memorable designs.",
     category: "design",
@@ -60,6 +62,7 @@ const SEED_DATA = [
   },
   {
     id: "free-seed-003",
+    thumbnail: "/seed-images/freelance%2F1455390582262-044cdead277a.jpg",
     title: "SEO Content Writing & Blog Posts",
     description: "High-quality, SEO-optimized content writing for blogs, websites, and marketing materials. Research-driven and engaging.",
     category: "writing",
@@ -78,6 +81,7 @@ const SEED_DATA = [
   },
   {
     id: "free-seed-004",
+    thumbnail: "/seed-images/freelance%2F1574717024653-61fd2cf4d44d.jpg",
     title: "Professional Video Editing & Motion Graphics",
     description: "Expert video editing with color grading, motion graphics, sound design, and visual effects for YouTube, ads, and social media.",
     category: "video",
@@ -96,6 +100,7 @@ const SEED_DATA = [
   },
   {
     id: "free-seed-005",
+    thumbnail: "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
     title: "Digital Marketing & Social Media Strategy",
     description: "Comprehensive digital marketing strategy including social media management, PPC campaigns, and analytics reporting.",
     category: "marketing",

@@ -5,6 +5,7 @@ const SEED_DATA = [
   {
     id: "health_seed_01",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/government%2F1559839734-2b71ea197ec2.jpg",
     name: "Amira Hassan",
     title: "Board Certified Cardiologist",
     specialization: "cardiology",
@@ -29,6 +30,7 @@ const SEED_DATA = [
   {
     id: "health_seed_02",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg",
     name: "David Kim",
     title: "Dermatology Specialist",
     specialization: "dermatology",
@@ -53,6 +55,7 @@ const SEED_DATA = [
   {
     id: "health_seed_03",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
     name: "Maria Santos",
     title: "Pediatrics & Child Development",
     specialization: "pediatrics",
@@ -77,6 +80,7 @@ const SEED_DATA = [
   {
     id: "health_seed_04",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg",
     name: "James Mitchell",
     title: "Orthopedic Surgeon",
     specialization: "orthopedics",
@@ -101,6 +105,7 @@ const SEED_DATA = [
   {
     id: "health_seed_05",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
     name: "Nadia Petrova",
     title: "Psychiatrist & Mental Health Expert",
     specialization: "psychiatry",

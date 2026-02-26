@@ -5,6 +5,7 @@ import { handleApiError } from "../../../lib/api-error-handler"
 const SEED_DATA = [
   {
     id: "membership-seed-1",
+    thumbnail: "/seed-images/affiliate%2F1483985988355-763728e1935b.jpg",
     name: "Bronze Membership",
     tier: "bronze",
     description: "Get started with basic member benefits including early access to sales and a welcome discount.",
@@ -19,6 +20,7 @@ const SEED_DATA = [
   },
   {
     id: "membership-seed-2",
+    thumbnail: "/seed-images/campaigns%2F1556742049-0cfed4f6a45d.jpg",
     name: "Silver Membership",
     tier: "silver",
     description: "Enhanced benefits with bigger discounts, priority support, and exclusive member events.",
@@ -33,6 +35,7 @@ const SEED_DATA = [
   },
   {
     id: "membership-seed-3",
+    thumbnail: "/seed-images/memberships%2F1441986300917-64674bd600d8.jpg",
     name: "Gold Membership",
     tier: "gold",
     description: "Premium tier with significant savings, VIP access, and personalized shopping experience.",
@@ -47,6 +50,7 @@ const SEED_DATA = [
   },
   {
     id: "membership-seed-4",
+    thumbnail: "/seed-images/memberships%2F1554224155-8d04cb21cd6c.jpg",
     name: "Platinum Membership",
     tier: "platinum",
     description: "The ultimate membership experience with maximum discounts, concierge service, and luxury perks.",
@@ -61,6 +65,7 @@ const SEED_DATA = [
   },
   {
     id: "membership-seed-5",
+    thumbnail: "/seed-images/campaigns%2F1503676260728-1c00da094a0b.jpg",
     name: "Student Membership",
     tier: "bronze",
     description: "Special membership for students with verified .edu email. Enjoy discounts on essentials.",

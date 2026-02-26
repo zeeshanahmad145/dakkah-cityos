@@ -5,6 +5,7 @@ const SEED_DATA = [
   {
     id: "legal_seed_01",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/legal%2F1589578527966-fdac0f44566c.jpg",
     name: "Elizabeth Warren-Clarke",
     bar_number: "CA-287451",
     specializations: ["corporate", "intellectual_property"],
@@ -29,6 +30,7 @@ const SEED_DATA = [
   {
     id: "legal_seed_02",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/legal%2F1507003211169-0a1dd7228f2d.jpg",
     name: "Marcus Thompson",
     bar_number: "NY-394822",
     specializations: ["criminal"],
@@ -53,6 +55,7 @@ const SEED_DATA = [
   {
     id: "legal_seed_03",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/legal%2F1573496359142-b8d87734a5a2.jpg",
     name: "Sofia Rodriguez",
     bar_number: "TX-512093",
     specializations: ["family", "immigration"],
@@ -77,6 +80,7 @@ const SEED_DATA = [
   {
     id: "legal_seed_04",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/legal%2F1556157382-97eda2d62296.jpg",
     name: "Richard Park",
     bar_number: "CA-618734",
     specializations: ["real_estate"],
@@ -101,6 +105,7 @@ const SEED_DATA = [
   {
     id: "legal_seed_05",
     tenant_id: "tenant_seed",
+    thumbnail: "/seed-images/legal%2F1580894732444-8ecded7900cd.jpg",
     name: "Aisha Patel",
     bar_number: "IL-729561",
     specializations: ["intellectual_property", "corporate"],

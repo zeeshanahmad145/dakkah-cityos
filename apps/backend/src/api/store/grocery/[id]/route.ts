@@ -21,7 +21,7 @@ const SEED_DATA = [
     shelf_life_days: 5,
     nutrition: { calories: "32 per 100g", protein: "0.7g", carbohydrates: "7.7g", fiber: "2g", sugar: "4.9g", fat: "0.3g", vitamin_c: "58.8mg" },
     nutrition_facts: [{ label: "Calories", value: "32 per 100g" }, { label: "Protein", value: "0.7g" }, { label: "Carbs", value: "7.7g" }, { label: "Fat", value: "0.3g" }],
-    allergens: [],
+    allergens: ["Strawberry"],
     related_products: [
       { id: "groc-seed-005", name: "Organic Mixed Vegetables Box", price: 2499, thumbnail: "/seed-images/grocery%2F1540189549336-e6e99c3679fe.jpg" },
       { id: "groc-seed-003", name: "Farm Fresh Free-Range Eggs", price: 1599, thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },

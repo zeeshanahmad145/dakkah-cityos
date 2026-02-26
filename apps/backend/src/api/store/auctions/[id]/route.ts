@@ -109,6 +109,25 @@ const SEED_DATA = [
   },
 ]
 
+const SEED_BIDDERS = ["Abdullah K.", "Victoria L.", "Hassan M.", "Sophie R.", "Omar T.", "Elena V.", "James W.", "Fatima A.", "Carlos D.", "Nadia S.", "Richard B.", "Amira H.", "David P.", "Leila N.", "Marco F."]
+
+function generateSeedBids(currentPrice: number, increment: number, count: number) {
+  const bids = []
+  let price = currentPrice
+  for (let i = 0; i < Math.min(count, 5); i++) {
+    bids.push({
+      id: `bid-${i + 1}`,
+      bidder: SEED_BIDDERS[i % SEED_BIDDERS.length],
+      amount: price,
+      currency_code: "SAR",
+      time: new Date(Date.now() - (i * 8 + 2) * 60 * 60 * 1000).toISOString(),
+      created_at: new Date(Date.now() - (i * 8 + 2) * 60 * 60 * 1000).toISOString(),
+    })
+    price -= increment
+  }
+  return bids
+}
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("auction") as any
@@ -116,12 +135,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const item = await mod.retrieveAuctionListing(id)
     if (!item) {
       const seedItem = SEED_DATA.find((s) => s.id === id) || SEED_DATA[0]
-      return res.json({ item: { ...seedItem, bids: [] } })
+      return res.json({ item: { ...seedItem, bids: generateSeedBids(seedItem.current_price, seedItem.bid_increment, seedItem.bid_count) } })
     }
     const bids = await mod.listBids({ auction_id: id }, { take: 100 })
     return res.json({ item: { ...item, bids } })
   } catch (error: any) {
     const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
-    return res.json({ item: { ...seedItem, bids: [] } })
+    return res.json({ item: { ...seedItem, bids: generateSeedBids(seedItem.current_price, seedItem.bid_increment, seedItem.bid_count) } })
   }
 }

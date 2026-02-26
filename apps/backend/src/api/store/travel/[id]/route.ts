@@ -172,6 +172,13 @@ const SEED_DATA = [
   },
 ]
 
+const SEED_ROOM_TYPES = [
+  { id: "room-1", name: "Standard Room", price_per_night: 85000, capacity: 2, description: "Comfortable room with king-size bed, en-suite bathroom, and city views.", amenities: ["King bed", "Free WiFi", "Mini bar", "Room service"] },
+  { id: "room-2", name: "Deluxe Suite", price_per_night: 150000, capacity: 3, description: "Spacious suite with separate living area, premium amenities, and panoramic views.", amenities: ["King bed", "Living area", "Jacuzzi", "Butler service"] },
+  { id: "room-3", name: "Family Room", price_per_night: 120000, capacity: 4, description: "Large room with two queen beds, kid-friendly amenities, and connecting door option.", amenities: ["Two queen beds", "Kids welcome pack", "Extra space", "Connecting rooms"] },
+  { id: "room-4", name: "Presidential Suite", price_per_night: 350000, capacity: 4, description: "Ultimate luxury with private terrace, dining room, and dedicated concierge service.", amenities: ["Master bedroom", "Private terrace", "Dining room", "Personal concierge"] },
+]
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("travel") as any
@@ -179,12 +186,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const [item] = await mod.listTravelProperties({ id }, { take: 1 })
     if (!item) {
       const seedItem = SEED_DATA.find((s) => s.id === id) || SEED_DATA[0]
-      return res.json({ item: { ...seedItem, room_types: [] } })
+      return res.json({ item: { ...seedItem, room_types: SEED_ROOM_TYPES } })
     }
     const roomTypes = await mod.listRoomTypes({ property_id: id }, { take: 100 })
     return res.json({ item: { ...item, room_types: roomTypes } })
   } catch (error: any) {
     const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
-    return res.json({ item: { ...seedItem, room_types: [] } })
+    return res.json({ item: { ...seedItem, room_types: SEED_ROOM_TYPES } })
   }
 }

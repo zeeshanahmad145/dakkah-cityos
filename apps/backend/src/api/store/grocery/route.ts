@@ -5,6 +5,7 @@ const SEED_DATA = [
   {
     id: "groc-seed-001",
     product_id: "groc-seed-001",
+    thumbnail: "/seed-images/grocery%2F1464965911861-746a04b4bca6.jpg",
     metadata: {
       name: "Organic Fresh Strawberries",
       description: "Hand-picked organic strawberries from local farms. Sweet, juicy, and perfect for smoothies or snacking.",
@@ -22,6 +23,7 @@ const SEED_DATA = [
   {
     id: "groc-seed-002",
     product_id: "groc-seed-002",
+    thumbnail: "/seed-images/grocery%2F1509440159596-0249088772ff.jpg",
     metadata: {
       name: "Artisan Sourdough Bread",
       description: "Freshly baked sourdough bread made with traditional fermentation methods. Crispy crust, soft interior.",
@@ -39,6 +41,7 @@ const SEED_DATA = [
   {
     id: "groc-seed-003",
     product_id: "groc-seed-003",
+    thumbnail: "/seed-images/grocery%2F1582722872445-44dc5f7e3c8f.jpg",
     metadata: {
       name: "Farm Fresh Free-Range Eggs",
       description: "Premium free-range eggs from pasture-raised hens. Rich in omega-3 and packed with flavor.",
@@ -56,6 +59,7 @@ const SEED_DATA = [
   {
     id: "groc-seed-004",
     product_id: "groc-seed-004",
+    thumbnail: "/seed-images/grocery%2F1603048297172-c92544798d5a.jpg",
     metadata: {
       name: "Premium Wagyu Beef Steaks",
       description: "A5 grade Wagyu beef steaks with exceptional marbling. Perfect for grilling or pan-searing.",
@@ -73,6 +77,7 @@ const SEED_DATA = [
   {
     id: "groc-seed-005",
     product_id: "groc-seed-005",
+    thumbnail: "/seed-images/grocery%2F1540420773420-3366772f4999.jpg",
     metadata: {
       name: "Organic Mixed Vegetables Box",
       description: "A curated box of seasonal organic vegetables including tomatoes, peppers, zucchini, and leafy greens.",

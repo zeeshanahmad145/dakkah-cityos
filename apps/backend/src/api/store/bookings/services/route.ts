@@ -6,6 +6,7 @@ const SEED_SERVICES = [
   {
     id: "bk-svc-1",
     product_id: "bk-svc-1",
+    thumbnail: "/seed-images/bookings%2F1544161515-4ab6ce6db874.jpg",
     service_type: "appointment",
     duration_minutes: 60,
     max_capacity: 1,
@@ -28,6 +29,7 @@ const SEED_SERVICES = [
   {
     id: "bk-svc-2",
     product_id: "bk-svc-2",
+    thumbnail: "/seed-images/bookings%2F1553877522-43269d4ea984.jpg",
     service_type: "appointment",
     duration_minutes: 45,
     max_capacity: 1,
@@ -50,6 +52,7 @@ const SEED_SERVICES = [
   {
     id: "bk-svc-3",
     product_id: "bk-svc-3",
+    thumbnail: "/seed-images/bookings%2F1506126613408-eca07ce68773.jpg",
     service_type: "class",
     duration_minutes: 90,
     max_capacity: 15,
@@ -72,6 +75,7 @@ const SEED_SERVICES = [
   {
     id: "bk-svc-4",
     product_id: "bk-svc-4",
+    thumbnail: "/seed-images/bookings%2F1542038784456-1ea8e935640e.jpg",
     service_type: "appointment",
     duration_minutes: 120,
     max_capacity: 1,
@@ -94,6 +98,7 @@ const SEED_SERVICES = [
   {
     id: "bk-svc-5",
     product_id: "bk-svc-5",
+    thumbnail: "/seed-images/bookings%2F1560066984-138dadb4c035.jpg",
     service_type: "appointment",
     duration_minutes: 60,
     max_capacity: 1,
@@ -116,6 +121,7 @@ const SEED_SERVICES = [
   {
     id: "bk-svc-6",
     product_id: "bk-svc-6",
+    thumbnail: "/seed-images/bookings%2F1596464716127-f2a82984de30.jpg",
     service_type: "class",
     duration_minutes: 60,
     max_capacity: 8,

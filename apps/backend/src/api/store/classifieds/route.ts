@@ -6,6 +6,7 @@ import { sanitizeList } from "../../../lib/image-sanitizer"
 const SEED_CLASSIFIEDS = [
   {
     id: "cls-1",
+    thumbnail: "/seed-images/classifieds%2F1592750475338-74b7b21085ab.jpg",
     title: "iPhone 15 Pro Max – 256GB, Like New",
     description: "Barely used iPhone 15 Pro Max in Natural Titanium. Comes with original box, charger, and AppleCare+ until 2026. No scratches or dents.",
     category_id: "electronics",
@@ -20,6 +21,7 @@ const SEED_CLASSIFIEDS = [
   },
   {
     id: "cls-2",
+    thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg",
     title: "Leather Sectional Sofa – Italian Design",
     description: "Beautiful Italian leather L-shaped sectional sofa in dark brown. Seats 6 comfortably. Moving sale – must go this week!",
     category_id: "furniture",
@@ -34,6 +36,7 @@ const SEED_CLASSIFIEDS = [
   },
   {
     id: "cls-3",
+    thumbnail: "/seed-images/classifieds%2F1621007947382-bb3c3994e3fb.jpg",
     title: "2022 Toyota Camry – Low Mileage",
     description: "Single-owner 2022 Toyota Camry Grande with only 18,000 km. Full service history, extended warranty, pearl white color.",
     category_id: "vehicles",
@@ -48,6 +51,7 @@ const SEED_CLASSIFIEDS = [
   },
   {
     id: "cls-4",
+    thumbnail: "/seed-images/classifieds%2F1517336714731-489689fd1ca8.jpg",
     title: "MacBook Pro M3 14\" – Brand New Sealed",
     description: "Brand new, sealed MacBook Pro 14-inch with M3 chip, 18GB RAM, 512GB SSD. Space Black. Selling because received as a duplicate gift.",
     category_id: "electronics",
@@ -62,6 +66,7 @@ const SEED_CLASSIFIEDS = [
   },
   {
     id: "cls-5",
+    thumbnail: "/seed-images/classifieds%2F1511379938547-c1f69419868d.jpg",
     title: "Vintage Oud Collection – 3 Pieces",
     description: "Three beautiful vintage oud instruments from different regions. Perfect for collectors or musicians. Each piece has unique craftsmanship.",
     category_id: "collectibles",
@@ -76,6 +81,7 @@ const SEED_CLASSIFIEDS = [
   },
   {
     id: "cls-6",
+    thumbnail: "/seed-images/classifieds%2F1593062096033-9a26b09da705.jpg",
     title: "Looking for: Standing Desk – Adjustable",
     description: "Looking to buy a quality adjustable standing desk in good condition. Preferably electric height adjustment. Budget up to 1,500 SAR.",
     category_id: "furniture",

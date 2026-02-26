@@ -17,14 +17,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const restaurant = await mod.retrieveRestaurant(id)
     if (!restaurant) {
       const seed = SEED_RESTAURANTS.find((s) => s.id === id) || SEED_RESTAURANTS[0]
-      return res.json({ item: { ...seed, id, menus: [] } })
+      return res.json({ item: { ...seed, id, menus: seed.menu || [] } })
     }
     const menus = await mod.listMenus({ restaurant_id: id }, { take: 10 })
     return res.json({ item: { ...restaurant, menus } })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_RESTAURANTS.find((s) => s.id === id) || SEED_RESTAURANTS[0]
-    return res.json({ item: { ...seed, id, menus: [] } })
+    return res.json({ item: { ...seed, id, menus: seed.menu || [] } })
   }
 }
 

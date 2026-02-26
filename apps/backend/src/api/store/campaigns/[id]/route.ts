@@ -31,6 +31,13 @@ const SEED_DATA = [
       { id: "tier-2", title: "VIP Shopper", description: "Exclusive early access to new markdowns plus a gift card", pledge_amount: 5000, currency_code: "USD", estimated_delivery: "2025-07-20", limited_quantity: 50, claimed: 32, includes: ["Early access", "$25 gift card", "Free shipping"] },
       { id: "tier-3", title: "Ultimate Bundle", description: "Curated bundle of top clearance items plus VIP perks", pledge_amount: 10000, currency_code: "USD", estimated_delivery: "2025-08-01", limited_quantity: 25, claimed: 11, includes: ["Curated bundle", "VIP perks", "Personal shopper session"] },
     ],
+    reviews: [
+      { author: "Sarah M.", rating: 5, comment: "Incredible deals across the board. I saved over $200 on summer items!", created_at: "2025-07-10T08:00:00Z" },
+      { author: "David K.", rating: 5, comment: "The best summer clearance event I've ever shopped. Great selection and fast shipping.", created_at: "2025-07-05T14:30:00Z" },
+      { author: "Amina R.", rating: 4, comment: "Solid discounts on quality items. Some sizes sold out quickly though.", created_at: "2025-06-28T10:00:00Z" },
+      { author: "James L.", rating: 5, comment: "Up to 60% off wasn't an exaggeration. Stocked up for next summer too!", created_at: "2025-06-20T16:00:00Z" },
+      { author: "Priya N.", rating: 4, comment: "Good variety of products on sale. Would love to see more home goods next time.", created_at: "2025-06-15T09:30:00Z" },
+    ],
   },
   {
     id: "campaign-seed-2",
@@ -57,6 +64,13 @@ const SEED_DATA = [
       { id: "upd-6", created_at: "2025-03-01T10:00:00Z", title: "March Madness Deals", content: "Spring is here and so are fresh new deals every Friday this month." },
     ],
     reward_tiers: [],
+    reviews: [
+      { author: "Omar B.", rating: 5, comment: "Flash Friday is my new favorite shopping tradition. Unbeatable prices every week!", created_at: "2025-03-14T12:00:00Z" },
+      { author: "Linda W.", rating: 4, comment: "Great concept — love the urgency. Scored an amazing deal on headphones.", created_at: "2025-02-28T10:00:00Z" },
+      { author: "Chen H.", rating: 5, comment: "The Valentine's special had perfect gift options at fantastic prices.", created_at: "2025-02-15T09:00:00Z" },
+      { author: "Fatima S.", rating: 4, comment: "Deals sell out fast but if you're quick, the savings are real.", created_at: "2025-01-31T14:00:00Z" },
+      { author: "Marcus T.", rating: 5, comment: "Been following Flash Friday for months now. Consistently impressed with the deals.", created_at: "2025-01-17T11:30:00Z" },
+    ],
   },
   {
     id: "campaign-seed-3",
@@ -83,6 +97,13 @@ const SEED_DATA = [
       { id: "upd-9", created_at: "2025-03-10T09:00:00Z", title: "Final Week!", content: "Last chance to grab winter essentials at the lowest prices of the season." },
     ],
     reward_tiers: [],
+    reviews: [
+      { author: "Elena V.", rating: 5, comment: "Scored winter coats at 70% off! The quality was still excellent despite the deep discounts.", created_at: "2025-03-15T08:00:00Z" },
+      { author: "Khalid A.", rating: 5, comment: "Best end-of-season sale I've seen. Cleared out my wishlist at amazing prices.", created_at: "2025-03-08T10:30:00Z" },
+      { author: "Jessica P.", rating: 4, comment: "Great savings on boots and outerwear. Selection was still good even late in the sale.", created_at: "2025-02-28T14:00:00Z" },
+      { author: "Tom R.", rating: 5, comment: "The additional 20% off already reduced items was incredible. Stocked up for next winter.", created_at: "2025-02-22T09:00:00Z" },
+      { author: "Nadia F.", rating: 4, comment: "Good clearance event. Wish it lasted a bit longer but the deals were genuine.", created_at: "2025-02-10T11:00:00Z" },
+    ],
   },
   {
     id: "campaign-seed-4",
@@ -109,6 +130,13 @@ const SEED_DATA = [
       { id: "upd-12", created_at: "2025-12-15T09:00:00Z", title: "Last Shipping Day", content: "Order by December 18th for guaranteed delivery before Christmas." },
     ],
     reward_tiers: [],
+    reviews: [
+      { author: "Michael C.", rating: 5, comment: "The gift bundles were perfectly curated. Made holiday shopping so easy!", created_at: "2025-12-20T10:00:00Z" },
+      { author: "Aisha K.", rating: 5, comment: "Free gift wrapping was a wonderful touch. Everything arrived beautifully presented.", created_at: "2025-12-15T08:30:00Z" },
+      { author: "Robert S.", rating: 4, comment: "Great selection of gifts at 30% off. Shipping was fast even during the holiday rush.", created_at: "2025-12-10T14:00:00Z" },
+      { author: "Hannah L.", rating: 5, comment: "Found unique gifts I wouldn't have discovered otherwise. The guide was super helpful.", created_at: "2025-12-01T09:00:00Z" },
+      { author: "Yusuf M.", rating: 4, comment: "Solid holiday deals. The bundle pricing made it easy to stay on budget.", created_at: "2025-11-25T11:30:00Z" },
+    ],
   },
   {
     id: "campaign-seed-5",
@@ -135,6 +163,13 @@ const SEED_DATA = [
       { id: "upd-15", created_at: "2025-08-15T09:00:00Z", title: "Electronics Blowout", content: "Laptops, tablets, and accessories now up to 25% off for a limited time." },
     ],
     reward_tiers: [],
+    reviews: [
+      { author: "Jennifer W.", rating: 5, comment: "Saved a fortune on school supplies. Everything my kids needed at great prices!", created_at: "2025-08-20T08:00:00Z" },
+      { author: "Ahmed H.", rating: 4, comment: "Good deals on laptops and tablets. The student discount stacked nicely.", created_at: "2025-08-10T10:30:00Z" },
+      { author: "Maria G.", rating: 5, comment: "The dorm essentials section was exactly what we needed. One-stop shopping!", created_at: "2025-08-05T14:00:00Z" },
+      { author: "Kevin T.", rating: 4, comment: "Decent electronics deals. Would love to see more brand options next year.", created_at: "2025-07-28T09:00:00Z" },
+      { author: "Samira N.", rating: 5, comment: "Best back-to-school sale around. Organized, easy to browse, and genuinely discounted.", created_at: "2025-07-22T11:00:00Z" },
+    ],
   },
 ]
 
