@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_GIGS = [
   { id: "gig-1", title: "Professional Logo & Brand Identity Design", description: "I will create a unique, modern logo and complete brand identity package including color palette, typography, and brand guidelines. Deliverables include vector files (AI, EPS, SVG), PNG/JPG variations, a brand style guide document, and unlimited revisions until you're satisfied.", category: "Design", budget: 25000, currency_code: "usd", duration_days: 7, seller: { name: "Alex Rivera", rating: 4.9, completed_gigs: 234, avatar: "/seed-images/gigs/1498050108023-c5249f4df085.jpg", member_since: "2022-03-15", response_time: "1 hour" }, thumbnail: "/seed-images/gigs/1498050108023-c5249f4df085.jpg", skills: ["Logo Design", "Branding", "Illustrator", "Photoshop"], status: "active", packages: [{ name: "Basic", price: 15000, delivery_days: 5, revisions: 2, description: "1 logo concept with 2 revisions" }, { name: "Standard", price: 25000, delivery_days: 7, revisions: 5, description: "3 logo concepts with brand colors and fonts" }, { name: "Premium", price: 45000, delivery_days: 10, revisions: -1, description: "Full brand identity package with unlimited revisions" }], reviews: [{ author: "Sarah M.", rating: 5, comment: "Incredible work! Alex delivered exactly what I envisioned.", created_at: "2025-04-20T00:00:00Z" }, { author: "James K.", rating: 5, comment: "Fast turnaround and professional quality.", created_at: "2025-04-15T00:00:00Z" }, { author: "Lisa P.", rating: 4, comment: "Great designer, very responsive to feedback.", created_at: "2025-04-10T00:00:00Z" }, { author: "Daniel W.", rating: 5, comment: "The brand guide was so comprehensive. Exceeded expectations.", created_at: "2025-04-05T00:00:00Z" }, { author: "Mona K.", rating: 4, comment: "Creative and professional. Would hire again.", created_at: "2025-03-28T00:00:00Z" }], faq: [{ question: "What file formats will I receive?", answer: "AI, EPS, SVG, PNG, JPG, and PDF files." }, { question: "Do you offer revisions?", answer: "Yes, all packages include revisions. Premium has unlimited." }], created_at: "2025-05-01T10:00:00Z" },
@@ -17,7 +18,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seed = SEED_GIGS.find(s => s.id === id) || SEED_GIGS[0]
       return res.json({ item: { ...seed, id } })
     }
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "gigs") })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_GIGS.find(s => s.id === id) || SEED_GIGS[0]

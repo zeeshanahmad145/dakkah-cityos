@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   { id: "aff-1", name: "TechReviewer Pro", email: "tech@affiliates.com", affiliate_type: "influencer", status: "active", commission_rate: 15, commission_type: "percentage", payout_method: "paypal", payout_minimum: 5000, bio: "Leading tech reviewer with 500K+ subscribers covering the latest gadgets and consumer electronics.", social_links: { youtube: "https://youtube.com/@techreviewer", twitter: "https://twitter.com/techreviewer" }, total_earnings: 1250000, total_clicks: 45000, total_conversions: 1200, conversion_rate: 2.67, thumbnail: "/seed-images/freelance/1532094349884-543bc11b234d.jpg", created_at: "2024-06-15T00:00:00Z", reviews: [{ author: "Mark Stevens", rating: 5, comment: "TechReviewer Pro consistently delivers honest, detailed tech reviews. Their affiliate links always lead to the best deals.", created_at: "2024-12-10T00:00:00Z" }, { author: "Linda Park", rating: 4, comment: "Great content quality and reliable product recommendations. Commission tracking is transparent.", created_at: "2024-11-22T00:00:00Z" }, { author: "James Cooper", rating: 5, comment: "One of the most trustworthy tech affiliates out there. Their audience engagement is phenomenal.", created_at: "2024-11-05T00:00:00Z" }, { author: "Samira Al-Harbi", rating: 4, comment: "Excellent conversion rates and professional communication. A pleasure to work with.", created_at: "2024-10-18T00:00:00Z" }, { author: "Ryan O'Brien", rating: 5, comment: "Top-tier affiliate partner. Their video reviews drive significant sales for our products.", created_at: "2024-09-30T00:00:00Z" }] },
@@ -18,7 +19,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seed = SEED_DATA.find(s => s.id === id) || SEED_DATA[0]
       return res.json({ item: { ...seed, id } })
     }
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "affiliates") })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_DATA.find(s => s.id === id) || SEED_DATA[0]

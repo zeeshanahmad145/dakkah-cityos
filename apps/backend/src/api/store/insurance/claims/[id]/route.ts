@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
+import { enrichDetailItem } from "../../../../../lib/detail-enricher"
 
 /**
  * GET /store/insurance/claims/:id
@@ -29,7 +30,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       }
     }
 
-    return res.json({ claim });
+    return res.json({ claim: enrichDetailItem(claim, "insurance") });
   } catch (error: any) {
     return handleApiError(res, error, "STORE-INSURANCE-CLAIM-GET");
   }

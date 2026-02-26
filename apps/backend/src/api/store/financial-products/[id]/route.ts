@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   { id: "fp-1", name: "Personal Savings Account", description: "High-yield savings account with competitive returns and no minimum balance requirement.", product_type: "savings", interest_rate: 4.5, features: ["No minimum balance", "Daily compounding interest", "Free unlimited transfers", "Mobile banking access"], highlights: ["4.5% APY guaranteed for 12 months", "FDIC insured up to 250,000 SAR", "No monthly fees"], thumbnail: "/seed-images/financial-products/1579621970563-ebec7560ff3e.jpg", metadata: { thumbnail: "/seed-images/financial-products/1579621970563-ebec7560ff3e.jpg", icon: "banknotes", rate: "4.5% APY", price: null, currency: "SAR" }, documents: [
@@ -67,7 +68,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0]
       return res.json({ item: seedItem })
     }
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "financial-products") })
   } catch (error: any) {
     const { id } = req.params
     const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0]

@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 /**
  * GET /store/permits/:id  — get permit status and decision
@@ -26,7 +27,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         .json({ error: "This permit does not belong to you" });
     }
 
-    return res.json({ permit });
+    return res.json({ permit: enrichDetailItem(permit, "government") });
   } catch (error: any) {
     return handleApiError(res, error, "STORE-PERMIT-GET");
   }

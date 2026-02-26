@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -113,7 +114,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       filters: { volume_pricing_id: rule.id },
     })
 
-    return res.json({ item: { ...rule, tiers } })
+    return res.json({ item: enrichDetailItem({ ...rule, tiers }, "volume-deals") })
   } catch (error: any) {
     const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
     return res.json({ item: seedItem })

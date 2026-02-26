@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const updateWishlistSchema = z.object({
   name: z.string().min(1).optional(),
@@ -13,7 +14,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const service = req.scope.resolve("wishlist") as any
     const item = await service.retrieveWishlist(req.params.id)
-    res.json({ item })
+    res.json({ item: enrichDetailItem(item, "wishlists") })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-WISHLISTS-ID")}
 }
@@ -32,7 +33,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const service = req.scope.resolve("wishlist") as any
     const item = await service.updateWishlists(req.params.id, parsed.data)
-    res.json({ item })
+    res.json({ item: enrichDetailItem(item, "wishlists") })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-WISHLISTS-ID")}
 }

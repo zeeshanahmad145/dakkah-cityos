@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -127,7 +128,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return res.json({ item: seedItem })
     }
     const reward_tiers = await mod.listRewardTiers({ campaign_id: id }, { take: 100 })
-    return res.json({ item: { ...item, reward_tiers } })
+    return res.json({ item: enrichDetailItem({ ...item, reward_tiers }, "crowdfunding") })
   } catch (error: any) {
     const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
     return res.json({ item: seedItem })

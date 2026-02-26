@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -119,7 +120,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const mod = req.scope.resolve("affiliate") as any
     const { id } = req.params
     const item = await mod.retrieveAffiliate(id)
-    if (item) return res.json({ item })
+    if (item) return res.json({ item: enrichDetailItem(item, "affiliate") })
     const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0]
     return res.json({ item: seedItem })
   } catch (error: any) {

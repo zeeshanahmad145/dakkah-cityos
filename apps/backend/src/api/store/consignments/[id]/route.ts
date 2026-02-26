@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_ITEMS = [
   { id: "cons-1", name: "Vintage Rolex Datejust", description: "Authentic vintage Rolex Datejust from 1985 in excellent condition. Includes original box and papers. Recently serviced with new crystal.", category: "Jewelry & Watches", thumbnail: "/seed-images/auctions/1523170335258-f5ed11844a49.jpg", images: ["/seed-images/auctions/1523170335258-f5ed11844a49.jpg"], price: 450000, currency: "SAR", condition: "Excellent", status: "listed", commission_rate: 20, consignor: "Ahmed K.", listed_date: "2025-11-15T00:00:00Z", reviews: [
@@ -67,7 +68,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({
-      item: {
+      item: enrichDetailItem({
         ...item,
         status: item.delivered_at
           ? "delivered"
@@ -76,7 +77,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
             : item.shipped_at
               ? "shipped"
               : "processing",
-      },
+      }, "consignments"),
     })
   } catch (error: any) {
     const { id } = req.params

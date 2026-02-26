@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const updateNotificationPreferenceSchema = z.object({
   channel: z.string().min(1).optional(),
@@ -14,7 +15,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const service = req.scope.resolve("notificationPreferencesModuleService") as any
     const item = await service.retrieveNotificationPreference(req.params.id)
-    res.json({ item })
+    res.json({ item: enrichDetailItem(item, "utilities") })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-NOTIFICATION-PREFERENCES-ID")}
 }
@@ -33,7 +34,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const service = req.scope.resolve("notificationPreferencesModuleService") as any
     const item = await service.updateNotificationPreferences(req.params.id, parsed.data)
-    res.json({ item })
+    res.json({ item: enrichDetailItem(item, "utilities") })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-NOTIFICATION-PREFERENCES-ID")}
 }

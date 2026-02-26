@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_VEHICLES = [
   {
@@ -121,7 +122,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (automotiveService?.retrieveVehicleListing) {
       const item = await automotiveService.retrieveVehicleListing(id)
       if (item) {
-        return res.json({ item })
+        return res.json({ item: enrichDetailItem(item, "vehicles") })
       }
     }
   } catch (_e) {}

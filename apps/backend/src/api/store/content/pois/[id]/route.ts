@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../../lib/detail-enricher"
 
 const SEED_POIS = [
   { id: "poi-1", name: "Al Faisaliyah Tower", description: "Iconic skyscraper in the heart of Riyadh with observation deck, luxury shopping mall, and fine dining restaurants. The tower stands at 267 meters and is one of the most recognizable landmarks in the city.", poi_type: "landmark", category: "attraction", thumbnail: "/seed-images/content/1586724237569-f3d0c1dee8c6.jpg", images: ["/seed-images/content/1586724237569-f3d0c1dee8c6.jpg"], address_line1: "King Fahd Road, Olaya District", city: "Riyadh", country_code: "SA", latitude: 24.6908, longitude: 46.6854, rating: 4.7, review_count: 342, is_active: true, opening_hours: "Sun-Thu 10AM-10PM, Fri-Sat 2PM-11PM", phone: "+966 11 273 2222", website: "https://alfaisaliah.com", features: ["Observation Deck", "Shopping Mall", "Fine Dining", "Parking"] },
@@ -22,7 +23,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return res.json({ poi: { ...seed, id, lat: seed.latitude, lng: seed.longitude }, item: { ...seed, id, lat: seed.latitude, lng: seed.longitude } })
     }
 
-    const normalized = { ...poi, lat: poi.latitude, lng: poi.longitude }
+    const normalized = enrichDetailItem({ ...poi, lat: poi.latitude, lng: poi.longitude }, "places")
     res.json({ poi: normalized, item: normalized })
   } catch {
     const seed = SEED_POIS.find(p => p.id === id) || SEED_POIS[0]

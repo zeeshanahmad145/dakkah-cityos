@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 function getFlashSalesSeedData() {
   const now = Date.now()
@@ -87,7 +88,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return res.json({ item: seedItem })
     }
 
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "flash-sales") })
   } catch (error: any) {
     const { id } = req.params
     const seed = getFlashSalesSeedData()

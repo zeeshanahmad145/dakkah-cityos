@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../../lib/detail-enricher"
 
 const SEED_SERVICES = [
   { id: "sp_01", service_name: "Deep Tissue Massage", description: "Professional deep tissue massage therapy to relieve chronic muscle tension and improve circulation.", provider: "Wellness Spa & Therapy Center", category: "wellness", duration: 60, price: 25000, currency: "SAR", rating: 4.9, review_count: 124, thumbnail: "/seed-images/bookings/1544161515-4ab6ce6db874.jpg", location: "Riyadh", availability: "Daily 9AM-9PM", reviews: [{ author: "Nora Al-Harbi", rating: 5, comment: "Incredible deep tissue work. Left feeling completely renewed and pain-free.", created_at: "2025-01-15T00:00:00Z" }, { author: "James Wilson", rating: 5, comment: "The therapist targeted my problem areas perfectly. Highly skilled and professional.", created_at: "2025-01-10T00:00:00Z" }, { author: "Fatima Zahra", rating: 4, comment: "Excellent spa atmosphere and skilled therapists. Will definitely book again.", created_at: "2025-01-05T00:00:00Z" }, { author: "Mike Thompson", rating: 5, comment: "Best massage experience in Riyadh. The center is spotlessly clean.", created_at: "2024-12-28T00:00:00Z" }, { author: "Aisha Malik", rating: 4, comment: "Great value for a 60-minute session. Easy online booking process.", created_at: "2024-12-20T00:00:00Z" }] },
@@ -14,7 +15,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const { id } = req.params
     const mod = req.scope.resolve("booking") as any
     const item = await mod.retrieveServiceProvider(id)
-    if (item) return res.json({ item })
+    if (item) return res.json({ item: enrichDetailItem(item, "bookings") })
     const seed = SEED_SERVICES.find((s) => s.id === id) || SEED_SERVICES[0]
     return res.json({ item: { ...seed, id } })
   } catch {

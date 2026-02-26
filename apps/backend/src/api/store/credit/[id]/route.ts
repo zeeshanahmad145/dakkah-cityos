@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_CREDIT = [
   { id: "credit-1", name: "Premium Business Credit", description: "Flexible credit line for established businesses with competitive rates and easy repayment terms.", credit_type: "revolving", interest_rate: 5.9, credit_limit: 50000000, currency: "USD", term_months: 12, min_payment_percent: 5, status: "active", features: ["No annual fee", "0% intro APR for 6 months", "Cashback rewards", "Online account management", "Auto-pay options"], requirements: ["Minimum credit score 650", "Business operating for at least 2 years", "Annual revenue of $100,000+", "Valid business registration documents"], thumbnail: "/seed-images/credit/1563013544-824ae1b704d3.jpg", metadata: { thumbnail: "/seed-images/credit/1563013544-824ae1b704d3.jpg" }, reviews: [
@@ -40,7 +41,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const availableCredit = creditLimit - creditUsed
 
     return res.json({
-      item: {
+      item: enrichDetailItem({
         id: company.id,
         name: company.name,
         credit: {
@@ -51,7 +52,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           payment_terms: company.payment_terms,
           currency: "USD",
         },
-      },
+      }, "credit"),
     })
   } catch (error: any) {
     const { id } = req.params

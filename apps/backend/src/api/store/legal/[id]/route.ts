@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -208,7 +209,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("legal") as any
     const item = await mod.retrieveAttorneyProfile(id)
-    if (item) return res.json({ item })
+    if (item) return res.json({ item: enrichDetailItem(item, "legal") })
   } catch (error: any) {
     const isNotFound = error?.type === "not_found" || error?.message?.includes("not found")
     if (!isNotFound) {

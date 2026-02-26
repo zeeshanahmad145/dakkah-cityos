@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SOCIAL_COMMERCE_SEED = [
   {
@@ -208,12 +209,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (type === "group_buy") {
       const [item] = await mod.listGroupBuys({ id }, { take: 1 })
       if (!item) return res.json({ item: SOCIAL_COMMERCE_SEED[0] })
-      return res.json({ item })
+      return res.json({ item: enrichDetailItem(item, "social-commerce") })
     }
 
     const [item] = await mod.listLiveStreams({ id }, { take: 1 })
     if (!item) return res.json({ item: SOCIAL_COMMERCE_SEED[0] })
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "social-commerce") })
   } catch (error: any) {
     return res.json({ item: SOCIAL_COMMERCE_SEED[0] })
   }

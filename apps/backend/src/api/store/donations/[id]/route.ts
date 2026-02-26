@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DONATIONS = [
   {
@@ -106,7 +107,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (charityService?.retrieveDonationCampaign) {
       const campaign = await charityService.retrieveDonationCampaign(id)
       if (campaign) {
-        return res.json({ item: campaign })
+        return res.json({ item: enrichDetailItem(campaign, "charity") })
       }
     }
   } catch (_e) {}

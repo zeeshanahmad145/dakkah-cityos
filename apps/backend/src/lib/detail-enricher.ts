@@ -60,6 +60,10 @@ const CATEGORY_IMAGES: Record<string, string> = {
   "white-label": "white-label/1557200134-90327ee9fafa.jpg",
   advertising: "advertising/1504384308620-19400d9df8c3.jpg",
   affiliate: "affiliate/1563013544-824ae1b704d3.jpg",
+  affiliates: "affiliate/1563013544-824ae1b704d3.jpg",
+  companies: "b2b/1454165804606-c3d57bc86b40.jpg",
+  places: "events/1459749411175-04bf5292ceea.jpg",
+  wishlists: "content/1586724237569-f3d0c1dee8c6.jpg",
 }
 
 const VALID_IMAGES: Record<string, string[]> = {

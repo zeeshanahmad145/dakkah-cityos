@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 
 const SEED_DATA = [
@@ -153,7 +154,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       bids: bidList.length > 0 ? bidList : generateSeedBids(Number(item.current_price || item.starting_price || 10000), Number(item.bid_increment || 1000), Number(item.total_bids || 5)),
       reviews: SEED_REVIEWS,
     }
-    return res.json({ item: enriched })
+    return res.json({ item: enrichDetailItem(enriched, "auctions") })
   } catch (error: any) {
     const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
     return res.json({ item: { ...seedItem, bids: generateSeedBids(seedItem.current_price, seedItem.bid_increment, seedItem.bid_count) } })

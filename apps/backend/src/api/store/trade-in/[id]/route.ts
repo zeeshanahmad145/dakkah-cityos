@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_ITEMS = [
   { id: "ti-seed-1", name: "iPhone 15 Pro", category: "phones", thumbnail: "/seed-images/auctions/1523275335684-37898b6baf30.jpg", description: "Trade in your iPhone 15 Pro for store credit. All storage sizes accepted.", condition_requirements: "Powers on, no cracks, all buttons functional", estimated_value_min: 150000, estimated_value_max: 280000, currency: "SAR", status: "active", requirements: ["Item must be in working condition", "Original charger and cable included", "No cracks or major scratches on screen", "Factory reset completed before trade-in"], reviews: [{ author: "Nasser K.", rating: 5, comment: "Got a great value for my old iPhone. Process was quick and transparent.", created_at: "2024-11-14T10:00:00Z" }, { author: "Huda M.", rating: 4, comment: "Fair pricing and fast evaluation. Credit was applied within 24 hours.", created_at: "2024-11-01T15:30:00Z" }, { author: "Ali S.", rating: 5, comment: "Best trade-in experience I've had. Much better value than other platforms.", created_at: "2024-10-18T09:00:00Z" }, { author: "Reem A.", rating: 4, comment: "Smooth process overall. The condition check was thorough but fair.", created_at: "2024-10-05T14:15:00Z" }, { author: "Fahad W.", rating: 5, comment: "Traded in my Pro for store credit towards the new model. Easy!", created_at: "2024-09-20T11:45:00Z" }] },
@@ -13,7 +14,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const { id } = req.params
     const mod = req.scope.resolve("tradeIn") as any
     const item = await mod.retrieveTradeInRequest(id)
-    if (item) return res.json({ item })
+    if (item) return res.json({ item: enrichDetailItem(item, "trade-in") })
     const seed = SEED_ITEMS.find((s) => s.id === id) || SEED_ITEMS[0]
     return res.json({ item: { ...seed, id } })
   } catch {

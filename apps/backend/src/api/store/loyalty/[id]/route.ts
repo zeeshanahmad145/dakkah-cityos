@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -103,7 +104,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     try {
       const program = await loyaltyService.retrieveLoyaltyProgram(id)
-      if (program) return res.json({ item: program })
+      if (program) return res.json({ item: enrichDetailItem(program, "loyalty") })
     } catch {}
 
     try {

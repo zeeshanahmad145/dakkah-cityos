@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_B2B = [
   { id: "b2b-1", name: "Acme Industrial Supplies", description: "Leading provider of industrial equipment and supplies for businesses of all sizes. Bulk ordering with competitive pricing.", company_type: "supplier", industry: "Industrial", contact_email: "sales@acme-industrial.com", phone: "+966 11 555 1234", address: "Riyadh Industrial City", status: "active", credit_limit: 50000000, payment_terms: "NET-30", thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg", metadata: { thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg" }, bulk_pricing: [{ min_quantity: 1, max_quantity: 99, price: 4999, discount: "0%" }, { min_quantity: 100, max_quantity: 499, price: 4499, discount: "10%" }, { min_quantity: 500, max_quantity: null, price: 3999, discount: "20%" }], certifications: ["ISO 9001:2015", "ISO 14001 Environmental", "OHSAS 18001 Safety"], products: [{ id: "prod-1", title: "Industrial Safety Helmet", name: "Industrial Safety Helmet", price: 4500, moq: 50, thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg" }, { id: "prod-2", title: "Heavy-Duty Work Gloves", name: "Heavy-Duty Work Gloves", price: 1200, moq: 100, thumbnail: "/seed-images/b2b/1504384308090-c894fdcc538d.jpg" }, { id: "prod-3", title: "Steel-Toe Safety Boots", name: "Steel-Toe Safety Boots", price: 8900, moq: 25, thumbnail: "/seed-images/b2b/1497435334941-8c899ee9e8e9.jpg" }, { id: "prod-4", title: "High-Vis Safety Vest", name: "High-Vis Safety Vest", price: 2500, moq: 200, thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg" }], reviews: [{ author: "Mohammad Al-Rashid", rating: 5, comment: "Acme has been our go-to supplier for two years. Consistent quality and on-time delivery every order.", created_at: "2025-01-15T00:00:00Z" }, { author: "Sarah Chen", rating: 4, comment: "Excellent bulk pricing on safety equipment. NET-30 terms work great for our cash flow.", created_at: "2025-01-10T00:00:00Z" }, { author: "David Procurement", rating: 5, comment: "ISO certified and it shows. Product quality is always top-notch with proper documentation.", created_at: "2025-01-05T00:00:00Z" }, { author: "Fatima Industrial", rating: 4, comment: "Great selection of industrial supplies. Their safety helmets are the best value in the market.", created_at: "2024-12-28T00:00:00Z" }, { author: "Robert Singh", rating: 5, comment: "Reliable B2B partner. Their credit limit and payment terms are very competitive.", created_at: "2024-12-20T00:00:00Z" }] },
@@ -16,7 +17,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seed = SEED_B2B.find((s) => s.id === id) || SEED_B2B[0]
       return res.json({ item: { ...seed, id } })
     }
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "b2b") })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_B2B.find((s) => s.id === id) || SEED_B2B[0]

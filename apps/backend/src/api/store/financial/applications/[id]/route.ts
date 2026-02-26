@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
+import { enrichDetailItem } from "../../../../../lib/detail-enricher"
 
 /**
  * GET   /store/financial/applications/:id  — get application status + repayment schedule
@@ -49,7 +50,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       }
     }
 
-    return res.json({ application, assessment, repaymentSchedule });
+    return res.json({ application: enrichDetailItem(application, "financial-products"), assessment, repaymentSchedule });
   } catch (error: any) {
     return handleApiError(res, error, "STORE-FINANCIAL-APPLICATION-GET");
   }

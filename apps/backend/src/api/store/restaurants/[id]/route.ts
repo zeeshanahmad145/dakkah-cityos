@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_RESTAURANTS = [
   { id: "rst-1", name: "Al Najd Village", description: "Authentic Najdi cuisine served in a traditional setting with live oud music. Famous for kabsa, jareesh, and haneeth.", cuisine_type: "najdi", cuisine: "Najdi", city: "Riyadh", phone: "+966 11 234 5678", rating: 4.8, review_count: 1240, price_range: "$$$", operating_hours: "12:00 PM – 12:00 AM", delivery_available: true, pickup_available: true, dine_in_available: true, thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg", metadata: { thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg" }, features: ["Live oud music", "Private dining rooms", "Outdoor seating", "Halal certified"], menu: [{ category: "Main Dishes", items: [{ name: "Kabsa", description: "Traditional spiced rice with tender lamb", price: 65 }, { name: "Jareesh", description: "Crushed wheat cooked with meat and spices", price: 45 }, { name: "Haneeth", description: "Slow-roasted lamb on a bed of rice", price: 85 }] }, { category: "Appetizers", items: [{ name: "Samboosa", description: "Crispy pastry filled with spiced meat", price: 20 }, { name: "Mutabbaq", description: "Stuffed pan-fried bread", price: 25 }] }], reviews: [{ author: "Abdullah M.", rating: 5, comment: "Best kabsa in Riyadh! The live oud music creates an incredible atmosphere.", created_at: "2024-11-14T20:00:00Z" }, { author: "Fatima S.", rating: 5, comment: "Authentic Najdi flavors that remind me of my grandmother's cooking.", created_at: "2024-11-01T19:30:00Z" }, { author: "Saeed K.", rating: 4, comment: "Delicious food and beautiful decor. Slightly crowded on weekends.", created_at: "2024-10-18T21:00:00Z" }, { author: "Hanan R.", rating: 5, comment: "The haneeth is absolutely divine. Worth every riyal.", created_at: "2024-10-05T20:15:00Z" }, { author: "Turki A.", rating: 4, comment: "Great traditional dining experience. Service was warm and welcoming.", created_at: "2024-09-20T19:45:00Z" }] },
@@ -45,7 +46,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       features: restaurant.metadata?.features || ["Dine-in", "Delivery", "Takeout"],
       price_range: restaurant.metadata?.price_range || "$$",
     }
-    return res.json({ item: enriched })
+    return res.json({ item: enrichDetailItem(enriched, "restaurants") })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_RESTAURANTS.find((s) => s.id === id) || SEED_RESTAURANTS[0]

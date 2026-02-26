@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 export const AUTHENTICATE = false
 
@@ -10,7 +11,7 @@ const SEED_DETAILS: Record<string, any> = {
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
   const detail = SEED_DETAILS[id]
-  if (detail) return res.json({ flash_deal: detail })
+  if (detail) return res.json({ flash_deal: enrichDetailItem(detail, "flash-deals") })
 
   try {
     const moduleService = req.scope.resolve("promotionExt") as any
@@ -26,7 +27,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         { author: "Ahmed S.", rating: 5, comment: "Fast shipping too. Highly recommend.", created_at: "2025-12-20T00:00:00Z" },
       ],
     }
-    return res.json({ flash_deal: enriched })
+    return res.json({ flash_deal: enrichDetailItem(enriched, "flash-deals") })
   } catch {
     return res.status(404).json({ message: "Flash deal not found" })
   }

@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 /**
  * GET /store/purchase-orders/:id
@@ -35,7 +36,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       }
     }
     
-    res.json({ purchase_order: purchaseOrder })
+    res.json({ purchase_order: enrichDetailItem(purchaseOrder, "b2b") })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-PURCHASE-ORDERS-ID")
   }

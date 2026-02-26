@@ -1,6 +1,7 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const submitQuoteSchema = z.object({
 }).strict()
@@ -159,7 +160,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const { id } = req.params;
 
     const quote = await quoteModuleService.retrieveQuote(id);
-    res.json({ quote });
+    res.json({ quote: enrichDetailItem(quote, "b2b") });
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_QUOTES.find((s) => s.id === id) || SEED_QUOTES[0]

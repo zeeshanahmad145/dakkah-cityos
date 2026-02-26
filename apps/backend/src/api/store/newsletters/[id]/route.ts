@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   { id: "nl-1", name: "Tech Trends Weekly", topic: "technology", thumbnail: "/seed-images/newsletters/1518770660439-4636190af475.jpg", edition_date: "2026-02-10", topics_covered: ["AI & Machine Learning", "Web3 Updates", "Cloud Computing"], description: "Stay ahead with the latest technology trends, product launches, and industry insights.", topics: ["Artificial Intelligence", "Cloud Computing", "Cybersecurity", "Software Development"], testimonials: [{ name: "Ahmed K.", quote: "The best tech newsletter I've subscribed to. Always relevant and insightful.", role: "CTO" }, { name: "Sara M.", quote: "Keeps me updated on industry trends without overwhelming my inbox.", role: "Software Engineer" }, { name: "Omar R.", quote: "A must-read for anyone in tech. Concise and actionable.", role: "Product Manager" }], sampleContent: [{ title: "The Rise of AI Agents in Enterprise", excerpt: "How autonomous AI agents are transforming business workflows and decision-making processes.", date: "2026-02-10" }, { title: "Cloud Cost Optimization Strategies for 2026", excerpt: "Practical tips to reduce your cloud spending without sacrificing performance.", date: "2026-02-03" }, { title: "Web3 Security: Lessons from Recent Breaches", excerpt: "Analyzing the biggest Web3 security incidents and what developers can learn.", date: "2026-01-27" }], reviews: [{ author: "Tariq M.", rating: 5, comment: "The most comprehensive tech newsletter I've found. Saves me hours of research.", created_at: "2025-01-10T09:00:00Z" }, { author: "Lina A.", rating: 4, comment: "Well-curated content that's actually relevant to my daily work.", created_at: "2025-01-20T14:00:00Z" }, { author: "Faisal R.", rating: 5, comment: "Love the deep dives into AI topics. Always learn something new.", created_at: "2025-02-01T10:00:00Z" }, { author: "Nadia H.", rating: 4, comment: "Concise and actionable. Perfect length for my morning commute read.", created_at: "2025-02-10T08:00:00Z" }, { author: "Badr S.", rating: 5, comment: "Been subscribed for a year and it keeps getting better with each edition.", created_at: "2025-02-20T12:00:00Z" }] },
@@ -18,7 +19,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0];
       return res.json({ item: seedItem });
     }
-    return res.json({ item });
+    return res.json({ item: enrichDetailItem(item, "newsletters") });
   } catch (error: any) {
     const { id } = req.params;
     const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0];

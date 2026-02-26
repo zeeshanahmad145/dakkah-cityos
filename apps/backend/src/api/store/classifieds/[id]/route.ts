@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_CLASSIFIEDS = [
   { id: "cls-1", title: "iPhone 15 Pro Max – 256GB, Like New", description: "Barely used iPhone 15 Pro Max in Natural Titanium. Comes with original box, charger, and AppleCare+ until 2026. No scratches or dents.", category_id: "electronics", listing_type: "sale", condition: "like_new", price: 380000, currency_code: "SAR", is_negotiable: true, location_city: "Riyadh", status: "active", thumbnail: "/seed-images/classifieds/1592750475338-74b7b21085ab.jpg", metadata: { thumbnail: "/seed-images/classifieds/1592750475338-74b7b21085ab.jpg", images: ["/seed-images/classifieds/1592750475338-74b7b21085ab.jpg"] }, reviews: [
@@ -69,7 +70,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       images: item.metadata?.images || [item.metadata?.thumbnail || `/seed-images/classifieds/1592750475338-74b7b21085ab.jpg`],
       reviews: SEED_REVIEWS,
     }
-    return res.json({ item: enriched })
+    return res.json({ item: enrichDetailItem(enriched, "classifieds") })
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_CLASSIFIEDS.find((s) => s.id === id) || SEED_CLASSIFIEDS[0]

@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -174,7 +175,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const mod = req.scope.resolve("parking") as any
     const { id } = req.params
     const item = await mod.retrieveParkingZone(id)
-    if (item) return res.json({ item })
+    if (item) return res.json({ item: enrichDetailItem(item, "parking") })
     const seedItem = SEED_DATA.find((s) => s.id === id) || SEED_DATA[0]
     return res.json({ item: seedItem })
   } catch (error: any) {

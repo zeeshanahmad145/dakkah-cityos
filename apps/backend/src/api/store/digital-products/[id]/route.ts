@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   { id: "dp-1", title: "Complete Web Development Bootcamp", description: "Master HTML, CSS, JavaScript, React, Node.js and more in this comprehensive course.", file_type: "video", file_size_bytes: 5368709120, preview_url: null, version: "3.0", max_downloads: null, is_active: true, thumbnail: "/seed-images/digital-products/1517694712202-14dd9538aa97.jpg", metadata: { thumbnail: "/seed-images/digital-products/1517694712202-14dd9538aa97.jpg", price: 4999, category: "software", rating: 4.8, currency_code: "USD" }, reviews: [
@@ -47,7 +48,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0]
       return res.json({ item: seedItem })
     }
-    return res.json({ item })
+    return res.json({ item: enrichDetailItem(item, "digital-products") })
   } catch (error: any) {
     const { id } = req.params
     const seedItem = SEED_DATA.find(i => i.id === id) || SEED_DATA[0]

@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_COMPANIES = [
   {
@@ -122,7 +123,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const company = await companyService.retrieveCompany(id)
       if (company) {
         const seedMatch = SEED_COMPANIES.find((c) => c.id === id) || SEED_COMPANIES[0]
-        return res.json({ company: { ...company, thumbnail: company.thumbnail || company.metadata?.thumbnail || seedMatch.thumbnail, reviews: seedMatch.reviews } })
+        return res.json({ company: enrichDetailItem({ ...company, thumbnail: company.thumbnail || company.metadata?.thumbnail || seedMatch.thumbnail, reviews: seedMatch.reviews }, "companies") })
       }
     }
   } catch (_e) {

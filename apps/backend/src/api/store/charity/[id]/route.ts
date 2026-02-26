@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_CHARITIES = [
   {
@@ -203,7 +204,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           const result = await mod.listDonationCampaigns({ charity_org_id: id }, { take: 100 })
           campaigns = Array.isArray(result) ? result : result?.[0] || []
         } catch (error: any) {}
-        return res.json({ item: { ...charity, campaigns } })
+        return res.json({ item: enrichDetailItem({ ...charity, campaigns }, "charity") })
       }
     } catch (error: any) {
       const isNotFound = error?.type === "not_found" || error?.code === "NOT_FOUND" || error?.message?.includes("not found") || error?.message?.includes("does not exist")
@@ -219,7 +220,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         try {
           org = await mod.retrieveCharityOrg((campaign as any).charity_org_id)
         } catch (error: any) {}
-        return res.json({ item: { ...campaign, organization: org } })
+        return res.json({ item: enrichDetailItem({ ...campaign, organization: org }, "charity") })
       }
     } catch (error: any) {
       const isNotFound = error?.type === "not_found" || error?.code === "NOT_FOUND" || error?.message?.includes("not found") || error?.message?.includes("does not exist")
