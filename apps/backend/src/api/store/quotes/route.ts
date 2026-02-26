@@ -3,6 +3,64 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
 
+const SEED_QUOTES = [
+  {
+    id: "quote-seed-1",
+    title: "Office Furniture Bulk Order",
+    customer_name: "Acme Corp",
+    status: "pending",
+    total: 1250000,
+    currency: "USD",
+    items_count: 12,
+    created_at: "2026-02-10T09:00:00Z",
+    thumbnail: "/seed-images/quotes%2F1504384308090-c894fdcc538d.jpg",
+  },
+  {
+    id: "quote-seed-2",
+    title: "IT Equipment Refresh",
+    customer_name: "TechStart Inc",
+    status: "approved",
+    total: 875000,
+    currency: "USD",
+    items_count: 8,
+    created_at: "2026-02-08T14:30:00Z",
+    thumbnail: "/seed-images/quotes%2F1551288049-bebda4e38f71.jpg",
+  },
+  {
+    id: "quote-seed-3",
+    title: "Event Supplies Package",
+    customer_name: "EventPro LLC",
+    status: "draft",
+    total: 340000,
+    currency: "USD",
+    items_count: 25,
+    created_at: "2026-02-05T11:00:00Z",
+    thumbnail: "/seed-images/quotes%2F1519494026892-80bbd2d6fd0d.jpg",
+  },
+  {
+    id: "quote-seed-4",
+    title: "Restaurant Kitchen Equipment",
+    customer_name: "Bistro Moderne",
+    status: "pending",
+    total: 2100000,
+    currency: "USD",
+    items_count: 15,
+    created_at: "2026-02-03T08:00:00Z",
+    thumbnail: "/seed-images/quotes%2F1504384308090-c894fdcc538d.jpg",
+  },
+  {
+    id: "quote-seed-5",
+    title: "Warehouse Shelving System",
+    customer_name: "LogiStore Ltd",
+    status: "approved",
+    total: 560000,
+    currency: "USD",
+    items_count: 6,
+    created_at: "2026-01-28T16:00:00Z",
+    thumbnail: "/seed-images/quotes%2F1551288049-bebda4e38f71.jpg",
+  },
+]
+
 const quoteItemSchema = z.object({
   product_id: z.string().min(1),
   variant_id: z.string().optional(),
@@ -100,8 +158,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     if (!req.auth_context?.actor_id) {
       return res.json({
-        quotes: [],
-        count: 0,
+        quotes: SEED_QUOTES,
+        count: SEED_QUOTES.length,
         public_info: {
           title: "Request a Quote",
           description: "Get custom pricing for bulk orders, special requirements, or B2B purchases.",
@@ -126,8 +184,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     res.json({ quotes, count: Array.isArray(quotes) ? quotes.length : 0 })
   } catch (error: any) {
     return res.json({
-      quotes: [],
-      count: 0,
+      quotes: SEED_QUOTES,
+      count: SEED_QUOTES.length,
       public_info: {
         title: "Request a Quote",
         description: "Get custom pricing for bulk orders, special requirements, or B2B purchases.",

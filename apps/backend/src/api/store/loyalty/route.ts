@@ -2,6 +2,49 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
 
+const SEED_PROGRAMS = [
+  {
+    id: "loyalty-prog-1",
+    name: "Rewards Plus",
+    description: "Earn points on every purchase and unlock exclusive member benefits.",
+    points_per_dollar: 1,
+    tier: "Bronze",
+    thumbnail: "/seed-images/loyalty%2F1563013544-824ae1b704d3.jpg",
+  },
+  {
+    id: "loyalty-prog-2",
+    name: "VIP Rewards",
+    description: "Premium loyalty program with accelerated earning and priority perks.",
+    points_per_dollar: 2,
+    tier: "Silver",
+    thumbnail: "/seed-images/loyalty%2F1612404730960-5c71577fca11.jpg",
+  },
+  {
+    id: "loyalty-prog-3",
+    name: "Elite Circle",
+    description: "Our top-tier program for frequent shoppers with the best rewards.",
+    points_per_dollar: 3,
+    tier: "Gold",
+    thumbnail: "/seed-images/loyalty%2F1610375461246-83df859d849d.jpg",
+  },
+  {
+    id: "loyalty-prog-4",
+    name: "Cashback Stars",
+    description: "Simple cashback rewards — earn store credit on every order.",
+    points_per_dollar: 1.5,
+    tier: "Bronze",
+    thumbnail: "/seed-images/loyalty%2F1579547945413-497e1b99dac0.jpg",
+  },
+  {
+    id: "loyalty-prog-5",
+    name: "Community Rewards",
+    description: "Support local causes while earning points on your purchases.",
+    points_per_dollar: 1,
+    tier: "Bronze",
+    thumbnail: "/seed-images/loyalty%2F1563013544-824ae1b704d3.jpg",
+  },
+]
+
 const enrollLoyaltySchema = z.object({
   program_id: z.string().min(1),
   tenant_id: z.string().min(1),
@@ -16,6 +59,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       account: null,
       program: null,
       recent_transactions: [],
+      programs: SEED_PROGRAMS,
       public_info: {
         title: "Loyalty Rewards Program",
         description: "Earn points on every purchase and redeem them for discounts, free products, and exclusive perks.",

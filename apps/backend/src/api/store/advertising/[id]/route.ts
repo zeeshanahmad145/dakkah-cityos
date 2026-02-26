@@ -18,6 +18,7 @@ const SEED_DATA = [
     start_date: "2024-06-01",
     end_date: "2024-08-31",
     thumbnail: "/seed-images/events%2F1540575467063-178a2e25ea79.jpg",
+    reviews: [{ author: "Marketing Pro", rating: 5, comment: "Incredible ROI on this banner placement. Our CTR exceeded expectations.", created_at: "2024-07-15T00:00:00Z" }, { author: "Brand Manager", rating: 4, comment: "Great visibility and the analytics dashboard is very detailed.", created_at: "2024-07-10T00:00:00Z" }, { author: "E-commerce Lead", rating: 5, comment: "Best performing ad slot we've ever used. Highly recommend.", created_at: "2024-07-05T00:00:00Z" }, { author: "Digital Strategist", rating: 4, comment: "Good placement with solid targeting options.", created_at: "2024-06-28T00:00:00Z" }, { author: "Growth Hacker", rating: 5, comment: "The homepage hero placement drove massive traffic to our sale.", created_at: "2024-06-20T00:00:00Z" }],
   },
   {
     id: "ad-seed-2",
@@ -35,6 +36,7 @@ const SEED_DATA = [
     start_date: "2024-07-01",
     end_date: "2024-09-30",
     thumbnail: "/seed-images/flash-sales%2F1607082348824-0a96f2a4b9da.jpg",
+    reviews: [{ author: "Retail Director", rating: 5, comment: "Sidebar placement converts really well for new arrivals.", created_at: "2024-08-12T00:00:00Z" }, { author: "CMO", rating: 4, comment: "Clean design options and good audience targeting.", created_at: "2024-08-05T00:00:00Z" }, { author: "Ad Buyer", rating: 5, comment: "Cost-effective and the reporting is excellent.", created_at: "2024-07-28T00:00:00Z" }, { author: "Product Manager", rating: 4, comment: "Helped drive awareness for our new collection.", created_at: "2024-07-20T00:00:00Z" }, { author: "Startup Founder", rating: 5, comment: "Perfect for launching new products to a targeted audience.", created_at: "2024-07-15T00:00:00Z" }],
   },
   {
     id: "ad-seed-3",
@@ -52,6 +54,7 @@ const SEED_DATA = [
     start_date: "2024-05-15",
     end_date: "2024-12-31",
     thumbnail: "/seed-images/loyalty%2F1556742049-0cfed4f6210.jpg",
+    reviews: [{ author: "VP Marketing", rating: 5, comment: "Interstitial format had the highest engagement rate.", created_at: "2024-06-15T00:00:00Z" }, { author: "Media Buyer", rating: 4, comment: "Great for brand awareness. Solid impression volume.", created_at: "2024-06-10T00:00:00Z" }, { author: "Agency Lead", rating: 5, comment: "Our clients love the targeting granularity.", created_at: "2024-06-05T00:00:00Z" }, { author: "DTC Brand", rating: 4, comment: "Good ROI compared to other platforms.", created_at: "2024-05-28T00:00:00Z" }, { author: "Performance Lead", rating: 5, comment: "Exceeded KPIs by 40%. Will renew.", created_at: "2024-05-20T00:00:00Z" }],
   },
   {
     id: "ad-seed-4",
@@ -69,6 +72,7 @@ const SEED_DATA = [
     start_date: "2024-08-01",
     end_date: "2024-10-31",
     thumbnail: "/seed-images/subscriptions%2F1553729459-02b1a9de8a94.jpg",
+    reviews: [{ author: "Flash Sale Manager", rating: 5, comment: "Countdown timer feature boosted urgency and conversions.", created_at: "2024-09-10T00:00:00Z" }, { author: "Promo Specialist", rating: 4, comment: "Great checkout placement. Caught last-minute buyers.", created_at: "2024-09-05T00:00:00Z" }, { author: "Revenue Lead", rating: 5, comment: "Best flash deal ad format we've tested.", created_at: "2024-08-28T00:00:00Z" }, { author: "Ops Manager", rating: 3, comment: "Good results but would like more customization.", created_at: "2024-08-20T00:00:00Z" }, { author: "Store Owner", rating: 4, comment: "Drove significant traffic during our flash event.", created_at: "2024-08-15T00:00:00Z" }],
   },
   {
     id: "ad-seed-5",
@@ -86,6 +90,7 @@ const SEED_DATA = [
     start_date: "2024-11-15",
     end_date: "2025-01-05",
     thumbnail: "/seed-images/events%2F1492684223f-81e1d12d8249.jpg",
+    reviews: [{ author: "Holiday Planner", rating: 5, comment: "Perfect timing and festive creatives that really stand out.", created_at: "2024-11-20T00:00:00Z" }, { author: "Seasonal Buyer", rating: 4, comment: "Native format blends well with search results.", created_at: "2024-11-15T00:00:00Z" }, { author: "Campaign Lead", rating: 5, comment: "Multi-format approach gave us great flexibility.", created_at: "2024-11-10T00:00:00Z" }, { author: "E-commerce Dir", rating: 4, comment: "Strong holiday campaign tools and scheduling.", created_at: "2024-11-05T00:00:00Z" }, { author: "Brand Strategist", rating: 5, comment: "The targeting during holiday season was spot on.", created_at: "2024-11-01T00:00:00Z" }],
   },
 ]
 

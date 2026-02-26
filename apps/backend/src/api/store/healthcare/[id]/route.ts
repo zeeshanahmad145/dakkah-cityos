@@ -19,6 +19,7 @@ const SEED_DATA = [
     currency_code: "USD",
     location: "Downtown Medical Center",
     rating: 4.9,
+    thumbnail: "/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg",
     metadata: {
       thumbnail: "/seed-images/government%2F1559839734-2b71ea197ec2.jpg",
       images: ["/seed-images/government%2F1559839734-2b71ea197ec2.jpg"],
@@ -32,6 +33,13 @@ const SEED_DATA = [
       { day: "Monday", time: "9:00 AM - 1:00 PM" },
       { day: "Wednesday", time: "2:00 PM - 6:00 PM" },
       { day: "Thursday", time: "9:00 AM - 12:00 PM" },
+    ],
+    reviews: [
+      { author: "Fatima K.", rating: 5, comment: "Dr. Hassan is incredibly thorough and caring. She took time to explain my condition and treatment options in detail.", created_at: "2025-04-10T10:00:00Z" },
+      { author: "George M.", rating: 5, comment: "Best cardiologist I've ever visited. Her preventive care approach helped me avoid a serious heart condition.", created_at: "2025-03-28T14:30:00Z" },
+      { author: "Nadia S.", rating: 4, comment: "Very knowledgeable and professional. Wait times can be a bit long but the quality of care is worth it.", created_at: "2025-03-15T09:00:00Z" },
+      { author: "Richard P.", rating: 5, comment: "Dr. Hassan's expertise in interventional cardiology is outstanding. She saved my life with a timely catheterization.", created_at: "2025-02-20T11:00:00Z" },
+      { author: "Salma A.", rating: 5, comment: "Compassionate doctor who truly listens. Her bilingual ability made it easy for my elderly mother to communicate.", created_at: "2025-02-05T08:30:00Z" },
     ],
   },
   {
@@ -51,6 +59,7 @@ const SEED_DATA = [
     currency_code: "USD",
     location: "Westside Skin Clinic",
     rating: 4.7,
+    thumbnail: "/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg",
     metadata: {
       thumbnail: "/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg",
       images: ["/seed-images/healthcare%2F1612349317150-e413f6a5b16d.jpg"],
@@ -64,6 +73,13 @@ const SEED_DATA = [
       { day: "Tuesday", time: "10:00 AM - 4:00 PM" },
       { day: "Thursday", time: "10:00 AM - 4:00 PM" },
       { day: "Saturday", time: "9:00 AM - 1:00 PM" },
+    ],
+    reviews: [
+      { author: "Michelle L.", rating: 5, comment: "Dr. Kim cleared my persistent acne that other dermatologists couldn't. His approach is scientific and effective.", created_at: "2025-04-08T11:00:00Z" },
+      { author: "Jennifer H.", rating: 4, comment: "Excellent skin cancer screening. Thorough examination and clear explanations. Modern equipment.", created_at: "2025-03-25T14:00:00Z" },
+      { author: "Kevin W.", rating: 5, comment: "The laser treatment results exceeded my expectations. Dr. Kim is meticulous and stays up-to-date with technology.", created_at: "2025-03-10T10:30:00Z" },
+      { author: "Anna T.", rating: 4, comment: "Professional and knowledgeable. The chemical peel treatment he recommended transformed my skin texture.", created_at: "2025-02-22T09:00:00Z" },
+      { author: "Brian C.", rating: 5, comment: "Published researcher who brings cutting-edge treatments to his practice. Highly recommend for any skin concern.", created_at: "2025-02-08T15:00:00Z" },
     ],
   },
   {
@@ -83,6 +99,7 @@ const SEED_DATA = [
     currency_code: "USD",
     location: "Family Health Center",
     rating: 4.9,
+    thumbnail: "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
     metadata: {
       thumbnail: "/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg",
       images: ["/seed-images/healthcare%2F1576091160399-112ba8d25d1d.jpg"],
@@ -96,6 +113,13 @@ const SEED_DATA = [
       { day: "Monday", time: "8:00 AM - 3:00 PM" },
       { day: "Wednesday", time: "8:00 AM - 3:00 PM" },
       { day: "Friday", time: "9:00 AM - 12:00 PM" },
+    ],
+    reviews: [
+      { author: "Rosa G.", rating: 5, comment: "Dr. Santos is wonderful with children. My toddler actually looks forward to visits. She makes them fun and comfortable.", created_at: "2025-04-06T09:00:00Z" },
+      { author: "Carlos D.", rating: 5, comment: "Her expertise in childhood nutrition helped us address our son's feeding challenges. Patient and knowledgeable.", created_at: "2025-03-22T10:30:00Z" },
+      { author: "Amy J.", rating: 5, comment: "The best pediatrician we've ever had. She caught a developmental concern early that made a huge difference.", created_at: "2025-03-08T08:00:00Z" },
+      { author: "Pedro M.", rating: 4, comment: "Trilingual practice is a blessing for our family. Thorough well-child visits with clear guidance for parents.", created_at: "2025-02-20T11:00:00Z" },
+      { author: "Laura B.", rating: 5, comment: "18 years of experience shows. Dr. Santos has an intuitive understanding of children's health needs.", created_at: "2025-02-05T09:30:00Z" },
     ],
   },
   {
@@ -115,6 +139,7 @@ const SEED_DATA = [
     currency_code: "USD",
     location: "Sports Medicine Institute",
     rating: 4.8,
+    thumbnail: "/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg",
     metadata: {
       thumbnail: "/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg",
       images: ["/seed-images/healthcare%2F1622253692010-333f2da6031d.jpg"],
@@ -128,6 +153,13 @@ const SEED_DATA = [
       { day: "Monday", time: "7:00 AM - 2:00 PM" },
       { day: "Thursday", time: "7:00 AM - 2:00 PM" },
       { day: "Saturday", time: "8:00 AM - 12:00 PM" },
+    ],
+    reviews: [
+      { author: "Jason R.", rating: 5, comment: "Dr. Mitchell performed my knee replacement and I'm back to hiking within 3 months. Incredible surgical skill.", created_at: "2025-04-09T08:00:00Z" },
+      { author: "Sarah L.", rating: 5, comment: "As a marathon runner, finding the right sports medicine doctor was crucial. Dr. Mitchell understands athletes.", created_at: "2025-03-26T10:00:00Z" },
+      { author: "Marcus W.", rating: 4, comment: "The arthroscopy was minimally invasive as promised. Recovery was quick. Professional and experienced surgeon.", created_at: "2025-03-12T14:00:00Z" },
+      { author: "Diana F.", rating: 5, comment: "20 years of experience is evident in his confident approach. He explained the procedure thoroughly and outcomes were excellent.", created_at: "2025-02-25T09:30:00Z" },
+      { author: "Ahmed K.", rating: 4, comment: "Top-notch orthopedic care. The rehabilitation plan was well-structured and my fracture healed perfectly.", created_at: "2025-02-10T11:00:00Z" },
     ],
   },
   {
@@ -147,6 +179,7 @@ const SEED_DATA = [
     currency_code: "USD",
     location: "Mind & Wellness Center",
     rating: 4.8,
+    thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
     metadata: {
       thumbnail: "/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg",
       images: ["/seed-images/healthcare%2F1551836022-d5d88e9218df.jpg"],
@@ -160,6 +193,13 @@ const SEED_DATA = [
       { day: "Tuesday", time: "10:00 AM - 6:00 PM" },
       { day: "Wednesday", time: "10:00 AM - 6:00 PM" },
       { day: "Friday", time: "10:00 AM - 2:00 PM" },
+    ],
+    reviews: [
+      { author: "Anna M.", rating: 5, comment: "Dr. Petrova's mindfulness-based approach transformed my anxiety management. She creates a safe, non-judgmental space.", created_at: "2025-04-11T11:00:00Z" },
+      { author: "Thomas G.", rating: 5, comment: "After years of struggling with depression, Dr. Petrova found the right combination of therapy and medication.", created_at: "2025-03-29T14:00:00Z" },
+      { author: "Sophie R.", rating: 4, comment: "Insightful and empathetic psychiatrist. The CBT sessions have given me practical tools for daily challenges.", created_at: "2025-03-14T10:30:00Z" },
+      { author: "Michael B.", rating: 5, comment: "Her trilingual practice makes mental health care accessible. Remarkable ability to connect with patients.", created_at: "2025-02-28T15:00:00Z" },
+      { author: "Elena V.", rating: 4, comment: "Professional and compassionate. The couples counseling sessions helped my partner and me communicate better.", created_at: "2025-02-12T12:00:00Z" },
     ],
   },
 ]

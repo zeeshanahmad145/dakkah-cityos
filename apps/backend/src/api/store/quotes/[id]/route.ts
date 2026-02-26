@@ -27,6 +27,13 @@ const SEED_QUOTES = [
     notes: "Bulk discount applied. Delivery within 2 weeks.",
     created_at: "2024-12-01T10:00:00Z",
     thumbnail: "/seed-images/b2b%2F1497366216548-37526070297c.jpg",
+    reviews: [
+      { author: "Samira K.", rating: 5, comment: "The quote was detailed and transparent. No hidden fees. Very professional.", created_at: "2025-01-05T09:00:00Z" },
+      { author: "Tariq N.", rating: 4, comment: "Quick turnaround on the quote. Bulk discount was very competitive.", created_at: "2025-01-15T11:00:00Z" },
+      { author: "Layla D.", rating: 5, comment: "Delivery within 2 weeks as promised. Furniture quality exceeded expectations.", created_at: "2025-01-25T14:00:00Z" },
+      { author: "Omar W.", rating: 4, comment: "Great pricing for the office package. Would have liked more customization options.", created_at: "2025-02-05T10:00:00Z" },
+      { author: "Nadia B.", rating: 5, comment: "Our procurement team was impressed. Seamless ordering process from quote to delivery.", created_at: "2025-02-15T13:00:00Z" },
+    ],
   },
   {
     id: "quote-seed-2",
@@ -49,6 +56,13 @@ const SEED_QUOTES = [
     notes: "Volume pricing applied. 30-day NET payment terms.",
     created_at: "2024-11-15T14:30:00Z",
     thumbnail: "/seed-images/b2b%2F1504384764-913a7ee141d3.jpg",
+    reviews: [
+      { author: "Khalid F.", rating: 5, comment: "Volume pricing was excellent. All 25 laptops arrived configured and ready to use.", created_at: "2025-01-08T10:00:00Z" },
+      { author: "Reem S.", rating: 4, comment: "Good equipment quality. The 30-day NET terms made budgeting easy.", created_at: "2025-01-18T12:00:00Z" },
+      { author: "Badr H.", rating: 5, comment: "Smooth procurement process. Account manager was responsive and helpful.", created_at: "2025-01-28T09:00:00Z" },
+      { author: "Amira G.", rating: 4, comment: "Monitors are excellent quality. Wireless peripherals work well out of the box.", created_at: "2025-02-07T15:00:00Z" },
+      { author: "Faisal M.", rating: 5, comment: "Best IT equipment vendor we've worked with. Quote to delivery was seamless.", created_at: "2025-02-17T11:00:00Z" },
+    ],
   },
   {
     id: "quote-seed-3",
@@ -71,6 +85,13 @@ const SEED_QUOTES = [
     notes: "Annual contract with quarterly delivery schedule.",
     created_at: "2024-12-10T09:15:00Z",
     thumbnail: "/seed-images/consignments%2F1586023492067-2e840fece27a.jpg",
+    reviews: [
+      { author: "Mansour L.", rating: 4, comment: "Good pricing for annual contract. Quarterly delivery schedule works well for our warehouse.", created_at: "2025-01-10T09:00:00Z" },
+      { author: "Huda T.", rating: 5, comment: "15% discount on the annual contract saved us significantly. Quality materials.", created_at: "2025-01-20T14:00:00Z" },
+      { author: "Waleed J.", rating: 4, comment: "Reliable supply chain. Haven't had a single late delivery in 6 months.", created_at: "2025-01-30T11:00:00Z" },
+      { author: "Salwa Q.", rating: 5, comment: "The bulk pricing is unbeatable. Boxes and packing materials are top quality.", created_at: "2025-02-09T10:00:00Z" },
+      { author: "Ziad R.", rating: 4, comment: "Good contract terms. Would appreciate more flexible delivery scheduling options.", created_at: "2025-02-19T13:00:00Z" },
+    ],
   },
   {
     id: "quote-seed-4",
@@ -93,6 +114,13 @@ const SEED_QUOTES = [
     notes: "Includes setup and teardown. Technical support during event.",
     created_at: "2024-12-05T16:00:00Z",
     thumbnail: "/seed-images/events%2F1540575467063-178a2e25ea79.jpg",
+    reviews: [
+      { author: "Dina C.", rating: 5, comment: "LED video walls were stunning. Technical support during the event was outstanding.", created_at: "2025-01-06T10:00:00Z" },
+      { author: "Sami E.", rating: 4, comment: "Great AV equipment quality. Setup and teardown was handled professionally.", created_at: "2025-01-16T12:00:00Z" },
+      { author: "Lamia P.", rating: 5, comment: "Our conference was a huge success thanks to the excellent AV setup.", created_at: "2025-01-26T15:00:00Z" },
+      { author: "Karim V.", rating: 4, comment: "Good equipment but the 10% discount could have been more competitive.", created_at: "2025-02-06T09:00:00Z" },
+      { author: "Noura Y.", rating: 5, comment: "Professional from start to finish. Will definitely use for our next event.", created_at: "2025-02-16T14:00:00Z" },
+    ],
   },
   {
     id: "quote-seed-5",
@@ -115,6 +143,13 @@ const SEED_QUOTES = [
     notes: "Quote expired. Contact for updated pricing.",
     created_at: "2024-10-01T11:00:00Z",
     thumbnail: "/seed-images/memberships%2F1441986300917-64674bd600d8.jpg",
+    reviews: [
+      { author: "Ghada O.", rating: 4, comment: "Quality merchandise and good bulk pricing. T-shirts were comfortable and well-printed.", created_at: "2025-01-03T09:00:00Z" },
+      { author: "Jaber F.", rating: 5, comment: "Embroidered caps looked fantastic. Our team loved the branded swag.", created_at: "2025-01-13T11:00:00Z" },
+      { author: "Rana A.", rating: 4, comment: "Good variety of products. Tote bags were especially popular at our event.", created_at: "2025-01-23T14:00:00Z" },
+      { author: "Hassan K.", rating: 3, comment: "Products were good but the quote expired before we could finalize. Need longer validity.", created_at: "2025-02-02T10:00:00Z" },
+      { author: "Dana M.", rating: 5, comment: "15% discount on bulk order was great. Will request updated pricing soon.", created_at: "2025-02-12T16:00:00Z" },
+    ],
   },
 ]
 

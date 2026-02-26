@@ -37,6 +37,7 @@ const SEED_CHARITIES = [
       { date: "2025-04-15T00:00:00Z", title: "Milestone Reached", content: "Thanks to your generous donations, we have now surpassed 60% of our fundraising goal!" },
       { date: "2025-03-20T00:00:00Z", title: "Partnership Announcement", content: "We are excited to announce a new partnership with local governments to expand our water purification programs." },
     ],
+    reviews: [{ author: "Ahmed Al-Rashid", rating: 5, comment: "Transparent organization with real impact. Every donation is tracked and I can see the wells being built.", created_at: "2025-05-10T00:00:00Z" }, { author: "Sarah Johnson", rating: 5, comment: "WaterAid Global does incredible work. Their regular updates show exactly where donations go.", created_at: "2025-05-05T00:00:00Z" }, { author: "David Park", rating: 4, comment: "Important cause with measurable results. The milestone updates keep donors engaged.", created_at: "2025-04-28T00:00:00Z" }, { author: "Fatima Nasser", rating: 5, comment: "Clean water changes everything. Proud to support an initiative that has helped thousands of families.", created_at: "2025-04-20T00:00:00Z" }, { author: "James Williams", rating: 4, comment: "Well-managed charity with clear goals. The partnership with local governments is a smart approach.", created_at: "2025-04-12T00:00:00Z" }],
   },
   {
     id: "charity_seed_02",
@@ -73,6 +74,7 @@ const SEED_CHARITIES = [
       { date: "2025-04-20T00:00:00Z", title: "Supply Distribution Complete", content: "Over 10,000 emergency supply kits have been distributed to families in the affected region." },
       { date: "2025-04-01T00:00:00Z", title: "Volunteer Drive Success", content: "Our volunteer recruitment drive brought in 200 new volunteers ready to assist in disaster relief efforts." },
     ],
+    reviews: [{ author: "Global Corp Foundation", rating: 5, comment: "Rapid deployment and efficient use of resources. Global Relief Network is our trusted disaster response partner.", created_at: "2025-05-12T00:00:00Z" }, { author: "Lisa Martinez", rating: 5, comment: "They respond within hours of a disaster. The emergency supply kits save lives immediately.", created_at: "2025-05-08T00:00:00Z" }, { author: "Robert Kim", rating: 4, comment: "Critical work when communities need it most. Their volunteer program is well-organized.", created_at: "2025-05-03T00:00:00Z" }, { author: "Nora Ibrahim", rating: 5, comment: "78% funded shows the community trust. Every donation makes an immediate difference.", created_at: "2025-04-25T00:00:00Z" }, { author: "Carlos Mendez", rating: 4, comment: "Urgent causes that deserve support. Supply distribution updates show real accountability.", created_at: "2025-04-18T00:00:00Z" }],
   },
   {
     id: "charity_seed_03",
@@ -109,6 +111,7 @@ const SEED_CHARITIES = [
       { date: "2025-04-10T00:00:00Z", title: "Scholarship Awards", content: "120 students received full scholarships for the upcoming academic year." },
       { date: "2025-03-15T00:00:00Z", title: "Teacher Training Program", content: "We have completed training for 50 new teachers who will serve in underserved communities." },
     ],
+    reviews: [{ author: "Education First Trust", rating: 5, comment: "EduCare Foundation is transforming lives through education. 120 scholarships in one year is remarkable.", created_at: "2025-05-11T00:00:00Z" }, { author: "Priya Sharma", rating: 5, comment: "Seeing children gain access to quality education is heartwarming. This fund makes a real difference.", created_at: "2025-05-06T00:00:00Z" }, { author: "Tom Anderson", rating: 4, comment: "The teacher training program ensures sustainable impact. Supporting education is supporting the future.", created_at: "2025-04-30T00:00:00Z" }, { author: "Yuki Tanaka", rating: 5, comment: "Three new schools opened thanks to donor support. Incredible progress toward the fundraising goal.", created_at: "2025-04-22T00:00:00Z" }, { author: "Maria Silva", rating: 4, comment: "Recurring donation option makes it easy to contribute regularly. Great transparency in reporting.", created_at: "2025-04-15T00:00:00Z" }],
   },
   {
     id: "charity_seed_04",
@@ -145,6 +148,7 @@ const SEED_CHARITIES = [
       { date: "2025-04-12T00:00:00Z", title: "Habitat Restoration", content: "50 hectares of critical habitat have been restored, providing safe corridors for wildlife migration." },
       { date: "2025-03-25T00:00:00Z", title: "Community Engagement", content: "Local community workshops have educated over 1,000 residents about wildlife conservation and sustainable practices." },
     ],
+    reviews: [{ author: "Wildlife Alliance", rating: 5, comment: "Earth Guardians is doing essential conservation work. Their anti-poaching efforts have saved countless animals.", created_at: "2025-05-10T00:00:00Z" }, { author: "Peter Anderson", rating: 5, comment: "Matching donations doubled the impact. The habitat restoration work is visually documented and inspiring.", created_at: "2025-05-05T00:00:00Z" }, { author: "Helen Chen", rating: 4, comment: "Important cause with measurable conservation outcomes. 50 hectares restored is significant progress.", created_at: "2025-04-28T00:00:00Z" }, { author: "Omar Hassan", rating: 5, comment: "Community workshops create lasting change. Educating 1,000 residents amplifies the conservation impact.", created_at: "2025-04-20T00:00:00Z" }, { author: "Sophie Laurent", rating: 4, comment: "Well-organized conservation project. The matching donation model incentivizes greater generosity.", created_at: "2025-04-12T00:00:00Z" }],
   },
   {
     id: "charity_seed_05",
@@ -181,6 +185,7 @@ const SEED_CHARITIES = [
       { date: "2025-04-22T00:00:00Z", title: "New Food Bank Opened", content: "A new community food bank has been established, serving 200 families weekly with fresh produce and essentials." },
       { date: "2025-04-05T00:00:00Z", title: "Farm Partnership", content: "We have partnered with 15 local farms to source fresh produce directly for our meal distribution programs." },
     ],
+    reviews: [{ author: "Feed the Future Fund", rating: 5, comment: "1 million meals served is an extraordinary achievement. Feed The World runs one of the most efficient hunger programs.", created_at: "2025-05-13T00:00:00Z" }, { author: "Hassan Al-Fahad", rating: 5, comment: "Their farm partnerships ensure fresh, nutritious food reaches families in need. Brilliant approach.", created_at: "2025-05-09T00:00:00Z" }, { author: "Jennifer Brown", rating: 4, comment: "The new community food bank serves 200 families weekly. Real, tangible impact on hunger.", created_at: "2025-05-04T00:00:00Z" }, { author: "Wei Zhang", rating: 5, comment: "Urgent cause that affects millions. Every donation helps feed families who would otherwise go hungry.", created_at: "2025-04-27T00:00:00Z" }, { author: "Grace Kim", rating: 4, comment: "Transparent reporting and consistent updates. The sustainable agriculture programs are especially impressive.", created_at: "2025-04-20T00:00:00Z" }],
   },
 ]
 

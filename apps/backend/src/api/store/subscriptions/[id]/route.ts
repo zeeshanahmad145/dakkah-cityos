@@ -19,6 +19,13 @@ const SEED_DATA = [
       { question: "What payment methods are accepted?", answer: "We accept all major credit cards, bank transfers, and digital wallets including Apple Pay and mada." },
       { question: "Can I cancel anytime?", answer: "Absolutely. You can cancel your subscription at any time with no cancellation fees." },
     ],
+    reviews: [
+      { author: "Youssef A.", rating: 5, comment: "Perfect starter plan for my small online shop. Easy setup and great support.", created_at: "2024-11-15T09:00:00Z" },
+      { author: "Maha K.", rating: 4, comment: "Good value for the price. Basic analytics cover what I need for now.", created_at: "2024-11-01T14:00:00Z" },
+      { author: "Tariq S.", rating: 5, comment: "Started here and grew my business. The 14-day trial convinced me instantly.", created_at: "2024-10-18T10:30:00Z" },
+      { author: "Lina M.", rating: 4, comment: "Simple and straightforward. Perfect for testing the platform.", created_at: "2024-10-02T16:15:00Z" },
+      { author: "Hamza R.", rating: 3, comment: "Good for starters but quickly outgrew the 5 product limit.", created_at: "2024-09-15T11:45:00Z" },
+    ],
   },
   {
     id: "sub-plan-2",
@@ -36,6 +43,13 @@ const SEED_DATA = [
       { question: "Can I add more storefronts?", answer: "The District plan includes 3 storefronts. For unlimited storefronts, upgrade to the Metro plan." },
       { question: "Is data migration included?", answer: "Yes, we offer free data migration from other platforms when you sign up for District or higher." },
       { question: "What analytics are included?", answer: "Advanced analytics includes sales trends, customer insights, conversion funnels, and product performance." },
+    ],
+    reviews: [
+      { author: "Bandar F.", rating: 5, comment: "Multi-vertical support is a game changer. Running food and retail from one dashboard.", created_at: "2024-11-12T10:00:00Z" },
+      { author: "Noor H.", rating: 5, comment: "Advanced analytics helped us understand our customers so much better.", created_at: "2024-10-28T15:30:00Z" },
+      { author: "Khalid D.", rating: 4, comment: "Great plan for growing businesses. Priority support is responsive and helpful.", created_at: "2024-10-15T09:45:00Z" },
+      { author: "Sara W.", rating: 5, comment: "The data migration was seamless. Moved from Shopify without any issues.", created_at: "2024-09-30T14:00:00Z" },
+      { author: "Faisal T.", rating: 4, comment: "Solid mid-tier plan. Would love more than 3 storefronts though.", created_at: "2024-09-12T11:20:00Z" },
     ],
   },
   {
@@ -55,6 +69,13 @@ const SEED_DATA = [
       { question: "Can I use my own domain?", answer: "Yes, custom domain support is included. We handle SSL certificates and DNS configuration for you." },
       { question: "Is there an SLA?", answer: "Metro plan includes a 99.9% uptime SLA with credits for any downtime beyond the guarantee." },
     ],
+    reviews: [
+      { author: "Sultan B.", rating: 5, comment: "Enterprise-grade features at a reasonable price. API access is excellent.", created_at: "2024-11-10T08:30:00Z" },
+      { author: "Amal N.", rating: 5, comment: "Custom domain and unlimited products made scaling effortless.", created_at: "2024-10-25T13:00:00Z" },
+      { author: "Waleed G.", rating: 5, comment: "The dedicated support alone is worth the upgrade. Response times under 1 hour.", created_at: "2024-10-08T10:15:00Z" },
+      { author: "Reem J.", rating: 4, comment: "Powerful analytics dashboards. Wish there were more template options.", created_at: "2024-09-22T15:45:00Z" },
+      { author: "Mazen L.", rating: 5, comment: "Running 8 storefronts seamlessly. This plan handles everything we throw at it.", created_at: "2024-09-05T09:30:00Z" },
+    ],
   },
   {
     id: "sub-plan-4",
@@ -72,6 +93,13 @@ const SEED_DATA = [
       { question: "Is on-premise deployment available?", answer: "Yes, Enterprise customers can choose on-premise deployment with our team handling installation and maintenance." },
       { question: "What is the SLA guarantee?", answer: "Enterprise plan includes a 99.99% uptime SLA with financial credits and priority incident response." },
       { question: "Can I get custom development?", answer: "Yes, Enterprise includes a pool of custom development hours for building features specific to your business needs." },
+    ],
+    reviews: [
+      { author: "Prince Ventures", rating: 5, comment: "White-label solution transformed our platform. Clients love the custom branding.", created_at: "2024-11-08T07:00:00Z" },
+      { author: "Gulf Corp", rating: 5, comment: "On-premise deployment met all our compliance requirements. Excellent team.", created_at: "2024-10-20T11:00:00Z" },
+      { author: "Riyadh Holdings", rating: 5, comment: "The SLA guarantee gives us confidence. Zero downtime in 6 months.", created_at: "2024-10-05T08:30:00Z" },
+      { author: "NEOM Digital", rating: 4, comment: "Custom development hours are invaluable. Built features unique to our market.", created_at: "2024-09-18T14:00:00Z" },
+      { author: "Vision Group", rating: 5, comment: "Best enterprise platform we've used. 24/7 support is truly 24/7.", created_at: "2024-09-01T10:45:00Z" },
     ],
   },
 ]

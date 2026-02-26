@@ -23,6 +23,13 @@ const SEED_DATA = [
     metadata: { thumbnail: "/seed-images/auctions%2F1526170375885-4d8ecf77b99f.jpg", price: 15000 },
     thumbnail: "/seed-images/auctions%2F1526170375885-4d8ecf77b99f.jpg",
     price: 15000,
+    reviews: [
+      { author: "Nasser A.", rating: 5, comment: "Amazing camera kit, everything was in perfect condition. Great for my wedding shoot.", created_at: "2024-11-15T10:00:00Z" },
+      { author: "Sara M.", rating: 5, comment: "Picked up and returned smoothly. The lens quality was superb.", created_at: "2024-11-02T14:30:00Z" },
+      { author: "Fahad K.", rating: 4, comment: "Good kit overall, the tripod was a bit worn but camera was flawless.", created_at: "2024-10-20T09:15:00Z" },
+      { author: "Lina H.", rating: 5, comment: "Perfect for my content creation weekend. Will definitely rent again!", created_at: "2024-10-05T16:45:00Z" },
+      { author: "Omar R.", rating: 4, comment: "Excellent value for money compared to buying. Camera performed great.", created_at: "2024-09-18T11:20:00Z" },
+    ],
   },
   {
     id: "rental_seed_2",
@@ -45,6 +52,13 @@ const SEED_DATA = [
     metadata: { thumbnail: "/seed-images/rentals%2F1560343090-f0409e92791a.jpg", price: 5000 },
     thumbnail: "/seed-images/rentals%2F1560343090-f0409e92791a.jpg",
     price: 5000,
+    reviews: [
+      { author: "Khalid S.", rating: 5, comment: "Amazing scooter for exploring the city. Battery lasted all day!", created_at: "2024-11-10T08:00:00Z" },
+      { author: "Mona B.", rating: 4, comment: "Fun ride, very convenient for short trips around the neighborhood.", created_at: "2024-10-28T13:45:00Z" },
+      { author: "Yousef T.", rating: 5, comment: "Used it for a week of commuting. Saved so much on transport costs.", created_at: "2024-10-15T07:30:00Z" },
+      { author: "Huda W.", rating: 4, comment: "Good condition, easy to use. Wish the range was a bit longer.", created_at: "2024-09-30T17:00:00Z" },
+      { author: "Rami J.", rating: 5, comment: "Perfect for sightseeing. Rented for tourists and they loved it.", created_at: "2024-09-12T10:20:00Z" },
+    ],
   },
   {
     id: "rental_seed_3",
@@ -67,6 +81,13 @@ const SEED_DATA = [
     metadata: { thumbnail: "/seed-images/freelance%2F1532629345422-7515f3d16bb6.jpg", price: 50000 },
     thumbnail: "/seed-images/freelance%2F1532629345422-7515f3d16bb6.jpg",
     price: 50000,
+    reviews: [
+      { author: "Abdulaziz F.", rating: 5, comment: "Everything we needed for a desert camping trip. Tent was spacious and clean.", created_at: "2024-11-08T15:00:00Z" },
+      { author: "Noura G.", rating: 4, comment: "Great gear set. The sleeping bags were warm and comfortable.", created_at: "2024-10-22T09:30:00Z" },
+      { author: "Tariq L.", rating: 5, comment: "Rented for a family weekend trip. Kids loved the lantern and stove worked perfectly.", created_at: "2024-10-10T12:00:00Z" },
+      { author: "Reem K.", rating: 5, comment: "Saved us from buying all this gear. Everything was well-maintained.", created_at: "2024-09-25T14:15:00Z" },
+      { author: "Saleh N.", rating: 4, comment: "Good quality gear. The cooler kept food fresh for three days.", created_at: "2024-09-08T08:45:00Z" },
+    ],
   },
   {
     id: "rental_seed_4",
@@ -89,6 +110,13 @@ const SEED_DATA = [
     metadata: { thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg", price: 120000 },
     thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg",
     price: 120000,
+    reviews: [
+      { author: "Amal D.", rating: 5, comment: "The standing desk transformed my home office. Chair was incredibly comfortable.", created_at: "2024-11-12T10:30:00Z" },
+      { author: "Bader H.", rating: 5, comment: "Rented for a month to try before buying. Now I know exactly what I want.", created_at: "2024-10-30T16:00:00Z" },
+      { author: "Dina R.", rating: 4, comment: "Great furniture, delivery was smooth. The desk motor is very quiet.", created_at: "2024-10-18T11:45:00Z" },
+      { author: "Faisal M.", rating: 5, comment: "My back pain improved significantly. The Aeron chair is worth every riyal.", created_at: "2024-10-02T09:00:00Z" },
+      { author: "Ghada S.", rating: 4, comment: "Excellent ergonomic setup. Wish the rental period was more flexible.", created_at: "2024-09-15T13:30:00Z" },
+    ],
   },
   {
     id: "rental_seed_5",
@@ -111,6 +139,13 @@ const SEED_DATA = [
     metadata: { thumbnail: "/seed-images/digital-products%2F1517694712202-14dd9538aa97.jpg", price: 12000 },
     thumbnail: "/seed-images/digital-products%2F1517694712202-14dd9538aa97.jpg",
     price: 12000,
+    reviews: [
+      { author: "Hassan Q.", rating: 5, comment: "All tools were in great working condition. Saved me from buying for a one-time project.", created_at: "2024-11-05T08:00:00Z" },
+      { author: "Jamal W.", rating: 4, comment: "Good power tools set. Batteries held charge well throughout the day.", created_at: "2024-10-25T14:00:00Z" },
+      { author: "Karim B.", rating: 5, comment: "Professional grade tools at a fraction of the cost. Highly recommend.", created_at: "2024-10-12T10:30:00Z" },
+      { author: "Layla T.", rating: 5, comment: "Rented for a home renovation. Everything worked perfectly.", created_at: "2024-09-28T07:15:00Z" },
+      { author: "Majed A.", rating: 4, comment: "Convenient rental process. The circular saw was especially impressive.", created_at: "2024-09-10T16:45:00Z" },
+    ],
   },
 ]
 

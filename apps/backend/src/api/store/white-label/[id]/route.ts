@@ -16,6 +16,7 @@ const catalog: Record<string, any> = {
     customization: ["Logo", "Packaging Design", "Fragrance", "Ingredients"],
     includes: ["Moisturizer (50ml)", "Cleanser (100ml)", "Serum (30ml)"],
     certifications: ["Cruelty-Free", "Dermatologist Tested", "Paraben-Free"],
+    reviews: [{ author: "Beauty Brand Owner", rating: 5, comment: "Launched our skincare line in 6 weeks. Exceptional quality.", created_at: "2024-06-15T00:00:00Z" }, { author: "Spa Owner", rating: 4, comment: "Dermatologist-tested products give our customers confidence.", created_at: "2024-06-10T00:00:00Z" }, { author: "Influencer", rating: 5, comment: "My followers love the custom skincare line.", created_at: "2024-05-28T00:00:00Z" }, { author: "Entrepreneur", rating: 4, comment: "Great fragrance customization options.", created_at: "2024-05-20T00:00:00Z" }, { author: "Retailer", rating: 5, comment: "Cruelty-free certification is a huge selling point.", created_at: "2024-05-15T00:00:00Z" }],
   },
   wl_supplement_01: {
     id: "wl_supplement_01",
@@ -31,6 +32,7 @@ const catalog: Record<string, any> = {
     customization: ["Formula", "Packaging", "Label Design", "Capsule Color"],
     includes: ["Custom Formula Development", "Label Design", "Regulatory Compliance"],
     certifications: ["FDA Compliant", "GMP Certified", "Third-Party Tested"],
+    reviews: [{ author: "Health Brand CEO", rating: 5, comment: "FDA-compliant manufacturing gave us peace of mind.", created_at: "2024-07-12T00:00:00Z" }, { author: "Fitness Coach", rating: 4, comment: "Custom formula development was excellent.", created_at: "2024-07-05T00:00:00Z" }, { author: "Nutritionist", rating: 5, comment: "Third-party testing ensures quality.", created_at: "2024-06-28T00:00:00Z" }, { author: "Gym Owner", rating: 4, comment: "GMP certification is essential for our brand.", created_at: "2024-06-20T00:00:00Z" }, { author: "DTC Brand", rating: 5, comment: "Great capsule color and packaging options.", created_at: "2024-06-15T00:00:00Z" }],
   },
   wl_coffee_01: {
     id: "wl_coffee_01",
@@ -46,6 +48,7 @@ const catalog: Record<string, any> = {
     customization: ["Roast Level", "Blend", "Packaging", "Label"],
     includes: ["Custom Blend Development", "Packaging Design", "Quality Testing"],
     certifications: ["Fair Trade Available", "Organic Options", "USDA Certified"],
+    reviews: [{ author: "Coffee Entrepreneur", rating: 5, comment: "Premium beans and the blend is exactly what we wanted.", created_at: "2024-08-10T00:00:00Z" }, { author: "Cafe Owner", rating: 5, comment: "Fast 2-week turnaround and amazing quality.", created_at: "2024-08-05T00:00:00Z" }, { author: "Subscription Box", rating: 4, comment: "Fair trade options are great for our brand.", created_at: "2024-07-28T00:00:00Z" }, { author: "Roaster", rating: 4, comment: "Custom blend development was professional.", created_at: "2024-07-20T00:00:00Z" }, { author: "Food Blogger", rating: 5, comment: "USDA certified organic option is a game changer.", created_at: "2024-07-15T00:00:00Z" }],
   },
   wl_clothing_01: {
     id: "wl_clothing_01",
@@ -61,6 +64,7 @@ const catalog: Record<string, any> = {
     customization: ["Design", "Fabric", "Labels", "Packaging", "Sizing"],
     includes: ["Pattern Development", "Sample Production", "Size Grading", "Quality Control"],
     certifications: ["OEKO-TEX", "GOTS Organic Options"],
+    reviews: [{ author: "Fashion Designer", rating: 5, comment: "Pattern development and size grading were top notch.", created_at: "2024-05-15T00:00:00Z" }, { author: "Boutique Owner", rating: 4, comment: "OEKO-TEX certified fabrics are exactly what we need.", created_at: "2024-05-10T00:00:00Z" }, { author: "Brand Founder", rating: 5, comment: "Quality control exceeded our expectations.", created_at: "2024-04-28T00:00:00Z" }, { author: "Streetwear Brand", rating: 4, comment: "Great fabric selection and sample production.", created_at: "2024-04-20T00:00:00Z" }, { author: "Retailer", rating: 5, comment: "From design to delivery, everything was smooth.", created_at: "2024-04-15T00:00:00Z" }],
   },
   wl_candle_01: {
     id: "wl_candle_01",
@@ -76,6 +80,7 @@ const catalog: Record<string, any> = {
     customization: ["Scent", "Wax Type", "Container", "Label Design"],
     includes: ["Scent Development", "Container Selection", "Label Design", "Gift Boxing Options"],
     certifications: ["Eco-Friendly", "Clean Burning", "Phthalate-Free"],
+    reviews: [{ author: "Home Decor Brand", rating: 5, comment: "Premium soy wax candles with beautiful custom scents.", created_at: "2024-09-10T00:00:00Z" }, { author: "Gift Shop Owner", rating: 4, comment: "Fast turnaround and gorgeous packaging options.", created_at: "2024-09-05T00:00:00Z" }, { author: "Lifestyle Blogger", rating: 5, comment: "Phthalate-free and clean burning. My customers love them.", created_at: "2024-08-28T00:00:00Z" }, { author: "Wedding Planner", rating: 5, comment: "Perfect for custom wedding favors.", created_at: "2024-08-20T00:00:00Z" }, { author: "Spa Owner", rating: 4, comment: "Eco-friendly certification helps our brand image.", created_at: "2024-08-15T00:00:00Z" }],
   },
 }
 

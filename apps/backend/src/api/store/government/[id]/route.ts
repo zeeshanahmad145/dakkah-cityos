@@ -22,6 +22,13 @@ const SEED_DATA = [
       { title: "Collect License", description: "Pick up your license or receive it by registered mail" },
     ],
     requirements: ["Valid commercial registration", "Proof of business address", "Tax identification number", "Owner's valid ID or passport", "No outstanding violations"],
+    reviews: [
+      { author: "Ahmad K.", rating: 4, comment: "The online application process was straightforward. Received my license within the stated timeframe.", created_at: "2025-04-10T09:00:00Z" },
+      { author: "Sarah M.", rating: 5, comment: "Much easier than the old paper-based system. The staff were helpful when I had questions about required documents.", created_at: "2025-03-28T14:00:00Z" },
+      { author: "Robert J.", rating: 4, comment: "Processing took 6 business days. Clear instructions on what documents were needed. Would use again.", created_at: "2025-03-15T11:30:00Z" },
+      { author: "Fatima A.", rating: 3, comment: "The process works but the website could be more intuitive. Had to call support to clarify one requirement.", created_at: "2025-02-20T10:00:00Z" },
+      { author: "David L.", rating: 5, comment: "Efficient service from start to finish. The digital tracking system let me monitor my application status in real time.", created_at: "2025-02-05T08:45:00Z" },
+    ],
   },
   {
     id: "gov_002",
@@ -43,6 +50,13 @@ const SEED_DATA = [
       { title: "Permit Issuance", description: "Permit issued upon successful review" },
     ],
     requirements: ["Land ownership proof", "Licensed architect's certification", "Soil testing report", "Neighbor notification confirmation", "Fire safety compliance plan"],
+    reviews: [
+      { author: "Mohammed S.", rating: 4, comment: "The pre-consultation step was very helpful in understanding requirements before submitting. Saved time on revisions.", created_at: "2025-04-08T10:00:00Z" },
+      { author: "Jennifer P.", rating: 3, comment: "Process took the full 30 days but the inspection was thorough. Make sure your architectural plans are detailed.", created_at: "2025-03-25T13:00:00Z" },
+      { author: "Carlos R.", rating: 4, comment: "Environmental review was strict but fair. The engineers who came for inspection were professional and knowledgeable.", created_at: "2025-03-10T09:30:00Z" },
+      { author: "Lisa W.", rating: 5, comment: "Smoother than expected. Having all documents ready upfront made the process much faster. Approved in 18 days.", created_at: "2025-02-22T11:00:00Z" },
+      { author: "Omar H.", rating: 4, comment: "Good online tracking system. The site inspection was scheduled at a convenient time. Overall positive experience.", created_at: "2025-02-08T14:30:00Z" },
+    ],
   },
   {
     id: "gov_003",
@@ -63,6 +77,13 @@ const SEED_DATA = [
       { title: "Permit Approval", description: "Final approval granted by the events committee" },
     ],
     requirements: ["Event liability insurance", "Certified security personnel", "First aid provisions", "Noise ordinance compliance", "Parking and traffic management plan"],
+    reviews: [
+      { author: "Nina T.", rating: 5, comment: "Organized a community festival and the permit process was clear. The events committee was responsive to questions.", created_at: "2025-04-06T12:00:00Z" },
+      { author: "Paul D.", rating: 4, comment: "Insurance verification was the trickiest part but the team guided us through it. Permit issued on time.", created_at: "2025-03-22T15:00:00Z" },
+      { author: "Rania F.", rating: 4, comment: "Good process for managing public events. The security review ensures everyone's safety. Reasonable fee.", created_at: "2025-03-08T10:30:00Z" },
+      { author: "Steve K.", rating: 3, comment: "Took 13 days which was cutting it close for our planning timeline. Start the application early if possible.", created_at: "2025-02-18T09:00:00Z" },
+      { author: "Amira B.", rating: 5, comment: "Second time applying and the process was even smoother. The online system remembers previous applications.", created_at: "2025-02-01T11:15:00Z" },
+    ],
   },
   {
     id: "gov_004",
@@ -83,6 +104,13 @@ const SEED_DATA = [
       { title: "License Issued", description: "Trade license issued upon successful verification" },
     ],
     requirements: ["Active business license", "Bank guarantee letter", "Customs broker authorization", "Product safety certifications", "Trade ministry registration"],
+    reviews: [
+      { author: "Hassan M.", rating: 5, comment: "Essential for our import business. The customs review was thorough and the license was issued in 8 days.", created_at: "2025-04-09T10:00:00Z" },
+      { author: "Diana C.", rating: 4, comment: "The bank guarantee requirement added a step but the overall process was efficient. Good support team.", created_at: "2025-03-26T14:00:00Z" },
+      { author: "Wei L.", rating: 4, comment: "Clear documentation of required commodity categories. The customs review ensures compliance from the start.", created_at: "2025-03-12T11:00:00Z" },
+      { author: "Marcus J.", rating: 5, comment: "Renewed our trade license online in just 7 days. The digital system has improved significantly over the years.", created_at: "2025-02-25T09:30:00Z" },
+      { author: "Aisha N.", rating: 3, comment: "Process is good but the bank guarantee took extra time to arrange. Plan ahead for this requirement.", created_at: "2025-02-10T13:00:00Z" },
+    ],
   },
   {
     id: "gov_005",
@@ -104,6 +132,13 @@ const SEED_DATA = [
       { title: "Certificate Issued", description: "Health certificate issued upon compliance" },
     ],
     requirements: ["Current facility lease or ownership", "Staff health clearances", "HACCP certification (for food)", "Fire safety certificate", "Waste disposal contract"],
+    reviews: [
+      { author: "Chef Khalid", rating: 5, comment: "The inspection was fair and thorough. The inspector provided helpful suggestions for improving our kitchen setup.", created_at: "2025-04-11T08:00:00Z" },
+      { author: "Dr. Patel", rating: 4, comment: "Necessary certification for our wellness center. The process was well-structured with clear compliance standards.", created_at: "2025-03-29T10:30:00Z" },
+      { author: "Maria R.", rating: 4, comment: "Staff health records collection took time but the health department was flexible with scheduling inspections.", created_at: "2025-03-14T14:00:00Z" },
+      { author: "James W.", rating: 5, comment: "Renewed our restaurant's health certificate smoothly. The online booking for inspections saved a lot of time.", created_at: "2025-02-28T09:00:00Z" },
+      { author: "Layla S.", rating: 3, comment: "Inspection was rescheduled once which delayed us. Once completed though, the certificate was issued quickly.", created_at: "2025-02-12T11:30:00Z" },
+    ],
   },
 ]
 

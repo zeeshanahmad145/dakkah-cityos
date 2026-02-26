@@ -17,6 +17,7 @@ const SEED_DATA = [
       { id: "vpt-1d", min_quantity: 500, max_quantity: null, discount_percentage: 40, fixed_price: null, currency_code: "USD" },
     ],
     thumbnail: "/seed-images/b2b%2F1497366216548-37526070297c.jpg",
+    reviews: [{ author: "Office Manager", rating: 5, comment: "Saved 30% on our quarterly supply orders.", created_at: "2024-06-15T00:00:00Z" }, { author: "Procurement Lead", rating: 4, comment: "Clear tier structure makes budgeting easy.", created_at: "2024-06-10T00:00:00Z" }, { author: "Admin Assistant", rating: 5, comment: "Great discounts at the 100+ quantity level.", created_at: "2024-05-28T00:00:00Z" }, { author: "Facilities Dir", rating: 4, comment: "Reliable pricing, no hidden fees.", created_at: "2024-05-20T00:00:00Z" }, { author: "Buyer", rating: 5, comment: "Best volume pricing program we've used.", created_at: "2024-05-15T00:00:00Z" }],
   },
   {
     id: "vp-seed-2",
@@ -31,6 +32,7 @@ const SEED_DATA = [
       { id: "vpt-2c", min_quantity: 100, max_quantity: null, discount_percentage: 25, fixed_price: null, currency_code: "USD" },
     ],
     thumbnail: "/seed-images/digital-products%2F1550751827-4bd374c3f58b.jpg",
+    reviews: [{ author: "Reseller", rating: 5, comment: "25% off at 100 units is a game changer.", created_at: "2024-07-12T00:00:00Z" }, { author: "IT Director", rating: 4, comment: "Good pricing tiers for bulk hardware.", created_at: "2024-07-05T00:00:00Z" }, { author: "Distributor", rating: 5, comment: "Transparent wholesale pricing.", created_at: "2024-06-28T00:00:00Z" }, { author: "E-com Seller", rating: 4, comment: "Competitive rates for electronics.", created_at: "2024-06-20T00:00:00Z" }, { author: "Tech Buyer", rating: 5, comment: "Significant savings on large orders.", created_at: "2024-06-15T00:00:00Z" }],
   },
   {
     id: "vp-seed-3",
@@ -46,6 +48,7 @@ const SEED_DATA = [
       { id: "vpt-3d", min_quantity: 5000, max_quantity: null, discount_percentage: 35, fixed_price: null, currency_code: "USD" },
     ],
     thumbnail: "/seed-images/consignments%2F1586023492067-2e840fece27a.jpg",
+    reviews: [{ author: "Plant Manager", rating: 5, comment: "35% discount at 5000+ units saves us thousands.", created_at: "2024-04-15T00:00:00Z" }, { author: "Supply Chain", rating: 4, comment: "Excellent for manufacturing partners.", created_at: "2024-04-10T00:00:00Z" }, { author: "Purchaser", rating: 5, comment: "Volume tiers are well structured.", created_at: "2024-03-28T00:00:00Z" }, { author: "Ops Director", rating: 4, comment: "Reliable pricing for raw materials.", created_at: "2024-03-20T00:00:00Z" }, { author: "Manufacturer", rating: 5, comment: "Best bulk rates in the industry.", created_at: "2024-03-15T00:00:00Z" }],
   },
   {
     id: "vp-seed-4",
@@ -60,6 +63,7 @@ const SEED_DATA = [
       { id: "vpt-4c", min_quantity: 500, max_quantity: null, discount_percentage: 32, fixed_price: null, currency_code: "USD" },
     ],
     thumbnail: "/seed-images/grocery%2F1542838132-92c53300e7e2.jpg",
+    reviews: [{ author: "Caterer", rating: 5, comment: "Great bulk rates for our catering business.", created_at: "2024-08-12T00:00:00Z" }, { author: "Restaurant Owner", rating: 4, comment: "32% off at 500+ is very competitive.", created_at: "2024-08-05T00:00:00Z" }, { author: "Chef", rating: 5, comment: "Saves us significantly on ingredient costs.", created_at: "2024-07-28T00:00:00Z" }, { author: "Food Truck", rating: 4, comment: "Easy to understand tier structure.", created_at: "2024-07-20T00:00:00Z" }, { author: "Bakery Owner", rating: 5, comment: "Excellent program for food service.", created_at: "2024-07-15T00:00:00Z" }],
   },
   {
     id: "vp-seed-5",
@@ -74,6 +78,7 @@ const SEED_DATA = [
       { id: "vpt-5c", min_quantity: 144, max_quantity: null, discount_percentage: 35, fixed_price: null, currency_code: "USD" },
     ],
     thumbnail: "/seed-images/memberships%2F1441986300917-64674bd600d8.jpg",
+    reviews: [{ author: "Boutique Owner", rating: 5, comment: "35% off at 144+ units is incredible.", created_at: "2024-09-10T00:00:00Z" }, { author: "Fashion Buyer", rating: 4, comment: "Great wholesale pricing for apparel.", created_at: "2024-09-05T00:00:00Z" }, { author: "Retailer", rating: 5, comment: "Easy to scale orders with clear tiers.", created_at: "2024-08-28T00:00:00Z" }, { author: "Brand Owner", rating: 4, comment: "Competitive per-unit costs.", created_at: "2024-08-20T00:00:00Z" }, { author: "Store Manager", rating: 5, comment: "Best volume pricing for clothing.", created_at: "2024-08-15T00:00:00Z" }],
   },
 ]
 

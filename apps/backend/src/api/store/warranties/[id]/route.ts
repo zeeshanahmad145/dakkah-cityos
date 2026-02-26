@@ -16,6 +16,7 @@ const SEED_DATA = [
     is_active: true,
     price: 2999,
     rating: 4.2,
+    thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg",
     metadata: { thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg" },
     highlights: ["12-month coverage", "No deductible", "Free battery replacement", "24/7 support hotline"],
     faq: [
@@ -27,6 +28,13 @@ const SEED_DATA = [
       { title: "Report Issue", description: "Contact our support team online or by phone to report the issue" },
       { title: "Diagnostic Review", description: "Our technicians will review your claim and diagnose the problem" },
       { title: "Repair or Replace", description: "We'll repair your device or send a replacement within 5-7 business days" },
+    ],
+    reviews: [
+      { author: "Ahmed B.", rating: 4, comment: "My phone battery was replaced for free. Quick and hassle-free process.", created_at: "2024-11-14T09:00:00Z" },
+      { author: "Sara T.", rating: 5, comment: "Filed a claim for a hardware failure and got it fixed in 3 days. Great service!", created_at: "2024-11-01T14:30:00Z" },
+      { author: "Khalid M.", rating: 4, comment: "Good basic coverage for the price. The 24/7 hotline is very responsive.", created_at: "2024-10-18T10:00:00Z" },
+      { author: "Noura F.", rating: 3, comment: "Decent plan but wish it covered accidental damage too.", created_at: "2024-10-05T16:15:00Z" },
+      { author: "Omar H.", rating: 5, comment: "Zero deductible is a huge plus. My laptop was repaired at no extra cost.", created_at: "2024-09-20T11:30:00Z" },
     ],
   },
   {
@@ -43,6 +51,7 @@ const SEED_DATA = [
     is_active: true,
     price: 5999,
     rating: 4.5,
+    thumbnail: "/seed-images/warranties%2F1506784983877-45594efa4cbe.jpg",
     metadata: { thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg" },
     highlights: ["24-month coverage", "Accidental damage protection", "Screen repair included", "Priority service queue"],
     faq: [
@@ -54,6 +63,13 @@ const SEED_DATA = [
       { title: "Submit Claim", description: "File a claim online with photos of the damage" },
       { title: "Ship Device", description: "Use our prepaid shipping label to send your device for repair" },
       { title: "Repair & Return", description: "Device repaired and shipped back within 7-10 business days" },
+    ],
+    reviews: [
+      { author: "Faisal R.", rating: 5, comment: "Dropped my phone and the screen was fixed completely free. This plan pays for itself.", created_at: "2024-11-12T08:00:00Z" },
+      { author: "Huda K.", rating: 5, comment: "Accidental damage coverage saved me. Screen repair was seamless.", created_at: "2024-10-28T13:00:00Z" },
+      { author: "Tariq W.", rating: 4, comment: "Prepaid shipping label made the process very convenient.", created_at: "2024-10-15T10:45:00Z" },
+      { author: "Lina S.", rating: 5, comment: "Priority queue meant my device was fixed faster than expected.", created_at: "2024-09-30T15:30:00Z" },
+      { author: "Bader N.", rating: 4, comment: "Good coverage for 2 years. Worth every penny for peace of mind.", created_at: "2024-09-12T09:15:00Z" },
     ],
   },
   {
@@ -83,6 +99,13 @@ const SEED_DATA = [
       { title: "Same-Day Dispatch", description: "Replacement device shipped same day via express delivery" },
       { title: "Return Old Device", description: "Use the included return label to send back the damaged device" },
     ],
+    reviews: [
+      { author: "Sultan A.", rating: 5, comment: "Same-day replacement is incredible. Had a new device within hours.", created_at: "2024-11-10T07:00:00Z" },
+      { author: "Amira G.", rating: 5, comment: "Phone was stolen, filed a claim with police report, got a replacement in 48 hours.", created_at: "2024-10-25T12:00:00Z" },
+      { author: "Waleed D.", rating: 5, comment: "Spilled water on my laptop. Fully covered! This premium plan is amazing.", created_at: "2024-10-08T09:30:00Z" },
+      { author: "Reem L.", rating: 4, comment: "Comprehensive coverage that truly covers everything. Premium is the way to go.", created_at: "2024-09-22T14:45:00Z" },
+      { author: "Mazen T.", rating: 5, comment: "The best warranty plan available. Zero deductible and same-day service.", created_at: "2024-09-05T10:00:00Z" },
+    ],
   },
   {
     id: "warranty-seed-4",
@@ -111,6 +134,13 @@ const SEED_DATA = [
       { title: "Priority Repair", description: "Your device receives priority repair treatment" },
       { title: "Return & Enjoy", description: "Repaired device returned, loaner device collected" },
     ],
+    reviews: [
+      { author: "Bandar Q.", rating: 5, comment: "4 years of worry-free usage. The annual maintenance keeps my device running like new.", created_at: "2024-11-08T08:30:00Z" },
+      { author: "Ghada J.", rating: 5, comment: "Loaner device during repair was a lifesaver. Never missed a beat.", created_at: "2024-10-22T11:00:00Z" },
+      { author: "Hamza M.", rating: 5, comment: "Priority repair is no joke. Had my laptop back in 2 days.", created_at: "2024-10-06T13:15:00Z" },
+      { author: "Dina B.", rating: 4, comment: "Excellent long-term warranty. The annual checkup caught an issue early.", created_at: "2024-09-18T09:45:00Z" },
+      { author: "Youssef S.", rating: 5, comment: "Best warranty investment. Comprehensive coverage for 4 full years.", created_at: "2024-09-02T15:00:00Z" },
+    ],
   },
   {
     id: "warranty-seed-5",
@@ -126,6 +156,7 @@ const SEED_DATA = [
     is_active: true,
     price: 7999,
     rating: 4.4,
+    thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg",
     metadata: { thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg" },
     highlights: ["24-month coverage", "In-home service", "Multiple appliance coverage", "No hidden fees"],
     faq: [
@@ -138,6 +169,13 @@ const SEED_DATA = [
       { title: "Schedule Visit", description: "A certified technician will be scheduled within 48 hours" },
       { title: "In-Home Repair", description: "Technician repairs the appliance at your location" },
       { title: "Quality Check", description: "Follow-up to ensure the repair is satisfactory" },
+    ],
+    reviews: [
+      { author: "Nasser K.", rating: 5, comment: "Our restaurant's refrigerator broke down. Technician came next day and fixed it.", created_at: "2024-11-06T07:30:00Z" },
+      { author: "Mona R.", rating: 4, comment: "In-home service is very convenient. No need to haul heavy appliances.", created_at: "2024-10-20T10:00:00Z" },
+      { author: "Sami H.", rating: 5, comment: "Covers multiple appliances under one plan. Saved us money compared to individual warranties.", created_at: "2024-10-04T14:30:00Z" },
+      { author: "Layla F.", rating: 4, comment: "Washer motor was replaced quickly. Good warranty for home appliances.", created_at: "2024-09-16T08:00:00Z" },
+      { author: "Rashid W.", rating: 5, comment: "Certified technicians who know what they're doing. Professional service.", created_at: "2024-09-01T12:15:00Z" },
     ],
   },
 ]
