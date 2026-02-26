@@ -20,6 +20,7 @@ const SEED_DATA = [
     location: "Downtown Wellness Studio",
     type: "class",
     is_active: true,
+    benefits: ["Improved flexibility and balance", "Stress relief and mental clarity", "Full-body strength building", "Better posture and alignment"],
   },
   {
     id: "fit-seed-002",
@@ -39,6 +40,7 @@ const SEED_DATA = [
     location: "Iron Box Gym",
     type: "class",
     is_active: true,
+    benefits: ["Increased cardiovascular endurance", "Functional strength gains", "Community-driven motivation", "Scalable for all fitness levels"],
   },
   {
     id: "fit-seed-003",
@@ -58,6 +60,7 @@ const SEED_DATA = [
     location: "FitLife Performance Center",
     type: "personal",
     is_active: true,
+    benefits: ["Personalized workout plans", "One-on-one coaching", "Faster results with accountability", "Injury prevention guidance"],
   },
   {
     id: "fit-seed-004",
@@ -77,6 +80,7 @@ const SEED_DATA = [
     location: "Aquatic Sports Center",
     type: "class",
     is_active: true,
+    benefits: ["Low-impact full-body workout", "Joint-friendly exercise", "Improved cardiovascular health", "Enhanced muscle recovery"],
   },
   {
     id: "fit-seed-005",
@@ -96,6 +100,7 @@ const SEED_DATA = [
     location: "Combat Athletics Academy",
     type: "class",
     is_active: true,
+    benefits: ["Self-defense skills", "Full-body conditioning", "Improved coordination and agility", "Stress release and confidence building"],
   },
 ]
 

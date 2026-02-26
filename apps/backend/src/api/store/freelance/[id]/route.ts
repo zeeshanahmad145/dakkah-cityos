@@ -19,6 +19,11 @@ const SEED_DATA = [
     delivery_time_days: 14,
     revisions_included: 3,
     status: "active",
+    packages: [
+      { name: "Basic", price: 2500, delivery_time: 7, description: "Simple landing page", features: ["1 page design", "Responsive layout", "Basic SEO", "1 revision"] },
+      { name: "Standard", price: 5000, delivery_time: 14, description: "Multi-page website", features: ["Up to 5 pages", "Responsive design", "SEO optimization", "3 revisions", "Contact form"] },
+      { name: "Premium", price: 10000, delivery_time: 21, description: "Full-stack web application", features: ["Unlimited pages", "Custom backend", "Database integration", "5 revisions", "Admin panel", "API development"] },
+    ],
   },
   {
     id: "free-seed-002",
@@ -37,6 +42,11 @@ const SEED_DATA = [
     delivery_time_days: 7,
     revisions_included: 5,
     status: "active",
+    packages: [
+      { name: "Basic", price: 1500, delivery_time: 3, description: "Logo design only", features: ["2 logo concepts", "1 revision", "PNG format"] },
+      { name: "Standard", price: 3500, delivery_time: 7, description: "Logo + brand kit", features: ["4 logo concepts", "Color palette", "Typography guide", "3 revisions", "Vector files"] },
+      { name: "Premium", price: 7000, delivery_time: 14, description: "Complete brand identity", features: ["6 logo concepts", "Brand guidelines", "Business cards", "5 revisions", "Social media kit", "Stationery design"] },
+    ],
   },
   {
     id: "free-seed-003",
@@ -55,6 +65,11 @@ const SEED_DATA = [
     delivery_time_days: 3,
     revisions_included: 2,
     status: "active",
+    packages: [
+      { name: "Basic", price: 500, delivery_time: 1, description: "1 blog post", features: ["500-word article", "SEO keywords", "1 revision"] },
+      { name: "Standard", price: 1500, delivery_time: 3, description: "3 blog posts", features: ["800-word articles", "SEO optimization", "Meta descriptions", "2 revisions"] },
+      { name: "Premium", price: 3500, delivery_time: 7, description: "Content strategy + posts", features: ["5 articles", "Keyword research", "Content calendar", "3 revisions", "Social snippets"] },
+    ],
   },
   {
     id: "free-seed-004",
@@ -73,6 +88,11 @@ const SEED_DATA = [
     delivery_time_days: 10,
     revisions_included: 2,
     status: "active",
+    packages: [
+      { name: "Basic", price: 3000, delivery_time: 5, description: "Basic video edit", features: ["Up to 5 min video", "Color correction", "Background music", "1 revision"] },
+      { name: "Standard", price: 7500, delivery_time: 10, description: "Professional edit", features: ["Up to 15 min video", "Motion graphics", "Sound design", "2 revisions", "Thumbnail design"] },
+      { name: "Premium", price: 15000, delivery_time: 21, description: "Full production", features: ["Up to 30 min video", "Advanced VFX", "Custom animations", "3 revisions", "Multiple formats", "Social media cuts"] },
+    ],
   },
   {
     id: "free-seed-005",
@@ -91,6 +111,11 @@ const SEED_DATA = [
     delivery_time_days: 30,
     revisions_included: 4,
     status: "active",
+    packages: [
+      { name: "Basic", price: 2000, delivery_time: 14, description: "Social media setup", features: ["Platform audit", "Profile optimization", "Content calendar", "1 revision"] },
+      { name: "Standard", price: 4000, delivery_time: 30, description: "Monthly management", features: ["3 platforms managed", "12 posts/month", "Analytics report", "Ad campaign setup", "2 revisions"] },
+      { name: "Premium", price: 8000, delivery_time: 30, description: "Full digital strategy", features: ["5 platforms managed", "20 posts/month", "PPC campaigns", "SEO strategy", "Monthly reporting", "4 revisions"] },
+    ],
   },
 ]
 

@@ -19,6 +19,7 @@ const SEED_DATA = [
     available_spots: 127,
     operating_hours: "24/7",
     is_available: true,
+    features: ["EV charging stations", "24/7 security cameras", "Covered parking", "Wheelchair accessible"],
   },
   {
     id: "park-seed-002",
@@ -37,6 +38,7 @@ const SEED_DATA = [
     available_spots: 342,
     operating_hours: "6:00 AM - 12:00 AM",
     is_available: true,
+    features: ["Direct mall access", "CCTV monitoring", "Valet service available", "Family parking zones"],
   },
   {
     id: "park-seed-003",
@@ -55,6 +57,7 @@ const SEED_DATA = [
     available_spots: 856,
     operating_hours: "24/7",
     is_available: true,
+    features: ["Free shuttle service", "Long-term discounts", "Well-lit grounds", "Luggage assistance"],
   },
   {
     id: "park-seed-004",
@@ -73,6 +76,7 @@ const SEED_DATA = [
     available_spots: 45,
     operating_hours: "5:00 AM - 11:00 PM",
     is_available: true,
+    features: ["Automated parking system", "Reserved premium spots", "Monthly subscriptions", "Mobile app access"],
   },
   {
     id: "park-seed-005",
@@ -91,6 +95,7 @@ const SEED_DATA = [
     available_spots: 18,
     operating_hours: "24/7",
     is_available: true,
+    features: ["White-glove valet service", "Car wash & detailing", "Climate-controlled garage", "VIP lounge access"],
   },
 ]
 

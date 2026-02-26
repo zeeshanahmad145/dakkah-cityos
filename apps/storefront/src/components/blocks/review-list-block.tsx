@@ -1,6 +1,7 @@
 import React from 'react'
 import { Rating } from '../ui/rating'
 import { t } from '@/lib/i18n'
+import { getMedusaPublishableKey } from '@/lib/utils/env'
 
 interface ReviewItem {
   id: string
@@ -19,6 +20,7 @@ interface ReviewItem {
 interface ReviewListBlockProps {
   heading?: string
   reviews?: ReviewItem[]
+  productId?: string
   entityType?: 'product' | 'vendor' | 'service' | 'booking'
   entityId?: string
   limit?: number
@@ -54,22 +56,65 @@ function computeDistribution(reviews: ReviewItem[]): number[] {
 export const ReviewListBlock: React.FC<ReviewListBlockProps> = ({
   heading,
   reviews = [],
+  productId,
   limit,
   showSummary = true,
   sortBy = 'recent',
   locale = 'en',
 }) => {
+  const [fetchedReviews, setFetchedReviews] = React.useState<ReviewItem[]>([])
+
+  React.useEffect(() => {
+    if (!productId) return
+    if (typeof window === 'undefined') return
+    const controller = new AbortController()
+    const publishableKey = getMedusaPublishableKey()
+    const headers: Record<string, string> = {}
+    if (publishableKey) headers['x-publishable-api-key'] = publishableKey
+
+    fetch(`/store/reviews/products/${productId}`, {
+      headers,
+      signal: controller.signal,
+    })
+      .then((res) => {
+        if (!res.ok) return null
+        return res.json()
+      })
+      .then((data) => {
+        if (!data) return
+        const items = Array.isArray(data.reviews) ? data.reviews : Array.isArray(data.data) ? data.data : []
+        if (!items.length) return
+        const mapped: ReviewItem[] = items.map((r: any) => ({
+          id: r.id,
+          author: r.customer_name || 'Anonymous',
+          rating: r.rating,
+          date: r.created_at,
+          content: r.content,
+          verified: r.is_verified_purchase,
+          helpful: r.helpful_count,
+        }))
+        setFetchedReviews(mapped)
+      })
+      .catch(() => {})
+    return () => controller.abort()
+  }, [productId])
+
+  const allReviews = React.useMemo(() => {
+    const ids = new Set(reviews.map((r) => r.id))
+    return [...reviews, ...fetchedReviews.filter((r) => !ids.has(r.id))]
+  }, [reviews, fetchedReviews])
+
   const sorted = React.useMemo(() => {
-    const copy = [...reviews]
+    const copy = [...allReviews]
     if (sortBy === 'rating') copy.sort((a, b) => b.rating - a.rating)
     else if (sortBy === 'helpful') copy.sort((a, b) => (b.helpful ?? 0) - (a.helpful ?? 0))
     else copy.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     return limit ? copy.slice(0, limit) : copy
-  }, [reviews, sortBy, limit])
+  }, [allReviews, sortBy, limit])
 
   const avgRating =
-    reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0
-  const distribution = React.useMemo(() => computeDistribution(reviews), [reviews])
+    allReviews.length > 0 ? allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length : 0
+  const distribution = React.useMemo(() => computeDistribution(allReviews), [allReviews])
   const maxCount = Math.max(...distribution, 1)
 
   return (
@@ -81,7 +126,7 @@ export const ReviewListBlock: React.FC<ReviewListBlockProps> = ({
           </h2>
         )}
 
-        {showSummary && reviews.length > 0 && (
+        {showSummary && allReviews.length > 0 && (
           <div className="flex flex-col md:flex-row items-center gap-8 mb-8 md:mb-12 p-6 rounded-lg border border-ds-border bg-ds-card">
             <div className="text-center shrink-0">
               <p className="text-5xl font-bold text-ds-foreground">{avgRating.toFixed(1)}</p>
@@ -89,7 +134,7 @@ export const ReviewListBlock: React.FC<ReviewListBlockProps> = ({
                 <Rating value={avgRating} size="md" />
               </div>
               <p className="text-sm text-ds-muted-foreground mt-2">
-                {reviews.length} {t(locale, 'blocks.reviews')}
+                {allReviews.length} {t(locale, 'blocks.reviews')}
               </p>
             </div>
             <div className="flex-1 w-full space-y-2">

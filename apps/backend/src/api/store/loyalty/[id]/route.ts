@@ -10,6 +10,13 @@ const SEED_DATA = [
     perks: ["1x points earning", "Member-only deals"],
     thumbnail: "https://images.unsplash.com/photo-1553729459-afe8f2e2ed65?w=800&h=600&fit=crop",
     description: "Start earning rewards with every purchase. Enjoy exclusive member-only deals and promotions.",
+    tiers: [
+      { name: "Bronze", threshold: 0, multiplier: 1 },
+      { name: "Silver", threshold: 500, multiplier: 1.5 },
+      { name: "Gold", threshold: 2000, multiplier: 2 },
+      { name: "Platinum", threshold: 5000, multiplier: 3 },
+    ],
+    benefits: ["Earn points on every purchase", "Member-only deals", "Birthday rewards", "Free shipping on select orders"],
   },
   {
     id: "loyalty-silver",
@@ -19,6 +26,13 @@ const SEED_DATA = [
     perks: ["1.5x points earning", "Free shipping on orders over $50"],
     thumbnail: "https://images.unsplash.com/photo-1612404730960-5c71577fca11?w=800&h=600&fit=crop",
     description: "Unlock 1.5x points earning and free shipping on qualifying orders.",
+    tiers: [
+      { name: "Bronze", threshold: 0, multiplier: 1 },
+      { name: "Silver", threshold: 500, multiplier: 1.5 },
+      { name: "Gold", threshold: 2000, multiplier: 2 },
+      { name: "Platinum", threshold: 5000, multiplier: 3 },
+    ],
+    benefits: ["1.5x points earning rate", "Free shipping on orders over $50", "Early access to promotions", "Exclusive member events"],
   },
   {
     id: "loyalty-gold",
@@ -28,6 +42,13 @@ const SEED_DATA = [
     perks: ["2x points earning", "Free shipping on all orders", "Early access to sales"],
     thumbnail: "https://images.unsplash.com/photo-1610375461246-83df859d849d?w=800&h=600&fit=crop",
     description: "Double your points, get free shipping on every order, and early access to all sales events.",
+    tiers: [
+      { name: "Bronze", threshold: 0, multiplier: 1 },
+      { name: "Silver", threshold: 500, multiplier: 1.5 },
+      { name: "Gold", threshold: 2000, multiplier: 2 },
+      { name: "Platinum", threshold: 5000, multiplier: 3 },
+    ],
+    benefits: ["2x points earning rate", "Free shipping on all orders", "Early access to sales", "Priority customer support"],
   },
   {
     id: "loyalty-platinum",
@@ -37,6 +58,13 @@ const SEED_DATA = [
     perks: ["3x points earning", "Free shipping", "Priority support", "Exclusive events"],
     thumbnail: "https://images.unsplash.com/photo-1579547945413-497e1b99dac0?w=800&h=600&fit=crop",
     description: "Our top tier with 3x points, priority support, and invitations to exclusive VIP events.",
+    tiers: [
+      { name: "Bronze", threshold: 0, multiplier: 1 },
+      { name: "Silver", threshold: 500, multiplier: 1.5 },
+      { name: "Gold", threshold: 2000, multiplier: 2 },
+      { name: "Platinum", threshold: 5000, multiplier: 3 },
+    ],
+    benefits: ["3x points earning rate", "Free shipping on all orders", "Priority support", "Exclusive VIP events", "Personal concierge service"],
   },
 ]
 
