@@ -24,8 +24,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg",
   },
   {
     id: "auto_seed_2",
@@ -49,8 +49,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg",
   },
   {
     id: "auto_seed_3",
@@ -74,8 +74,8 @@ const SEED_DATA = [
     location_city: "Dammam",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
+    thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg",
   },
   {
     id: "auto_seed_4",
@@ -99,8 +99,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg",
   },
   {
     id: "auto_seed_5",
@@ -124,8 +124,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg",
   },
 ]
 

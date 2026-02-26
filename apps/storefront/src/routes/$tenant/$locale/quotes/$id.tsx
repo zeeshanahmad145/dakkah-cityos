@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { createFileRoute } from "@tanstack/react-router";
 import { QuoteDetails } from "@/components/quotes/quote-details";
 import { TimelineBlock } from "@/components/blocks/timeline-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 interface QuoteItem {
   id: string;
@@ -79,6 +80,7 @@ function QuoteDetailPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <TimelineBlock />
+        <ReviewListBlock productId={quote?.id || id} heading="Reviews" />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { SubscriptionManageBlock } from "@/components/blocks/subscription-manage-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -247,6 +248,7 @@ function SubscriptionDetailPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <SubscriptionManageBlock subscriptionId={plan.id} />
+        <ReviewListBlock productId={plan.id || id} heading="Reviews" />
       </div>
     </div>
   )

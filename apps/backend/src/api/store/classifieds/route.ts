@@ -15,7 +15,7 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Riyadh",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=600&fit=crop", images: ["https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=600&fit=crop"] },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1592750475338-74b7b21085ab.jpg", images: ["/seed-images/classifieds%2F1592750475338-74b7b21085ab.jpg"] },
   },
   {
     id: "cls-2",
@@ -29,7 +29,7 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Jeddah",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop", images: ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop"] },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg", images: ["/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg"] },
   },
   {
     id: "cls-3",
@@ -43,7 +43,7 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: false,
     location_city: "Dammam",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&h=600&fit=crop", images: ["https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&h=600&fit=crop"] },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1621007947382-bb3c3994e3fb.jpg", images: ["/seed-images/classifieds%2F1621007947382-bb3c3994e3fb.jpg"] },
   },
   {
     id: "cls-4",
@@ -57,7 +57,7 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Riyadh",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=600&fit=crop", images: ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=600&fit=crop"] },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1517336714731-489689fd1ca8.jpg", images: ["/seed-images/classifieds%2F1517336714731-489689fd1ca8.jpg"] },
   },
   {
     id: "cls-5",
@@ -71,7 +71,7 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Madinah",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&h=600&fit=crop", images: ["https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&h=600&fit=crop"] },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1511379938547-c1f69419868d.jpg", images: ["/seed-images/classifieds%2F1511379938547-c1f69419868d.jpg"] },
   },
   {
     id: "cls-6",
@@ -85,7 +85,7 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Riyadh",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=800&h=600&fit=crop", images: ["https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=800&h=600&fit=crop"] },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1593062096033-9a26b09da705.jpg", images: ["/seed-images/classifieds%2F1593062096033-9a26b09da705.jpg"] },
   },
 ]
 

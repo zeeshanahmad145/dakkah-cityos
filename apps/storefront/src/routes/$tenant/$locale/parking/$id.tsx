@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ParkingSpotFinderBlock } from "@/components/blocks/parking-spot-finder-block"
 import { MapBlock } from "@/components/blocks/map-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -255,6 +256,7 @@ function ParkingDetailPage() {
         {(spot.latitude || spot.lat || (spot.coordinates && spot.coordinates.lat)) && (
           <MapBlock />
         )}
+        <ReviewListBlock productId={spot.id || id} heading="Reviews" />
       </div>
     </div>
   )

@@ -25,8 +25,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1625231334401-43cc3eb76606?w=800&h=600&fit=crop", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1625231334401-43cc3eb76606?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive%2F1568605117036-5fe5e7bab0b7.jpg",
   },
   {
     id: "auto_seed_2",
@@ -50,8 +50,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=800&h=600&fit=crop", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1556189250-72ba954cfc2b?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive%2F1556189250-72ba954cfc2b.jpg",
   },
   {
     id: "auto_seed_3",
@@ -75,8 +75,8 @@ const SEED_DATA = [
     location_city: "Dammam",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&h=600&fit=crop", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive%2F1618843479313-40f8afb4b4d8.jpg",
   },
   {
     id: "auto_seed_4",
@@ -100,8 +100,8 @@ const SEED_DATA = [
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1621993202323-f438eec934ff?w=800&h=600&fit=crop", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1621993202323-f438eec934ff?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive%2F1621993202323-f438eec934ff.jpg",
   },
   {
     id: "auto_seed_5",
@@ -125,8 +125,8 @@ const SEED_DATA = [
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?w=800&h=600&fit=crop", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
-    thumbnail: "https://images.unsplash.com/photo-1632245889029-e406faaa34cd?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    thumbnail: "/seed-images/automotive%2F1632245889029-e406faaa34cd.jpg",
   },
 ]
 

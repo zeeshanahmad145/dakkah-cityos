@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { VehicleListingBlock } from "@/components/blocks/vehicle-listing-block"
 import { ComparisonTableBlock } from "@/components/blocks/comparison-table-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -214,6 +215,7 @@ function AutomotiveDetailPage() {
           <ComparisonTableBlock />
         </div>
       </div>
+      <ReviewListBlock productId={vehicle.id || id} heading="Reviews" />
     </div>
   )
 }

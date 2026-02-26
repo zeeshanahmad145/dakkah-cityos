@@ -17,8 +17,8 @@ const SEED_DATA = [
     bedrooms: 5,
     bathrooms: 6,
     area_sqm: 650,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1600596542815-ffad4c1539a9.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1600596542815-ffad4c1539a9.jpg",
   },
   {
     id: "re_seed_2",
@@ -35,8 +35,8 @@ const SEED_DATA = [
     bedrooms: 2,
     bathrooms: 2,
     area_sqm: 120,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/financial-products%2F1560518883-ce09059eeffa.jpg" },
+    thumbnail: "/seed-images/financial-products%2F1560518883-ce09059eeffa.jpg",
   },
   {
     id: "re_seed_3",
@@ -53,8 +53,8 @@ const SEED_DATA = [
     bedrooms: 0,
     bathrooms: 4,
     area_sqm: 500,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/government%2F1564013799919-ab600027ffc6.jpg" },
+    thumbnail: "/seed-images/government%2F1564013799919-ab600027ffc6.jpg",
   },
   {
     id: "re_seed_4",
@@ -71,8 +71,8 @@ const SEED_DATA = [
     bedrooms: 4,
     bathrooms: 5,
     area_sqm: 450,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1600585154340-be6161a56a0c.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1600585154340-be6161a56a0c.jpg",
   },
   {
     id: "re_seed_5",
@@ -89,8 +89,8 @@ const SEED_DATA = [
     bedrooms: 4,
     bathrooms: 4,
     area_sqm: 320,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1502672260266-1c1ef2d93688.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1502672260266-1c1ef2d93688.jpg",
   },
 ]
 

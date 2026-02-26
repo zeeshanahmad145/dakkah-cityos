@@ -6,6 +6,7 @@ import { CampaignProgressBar } from "@/components/campaigns/campaign-progress-ba
 import { RewardTier } from "@/components/campaigns/reward-tier"
 import { CountdownTimer } from "@/components/campaigns/countdown-timer"
 import { CrowdfundingProgressBlock } from "@/components/blocks/crowdfunding-progress-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -187,6 +188,7 @@ function CampaignDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <CrowdfundingProgressBlock />
       </div>
+      <ReviewListBlock productId={campaign.id || id} heading="Reviews" />
     </div>
   )
 }

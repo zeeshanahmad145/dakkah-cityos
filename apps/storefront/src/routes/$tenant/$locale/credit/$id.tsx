@@ -5,6 +5,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { ComparisonTableBlock } from "@/components/blocks/comparison-table-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -268,6 +269,7 @@ function CreditDetailPage() {
         <ComparisonTableBlock />
         <FaqBlock />
       </div>
+      <ReviewListBlock productId={product.id || id} heading="Reviews" />
     </div>
   )
 }

@@ -29,7 +29,7 @@ const SEED_DATA = [
     commission_type: "percentage",
     bio: "Leading tech review channel with 500K+ followers. Specializing in consumer electronics and smart home devices.",
     category: "Electronics",
-    thumbnail: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/affiliate%2F1531297484001-80022131f5a1.jpg",
   },
   {
     id: "aff_002",
@@ -41,7 +41,7 @@ const SEED_DATA = [
     commission_type: "percentage",
     bio: "Award-winning fashion blog featuring sustainable and luxury brands. 250K monthly readers.",
     category: "Fashion",
-    thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/affiliate%2F1483985988355-763728e1935b.jpg",
   },
   {
     id: "aff_003",
@@ -53,7 +53,7 @@ const SEED_DATA = [
     commission_type: "percentage",
     bio: "Health and wellness platform covering nutrition, fitness, and mental health. Trusted by 1M+ subscribers.",
     category: "Health & Wellness",
-    thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/affiliate%2F1544367567-0f2fcb009e0b.jpg",
   },
   {
     id: "aff_004",
@@ -65,7 +65,7 @@ const SEED_DATA = [
     commission_type: "percentage",
     bio: "Interior design inspiration and product recommendations for modern homes. Featured in top design magazines.",
     category: "Home & Garden",
-    thumbnail: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/affiliate%2F1586023492125-27b2c045efd7.jpg",
   },
   {
     id: "aff_005",
@@ -77,7 +77,7 @@ const SEED_DATA = [
     commission_type: "percentage",
     bio: "Adventure sports and outdoor gear reviews. 300K YouTube subscribers passionate about camping, hiking, and travel.",
     category: "Sports & Outdoors",
-    thumbnail: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/affiliate%2F1551632811-561732d1e306.jpg",
   },
 ]
 

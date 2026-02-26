@@ -18,8 +18,8 @@ const SEED_DATA = [
     rating: 4.9,
     review_count: 342,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/travel%2F1566073771259-6a8506099945.jpg" },
+    thumbnail: "/seed-images/travel%2F1566073771259-6a8506099945.jpg",
   },
   {
     id: "travel_seed_2",
@@ -37,8 +37,8 @@ const SEED_DATA = [
     rating: 4.6,
     review_count: 218,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/travel%2F1520250497591-112f2f40a3f4.jpg" },
+    thumbnail: "/seed-images/travel%2F1520250497591-112f2f40a3f4.jpg",
   },
   {
     id: "travel_seed_3",
@@ -56,8 +56,8 @@ const SEED_DATA = [
     rating: 4.4,
     review_count: 96,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/travel%2F1596436889106-be35e843f974.jpg" },
+    thumbnail: "/seed-images/travel%2F1596436889106-be35e843f974.jpg",
   },
   {
     id: "travel_seed_4",
@@ -75,8 +75,8 @@ const SEED_DATA = [
     rating: 4.7,
     review_count: 154,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/travel%2F1522708323590-d24dbb6b0267.jpg" },
+    thumbnail: "/seed-images/travel%2F1522708323590-d24dbb6b0267.jpg",
   },
   {
     id: "travel_seed_5",
@@ -94,8 +94,8 @@ const SEED_DATA = [
     rating: 4.9,
     review_count: 67,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/travel%2F1613977257363-707ba9348227.jpg" },
+    thumbnail: "/seed-images/travel%2F1613977257363-707ba9348227.jpg",
   },
 ]
 

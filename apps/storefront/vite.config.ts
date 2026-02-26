@@ -67,6 +67,11 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       allowedHosts: true,
       proxy: {
+        "/seed-images": {
+          target: backendUrl,
+          changeOrigin: true,
+          secure: false,
+        },
         "/platform": {
           target: backendUrl,
           changeOrigin: true,

@@ -9,7 +9,7 @@ const SEED_DATA = [
     author: "Sarah Mitchell",
     publishedAt: "2026-02-10T09:00:00Z",
     read_time: "6 min read",
-    thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
   },
   {
     id: "blog-2",
@@ -19,7 +19,7 @@ const SEED_DATA = [
     author: "Ahmed Al-Rashid",
     publishedAt: "2026-02-08T14:30:00Z",
     read_time: "8 min read",
-    thumbnail: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/campaigns%2F1556742049-0cfed4f6a45d.jpg",
   },
   {
     id: "blog-3",
@@ -29,7 +29,7 @@ const SEED_DATA = [
     author: "Dr. Fatima Khan",
     publishedAt: "2026-02-05T11:00:00Z",
     read_time: "10 min read",
-    thumbnail: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/content%2F1573164713988-8665fc963095.jpg",
   },
   {
     id: "blog-4",
@@ -39,7 +39,7 @@ const SEED_DATA = [
     author: "Layla Hassan",
     publishedAt: "2026-02-03T08:00:00Z",
     read_time: "5 min read",
-    thumbnail: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/content%2F1558171813-4c088753af8f.jpg",
   },
   {
     id: "blog-5",
@@ -49,7 +49,7 @@ const SEED_DATA = [
     author: "Omar Khaled",
     publishedAt: "2026-01-28T16:00:00Z",
     read_time: "7 min read",
-    thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg",
   },
 ]
 

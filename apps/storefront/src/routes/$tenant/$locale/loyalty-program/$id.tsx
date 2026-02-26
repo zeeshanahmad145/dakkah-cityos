@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { LoyaltyPointsDisplayBlock } from "@/components/blocks/loyalty-points-display-block"
 import { LoyaltyDashboardBlock } from "@/components/blocks/loyalty-dashboard-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -208,6 +209,7 @@ function LoyaltyProgramDetailPage() {
         <LoyaltyPointsDisplayBlock />
         <LoyaltyDashboardBlock />
       </div>
+      <ReviewListBlock productId={program.id || id} heading="Reviews" />
     </div>
   )
 }

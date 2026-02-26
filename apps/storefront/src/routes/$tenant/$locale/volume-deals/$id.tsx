@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { BulkPricingTableBlock } from "@/components/blocks/bulk-pricing-table-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 import { useState } from "react"
 
 function normalizeDetail(item: any) {
@@ -231,6 +232,7 @@ function VolumeDealsDetailPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <BulkPricingTableBlock productId={item.id} />
+        <ReviewListBlock productId={item.id || id} heading="Reviews" />
       </div>
     </div>
   )

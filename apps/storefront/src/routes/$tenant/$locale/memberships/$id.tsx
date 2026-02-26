@@ -6,6 +6,7 @@ import type { SupportedLocale } from "@/lib/i18n"
 import { BenefitsList } from "@/components/memberships/benefits-list"
 import { MembershipTiersBlock } from "@/components/blocks/membership-tiers-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -203,6 +204,7 @@ function MembershipDetailPage() {
         <MembershipTiersBlock />
         <FaqBlock />
       </div>
+      <ReviewListBlock productId={tier.id || id} heading="Reviews" />
     </div>
   )
 }

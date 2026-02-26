@@ -2,6 +2,7 @@
 import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { NewsletterBlock } from "@/components/blocks/newsletter-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 import { useState } from "react"
 import { t } from "@/lib/i18n"
 
@@ -266,6 +267,7 @@ function NewsletterDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <NewsletterBlock />
       </div>
+      <ReviewListBlock productId={newsletter.id || id} heading="Reviews" />
     </div>
   )
 }

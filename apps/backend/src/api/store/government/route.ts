@@ -40,7 +40,7 @@ const SEED_DATA = [
     processing_time: "5-7 business days",
     fee: 25000,
     status: "available",
-    thumbnail: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg",
   },
   {
     id: "gov_002",
@@ -53,7 +53,7 @@ const SEED_DATA = [
     processing_time: "15-30 business days",
     fee: 50000,
     status: "available",
-    thumbnail: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/government%2F1564013799919-ab600027ffc6.jpg",
   },
   {
     id: "gov_003",
@@ -66,7 +66,7 @@ const SEED_DATA = [
     processing_time: "10-14 business days",
     fee: 15000,
     status: "available",
-    thumbnail: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/government%2F1559839734-2b71ea197ec2.jpg",
   },
   {
     id: "gov_004",
@@ -79,7 +79,7 @@ const SEED_DATA = [
     processing_time: "7-10 business days",
     fee: 35000,
     status: "available",
-    thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg",
   },
   {
     id: "gov_005",
@@ -92,7 +92,7 @@ const SEED_DATA = [
     processing_time: "10-15 business days",
     fee: 20000,
     status: "available",
-    thumbnail: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/government%2F1579684385127-1ef15d508118.jpg",
   },
 ]
 

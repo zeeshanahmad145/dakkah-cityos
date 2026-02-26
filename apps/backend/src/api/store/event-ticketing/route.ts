@@ -14,7 +14,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 250,
     status: "published",
-    thumbnail: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/event-ticketing%2F1488646953014-85cb44e25828.jpg",
   },
   {
     id: "et_002",
@@ -28,7 +28,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 500,
     status: "published",
-    thumbnail: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/bookings%2F1534438327276-14e5300c3a48.jpg",
   },
   {
     id: "et_003",
@@ -42,7 +42,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 120,
     status: "published",
-    thumbnail: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/event-ticketing%2F1507525428034-b723cf961d3e.jpg",
   },
   {
     id: "et_004",
@@ -56,7 +56,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 1000,
     status: "published",
-    thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/bundles%2F1519389950473-47ba0277781c.jpg",
   },
   {
     id: "et_005",
@@ -70,7 +70,7 @@ const SEED_DATA = [
     currency_code: "usd",
     tickets_available: 350,
     status: "published",
-    thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg",
   },
 ]
 

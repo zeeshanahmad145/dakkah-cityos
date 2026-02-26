@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { HealthcareProviderBlock } from '@/components/blocks/healthcare-provider-block'
 import { AppointmentSlotsBlock } from '@/components/blocks/appointment-slots-block'
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -229,6 +230,7 @@ function HealthcareDetailPage() {
         <HealthcareProviderBlock providerId={provider.id} />
         <AppointmentSlotsBlock providerId={provider.id} />
       </div>
+      <ReviewListBlock productId={provider.id || id} heading="Reviews" />
     </div>
   )
 }

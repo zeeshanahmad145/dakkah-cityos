@@ -11,7 +11,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["1 Storefront", "Basic Analytics", "Email Support", "5 Products"],
-    thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/content%2F1460925895917-afdab827c52f.jpg",
   },
   {
     id: "sub-plan-2",
@@ -22,7 +22,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["3 Storefronts", "Advanced Analytics", "Priority Support", "50 Products", "Multi-Vertical"],
-    thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
   },
   {
     id: "sub-plan-3",
@@ -33,7 +33,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["Unlimited Storefronts", "Custom Analytics", "Dedicated Support", "Unlimited Products", "API Access", "Custom Domain"],
-    thumbnail: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
   },
   {
     id: "sub-plan-4",
@@ -44,7 +44,7 @@ const SEED_DATA = [
     currency_code: "SAR",
     status: "active",
     features: ["White-Label", "SLA Guarantee", "On-Premise Option", "Unlimited Everything", "24/7 Phone Support", "Custom Development"],
-    thumbnail: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop",
+    thumbnail: "/seed-images/parking%2F1497366216548-37526070297c.jpg",
   },
 ]
 

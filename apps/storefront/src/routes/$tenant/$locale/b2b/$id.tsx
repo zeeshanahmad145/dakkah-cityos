@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { BulkPricingTableBlock } from "@/components/blocks/bulk-pricing-table-block"
 import { CompanyDashboardBlock } from "@/components/blocks/company-dashboard-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -251,6 +252,7 @@ function B2BDetailPage() {
         <BulkPricingTableBlock productId={item.id} />
         <CompanyDashboardBlock />
       </div>
+      <ReviewListBlock productId={item.id || id} heading="Reviews" />
     </div>
   )
 }

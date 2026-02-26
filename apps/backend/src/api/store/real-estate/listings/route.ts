@@ -17,8 +17,8 @@ const SEED_DATA = [
     bedrooms: 5,
     bathrooms: 6,
     area_sqm: 650,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1613490493576-7fde63acd811.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1613490493576-7fde63acd811.jpg",
   },
   {
     id: "re_seed_2",
@@ -35,8 +35,8 @@ const SEED_DATA = [
     bedrooms: 2,
     bathrooms: 2,
     area_sqm: 120,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1545324418-cc1a3fa10c00.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1545324418-cc1a3fa10c00.jpg",
   },
   {
     id: "re_seed_3",
@@ -53,8 +53,8 @@ const SEED_DATA = [
     bedrooms: 0,
     bathrooms: 4,
     area_sqm: 500,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg" },
+    thumbnail: "/seed-images/b2b%2F1486406146926-c627a92ad1ab.jpg",
   },
   {
     id: "re_seed_4",
@@ -71,8 +71,8 @@ const SEED_DATA = [
     bedrooms: 4,
     bathrooms: 5,
     area_sqm: 450,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1512917774080-9991f1c4c750.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1512917774080-9991f1c4c750.jpg",
   },
   {
     id: "re_seed_5",
@@ -89,8 +89,8 @@ const SEED_DATA = [
     bedrooms: 4,
     bathrooms: 4,
     area_sqm: 320,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/real-estate%2F1600596542815-ffad4c1539a9.jpg" },
+    thumbnail: "/seed-images/real-estate%2F1600596542815-ffad4c1539a9.jpg",
   },
 ]
 

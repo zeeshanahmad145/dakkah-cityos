@@ -16,7 +16,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/restaurants%2F1555396273-367ea4eb4db5.jpg" },
   },
   {
     id: "rst-2",
@@ -32,7 +32,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/restaurants%2F1579871494447-9811cf80d66c.jpg" },
   },
   {
     id: "rst-3",
@@ -48,7 +48,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/restaurants%2F1517248135467-4c7edcad34c4.jpg" },
   },
   {
     id: "rst-4",
@@ -64,7 +64,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/restaurants%2F1585937421612-70a008356fbe.jpg" },
   },
   {
     id: "rst-5",
@@ -80,7 +80,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: false,
     dine_in_available: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/bundles%2F1504674900247-0877df9cc836.jpg" },
   },
   {
     id: "rst-6",
@@ -96,7 +96,7 @@ const SEED_RESTAURANTS = [
     delivery_available: true,
     pickup_available: true,
     dine_in_available: false,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/restaurants%2F1562565652-a0d8f0c59eb4.jpg" },
   },
 ]
 

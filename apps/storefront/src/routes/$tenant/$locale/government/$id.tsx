@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { TimelineBlock } from "@/components/blocks/timeline-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -256,6 +257,7 @@ function GovernmentDetailPage() {
         <TimelineBlock />
         <FaqBlock />
       </div>
+      <ReviewListBlock productId={service.id || id} heading="Reviews" />
     </div>
   )
 }

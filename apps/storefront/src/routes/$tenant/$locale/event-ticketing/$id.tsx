@@ -3,6 +3,7 @@ import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/l
 import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function getFallbackItems() {
   return [
@@ -281,6 +282,7 @@ function EventTicketingDetailPage() {
           </div>
         </div>
       </section>
+      <ReviewListBlock productId={event.id || id} heading="Reviews" />
     </div>
   )
 }

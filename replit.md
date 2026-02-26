@@ -93,9 +93,10 @@ Sentry is integrated in the backend via `@sentry/node` in `instrumentation.ts`. 
 
 ### Seed Data & Reviews
 - **65 custom modules** with 270 model files across all verticals
-- **73 list routes**, ~40+ with seed data and Unsplash images
+- **73 list routes**, all with seed data
 - **54 detail routes**, all 37 with storefront pages return 200 with seed data
-- **Review system**: `ReviewListBlock` component auto-fetches reviews from `/store/reviews/products/{id}` via Vite proxy. Backend returns 10-12 seed reviews per product with realistic names, ratings, and content when DB is empty.
+- **Seed images**: 201 images stored locally in `apps/backend/static/seed-images/` organized by vertical. Served via `/seed-images/{vertical}%2F{filename}.jpg` endpoint (no publishable key required). Vite proxy configured for `/seed-images` path. Zero external Unsplash URLs.
+- **Review system**: `ReviewListBlock` component (45 pages) auto-fetches reviews from `/store/reviews/products/{id}` via useEffect. Backend returns 10-12 seed reviews per product with realistic names, ratings, and content when DB is empty.
 - **Seed review data**: Products get 10 reviews (3-5 stars), vendors get 8 reviews. All with `customer_name`, `content`, `created_at`, `is_verified_purchase`, `helpful_count`.
 - **Array field safety**: All backend seed data includes required array fields (`features`, `benefits`, `tiers`, `highlights`, `coverage_details`, `schedule`, `packages`) to prevent `.map()` crashes on storefront detail pages.
 - Auth-required routes (bookings, wallet, wishlists, purchase-orders, quotes) have hardcoded storefront fallback data or handle empty state gracefully.

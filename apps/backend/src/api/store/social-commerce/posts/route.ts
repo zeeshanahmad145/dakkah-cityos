@@ -14,7 +14,7 @@ const SEED_DATA = [
     rating: 4.8,
     total_reviews: 3200,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/affiliate%2F1483985988355-763728e1935b.jpg" },
   },
   {
     id: "sc_002",
@@ -29,7 +29,7 @@ const SEED_DATA = [
     rating: 4.7,
     total_reviews: 5600,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/bundles%2F1556228578-0d85b1a4d571.jpg" },
   },
   {
     id: "sc_003",
@@ -44,7 +44,7 @@ const SEED_DATA = [
     rating: 4.9,
     total_reviews: 8900,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg" },
   },
   {
     id: "sc_004",
@@ -59,7 +59,7 @@ const SEED_DATA = [
     rating: 4.6,
     total_reviews: 2100,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1548848221-0c2e497ed557?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/grocery%2F1548848221-0c2e497ed557.jpg" },
   },
   {
     id: "sc_005",
@@ -74,7 +74,7 @@ const SEED_DATA = [
     rating: 4.4,
     total_reviews: 12000,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/bundles%2F1519389950473-47ba0277781c.jpg" },
   },
   {
     id: "sc_006",
@@ -89,7 +89,7 @@ const SEED_DATA = [
     rating: 4.5,
     total_reviews: 4500,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/bookings%2F1534438327276-14e5300c3a48.jpg" },
   },
   {
     id: "sc_007",
@@ -104,7 +104,7 @@ const SEED_DATA = [
     rating: 4.8,
     total_reviews: 6700,
     is_active: true,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1515562141589-67f0d6a4bf28?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/social-commerce%2F1560472355-536de3962603.jpg" },
   },
 ]
 

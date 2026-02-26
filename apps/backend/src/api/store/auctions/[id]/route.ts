@@ -19,8 +19,8 @@ const SEED_DATA = [
     total_bids: 12,
     starts_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     ends_at: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1523275335684-37898b6baf30.jpg" },
+    thumbnail: "/seed-images/auctions%2F1523275335684-37898b6baf30.jpg",
   },
   {
     id: "auction_seed_2",
@@ -39,8 +39,8 @@ const SEED_DATA = [
     total_bids: 8,
     starts_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     ends_at: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1526170375885-4d8ecf77b99f.jpg" },
+    thumbnail: "/seed-images/auctions%2F1526170375885-4d8ecf77b99f.jpg",
   },
   {
     id: "auction_seed_3",
@@ -59,8 +59,8 @@ const SEED_DATA = [
     total_bids: 15,
     starts_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     ends_at: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg" },
+    thumbnail: "/seed-images/auctions%2F1489824904134-891ab64532f1.jpg",
   },
   {
     id: "auction_seed_4",
@@ -79,8 +79,8 @@ const SEED_DATA = [
     total_bids: 6,
     starts_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     ends_at: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(),
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1515562141589-67f0d6a4bf28?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1515562141589-67f0d6a4bf28?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1560472355-536de3962603.jpg" },
+    thumbnail: "/seed-images/auctions%2F1560472355-536de3962603.jpg",
   },
   {
     id: "auction_seed_5",
@@ -99,8 +99,8 @@ const SEED_DATA = [
     total_bids: 4,
     starts_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     ends_at: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop" },
-    thumbnail: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop",
+    metadata: { thumbnail: "/seed-images/auctions%2F1505740420928-5e560c06d30e.jpg" },
+    thumbnail: "/seed-images/auctions%2F1505740420928-5e560c06d30e.jpg",
   },
 ]
 

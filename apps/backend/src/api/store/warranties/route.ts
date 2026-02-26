@@ -14,7 +14,7 @@ const SEED_DATA = [
     is_active: true,
     price: 2999,
     rating: 4.2,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/content%2F1454165804606-c3d57bc86b40.jpg" },
   },
   {
     id: "warranty-seed-2",
@@ -28,7 +28,7 @@ const SEED_DATA = [
     is_active: true,
     price: 5999,
     rating: 4.5,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/government%2F1450101499163-c8848c66ca85.jpg" },
   },
   {
     id: "warranty-seed-3",
@@ -42,7 +42,7 @@ const SEED_DATA = [
     is_active: true,
     price: 9999,
     rating: 4.8,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/warranties%2F1589829545856-d10d557cf95f.jpg" },
   },
   {
     id: "warranty-seed-4",
@@ -56,7 +56,7 @@ const SEED_DATA = [
     is_active: true,
     price: 14999,
     rating: 4.9,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/warranties%2F1506784983877-45594efa4cbe.jpg" },
   },
   {
     id: "warranty-seed-5",
@@ -70,7 +70,7 @@ const SEED_DATA = [
     is_active: true,
     price: 7999,
     rating: 4.4,
-    metadata: { thumbnail: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop" },
+    metadata: { thumbnail: "/seed-images/classifieds%2F1555041469-a586c61ea9bc.jpg" },
   },
 ]
 

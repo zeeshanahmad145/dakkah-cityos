@@ -4,6 +4,7 @@ import { t } from "@/lib/i18n"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { PropertyListingBlock } from '@/components/blocks/property-listing-block'
 import { MapBlock } from '@/components/blocks/map-block'
+import { ReviewListBlock } from '@/components/blocks/review-list-block'
 
 function normalizeDetail(item: any) {
   if (!item) return null
@@ -221,6 +222,7 @@ function RealEstateDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <PropertyListingBlock propertyId={property.id} />
         <MapBlock latitude={property.latitude} longitude={property.longitude} locations={[]} />
+        <ReviewListBlock productId={property.id || id} heading="Reviews" />
       </div>
     </div>
   )
