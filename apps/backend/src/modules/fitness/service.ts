@@ -12,31 +12,26 @@ class FitnessModuleService extends MedusaService({
   ClassBooking,
   WellnessPlan,
 }) {
-  /**
-   * Book a fitness class for a member. Validates membership status and class capacity.
-   */
-  async bookClass(classId: string, memberId: string): Promise<any> {
+  async bookClass(classId: string, customerId: string): Promise<any> {
     const schedule = await this.retrieveClassSchedule(classId)
-    const membership = await this.retrieveGymMembership(memberId)
-    if (membership.status !== "active") {
-      throw new Error("Membership is not active")
-    }
-    const existingBookings = await this.listClassBookings({ class_schedule_id: classId }) as any
+    const existingBookings = await this.listClassBookings({ schedule_id: classId }) as any
     const bookingList = Array.isArray(existingBookings) ? existingBookings : [existingBookings].filter(Boolean)
     if (bookingList.length >= (schedule.max_capacity || 20)) {
       throw new Error("Class is fully booked")
     }
+    const alreadyBooked = bookingList.find((b: any) => b.customer_id === customerId && b.status === "booked")
+    if (alreadyBooked) {
+      throw new Error("You have already booked this class")
+    }
     return await (this as any).createClassBookings({
-      class_schedule_id: classId,
-      member_id: memberId,
-      status: "confirmed",
+      tenant_id: "default",
+      schedule_id: classId,
+      customer_id: customerId,
+      status: "booked",
       booked_at: new Date(),
     })
   }
 
-  /**
-   * Cancel an existing class booking. Only future bookings can be cancelled.
-   */
   async cancelBooking(bookingId: string): Promise<any> {
     const booking = await this.retrieveClassBooking(bookingId)
     if (booking.status === "cancelled") {
@@ -49,76 +44,64 @@ class FitnessModuleService extends MedusaService({
     })
   }
 
-  /**
-   * Get the class schedule for a trainer on a specific date.
-   */
   async getSchedule(trainerId: string, date: Date): Promise<any[]> {
-    const schedules = await this.listClassSchedules({ trainer_id: trainerId }) as any
+    const schedules = await this.listClassSchedules({ instructor_id: trainerId }) as any
     const list = Array.isArray(schedules) ? schedules : [schedules].filter(Boolean)
     const targetDate = new Date(date).toDateString()
     return list.filter((s: any) => new Date(s.start_time).toDateString() === targetDate)
       .sort((a: any, b: any) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime())
   }
 
-  /**
-   * Track attendance for a member in a class. Marks the booking as attended.
-   */
-  async trackAttendance(classId: string, memberId: string): Promise<any> {
+  async trackAttendance(classId: string, customerId: string): Promise<any> {
     const bookings = await this.listClassBookings({
-      class_schedule_id: classId,
-      member_id: memberId,
-      status: "confirmed",
+      schedule_id: classId,
+      customer_id: customerId,
+      status: "booked",
     }) as any
     const bookingList = Array.isArray(bookings) ? bookings : [bookings].filter(Boolean)
     if (bookingList.length === 0) {
-      throw new Error("No confirmed booking found for this member and class")
+      throw new Error("No booking found for this class")
     }
     return await (this as any).updateClassBookings({
       id: bookingList[0].id,
-      status: "attended",
-      attended_at: new Date(),
+      status: "checked_in",
+      checked_in_at: new Date(),
     })
   }
 
-  async createMembership(memberId: string, data: {
-    planType: string
-    startDate: Date
-    durationMonths: number
-    price: number
+  async createMembership(customerId: string, data: {
+    membershipType: string
+    monthlyFee: number
+    currencyCode?: string
+    durationMonths?: number
   }): Promise<any> {
-    if (!data.planType) {
-      throw new Error("Plan type is required")
+    if (!data.membershipType) {
+      throw new Error("Membership type is required")
     }
-    if (!data.durationMonths || data.durationMonths <= 0) {
-      throw new Error("Duration must be greater than zero")
-    }
-    if (!data.price || data.price < 0) {
-      throw new Error("Price must be a non-negative number")
-    }
-
-    const startDate = new Date(data.startDate)
+    const startDate = new Date()
     const endDate = new Date(startDate)
-    endDate.setMonth(endDate.getMonth() + data.durationMonths)
+    endDate.setMonth(endDate.getMonth() + (data.durationMonths || 12))
 
     return await (this as any).createGymMemberships({
-      member_id: memberId,
-      plan_type: data.planType,
+      tenant_id: "default",
+      customer_id: customerId,
+      membership_type: data.membershipType,
       start_date: startDate,
       end_date: endDate,
-      duration_months: data.durationMonths,
-      price: data.price,
+      monthly_fee: data.monthlyFee,
+      currency_code: data.currencyCode || "SAR",
       status: "active",
-      created_at: new Date(),
+      auto_renew: true,
     })
   }
 
-  async checkMembershipStatus(memberId: string): Promise<{
+  async checkMembershipStatus(customerId: string): Promise<{
     active: boolean
     membership: any | null
     daysRemaining?: number
     expired?: boolean
   }> {
-    const memberships = await this.listGymMemberships({ member_id: memberId }) as any
+    const memberships = await this.listGymMemberships({ customer_id: customerId }) as any
     const list = Array.isArray(memberships) ? memberships : [memberships].filter(Boolean)
 
     if (list.length === 0) {
@@ -154,11 +137,10 @@ class FitnessModuleService extends MedusaService({
     const capacity = schedule.max_capacity || 20
 
     const bookings = await this.listClassBookings({
-      class_schedule_id: classScheduleId,
-      status: ["confirmed", "attended"],
+      schedule_id: classScheduleId,
     }) as any
     const bookingList = Array.isArray(bookings) ? bookings : [bookings].filter(Boolean)
-    const booked = bookingList.length
+    const booked = bookingList.filter((b: any) => ["booked", "checked_in", "completed"].includes(b.status)).length
 
     return {
       classScheduleId,
@@ -169,7 +151,7 @@ class FitnessModuleService extends MedusaService({
     }
   }
 
-  async cancelClassBooking(bookingId: string, memberId: string): Promise<{
+  async cancelClassBooking(bookingId: string, customerId: string): Promise<{
     bookingId: string
     status: string
     lateCancelFee: number
@@ -181,11 +163,11 @@ class FitnessModuleService extends MedusaService({
       throw new Error("Booking is already cancelled")
     }
 
-    if (booking.member_id !== memberId) {
+    if (booking.customer_id !== customerId) {
       throw new Error("Only the booking owner can cancel this booking")
     }
 
-    const schedule = await this.retrieveClassSchedule(booking.class_schedule_id) as any
+    const schedule = await this.retrieveClassSchedule(booking.schedule_id) as any
     const classTime = new Date(schedule.start_time)
     const now = new Date()
     const hoursUntilClass = (classTime.getTime() - now.getTime()) / (1000 * 60 * 60)
@@ -205,13 +187,12 @@ class FitnessModuleService extends MedusaService({
       id: bookingId,
       status: "cancelled",
       cancelled_at: new Date(),
-      late_cancel_fee: lateCancelFee,
     })
 
     return { bookingId, status: "cancelled", lateCancelFee, refundable }
   }
 
-  async recordWorkout(memberId: string, data: {
+  async recordWorkout(customerId: string, data: {
     exerciseType: string
     duration: number
     caloriesBurned?: number
@@ -224,20 +205,19 @@ class FitnessModuleService extends MedusaService({
       throw new Error("Duration must be greater than zero")
     }
 
-    const membershipStatus = await this.checkMembershipStatus(memberId)
-    if (!membershipStatus.active) {
-      throw new Error("Active membership is required to record workouts")
-    }
-
     return await (this as any).createWellnessPlans({
-      member_id: memberId,
-      exercise_type: data.exerciseType,
-      duration_minutes: data.duration,
-      calories_burned: data.caloriesBurned || null,
-      notes: data.notes || null,
-      type: "workout_log",
-      recorded_at: new Date(),
-      status: "completed",
+      tenant_id: "default",
+      customer_id: customerId,
+      plan_type: "workout_log",
+      title: `${data.exerciseType} session`,
+      description: data.notes || null,
+      status: "active",
+      metadata: {
+        exercise_type: data.exerciseType,
+        duration_minutes: data.duration,
+        calories_burned: data.caloriesBurned || null,
+        recorded_at: new Date(),
+      },
     })
   }
 }

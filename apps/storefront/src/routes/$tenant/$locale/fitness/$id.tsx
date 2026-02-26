@@ -51,6 +51,9 @@ function FitnessDetailPage() {
   const loaderData = Route.useLoaderData()
   const item = loaderData?.item
 
+  const [trialLoading, setTrialLoading] = useState(false)
+  const [membershipLoading, setMembershipLoading] = useState<string | null>(null)
+
   const handleBookClass = async () => {
     setBookLoading(true)
     try {
@@ -59,16 +62,47 @@ function FitnessDetailPage() {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-publishable-api-key": getMedusaPublishableKey() },
         credentials: "include",
-        body: JSON.stringify({ class_id: id })
+        body: JSON.stringify({ customer_id: `guest_${Date.now()}` })
       })
-      if (resp.ok) toast.success("Class booked!")
-      else toast.error("Something went wrong. Please try again.")
+      const data = await resp.json()
+      if (resp.ok) toast.success(data.message || "Class booked successfully!")
+      else toast.error(data.error || "Something went wrong. Please try again.")
     } catch { toast.error("Network error. Please try again.") }
     finally { setBookLoading(false) }
   }
 
-  const handleFreeTrial = () => {
-    toast.success("Free trial started!")
+  const handleFreeTrial = async () => {
+    setTrialLoading(true)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/fitness/trial`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": getMedusaPublishableKey() },
+        credentials: "include",
+        body: JSON.stringify({ class_id: id })
+      })
+      const data = await resp.json()
+      if (resp.ok) toast.success(data.message || "Free trial started!")
+      else toast.error(data.error || "Could not start trial. Please try again.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setTrialLoading(false) }
+  }
+
+  const handleSelectMembership = async (planId: string, planName: string) => {
+    setMembershipLoading(planId)
+    try {
+      const baseUrl = getServerBaseUrl()
+      const resp = await fetch(`${baseUrl}/store/fitness/membership`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-publishable-api-key": getMedusaPublishableKey() },
+        credentials: "include",
+        body: JSON.stringify({ plan_id: planId })
+      })
+      const data = await resp.json()
+      if (resp.ok) toast.success(data.message || `${planName} activated!`)
+      else toast.error(data.error || "Could not activate membership.")
+    } catch { toast.error("Network error. Please try again.") }
+    finally { setMembershipLoading(null) }
   }
 
   if (!item) {
@@ -206,8 +240,8 @@ function FitnessDetailPage() {
                   {bookLoading ? "Booking..." : "Book Class"}
                 </button>
 
-                <button onClick={handleFreeTrial} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors">
-                  Free Trial
+                <button onClick={handleFreeTrial} disabled={trialLoading} className="w-full py-3 px-4 border border-ds-border text-ds-foreground rounded-lg font-medium hover:bg-ds-muted transition-colors disabled:opacity-50">
+                  {trialLoading ? "Starting Trial..." : "Free Trial"}
                 </button>
               </div>
 
@@ -215,20 +249,25 @@ function FitnessDetailPage() {
                 <div className="bg-ds-background border border-ds-border rounded-xl p-6">
                   <h3 className="font-semibold text-ds-foreground mb-3">Membership Options</h3>
                   <div className="space-y-3">
-                    {item.membership_options.map((opt: any, idx: number) => (
-                      <div key={idx} className="p-3 border border-ds-border rounded-lg hover:border-ds-primary transition-colors cursor-pointer">
-                        <div className="flex justify-between items-center">
-                          <p className="font-medium text-ds-foreground text-sm">{opt.name}</p>
-                          <p className="font-bold text-ds-primary text-sm">${Number(opt.price || 0).toLocaleString()}</p>
-                        </div>
-                        {opt.description && (
-                          <p className="text-xs text-ds-muted-foreground mt-1">{opt.description}</p>
-                        )}
-                        {opt.period && (
-                          <p className="text-xs text-ds-muted-foreground">per {opt.period}</p>
-                        )}
-                      </div>
-                    ))}
+                    {item.membership_options.map((opt: any, idx: number) => {
+                      const planId = opt.id || `plan-${opt.period || idx}`
+                      const isLoading = membershipLoading === planId
+                      return (
+                        <button key={idx} onClick={() => handleSelectMembership(planId, opt.name)} disabled={isLoading} className="w-full text-start p-3 border border-ds-border rounded-lg hover:border-ds-primary transition-colors cursor-pointer disabled:opacity-50">
+                          <div className="flex justify-between items-center">
+                            <p className="font-medium text-ds-foreground text-sm">{opt.name}</p>
+                            <p className="font-bold text-ds-primary text-sm">${Number(opt.price || 0).toLocaleString()}</p>
+                          </div>
+                          {opt.description && (
+                            <p className="text-xs text-ds-muted-foreground mt-1">{opt.description}</p>
+                          )}
+                          {opt.period && (
+                            <p className="text-xs text-ds-muted-foreground">per {opt.period}</p>
+                          )}
+                          {isLoading && <p className="text-xs text-ds-primary mt-1">Activating...</p>}
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
               )}

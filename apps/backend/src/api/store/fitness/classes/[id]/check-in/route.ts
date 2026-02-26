@@ -1,31 +1,34 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../../lib/api-error-handler";
 
-/**
- * POST /store/fitness/classes/:id/check-in
- * Check in a member to an attended class. Marks booking as attended.
- */
+export const AUTHENTICATE = false
+
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const fitnessService = req.scope.resolve("fitness") as any;
     const classId = req.params.id;
-    const { member_id } = req.body as { member_id: string };
+    const { customer_id, action } = req.body as { customer_id?: string; action?: string };
 
-    if (!member_id) {
-      return res.status(400).json({ error: "member_id is required" });
+    const guestId = customer_id || `guest_${Date.now()}`
+
+    if (action === "check-in") {
+      const result = await fitnessService.trackAttendance(classId, guestId);
+      return res.json({ booking: result, checked_in: true });
     }
 
-    const result = await fitnessService.trackAttendance(classId, member_id);
-    return res.json({ booking: result, checked_in: true });
+    const result = await fitnessService.bookClass(classId, guestId);
+    return res.json({ booking: result, booked: true, message: "Class booked successfully" });
   } catch (error: any) {
-    return handleApiError(res, error, "STORE-FITNESS-CHECKIN");
+    if (error.message?.includes("fully booked")) {
+      return res.status(409).json({ error: error.message });
+    }
+    if (error.message?.includes("already booked")) {
+      return res.status(409).json({ error: error.message });
+    }
+    return handleApiError(res, error, "STORE-FITNESS-BOOKING");
   }
 }
 
-/**
- * GET /store/fitness/classes/:id/check-in
- * Get class availability (capacity, booked, available).
- */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const fitnessService = req.scope.resolve("fitness") as any;
