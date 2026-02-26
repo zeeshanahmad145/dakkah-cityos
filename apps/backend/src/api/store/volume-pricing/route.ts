@@ -19,7 +19,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-2",
-    thumbnail: "/seed-images/b2b%2F1553877522-43269d4ea984.jpg",
+    thumbnail: "/seed-images/b2b%2F1551288049-bebda4e38f71.jpg",
     name: "Wholesale Electronics Pricing",
     description: "Tiered pricing for electronics resellers.",
     applies_to: "product",
@@ -33,7 +33,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-3",
-    thumbnail: "/seed-images/b2b%2F1454165804606-c3d57bc86b40.jpg",
+    thumbnail: "/seed-images/b2b%2F1519494026892-80bbd2d6fd0d.jpg",
     name: "Raw Materials Volume Pricing",
     description: "Industrial raw material pricing tiers.",
     applies_to: "product",
@@ -47,7 +47,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-4",
-    thumbnail: "/seed-images/b2b%2F1556742049-0cfed4f6a45d.jpg",
+    thumbnail: "/seed-images/b2b%2F1606787366850-de6330128bfc.jpg",
     name: "Food Service Bulk Rates",
     description: "Special pricing for restaurants and catering companies.",
     applies_to: "category",
@@ -60,7 +60,7 @@ const SEED_RULES = [
   },
   {
     id: "vp-seed-5",
-    thumbnail: "/seed-images/b2b%2F1560518883-ce09059eeffa.jpg",
+    thumbnail: "/seed-images/b2b%2F1497435334941-8c899ee9e8e9.jpg",
     name: "Apparel Wholesale Tiers",
     description: "Volume pricing for fashion retailers and boutiques.",
     applies_to: "product",

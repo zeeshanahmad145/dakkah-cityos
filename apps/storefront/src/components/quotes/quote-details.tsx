@@ -84,8 +84,8 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
 
       {/* Expiration Warning */}
       {quote.valid_until && (
-        <div className={`p-4 rounded-lg ${isExpired ? "bg-ds-destructive border-ds-destructive" : "bg-ds-info border-ds-info"} border`}>
-          <p className={isExpired ? "text-ds-destructive" : "text-ds-info"}>
+        <div className={`p-4 rounded-lg border ${isExpired ? "bg-red-50 border-red-200" : "bg-blue-50 border-blue-200"}`}>
+          <p className={isExpired ? "text-red-700" : "text-blue-700"}>
             {isExpired 
               ? `This quote expired on ${new Date(quote.valid_until).toLocaleDateString()}`
               : `Valid until ${new Date(quote.valid_until).toLocaleDateString()}`
@@ -100,8 +100,8 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
           <h2 className="font-semibold">Quote Items</h2>
         </div>
         <div className="divide-y">
-          {quote.items.map((item) => (
-            <div key={item.id} className="p-4 flex items-center gap-4">
+          {quote.items.map((item, idx) => (
+            <div key={item.id || idx} className="p-4 flex items-center gap-4">
               {item.thumbnail && (
                 <img
                   src={item.thumbnail}
@@ -110,7 +110,7 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
                 />
               )}
               <div className="flex-1">
-                <p className="font-medium">{item.title}</p>
+                <p className="font-medium">{item.title || (item as any).name || "Item"}</p>
                 {item.sku && (
                   <p className="text-sm text-muted-foreground">SKU: {item.sku}</p>
                 )}
@@ -120,19 +120,19 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
                 {item.custom_price && item.custom_price !== item.unit_price ? (
                   <>
                     <p className="font-semibold text-ds-success">
-                      ${Number(item.custom_price).toFixed(2)}
+                      ${(Number(item.custom_price || 0) / 100).toFixed(2)}
                     </p>
                     <p className="text-sm text-muted-foreground line-through">
-                      ${Number(item.unit_price).toFixed(2)}
+                      ${(Number(item.unit_price || 0) / 100).toFixed(2)}
                     </p>
                   </>
                 ) : (
                   <p className="font-semibold">
-                    ${Number(item.unit_price).toFixed(2)}
+                    ${(Number(item.unit_price || 0) / 100).toFixed(2)}
                   </p>
                 )}
                 <p className="text-sm text-muted-foreground">
-                  Total: ${(Number(item.custom_price || item.unit_price) * item.quantity).toFixed(2)}
+                  Total: ${(Number((item as any).total || (Number(item.custom_price || item.unit_price || 0) * item.quantity)) / 100).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -144,21 +144,21 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
       <div className="border rounded-lg p-4 space-y-2">
         <div className="flex justify-between">
           <span>Subtotal</span>
-          <span>${Number(quote.subtotal).toFixed(2)}</span>
+          <span>${(Number(quote.subtotal || 0) / 100).toFixed(2)}</span>
         </div>
-        {quote.discount_total > 0 && (
+        {(quote.discount_total || (quote as any).discount || 0) > 0 && (
           <div className="flex justify-between text-ds-success">
             <span>Discount</span>
-            <span>-${Number(quote.discount_total).toFixed(2)}</span>
+            <span>-${(Number(quote.discount_total || (quote as any).discount || 0) / 100).toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-between">
           <span>Tax</span>
-          <span>${Number(quote.tax_total).toFixed(2)}</span>
+          <span>${(Number(quote.tax_total || (quote as any).tax || 0) / 100).toFixed(2)}</span>
         </div>
         <div className="flex justify-between font-bold text-lg pt-2 border-t">
           <span>Total</span>
-          <span>${Number(quote.total).toFixed(2)}</span>
+          <span>${(Number(quote.total || 0) / 100).toFixed(2)}</span>
         </div>
       </div>
 

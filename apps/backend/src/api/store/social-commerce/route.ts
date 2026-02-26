@@ -140,7 +140,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 24900,
     likes: 31500,
     tags: ["jewelry", "handmade", "gold", "accessories"],
-    thumbnail: "/seed-images/social-commerce%2F1560472355-536de3962603.jpg",
+    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
   },
 ]
 

@@ -93,9 +93,11 @@ Sentry is integrated in the backend via `@sentry/node` in `instrumentation.ts`. 
 
 ### Seed Data & Reviews
 - **65 custom modules** with 270 model files across all verticals
-- **74 list routes** (including invoices), all with seed data and top-level thumbnails
-- **57 detail routes** (including companies/[id], donations/[id], vehicles/[id]), all return 200 with seed data, reviews, and populated arrays
-- **Seed images**: 201 images stored locally in `apps/backend/static/seed-images/` organized by vertical. Served via `/seed-images/{vertical}%2F{filename}.jpg` endpoint (no publishable key required). Vite proxy configured for `/seed-images` path. Zero external Unsplash URLs.
+- **74 list routes** (including invoices, promotions), all with seed data and top-level thumbnails
+- **57 detail routes** (including companies/[id], donations/[id], vehicles/[id], quotes/[id]), all return 200 with seed data, reviews, and populated arrays
+- **Companies detail page**: `apps/storefront/src/routes/$tenant/$locale/companies/$id.tsx` fetches from `/store/companies/{id}`, displays hero image, tier badge, status, contact details, credit info, reviews
+- **Quotes detail page**: `QuoteDetails` component handles both `tax_total`/`discount_total` and `tax`/`discount` field names, divides cent values by 100 for display
+- **Seed images**: 201 images stored locally in `apps/backend/static/seed-images/` organized by vertical. Served via `/seed-images/{vertical}%2F{filename}.jpg` endpoint (no publishable key required). Vite proxy configured for `/seed-images` path. Zero external Unsplash URLs. All 200+ image references validated against existing files — zero broken references.
 - **Image sanitizer**: `apps/backend/src/lib/image-sanitizer.ts` — replaces any Unsplash URLs in DB-sourced data with local `/seed-images/` paths at the response level. Applied to vendors, classifieds, restaurants, bookings/services routes.
 - **Review system**: `ReviewListBlock` component (45 pages) auto-fetches reviews from `/store/reviews/products/{id}` via useEffect. Backend returns 10-12 seed reviews per product with realistic names, ratings, and content when DB is empty.
 - **Seed review data**: Products get 10 reviews (3-5 stars), vendors get 8 reviews, all detail routes have 5 reviews. All with `customer_name`/`author`, `content`/`comment`, `created_at`, `rating`.

@@ -53,9 +53,9 @@ const SEED_DATA = [
     description: "Curated gift collections for everyone on your list. Special bundles and free gift wrapping.",
     type: "holiday",
     status: "active",
-    thumbnail: "/seed-images/campaigns%2F1560472355-536de3962603.jpg",
+    thumbnail: "/seed-images/campaigns%2F1503676260728-1c00da094a0b.jpg",
     metadata: {
-      image: "/seed-images/campaigns%2F1560472355-536de3962603.jpg",
+      image: "/seed-images/campaigns%2F1503676260728-1c00da094a0b.jpg",
       discount: "30%",
       discount_label: "30% Off Bundles",
     },

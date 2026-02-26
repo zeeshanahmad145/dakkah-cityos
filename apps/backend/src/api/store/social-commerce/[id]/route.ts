@@ -182,7 +182,7 @@ const SOCIAL_COMMERCE_SEED = [
     price: 24900,
     likes: 31500,
     tags: ["jewelry", "handmade", "gold", "accessories"],
-    thumbnail: "/seed-images/social-commerce%2F1560472355-536de3962603.jpg",
+    thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg",
     reviews: [
       { rating: 5, author: "Lina A.", comment: "The craftsmanship is exquisite. Each piece feels truly unique." , created_at: "2023-12-28T00:00:00Z" },
       { rating: 5, author: "Ghada M.", comment: "Ordered a custom necklace and it exceeded my expectations." , created_at: "2023-12-20T00:00:00Z" },

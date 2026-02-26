@@ -104,7 +104,7 @@ const SEED_DATA = [
     rating: 4.8,
     total_reviews: 6700,
     is_active: true,
-    metadata: { thumbnail: "/seed-images/social-commerce%2F1560472355-536de3962603.jpg" },
+    metadata: { thumbnail: "/seed-images/social-commerce%2F1547887538-e3a2f32cb1cc.jpg" },
   },
 ]
 

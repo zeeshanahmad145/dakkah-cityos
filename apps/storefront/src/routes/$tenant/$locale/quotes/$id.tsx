@@ -44,6 +44,10 @@ function normalizeDetail(item: any) {
     rating: item.rating ?? item.avg_rating ?? meta.rating ?? null,
     review_count: item.review_count ?? meta.review_count ?? null,
     location: item.location || item.city || item.address || meta.location || null,
+    quote_number: item.quote_number || item.title || item.id || "",
+    tax_total: item.tax_total ?? item.tax ?? 0,
+    discount_total: item.discount_total ?? item.discount ?? 0,
+    items: item.items || [],
   }
 }
 
@@ -62,8 +66,8 @@ export const Route = createFileRoute("/$tenant/$locale/quotes/$id")({
   component: QuoteDetailPage,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Quote Details"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
+      { title: `${loaderData?.item?.quote_number || loaderData?.item?.title || loaderData?.item?.name || "Quote Details"} | Dakkah CityOS` },
+      { name: "description", content: loaderData?.item?.description || loaderData?.item?.notes || "" },
     ],
   }),
 });

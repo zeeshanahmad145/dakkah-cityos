@@ -299,6 +299,7 @@ import { Route as TenantLocaleCrowdfundingIdRouteImport } from './routes/$tenant
 import { Route as TenantLocaleCreditIdRouteImport } from './routes/$tenant/$locale/credit/$id'
 import { Route as TenantLocaleConsignmentIdRouteImport } from './routes/$tenant/$locale/consignment/$id'
 import { Route as TenantLocaleConsignmentShopIdRouteImport } from './routes/$tenant/$locale/consignment-shop/$id'
+import { Route as TenantLocaleCompaniesIdRouteImport } from './routes/$tenant/$locale/companies/$id'
 import { Route as TenantLocaleClassifiedsIdRouteImport } from './routes/$tenant/$locale/classifieds/$id'
 import { Route as TenantLocaleCharityIdRouteImport } from './routes/$tenant/$locale/charity/$id'
 import { Route as TenantLocaleCategoriesHandleRouteImport } from './routes/$tenant/$locale/categories/$handle'
@@ -2011,6 +2012,11 @@ const TenantLocaleConsignmentShopIdRoute =
     path: '/consignment-shop/$id',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
+const TenantLocaleCompaniesIdRoute = TenantLocaleCompaniesIdRouteImport.update({
+  id: '/companies/$id',
+  path: '/companies/$id',
+  getParentRoute: () => TenantLocaleRoute,
+} as any)
 const TenantLocaleClassifiedsIdRoute =
   TenantLocaleClassifiedsIdRouteImport.update({
     id: '/classifieds/$id',
@@ -2405,6 +2411,7 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/categories/$handle': typeof TenantLocaleCategoriesHandleRoute
   '/$tenant/$locale/charity/$id': typeof TenantLocaleCharityIdRoute
   '/$tenant/$locale/classifieds/$id': typeof TenantLocaleClassifiedsIdRoute
+  '/$tenant/$locale/companies/$id': typeof TenantLocaleCompaniesIdRoute
   '/$tenant/$locale/consignment-shop/$id': typeof TenantLocaleConsignmentShopIdRoute
   '/$tenant/$locale/consignment/$id': typeof TenantLocaleConsignmentIdRoute
   '/$tenant/$locale/credit/$id': typeof TenantLocaleCreditIdRoute
@@ -2747,6 +2754,7 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/categories/$handle': typeof TenantLocaleCategoriesHandleRoute
   '/$tenant/$locale/charity/$id': typeof TenantLocaleCharityIdRoute
   '/$tenant/$locale/classifieds/$id': typeof TenantLocaleClassifiedsIdRoute
+  '/$tenant/$locale/companies/$id': typeof TenantLocaleCompaniesIdRoute
   '/$tenant/$locale/consignment-shop/$id': typeof TenantLocaleConsignmentShopIdRoute
   '/$tenant/$locale/consignment/$id': typeof TenantLocaleConsignmentIdRoute
   '/$tenant/$locale/credit/$id': typeof TenantLocaleCreditIdRoute
@@ -3091,6 +3099,7 @@ export interface FileRoutesById {
   '/$tenant/$locale/categories/$handle': typeof TenantLocaleCategoriesHandleRoute
   '/$tenant/$locale/charity/$id': typeof TenantLocaleCharityIdRoute
   '/$tenant/$locale/classifieds/$id': typeof TenantLocaleClassifiedsIdRoute
+  '/$tenant/$locale/companies/$id': typeof TenantLocaleCompaniesIdRoute
   '/$tenant/$locale/consignment-shop/$id': typeof TenantLocaleConsignmentShopIdRoute
   '/$tenant/$locale/consignment/$id': typeof TenantLocaleConsignmentIdRoute
   '/$tenant/$locale/credit/$id': typeof TenantLocaleCreditIdRoute
@@ -3437,6 +3446,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/categories/$handle'
     | '/$tenant/$locale/charity/$id'
     | '/$tenant/$locale/classifieds/$id'
+    | '/$tenant/$locale/companies/$id'
     | '/$tenant/$locale/consignment-shop/$id'
     | '/$tenant/$locale/consignment/$id'
     | '/$tenant/$locale/credit/$id'
@@ -3779,6 +3789,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/categories/$handle'
     | '/$tenant/$locale/charity/$id'
     | '/$tenant/$locale/classifieds/$id'
+    | '/$tenant/$locale/companies/$id'
     | '/$tenant/$locale/consignment-shop/$id'
     | '/$tenant/$locale/consignment/$id'
     | '/$tenant/$locale/credit/$id'
@@ -4122,6 +4133,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/categories/$handle'
     | '/$tenant/$locale/charity/$id'
     | '/$tenant/$locale/classifieds/$id'
+    | '/$tenant/$locale/companies/$id'
     | '/$tenant/$locale/consignment-shop/$id'
     | '/$tenant/$locale/consignment/$id'
     | '/$tenant/$locale/credit/$id'
@@ -6436,6 +6448,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleConsignmentShopIdRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
+    '/$tenant/$locale/companies/$id': {
+      id: '/$tenant/$locale/companies/$id'
+      path: '/companies/$id'
+      fullPath: '/$tenant/$locale/companies/$id'
+      preLoaderRoute: typeof TenantLocaleCompaniesIdRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
     '/$tenant/$locale/classifieds/$id': {
       id: '/$tenant/$locale/classifieds/$id'
       path: '/classifieds/$id'
@@ -6961,6 +6980,7 @@ interface TenantLocaleRouteChildren {
   TenantLocaleCategoriesHandleRoute: typeof TenantLocaleCategoriesHandleRoute
   TenantLocaleCharityIdRoute: typeof TenantLocaleCharityIdRoute
   TenantLocaleClassifiedsIdRoute: typeof TenantLocaleClassifiedsIdRoute
+  TenantLocaleCompaniesIdRoute: typeof TenantLocaleCompaniesIdRoute
   TenantLocaleConsignmentShopIdRoute: typeof TenantLocaleConsignmentShopIdRoute
   TenantLocaleConsignmentIdRoute: typeof TenantLocaleConsignmentIdRoute
   TenantLocaleCreditIdRoute: typeof TenantLocaleCreditIdRoute
@@ -7299,6 +7319,7 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleCategoriesHandleRoute: TenantLocaleCategoriesHandleRoute,
   TenantLocaleCharityIdRoute: TenantLocaleCharityIdRoute,
   TenantLocaleClassifiedsIdRoute: TenantLocaleClassifiedsIdRoute,
+  TenantLocaleCompaniesIdRoute: TenantLocaleCompaniesIdRoute,
   TenantLocaleConsignmentShopIdRoute: TenantLocaleConsignmentShopIdRoute,
   TenantLocaleConsignmentIdRoute: TenantLocaleConsignmentIdRoute,
   TenantLocaleCreditIdRoute: TenantLocaleCreditIdRoute,
