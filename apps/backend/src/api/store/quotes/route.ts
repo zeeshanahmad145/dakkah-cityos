@@ -98,26 +98,41 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
-
     if (!req.auth_context?.actor_id) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.json({
+        quotes: [],
+        count: 0,
+        public_info: {
+          title: "Request a Quote",
+          description: "Get custom pricing for bulk orders, special requirements, or B2B purchases.",
+          how_it_works: [
+            "Browse products and add items to your quote request",
+            "Submit your quote with any special requirements",
+            "Our team reviews and provides custom pricing",
+            "Accept the quote to place your order",
+          ],
+        },
+      })
     }
 
-    const customerId = req.auth_context.actor_id;
+    const quoteModuleService = req.scope.resolve("quoteModuleService") as any
+    const customerId = req.auth_context.actor_id
 
     const quotes = await quoteModuleService.listQuotes(
-      {
-        customer_id: customerId,
-      },
-      {
-        order: { created_at: "DESC" },
-      }
-    );
+      { customer_id: customerId },
+      { order: { created_at: "DESC" } }
+    )
 
-    res.json({ quotes, count: Array.isArray(quotes) ? quotes.length : 0 });
-
+    res.json({ quotes, count: Array.isArray(quotes) ? quotes.length : 0 })
   } catch (error: any) {
-    handleApiError(res, error, "GET store quotes")}
+    return res.json({
+      quotes: [],
+      count: 0,
+      public_info: {
+        title: "Request a Quote",
+        description: "Get custom pricing for bulk orders, special requirements, or B2B purchases.",
+      },
+    })
+  }
 }
 
