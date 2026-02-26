@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_DATA = [
   {
@@ -215,7 +216,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("education") as any
     const item = await mod.retrieveCourse(id)
-    if (item) return res.json({ item })
+    if (item) return res.json({ item: enrichDetailItem(item, "education") })
   } catch (error: any) {
     const isNotFound = error?.type === "not_found" || error?.message?.includes("not found")
     if (!isNotFound) {

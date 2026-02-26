@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
+import { enrichDetailItem } from "../../../../lib/detail-enricher"
 
 const SEED_SERVICES = [
   {
@@ -172,12 +173,12 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const itemList = Array.isArray(items) ? items : [items].filter(Boolean)
 
     res.json({
-      booking: {
+      booking: enrichDetailItem({
         ...booking,
         service,
         provider,
         items: itemList,
-      },
+      }, "bookings"),
     })
   } catch (error: any) {
     const seedItem = SEED_SERVICES.find(i => i.id === id) || SEED_SERVICES[0]
