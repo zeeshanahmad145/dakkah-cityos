@@ -133,8 +133,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (tenant_id) filters.tenant_id = tenant_id
     if (auction_type) filters.auction_type = auction_type
     filters.status = "active"
-    const dbItems = await mod.listAuctionListings(filters, { skip: Number(offset), take: Number(limit) })
-    const items = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const dbResult = await mod.listAuctionListings(filters, { skip: Number(offset), take: Number(limit) })
+    const dbItems = Array.isArray(dbResult) ? dbResult : []
+    const enriched = dbItems.map((a: any) => ({
+      ...a,
+      thumbnail: a.metadata?.thumbnail || `/seed-images/auctions%2F1523170335258-f5ed11844a49.jpg`,
+    }))
+    const items = enriched.length > 0 ? enriched : SEED_DATA
     return res.json({ items, count: items.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
     handleApiError(res, error, "STORE-AUCTIONS")}
