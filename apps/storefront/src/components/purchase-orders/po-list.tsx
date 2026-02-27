@@ -91,7 +91,7 @@ export function POList({
             <div className="flex items-center gap-4">
               <div>
                 <p className="text-xs text-ds-muted-foreground">Items</p>
-                <p className="font-medium text-ds-foreground">{po.items.length}</p>
+                <p className="font-medium text-ds-foreground">{po.items?.length ?? 0}</p>
               </div>
               <div>
                 <p className="text-xs text-ds-muted-foreground">Total</p>
