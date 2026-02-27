@@ -78,7 +78,11 @@ function BookingsPage() {
       ) : (
         <div className="space-y-4">
           {filteredBookings.map((booking) => {
-            const scheduledDate = new Date(booking.scheduled_at)
+            const scheduledDate = new Date(booking.scheduled_at || booking.start_time)
+            const serviceName = booking.service?.name || booking.customer_notes || "Booking"
+            const servicePrice = booking.service?.price || booking.total || booking.subtotal || 0
+            const serviceCurrency = booking.service?.currency_code || booking.currency_code || "sar"
+            const serviceDuration = booking.service?.duration
             return (
               <Link
                 key={booking.id}
@@ -97,7 +101,7 @@ function BookingsPage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-ds-foreground">{booking.service.name}</h3>
+                  <h3 className="font-semibold text-ds-foreground">{serviceName}</h3>
                   <div className="flex items-center gap-3 mt-1">
                     <div className="flex items-center gap-1 text-sm text-ds-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -122,9 +126,11 @@ function BookingsPage() {
                 {/* Price */}
                 <div className="text-end flex-shrink-0">
                   <p className="font-semibold text-ds-foreground">
-                    {formatPrice(booking.service.price, booking.service.currency_code || "usd")}
+                    {formatPrice(servicePrice, serviceCurrency)}
                   </p>
-                  <p className="text-sm text-ds-muted-foreground">{booking.service.duration} min</p>
+                  {serviceDuration && (
+                    <p className="text-sm text-ds-muted-foreground">{serviceDuration} min</p>
+                  )}
                 </div>
 
                 <ChevronRight className="h-5 w-5 text-ds-muted-foreground flex-shrink-0" />
