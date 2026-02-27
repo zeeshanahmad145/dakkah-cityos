@@ -91,7 +91,7 @@ const SEED_COMPANIES = [
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyService = req.scope.resolve("companyModuleService") as any;
+    const companyService = req.scope.resolve("company") as any;
 
     if (!req.auth_context?.actor_id) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -151,7 +151,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyService = req.scope.resolve("companyModuleService") as any;
+    const companyService = req.scope.resolve("company") as any;
 
     if (!req.auth_context?.actor_id) {
       return res.json({ companies: SEED_COMPANIES });

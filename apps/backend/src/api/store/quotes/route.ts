@@ -86,7 +86,7 @@ const createQuoteSchema = z.object({
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
+    const quoteModuleService = req.scope.resolve("quote") as any;
 
     const parsed = createQuoteSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -174,7 +174,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       })
     }
 
-    const quoteModuleService = req.scope.resolve("quoteModuleService") as any
+    const quoteModuleService = req.scope.resolve("quote") as any
     const customerId = req.auth_context.actor_id
 
     const quotes = await quoteModuleService.listQuotes(

@@ -118,7 +118,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
 
   try {
-    const companyService = req.scope.resolve("companyModuleService") as any
+    const companyService = req.scope.resolve("company") as any
     if (companyService?.retrieveCompany) {
       const company = await companyService.retrieveCompany(id)
       if (company) {

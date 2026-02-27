@@ -75,8 +75,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
   if (!customerId) {
     return res.json({
-      trade_ins: [],
-      items: SEED_ITEMS,
+      trade_ins: SEED_ITEMS,
       count: SEED_ITEMS.length,
       limit: 20,
       offset: 0,

@@ -156,11 +156,17 @@ const SEED_QUOTES = [
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
+    const quoteModuleService = req.scope.resolve("quote") as any;
     const { id } = req.params;
 
     const quote = await quoteModuleService.retrieveQuote(id);
-    res.json({ quote: enrichDetailItem(quote, "b2b") });
+    let items: any[] = []
+    try {
+      const rawItems = await quoteModuleService.listQuoteItems({ quote_id: id })
+      items = Array.isArray(rawItems) ? rawItems : [rawItems].filter(Boolean)
+    } catch {}
+    const enriched = enrichDetailItem({ ...quote, items }, "b2b")
+    res.json({ quote: enriched });
   } catch (error: any) {
     const { id } = req.params
     const seed = SEED_QUOTES.find((s) => s.id === id) || SEED_QUOTES[0]
@@ -170,7 +176,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
+    const quoteModuleService = req.scope.resolve("quote") as any;
     const { id } = req.params;
 
     if (!req.auth_context?.actor_id) {

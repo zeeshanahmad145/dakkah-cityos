@@ -85,7 +85,7 @@ const SEED_INVOICES = [
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const invoiceService = req.scope.resolve("invoiceModuleService") as any
+    const invoiceService = req.scope.resolve("invoice") as any
 
     if (!req.auth_context?.actor_id) {
       return res.json({ invoices: SEED_INVOICES, count: SEED_INVOICES.length })

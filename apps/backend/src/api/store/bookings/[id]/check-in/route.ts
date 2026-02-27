@@ -25,7 +25,7 @@ export async function POST(
   const { id } = req.params
   const { check_in_code } = parsed.data
   const query = req.scope.resolve("query")
-  const bookingService = req.scope.resolve("bookingModuleService")
+  const bookingService = req.scope.resolve("booking")
 
   const { data: bookings } = await query.graph({
     entity: "booking",

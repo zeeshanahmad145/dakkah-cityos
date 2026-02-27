@@ -30,7 +30,7 @@ export async function POST(
   } catch (error: any) {
     return handleApiError(res, error, "STORE-SUBSCRIPTIONS-WEBHOOK")}
 
-  const subscriptionService = req.scope.resolve("subscriptionModuleService")
+  const subscriptionService = req.scope.resolve("subscription")
 
   try {
     switch (event.type) {

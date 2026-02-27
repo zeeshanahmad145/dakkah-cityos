@@ -13,7 +13,7 @@ const acceptQuoteSchema = z.object({
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModuleService = req.scope.resolve("quoteModuleService") as any;
+    const quoteModuleService = req.scope.resolve("quote") as any;
     const { id } = req.params;
 
     if (!req.auth_context?.actor_id) {

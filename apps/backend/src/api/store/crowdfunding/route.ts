@@ -158,7 +158,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (search) filters.search = search
 
     const rawItems = await mod.listCrowdfundCampaigns(filters, { skip: Number(offset), take: Number(limit) })
-    const items = Array.isArray(rawItems) && rawItems.length > 0 ? rawItems : SEED_DATA
+    const dbItems = Array.isArray(rawItems) && rawItems.length > 0 ? rawItems : null
+    const items = (dbItems || SEED_DATA).map((item: any) => ({
+      ...item,
+      thumbnail: item.thumbnail || (Array.isArray(item.images) && item.images[0]) || item.image_url || null,
+      goal_amount: item.goal_amount ? Number(item.goal_amount) : item.goal_amount,
+      raised_amount: item.raised_amount ? Number(item.raised_amount) : item.raised_amount,
+    }))
     return res.json({
       items,
       count: items.length,

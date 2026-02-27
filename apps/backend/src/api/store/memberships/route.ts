@@ -92,12 +92,31 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve("membership") as any
     const { limit = "20", offset = "0", tenant_id, customer_id, status } = req.query as Record<string, string | undefined>
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (customer_id) filters.customer_id = customer_id
-    if (status) filters.status = status
-    const items = await moduleService.listMemberships(filters, { skip: Number(offset), take: Number(limit) })
-    const results = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+
+    if (customer_id) {
+      const filters: Record<string, any> = { customer_id }
+      if (status) filters.status = status
+      const items = await moduleService.listMemberships(filters, { skip: Number(offset), take: Number(limit) })
+      const results = Array.isArray(items) ? items : []
+      return res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
+    }
+
+    let tiers: any[] = []
+    try {
+      const tierFilters: Record<string, any> = {}
+      if (tenant_id) tierFilters.tenant_id = tenant_id
+      const raw = await moduleService.listMembershipTiers(tierFilters, { skip: Number(offset), take: Number(limit) })
+      tiers = Array.isArray(raw) ? raw : []
+    } catch {}
+
+    const results = tiers.length > 0
+      ? tiers.map((t: any) => ({
+          ...t,
+          annual_fee: t.annual_fee ? Number(t.annual_fee) : null,
+          thumbnail: t.icon_url || t.thumbnail || null,
+        }))
+      : SEED_DATA
+
     return res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
   } catch (error: any) {
     handleApiError(res, error, "STORE-MEMBERSHIPS")}
