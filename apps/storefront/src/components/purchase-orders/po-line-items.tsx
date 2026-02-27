@@ -16,7 +16,7 @@ export function POLineItems({
   onUpdateQuantity,
   onRemoveItem,
 }: POLineItemsProps) {
-  if (items.length === 0) {
+  if (!items || items.length === 0) {
     return (
       <div className="bg-ds-background rounded-xl border border-ds-border p-8 text-center">
         <p className="text-ds-muted-foreground">No items in this purchase order</p>

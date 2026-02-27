@@ -89,7 +89,7 @@ export function PODetail({ purchaseOrder: po }: PODetailProps) {
       <div className="p-6 border-b border-ds-border">
         <h3 className="text-sm font-semibold text-ds-foreground mb-4">Line Items</h3>
         <div className="space-y-3">
-          {po.items.map((item) => (
+          {(po.items || []).map((item) => (
             <div key={item.id} className="flex items-center justify-between py-3 border-b border-ds-border last:border-0">
               <div>
                 <p className="font-medium text-ds-foreground">{item.title}</p>
