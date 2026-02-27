@@ -12,6 +12,7 @@ export const Route = createFileRoute("/$tenant/$locale/account/addresses")({
 })
 
 function AddressesPage() {
+  const { locale } = Route.useParams() as { locale: string }
   const [showForm, setShowForm] = useState(false)
   const [editingAddress, setEditingAddress] = useState<any>(null)
   const queryClient = useQueryClient()

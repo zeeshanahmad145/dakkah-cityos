@@ -29,7 +29,7 @@ export interface TenantContextValue {
 
 const TenantContext = createContext<TenantContextValue>({
   tenant: null,
-  tenantSlug: "default",
+  tenantSlug: "dakkah",
   locale: "en",
   direction: "ltr",
 })
@@ -46,7 +46,7 @@ export function TenantProvider({
 
 const defaultTenantValue: TenantContextValue = {
   tenant: null,
-  tenantSlug: "default",
+  tenantSlug: "dakkah",
   locale: "en",
   direction: "ltr",
 }

@@ -28,7 +28,7 @@ function useTenantUserRole(tenantSlug: string, customerId: string | undefined) {
     queryKey: ["tenant-user-role", tenantSlug, customerId],
     queryFn: async () => {
       try {
-        const response = await sdk.client.fetch(`/platform/${tenantSlug}/context`, { method: "GET" })
+        const response = await sdk.client.fetch(`/platform/context?tenant=${encodeURIComponent(tenantSlug)}`, { method: "GET" })
         const data = response as any
         const userRole = data?.user?.role || data?.tenantUser?.role
         if (userRole && userRole in RBAC_ROLE_WEIGHTS) {

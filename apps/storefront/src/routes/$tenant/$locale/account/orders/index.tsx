@@ -9,6 +9,7 @@ export const Route = createFileRoute("/$tenant/$locale/account/orders/")({
 })
 
 function OrdersPage() {
+  const { locale } = Route.useParams() as { locale: string }
   const { data: orders, isLoading } = useCustomerOrders({
     fields: "*items,*items.thumbnail",
   })

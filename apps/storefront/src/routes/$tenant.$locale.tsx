@@ -1,8 +1,9 @@
-import { createFileRoute, notFound, Outlet } from "@tanstack/react-router"
+import { createFileRoute, notFound, Outlet, Link } from "@tanstack/react-router"
 import { TenantProvider } from "@/lib/context/tenant-context"
 import type { TenantConfig } from "@/lib/context/tenant-context"
 import { PlatformContextProvider } from "@/lib/context/platform-context"
 import { sdk } from "@/lib/utils/sdk"
+import { Button } from "@/components/ui/button"
 
 const SUPPORTED_LOCALES = ["en", "fr", "ar"]
 
@@ -66,6 +67,10 @@ export const Route = createFileRoute("/$tenant/$locale")({
       tenantConfig = DEFAULT_TENANT
     }
 
+    if (!tenantConfig) {
+      throw notFound()
+    }
+
     let regions = null
     if (typeof window !== "undefined") {
       try {
@@ -89,6 +94,26 @@ export const Route = createFileRoute("/$tenant/$locale")({
     }
   },
   component: TenantLocaleLayout,
+  notFoundComponent: () => {
+    return (
+      <div className="content-container py-12">
+        <div className="min-h-[50vh] flex flex-col items-center justify-center text-center">
+          <div className="max-w-md space-y-6">
+            <h1 className="text-8xl font-light text-ds-foreground">404</h1>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold text-ds-foreground">Tenant Not Found</h2>
+              <p className="text-ds-muted-foreground">
+                The tenant or page you are looking for does not exist.
+              </p>
+            </div>
+            <Link to="/$tenant/$locale" params={{ tenant: "dakkah", locale: "en" }}>
+              <Button className="px-6 py-3" variant="primary">Go to Dakkah</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  },
 })
 
 function TenantLocaleLayout() {
