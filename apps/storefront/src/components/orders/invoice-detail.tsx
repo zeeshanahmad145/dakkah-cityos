@@ -87,7 +87,7 @@ export function InvoiceDetail({ invoiceId }: InvoiceDetailProps) {
           <h2 className="font-semibold">Line Items</h2>
         </div>
         <div className="divide-y">
-          {invoice.items.map((item: InvoiceItem) => (
+          {(invoice.items || []).map((item: InvoiceItem) => (
             <div key={item.id} className="p-4 flex items-center gap-4">
               {item.thumbnail && (
                 <img loading="lazy" src={item.thumbnail} alt={item.title} className="w-12 h-12 object-cover rounded" />

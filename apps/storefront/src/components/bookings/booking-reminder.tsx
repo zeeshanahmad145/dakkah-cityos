@@ -72,7 +72,7 @@ export function BookingReminder({ booking }: BookingReminderProps) {
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h4 className="font-semibold text-ds-foreground truncate">{booking.service.name}</h4>
+            <h4 className="font-semibold text-ds-foreground truncate">{booking.service?.name || "Booking"}</h4>
             <span className={`text-xs px-2 py-0.5 rounded-full ${
               isToday 
                 ? "bg-ds-info text-ds-info" 

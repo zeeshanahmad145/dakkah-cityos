@@ -12,7 +12,7 @@ export function BundleBuilder({ bundle, onAddToCart }: BundleBuilderProps) {
   const { locale } = useLocale()
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => {
     const initial = new Set<string>()
-    bundle.items.forEach((item) => {
+    ;(bundle.items || []).forEach((item) => {
       if (item.required) initial.add(item.id)
     })
     return initial
@@ -28,7 +28,7 @@ export function BundleBuilder({ bundle, onAddToCart }: BundleBuilderProps) {
     })
   }
 
-  const selectedItems = bundle.items.filter((item) => selectedIds.has(item.id))
+  const selectedItems = (bundle.items || []).filter((item) => selectedIds.has(item.id))
   const individualTotal = selectedItems.reduce((sum, item) => sum + item.price, 0)
   const savings = individualTotal - bundle.total_price
   const savingsPercent = individualTotal > 0 ? Math.round((savings / individualTotal) * 100) : 0
@@ -48,7 +48,7 @@ export function BundleBuilder({ bundle, onAddToCart }: BundleBuilderProps) {
         )}
 
         <div className="mt-6 space-y-3">
-          {bundle.items.map((item) => (
+          {(bundle.items || []).map((item) => (
             <BundleItemRow
               key={item.id}
               item={item}

@@ -118,7 +118,7 @@ function SubscriptionDetailPage() {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-ds-foreground">{subscription.plan.name}</h1>
+                <h1 className="text-2xl font-bold text-ds-foreground">{subscription.plan?.name || "Subscription"}</h1>
                 <span
                   className={`inline-block px-2 py-1 text-xs font-medium rounded ${
                     statusColors[subscription.status] || "bg-ds-muted text-ds-foreground"
@@ -128,7 +128,7 @@ function SubscriptionDetailPage() {
                 </span>
               </div>
               <p className="text-ds-muted-foreground mt-1">
-                {formatPrice(subscription.plan.price, subscription.plan.currency_code)} /{" "}
+                {formatPrice(subscription.plan?.price ?? 0, subscription.plan?.currency_code || "usd")} /{" "}
                 {subscription.billing_interval}
               </p>
             </div>

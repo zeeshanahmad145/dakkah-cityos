@@ -100,7 +100,7 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
           <h2 className="font-semibold">Quote Items</h2>
         </div>
         <div className="divide-y">
-          {quote.items.map((item, idx) => (
+          {(quote.items || []).map((item, idx) => (
             <div key={item.id || idx} className="p-4 flex items-center gap-4">
               {item.thumbnail && (
                 <img

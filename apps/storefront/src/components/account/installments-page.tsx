@@ -177,7 +177,7 @@ export function InstallmentsPage({ plans = samplePlans, currency = "USD", loadin
                 {isExpanded && (
                   <div className="border-t border-ds-border bg-ds-muted/30">
                     <div className="p-4 space-y-2">
-                      {plan.payments.map((payment) => (
+                      {(plan.payments || []).map((payment) => (
                         <div
                           key={payment.id}
                           className={`flex items-center justify-between p-2 rounded-md ${

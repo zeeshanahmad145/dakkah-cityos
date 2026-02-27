@@ -49,13 +49,13 @@ export function ApprovalRequestDetail({ requestId }: ApprovalRequestDetailProps)
         </div>
       </div>
 
-      {request.actions.length > 0 && (
+      {(request.actions?.length ?? 0) > 0 && (
         <div className="border rounded-lg">
           <div className="p-4 border-b bg-muted/20">
             <h2 className="font-semibold">Action History</h2>
           </div>
           <div className="divide-y">
-            {request.actions.map((action: ApprovalAction) => (
+            {(request.actions || []).map((action: ApprovalAction) => (
               <div key={action.id} className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">

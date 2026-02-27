@@ -344,9 +344,9 @@ export const CartPromo = ({ cart }: CartPromoProps) => {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {cart.promotions.length > 0 && (
+      {(cart.promotions?.length ?? 0) > 0 && (
         <div className="flex flex-wrap gap-2">
-          {cart.promotions.map((promotion) => (
+          {(cart.promotions || []).map((promotion) => (
             <Button key={promotion.code} variant="secondary" size="fit">
               {promotion.code}
               <XMark

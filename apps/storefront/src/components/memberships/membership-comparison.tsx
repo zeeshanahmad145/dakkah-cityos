@@ -34,7 +34,7 @@ export function MembershipComparison({
   const loc = locale as SupportedLocale
 
   const allBenefitTitles = Array.from(
-    new Set(tiers.flatMap((tier) => tier.benefits.map((b) => b.title)))
+    new Set(tiers.flatMap((tier) => (tier.benefits || []).map((b) => b.title)))
   )
 
   const billingLabels: Record<string, string> = {

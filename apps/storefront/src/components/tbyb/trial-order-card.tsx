@@ -58,7 +58,7 @@ export function TrialOrderCard({
       )}
 
       <div className="space-y-2">
-        {order.items.map((item) => (
+        {(order.items || []).map((item) => (
           <div key={item.id} className="flex items-center gap-3">
             {item.thumbnail ? (
               <img loading="lazy" src={item.thumbnail} alt={item.title} className="w-12 h-12 rounded object-cover flex-shrink-0" />
@@ -86,7 +86,7 @@ export function TrialOrderCard({
         <div className="flex gap-2 pt-2">
           <button
             type="button"
-            onClick={() => onKeepItems?.(order.items.map((i) => i.id))}
+            onClick={() => onKeepItems?.((order.items || []).map((i) => i.id))}
             className="flex-1 px-3 py-2 text-sm font-medium rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors"
           >
             {t(locale, "tbyb.keep_items")}

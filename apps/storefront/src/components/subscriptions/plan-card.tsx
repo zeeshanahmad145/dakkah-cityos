@@ -84,7 +84,7 @@ export function PlanCard({ plan, isCurrentPlan }: PlanCardProps) {
         </div>
 
         <div className="space-y-3 mb-8">
-          {plan.features.map((feature, index) => (
+          {(plan.features || []).map((feature, index) => (
             <div key={index} className="flex items-start gap-3">
               <CheckCircleSolid className="w-5 h-5 text-ds-success flex-shrink-0 mt-0.5" />
               <span className="text-sm text-ds-muted-foreground">{feature}</span>
@@ -129,7 +129,7 @@ export function PlanComparisonTable({
   const prefix = useTenantPrefix()
 
   const allFeatures = Array.from(
-    new Set(plans.flatMap((plan) => plan.features))
+    new Set(plans.flatMap((plan) => plan.features || []))
   )
 
   const formatPrice = (amount: number, currency: string) => {

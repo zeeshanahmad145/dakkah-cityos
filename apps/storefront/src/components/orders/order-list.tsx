@@ -58,7 +58,7 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
     const matchesSearch =
       searchQuery === "" ||
       order.display_id.toString().includes(searchQuery) ||
-      order.items.some((item) => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      (order.items || []).some((item) => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
 
     const matchesStatus = statusFilter === "all" || order.fulfillment_status === statusFilter
 
@@ -129,7 +129,7 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
             >
               {/* Thumbnails */}
               <div className="flex -space-x-2 flex-shrink-0">
-                {order.items.slice(0, 3).map((item, i) => (
+                {(order.items || []).slice(0, 3).map((item, i) => (
                   <div
                     key={item.id}
                     className="w-12 h-12 rounded-md bg-ds-muted border-2 border-white overflow-hidden"
@@ -148,9 +148,9 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
                     )}
                   </div>
                 ))}
-                {order.items.length > 3 && (
+                {(order.items?.length ?? 0) > 3 && (
                   <div className="w-12 h-12 rounded-md bg-ds-muted border-2 border-white flex items-center justify-center text-xs font-medium text-ds-muted-foreground">
-                    +{order.items.length - 3}
+                    +{(order.items?.length ?? 0) - 3}
                   </div>
                 )}
               </div>
@@ -175,7 +175,7 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
                   })}
                 </p>
                 <p className="text-sm text-ds-muted-foreground">
-                  {order.items.length} {order.items.length === 1 ? "item" : "items"}
+                  {order.items?.length ?? 0} {(order.items?.length ?? 0) === 1 ? "item" : "items"}
                 </p>
               </div>
 

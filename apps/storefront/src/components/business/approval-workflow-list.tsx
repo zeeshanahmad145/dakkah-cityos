@@ -61,12 +61,12 @@ function WorkflowCard({ workflow }: { workflow: ApprovalWorkflow }) {
           Trigger: {triggerLabels[workflow.trigger_type] || workflow.trigger_type}
         </span>
         <span className="text-muted-foreground">
-          {workflow.steps.length} approval step{workflow.steps.length !== 1 ? "s" : ""}
+          {workflow.steps?.length ?? 0} approval step{(workflow.steps?.length ?? 0) !== 1 ? "s" : ""}
         </span>
       </div>
-      {workflow.conditions.length > 0 && (
+      {(workflow.conditions?.length ?? 0) > 0 && (
         <div className="mt-3 text-xs text-muted-foreground">
-          {workflow.conditions.length} condition{workflow.conditions.length !== 1 ? "s" : ""} configured
+          {workflow.conditions?.length ?? 0} condition{(workflow.conditions?.length ?? 0) !== 1 ? "s" : ""} configured
         </div>
       )}
     </div>

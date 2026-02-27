@@ -84,7 +84,7 @@ export function DynamicFooter({ categories = [] }: DynamicFooterProps) {
   footer.customSections?.forEach(section => {
     sections.push({
       title: section.title,
-      links: section.links.map(link => ({
+      links: (section.links || []).map(link => ({
         label: link.label,
         href: link.href.startsWith('/') ? `${prefix}${link.href}` : link.href
       }))
@@ -110,7 +110,7 @@ export function DynamicFooter({ categories = [] }: DynamicFooterProps) {
                 {section.title}
               </h3>
               <ul className="mt-4 space-y-2">
-                {section.links.map((link, linkIndex) => (
+                {(section.links || []).map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <Link
                       to={link.href}

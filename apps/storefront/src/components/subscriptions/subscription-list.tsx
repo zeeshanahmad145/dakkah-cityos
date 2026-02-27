@@ -56,8 +56,8 @@ export function SubscriptionList({
         >
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="font-semibold text-ds-foreground">{subscription.plan.name}</h3>
-              <p className="text-sm text-ds-muted-foreground mt-0.5">{subscription.plan.description}</p>
+              <h3 className="font-semibold text-ds-foreground">{subscription.plan?.name || "Subscription"}</h3>
+              <p className="text-sm text-ds-muted-foreground mt-0.5">{subscription.plan?.description}</p>
             </div>
             <span className={cn(
               "px-3 py-1 rounded-full text-xs font-medium capitalize",
@@ -72,7 +72,7 @@ export function SubscriptionList({
               <div>
                 <p className="text-xs text-ds-muted-foreground">Price</p>
                 <p className="font-semibold text-ds-foreground">
-                  {formatPrice(subscription.plan.price, subscription.plan.currency_code)}/{subscription.plan.billing_interval}
+                  {formatPrice(subscription.plan?.price ?? 0, subscription.plan?.currency_code || "usd")}/{subscription.plan?.billing_interval || "month"}
                 </p>
               </div>
               <div>

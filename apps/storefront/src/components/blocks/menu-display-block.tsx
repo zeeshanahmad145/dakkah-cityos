@@ -151,7 +151,7 @@ export const MenuDisplayBlock: React.FC<MenuDisplayBlockProps> = ({
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-ds-foreground mb-4">{currentCategory?.name}</h3>
             <div className={variant === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'flex flex-col gap-3'}>
-              {currentCategory?.items.map((item, i) => renderMenuItem(item, i))}
+              {(currentCategory?.items || []).map((item, i) => renderMenuItem(item, i))}
             </div>
           </div>
         </div>

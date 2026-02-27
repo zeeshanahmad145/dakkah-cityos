@@ -176,7 +176,7 @@ function VendorOrderDetail({ orderId, locale }: VendorOrderDetailProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-ds-border">
-              {order.items.map((item) => (
+              {(order.items || []).map((item) => (
                 <tr key={item.id} className="hover:bg-ds-surface/50">
                   <td className="p-4 text-sm font-medium text-ds-foreground">{item.product_name}</td>
                   <td className="p-4 text-sm text-ds-foreground text-end">{item.quantity}</td>

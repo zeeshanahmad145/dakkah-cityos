@@ -36,7 +36,7 @@ export function DropshipOrderCard({
       </div>
 
       <div className="space-y-2">
-        {order.items.map((item) => (
+        {(order.items || []).map((item) => (
           <div key={item.id} className="flex items-center gap-3">
             {item.thumbnail ? (
               <img

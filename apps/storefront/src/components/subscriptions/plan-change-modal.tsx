@@ -101,10 +101,10 @@ export function PlanChangeModal({
                   </div>
                 </div>
 
-                {plan.features.length > 0 && (
+                {(plan.features?.length ?? 0) > 0 && (
                   <div className="mt-3 pt-3 border-t border-ds-border">
                     <ul className="grid grid-cols-2 gap-2">
-                      {plan.features.slice(0, 4).map((feature, index) => (
+                      {(plan.features || []).slice(0, 4).map((feature, index) => (
                         <li key={index} className="flex items-center gap-2 text-sm text-ds-muted-foreground">
                           <Check className="w-4 h-4 text-ds-success" />
                           {feature}

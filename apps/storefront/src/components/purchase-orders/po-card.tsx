@@ -78,7 +78,7 @@ export function POCard({ purchaseOrder: po, compact = false }: POCardProps) {
       <div className="grid grid-cols-3 gap-4 pt-4 border-t border-ds-border">
         <div>
           <p className="text-xs text-ds-muted-foreground">Items</p>
-          <p className="font-medium text-ds-foreground">{po.items.length}</p>
+          <p className="font-medium text-ds-foreground">{po.items?.length ?? 0}</p>
         </div>
         <div>
           <p className="text-xs text-ds-muted-foreground">Created By</p>

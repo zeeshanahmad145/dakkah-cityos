@@ -134,7 +134,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
           <h2 className="text-lg font-semibold text-ds-foreground">Items</h2>
         </div>
         <div className="divide-y divide-ds-border">
-          {order.items.map((item) => (
+          {(order.items || []).map((item) => (
             <div key={item.id} className="flex gap-4 p-4">
               <div className="w-20 h-20 rounded-md bg-ds-muted overflow-hidden flex-shrink-0">
                 {item.thumbnail ? (

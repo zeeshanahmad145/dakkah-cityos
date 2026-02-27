@@ -9,7 +9,7 @@ const SEED_NEWSLETTERS = [
   { id: "nl-2", title: "Style & Fashion Update", description: "Curated fashion trends, seasonal collections, and exclusive deals from top designers and brands.", frequency: "weekly", subscriber_count: 8900, category: "fashion", thumbnail: "/seed-images/content/1548013146-72479768bada.jpg", created_at: "2025-01-15T00:00:00Z" },
   { id: "nl-3", title: "Foodie Finds", description: "Discover new restaurants, recipes, and food trends in your city every Wednesday.", frequency: "weekly", subscriber_count: 6200, category: "food", thumbnail: "/seed-images/grocery/1542838132-92c53300491e.jpg", created_at: "2025-02-01T00:00:00Z" },
   { id: "nl-4", title: "Wellness & Health Brief", description: "Expert health tips, workout routines, and wellness research to keep you at your best.", frequency: "biweekly", subscriber_count: 15300, category: "health", thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg", created_at: "2025-02-15T00:00:00Z" },
-  { id: "nl-5", title: "Market Watch", description: "Daily financial market analysis, investment tips, and economic updates from industry experts.", frequency: "daily", subscriber_count: 22100, category: "finance", thumbnail: "/seed-images/financial/1554224155-6726a7aed583.jpg", created_at: "2025-03-01T00:00:00Z" },
+  { id: "nl-5", title: "Market Watch", description: "Daily financial market analysis, investment tips, and economic updates from industry experts.", frequency: "daily", subscriber_count: 22100, category: "finance", thumbnail: "/seed-images/financial-products/1559526324-4b87b5e36e44.jpg", created_at: "2025-03-01T00:00:00Z" },
 ]
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {

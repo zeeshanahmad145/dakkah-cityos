@@ -130,7 +130,7 @@ export const CourseCurriculumBlock: React.FC<CourseCurriculumBlockProps> = ({
                   </div>
                 )}
                 <div className="flex flex-wrap gap-1">
-                  {mod.lessons.map((l, j) => (
+                  {(mod.lessons || []).map((l, j) => (
                     <span key={j} className="text-xs text-ds-muted-foreground">{typeIcons[l.type]}</span>
                   ))}
                 </div>
@@ -157,7 +157,7 @@ export const CourseCurriculumBlock: React.FC<CourseCurriculumBlockProps> = ({
           </div>
           <div className="space-y-2">
             {placeholderModules.flatMap((mod, mi) =>
-              mod.lessons.map((lesson, li) => (
+              (mod.lessons || []).map((lesson, li) => (
                 <div key={`${mi}-${li}`} className="flex items-center gap-3 p-3 rounded-lg bg-ds-card border border-ds-border">
                   <span className="text-lg">{typeIcons[lesson.type]}</span>
                   <div className="flex-1 min-w-0">
@@ -224,7 +224,7 @@ export const CourseCurriculumBlock: React.FC<CourseCurriculumBlockProps> = ({
               </button>
               {expandedModules.includes(i) && (
                 <div className="border-t border-ds-border">
-                  {mod.lessons.map((lesson, j) => (
+                  {(mod.lessons || []).map((lesson, j) => (
                     <div key={j} className="flex items-center gap-3 px-4 py-3 border-b border-ds-border last:border-0 hover:bg-ds-muted/30 transition-colors">
                       <span className="text-base">{typeIcons[lesson.type]}</span>
                       <span className="flex-1 text-sm text-ds-foreground">{lesson.title}</span>

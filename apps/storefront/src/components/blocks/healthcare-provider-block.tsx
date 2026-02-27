@@ -76,7 +76,7 @@ export const HealthcareProviderBlock: React.FC<HealthcareProviderBlockProps> = (
       )}
 
       <div className="flex flex-wrap gap-1 mb-4">
-        {provider.insurance.map((ins) => (
+        {(provider.insurance || []).map((ins) => (
           <span key={ins} className="text-xs px-2 py-0.5 rounded-full bg-ds-muted text-ds-muted-foreground">
             {ins}
           </span>

@@ -68,7 +68,7 @@ export function SubscriptionCard({
             </h3>
             <p className="text-sm text-ds-muted-foreground">
               {subscription.plan
-                ? `${formatPrice(subscription.plan.price, subscription.plan.currency_code)}/${subscription.plan.billing_interval}`
+                ? `${formatPrice(subscription.plan.price, subscription.plan.currency_code || "usd")}/${subscription.plan.billing_interval || "month"}`
                 : ""}
             </p>
           </div>

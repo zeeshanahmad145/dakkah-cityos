@@ -141,7 +141,7 @@ export const EventScheduleBlock: React.FC<EventScheduleBlockProps> = ({
           <div className="relative">
             <div className="absolute start-4 md:start-8 top-0 bottom-0 w-0.5 bg-ds-border" />
             <div className="space-y-6">
-              {currentDay?.sessions.map((session) => (
+              {(currentDay?.sessions || []).map((session) => (
                 <div key={session.id} className="relative ps-12 md:ps-20">
                   <div className="absolute start-3 md:start-7 top-4 w-3 h-3 rounded-full bg-ds-primary border-2 border-ds-background" />
                   <div className="text-sm font-medium text-ds-muted-foreground mb-2">{session.time}</div>
@@ -154,7 +154,7 @@ export const EventScheduleBlock: React.FC<EventScheduleBlockProps> = ({
 
         {view === 'grid' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {currentDay?.sessions.map((session) => (
+            {(currentDay?.sessions || []).map((session) => (
               <SessionCard key={session.id} session={session} />
             ))}
           </div>
@@ -162,7 +162,7 @@ export const EventScheduleBlock: React.FC<EventScheduleBlockProps> = ({
 
         {view === 'agenda' && (
           <div className="space-y-3">
-            {currentDay?.sessions.map((session) => (
+            {(currentDay?.sessions || []).map((session) => (
               <div key={session.id} className="flex gap-4 bg-ds-card border border-ds-border rounded-lg p-4">
                 <div className="w-20 flex-shrink-0 text-center">
                   <p className="text-sm font-semibold text-ds-foreground">{session.time}</p>

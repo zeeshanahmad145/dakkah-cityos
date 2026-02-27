@@ -37,8 +37,8 @@ function ReferralsPage() {
           code={referral.code}
           link={referral.link}
           totalReferred={referral.totalReferred}
-          successfulReferrals={referral.history.filter((h) => h.status === "completed").length}
-          pendingReferrals={referral.history.filter((h) => h.status === "pending").length}
+          successfulReferrals={(referral.history || []).filter((h) => h.status === "completed").length}
+          pendingReferrals={(referral.history || []).filter((h) => h.status === "pending").length}
           totalEarned={referral.totalEarned}
           currencyCode={referral.currencyCode}
           rewardDescription={referral.rewardDescription}

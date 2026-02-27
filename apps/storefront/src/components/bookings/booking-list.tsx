@@ -65,7 +65,7 @@ export function BookingList({
         >
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="font-semibold text-ds-foreground">{booking.service.name}</h3>
+              <h3 className="font-semibold text-ds-foreground">{booking.service?.name || "Booking"}</h3>
               <p className="text-sm text-ds-muted-foreground mt-0.5">
                 {formatDateTime(booking.scheduled_at)}
               </p>
@@ -88,12 +88,12 @@ export function BookingList({
             <div className="flex items-center gap-4">
               <div>
                 <p className="text-xs text-ds-muted-foreground">Duration</p>
-                <p className="text-sm text-ds-foreground">{booking.service.duration} min</p>
+                <p className="text-sm text-ds-foreground">{booking.service?.duration || 0} min</p>
               </div>
               <div>
                 <p className="text-xs text-ds-muted-foreground">Price</p>
                 <p className="font-semibold text-ds-foreground">
-                  {formatPrice(booking.service.price, booking.service.currency_code)}
+                  {formatPrice(booking.service?.price ?? 0, booking.service?.currency_code || "usd")}
                 </p>
               </div>
             </div>

@@ -89,7 +89,7 @@ export function UpcomingBookings({ bookings, isLoading }: UpcomingBookingsProps)
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-ds-foreground">{booking.service.name}</p>
+                <p className="text-sm font-medium text-ds-foreground">{booking.service?.name || "Booking"}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <Clock className="h-3 w-3 text-ds-muted-foreground" />
                   <span className="text-sm text-ds-muted-foreground">

@@ -98,7 +98,7 @@ function BookingDetailPage() {
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-ds-foreground">{booking.service.name}</h1>
+                <h1 className="text-2xl font-bold text-ds-foreground">{booking.service?.name || "Booking"}</h1>
                 <span
                   className={`inline-block px-2 py-1 text-xs font-medium rounded ${
                     statusColors[booking.status] || "bg-ds-muted text-ds-foreground"
@@ -107,13 +107,13 @@ function BookingDetailPage() {
                   {booking.status}
                 </span>
               </div>
-              <p className="text-ds-muted-foreground mt-1">{booking.service.description}</p>
+              <p className="text-ds-muted-foreground mt-1">{booking.service?.description}</p>
             </div>
             <div className="text-end">
               <p className="text-2xl font-bold text-ds-foreground">
-                {formatPrice(booking.service.price, booking.service.currency_code || "usd")}
+                {formatPrice(booking.service?.price ?? 0, booking.service?.currency_code || "usd")}
               </p>
-              <p className="text-sm text-ds-muted-foreground">{booking.service.duration} minutes</p>
+              <p className="text-sm text-ds-muted-foreground">{booking.service?.duration || 0} minutes</p>
             </div>
           </div>
         </div>
@@ -200,7 +200,7 @@ function BookingDetailPage() {
                 <Button
                   variant="outline"
                   size="fit"
-                  onClick={() => navigate({ to: `${baseHref}/bookings/${booking.service.handle}` as any })}
+                  onClick={() => navigate({ to: `${baseHref}/bookings/${booking.service?.handle}` as any })}
                 >
                   <Calendar className="h-4 w-4 me-2" />
                   Reschedule

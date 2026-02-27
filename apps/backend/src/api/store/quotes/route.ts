@@ -139,12 +139,13 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     // Calculate totals
     await quoteModuleService.calculateQuoteTotals(quote.id);
 
-    // Retrieve updated quote
-    const updatedQuote = await quoteModuleService.retrieveQuote(quote.id, {
-      relations: ["items"],
-    });
-
-    res.json({ quote: updatedQuote });
+    const updatedQuote = await quoteModuleService.retrieveQuote(quote.id);
+    let fetchedItems: any[] = [];
+    try {
+      const rawItems = await quoteModuleService.listQuoteItems({ quote_id: quote.id });
+      fetchedItems = Array.isArray(rawItems) ? rawItems : [rawItems].filter(Boolean);
+    } catch {}
+    res.json({ quote: { ...updatedQuote, items: fetchedItems } });
 
   } catch (error: any) {
     handleApiError(res, error, "POST store quotes")}

@@ -82,9 +82,9 @@ export function ActiveSubscriptions({ subscriptions, isLoading }: ActiveSubscrip
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-ds-foreground">{subscription.plan.name}</p>
+              <p className="text-sm font-medium text-ds-foreground">{subscription.plan?.name || "Subscription"}</p>
               <p className="text-sm text-ds-muted-foreground">
-                {formatPrice(subscription.plan.price, subscription.plan.currency_code)} /{" "}
+                {formatPrice(subscription.plan?.price ?? 0, subscription.plan?.currency_code || "usd")} /{" "}
                 {subscription.billing_interval}
               </p>
             </div>

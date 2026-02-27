@@ -56,9 +56,9 @@ function SubscriptionsPage() {
                     <ArrowPath className="h-6 w-6 text-ds-muted-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-ds-foreground">{subscription.plan.name}</h3>
+                    <h3 className="font-semibold text-ds-foreground">{subscription.plan?.name || "Subscription"}</h3>
                     <p className="text-sm text-ds-muted-foreground mt-1">
-                      {formatPrice(subscription.plan.price, subscription.plan.currency_code)} /{" "}
+                      {formatPrice(subscription.plan?.price ?? 0, subscription.plan?.currency_code || "usd")} /{" "}
                       {subscription.billing_interval}
                     </p>
                     <div className="flex items-center gap-4 mt-3">

@@ -35,8 +35,8 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
       <div className="p-6 border-b border-ds-border">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-ds-foreground">{subscription.plan.name}</h2>
-            <p className="text-ds-muted-foreground mt-1">{subscription.plan.description}</p>
+            <h2 className="text-xl font-semibold text-ds-foreground">{subscription.plan?.name || "Subscription"}</h2>
+            <p className="text-ds-muted-foreground mt-1">{subscription.plan?.description}</p>
           </div>
           <span className={cn(
             "px-3 py-1 rounded-full text-sm font-medium capitalize",
@@ -55,9 +55,9 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
           <div className="bg-ds-muted rounded-lg p-4">
             <div className="flex items-baseline gap-1">
               <span className="text-3xl font-bold text-ds-foreground">
-                {formatPrice(subscription.plan.price, subscription.plan.currency_code)}
+                {formatPrice(subscription.plan?.price ?? 0, subscription.plan?.currency_code || "usd")}
               </span>
-              <span className="text-ds-muted-foreground">/{subscription.plan.billing_interval}</span>
+              <span className="text-ds-muted-foreground">/{subscription.plan?.billing_interval || "month"}</span>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
             </div>
             <div>
               <p className="text-xs text-ds-muted-foreground uppercase tracking-wider">Billing Cycle</p>
-              <p className="text-sm text-ds-foreground mt-1 capitalize">{subscription.plan.billing_interval}ly</p>
+              <p className="text-sm text-ds-foreground mt-1 capitalize">{subscription.plan?.billing_interval || "month"}ly</p>
             </div>
             <div>
               <p className="text-xs text-ds-muted-foreground uppercase tracking-wider">Auto-Renew</p>
@@ -88,7 +88,7 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
         </div>
 
         {/* Features */}
-        {subscription.plan.features && subscription.plan.features.length > 0 && (
+        {subscription.plan?.features && subscription.plan.features.length > 0 && (
           <div>
             <h3 className="text-sm font-semibold text-ds-foreground mb-3">Included Features</h3>
             <ul className="space-y-2">

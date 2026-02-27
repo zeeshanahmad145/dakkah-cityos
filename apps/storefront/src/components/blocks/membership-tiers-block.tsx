@@ -65,7 +65,7 @@ export const MembershipTiersBlock: React.FC<MembershipTiersBlockProps> = ({
             </div>
 
             <ul className="flex-1 space-y-3 mb-8">
-              {tier.benefits.map((benefit, bi) => (
+              {(tier.benefits || []).map((benefit, bi) => (
                 <li key={bi} className="flex items-start gap-2">
                   <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke={tier.color || '#6366f1'} strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -138,7 +138,7 @@ export const MembershipTiersBlock: React.FC<MembershipTiersBlockProps> = ({
           </div>
           <div className="p-6">
             <ul className="space-y-3 mb-6">
-              {tier.benefits.map((benefit, bi) => (
+              {(tier.benefits || []).map((benefit, bi) => (
                 <li key={bi} className="flex items-start gap-2">
                   <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke={tier.color || '#6366f1'} strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />

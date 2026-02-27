@@ -45,8 +45,8 @@ export function BookingDetail({ booking }: BookingDetailProps) {
       <div className="p-6 border-b border-ds-border">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-ds-foreground">{booking.service.name}</h2>
-            <p className="text-ds-muted-foreground mt-1">{booking.service.description}</p>
+            <h2 className="text-xl font-semibold text-ds-foreground">{booking.service?.name || "Booking"}</h2>
+            <p className="text-ds-muted-foreground mt-1">{booking.service?.description}</p>
           </div>
           <span className={cn(
             "px-3 py-1 rounded-full text-sm font-medium capitalize",
@@ -122,12 +122,12 @@ export function BookingDetail({ booking }: BookingDetailProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-ds-muted-foreground">Duration</p>
-              <p className="text-ds-foreground">{booking.service.duration} minutes</p>
+              <p className="text-ds-foreground">{booking.service?.duration || 0} minutes</p>
             </div>
             <div className="text-end">
               <p className="text-sm text-ds-muted-foreground">Total</p>
               <p className="text-xl font-semibold text-ds-foreground">
-                {formatPrice(booking.service.price, booking.service.currency_code)}
+                {formatPrice(booking.service?.price ?? 0, booking.service?.currency_code || "usd")}
               </p>
             </div>
           </div>
