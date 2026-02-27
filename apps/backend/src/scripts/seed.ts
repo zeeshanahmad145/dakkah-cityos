@@ -74,6 +74,74 @@ export default async function seedCoreData({ container }: ExecArgs) {
     logger.warn(`  Admin user creation skipped: ${error.message}`)
   }
 
+  // 1b. Create Customer Accounts
+  logger.info("Step 1b: Creating customer accounts...")
+  const SEED_CUSTOMERS = [
+    { email: "mohammed@dakkah.com", first_name: "Mohammed", last_name: "Al-Rashid", phone: "+966501234567", address: { address_1: "King Fahd Road, Al Olaya District", city: "Riyadh", postal_code: "12241" } },
+    { email: "fatima@dakkah.com", first_name: "Fatima", last_name: "Al-Saud", phone: "+966502345678", address: { address_1: "Prince Sultan Road, Al Zahra District", city: "Jeddah", postal_code: "23425" } },
+    { email: "ahmed@dakkah.com", first_name: "Ahmed", last_name: "Hassan", phone: "+966503456789", address: { address_1: "King Abdulaziz Road, Al Khobar", city: "Dammam", postal_code: "31952" } },
+    { email: "khalid@dakkah.com", first_name: "Khalid", last_name: "Al-Dakkah", phone: "+966504567890", address: { address_1: "Tahlia Street, Al Rawdah District", city: "Jeddah", postal_code: "23432" } },
+    { email: "sara@dakkah.com", first_name: "Sara", last_name: "Al-Mansour", phone: "+966505678901", address: { address_1: "Northern Ring Road, Al Nakheel", city: "Riyadh", postal_code: "12382" } },
+    { email: "omar@dakkah.com", first_name: "Omar", last_name: "Al-Otaibi", phone: "+966506789012", address: { address_1: "Corniche Road, Al Hamra", city: "Jeddah", postal_code: "23511" } },
+    { email: "noura@dakkah.com", first_name: "Noura", last_name: "Al-Shamrani", phone: "+966507890123", address: { address_1: "King Abdullah Road, Al Malaz", city: "Riyadh", postal_code: "12631" } },
+    { email: "abdullah@dakkah.com", first_name: "Abdullah", last_name: "Al-Qahtani", phone: "+966508901234", address: { address_1: "Prince Faisal Road, Al Murjan", city: "Dammam", postal_code: "32411" } },
+    { email: "test_customer@dakkah.com", first_name: "Test", last_name: "Customer", phone: "+966509012345", address: { address_1: "King Saud Road, Al Wizarat", city: "Riyadh", postal_code: "12611" } },
+  ]
+
+  try {
+    const authModuleService = container.resolve(Modules.AUTH)
+    const customerModuleService = container.resolve(Modules.CUSTOMER)
+
+    for (const cust of SEED_CUSTOMERS) {
+      try {
+        const existing = await customerModuleService.listCustomers({ email: cust.email })
+        if (existing.length > 0) {
+          logger.info(`  Customer ${cust.email} already exists`)
+          continue
+        }
+
+        const authIdentity = await authModuleService.createAuthIdentities({
+          provider_identities: [{
+            provider: "emailpass",
+            entity_id: cust.email,
+            provider_metadata: { password: "Dakkah2024!" },
+          }],
+        })
+
+        const customer = await customerModuleService.createCustomers({
+          email: cust.email,
+          first_name: cust.first_name,
+          last_name: cust.last_name,
+          phone: cust.phone,
+          has_account: true,
+        })
+
+        await authModuleService.updateAuthIdentities({
+          id: authIdentity.id,
+          app_metadata: { customer_id: customer.id },
+        })
+
+        await customerModuleService.addCustomerAddresses({
+          customer_id: customer.id,
+          first_name: cust.first_name,
+          last_name: cust.last_name,
+          address_1: cust.address.address_1,
+          city: cust.address.city,
+          country_code: "sa",
+          postal_code: cust.address.postal_code,
+          phone: cust.phone,
+          is_default_shipping: true,
+        })
+
+        logger.info(`  Created customer: ${cust.email} (${customer.id})`)
+      } catch (err: any) {
+        logger.warn(`  Customer ${cust.email} skipped: ${err.message}`)
+      }
+    }
+  } catch (error: any) {
+    logger.warn(`  Customer seeding skipped: ${error.message}`)
+  }
+
   // 2. Setup Store
   logger.info("Step 2: Setting up store...")
   const [store] = await storeModuleService.listStores()
