@@ -35,6 +35,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset: Number(offset),
     })
   } catch (error: any) {
-    handleApiError(res, error, "STORE-ANALYTICS")}
+    if (error?.message?.includes("does not exist") || error?.message?.includes("relation")) {
+      return res.json({
+        items: [],
+        count: 0,
+        limit: Number(req.query.limit || 20),
+        offset: Number(req.query.offset || 0),
+      })
+    }
+    handleApiError(res, error, "STORE-ANALYTICS")
+  }
 }
 
