@@ -17,26 +17,36 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const customerId = req.auth_context.actor_id
   
   try {
-    const purchaseOrder = await companyModule.retrievePurchaseOrder(id, {
-      relations: ["items", "company"],
-    })
+    const purchaseOrder = await companyModule.retrievePurchaseOrder(id)
     
-    // Verify ownership (customer created it or is part of the company)
     if (purchaseOrder.customer_id !== customerId) {
-      // Check if customer is part of the company
-      const employees = await companyModule.listCompanyEmployees({
-        company_id: purchaseOrder.company_id,
-        customer_id: customerId,
-      })
-      
-      const employeeList = Array.isArray(employees) ? employees : [employees].filter(Boolean)
-      
-      if (employeeList.length === 0) {
+      try {
+        const employees = await companyModule.listCompanyEmployees({
+          company_id: purchaseOrder.company_id,
+          customer_id: customerId,
+        })
+        const employeeList = Array.isArray(employees) ? employees : [employees].filter(Boolean)
+        if (employeeList.length === 0) {
+          return res.status(403).json({ message: "Access denied" })
+        }
+      } catch {
         return res.status(403).json({ message: "Access denied" })
       }
     }
     
-    res.json({ purchase_order: enrichDetailItem(purchaseOrder, "b2b") })
+    let items: any[] = []
+    try {
+      const rawItems = await companyModule.listPurchaseOrderItems({ purchase_order_id: id })
+      items = Array.isArray(rawItems) ? rawItems : [rawItems].filter(Boolean)
+    } catch {}
+    
+    let company: any = null
+    try {
+      company = await companyModule.retrieveCompany(purchaseOrder.company_id)
+    } catch {}
+    
+    const enriched = enrichDetailItem({ ...purchaseOrder, items, company }, "b2b")
+    res.json({ purchase_order: enriched })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-PURCHASE-ORDERS-ID")
   }

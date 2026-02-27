@@ -147,12 +147,14 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       })
     }
     
-    // Fetch complete PO
-    const completePO = await companyModule.retrievePurchaseOrder(purchaseOrder.id, {
-      relations: ["items"],
-    })
+    const completePO = await companyModule.retrievePurchaseOrder(purchaseOrder.id)
+    let poItems: any[] = []
+    try {
+      const rawItems = await companyModule.listPurchaseOrderItems({ purchase_order_id: purchaseOrder.id })
+      poItems = Array.isArray(rawItems) ? rawItems : [rawItems].filter(Boolean)
+    } catch {}
     
-    res.status(201).json({ purchase_order: completePO })
+    res.status(201).json({ purchase_order: { ...completePO, items: poItems } })
   } catch (error: any) {
     return handleApiError(res, error, "STORE-PURCHASE-ORDERS")
   }
