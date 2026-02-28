@@ -1,34 +1,53 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
-const createProgramSchema = z.object({
-  name: z.string().optional(),
-  description: z.string().optional(),
-  tenant_id: z.string().optional(),
-  status: z.string().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-}).passthrough()
+const createProgramSchema = z
+  .object({
+    name: z.string(),
+    description: z.string().optional(),
+    tenant_id: z.string().optional(),
+    status: z.string().optional(),
+    points_per_currency: z.number().optional(),
+    currency_per_point: z.number().optional(),
+    min_redemption_points: z.number().optional(),
+    is_active: z.boolean().optional(),
+    tiers: z.any().optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
+  })
+  .passthrough();
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("loyalty") as any
-    const programs = await service.listLoyaltyPrograms({})
-    res.json({ programs: Array.isArray(programs) ? programs : [programs].filter(Boolean) })
+    const service = req.scope.resolve("loyalty") as any;
+    const programs = await service.listLoyaltyPrograms({});
+    res.json({
+      programs: Array.isArray(programs) ? programs : [programs].filter(Boolean),
+    });
   } catch (error: any) {
-    return handleApiError(res, error, "ADMIN-LOYALTY-PROGRAMS")}
+    return handleApiError(res, error, "ADMIN-LOYALTY-PROGRAMS");
+  }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("loyalty") as any
-    const parsed = createProgramSchema.safeParse(req.body)
+    const service = req.scope.resolve("loyalty") as any;
+    const parsed = createProgramSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.issues });
     }
-    const program = await service.createLoyaltyPrograms(parsed.data)
-    res.status(201).json({ program })
-  } catch (error: any) {
-    return handleApiError(res, error, "ADMIN-LOYALTY-PROGRAMS")}
-}
 
+    const cityosContext = (req as any).cityosContext as any;
+    const tenant_id = cityosContext?.tenantId || "default";
+
+    const program = await service.createLoyaltyPrograms({
+      ...parsed.data,
+      tenant_id,
+    });
+    res.status(201).json({ program });
+  } catch (error: any) {
+    return handleApiError(res, error, "ADMIN-LOYALTY-PROGRAMS");
+  }
+}

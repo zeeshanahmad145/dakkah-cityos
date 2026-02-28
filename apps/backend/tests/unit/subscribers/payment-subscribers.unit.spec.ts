@@ -28,6 +28,7 @@ function makeContainer() {
     resolve: jest.fn((dep: string) => {
       if (dep === "notification") return { createNotifications: mockCreateNotifications }
       if (dep === "query") return { graph: mockGraph }
+      if (dep === "logger") return { info: jest.fn(), error: jest.fn(), warn: jest.fn() }
       return {}
     }),
   }

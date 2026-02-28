@@ -1,12 +1,13 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 const EVENTS_SEED = [
   {
     id: "evt_001",
     name: "Riyadh Season Festival 2026",
     handle: "riyadh-season-2026",
-    description: "The largest entertainment festival in the Middle East featuring world-class performances, exhibitions, and culinary experiences.",
+    description:
+      "The largest entertainment festival in the Middle East featuring world-class performances, exhibitions, and culinary experiences.",
     event_type: "Festival",
     venue: "Boulevard Riyadh City",
     city: "Riyadh",
@@ -23,18 +24,49 @@ const EVENTS_SEED = [
     tags: ["entertainment", "music", "food", "culture"],
     image_url: "/seed-images/events/1540575467063-178a50c2df87.jpg",
     reviews: [
-      { author: "Faisal A.", rating: 5, comment: "Riyadh Season never disappoints! World-class entertainment in the heart of the city.", created_at: "2025-12-10T10:00:00Z" },
-      { author: "Noura K.", rating: 5, comment: "So many things to do. We spent the whole weekend and didn't see everything. Amazing!", created_at: "2025-12-07T14:30:00Z" },
-      { author: "Ahmed S.", rating: 4, comment: "Great performances and exhibitions. Parking was a challenge on weekends though.", created_at: "2025-12-03T09:15:00Z" },
-      { author: "Haya M.", rating: 4, comment: "Boulevard Riyadh City is beautifully designed. Food options are diverse and delicious.", created_at: "2025-11-29T16:45:00Z" },
-      { author: "Omar T.", rating: 5, comment: "Best entertainment festival in the region. Can't wait for next season!", created_at: "2025-11-25T11:00:00Z" },
+      {
+        author: "Faisal A.",
+        rating: 5,
+        comment:
+          "Riyadh Season never disappoints! World-class entertainment in the heart of the city.",
+        created_at: "2025-12-10T10:00:00Z",
+      },
+      {
+        author: "Noura K.",
+        rating: 5,
+        comment:
+          "So many things to do. We spent the whole weekend and didn't see everything. Amazing!",
+        created_at: "2025-12-07T14:30:00Z",
+      },
+      {
+        author: "Ahmed S.",
+        rating: 4,
+        comment:
+          "Great performances and exhibitions. Parking was a challenge on weekends though.",
+        created_at: "2025-12-03T09:15:00Z",
+      },
+      {
+        author: "Haya M.",
+        rating: 4,
+        comment:
+          "Boulevard Riyadh City is beautifully designed. Food options are diverse and delicious.",
+        created_at: "2025-11-29T16:45:00Z",
+      },
+      {
+        author: "Omar T.",
+        rating: 5,
+        comment:
+          "Best entertainment festival in the region. Can't wait for next season!",
+        created_at: "2025-11-25T11:00:00Z",
+      },
     ],
   },
   {
     id: "evt_002",
     name: "LEAP Technology Conference",
     handle: "leap-tech-2026",
-    description: "Global technology conference bringing together innovators, investors, and enterprise leaders from around the world.",
+    description:
+      "Global technology conference bringing together innovators, investors, and enterprise leaders from around the world.",
     event_type: "Conference",
     venue: "Riyadh Front Exhibition Center",
     city: "Riyadh",
@@ -51,18 +83,49 @@ const EVENTS_SEED = [
     tags: ["technology", "innovation", "startup", "ai"],
     image_url: "/seed-images/events/1505373877841-8d25f7d46678.jpg",
     reviews: [
-      { author: "Khalid B.", rating: 5, comment: "LEAP is the premier tech event in the region. Keynotes from global leaders were inspiring.", created_at: "2025-12-09T13:20:00Z" },
-      { author: "Reem F.", rating: 5, comment: "Incredible networking opportunities. Met investors and partners that changed our trajectory.", created_at: "2025-12-05T10:00:00Z" },
-      { author: "Saeed D.", rating: 4, comment: "Great content on AI and digital transformation. Venue was massive and well-organized.", created_at: "2025-12-01T15:45:00Z" },
-      { author: "Lina R.", rating: 4, comment: "Startup showcases were impressive. Saudi tech ecosystem is growing rapidly.", created_at: "2025-11-27T09:30:00Z" },
-      { author: "Mansour H.", rating: 5, comment: "Four days of pure innovation. The enterprise demos were world-class.", created_at: "2025-11-23T12:15:00Z" },
+      {
+        author: "Khalid B.",
+        rating: 5,
+        comment:
+          "LEAP is the premier tech event in the region. Keynotes from global leaders were inspiring.",
+        created_at: "2025-12-09T13:20:00Z",
+      },
+      {
+        author: "Reem F.",
+        rating: 5,
+        comment:
+          "Incredible networking opportunities. Met investors and partners that changed our trajectory.",
+        created_at: "2025-12-05T10:00:00Z",
+      },
+      {
+        author: "Saeed D.",
+        rating: 4,
+        comment:
+          "Great content on AI and digital transformation. Venue was massive and well-organized.",
+        created_at: "2025-12-01T15:45:00Z",
+      },
+      {
+        author: "Lina R.",
+        rating: 4,
+        comment:
+          "Startup showcases were impressive. Saudi tech ecosystem is growing rapidly.",
+        created_at: "2025-11-27T09:30:00Z",
+      },
+      {
+        author: "Mansour H.",
+        rating: 5,
+        comment:
+          "Four days of pure innovation. The enterprise demos were world-class.",
+        created_at: "2025-11-23T12:15:00Z",
+      },
     ],
   },
   {
     id: "evt_003",
     name: "Jeddah Jazz Festival",
     handle: "jeddah-jazz-2026",
-    description: "An unforgettable evening of jazz music featuring international and local artists along the Jeddah Corniche.",
+    description:
+      "An unforgettable evening of jazz music featuring international and local artists along the Jeddah Corniche.",
     event_type: "Concert",
     venue: "Jeddah Superdome",
     city: "Jeddah",
@@ -79,18 +142,49 @@ const EVENTS_SEED = [
     tags: ["music", "jazz", "live", "concert"],
     image_url: "/seed-images/events/1514525253161-7a46d19cd819.jpg",
     reviews: [
-      { author: "Tariq W.", rating: 5, comment: "Jazz by the corniche was magical. International artists blended beautifully with local talent.", created_at: "2025-12-08T11:30:00Z" },
-      { author: "Dalal N.", rating: 4, comment: "Wonderful evening of music. Jeddah Superdome acoustics are excellent for jazz.", created_at: "2025-12-04T14:00:00Z" },
-      { author: "Youssef G.", rating: 5, comment: "Three nights of incredible performances. The closing night was unforgettable.", created_at: "2025-11-30T09:45:00Z" },
-      { author: "Maha A.", rating: 4, comment: "Great music and atmosphere. Food vendors around the venue had excellent options.", created_at: "2025-11-26T16:20:00Z" },
-      { author: "Badr S.", rating: 3, comment: "Beautiful event but wish there were more seating options. Standing area got crowded.", created_at: "2025-11-22T10:30:00Z" },
+      {
+        author: "Tariq W.",
+        rating: 5,
+        comment:
+          "Jazz by the corniche was magical. International artists blended beautifully with local talent.",
+        created_at: "2025-12-08T11:30:00Z",
+      },
+      {
+        author: "Dalal N.",
+        rating: 4,
+        comment:
+          "Wonderful evening of music. Jeddah Superdome acoustics are excellent for jazz.",
+        created_at: "2025-12-04T14:00:00Z",
+      },
+      {
+        author: "Youssef G.",
+        rating: 5,
+        comment:
+          "Three nights of incredible performances. The closing night was unforgettable.",
+        created_at: "2025-11-30T09:45:00Z",
+      },
+      {
+        author: "Maha A.",
+        rating: 4,
+        comment:
+          "Great music and atmosphere. Food vendors around the venue had excellent options.",
+        created_at: "2025-11-26T16:20:00Z",
+      },
+      {
+        author: "Badr S.",
+        rating: 3,
+        comment:
+          "Beautiful event but wish there were more seating options. Standing area got crowded.",
+        created_at: "2025-11-22T10:30:00Z",
+      },
     ],
   },
   {
     id: "evt_004",
     name: "Saudi Food Festival",
     handle: "saudi-food-festival",
-    description: "Celebrate Saudi culinary heritage with live cooking demonstrations, food stalls, and workshops featuring traditional and modern cuisine.",
+    description:
+      "Celebrate Saudi culinary heritage with live cooking demonstrations, food stalls, and workshops featuring traditional and modern cuisine.",
     event_type: "Food Festival",
     venue: "King Abdullah Financial District",
     city: "Riyadh",
@@ -107,18 +201,49 @@ const EVENTS_SEED = [
     tags: ["food", "cooking", "culture", "family"],
     image_url: "/seed-images/events/1555939594-58d7cb561ad1.jpg",
     reviews: [
-      { author: "Salma R.", rating: 5, comment: "Saudi cuisine showcased beautifully. Live cooking demos by renowned chefs were a highlight.", created_at: "2025-12-10T09:00:00Z" },
-      { author: "Hamad K.", rating: 5, comment: "Food stalls were amazing. Tried dishes from every region of Saudi Arabia. Must-attend!", created_at: "2025-12-06T12:45:00Z" },
-      { author: "Nada F.", rating: 4, comment: "Great family event. Kids cooking workshops were a wonderful touch.", created_at: "2025-12-02T16:30:00Z" },
-      { author: "Rashid B.", rating: 4, comment: "KAFD is a stunning venue for this. Traditional and modern cuisine side by side.", created_at: "2025-11-28T10:15:00Z" },
-      { author: "Amira T.", rating: 5, comment: "Best food festival in the kingdom. The week-long format means you can come back for more.", created_at: "2025-11-24T14:00:00Z" },
+      {
+        author: "Salma R.",
+        rating: 5,
+        comment:
+          "Saudi cuisine showcased beautifully. Live cooking demos by renowned chefs were a highlight.",
+        created_at: "2025-12-10T09:00:00Z",
+      },
+      {
+        author: "Hamad K.",
+        rating: 5,
+        comment:
+          "Food stalls were amazing. Tried dishes from every region of Saudi Arabia. Must-attend!",
+        created_at: "2025-12-06T12:45:00Z",
+      },
+      {
+        author: "Nada F.",
+        rating: 4,
+        comment:
+          "Great family event. Kids cooking workshops were a wonderful touch.",
+        created_at: "2025-12-02T16:30:00Z",
+      },
+      {
+        author: "Rashid B.",
+        rating: 4,
+        comment:
+          "KAFD is a stunning venue for this. Traditional and modern cuisine side by side.",
+        created_at: "2025-11-28T10:15:00Z",
+      },
+      {
+        author: "Amira T.",
+        rating: 5,
+        comment:
+          "Best food festival in the kingdom. The week-long format means you can come back for more.",
+        created_at: "2025-11-24T14:00:00Z",
+      },
     ],
   },
   {
     id: "evt_005",
     name: "AlUla Arts Festival",
     handle: "alula-arts-2026",
-    description: "Immersive art installations and cultural exhibitions set against the stunning backdrop of AlUla's ancient landscapes.",
+    description:
+      "Immersive art installations and cultural exhibitions set against the stunning backdrop of AlUla's ancient landscapes.",
     event_type: "Art Exhibition",
     venue: "AlUla Heritage Site",
     city: "AlUla",
@@ -135,18 +260,49 @@ const EVENTS_SEED = [
     tags: ["art", "culture", "heritage", "exhibition"],
     image_url: "/seed-images/events/1501281668745-f7f57925c3b4.jpg",
     reviews: [
-      { author: "Lulwa M.", rating: 5, comment: "AlUla is breathtaking and the art installations are world-class. A truly immersive experience.", created_at: "2025-12-09T10:30:00Z" },
-      { author: "Nawaf A.", rating: 5, comment: "The ancient landscapes combined with modern art created something extraordinary.", created_at: "2025-12-05T15:00:00Z" },
-      { author: "Ghada H.", rating: 5, comment: "One of the most unique cultural experiences in Saudi Arabia. Photography paradise.", created_at: "2025-12-01T11:20:00Z" },
-      { author: "Majed S.", rating: 4, comment: "Incredible setting but AlUla is remote. Plan your accommodation well in advance.", created_at: "2025-11-27T14:45:00Z" },
-      { author: "Dania K.", rating: 4, comment: "Art exhibitions were thought-provoking. The heritage site adds so much context and beauty.", created_at: "2025-11-23T09:00:00Z" },
+      {
+        author: "Lulwa M.",
+        rating: 5,
+        comment:
+          "AlUla is breathtaking and the art installations are world-class. A truly immersive experience.",
+        created_at: "2025-12-09T10:30:00Z",
+      },
+      {
+        author: "Nawaf A.",
+        rating: 5,
+        comment:
+          "The ancient landscapes combined with modern art created something extraordinary.",
+        created_at: "2025-12-05T15:00:00Z",
+      },
+      {
+        author: "Ghada H.",
+        rating: 5,
+        comment:
+          "One of the most unique cultural experiences in Saudi Arabia. Photography paradise.",
+        created_at: "2025-12-01T11:20:00Z",
+      },
+      {
+        author: "Majed S.",
+        rating: 4,
+        comment:
+          "Incredible setting but AlUla is remote. Plan your accommodation well in advance.",
+        created_at: "2025-11-27T14:45:00Z",
+      },
+      {
+        author: "Dania K.",
+        rating: 4,
+        comment:
+          "Art exhibitions were thought-provoking. The heritage site adds so much context and beauty.",
+        created_at: "2025-11-23T09:00:00Z",
+      },
     ],
   },
   {
     id: "evt_006",
     name: "Dakar Rally Saudi Arabia",
     handle: "dakar-rally-2026",
-    description: "The world's most grueling off-road rally race traversing Saudi Arabia's diverse desert terrain.",
+    description:
+      "The world's most grueling off-road rally race traversing Saudi Arabia's diverse desert terrain.",
     event_type: "Sports",
     venue: "Multiple Locations",
     city: "Jeddah",
@@ -163,18 +319,49 @@ const EVENTS_SEED = [
     tags: ["sports", "racing", "adventure", "motorsport"],
     image_url: "/seed-images/events/1568605117036-5fe5e7bab0b7.jpg",
     reviews: [
-      { author: "Faris D.", rating: 5, comment: "The Dakar Rally through Saudi terrain is unbelievable. Desert landscapes make for epic racing.", created_at: "2025-12-08T11:00:00Z" },
-      { author: "Sara N.", rating: 4, comment: "Free entry and incredible motorsport action. The stage finishes are exciting to watch.", created_at: "2025-12-04T14:30:00Z" },
-      { author: "Ibrahim W.", rating: 5, comment: "Two weeks of world-class rally racing. Saudi Arabia is the perfect host country.", created_at: "2025-11-30T10:00:00Z" },
-      { author: "Mona G.", rating: 4, comment: "Thrilling to watch but bring lots of water and sun protection. Desert conditions are intense.", created_at: "2025-11-26T16:00:00Z" },
-      { author: "Waleed J.", rating: 5, comment: "Best motorsport event I've ever attended. The variety of terrain is spectacular.", created_at: "2025-11-22T12:30:00Z" },
+      {
+        author: "Faris D.",
+        rating: 5,
+        comment:
+          "The Dakar Rally through Saudi terrain is unbelievable. Desert landscapes make for epic racing.",
+        created_at: "2025-12-08T11:00:00Z",
+      },
+      {
+        author: "Sara N.",
+        rating: 4,
+        comment:
+          "Free entry and incredible motorsport action. The stage finishes are exciting to watch.",
+        created_at: "2025-12-04T14:30:00Z",
+      },
+      {
+        author: "Ibrahim W.",
+        rating: 5,
+        comment:
+          "Two weeks of world-class rally racing. Saudi Arabia is the perfect host country.",
+        created_at: "2025-11-30T10:00:00Z",
+      },
+      {
+        author: "Mona G.",
+        rating: 4,
+        comment:
+          "Thrilling to watch but bring lots of water and sun protection. Desert conditions are intense.",
+        created_at: "2025-11-26T16:00:00Z",
+      },
+      {
+        author: "Waleed J.",
+        rating: 5,
+        comment:
+          "Best motorsport event I've ever attended. The variety of terrain is spectacular.",
+        created_at: "2025-11-22T12:30:00Z",
+      },
     ],
   },
   {
     id: "evt_007",
     name: "Saudi Arabian Grand Prix",
     handle: "f1-jeddah-2026",
-    description: "Formula 1 racing at the spectacular Jeddah Corniche Circuit under the lights.",
+    description:
+      "Formula 1 racing at the spectacular Jeddah Corniche Circuit under the lights.",
     event_type: "Sports",
     venue: "Jeddah Corniche Circuit",
     city: "Jeddah",
@@ -191,18 +378,49 @@ const EVENTS_SEED = [
     tags: ["f1", "racing", "sports", "motorsport"],
     image_url: "/seed-images/events/1511578314322-379afb476865.jpg",
     reviews: [
-      { author: "Rania B.", rating: 5, comment: "F1 under the lights in Jeddah is spectacular. The Corniche Circuit is incredibly fast.", created_at: "2025-12-10T09:30:00Z" },
-      { author: "Fahad M.", rating: 5, comment: "Best F1 race on the calendar. The atmosphere along the Jeddah waterfront is electric.", created_at: "2025-12-06T13:00:00Z" },
-      { author: "Leila K.", rating: 4, comment: "Great race weekend. Pit walk was amazing. Food and entertainment areas were well done.", created_at: "2025-12-02T16:45:00Z" },
-      { author: "Sami A.", rating: 4, comment: "Incredible racing action. Grandstand views were perfect. Night race ambiance is unmatched.", created_at: "2025-11-28T10:00:00Z" },
-      { author: "Huda R.", rating: 5, comment: "Third year attending and it keeps getting better. Saudi GP is a must for F1 fans.", created_at: "2025-11-24T14:30:00Z" },
+      {
+        author: "Rania B.",
+        rating: 5,
+        comment:
+          "F1 under the lights in Jeddah is spectacular. The Corniche Circuit is incredibly fast.",
+        created_at: "2025-12-10T09:30:00Z",
+      },
+      {
+        author: "Fahad M.",
+        rating: 5,
+        comment:
+          "Best F1 race on the calendar. The atmosphere along the Jeddah waterfront is electric.",
+        created_at: "2025-12-06T13:00:00Z",
+      },
+      {
+        author: "Leila K.",
+        rating: 4,
+        comment:
+          "Great race weekend. Pit walk was amazing. Food and entertainment areas were well done.",
+        created_at: "2025-12-02T16:45:00Z",
+      },
+      {
+        author: "Sami A.",
+        rating: 4,
+        comment:
+          "Incredible racing action. Grandstand views were perfect. Night race ambiance is unmatched.",
+        created_at: "2025-11-28T10:00:00Z",
+      },
+      {
+        author: "Huda R.",
+        rating: 5,
+        comment:
+          "Third year attending and it keeps getting better. Saudi GP is a must for F1 fans.",
+        created_at: "2025-11-24T14:30:00Z",
+      },
     ],
   },
   {
     id: "evt_008",
     name: "Soundstorm Music Festival",
     handle: "soundstorm-2026",
-    description: "The Middle East's biggest music festival featuring global DJ headliners and electronic music acts.",
+    description:
+      "The Middle East's biggest music festival featuring global DJ headliners and electronic music acts.",
     event_type: "Music Festival",
     venue: "Banban",
     city: "Riyadh",
@@ -219,19 +437,54 @@ const EVENTS_SEED = [
     tags: ["music", "edm", "festival", "entertainment"],
     image_url: "/seed-images/events/1459749411175-04bf5292ceea.jpg",
     reviews: [
-      { author: "Ziad H.", rating: 5, comment: "MDLBEAST knows how to throw a festival. Global DJ headliners and insane production quality.", created_at: "2025-12-09T11:00:00Z" },
-      { author: "Nouf S.", rating: 5, comment: "Best music festival in the Middle East. The energy of 200,000 people is indescribable.", created_at: "2025-12-05T14:30:00Z" },
-      { author: "Turki A.", rating: 4, comment: "Amazing lineup and stage design. Gets very crowded near the main stage though.", created_at: "2025-12-01T10:15:00Z" },
-      { author: "Joud M.", rating: 4, comment: "Four nights of incredible music. VIP experience is worth the upgrade for comfort.", created_at: "2025-11-27T15:45:00Z" },
-      { author: "Abdulaziz F.", rating: 5, comment: "Soundstorm keeps raising the bar. Production rival the biggest festivals worldwide.", created_at: "2025-11-23T09:30:00Z" },
+      {
+        author: "Ziad H.",
+        rating: 5,
+        comment:
+          "MDLBEAST knows how to throw a festival. Global DJ headliners and insane production quality.",
+        created_at: "2025-12-09T11:00:00Z",
+      },
+      {
+        author: "Nouf S.",
+        rating: 5,
+        comment:
+          "Best music festival in the Middle East. The energy of 200,000 people is indescribable.",
+        created_at: "2025-12-05T14:30:00Z",
+      },
+      {
+        author: "Turki A.",
+        rating: 4,
+        comment:
+          "Amazing lineup and stage design. Gets very crowded near the main stage though.",
+        created_at: "2025-12-01T10:15:00Z",
+      },
+      {
+        author: "Joud M.",
+        rating: 4,
+        comment:
+          "Four nights of incredible music. VIP experience is worth the upgrade for comfort.",
+        created_at: "2025-11-27T15:45:00Z",
+      },
+      {
+        author: "Abdulaziz F.",
+        rating: 5,
+        comment:
+          "Soundstorm keeps raising the bar. Production rival the biggest festivals worldwide.",
+        created_at: "2025-11-23T09:30:00Z",
+      },
     ],
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const { id } = req.params
+  const { id } = req.params;
 
-  const seedItem = EVENTS_SEED.find(e => e.id === id || e.handle === id) || EVENTS_SEED[0]
-  return res.json({ item: { ...seedItem, thumbnail: seedItem.thumbnail || seedItem.image_url } })
+  const seedItem =
+    EVENTS_SEED.find((e) => e.id === id || e.handle === id) || EVENTS_SEED[0];
+  return res.json({
+    item: {
+      ...seedItem,
+      thumbnail: (seedItem as any).thumbnail || seedItem.image_url,
+    },
+  });
 }
-

@@ -1,52 +1,55 @@
-import { defineWidgetConfig } from "@medusajs/admin-sdk"
-import { Container, Heading, Text, Badge, Button, Table } from "@medusajs/ui"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { sdk } from "../lib/client.js"
+import { defineWidgetConfig } from "@medusajs/admin-sdk";
+import { Container, Heading, Text, Badge, Button, Table } from "@medusajs/ui";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { sdk } from "../lib/client.js";
 
 interface Payout {
-  id: string
-  vendor_id: string
-  vendor_name?: string
-  amount: number
-  currency_code: string
-  status: string
-  payment_method?: string
-  transactions_count: number
-  period_start: string
-  period_end: string
-  created_at: string
-  processed_at?: string
+  id: string;
+  payout_number: string;
+  vendor_id: string;
+  vendor_name?: string;
+  net_amount: number;
+  status: string;
+  payment_method?: string;
+  transaction_count: number;
+  period_start: string;
+  period_end: string;
+  created_at: string;
+  processing_completed_at?: string;
 }
 
 const PayoutProcessingWidget = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-payouts"],
     queryFn: async () => {
-      const response = await sdk.client.fetch<{ payouts: Payout[]; count: number }>(
-        "/admin/payouts",
-        { credentials: "include" }
-      )
-      return response
+      const response = await sdk.client.fetch<{
+        payouts: Payout[];
+        count: number;
+      }>("/admin/payouts", { credentials: "include" });
+      return response;
     },
-  })
+  });
 
   const processMutation = useMutation({
     mutationFn: async (payoutId: string) => {
       return sdk.client.fetch(`/admin/payouts/${payoutId}/process`, {
         method: "POST",
         credentials: "include",
-      })
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-payouts"] })
+      queryClient.invalidateQueries({ queryKey: ["admin-payouts"] });
     },
-  })
+  });
 
-  const payouts = data?.payouts || []
-  const pendingPayouts = payouts.filter((p) => p.status === "pending")
-  const totalPending = pendingPayouts.reduce((sum, p) => sum + (p.amount || 0), 0)
+  const payouts = data?.payouts || [];
+  const pendingPayouts = payouts.filter((p) => p.status === "pending");
+  const totalPending = pendingPayouts.reduce(
+    (sum, p) => sum + (p.net_amount || 0),
+    0,
+  );
 
   if (isLoading) {
     return (
@@ -58,7 +61,7 @@ const PayoutProcessingWidget = () => {
           <Text className="text-ui-fg-subtle">Loading payouts...</Text>
         </div>
       </Container>
-    )
+    );
   }
 
   return (
@@ -107,10 +110,10 @@ const PayoutProcessingWidget = () => {
                         payout.status === "completed"
                           ? "green"
                           : payout.status === "pending"
-                          ? "orange"
-                          : payout.status === "processing"
-                          ? "blue"
-                          : "red"
+                            ? "orange"
+                            : payout.status === "processing"
+                              ? "blue"
+                              : "red"
                       }
                     >
                       {payout.status}
@@ -120,12 +123,12 @@ const PayoutProcessingWidget = () => {
                     <Text size="small">
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: payout.currency_code || "USD",
-                      }).format(payout.amount || 0)}
+                        currency: "USD",
+                      }).format(payout.net_amount || 0)}
                     </Text>
                   </Table.Cell>
                   <Table.Cell>
-                    <Text size="small">{payout.transactions_count}</Text>
+                    <Text size="small">{payout.transaction_count}</Text>
                   </Table.Cell>
                   <Table.Cell>
                     <Text size="small" className="text-ui-fg-subtle">
@@ -152,11 +155,11 @@ const PayoutProcessingWidget = () => {
         )}
       </div>
     </Container>
-  )
-}
+  );
+};
 
 export const config = defineWidgetConfig({
   zone: "order.details.side.before",
-})
+});
 
-export default PayoutProcessingWidget
+export default PayoutProcessingWidget;

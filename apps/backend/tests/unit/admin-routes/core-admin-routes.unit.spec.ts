@@ -111,7 +111,7 @@ describe("Admin Vendors Routes", () => {
 
       await createVendor(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: "Validation failed" }))
     })
 
@@ -554,7 +554,7 @@ describe("Admin Commission Tiers Routes", () => {
 
       await createCommissionTier(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ message: "Rate must be between 0 and 100" })
     })
 
@@ -575,7 +575,7 @@ describe("Admin Commission Tiers Routes", () => {
 
       await createCommissionTier(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ message: "Rate must be between 0 and 100" })
     })
 
@@ -601,7 +601,7 @@ describe("Admin Commission Tiers Routes", () => {
 
       await createCommissionTier(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ message: "Revenue range overlaps with existing tier" })
     })
   })

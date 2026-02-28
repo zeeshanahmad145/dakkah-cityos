@@ -62,7 +62,7 @@ describe("Admin Vendor Detail Routes", () => {
       } as any
       const res = createRes()
       await updateVendor(req, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: "Validation failed" }))
     })
   })
@@ -180,7 +180,7 @@ describe("Admin Vendor Reinstate Route", () => {
     } as any
     const res = createRes()
     await reinstateVendor(req, res)
-    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
 

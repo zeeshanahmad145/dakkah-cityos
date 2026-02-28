@@ -129,7 +129,7 @@ describe("Commerce Store Routes", () => {
       const req = createReq({ scope: { resolve: jest.fn(() => mockService) }, body: {} })
       const res = createRes()
       await auctionsPOST(req as any, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 

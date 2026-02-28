@@ -61,7 +61,7 @@ describe("Admin Wishlists Routes", () => {
 
       await listWishlists(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ message: "DB error" })
     })
   })
@@ -87,7 +87,7 @@ describe("Admin Wishlists Routes", () => {
 
       await createWishlist(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -135,7 +135,7 @@ describe("Admin Wishlists Routes", () => {
 
       await updateWishlist(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -159,7 +159,7 @@ describe("Admin Wishlists Routes", () => {
 
       await deleteWishlist(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

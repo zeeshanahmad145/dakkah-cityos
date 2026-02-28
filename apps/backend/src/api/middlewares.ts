@@ -1,4 +1,4 @@
-import { defineMiddlewares } from "@medusajs/medusa";
+import { defineMiddlewares, authenticate } from "@medusajs/medusa";
 import * as Sentry from "@sentry/node";
 import type {
   MedusaNextFunction,
@@ -49,13 +49,17 @@ function sentryRequestMiddleware(
   Sentry.withScope((scope) => {
     scope.setTag("http.method", req.method);
     scope.setTag("http.url", req.originalUrl || req.url);
-    scope.setTransactionName(`${req.method} ${req.route?.path || req.originalUrl || req.url}`);
+    scope.setTransactionName(
+      `${req.method} ${req.route?.path || req.originalUrl || req.url}`,
+    );
 
     const originalJson = res.json.bind(res);
     res.json = function (body: any) {
       if (res.statusCode >= 500) {
         const errorMessage =
-          body?.message || body?.error || `Server error on ${req.method} ${req.originalUrl}`;
+          body?.message ||
+          body?.error ||
+          `Server error on ${req.method} ${req.originalUrl}`;
         Sentry.captureException(new Error(errorMessage), {
           extra: {
             statusCode: res.statusCode,
@@ -91,6 +95,34 @@ export default defineMiddlewares({
     {
       matcher: "/store/**",
       middlewares: [sentryRequestMiddleware],
+    },
+    {
+      matcher: "/admin/volume-pricing*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
+    },
+    {
+      matcher: "/admin/vendors*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
+    },
+    {
+      matcher: "/admin/legal*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
+    },
+    {
+      matcher: "/admin/quotes*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
+    },
+    {
+      matcher: "/admin/charities*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
+    },
+    {
+      matcher: "/admin/fitness*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
+    },
+    {
+      matcher: "/admin/grocery*",
+      middlewares: [authenticate("user", ["session", "bearer", "api-key"])],
     },
     {
       matcher: "/admin/**",

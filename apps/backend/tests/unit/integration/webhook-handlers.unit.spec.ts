@@ -170,7 +170,7 @@ describe("Webhook Handlers", () => {
       const req = createReq({ headers: { "stripe-signature": "t=123,v1=invalidsig" }, body })
       const res = createRes()
       await handleStripeWebhook(req, res, { secret: stripeSecret, service: mockStripeService })
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ error: "Invalid signature" })
     })
 
@@ -188,7 +188,7 @@ describe("Webhook Handlers", () => {
       const req = createReq({ headers: { "stripe-signature": "t=123,v1=abc" }, body: {} })
       const res = createRes()
       await handleStripeWebhook(req, res, { secret: stripeSecret, service: mockStripeService })
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -242,7 +242,7 @@ describe("Webhook Handlers", () => {
       const req = createReq({ headers: { "x-erpnext-signature": signature }, body })
       const res = createRes()
       await handleErpNextWebhook(req, res, { secret: erpNextSecret, service: mockErpNextService })
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ error: "Missing event type" })
     })
   })

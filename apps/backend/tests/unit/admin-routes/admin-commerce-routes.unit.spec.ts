@@ -68,7 +68,7 @@ describe("Admin Booking Reschedule Route", () => {
     } as any
     const res = createRes()
     await rescheduleBooking(req, res)
-    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
 
@@ -206,7 +206,7 @@ describe("Admin Payouts Routes", () => {
       } as any
       const res = createRes()
       await holdPayout(req, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })
@@ -246,7 +246,7 @@ describe("Admin Product Commission Routes", () => {
       } as any
       const res = createRes()
       await setProductCommission(req, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

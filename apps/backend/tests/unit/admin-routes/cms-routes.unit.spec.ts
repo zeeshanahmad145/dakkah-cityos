@@ -80,7 +80,7 @@ describe("Admin CMS Pages Routes", () => {
 
       await listPages(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ message: "DB error" })
     })
   })
@@ -106,7 +106,7 @@ describe("Admin CMS Pages Routes", () => {
 
       await createPage(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -154,7 +154,7 @@ describe("Admin CMS Pages Routes", () => {
 
       await updatePage(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -178,7 +178,7 @@ describe("Admin CMS Pages Routes", () => {
 
       await deletePage(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

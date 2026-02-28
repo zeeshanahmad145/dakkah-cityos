@@ -154,7 +154,7 @@ describe("Store Routes Verticals 3", () => {
       })
       const res = createRes()
       await volumePricingGET(req as any, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 

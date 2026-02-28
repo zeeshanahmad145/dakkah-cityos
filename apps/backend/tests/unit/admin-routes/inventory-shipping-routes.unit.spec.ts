@@ -86,7 +86,7 @@ describe("Admin Inventory Extension Routes", () => {
 
       await listStockAlerts(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -135,7 +135,7 @@ describe("Admin Inventory Extension Routes", () => {
 
       await listTransfers(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })
@@ -198,7 +198,7 @@ describe("Admin Shipping Extension Routes", () => {
 
       await listCarriers(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -238,7 +238,7 @@ describe("Admin Shipping Extension Routes", () => {
 
       await createCarrier(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

@@ -1,17 +1,17 @@
-import Medusa from "@medusajs/js-sdk"
+import Medusa from "@medusajs/js-sdk";
 
 export const sdk = new Medusa({
   baseUrl: "/",
   auth: {
-    type: "jwt",
+    type: "session",
   },
-})
+});
 
 // Helper to get auth headers
 const getAuthHeaders = (): Record<string, string> => {
-  const token = localStorage.getItem("medusa_auth_token")
-  return token ? { Authorization: `Bearer ${token}` } : {}
-}
+  const token = localStorage.getItem("medusa_auth_token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
 // Custom client with HTTP methods for admin hooks
 export const client = {
@@ -24,10 +24,10 @@ export const client = {
         ...getAuthHeaders(),
       },
       credentials: "include",
-    })
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const data = await response.json()
-    return { data }
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json();
+    return { data };
   },
   async post<T>(url: string, body?: unknown): Promise<{ data: T }> {
     const response = await fetch(url, {
@@ -38,10 +38,10 @@ export const client = {
       },
       credentials: "include",
       body: body ? JSON.stringify(body) : undefined,
-    })
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const data = await response.json()
-    return { data }
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json();
+    return { data };
   },
   async put<T>(url: string, body?: unknown): Promise<{ data: T }> {
     const response = await fetch(url, {
@@ -52,10 +52,10 @@ export const client = {
       },
       credentials: "include",
       body: body ? JSON.stringify(body) : undefined,
-    })
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const data = await response.json()
-    return { data }
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json();
+    return { data };
   },
   async delete<T>(url: string): Promise<{ data: T }> {
     const response = await fetch(url, {
@@ -65,9 +65,9 @@ export const client = {
         ...getAuthHeaders(),
       },
       credentials: "include",
-    })
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const data = await response.json().catch(() => ({}))
-    return { data: data as T }
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const data = await response.json().catch(() => ({}));
+    return { data: data as T };
   },
-}
+};

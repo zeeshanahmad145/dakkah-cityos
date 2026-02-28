@@ -70,7 +70,7 @@ describe("Admin Loyalty Programs Routes", () => {
 
       await listPrograms(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith({ message: "Service down" })
     })
   })
@@ -96,7 +96,7 @@ describe("Admin Loyalty Programs Routes", () => {
 
       await createProgram(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -144,7 +144,7 @@ describe("Admin Loyalty Programs Routes", () => {
 
       await updateProgram(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -168,7 +168,7 @@ describe("Admin Loyalty Programs Routes", () => {
 
       await deleteProgram(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

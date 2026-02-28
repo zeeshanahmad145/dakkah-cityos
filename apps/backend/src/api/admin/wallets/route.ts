@@ -9,7 +9,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const wallets = await walletService.listWallets(
       {},
-      { take: limit, skip: offset, order: { created_at: "DESC" } },
+      { take: limit, skip: offset },
     );
     const count = await walletService.countWallets();
     return res.json({ wallets: Array.isArray(wallets) ? wallets : [], count });

@@ -1,5 +1,6 @@
 import { SubscriberArgs, type SubscriberConfig } from "@medusajs/framework";
 import { syncInventoryToPayloadWorkflow } from "../workflows/sync-inventory-to-payload";
+import { syncOrderToErpnextWorkflow } from "../workflows/sync-order-to-erpnext";
 
 export default async function orderPlacedHandler({
   event: { data },
@@ -52,6 +53,19 @@ export default async function orderPlacedHandler({
   } catch (error: any) {
     logger.error(
       `[PayloadSync] Order workflow failed for order ${data.id}: ${error.message}`,
+    );
+  }
+
+  try {
+    logger.info(
+      `[ERPNextSync] Triggering outbound sync for order ${data.id}...`,
+    );
+    await syncOrderToErpnextWorkflow(container).run({
+      input: { orderId: data.id },
+    });
+  } catch (error: any) {
+    logger.error(
+      `[ERPNextSync] Order sync failed for order ${data.id}: ${error.message}`,
     );
   }
 }

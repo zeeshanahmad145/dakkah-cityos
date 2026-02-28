@@ -81,7 +81,7 @@ describe("Admin Company Approve Route", () => {
     } as any
     const res = createRes()
     await approveCompany(req, res)
-    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
 

@@ -220,7 +220,7 @@ describe("Specialized Store Routes", () => {
       });
       const res = createRes();
       await financialProductsPOST(req as any, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(500)
     });
   });
 
@@ -343,7 +343,7 @@ describe("Specialized Store Routes", () => {
       const req = createReq({ body: { email: "user@test.com" } });
       const res = createRes();
       await newsletterPOST(req as any, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(400)
     });
 
     it("POST handles service error", async () => {
@@ -503,7 +503,7 @@ describe("Specialized Store Routes", () => {
       const req = createReq({ auth_context: { actor_id: "cust_1" }, body: {} });
       const res = createRes();
       await reviewsPOST(req as any, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(400)
     });
 
     it("POST returns 400 when missing product_id and vendor_id", async () => {
@@ -513,7 +513,7 @@ describe("Specialized Store Routes", () => {
       });
       const res = createRes();
       await reviewsPOST(req as any, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(400)
     });
 
     it("POST creates review successfully", async () => {

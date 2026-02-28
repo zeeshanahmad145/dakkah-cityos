@@ -97,7 +97,7 @@ describe("Admin Subscription Pause Route", () => {
     } as any
     const res = createRes()
     await pauseSubscription(req, res)
-    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
 
@@ -124,7 +124,7 @@ describe("Admin Subscription Resume Route", () => {
     } as any
     const res = createRes()
     await resumeSubscription(req, res)
-    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
 

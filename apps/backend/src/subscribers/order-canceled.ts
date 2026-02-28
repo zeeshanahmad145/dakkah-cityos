@@ -1,5 +1,6 @@
 import { SubscriberArgs, type SubscriberConfig } from "@medusajs/framework";
 import { syncInventoryToPayloadWorkflow } from "../workflows/sync-inventory-to-payload";
+import { cancelFleetbaseDispatchWorkflow } from "../workflows/cancel-fleetbase-dispatch";
 
 export default async function orderCanceledHandler({
   event: { data },
@@ -45,6 +46,27 @@ export default async function orderCanceledHandler({
       await syncInventoryToPayloadWorkflow(container).run({
         input: { inventoryItemId },
       });
+    }
+
+    // Cancel any active Fleetbase driver dispatch
+    const { result: rawFleetResult } = await cancelFleetbaseDispatchWorkflow(
+      container,
+    ).run({
+      input: {
+        orderId: data.id,
+      },
+    });
+
+    const fleetResult = rawFleetResult as { status: string; message?: string };
+
+    if (fleetResult.status === "error") {
+      logger.error(
+        `[Fleetbase] Dispatch cancellation failed for order ${data.id}: ${fleetResult.message}`,
+      );
+    } else if (fleetResult.status !== "skipped") {
+      logger.info(
+        `[Fleetbase] Fleetbase dispatch cancelled for order ${data.id}`,
+      );
     }
   } catch (error: any) {
     logger.error(

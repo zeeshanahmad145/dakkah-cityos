@@ -18,8 +18,8 @@ interface PaymentTerm {
   name: string;
   code: string;
   net_days: number;
-  discount_percent: number;
-  discount_days: number;
+  early_payment_discount_percent: number;
+  early_payment_discount_days: number;
   is_default: boolean;
   is_active: boolean;
 }
@@ -34,8 +34,8 @@ const PaymentTermsPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     net_days: 30,
-    discount_percent: 0,
-    discount_days: 0,
+    early_payment_discount_percent: 0,
+    early_payment_discount_days: 0,
     is_default: false,
   });
 
@@ -64,10 +64,13 @@ const PaymentTermsPage = () => {
         ? `/admin/payment-terms/${editingTerm.id}`
         : "/admin/payment-terms";
 
+      const code = generatePreviewCode();
+      const payload = { ...formData, code };
+
       if (editingTerm) {
-        await client.put(url, formData);
+        await client.put(url, payload);
       } else {
-        await client.post(url, formData);
+        await client.post(url, payload);
       }
 
       fetchTerms();
@@ -93,8 +96,8 @@ const PaymentTermsPage = () => {
     setFormData({
       name: term.name,
       net_days: term.net_days,
-      discount_percent: term.discount_percent,
-      discount_days: term.discount_days,
+      early_payment_discount_percent: term.early_payment_discount_percent || 0,
+      early_payment_discount_days: term.early_payment_discount_days || 0,
       is_default: term.is_default,
     });
     setShowForm(true);
@@ -106,15 +109,18 @@ const PaymentTermsPage = () => {
     setFormData({
       name: "",
       net_days: 30,
-      discount_percent: 0,
-      discount_days: 0,
+      early_payment_discount_percent: 0,
+      early_payment_discount_days: 0,
       is_default: false,
     });
   };
 
   const generatePreviewCode = () => {
-    if (formData.discount_percent > 0 && formData.discount_days > 0) {
-      return `${formData.discount_percent}/${formData.discount_days} Net ${formData.net_days}`;
+    if (
+      formData.early_payment_discount_percent > 0 &&
+      formData.early_payment_discount_days > 0
+    ) {
+      return `${formData.early_payment_discount_percent}/${formData.early_payment_discount_days} Net ${formData.net_days}`;
     }
     return `Net ${formData.net_days}`;
   };
@@ -219,20 +225,21 @@ const PaymentTermsPage = () => {
 
               {/* Discount Percent */}
               <div>
-                <Label htmlFor="discount_percent">
+                <Label htmlFor="early_payment_discount_percent">
                   Early Payment Discount (%)
                 </Label>
                 <Input
-                  id="discount_percent"
+                  id="early_payment_discount_percent"
                   type="number"
                   min={0}
                   max={100}
                   step={0.5}
-                  value={formData.discount_percent}
+                  value={formData.early_payment_discount_percent}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      discount_percent: parseFloat(e.target.value) || 0,
+                      early_payment_discount_percent:
+                        parseFloat(e.target.value) || 0,
                     })
                   }
                 />
@@ -243,20 +250,23 @@ const PaymentTermsPage = () => {
 
               {/* Discount Days */}
               <div>
-                <Label htmlFor="discount_days">Discount Valid For (Days)</Label>
+                <Label htmlFor="early_payment_discount_days">
+                  Discount Valid For (Days)
+                </Label>
                 <Input
-                  id="discount_days"
+                  id="early_payment_discount_days"
                   type="number"
                   min={0}
                   max={formData.net_days}
-                  value={formData.discount_days}
+                  value={formData.early_payment_discount_days}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      discount_days: parseInt(e.target.value) || 0,
+                      early_payment_discount_days:
+                        parseInt(e.target.value) || 0,
                     })
                   }
-                  disabled={formData.discount_percent === 0}
+                  disabled={formData.early_payment_discount_percent === 0}
                 />
                 <Text className="text-xs text-ui-fg-subtle mt-1">
                   Days to pay and receive the discount
@@ -272,10 +282,10 @@ const PaymentTermsPage = () => {
               <Text className="text-xl font-mono font-bold">
                 {generatePreviewCode()}
               </Text>
-              {formData.discount_percent > 0 && (
+              {formData.early_payment_discount_percent > 0 && (
                 <Text className="text-sm text-ui-fg-subtle mt-2">
-                  Customers paying within {formData.discount_days} days save{" "}
-                  {formData.discount_percent}%
+                  Customers paying within {formData.early_payment_discount_days}{" "}
+                  days save {formData.early_payment_discount_percent}%
                 </Text>
               )}
             </div>
@@ -365,13 +375,13 @@ const PaymentTermsPage = () => {
                     <Text>{term.net_days} days</Text>
                   </td>
                   <td className="p-4">
-                    {term.discount_percent > 0 ? (
+                    {term.early_payment_discount_percent > 0 ? (
                       <div>
                         <Text className="font-medium text-green-600">
-                          {term.discount_percent}% off
+                          {term.early_payment_discount_percent}% off
                         </Text>
                         <Text className="text-xs text-ui-fg-subtle">
-                          if paid within {term.discount_days} days
+                          if paid within {term.early_payment_discount_days} days
                         </Text>
                       </div>
                     ) : (

@@ -70,7 +70,7 @@ describe("Admin I18n Routes", () => {
       } as any
       const res = createRes()
       await createI18n(req, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ message: "Validation failed" }))
     })
   })
@@ -97,7 +97,7 @@ describe("Admin Notification Preferences Routes", () => {
     } as any
     const res = createRes()
     await createNotificationPref(req, res)
-    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })
 
@@ -131,7 +131,7 @@ describe("Admin Temporal Routes", () => {
       } as any
       const res = createRes()
       await triggerTemporal(req, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

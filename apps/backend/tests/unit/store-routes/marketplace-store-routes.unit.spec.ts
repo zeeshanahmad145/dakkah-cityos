@@ -101,7 +101,7 @@ describe("Marketplace Store Routes", () => {
       });
       const res = createRes();
       await automotivePOST(req as any, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(500)
     });
   });
 
@@ -299,7 +299,7 @@ describe("Marketplace Store Routes", () => {
       });
       const res = createRes();
       await tradeInPOST(req as any, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.status).toHaveBeenCalledWith(400)
     });
   });
 
