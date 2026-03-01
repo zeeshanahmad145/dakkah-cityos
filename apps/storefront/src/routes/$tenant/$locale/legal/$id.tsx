@@ -373,7 +373,7 @@ function LegalDetailPage() {
                   Client Reviews
                 </h2>
                 <div className="space-y-4">
-                  {service.reviews.map((review: any, idx: number) => (
+                  {(service.reviews ?? []).map((review: any, idx: number) => (
                     <div
                       key={idx}
                       className="pb-4 border-b border-ds-border last:border-0"

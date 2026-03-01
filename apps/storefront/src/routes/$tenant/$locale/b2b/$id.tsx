@@ -267,7 +267,7 @@ function B2BDetailPage() {
                   Products
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {item.products.map((product: any, idx: number) => (
+                  {(item.products ?? []).map((product: any, idx: number) => (
                     <div
                       key={idx}
                       className="border border-ds-border rounded-lg p-4"

@@ -269,6 +269,21 @@ const SEED_COMPANIES = [
   },
 ];
 
+async function fetchCompanyTeam(companyId: string): Promise<any[]> {
+  try {
+    const { Pool } = await import("pg");
+    const pool = new Pool({ connectionString: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL });
+    const result = await pool.query(
+      "SELECT id, company_id, customer_id, role, status, spending_limit, approval_limit, joined_at FROM company_user WHERE company_id = $1 AND deleted_at IS NULL",
+      [companyId]
+    );
+    await pool.end();
+    return result.rows;
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params;
 
@@ -279,6 +294,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       if (company) {
         const seedMatch =
           SEED_COMPANIES.find((c) => c.id === id) || SEED_COMPANIES[0];
+        let team: any[] = [];
+        try {
+          const raw = await companyService.listCompanyUsers({ company_id: id });
+          team = Array.isArray(raw) ? raw : [];
+        } catch {}
+        if (team.length === 0) {
+          team = await fetchCompanyTeam(id);
+        }
         return res.json({
           company: enrichDetailItem(
             {
@@ -288,6 +311,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
                 company.metadata?.thumbnail ||
                 seedMatch.thumbnail,
               reviews: seedMatch.reviews,
+              team,
             },
             "companies",
           ),
@@ -298,5 +322,5 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
   const seedMatch =
     SEED_COMPANIES.find((c) => c.id === id) || SEED_COMPANIES[0];
-  return res.json({ company: seedMatch });
+  return res.json({ company: { ...seedMatch, team: [] } });
 }

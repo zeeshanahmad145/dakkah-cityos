@@ -377,7 +377,7 @@ function EducationDetailPage() {
                   Student Reviews
                 </h2>
                 <div className="space-y-4">
-                  {course.reviews.map((review: any, idx: number) => (
+                  {(course.reviews ?? []).map((review: any, idx: number) => (
                     <div
                       key={idx}
                       className="pb-4 border-b border-ds-border last:border-0"

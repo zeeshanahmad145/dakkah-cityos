@@ -316,7 +316,7 @@ function SocialCommerceDetailPage() {
                   Reviews
                 </h2>
                 <div className="space-y-4">
-                  {product.reviews.map((review: any, idx: number) => (
+                  {(product.reviews ?? []).map((review: any, idx: number) => (
                     <div
                       key={idx}
                       className="pb-4 border-b border-ds-border last:border-0"

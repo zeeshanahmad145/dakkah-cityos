@@ -411,7 +411,7 @@ function TravelDetailPage() {
                   Traveler Reviews
                 </h2>
                 <div className="space-y-4">
-                  {pkg.reviews.map((review: any, idx: number) => (
+                  {(pkg.reviews ?? []).map((review: any, idx: number) => (
                     <div
                       key={idx}
                       className="pb-4 border-b border-ds-border last:border-0"

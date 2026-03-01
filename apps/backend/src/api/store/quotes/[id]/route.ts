@@ -383,6 +383,21 @@ const SEED_QUOTES = [
   },
 ];
 
+async function fetchQuoteItems(id: string): Promise<any[]> {
+  try {
+    const { Pool } = await import("pg");
+    const pool = new Pool({ connectionString: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL });
+    const result = await pool.query(
+      "SELECT id, quote_id, title, description, quantity, unit_price, subtotal, tax_total, total FROM quote_item WHERE quote_id = $1 AND deleted_at IS NULL ORDER BY created_at",
+      [id]
+    );
+    await pool.end();
+    return result.rows;
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const quoteModuleService = req.scope.resolve("quote") as unknown as any;
@@ -396,6 +411,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       });
       items = Array.isArray(rawItems) ? rawItems : [rawItems].filter(Boolean);
     } catch {}
+    if (items.length === 0) {
+      items = await fetchQuoteItems(id);
+    }
     const enriched = enrichDetailItem({ ...quote, items }, "b2b");
     res.json({ quote: enriched });
   } catch (error: unknown) {

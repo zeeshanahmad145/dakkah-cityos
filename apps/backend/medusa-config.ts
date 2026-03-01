@@ -19,6 +19,9 @@ module.exports = defineConfig({
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
     backendUrl:
       process.env.MEDUSA_BACKEND_URL ||
+      (process.env.REPLIT_DOMAINS
+        ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`
+        : undefined) ||
       (process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
         : undefined) ||
@@ -33,7 +36,17 @@ module.exports = defineConfig({
           .map((h) => h.trim());
       }
 
+      const adminBackendUrl =
+        process.env.MEDUSA_BACKEND_URL ||
+        (process.env.REPLIT_DOMAINS
+          ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`
+          : undefined) ||
+        "http://localhost:9000";
+
       return {
+        define: {
+          __BACKEND_URL__: JSON.stringify(adminBackendUrl),
+        },
         server: {
           allowedHosts,
           hmr: false,

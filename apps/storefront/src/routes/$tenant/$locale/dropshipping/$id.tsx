@@ -350,7 +350,7 @@ function DropshippingDetailPage() {
                   Available Products
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {supplier.products.map((product: any) => (
+                  {(supplier.products ?? []).map((product: any) => (
                     <div
                       key={product.id}
                       className="border border-ds-border rounded-lg p-4 hover:bg-ds-muted/50 transition-colors"

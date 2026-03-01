@@ -104,6 +104,21 @@ const SEED_INVOICES: Record<string, any> = {
   },
 };
 
+async function fetchInvoiceItems(id: string): Promise<any[]> {
+  try {
+    const { Pool } = await import("pg");
+    const pool = new Pool({ connectionString: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL });
+    const result = await pool.query(
+      "SELECT id, invoice_id, title, description, quantity, unit_price, subtotal, tax_total, total FROM invoice_item WHERE invoice_id = $1 AND deleted_at IS NULL ORDER BY created_at",
+      [id]
+    );
+    await pool.end();
+    return result.rows;
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params;
   try {
@@ -114,6 +129,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       const raw = await invoiceService.listInvoiceItems({ invoice_id: id });
       items = Array.isArray(raw) ? raw : [raw].filter(Boolean);
     } catch {}
+    if (items.length === 0) {
+      items = await fetchInvoiceItems(id);
+    }
     return res.json({
       invoice: enrichDetailItem({ ...invoice, line_items: items }, "b2b"),
     });

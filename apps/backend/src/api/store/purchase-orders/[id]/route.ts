@@ -43,6 +43,18 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       });
       items = Array.isArray(rawItems) ? rawItems : [rawItems].filter(Boolean);
     } catch {}
+    if (items.length === 0) {
+      try {
+        const { Pool } = await import("pg");
+        const pool = new Pool({ connectionString: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL });
+        const result = await pool.query(
+          "SELECT id, purchase_order_id, title, description, sku, quantity, unit_price, subtotal, total, status FROM purchase_order_item WHERE purchase_order_id = $1 AND deleted_at IS NULL ORDER BY created_at",
+          [id]
+        );
+        await pool.end();
+        items = result.rows;
+      } catch {}
+    }
 
     let company: any = null;
     try {

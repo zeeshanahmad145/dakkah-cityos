@@ -34,7 +34,7 @@ SENTRY_ORG = "dakkah-cityos"
 SENTRY_PROJECT = "dakkah-cityos-sentry-project"
 
 [userenv.development]
-MEDUSA_BACKEND_URL = "http://localhost:9000"
+MEDUSA_BACKEND_URL = "https://f76865b8-a3a7-41f9-85b2-b0ade8a4fd85-00-3o74vg6b4mqvs.sisko.replit.dev"
 VITE_MEDUSA_BACKEND_URL = "http://localhost:9000"
 
 [userenv.production]

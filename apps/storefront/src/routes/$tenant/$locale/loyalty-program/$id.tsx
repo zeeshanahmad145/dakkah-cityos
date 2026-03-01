@@ -264,7 +264,7 @@ function LoyaltyProgramDetailPage() {
                   Membership Tiers
                 </h2>
                 <div className="space-y-3">
-                  {program.tiers.map((tier: any, idx: number) => (
+                  {(program.tiers ?? []).map((tier: any, idx: number) => (
                     <div
                       key={idx}
                       className="bg-ds-muted/30 rounded-lg p-4 flex items-center justify-between"

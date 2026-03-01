@@ -311,7 +311,7 @@ function VolumeDealsPage() {
                           <p className="text-xs font-medium text-ds-foreground">
                             {t(locale, "volume_deals.pricing_tiers")}:
                           </p>
-                          {item.tiers.map((tier: any, idx: number) => (
+                          {(item.tiers ?? []).map((tier: any, idx: number) => (
                             <div
                               key={idx}
                               className={`flex justify-between items-center text-sm px-3 py-1.5 rounded-lg ${idx === item.tiers.length - 1 ? "bg-ds-success/10 border border-ds-success/30" : "bg-ds-muted/50"}`}

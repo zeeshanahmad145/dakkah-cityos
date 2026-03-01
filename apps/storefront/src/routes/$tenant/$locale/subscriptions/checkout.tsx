@@ -242,7 +242,7 @@ function SubscriptionCheckoutPage() {
                     Included Features
                   </div>
                   <ul className="space-y-2">
-                    {((plan.features as string[] | undefined) as string[]).slice(0, 5).map((feature, index) => (
+                    {((plan.features as string[] | undefined) ?? []).slice(0, 5).map((feature, index) => (
                       <li
                         key={index}
                         className="flex items-start gap-2 text-sm text-ds-muted-foreground"
@@ -251,9 +251,9 @@ function SubscriptionCheckoutPage() {
                         {feature}
                       </li>
                     ))}
-                    {((plan.features as string[] | undefined) as string[]).length > 5 && (
+                    {((plan.features as string[] | undefined) ?? []).length > 5 && (
                       <li className="text-sm text-ds-muted-foreground">
-                        + {((plan.features as string[] | undefined) as string[]).length - 5} more features
+                        + {((plan.features as string[] | undefined) ?? []).length - 5} more features
                       </li>
                     )}
                   </ul>

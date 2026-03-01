@@ -295,7 +295,7 @@ function HealthcareDetailPage() {
                   Services
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {provider.services.map((service: any, idx: number) => (
+                  {(provider.services ?? []).map((service: any, idx: number) => (
                     <div
                       key={idx}
                       className="flex items-center gap-2 text-sm p-3 bg-ds-muted/30 rounded-lg"
@@ -349,7 +349,7 @@ function HealthcareDetailPage() {
                   Patient Reviews
                 </h2>
                 <div className="space-y-4">
-                  {provider.reviews.map((review: any, idx: number) => (
+                  {(provider.reviews ?? []).map((review: any, idx: number) => (
                     <div
                       key={idx}
                       className="pb-4 border-b border-ds-border last:border-0"
