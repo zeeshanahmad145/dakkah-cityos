@@ -697,6 +697,376 @@ async function seedVerticalSampleData() {
   }
 }
 
+async function seedB2BAndCustomerTables() {
+  console.log("\n=== STEP 11: Seeding B2B, sub-tables, memberships, subscriptions ===");
+  const ts = now();
+
+  const checkEmpty = async (table) => {
+    const r = await q(`SELECT count(*) as cnt FROM "${table}"`);
+    return parseInt(r[0].cnt) === 0;
+  };
+
+  // Query customers by known emails (stable IDs)
+  const custs = await q(`SELECT id, email, first_name FROM customer WHERE email LIKE '%@dakkah.com' ORDER BY email LIMIT 9`);
+  if (!custs.length) { console.log("  No dakkah customers found, skipping B2B seed"); return; }
+
+  // Map by first name for convenience
+  const byEmail = Object.fromEntries(custs.map(c => [c.email, c.id]));
+  const cIds = custs.map(c => c.id);
+
+  // ── 1. Companies ──────────────────────────────────────────────────────────
+  if (await checkEmpty("company")) {
+    const companies = [
+      ["comp_01", "Al-Faisal Trading", "trading", "+966112345001", "info@alfaisal.com", "approved", "gold", 320, 500000],
+      ["comp_02", "Jeddah Tech Solutions", "technology", "+966122345002", "info@jeddahtech.com", "approved", "platinum", 150, 750000],
+      ["comp_03", "Eastern Province Supplies", "manufacturing", "+966132345003", "info@eprovince.com", "approved", "silver", 85, 200000],
+      ["comp_04", "Madinah Hospitality Group", "hospitality", "+966142345004", "info@madinahhosp.com", "approved", "gold", 180, 400000],
+      ["comp_05", "Tabuk Fresh Foods", "food_beverage", "+966142345005", "info@tabukfresh.com", "approved", "silver", 65, 150000],
+    ];
+    for (const [id, name, industry, phone, email, status, tier, emp, credit] of companies) {
+      await q(`INSERT INTO company (id, tenant_id, name, industry, phone, email, status, tier, employee_count, credit_limit, currency_code, created_at, updated_at, raw_credit_limit)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'sar',$11,$11,$12) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, name, industry, phone, email, status, tier, emp, credit * 100, ts,
+          JSON.stringify({value: String(credit * 100), precision: 2})]);
+    }
+    console.log("  Created 5 companies");
+  }
+
+  // ── 2. Membership Tiers ───────────────────────────────────────────────────
+  if (await checkEmpty("membership_tier")) {
+    const tiers = [
+      ["mt_silver", "Silver", 0, 4999, 500, 1.0],
+      ["mt_gold", "Gold", 5000, 19999, 1000, 1.5],
+      ["mt_platinum", "Platinum", 20000, null, 2500, 2.0],
+    ];
+    for (const [id, name, minSpend, maxSpend, points, multiplier] of tiers) {
+      await q(`INSERT INTO membership_tier (id, tenant_id, name, min_spend, max_spend, annual_fee, points_bonus, points_multiplier, benefits, currency_code, is_active, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,0,$6,$7,'[]','sar',true,$8,$8) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, name, minSpend, maxSpend, points, multiplier, ts]);
+    }
+    console.log("  Created 3 membership tiers");
+  }
+
+  // ── 3. Subscription Plans ─────────────────────────────────────────────────
+  if (await checkEmpty("subscription_plan")) {
+    const plans = [
+      ["sub_plan_01", "CityOS Pilot", "monthly", 29900, "Up to 3 users"],
+      ["sub_plan_02", "CityOS District", "monthly", 99900, "Up to 15 users"],
+      ["sub_plan_03", "CityOS Metropolis", "monthly", 29990, "Unlimited users"],
+      ["sub_plan_04", "CityOS District Annual", "yearly", 999000, "Annual billing discount"],
+      ["sub_plan_05", "Grocery Fresh Weekly", "weekly", 8900, "Fresh grocery delivery"],
+    ];
+    for (const [id, name, interval, price, desc] of plans) {
+      await q(`INSERT INTO subscription_plan (id, tenant_id, name, description, billing_interval, price, currency_code, is_active, trial_days, created_at, updated_at, raw_price)
+        VALUES ($1,$2,$3,$4,$5,$6,'sar',true,14,$7,$7,$8) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, name, desc, interval, price, ts, JSON.stringify({value: String(price), precision: 2})]);
+    }
+    console.log("  Created 5 subscription plans");
+  }
+
+  // ── 4. Charity Orgs ───────────────────────────────────────────────────────
+  if (await checkEmpty("charity_org")) {
+    const orgs = [
+      ["cho-001", "Saudi Red Crescent Authority", "humanitarian", "srca.org.sa"],
+      ["cho-002", "Saned Foundation", "social_welfare", "saned.org.sa"],
+      ["cho-003", "Ehsan Relief", "humanitarian", "ehsan.org.sa"],
+      ["cho-004", "Riyada Education Fund", "education", "riyada.org.sa"],
+      ["cho-005", "Tawasol Disability Support", "disability", "tawasol.org.sa"],
+    ];
+    for (const [id, name, cat, website] of orgs) {
+      await q(`INSERT INTO charity_org (id, tenant_id, name, category, website, is_verified, is_active, total_raised, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,true,true,0,$6,$6) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, name, cat, `https://${website}`, ts]);
+    }
+    console.log("  Created 5 charity orgs");
+  }
+
+  // ── 5. Company Users (link customers to companies) ────────────────────────
+  if (await checkEmpty("company_user")) {
+    const links = [
+      ["cu_001", "comp_01", cIds[0], "admin", 50000, 20000],
+      ["cu_002", "comp_01", cIds[1], "buyer", 10000, 5000],
+      ["cu_003", "comp_02", cIds[2], "admin", 75000, 30000],
+      ["cu_004", "comp_02", cIds[3], "buyer", 15000, 7500],
+      ["cu_005", "comp_03", cIds[4], "admin", 30000, 12000],
+      ["cu_006", "comp_03", cIds[5], "buyer", 8000, 4000],
+      ["cu_007", "comp_04", cIds[6], "admin", 20000, 10000],
+      ["cu_008", "comp_04", cIds[7], "buyer", 12000, 6000],
+      ["cu_009", "comp_05", cIds[0], "buyer", 5000, 2500],
+      ["cu_010", "comp_05", cIds[3], "buyer", 5000, 2500],
+    ];
+    for (const [id, compId, custId, role, limit, approvalLimit] of links) {
+      await q(`INSERT INTO company_user (id, company_id, customer_id, role, spending_limit, spending_limit_period, current_period_spend, approval_limit, status, joined_at, raw_spending_limit, raw_current_period_spend, raw_approval_limit, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,'monthly',0,$6,'active',$7,$8,$9,$10,$7,$7) ON CONFLICT (id) DO NOTHING`,
+        [id, compId, custId, role, limit * 100, approvalLimit * 100, ts,
+          JSON.stringify({value: String(limit * 100), precision: 2}),
+          JSON.stringify({value: "0", precision: 2}),
+          JSON.stringify({value: String(approvalLimit * 100), precision: 2})]);
+    }
+    console.log("  Created 10 company users");
+  }
+
+  // ── 6. Purchase Orders ────────────────────────────────────────────────────
+  if (await checkEmpty("purchase_order")) {
+    const pos = [
+      ["po_001", cIds[0], "comp_01", 164185, "confirmed"],
+      ["po_002", cIds[0], "comp_01", 205875, "pending"],
+      ["po_003", cIds[3], "comp_02", 1389000, "confirmed"],
+      ["po_004", cIds[4], "comp_03", 431750, "confirmed"],
+      ["po_005", cIds[7], "comp_04", 1493850, "pending"],
+    ];
+    for (const [id, custId, compId, total, status] of pos) {
+      await q(`INSERT INTO purchase_order (id, tenant_id, customer_id, company_id, po_number, status, currency_code, subtotal, tax_total, total, required_by, created_at, updated_at, raw_subtotal, raw_tax_total, raw_total)
+        VALUES ($1,$2,$3,$4,$5,$6,'sar',$7,0,$7,$8,$8,$8,$9,$10,$9) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, custId, compId, `PO-${id.toUpperCase()}`, status, total, ts,
+          JSON.stringify({value: String(total), precision: 2}),
+          JSON.stringify({value: "0", precision: 2})]);
+    }
+    console.log("  Created 5 purchase orders");
+  }
+
+  // ── 7. Purchase Order Items ───────────────────────────────────────────────
+  if (await checkEmpty("purchase_order_item")) {
+    const items = [
+      ["poi_001_1", "po_001", "Premium Wireless Earbuds", "SKU-EAR-001", 2, 29900, 59800, "confirmed"],
+      ["poi_001_2", "po_001", "Smart Fitness Watch Pro", "SKU-WAT-002", 1, 79900, 79900, "confirmed"],
+      ["poi_001_3", "po_001", "USB-C Hub 7-in-1", "SKU-HUB-003", 3, 14900, 44700, "confirmed"],
+      ["poi_002_1", "po_002", "Organic Arabic Coffee Blend", "SKU-COF-001", 5, 8900, 44500, "pending"],
+      ["poi_002_2", "po_002", "Saudi Dates Premium Box", "SKU-DAT-002", 3, 12000, 36000, "pending"],
+      ["poi_002_3", "po_002", "Luxury Oud Perfume", "SKU-OUD-003", 2, 45000, 90000, "pending"],
+      ["poi_003_1", "po_003", "Office Chair Executive", "SKU-CHR-001", 4, 120000, 480000, "confirmed"],
+      ["poi_003_2", "po_003", "Standing Desk 180cm", "SKU-DSK-002", 2, 250000, 500000, "confirmed"],
+      ["poi_003_3", "po_003", "Monitor 27\" 4K", "SKU-MON-003", 2, 180000, 360000, "pending"],
+      ["poi_004_1", "po_004", "Yoga Mat Premium", "SKU-YOG-001", 10, 15000, 150000, "confirmed"],
+      ["poi_004_2", "po_004", "Resistance Bands Set", "SKU-RES-002", 10, 9500, 95000, "confirmed"],
+      ["poi_004_3", "po_004", "Water Bottle Insulated", "SKU-BOT-003", 20, 6500, 130000, "confirmed"],
+      ["poi_005_1", "po_005", "Laptop Business Pro", "SKU-LAP-001", 3, 350000, 1050000, "pending"],
+      ["poi_005_2", "po_005", "Wireless Keyboard & Mouse", "SKU-KEY-002", 3, 35000, 105000, "pending"],
+      ["poi_005_3", "po_005", "Webcam 4K Business", "SKU-CAM-003", 3, 48000, 144000, "pending"],
+    ];
+    for (const [id, poId, title, sku, qty, unitPrice, subtotal, status] of items) {
+      const tax = Math.round(subtotal * 0.15);
+      await q(`INSERT INTO purchase_order_item (id, purchase_order_id, title, sku, quantity, fulfilled_quantity, unit_price, discount_amount, tax_amount, subtotal, total, status, raw_unit_price, raw_discount_amount, raw_tax_amount, raw_subtotal, raw_total, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,0,$6,0,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$16) ON CONFLICT (id) DO NOTHING`,
+        [id, poId, title, sku, qty, unitPrice, tax, subtotal, subtotal + tax, status,
+          JSON.stringify({value: String(unitPrice), precision: 2}),
+          JSON.stringify({value: "0", precision: 2}),
+          JSON.stringify({value: String(tax), precision: 2}),
+          JSON.stringify({value: String(subtotal), precision: 2}),
+          JSON.stringify({value: String(subtotal + tax), precision: 2}), ts]);
+    }
+    console.log("  Created 15 purchase order items");
+  }
+
+  // ── 8. Invoices ───────────────────────────────────────────────────────────
+  if (await checkEmpty("invoice")) {
+    const invoices = [
+      ["inv_001", cIds[0], "comp_01", "INV-2025-001", "paid", 165155, 24773, 189928],
+      ["inv_002", cIds[2], "comp_02", "INV-2025-002", "paid", 515000, 77250, 592250],
+      ["inv_003", cIds[3], "comp_02", "INV-2025-003", "overdue", 950000, 142500, 1092500],
+      ["inv_004", cIds[4], "comp_03", "INV-2025-004", "paid", 224000, 33600, 257600],
+      ["inv_005", cIds[0], "comp_01", "INV-2025-005", "pending", 540000, 81000, 621000],
+      ["inv_006", cIds[7], "comp_04", "INV-2025-006", "pending", 292500, 43875, 336375],
+    ];
+    for (const [id, custId, compId, num, status, subtotal, tax, total] of invoices) {
+      const issueDate = new Date(Date.now() - 30 * 86400000).toISOString();
+      const dueDate = new Date(Date.now() + 30 * 86400000).toISOString();
+      await q(`INSERT INTO invoice (id, tenant_id, customer_id, company_id, invoice_number, status, issue_date, due_date, currency_code, subtotal, tax_total, total, created_at, updated_at, raw_subtotal, raw_tax_total, raw_total)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'sar',$9,$10,$11,$12,$12,$13,$14,$15) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, custId, compId, num, status, issueDate, dueDate, subtotal, tax, total, ts,
+          JSON.stringify({value: String(subtotal), precision: 2}),
+          JSON.stringify({value: String(tax), precision: 2}),
+          JSON.stringify({value: String(total), precision: 2})]);
+    }
+    console.log("  Created 6 invoices");
+  }
+
+  // ── 9. Invoice Items ──────────────────────────────────────────────────────
+  if (await checkEmpty("invoice_item")) {
+    const items = [
+      ["ii_001_1","inv_001","Premium Wireless Earbuds","ANC earbuds x2",2,29900,59800,8970,68770],
+      ["ii_001_2","inv_001","Smart Fitness Watch Pro","GPS smartwatch",1,79900,79900,11985,91885],
+      ["ii_001_3","inv_001","Delivery Charges","Express shipping",1,4500,4500,0,4500],
+      ["ii_002_1","inv_002","Office Chair Executive","Ergonomic x2",2,120000,240000,36000,276000],
+      ["ii_002_2","inv_002","Standing Desk 180cm","Electric adjustable",1,250000,250000,37500,287500],
+      ["ii_002_3","inv_002","Installation Service","Professional setup",1,20000,20000,0,20000],
+      ["ii_003_1","inv_003","Laptop Business Pro","Intel i7 x2",2,350000,700000,105000,805000],
+      ["ii_003_2","inv_003","Microsoft 365 Business","1yr x5",5,30000,150000,22500,172500],
+      ["ii_003_3","inv_003","IT Setup Consulting","Network config",4,25000,100000,0,100000],
+      ["ii_004_1","inv_004","Organic Coffee 1kg","Arabica x10",10,8900,89000,13350,102350],
+      ["ii_004_2","inv_004","Saudi Medjool Dates 1kg","Premium x10",10,12000,120000,18000,138000],
+      ["ii_004_3","inv_004","Cold Chain Delivery","Refrigerated transport",1,15000,15000,0,15000],
+      ["ii_005_1","inv_005","Yoga Mat Premium","Non-slip x20",20,15000,300000,45000,345000],
+      ["ii_005_2","inv_005","Resistance Bands Set","5-piece x20",20,9500,190000,28500,218500],
+      ["ii_005_3","inv_005","Custom Logo Printing","Branding flat fee",1,50000,50000,0,50000],
+      ["ii_006_1","inv_006","Luxury Oud Perfume 50ml","Premium x5",5,45000,225000,33750,258750],
+      ["ii_006_2","inv_006","Gift Packaging Premium","Luxury box x5",5,7500,37500,0,37500],
+      ["ii_006_3","inv_006","Corporate Engraving","Custom name x5",5,6000,30000,0,30000],
+    ];
+    for (const [id,invId,title,desc,qty,unitPrice,subtotal,taxTotal,total] of items) {
+      await q(`INSERT INTO invoice_item (id, invoice_id, title, description, quantity, unit_price, subtotal, tax_total, total, raw_unit_price, raw_subtotal, raw_tax_total, raw_total, created_at)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) ON CONFLICT (id) DO NOTHING`,
+        [id,invId,title,desc,qty,unitPrice,subtotal,taxTotal,total,
+          JSON.stringify({value:String(unitPrice),precision:2}),
+          JSON.stringify({value:String(subtotal),precision:2}),
+          JSON.stringify({value:String(taxTotal),precision:2}),
+          JSON.stringify({value:String(total),precision:2}), ts]);
+    }
+    console.log("  Created 18 invoice items");
+  }
+
+  // ── 10. Quotes ────────────────────────────────────────────────────────────
+  if (await checkEmpty("quote")) {
+    const quotes = [
+      ["quot_001", cIds[0], "comp_01", "RFQ-2025-001", "approved", 929500, 0, 929500],
+      ["quot_002", cIds[2], "comp_02", "RFQ-2025-002", "pending", 836940, 0, 836940],
+      ["quot_003", cIds[3], "comp_02", "RFQ-2025-003", "approved", 1629500, 0, 1629500],
+      ["quot_004", cIds[4], "comp_03", "RFQ-2025-004", "pending", 2956700, 0, 2956700],
+      ["quot_005", cIds[5], "comp_03", "RFQ-2025-005", "expired", 5740000, 0, 5740000],
+      ["quot_006", cIds[0], "comp_01", "RFQ-2025-006", "pending", 4948200, 0, 4948200],
+    ];
+    for (const [id, custId, compId, refNum, status, total, discount, grandTotal] of quotes) {
+      await q(`INSERT INTO quote (id, tenant_id, customer_id, company_id, reference_number, status, currency_code, subtotal, discount_total, tax_total, total, valid_until, created_at, updated_at, raw_subtotal, raw_discount_total, raw_tax_total, raw_total)
+        VALUES ($1,$2,$3,$4,$5,$6,'sar',$7,$8,0,$9,$10,$10,$10,$11,$12,$13,$14) ON CONFLICT (id) DO NOTHING`,
+        [id, TENANT_ID, custId, compId, refNum, status, total, discount, grandTotal,
+          new Date(Date.now() + 30 * 86400000).toISOString(),
+          JSON.stringify({value:String(total),precision:2}),
+          JSON.stringify({value:String(discount),precision:2}),
+          JSON.stringify({value:"0",precision:2}),
+          JSON.stringify({value:String(grandTotal),precision:2})]);
+    }
+    console.log("  Created 6 quotes");
+  }
+
+  // ── 11. Quote Items ───────────────────────────────────────────────────────
+  if (await checkEmpty("quote_item")) {
+    // Get product/variant IDs
+    const prods = await q(`SELECT p.id as pid, pv.id as vid, p.title FROM product p JOIN product_variant pv ON pv.product_id = p.id LIMIT 5`);
+    if (prods.length) {
+      const items = [
+        ["qi_001_1","quot_001",0,10,26910,2691.00,0,0],
+        ["qi_001_2","quot_001",1,5,75905,3795.25,0,0],
+        ["qi_001_3","quot_001",2,20,8900,1780.00,0,267],
+        ["qi_002_1","quot_002",3,8,40500,3240.00,360,432],
+        ["qi_002_2","quot_002",0,6,26910,1614.60,179.40,215.14],
+        ["qi_002_3","quot_002",1,4,79900,3196.00,0,479.4],
+        ["qi_003_1","quot_003",2,50,8010,4005.00,445,534],
+        ["qi_003_2","quot_003",3,12,42750,5130.00,270,714],
+        ["qi_003_3","quot_003",0,30,25415,7624.50,1347,0],
+        ["qi_004_1","quot_004",1,25,71910,17977.50,1997.50,2397],
+        ["qi_004_2","quot_004",0,25,26910,6727.50,747.50,897],
+        ["qi_004_3","quot_004",2,40,8900,3560.00,0,534],
+        ["qi_005_1","quot_005",3,100,38250,38250.00,4500,0],
+        ["qi_005_2","quot_005",0,50,25415,12707.50,2245,0],
+        ["qi_005_3","quot_005",1,20,67915,13583.00,2397,0],
+        ["qi_006_1","quot_006",2,100,7565,7565.00,1335,0],
+        ["qi_006_2","quot_006",3,60,38250,22950.00,4050,0],
+        ["qi_006_3","quot_006",0,80,23920,19136.00,4784,0],
+      ];
+      for (const [id,qId,pidx,qty,customPrice,subtotal,discount,tax] of items) {
+        const prod = prods[pidx % prods.length];
+        const unitPrice = Math.round(subtotal / qty);
+        const total = subtotal - discount;
+        await q(`INSERT INTO quote_item (id, quote_id, product_id, variant_id, title, quantity, unit_price, custom_unit_price, subtotal, discount_total, tax_total, total, raw_unit_price, raw_custom_unit_price, raw_subtotal, raw_discount_total, raw_tax_total, raw_total, created_at, updated_at)
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$19) ON CONFLICT (id) DO NOTHING`,
+          [id,qId,prod.pid,prod.vid,prod.title,qty,unitPrice,customPrice,subtotal,discount,tax,total,
+            JSON.stringify({value:String(unitPrice),precision:2}),
+            JSON.stringify({value:String(customPrice),precision:2}),
+            JSON.stringify({value:String(subtotal),precision:2}),
+            JSON.stringify({value:String(discount),precision:2}),
+            JSON.stringify({value:String(tax),precision:2}),
+            JSON.stringify({value:String(total),precision:2}), ts]);
+      }
+      console.log("  Created 18 quote items");
+    }
+  }
+
+  // ── 12. Memberships ───────────────────────────────────────────────────────
+  if (await checkEmpty("membership")) {
+    const tiers = await q(`SELECT id FROM membership_tier ORDER BY created_at LIMIT 3`);
+    if (tiers.length) {
+      const tierMap = [tiers[0].id, tiers[1].id, tiers[2].id];
+      for (let i = 0; i < Math.min(custs.length, 8); i++) {
+        const tierIdx = i % 3;
+        const totalSpent = (tierIdx === 0 ? 50000 : tierIdx === 1 ? 200000 : 900000) + i * 10000;
+        await q(`INSERT INTO membership (id, tenant_id, customer_id, tier_id, membership_number, status, joined_at, expires_at, total_points, lifetime_points, total_spent, auto_renew, raw_total_spent, created_at, updated_at)
+          VALUES ($1,$2,$3,$4,$5,'active',$6,$7,$8,$9,$10,true,$11,$6,$6) ON CONFLICT (id) DO NOTHING`,
+          [`mem_${uid()}`, TENANT_ID, custs[i].id, tierMap[tierIdx],
+            `MEM-${new Date().getFullYear()}-${String(i+1).padStart(4,'0')}`,
+            ts, new Date(Date.now() + 365 * 86400000).toISOString(),
+            Math.floor(Math.random() * 5000), Math.floor(Math.random() * 15000), totalSpent,
+            JSON.stringify({value:String(totalSpent),precision:2})]);
+      }
+      console.log(`  Created ${Math.min(custs.length, 8)} memberships`);
+    }
+  }
+
+  // ── 13. Subscriptions ─────────────────────────────────────────────────────
+  if (await checkEmpty("subscription")) {
+    const intervals = ["monthly","yearly","monthly","monthly","yearly","monthly","monthly","monthly"];
+    const statuses = ["active","active","paused","active","active","canceled","active","active"];
+    const prices = [29900, 999000, 14900, 99900, 299000, 14900, 49900, 199000];
+    for (let i = 0; i < Math.min(custs.length, 8); i++) {
+      const subtotal = prices[i];
+      const tax = Math.round(subtotal * 0.15);
+      const total = subtotal + tax;
+      await q(`INSERT INTO subscription (id, customer_id, status, start_date, end_date, current_period_start, current_period_end, billing_interval, billing_interval_count, currency_code, subtotal, tax_total, total, tenant_id, raw_subtotal, raw_tax_total, raw_total, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,1,'sar',$9,$10,$11,$12,$13,$14,$15,$16,$16) ON CONFLICT (id) DO NOTHING`,
+        [`sub_${uid()}`, custs[i].id, statuses[i],
+          new Date(Date.now() - 180 * 86400000).toISOString(),
+          new Date(Date.now() + 185 * 86400000).toISOString(),
+          new Date(Date.now() - 30 * 86400000).toISOString(),
+          new Date(Date.now() + 30 * 86400000).toISOString(),
+          intervals[i], subtotal, tax, total, TENANT_ID,
+          JSON.stringify({value:String(subtotal),precision:2}),
+          JSON.stringify({value:String(tax),precision:2}),
+          JSON.stringify({value:String(total),precision:2}), ts]);
+    }
+    console.log(`  Created ${Math.min(custs.length, 8)} subscriptions`);
+  }
+
+  // ── 14. Service Providers ─────────────────────────────────────────────────
+  if (await checkEmpty("service_provider")) {
+    const providers = [
+      ["Dr. Khaled Al-Rashidi","drkhaled@dakkah.com","Cardiologist","/seed-images/healthcare/1551601651-bc506020d8c7.jpg"],
+      ["Dr. Maha Al-Qassem","drmaha@dakkah.com","Pediatrician","/seed-images/healthcare/1551836022-d5d88e9218df.jpg"],
+      ["Coach Saad Al-Mutairi","coach.saad@dakkah.com","Personal Trainer","/seed-images/fitness/1518611012118-696072aa579a.jpg"],
+      ["Coach Hessa Al-Dossari","coach.hessa@dakkah.com","Yoga Instructor","/seed-images/fitness/1530549387789-4c1017266635.jpg"],
+      ["Groomer Abdulrahman","groomer.abdo@dakkah.com","Pet Groomer","/seed-images/pet-services/1542838132-92c53300491e.jpg"],
+      ["Dr. Nora Al-Shehri","drnora@dakkah.com","Veterinarian","/seed-images/pet-services/1587300003388-59208cc962cb.jpg"],
+      ["Prof. Ahmed Al-Harbi","prof.ahmed@dakkah.com","Senior Instructor","/seed-images/education/1509062522-5beb27ea6e09.jpg"],
+      ["Stylist Lujain Al-Otaibi","stylist.lujain@dakkah.com","Personal Stylist","/seed-images/vendors/1547751514-60a0cf66f5ed.jpg"],
+    ];
+    for (const [name, email, title, avatar] of providers) {
+      await q(`INSERT INTO service_provider (id, tenant_id, name, email, title, avatar_url, status, timezone, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,$6,'active','Asia/Riyadh',$7,$7) ON CONFLICT (id) DO NOTHING`,
+        [`sp_${uid()}`, TENANT_ID, name, email, title, avatar, ts]);
+    }
+    console.log("  Created 8 service providers");
+  }
+
+  // ── 15. Point Transactions ────────────────────────────────────────────────
+  if (await checkEmpty("point_transaction")) {
+    const accounts = await q(`SELECT id FROM loyalty_account LIMIT 6`);
+    const types = ["earn","redeem","expire","earn","earn","redeem"];
+    const descs = [
+      "Points earned on purchase","Redeemed for discount",
+      "Points expired","Bonus on first order","Double points event","Redeemed for voucher"
+    ];
+    for (let i = 0; i < Math.min(accounts.length, 6); i++) {
+      const pts = types[i] === "earn" ? 500 + i * 200 : -(200 + i * 50);
+      const balance = Math.abs(pts) + i * 100;
+      await q(`INSERT INTO point_transaction (id, account_id, tenant_id, type, points, balance_after, description, created_at, updated_at)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$8) ON CONFLICT (id) DO NOTHING`,
+        [`pt_${uid()}`, accounts[i].id, TENANT_ID, types[i] === "expire" ? "expire" : types[i],
+          pts, balance, descs[i], ts]);
+    }
+    console.log("  Created 6 point transactions");
+  }
+
+  console.log("  B2B and sub-table seeding complete");
+}
+
 async function main() {
   const skipImages = process.argv.includes("--skip-images");
   const onlyImages = process.argv.includes("--only-images");
@@ -723,6 +1093,7 @@ async function main() {
       await seedInventory();
       await updateProductImages();
       await seedVerticalSampleData();
+      await seedB2BAndCustomerTables();
     }
 
     console.log("\n============================================================");
@@ -755,6 +1126,19 @@ async function main() {
       UNION ALL SELECT 'cms_pages', count(*) FROM cms_page
       UNION ALL SELECT 'cms_navigation', count(*) FROM cms_navigation
       UNION ALL SELECT 'loyalty_programs', count(*) FROM loyalty_program
+      UNION ALL SELECT 'companies', count(*) FROM company
+      UNION ALL SELECT 'company_users', count(*) FROM company_user
+      UNION ALL SELECT 'purchase_orders', count(*) FROM purchase_order
+      UNION ALL SELECT 'purchase_order_items', count(*) FROM purchase_order_item
+      UNION ALL SELECT 'invoices', count(*) FROM invoice
+      UNION ALL SELECT 'invoice_items', count(*) FROM invoice_item
+      UNION ALL SELECT 'quotes', count(*) FROM quote
+      UNION ALL SELECT 'quote_items', count(*) FROM quote_item
+      UNION ALL SELECT 'memberships', count(*) FROM membership
+      UNION ALL SELECT 'membership_tiers', count(*) FROM membership_tier
+      UNION ALL SELECT 'subscriptions', count(*) FROM subscription
+      UNION ALL SELECT 'service_providers', count(*) FROM service_provider
+      UNION ALL SELECT 'point_transactions', count(*) FROM point_transaction
       ORDER BY entity
     `);
 
