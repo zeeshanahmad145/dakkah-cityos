@@ -3,7 +3,7 @@ import { handleApiError } from "../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("eventModuleService") as unknown as any;
+    const moduleService = req.scope.resolve("eventOutbox") as unknown as any;
     const {
       limit = "20",
       offset = "0",

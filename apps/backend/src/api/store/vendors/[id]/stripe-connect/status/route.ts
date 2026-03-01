@@ -10,7 +10,7 @@ export async function GET(
 ) {
   const { id } = req.params
   const query = req.scope.resolve("query") as unknown as any
-  const vendorService = req.scope.resolve("vendorModuleService") as unknown as any
+  const vendorService = req.scope.resolve("vendor") as unknown as any
 
   const { data: vendors } = await query.graph({
     entity: "vendors",

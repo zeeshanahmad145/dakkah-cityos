@@ -28,7 +28,7 @@ export async function POST(
   } = parsed.data
 
   const query = req.scope.resolve("query") as unknown as any
-  const bookingService = req.scope.resolve("bookingModuleService") as unknown as any
+  const bookingService = req.scope.resolve("booking") as unknown as any
 
   const { data: bookings } = await query.graph({
     entity: "booking",

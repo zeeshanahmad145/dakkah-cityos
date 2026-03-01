@@ -208,7 +208,7 @@ async function resolveTenantId(
   }
 
   try {
-    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any;
+    const tenantService = req.scope.resolve("tenant") as unknown as any;
     if (tenantService?.listTenants) {
       const [tenants] = await tenantService.listTenants({ slug: tenantSlug });
       if (tenants?.length > 0) {

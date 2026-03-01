@@ -69,7 +69,7 @@ export async function PUT(
       status
     } = parsed.data
 
-    const subscriptionService = req.scope.resolve("subscriptionModuleService") as unknown as any
+    const subscriptionService = req.scope.resolve("subscription") as unknown as any
 
     await subscriptionService.updateSubscriptionDiscounts({
       selector: { id },
@@ -101,7 +101,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = req.params
-    const subscriptionService = req.scope.resolve("subscriptionModuleService") as unknown as any
+    const subscriptionService = req.scope.resolve("subscription") as unknown as any
 
     await subscriptionService.deleteSubscriptionDiscounts(id)
 

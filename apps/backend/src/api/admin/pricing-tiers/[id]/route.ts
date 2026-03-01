@@ -76,7 +76,7 @@ export async function PUT(
       priority
     } = parsed.data
 
-    const companyService = req.scope.resolve("companyModuleService") as unknown as any
+    const companyService = req.scope.resolve("company") as unknown as any
 
     await companyService.updatePricingTiers({
       selector: { id },
@@ -125,7 +125,7 @@ export async function DELETE(
       })
     }
 
-    const companyService = req.scope.resolve("companyModuleService") as unknown as any
+    const companyService = req.scope.resolve("company") as unknown as any
     await companyService.deletePricingTiers(id)
 
     res.json({ message: "Pricing tier deleted", id })

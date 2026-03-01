@@ -64,7 +64,7 @@ async function handleDeliveryStatusUpdate(payload: any, container: any) {
       updatedMetadata.fleetbase_out_for_delivery_at = new Date().toISOString();
     }
 
-    const orderService = container.resolve("orderService") as unknown as any;
+    const orderService = container.resolve("order") as unknown as any;
     await orderService.update(order.id, { metadata: updatedMetadata });
 
     if (status === "delivered") {
@@ -131,7 +131,7 @@ async function handleDriverAssigned(payload: any, container: any) {
       fleetbase_driver_assigned_at: new Date().toISOString(),
     };
 
-    const orderService = container.resolve("orderService") as unknown as any;
+    const orderService = container.resolve("order") as unknown as any;
     await orderService.update(order.id, { metadata: updatedMetadata });
 
     log.info(
@@ -190,7 +190,7 @@ async function handleRouteUpdated(payload: any, container: any) {
       fleetbase_route_updated_at: new Date().toISOString(),
     };
 
-    const orderService = container.resolve("orderService") as unknown as any;
+    const orderService = container.resolve("order") as unknown as any;
     await orderService.update(order.id, { metadata: updatedMetadata });
 
     log.info(
@@ -256,7 +256,7 @@ async function handleDeliveryCompleted(payload: any, container: any) {
       fleetbase_last_status_update: new Date().toISOString(),
     };
 
-    const orderService = container.resolve("orderService") as unknown as any;
+    const orderService = container.resolve("order") as unknown as any;
     await orderService.update(order.id, { metadata: updatedMetadata });
 
     try {

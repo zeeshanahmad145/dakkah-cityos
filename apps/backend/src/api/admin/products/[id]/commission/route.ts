@@ -60,7 +60,7 @@ export async function POST(
     }
     const { rate, type = "percentage" } = parsed.data
 
-    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any
+    const commissionService = req.scope.resolve("commission") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     // Validate rate
@@ -113,7 +113,7 @@ export async function PUT(
     }
     const { rate, type } = parsed.data
 
-    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any
+    const commissionService = req.scope.resolve("commission") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     // Find existing override
@@ -168,7 +168,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = req.params
-    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any
+    const commissionService = req.scope.resolve("commission") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     const { data: existing } = await query.graph({

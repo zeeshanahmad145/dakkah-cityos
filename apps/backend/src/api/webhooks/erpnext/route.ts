@@ -140,7 +140,7 @@ async function handleInvoiceStatusChange(payload: any, container: any) {
       );
     }
 
-    const orderService = container.resolve("orderService") as unknown as any;
+    const orderService = container.resolve("order") as unknown as any;
     await orderService.update(order.id, { metadata: updatedMetadata });
 
     log.info(
@@ -232,7 +232,7 @@ async function handlePaymentEntry(payload: any, container: any) {
       );
     }
 
-    const orderService = container.resolve("orderService") as unknown as any;
+    const orderService = container.resolve("order") as unknown as any;
     await orderService.update(order.id, { metadata: updatedMetadata });
 
     log.info(

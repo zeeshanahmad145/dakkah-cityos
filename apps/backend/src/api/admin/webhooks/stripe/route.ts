@@ -74,7 +74,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
             if (orders && orders.length > 0) {
               const orderModuleService =
-                req.scope.resolve("orderModuleService") as unknown as any;
+                req.scope.resolve("order") as unknown as any;
               await orderModuleService.updateOrders({
                 id: orderId,
                 metadata: {
@@ -142,7 +142,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
             if (orders && orders.length > 0) {
               const orderModuleService =
-                req.scope.resolve("orderModuleService") as unknown as any;
+                req.scope.resolve("order") as unknown as any;
               await orderModuleService.updateOrders({
                 id: orderId,
                 metadata: {
@@ -184,7 +184,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
             if (orders && orders.length > 0) {
               const orderModuleService =
-                req.scope.resolve("orderModuleService") as unknown as any;
+                req.scope.resolve("order") as unknown as any;
               await orderModuleService.updateOrders({
                 id: orderId,
                 metadata: {

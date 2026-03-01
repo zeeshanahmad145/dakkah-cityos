@@ -3,7 +3,7 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+    const companyModuleService = req.scope.resolve("company") as unknown as any;
     const { id } = req.params;
     const userId = req.auth_context?.actor_id || "system";
 

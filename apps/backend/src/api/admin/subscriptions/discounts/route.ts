@@ -81,7 +81,7 @@ export async function POST(
       duration_months
     } = parsed.data
 
-    const subscriptionService = req.scope.resolve("subscriptionModuleService") as unknown as any
+    const subscriptionService = req.scope.resolve("subscription") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     // Check if code already exists

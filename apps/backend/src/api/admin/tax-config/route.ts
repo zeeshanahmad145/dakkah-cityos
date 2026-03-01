@@ -15,7 +15,7 @@ const createSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("taxConfigModuleService") as unknown as any;
+    const moduleService = req.scope.resolve("taxConfig") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -46,7 +46,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("taxConfigModuleService") as unknown as any;
+    const moduleService = req.scope.resolve("taxConfig") as unknown as any;
     const parsed = createSchema.safeParse(req.body);
     if (!parsed.success)
       return res

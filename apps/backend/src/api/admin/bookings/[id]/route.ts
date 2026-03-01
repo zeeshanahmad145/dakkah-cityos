@@ -67,7 +67,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const bookingModuleService = req.scope.resolve("bookingModuleService") as unknown as any;
+    const bookingModuleService = req.scope.resolve("booking") as unknown as any;
     const { id } = req.params;
     const parsed = updateBookingSchema.safeParse(req.body);
     if (!parsed.success)

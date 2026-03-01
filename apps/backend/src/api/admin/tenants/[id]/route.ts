@@ -59,7 +59,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenantModuleService") as unknown as any;
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
     const { id } = req.params;
     const parsed = updateTenantSchema.safeParse(req.body);
     if (!parsed.success) {

@@ -21,7 +21,7 @@ export async function PUT(
     }
     const { role, permissions } = parsed.data
 
-    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any
+    const tenantService = req.scope.resolve("tenant") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     // Verify member exists
@@ -69,7 +69,7 @@ export async function DELETE(
 ) {
   try {
     const { id, userId } = req.params
-    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any
+    const tenantService = req.scope.resolve("tenant") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     // Verify member exists

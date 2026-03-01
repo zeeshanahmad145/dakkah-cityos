@@ -8,6 +8,12 @@ export default async function invoiceGenerationJob(container: MedusaContainer) {
   const invoiceService = container.resolve("invoice") as unknown as any;
   const eventBus = container.resolve(Modules.EVENT_BUS) as unknown as any;
 
+  const today = new Date();
+  if (today.getDate() !== 1) {
+    logger.info("[Invoice Generation] Skipping — not the 1st of the month");
+    return;
+  }
+
   logger.info("[Invoice Generation] Starting monthly invoice generation...");
 
   try {
@@ -132,5 +138,5 @@ export default async function invoiceGenerationJob(container: MedusaContainer) {
 
 export const config = {
   name: "invoice-generation",
-  schedule: "0 4 1 * *", // 1st of every month at 4 AM
+  schedule: "0 4 * * *", // Run daily at 4 AM; job checks internally if it's the 1st of the month
 };

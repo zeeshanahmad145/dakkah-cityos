@@ -47,7 +47,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const { name, min_revenue, max_revenue, rate } = parsed.data;
 
-    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any;
+    const commissionService = req.scope.resolve("commission") as unknown as any;
 
     // Check for overlapping tiers
     const query = req.scope.resolve("query") as unknown as any;

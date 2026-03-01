@@ -20,7 +20,7 @@ export async function POST(
   const { notify_customer } = parsed.data
   
   const query = req.scope.resolve("query") as unknown as any
-  const quoteService = req.scope.resolve("quoteModuleService") as unknown as any
+  const quoteService = req.scope.resolve("quote") as unknown as any
 
   const { data: quotes } = await query.graph({
     entity: "quote",
@@ -61,7 +61,7 @@ export async function POST(
 
   try {
     // Create cart from quote
-    const cartService = req.scope.resolve("cartModuleService") as unknown as any
+    const cartService = req.scope.resolve("cartExtension") as unknown as any
     
     const cart = await cartService.createCarts({
       customer_id: quote.customer_id,

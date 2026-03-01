@@ -14,7 +14,7 @@ const createSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("cartExtensionModuleService") as unknown as any;
+    const moduleService = req.scope.resolve("cartExtension") as unknown as any;
     const { limit = "20", offset = "0" } = req.query as Record<
       string,
       string | undefined
@@ -36,7 +36,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("cartExtensionModuleService") as unknown as any;
+    const moduleService = req.scope.resolve("cartExtension") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success)
       return res

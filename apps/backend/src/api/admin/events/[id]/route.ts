@@ -10,7 +10,7 @@ const eventActionSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("eventModuleService") as unknown as any;
+    const service = req.scope.resolve("eventOutbox") as unknown as any;
     const item = await service.retrieveEventOutbox(req.params.id);
     res.json({ item });
   } catch (error: unknown) {
@@ -20,7 +20,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("eventModuleService") as unknown as any;
+    const service = req.scope.resolve("eventOutbox") as unknown as any;
     const parsed = eventActionSchema.safeParse(req.body);
     if (!parsed.success)
       return res
@@ -38,7 +38,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("eventModuleService") as unknown as any;
+    const service = req.scope.resolve("eventOutbox") as unknown as any;
     await service.deleteEventOutboxes(req.params.id);
     res.status(200).json({ id: req.params.id, deleted: true });
   } catch (error: unknown) {

@@ -15,7 +15,7 @@ const approveCompanySchema = z
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyService = req.scope.resolve("companyModuleService") as unknown as any;
+    const companyService = req.scope.resolve("company") as unknown as any;
     const { id } = req.params;
     const adminUserId = req.auth_context?.actor_id;
 

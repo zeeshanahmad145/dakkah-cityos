@@ -13,7 +13,7 @@ const createNotificationPreferenceSchema = z.object({
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("notificationPreferencesModuleService") as unknown as any;
+    const service = req.scope.resolve("notificationPreferences") as unknown as any;
     const customerId =
       req.auth_context?.actor_id || (req.query.customer_id as string);
     if (!customerId) {
@@ -30,7 +30,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("notificationPreferencesModuleService") as unknown as any;
+    const service = req.scope.resolve("notificationPreferences") as unknown as any;
     const customerId = req.auth_context?.actor_id;
     if (!customerId) {
       return res.status(401).json({ message: "Authentication required" });

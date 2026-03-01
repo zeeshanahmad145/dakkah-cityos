@@ -59,7 +59,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 // Add a tax exemption
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve("query") as unknown as any;
-  const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+  const companyModuleService = req.scope.resolve("company") as unknown as any;
   const { id } = req.params;
   const parsed = createTaxExemptionSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -124,7 +124,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 // Verify/Update a tax exemption
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve("query") as unknown as any;
-  const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+  const companyModuleService = req.scope.resolve("company") as unknown as any;
   const { id } = req.params;
   const parsed = updateTaxExemptionSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -175,7 +175,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 // Delete a tax exemption
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   const query = req.scope.resolve("query") as unknown as any;
-  const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+  const companyModuleService = req.scope.resolve("company") as unknown as any;
   const { id } = req.params;
   const { exemption_id } = req.query as { exemption_id: string };
 

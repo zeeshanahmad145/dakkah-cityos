@@ -85,7 +85,7 @@ export async function POST(
   }
 
   const query = req.scope.resolve("query") as unknown as any
-  const invoiceService = req.scope.resolve("invoiceModuleService") as unknown as any
+  const invoiceService = req.scope.resolve("invoice") as unknown as any
 
   const { data: invoices } = await query.graph({
     entity: "invoice",

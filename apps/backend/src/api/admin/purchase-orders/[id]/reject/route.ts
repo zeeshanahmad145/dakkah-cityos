@@ -10,7 +10,7 @@ const rejectSchema = z
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+    const companyModuleService = req.scope.resolve("company") as unknown as any;
     const { id } = req.params;
     const parsed = rejectSchema.safeParse(req.body);
     if (!parsed.success) {

@@ -118,7 +118,7 @@ export async function POST(
 
   const { quote_ids, extend_days, notify_customers } = parsed.data
 
-  const quoteService = req.scope.resolve("quoteModuleService") as unknown as any
+  const quoteService = req.scope.resolve("quote") as unknown as any
   const query = req.scope.resolve("query") as unknown as any
 
   if (extend_days < 1) {

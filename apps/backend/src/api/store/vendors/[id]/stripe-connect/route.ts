@@ -54,7 +54,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params;
   const { return_url, refresh_url } = parsed.data;
   const query = req.scope.resolve("query") as unknown as any;
-  const vendorService = req.scope.resolve("vendorModuleService") as unknown as any;
+  const vendorService = req.scope.resolve("vendor") as unknown as any;
 
   const { data: vendors } = await query.graph({
     entity: "vendors",

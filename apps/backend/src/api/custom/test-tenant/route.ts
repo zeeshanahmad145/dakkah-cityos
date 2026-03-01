@@ -18,7 +18,7 @@ const createTenantSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenantModuleService") as unknown as any;
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
 
     const {
       limit = 20,
@@ -54,7 +54,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenantModuleService") as unknown as any;
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
     const parsed = createTenantSchema.safeParse(req.body);
     if (!parsed.success) {
       return res

@@ -54,7 +54,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 
     const { name, min_revenue, max_revenue, rate } = parsed.data;
 
-    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any;
+    const commissionService = req.scope.resolve("commission") as unknown as any;
 
     await commissionService.updateCommissionTiers({
       selector: { id },
@@ -83,7 +83,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params;
-    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any;
+    const commissionService = req.scope.resolve("commission") as unknown as any;
 
     await commissionService.deleteCommissionTiers(id);
 

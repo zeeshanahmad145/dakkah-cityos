@@ -76,7 +76,7 @@ export async function POST(
       priority
     } = parsed.data
 
-    const pricingService = req.scope.resolve("pricingModuleService") as unknown as any
+    const pricingService = req.scope.resolve("pricing") as unknown as any
 
     // Create a price list for this tier
     const priceList = await pricingService.createPriceLists({
@@ -86,7 +86,7 @@ export async function POST(
     })
 
     // Create the tier
-    const companyService = req.scope.resolve("companyModuleService") as unknown as any
+    const companyService = req.scope.resolve("company") as unknown as any
     const tier = await companyService.createPricingTiers({
       name,
       description,

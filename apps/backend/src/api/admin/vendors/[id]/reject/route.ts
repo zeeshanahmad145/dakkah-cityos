@@ -17,7 +17,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const vendorModuleService = req.scope.resolve("vendorModuleService") as unknown as any;
+    const vendorModuleService = req.scope.resolve("vendor") as unknown as any;
     const { id } = req.params;
     const reason = parsed.data.reason || "No reason provided";
 

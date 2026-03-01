@@ -20,7 +20,6 @@ export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   loader: async ({ context }) => {
-    if (typeof window === "undefined") return {}
     try {
       const { queryClient } = context
       await queryClient.ensureQueryData({

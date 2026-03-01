@@ -3,7 +3,7 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   const { subdomain } = req.params;
-  const storeModuleService = req.scope.resolve("cityosStoreService") as unknown as any;
+  const storeModuleService = req.scope.resolve("cityosStore") as unknown as any;
 
   try {
     const stores = await storeModuleService.listStores({

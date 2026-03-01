@@ -4,7 +4,7 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve("query") as unknown as any;
-    const payoutService = req.scope.resolve("payoutModuleService") as unknown as any;
+    const payoutService = req.scope.resolve("payout") as unknown as any;
     const { id } = req.params;
 
     const {

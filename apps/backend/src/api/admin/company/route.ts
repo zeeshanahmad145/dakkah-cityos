@@ -23,7 +23,7 @@ const createSchema = z
   .passthrough();
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const mod = req.scope.resolve("companyModuleService") as unknown as any;
+  const mod = req.scope.resolve("company") as unknown as any;
   const {
     limit = "20",
     offset = "0",
@@ -51,7 +51,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const mod = req.scope.resolve("companyModuleService") as unknown as any;
+  const mod = req.scope.resolve("company") as unknown as any;
   const validation = createSchema.safeParse(req.body);
   if (!validation.success)
     return res

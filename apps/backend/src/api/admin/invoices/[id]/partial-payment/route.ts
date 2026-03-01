@@ -25,7 +25,7 @@ export async function POST(
     const { amount, payment_method, reference, notes } = parsed.data
 
     const query = req.scope.resolve("query") as unknown as any
-    const invoiceService = req.scope.resolve("invoiceModuleService") as unknown as any
+    const invoiceService = req.scope.resolve("invoice") as unknown as any
 
     const { data: invoices } = await query.graph({
       entity: "invoice",

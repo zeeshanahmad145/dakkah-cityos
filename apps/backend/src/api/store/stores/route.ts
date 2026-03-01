@@ -2,7 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { handleApiError } from "../../../lib/api-error-handler";
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
-  const storeModuleService = req.scope.resolve("cityosStoreService") as unknown as any;
+  const storeModuleService = req.scope.resolve("cityosStore") as unknown as any;
 
   try {
     const {
@@ -33,7 +33,7 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
 
 export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
-    const storeModuleService = req.scope.resolve("cityosStoreService") as unknown as any;
+    const storeModuleService = req.scope.resolve("cityosStore") as unknown as any;
     const { name, handle, tenant_id, region_id, metadata } = req.body as {
       name: string;
       handle?: string;

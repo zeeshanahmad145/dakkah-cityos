@@ -66,7 +66,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 // Adjust credit limit
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+    const companyModuleService = req.scope.resolve("company") as unknown as any;
     const { id } = req.params;
     const parsed = updateCreditSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -102,7 +102,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const query = req.scope.resolve("query") as unknown as any;
-    const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+    const companyModuleService = req.scope.resolve("company") as unknown as any;
     const { id } = req.params;
     const parsed = adjustCreditSchema.safeParse(req.body);
     if (!parsed.success) {

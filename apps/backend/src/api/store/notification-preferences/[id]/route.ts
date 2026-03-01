@@ -13,7 +13,7 @@ const updateNotificationPreferenceSchema = z.object({
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("notificationPreferencesModuleService") as unknown as any;
+    const service = req.scope.resolve("notificationPreferences") as unknown as any;
     const item = await service.retrieveNotificationPreference(req.params.id);
     res.json({ item: enrichDetailItem(item, "utilities") });
   } catch (error: unknown) {
@@ -35,7 +35,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const service = req.scope.resolve("notificationPreferencesModuleService") as unknown as any;
+    const service = req.scope.resolve("notificationPreferences") as unknown as any;
     const item = await service.updateNotificationPreferences(
       req.params.id,
       parsed.data,
@@ -52,7 +52,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
     if (!customerId) {
       return res.status(401).json({ message: "Authentication required" });
     }
-    const service = req.scope.resolve("notificationPreferencesModuleService") as unknown as any;
+    const service = req.scope.resolve("notificationPreferences") as unknown as any;
     await service.deleteNotificationPreferences(req.params.id);
     res.status(200).json({ id: req.params.id, deleted: true });
   } catch (error: unknown) {

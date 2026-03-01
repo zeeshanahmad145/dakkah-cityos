@@ -55,7 +55,7 @@ export async function POST(
     }
     const { email, role, permissions } = parsed.data
 
-    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any
+    const tenantService = req.scope.resolve("tenant") as unknown as any
     const query = req.scope.resolve("query") as unknown as any
 
     // Check if user already a member

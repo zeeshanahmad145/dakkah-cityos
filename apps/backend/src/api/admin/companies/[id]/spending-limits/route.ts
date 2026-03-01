@@ -55,7 +55,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 // Update spending limit for a user
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyModuleService = req.scope.resolve("companyModuleService") as unknown as any;
+    const companyModuleService = req.scope.resolve("company") as unknown as any;
     const { id } = req.params;
     const parsed = updateSpendingLimitSchema.safeParse(req.body);
     if (!parsed.success) {
