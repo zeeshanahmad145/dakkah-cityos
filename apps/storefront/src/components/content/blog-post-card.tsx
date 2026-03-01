@@ -16,7 +16,7 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
   if (variant === "compact") {
     return (
       <Link
-        to={`${prefix}/blog/${post.slug}` as any}
+        to={`${prefix}/blog/${post.slug}` as never}
         className="flex items-center gap-3 group"
       >
         {post.thumbnail && (
@@ -33,7 +33,7 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
             {post.title}
           </h4>
           <p className="text-xs text-ds-muted-foreground mt-1">
-            {formatDate(post.publishedAt, locale as any)}
+            {formatDate(post.publishedAt, locale as import("@/lib/i18n").SupportedLocale)}
           </p>
         </div>
       </Link>
@@ -43,7 +43,7 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
   if (variant === "featured") {
     return (
       <Link
-        to={`${prefix}/blog/${post.slug}` as any}
+        to={`${prefix}/blog/${post.slug}` as never}
         className="group relative block overflow-hidden rounded-xl bg-ds-muted"
       >
         {post.thumbnail && (
@@ -64,7 +64,9 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
             {post.title}
           </h2>
           {post.excerpt && (
-            <p className="text-sm text-white/80 line-clamp-2 mb-3">{post.excerpt}</p>
+            <p className="text-sm text-white/80 line-clamp-2 mb-3">
+              {post.excerpt}
+            </p>
           )}
           <div className="flex items-center gap-3 text-sm text-white/70">
             {post.author && (
@@ -80,11 +82,13 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
               </div>
             )}
             <span>·</span>
-            <span>{formatDate(post.publishedAt, locale as any)}</span>
+            <span>{formatDate(post.publishedAt, locale as import("@/lib/i18n").SupportedLocale)}</span>
             {post.readingTime && (
               <>
                 <span>·</span>
-                <span>{post.readingTime} {t(locale, "content.min_read")}</span>
+                <span>
+                  {post.readingTime} {t(locale, "content.min_read")}
+                </span>
               </>
             )}
           </div>
@@ -96,7 +100,7 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
   if (variant === "horizontal") {
     return (
       <Link
-        to={`${prefix}/blog/${post.slug}` as any}
+        to={`${prefix}/blog/${post.slug}` as never}
         className="group flex flex-col sm:flex-row gap-4 bg-ds-background rounded-lg border border-ds-border overflow-hidden hover:border-ds-primary transition-colors"
       >
         {post.thumbnail && (
@@ -118,7 +122,9 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
             {post.title}
           </h3>
           {post.excerpt && (
-            <p className="text-sm text-ds-muted-foreground line-clamp-2 mb-3">{post.excerpt}</p>
+            <p className="text-sm text-ds-muted-foreground line-clamp-2 mb-3">
+              {post.excerpt}
+            </p>
           )}
           <div className="flex items-center gap-3 text-xs text-ds-muted-foreground">
             {post.author && (
@@ -133,9 +139,11 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
                 <span>{post.author.name}</span>
               </div>
             )}
-            <span>{formatDate(post.publishedAt, locale as any)}</span>
+            <span>{formatDate(post.publishedAt, locale as import("@/lib/i18n").SupportedLocale)}</span>
             {post.readingTime && (
-              <span>{post.readingTime} {t(locale, "content.min_read")}</span>
+              <span>
+                {post.readingTime} {t(locale, "content.min_read")}
+              </span>
             )}
           </div>
         </div>
@@ -145,7 +153,7 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
 
   return (
     <Link
-      to={`${prefix}/blog/${post.slug}` as any}
+      to={`${prefix}/blog/${post.slug}` as never}
       className="group flex flex-col bg-ds-background rounded-lg border border-ds-border overflow-hidden hover:border-ds-primary transition-colors"
     >
       {post.thumbnail && (
@@ -167,7 +175,9 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
           {post.title}
         </h3>
         {post.excerpt && (
-          <p className="text-sm text-ds-muted-foreground line-clamp-2 mb-3 flex-1">{post.excerpt}</p>
+          <p className="text-sm text-ds-muted-foreground line-clamp-2 mb-3 flex-1">
+            {post.excerpt}
+          </p>
         )}
         <div className="flex items-center justify-between text-xs text-ds-muted-foreground mt-auto pt-3 border-t border-ds-border">
           <div className="flex items-center gap-2">
@@ -185,9 +195,11 @@ export function BlogPostCard({ post, variant = "default" }: BlogPostCardProps) {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <span>{formatDate(post.publishedAt, locale as any)}</span>
+            <span>{formatDate(post.publishedAt, locale as import("@/lib/i18n").SupportedLocale)}</span>
             {post.readingTime && (
-              <span>· {post.readingTime} {t(locale, "content.min_read")}</span>
+              <span>
+                · {post.readingTime} {t(locale, "content.min_read")}
+              </span>
             )}
           </div>
         </div>

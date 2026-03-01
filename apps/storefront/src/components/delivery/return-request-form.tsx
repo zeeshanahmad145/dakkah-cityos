@@ -151,7 +151,7 @@ export function ReturnRequestForm({
                   <div className="flex items-start justify-between gap-2">
                     <h4 className="font-medium text-ds-foreground">{item.title}</h4>
                     <p className="text-sm font-medium text-ds-foreground flex-shrink-0">
-                      {formatCurrency(item.price.amount, item.price.currency, locale as SupportedLocale)}
+                      {formatCurrency((item.price.amount ?? 0), item.price.currency, locale as SupportedLocale)}
                     </p>
                   </div>
                   <p className="text-sm text-ds-muted-foreground">Qty: {item.quantity}</p>

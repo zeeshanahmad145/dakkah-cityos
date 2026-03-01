@@ -1,151 +1,1275 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const results: Record<string, { seeded: number; error?: string }> = {}
+  const results: Record<string, { seeded: number; error?: string }> = {};
 
   async function seedModule(
     name: string,
     moduleKey: string,
     createMethod: string,
-    data: any[]
+    data: any[],
   ) {
     try {
-      const mod = req.scope.resolve(moduleKey) as any
+      const mod = req.scope.resolve(moduleKey) as unknown as any;
       if (!mod[createMethod]) {
-        results[name] = { seeded: 0, error: `Method ${createMethod} not found` }
-        return
+        results[name] = {
+          seeded: 0,
+          error: `Method ${createMethod} not found`,
+        };
+        return;
       }
-      let count = 0
+      let count = 0;
       for (const item of data) {
         try {
-          await mod[createMethod](item)
-          count++
+          await mod[createMethod](item);
+          count++;
         } catch (e: any) {
-          if (!e.message?.includes("duplicate") && !e.message?.includes("unique")) {
-            console.log(`[seed] ${name} item failed:`, e.message?.substring(0, 120))
+          if (
+            !e.message?.includes("duplicate") &&
+            !e.message?.includes("unique")
+          ) {
+            console.log(
+              `[seed] ${name} item failed:`,
+              e.message?.substring(0, 120),
+            );
           } else {
-            count++
+            count++;
           }
         }
       }
-      results[name] = { seeded: count }
+      results[name] = { seeded: count };
     } catch (e: any) {
-      results[name] = { seeded: 0, error: e.message }
+      results[name] = { seeded: 0, error: e.message };
     }
   }
 
-  const future = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-  const past = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const future = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  const past = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   await seedModule("auction_listings", "auction", "createAuctionListings", [
-    { tenant_id: "default", product_id: "prod_auc_1", title: "Vintage Arabian Dallah Coffee Pot", description: "18th century hand-crafted dallah with intricate engravings", auction_type: "english", status: "active", starting_price: 50000, reserve_price: 150000, current_price: 85000, currency_code: "SAR", bid_increment: 5000, starts_at: past, ends_at: future, total_bids: 8, metadata: { thumbnail: "/seed-images/auctions/1523170335258-f5ed11844a49.jpg" } },
-    { tenant_id: "default", product_id: "prod_auc_2", title: "2024 Toyota Land Cruiser GR Sport", description: "Limited edition, fully loaded, under warranty", auction_type: "english", status: "active", starting_price: 280000, reserve_price: 350000, current_price: 310000, currency_code: "SAR", bid_increment: 10000, starts_at: past, ends_at: future, total_bids: 12, metadata: { thumbnail: "/seed-images/auctions/1583121274602-3e2820c69888.jpg" } },
-    { tenant_id: "default", product_id: "prod_auc_3", title: "Original Arabic Calligraphy Artwork", description: "Master Hassan's award-winning piece, mixed media on canvas", auction_type: "reserve", status: "active", starting_price: 25000, reserve_price: 75000, current_price: 42000, currency_code: "SAR", bid_increment: 2500, starts_at: past, ends_at: future, total_bids: 6, metadata: { thumbnail: "/seed-images/auctions/1579783902614-a3fb3927b6a5.jpg" } },
-    { tenant_id: "default", product_id: "prod_auc_4", title: "Rare Diamond & Emerald Necklace", description: "18K white gold, 5 carats VS1 diamonds, Colombian emeralds, GIA certified", auction_type: "sealed", status: "active", starting_price: 400000, reserve_price: 750000, current_price: 520000, currency_code: "SAR", bid_increment: 15000, starts_at: past, ends_at: future, total_bids: 4, metadata: { thumbnail: "/seed-images/auctions/1526170375885-4d8ecf77b99f.jpg" } },
-    { tenant_id: "default", product_id: "prod_auc_5", title: "Antique Persian Silk Carpet", description: "Hand-woven Isfahan silk carpet, circa 1920, museum quality", auction_type: "english", status: "active", starting_price: 180000, reserve_price: 300000, current_price: 225000, currency_code: "SAR", bid_increment: 10000, starts_at: past, ends_at: future, total_bids: 9, metadata: { thumbnail: "/seed-images/auctions/1489824904134-891ab64532f1.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      product_id: "prod_auc_1",
+      title: "Vintage Arabian Dallah Coffee Pot",
+      description: "18th century hand-crafted dallah with intricate engravings",
+      auction_type: "english",
+      status: "active",
+      starting_price: 50000,
+      reserve_price: 150000,
+      current_price: 85000,
+      currency_code: "SAR",
+      bid_increment: 5000,
+      starts_at: past,
+      ends_at: future,
+      total_bids: 8,
+      metadata: {
+        thumbnail: "/seed-images/auctions/1523170335258-f5ed11844a49.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_auc_2",
+      title: "2024 Toyota Land Cruiser GR Sport",
+      description: "Limited edition, fully loaded, under warranty",
+      auction_type: "english",
+      status: "active",
+      starting_price: 280000,
+      reserve_price: 350000,
+      current_price: 310000,
+      currency_code: "SAR",
+      bid_increment: 10000,
+      starts_at: past,
+      ends_at: future,
+      total_bids: 12,
+      metadata: {
+        thumbnail: "/seed-images/auctions/1583121274602-3e2820c69888.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_auc_3",
+      title: "Original Arabic Calligraphy Artwork",
+      description: "Master Hassan's award-winning piece, mixed media on canvas",
+      auction_type: "reserve",
+      status: "active",
+      starting_price: 25000,
+      reserve_price: 75000,
+      current_price: 42000,
+      currency_code: "SAR",
+      bid_increment: 2500,
+      starts_at: past,
+      ends_at: future,
+      total_bids: 6,
+      metadata: {
+        thumbnail: "/seed-images/auctions/1579783902614-a3fb3927b6a5.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_auc_4",
+      title: "Rare Diamond & Emerald Necklace",
+      description:
+        "18K white gold, 5 carats VS1 diamonds, Colombian emeralds, GIA certified",
+      auction_type: "sealed",
+      status: "active",
+      starting_price: 400000,
+      reserve_price: 750000,
+      current_price: 520000,
+      currency_code: "SAR",
+      bid_increment: 15000,
+      starts_at: past,
+      ends_at: future,
+      total_bids: 4,
+      metadata: {
+        thumbnail: "/seed-images/auctions/1526170375885-4d8ecf77b99f.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_auc_5",
+      title: "Antique Persian Silk Carpet",
+      description: "Hand-woven Isfahan silk carpet, circa 1920, museum quality",
+      auction_type: "english",
+      status: "active",
+      starting_price: 180000,
+      reserve_price: 300000,
+      current_price: 225000,
+      currency_code: "SAR",
+      bid_increment: 10000,
+      starts_at: past,
+      ends_at: future,
+      total_bids: 9,
+      metadata: {
+        thumbnail: "/seed-images/auctions/1489824904134-891ab64532f1.jpg",
+      },
+    },
+  ]);
 
   await seedModule("restaurants", "restaurant", "createRestaurants", [
-    { tenant_id: "default", name: "Al Baik Express", handle: "al-baik-express", description: "Saudi Arabia's most beloved fast-food chain", cuisine_types: ["fast_food", "chicken"], address_line1: "King Fahd Road", city: "Riyadh", postal_code: "11564", country_code: "SA", phone: "+966 11 234 5678", rating: 4.8, operating_hours: { mon: "10:00-02:00", tue: "10:00-02:00", wed: "10:00-02:00", thu: "10:00-02:00", fri: "14:00-02:00", sat: "10:00-02:00", sun: "10:00-02:00" }, metadata: { thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg" } },
-    { tenant_id: "default", name: "Nusret Steakhouse", handle: "nusret-steakhouse", description: "Celebrity chef Salt Bae's premium steakhouse experience", cuisine_types: ["steakhouse", "fine_dining"], address_line1: "Al Olaya District", city: "Riyadh", postal_code: "11564", country_code: "SA", phone: "+966 11 345 6789", rating: 4.7, operating_hours: { mon: "12:00-01:00", tue: "12:00-01:00" }, metadata: { thumbnail: "/seed-images/restaurants/1579871494447-9811cf80d66c.jpg" } },
-    { tenant_id: "default", name: "The Globe Restaurant", handle: "the-globe-restaurant", description: "Fine dining with panoramic views from Al Faisaliyah Tower", cuisine_types: ["international", "fine_dining"], address_line1: "Al Faisaliyah Tower", city: "Riyadh", postal_code: "11553", country_code: "SA", phone: "+966 11 456 7890", rating: 4.9, operating_hours: { daily: "19:00-00:00" }, metadata: { thumbnail: "/seed-images/restaurants/1517248135467-4c7edcad34c4.jpg" } },
-    { tenant_id: "default", name: "Mama Noura", handle: "mama-noura", description: "Classic shawarma and grills, a Riyadh institution since 1970", cuisine_types: ["middle_eastern", "shawarma"], address_line1: "Tahlia Street", city: "Riyadh", postal_code: "11564", country_code: "SA", phone: "+966 11 567 8901", rating: 4.5, operating_hours: { daily: "11:00-03:00" }, metadata: { thumbnail: "/seed-images/restaurants/1552566626-98f62a11-2846.jpg" } },
-    { tenant_id: "default", name: "Sakura Japanese Kitchen", handle: "sakura-japanese", description: "Authentic Japanese cuisine with Tokyo-trained chefs", cuisine_types: ["japanese", "sushi"], address_line1: "Prince Sultan Road", city: "Jeddah", postal_code: "23431", country_code: "SA", phone: "+966 12 678 9012", rating: 4.6, operating_hours: { daily: "12:00-23:30" }, metadata: { thumbnail: "/seed-images/restaurants/1504674900247-0877df9cc836.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      name: "Al Baik Express",
+      handle: "al-baik-express",
+      description: "Saudi Arabia's most beloved fast-food chain",
+      cuisine_types: ["fast_food", "chicken"],
+      address_line1: "King Fahd Road",
+      city: "Riyadh",
+      postal_code: "11564",
+      country_code: "SA",
+      phone: "+966 11 234 5678",
+      rating: 4.8,
+      operating_hours: {
+        mon: "10:00-02:00",
+        tue: "10:00-02:00",
+        wed: "10:00-02:00",
+        thu: "10:00-02:00",
+        fri: "14:00-02:00",
+        sat: "10:00-02:00",
+        sun: "10:00-02:00",
+      },
+      metadata: {
+        thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Nusret Steakhouse",
+      handle: "nusret-steakhouse",
+      description: "Celebrity chef Salt Bae's premium steakhouse experience",
+      cuisine_types: ["steakhouse", "fine_dining"],
+      address_line1: "Al Olaya District",
+      city: "Riyadh",
+      postal_code: "11564",
+      country_code: "SA",
+      phone: "+966 11 345 6789",
+      rating: 4.7,
+      operating_hours: { mon: "12:00-01:00", tue: "12:00-01:00" },
+      metadata: {
+        thumbnail: "/seed-images/restaurants/1579871494447-9811cf80d66c.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "The Globe Restaurant",
+      handle: "the-globe-restaurant",
+      description: "Fine dining with panoramic views from Al Faisaliyah Tower",
+      cuisine_types: ["international", "fine_dining"],
+      address_line1: "Al Faisaliyah Tower",
+      city: "Riyadh",
+      postal_code: "11553",
+      country_code: "SA",
+      phone: "+966 11 456 7890",
+      rating: 4.9,
+      operating_hours: { daily: "19:00-00:00" },
+      metadata: {
+        thumbnail: "/seed-images/restaurants/1517248135467-4c7edcad34c4.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Mama Noura",
+      handle: "mama-noura",
+      description:
+        "Classic shawarma and grills, a Riyadh institution since 1970",
+      cuisine_types: ["middle_eastern", "shawarma"],
+      address_line1: "Tahlia Street",
+      city: "Riyadh",
+      postal_code: "11564",
+      country_code: "SA",
+      phone: "+966 11 567 8901",
+      rating: 4.5,
+      operating_hours: { daily: "11:00-03:00" },
+      metadata: {
+        thumbnail: "/seed-images/restaurants/1552566626-98f62a11-2846.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Sakura Japanese Kitchen",
+      handle: "sakura-japanese",
+      description: "Authentic Japanese cuisine with Tokyo-trained chefs",
+      cuisine_types: ["japanese", "sushi"],
+      address_line1: "Prince Sultan Road",
+      city: "Jeddah",
+      postal_code: "23431",
+      country_code: "SA",
+      phone: "+966 12 678 9012",
+      rating: 4.6,
+      operating_hours: { daily: "12:00-23:30" },
+      metadata: {
+        thumbnail: "/seed-images/restaurants/1504674900247-0877df9cc836.jpg",
+      },
+    },
+  ]);
 
   await seedModule("practitioners", "healthcare", "createPractitioners", [
-    { tenant_id: "default", name: "Dr. Ahmed Al-Rashidi", specialization: "cardiology", qualification: "MD, FACC", experience_years: 15, phone: "+966 11 234 0001", email: "ahmed.rashidi@cityos.health", is_active: true, consultation_fee: 500, currency_code: "SAR", metadata: { thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg" } },
-    { tenant_id: "default", name: "Dr. Fatima Al-Zahrani", specialization: "dermatology", qualification: "MD, FAAD", experience_years: 12, phone: "+966 11 234 0002", email: "fatima.zahrani@cityos.health", is_active: true, consultation_fee: 400, currency_code: "SAR", metadata: { thumbnail: "/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg" } },
-    { tenant_id: "default", name: "Dr. Khalid Al-Farsi", specialization: "orthopedics", qualification: "MD, FRCSC", experience_years: 20, phone: "+966 11 234 0003", email: "khalid.farsi@cityos.health", is_active: true, consultation_fee: 600, currency_code: "SAR", metadata: { thumbnail: "/seed-images/healthcare/1551601651-bc506020d8c7.jpg" } },
-    { tenant_id: "default", name: "Dr. Noura Al-Salem", specialization: "pediatrics", qualification: "MD, FAAP", experience_years: 10, phone: "+966 11 234 0004", email: "noura.salem@cityos.health", is_active: true, consultation_fee: 350, currency_code: "SAR", metadata: { thumbnail: "/seed-images/healthcare/1559839734-2b71ea197ec2.jpg" } },
-    { tenant_id: "default", name: "Dr. Hassan Al-Qahtani", specialization: "neurology", qualification: "MD, FRCP", experience_years: 18, phone: "+966 11 234 0005", email: "hassan.qahtani@cityos.health", is_active: true, consultation_fee: 550, currency_code: "SAR", metadata: { thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      name: "Dr. Ahmed Al-Rashidi",
+      specialization: "cardiology",
+      qualification: "MD, FACC",
+      experience_years: 15,
+      phone: "+966 11 234 0001",
+      email: "ahmed.rashidi@cityos.health",
+      is_active: true,
+      consultation_fee: 500,
+      currency_code: "SAR",
+      metadata: {
+        thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Dr. Fatima Al-Zahrani",
+      specialization: "dermatology",
+      qualification: "MD, FAAD",
+      experience_years: 12,
+      phone: "+966 11 234 0002",
+      email: "fatima.zahrani@cityos.health",
+      is_active: true,
+      consultation_fee: 400,
+      currency_code: "SAR",
+      metadata: {
+        thumbnail: "/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Dr. Khalid Al-Farsi",
+      specialization: "orthopedics",
+      qualification: "MD, FRCSC",
+      experience_years: 20,
+      phone: "+966 11 234 0003",
+      email: "khalid.farsi@cityos.health",
+      is_active: true,
+      consultation_fee: 600,
+      currency_code: "SAR",
+      metadata: {
+        thumbnail: "/seed-images/healthcare/1551601651-bc506020d8c7.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Dr. Noura Al-Salem",
+      specialization: "pediatrics",
+      qualification: "MD, FAAP",
+      experience_years: 10,
+      phone: "+966 11 234 0004",
+      email: "noura.salem@cityos.health",
+      is_active: true,
+      consultation_fee: 350,
+      currency_code: "SAR",
+      metadata: {
+        thumbnail: "/seed-images/healthcare/1559839734-2b71ea197ec2.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Dr. Hassan Al-Qahtani",
+      specialization: "neurology",
+      qualification: "MD, FRCP",
+      experience_years: 18,
+      phone: "+966 11 234 0005",
+      email: "hassan.qahtani@cityos.health",
+      is_active: true,
+      consultation_fee: 550,
+      currency_code: "SAR",
+      metadata: {
+        thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
+      },
+    },
+  ]);
 
   await seedModule("courses", "education", "createCourses", [
-    { tenant_id: "default", title: "Full Stack Web Development", description: "Master modern web development with React, Node.js, and PostgreSQL", short_description: "Learn full-stack web dev", category: "technology", level: "intermediate", format: "self_paced", price: 2999, currency_code: "SAR", duration_hours: 120, total_lessons: 48, total_enrollments: 35, avg_rating: 4.8, status: "published", thumbnail_url: "/seed-images/education/1516321318399-29689228956c.jpg", metadata: { thumbnail: "/seed-images/education/1516321318399-29689228956c.jpg" } },
-    { tenant_id: "default", title: "Arabic Calligraphy Masterclass", description: "Learn the art of Arabic calligraphy from traditional Naskh to modern styles", short_description: "Master Arabic calligraphy", category: "arts", level: "beginner", format: "live", price: 1499, currency_code: "SAR", duration_hours: 40, total_lessons: 20, total_enrollments: 18, avg_rating: 4.9, status: "published", thumbnail_url: "/seed-images/education/1524178232363-1fb2b075b655.jpg", metadata: { thumbnail: "/seed-images/education/1524178232363-1fb2b075b655.jpg" } },
-    { tenant_id: "default", title: "Business Management & Leadership", description: "Develop essential management skills for the modern Saudi business landscape", short_description: "Lead with confidence", category: "business", level: "advanced", format: "hybrid", price: 4999, currency_code: "SAR", duration_hours: 80, total_lessons: 32, total_enrollments: 22, avg_rating: 4.7, status: "published", thumbnail_url: "/seed-images/education/1523050121-b5e753be322e.jpg", metadata: { thumbnail: "/seed-images/education/1523050121-b5e753be322e.jpg" } },
-    { tenant_id: "default", title: "Data Science with Python", description: "From data analysis to machine learning with hands-on projects", short_description: "Data science essentials", category: "technology", level: "intermediate", format: "self_paced", price: 3499, currency_code: "SAR", duration_hours: 100, total_lessons: 40, total_enrollments: 28, avg_rating: 4.6, status: "published", thumbnail_url: "/seed-images/education/1509062522-5beb27ea6e09.jpg", metadata: { thumbnail: "/seed-images/education/1509062522-5beb27ea6e09.jpg" } },
-    { tenant_id: "default", title: "Islamic Finance Fundamentals", description: "Understanding Sharia-compliant financial products and banking", short_description: "Sharia-compliant finance", category: "finance", level: "beginner", format: "self_paced", price: 1999, currency_code: "SAR", duration_hours: 60, total_lessons: 24, total_enrollments: 72, avg_rating: 4.8, status: "published", thumbnail_url: "/seed-images/financial-products/1554224155-6726a1ad-a607.jpg", metadata: { thumbnail: "/seed-images/financial-products/1554224155-6726a1ad-a607.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      title: "Full Stack Web Development",
+      description:
+        "Master modern web development with React, Node.js, and PostgreSQL",
+      short_description: "Learn full-stack web dev",
+      category: "technology",
+      level: "intermediate",
+      format: "self_paced",
+      price: 2999,
+      currency_code: "SAR",
+      duration_hours: 120,
+      total_lessons: 48,
+      total_enrollments: 35,
+      avg_rating: 4.8,
+      status: "published",
+      thumbnail_url: "/seed-images/education/1516321318399-29689228956c.jpg",
+      metadata: {
+        thumbnail: "/seed-images/education/1516321318399-29689228956c.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Arabic Calligraphy Masterclass",
+      description:
+        "Learn the art of Arabic calligraphy from traditional Naskh to modern styles",
+      short_description: "Master Arabic calligraphy",
+      category: "arts",
+      level: "beginner",
+      format: "live",
+      price: 1499,
+      currency_code: "SAR",
+      duration_hours: 40,
+      total_lessons: 20,
+      total_enrollments: 18,
+      avg_rating: 4.9,
+      status: "published",
+      thumbnail_url: "/seed-images/education/1524178232363-1fb2b075b655.jpg",
+      metadata: {
+        thumbnail: "/seed-images/education/1524178232363-1fb2b075b655.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Business Management & Leadership",
+      description:
+        "Develop essential management skills for the modern Saudi business landscape",
+      short_description: "Lead with confidence",
+      category: "business",
+      level: "advanced",
+      format: "hybrid",
+      price: 4999,
+      currency_code: "SAR",
+      duration_hours: 80,
+      total_lessons: 32,
+      total_enrollments: 22,
+      avg_rating: 4.7,
+      status: "published",
+      thumbnail_url: "/seed-images/education/1523050121-b5e753be322e.jpg",
+      metadata: {
+        thumbnail: "/seed-images/education/1523050121-b5e753be322e.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Data Science with Python",
+      description:
+        "From data analysis to machine learning with hands-on projects",
+      short_description: "Data science essentials",
+      category: "technology",
+      level: "intermediate",
+      format: "self_paced",
+      price: 3499,
+      currency_code: "SAR",
+      duration_hours: 100,
+      total_lessons: 40,
+      total_enrollments: 28,
+      avg_rating: 4.6,
+      status: "published",
+      thumbnail_url: "/seed-images/education/1509062522-5beb27ea6e09.jpg",
+      metadata: {
+        thumbnail: "/seed-images/education/1509062522-5beb27ea6e09.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Islamic Finance Fundamentals",
+      description:
+        "Understanding Sharia-compliant financial products and banking",
+      short_description: "Sharia-compliant finance",
+      category: "finance",
+      level: "beginner",
+      format: "self_paced",
+      price: 1999,
+      currency_code: "SAR",
+      duration_hours: 60,
+      total_lessons: 24,
+      total_enrollments: 72,
+      avg_rating: 4.8,
+      status: "published",
+      thumbnail_url:
+        "/seed-images/financial-products/1554224155-6726a1ad-a607.jpg",
+      metadata: {
+        thumbnail:
+          "/seed-images/financial-products/1554224155-6726a1ad-a607.jpg",
+      },
+    },
+  ]);
 
-  await seedModule("classified_listings", "classified", "createClassifiedListings", [
-    { tenant_id: "default", seller_id: "seller_seed_1", title: "Luxury L-Shape Sofa Set – Italian Leather", description: "Premium Italian genuine leather sofa, barely used, perfect condition", listing_type: "sell", condition: "like_new", price: 8500, currency_code: "SAR", location_city: "Riyadh", status: "active", metadata: { thumbnail: "/seed-images/classifieds/1555041839-2e5b6def5b31.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_2", title: "MacBook Pro 16\" M3 Max – 36GB RAM", description: "Apple MacBook Pro 16-inch, M3 Max chip, Space Black, with AppleCare+", listing_type: "sell", condition: "like_new", price: 14999, currency_code: "SAR", location_city: "Jeddah", status: "active", metadata: { thumbnail: "/seed-images/classifieds/1496181133206-80ce9b88a853.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_3", title: "Toyota Camry 2023 – Full Option", description: "Single owner, full service history, under warranty, 25,000 km", listing_type: "sell", condition: "like_new", price: 95000, currency_code: "SAR", location_city: "Riyadh", status: "active", metadata: { thumbnail: "/seed-images/automotive/1494976388-5efd60382b47.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_4", title: "Canon EOS R6 Mark II + 24-70mm Lens", description: "Professional camera kit, includes extra batteries and bag", listing_type: "sell", condition: "good", price: 12000, currency_code: "SAR", location_city: "Dammam", status: "active", metadata: { thumbnail: "/seed-images/classifieds/1593642632559-0e542d499d98.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_5", title: "Villa for Sale – Al Narjis District", description: "6 bedroom villa with garden, pool, driver's room, maid's room", listing_type: "sell", condition: "new", price: 2800000, currency_code: "SAR", location_city: "Riyadh", status: "active", metadata: { thumbnail: "/seed-images/real-estate/1570129477164-145adc5388f2.jpg" } },
-  ])
+  await seedModule(
+    "classified_listings",
+    "classified",
+    "createClassifiedListings",
+    [
+      {
+        tenant_id: "default",
+        seller_id: "seller_seed_1",
+        title: "Luxury L-Shape Sofa Set – Italian Leather",
+        description:
+          "Premium Italian genuine leather sofa, barely used, perfect condition",
+        listing_type: "sell",
+        condition: "like_new",
+        price: 8500,
+        currency_code: "SAR",
+        location_city: "Riyadh",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/classifieds/1555041839-2e5b6def5b31.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        seller_id: "seller_seed_2",
+        title: 'MacBook Pro 16" M3 Max – 36GB RAM',
+        description:
+          "Apple MacBook Pro 16-inch, M3 Max chip, Space Black, with AppleCare+",
+        listing_type: "sell",
+        condition: "like_new",
+        price: 14999,
+        currency_code: "SAR",
+        location_city: "Jeddah",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/classifieds/1496181133206-80ce9b88a853.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        seller_id: "seller_seed_3",
+        title: "Toyota Camry 2023 – Full Option",
+        description:
+          "Single owner, full service history, under warranty, 25,000 km",
+        listing_type: "sell",
+        condition: "like_new",
+        price: 95000,
+        currency_code: "SAR",
+        location_city: "Riyadh",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/automotive/1494976388-5efd60382b47.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        seller_id: "seller_seed_4",
+        title: "Canon EOS R6 Mark II + 24-70mm Lens",
+        description:
+          "Professional camera kit, includes extra batteries and bag",
+        listing_type: "sell",
+        condition: "good",
+        price: 12000,
+        currency_code: "SAR",
+        location_city: "Dammam",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/classifieds/1593642632559-0e542d499d98.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        seller_id: "seller_seed_5",
+        title: "Villa for Sale – Al Narjis District",
+        description:
+          "6 bedroom villa with garden, pool, driver's room, maid's room",
+        listing_type: "sell",
+        condition: "new",
+        price: 2800000,
+        currency_code: "SAR",
+        location_city: "Riyadh",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/real-estate/1570129477164-145adc5388f2.jpg",
+        },
+      },
+    ],
+  );
 
   await seedModule("events", "eventTicketing", "createEvents", [
-    { tenant_id: "default", title: "Riyadh Season 2026", description: "The biggest entertainment festival in the Middle East", event_type: "festival", status: "published", starts_at: future, ends_at: new Date(future.getTime() + 90 * 24 * 3600000), image_url: "/seed-images/event-ticketing/1459749411611-4ce555d044d2.jpg", organizer_name: "GEA", max_capacity: 100000, metadata: { thumbnail: "/seed-images/event-ticketing/1459749411611-4ce555d044d2.jpg" } },
-    { tenant_id: "default", title: "Saudi Pro League – Al Hilal vs Al Nassr", description: "The ultimate Riyadh derby featuring top international players", event_type: "sports", status: "published", starts_at: new Date(Date.now() + 14 * 86400000), ends_at: new Date(Date.now() + 14 * 86400000 + 3 * 3600000), image_url: "/seed-images/event-ticketing/1540747913346-8271a0c17398.jpg", organizer_name: "SPL", max_capacity: 68000, metadata: { thumbnail: "/seed-images/event-ticketing/1540747913346-8271a0c17398.jpg" } },
-    { tenant_id: "default", title: "Arabic Music Night – Mohammed Abdu", description: "A legendary evening of classic Arabic music", event_type: "concert", status: "published", starts_at: new Date(Date.now() + 21 * 86400000), ends_at: new Date(Date.now() + 21 * 86400000 + 4 * 3600000), image_url: "/seed-images/event-ticketing/1501281668745-f7f57925c35f.jpg", organizer_name: "MDLBEAST", max_capacity: 15000, metadata: { thumbnail: "/seed-images/event-ticketing/1501281668745-f7f57925c35f.jpg" } },
-    { tenant_id: "default", title: "Tech Summit Saudi 2026", description: "Leading technology conference featuring AI, blockchain, and smart city innovations", event_type: "conference", status: "published", starts_at: new Date(Date.now() + 45 * 86400000), ends_at: new Date(Date.now() + 47 * 86400000), image_url: "/seed-images/events/1540575467063-db510fe9e44c.jpg", organizer_name: "KAUST", max_capacity: 5000, metadata: { thumbnail: "/seed-images/events/1540575467063-db510fe9e44c.jpg" } },
-    { tenant_id: "default", title: "Jeddah Food Festival", description: "Celebrate the diverse culinary heritage of Saudi Arabia", event_type: "festival", status: "published", starts_at: new Date(Date.now() + 30 * 86400000), ends_at: new Date(Date.now() + 33 * 86400000), image_url: "/seed-images/events/1492684223440-e10bdc5eadbb.jpg", organizer_name: "Jeddah Municipality", max_capacity: 20000, metadata: { thumbnail: "/seed-images/events/1492684223440-e10bdc5eadbb.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      title: "Riyadh Season 2026",
+      description: "The biggest entertainment festival in the Middle East",
+      event_type: "festival",
+      status: "published",
+      starts_at: future,
+      ends_at: new Date(future.getTime() + 90 * 24 * 3600000),
+      image_url: "/seed-images/event-ticketing/1459749411611-4ce555d044d2.jpg",
+      organizer_name: "GEA",
+      max_capacity: 100000,
+      metadata: {
+        thumbnail:
+          "/seed-images/event-ticketing/1459749411611-4ce555d044d2.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Saudi Pro League – Al Hilal vs Al Nassr",
+      description:
+        "The ultimate Riyadh derby featuring top international players",
+      event_type: "sports",
+      status: "published",
+      starts_at: new Date(Date.now() + 14 * 86400000),
+      ends_at: new Date(Date.now() + 14 * 86400000 + 3 * 3600000),
+      image_url: "/seed-images/event-ticketing/1540747913346-8271a0c17398.jpg",
+      organizer_name: "SPL",
+      max_capacity: 68000,
+      metadata: {
+        thumbnail:
+          "/seed-images/event-ticketing/1540747913346-8271a0c17398.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Arabic Music Night – Mohammed Abdu",
+      description: "A legendary evening of classic Arabic music",
+      event_type: "concert",
+      status: "published",
+      starts_at: new Date(Date.now() + 21 * 86400000),
+      ends_at: new Date(Date.now() + 21 * 86400000 + 4 * 3600000),
+      image_url: "/seed-images/event-ticketing/1501281668745-f7f57925c35f.jpg",
+      organizer_name: "MDLBEAST",
+      max_capacity: 15000,
+      metadata: {
+        thumbnail:
+          "/seed-images/event-ticketing/1501281668745-f7f57925c35f.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Tech Summit Saudi 2026",
+      description:
+        "Leading technology conference featuring AI, blockchain, and smart city innovations",
+      event_type: "conference",
+      status: "published",
+      starts_at: new Date(Date.now() + 45 * 86400000),
+      ends_at: new Date(Date.now() + 47 * 86400000),
+      image_url: "/seed-images/events/1540575467063-db510fe9e44c.jpg",
+      organizer_name: "KAUST",
+      max_capacity: 5000,
+      metadata: {
+        thumbnail: "/seed-images/events/1540575467063-db510fe9e44c.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      title: "Jeddah Food Festival",
+      description: "Celebrate the diverse culinary heritage of Saudi Arabia",
+      event_type: "festival",
+      status: "published",
+      starts_at: new Date(Date.now() + 30 * 86400000),
+      ends_at: new Date(Date.now() + 33 * 86400000),
+      image_url: "/seed-images/events/1492684223440-e10bdc5eadbb.jpg",
+      organizer_name: "Jeddah Municipality",
+      max_capacity: 20000,
+      metadata: {
+        thumbnail: "/seed-images/events/1492684223440-e10bdc5eadbb.jpg",
+      },
+    },
+  ]);
 
   await seedModule("vehicle_listings", "automotive", "createVehicleListings", [
-    { tenant_id: "default", seller_id: "seller_seed_1", listing_type: "sale", title: "2024 Toyota Land Cruiser 300", make: "Toyota", model_name: "Land Cruiser 300", year: 2024, price: 320000, currency_code: "SAR", fuel_type: "petrol", transmission: "automatic", body_type: "suv", color: "Pearl White", condition: "certified_pre_owned", status: "active", metadata: { thumbnail: "/seed-images/automotive/1494976388-5efd60382b47.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_2", listing_type: "sale", title: "2023 Mercedes-Benz S-Class S500", make: "Mercedes-Benz", model_name: "S-Class S500", year: 2023, price: 580000, currency_code: "SAR", fuel_type: "petrol", transmission: "automatic", body_type: "sedan", color: "Obsidian Black", condition: "certified_pre_owned", status: "active", metadata: { thumbnail: "/seed-images/automotive/1583121274602-3e2820c69888.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_3", listing_type: "sale", title: "2024 BMW X5 xDrive40i", make: "BMW", model_name: "X5 xDrive40i", year: 2024, price: 385000, currency_code: "SAR", fuel_type: "petrol", transmission: "automatic", body_type: "suv", color: "Mineral White", condition: "new", status: "active", metadata: { thumbnail: "/seed-images/automotive/1489824904134-891ab64532f1.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_4", listing_type: "sale", title: "2023 Nissan Patrol Platinum", make: "Nissan", model_name: "Patrol Platinum", year: 2023, price: 265000, currency_code: "SAR", fuel_type: "petrol", transmission: "automatic", body_type: "suv", color: "Desert Gold", condition: "used", status: "active", metadata: { thumbnail: "/seed-images/automotive/1553440569-e7d61c1a3a4a.jpg" } },
-    { tenant_id: "default", seller_id: "seller_seed_5", listing_type: "sale", title: "2024 Lexus LX 600", make: "Lexus", model_name: "LX 600", year: 2024, price: 420000, currency_code: "SAR", fuel_type: "petrol", transmission: "automatic", body_type: "suv", color: "Sonic Chrome", condition: "new", status: "active", metadata: { thumbnail: "/seed-images/automotive/1544636331-e6c41d8d6044.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      seller_id: "seller_seed_1",
+      listing_type: "sale",
+      title: "2024 Toyota Land Cruiser 300",
+      make: "Toyota",
+      model_name: "Land Cruiser 300",
+      year: 2024,
+      price: 320000,
+      currency_code: "SAR",
+      fuel_type: "petrol",
+      transmission: "automatic",
+      body_type: "suv",
+      color: "Pearl White",
+      condition: "certified_pre_owned",
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/automotive/1494976388-5efd60382b47.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      seller_id: "seller_seed_2",
+      listing_type: "sale",
+      title: "2023 Mercedes-Benz S-Class S500",
+      make: "Mercedes-Benz",
+      model_name: "S-Class S500",
+      year: 2023,
+      price: 580000,
+      currency_code: "SAR",
+      fuel_type: "petrol",
+      transmission: "automatic",
+      body_type: "sedan",
+      color: "Obsidian Black",
+      condition: "certified_pre_owned",
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/automotive/1583121274602-3e2820c69888.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      seller_id: "seller_seed_3",
+      listing_type: "sale",
+      title: "2024 BMW X5 xDrive40i",
+      make: "BMW",
+      model_name: "X5 xDrive40i",
+      year: 2024,
+      price: 385000,
+      currency_code: "SAR",
+      fuel_type: "petrol",
+      transmission: "automatic",
+      body_type: "suv",
+      color: "Mineral White",
+      condition: "new",
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/automotive/1489824904134-891ab64532f1.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      seller_id: "seller_seed_4",
+      listing_type: "sale",
+      title: "2023 Nissan Patrol Platinum",
+      make: "Nissan",
+      model_name: "Patrol Platinum",
+      year: 2023,
+      price: 265000,
+      currency_code: "SAR",
+      fuel_type: "petrol",
+      transmission: "automatic",
+      body_type: "suv",
+      color: "Desert Gold",
+      condition: "used",
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/automotive/1553440569-e7d61c1a3a4a.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      seller_id: "seller_seed_5",
+      listing_type: "sale",
+      title: "2024 Lexus LX 600",
+      make: "Lexus",
+      model_name: "LX 600",
+      year: 2024,
+      price: 420000,
+      currency_code: "SAR",
+      fuel_type: "petrol",
+      transmission: "automatic",
+      body_type: "suv",
+      color: "Sonic Chrome",
+      condition: "new",
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/automotive/1544636331-e6c41d8d6044.jpg",
+      },
+    },
+  ]);
 
-  await seedModule("property_listings", "realEstate", "createPropertyListings", [
-    { tenant_id: "default", title: "Luxury 3-Bedroom Apartment in Al Olaya", description: "Modern apartment with premium finishes and city views", property_type: "apartment", listing_type: "sale", price: 1500000, currency_code: "SAR", area_sqm: 180, bedrooms: 3, bathrooms: 2, address_line1: "Al Olaya District", city: "Riyadh", postal_code: "11564", country_code: "SA", status: "active", metadata: { thumbnail: "/seed-images/real-estate/1570129477164-145adc5388f2.jpg" } },
-    { tenant_id: "default", title: "Spacious Family Villa in Al Narjis", description: "6-bedroom villa with garden, pool, driver and maid rooms", property_type: "villa", listing_type: "sale", price: 3200000, currency_code: "SAR", area_sqm: 450, bedrooms: 6, bathrooms: 5, address_line1: "Al Narjis District", city: "Riyadh", postal_code: "13326", country_code: "SA", status: "active", metadata: { thumbnail: "/seed-images/real-estate/1560448204-e02f11c5e3e0.jpg" } },
-    { tenant_id: "default", title: "Premium Office Space in KAFD", description: "Grade A office space in King Abdullah Financial District", property_type: "office", listing_type: "rent", price: 250000, currency_code: "SAR", price_period: "yearly", area_sqm: 200, bathrooms: 2, address_line1: "KAFD Tower 3", city: "Riyadh", postal_code: "13519", country_code: "SA", status: "active", metadata: { thumbnail: "/seed-images/real-estate/1497366216-18723bb40445.jpg" } },
-    { tenant_id: "default", title: "Beachfront Villa in Obhur", description: "Stunning Red Sea beachfront property with private beach access", property_type: "villa", listing_type: "sale", price: 5500000, currency_code: "SAR", area_sqm: 600, bedrooms: 5, bathrooms: 4, address_line1: "Obhur Corniche Road", city: "Jeddah", postal_code: "23813", country_code: "SA", status: "active", metadata: { thumbnail: "/seed-images/real-estate/1565363887-a7e7589ade24.jpg" } },
-    { tenant_id: "default", title: "Modern Studio in Al Hamra", description: "Compact studio ideal for professionals, near business district", property_type: "studio", listing_type: "rent", price: 30000, currency_code: "SAR", price_period: "yearly", area_sqm: 45, bathrooms: 1, address_line1: "Al Hamra Business Center", city: "Jeddah", postal_code: "23324", country_code: "SA", status: "active", metadata: { thumbnail: "/seed-images/real-estate/1560518883-ce09cec83d5a.jpg" } },
-  ])
+  await seedModule(
+    "property_listings",
+    "realEstate",
+    "createPropertyListings",
+    [
+      {
+        tenant_id: "default",
+        title: "Luxury 3-Bedroom Apartment in Al Olaya",
+        description: "Modern apartment with premium finishes and city views",
+        property_type: "apartment",
+        listing_type: "sale",
+        price: 1500000,
+        currency_code: "SAR",
+        area_sqm: 180,
+        bedrooms: 3,
+        bathrooms: 2,
+        address_line1: "Al Olaya District",
+        city: "Riyadh",
+        postal_code: "11564",
+        country_code: "SA",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/real-estate/1570129477164-145adc5388f2.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        title: "Spacious Family Villa in Al Narjis",
+        description: "6-bedroom villa with garden, pool, driver and maid rooms",
+        property_type: "villa",
+        listing_type: "sale",
+        price: 3200000,
+        currency_code: "SAR",
+        area_sqm: 450,
+        bedrooms: 6,
+        bathrooms: 5,
+        address_line1: "Al Narjis District",
+        city: "Riyadh",
+        postal_code: "13326",
+        country_code: "SA",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/real-estate/1560448204-e02f11c5e3e0.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        title: "Premium Office Space in KAFD",
+        description: "Grade A office space in King Abdullah Financial District",
+        property_type: "office",
+        listing_type: "rent",
+        price: 250000,
+        currency_code: "SAR",
+        price_period: "yearly",
+        area_sqm: 200,
+        bathrooms: 2,
+        address_line1: "KAFD Tower 3",
+        city: "Riyadh",
+        postal_code: "13519",
+        country_code: "SA",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/real-estate/1497366216-18723bb40445.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        title: "Beachfront Villa in Obhur",
+        description:
+          "Stunning Red Sea beachfront property with private beach access",
+        property_type: "villa",
+        listing_type: "sale",
+        price: 5500000,
+        currency_code: "SAR",
+        area_sqm: 600,
+        bedrooms: 5,
+        bathrooms: 4,
+        address_line1: "Obhur Corniche Road",
+        city: "Jeddah",
+        postal_code: "23813",
+        country_code: "SA",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/real-estate/1565363887-a7e7589ade24.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        title: "Modern Studio in Al Hamra",
+        description:
+          "Compact studio ideal for professionals, near business district",
+        property_type: "studio",
+        listing_type: "rent",
+        price: 30000,
+        currency_code: "SAR",
+        price_period: "yearly",
+        area_sqm: 45,
+        bathrooms: 1,
+        address_line1: "Al Hamra Business Center",
+        city: "Jeddah",
+        postal_code: "23324",
+        country_code: "SA",
+        status: "active",
+        metadata: {
+          thumbnail: "/seed-images/real-estate/1560518883-ce09cec83d5a.jpg",
+        },
+      },
+    ],
+  );
 
   await seedModule("rental_products", "rental", "createRentalProducts", [
-    { tenant_id: "default", product_id: "prod_rental_1", rental_type: "daily", base_price: 800, currency_code: "SAR", deposit_amount: 5000, is_available: true, metadata: { thumbnail: "/seed-images/rentals/1449965382-971ecc4c27af.jpg", title: "Luxury SUV – Range Rover Vogue", description: "Full-size luxury SUV, perfect for desert trips" } },
-    { tenant_id: "default", product_id: "prod_rental_2", rental_type: "daily", base_price: 350, currency_code: "SAR", deposit_amount: 2000, is_available: true, metadata: { thumbnail: "/seed-images/rentals/1452587925148-ce544e77e70d.jpg", title: "Professional Camera Kit – Sony A7IV", description: "Full-frame mirrorless camera with 3 lenses" } },
-    { tenant_id: "default", product_id: "prod_rental_3", rental_type: "weekly", base_price: 15000, currency_code: "SAR", deposit_amount: 25000, is_available: true, metadata: { thumbnail: "/seed-images/rentals/1529290130-4082a3a02297.jpg", title: "Luxury Villa – Weekly Rental", description: "5-bedroom villa with pool" } },
-    { tenant_id: "default", product_id: "prod_rental_4", rental_type: "daily", base_price: 1200, currency_code: "SAR", deposit_amount: 5000, is_available: true, metadata: { thumbnail: "/seed-images/rentals/1505236858219-adf59cfb2544.jpg", title: "Event Equipment Package", description: "Sound system, lighting, projector" } },
-    { tenant_id: "default", product_id: "prod_rental_5", rental_type: "daily", base_price: 3500, currency_code: "SAR", deposit_amount: 20000, is_available: true, metadata: { thumbnail: "/seed-images/rentals/1504274700880-e95c7dd3fdc6.jpg", title: "Construction Excavator – CAT 320", description: "Heavy-duty excavator for construction" } },
-  ])
+    {
+      tenant_id: "default",
+      product_id: "prod_rental_1",
+      rental_type: "daily",
+      base_price: 800,
+      currency_code: "SAR",
+      deposit_amount: 5000,
+      is_available: true,
+      metadata: {
+        thumbnail: "/seed-images/rentals/1449965382-971ecc4c27af.jpg",
+        title: "Luxury SUV – Range Rover Vogue",
+        description: "Full-size luxury SUV, perfect for desert trips",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_rental_2",
+      rental_type: "daily",
+      base_price: 350,
+      currency_code: "SAR",
+      deposit_amount: 2000,
+      is_available: true,
+      metadata: {
+        thumbnail: "/seed-images/rentals/1452587925148-ce544e77e70d.jpg",
+        title: "Professional Camera Kit – Sony A7IV",
+        description: "Full-frame mirrorless camera with 3 lenses",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_rental_3",
+      rental_type: "weekly",
+      base_price: 15000,
+      currency_code: "SAR",
+      deposit_amount: 25000,
+      is_available: true,
+      metadata: {
+        thumbnail: "/seed-images/rentals/1529290130-4082a3a02297.jpg",
+        title: "Luxury Villa – Weekly Rental",
+        description: "5-bedroom villa with pool",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_rental_4",
+      rental_type: "daily",
+      base_price: 1200,
+      currency_code: "SAR",
+      deposit_amount: 5000,
+      is_available: true,
+      metadata: {
+        thumbnail: "/seed-images/rentals/1505236858219-adf59cfb2544.jpg",
+        title: "Event Equipment Package",
+        description: "Sound system, lighting, projector",
+      },
+    },
+    {
+      tenant_id: "default",
+      product_id: "prod_rental_5",
+      rental_type: "daily",
+      base_price: 3500,
+      currency_code: "SAR",
+      deposit_amount: 20000,
+      is_available: true,
+      metadata: {
+        thumbnail: "/seed-images/rentals/1504274700880-e95c7dd3fdc6.jpg",
+        title: "Construction Excavator – CAT 320",
+        description: "Heavy-duty excavator for construction",
+      },
+    },
+  ]);
 
   await seedModule("gig_listings", "freelance", "createGigListings", [
-    { tenant_id: "default", freelancer_id: "freelancer_seed_1", title: "Professional Logo & Brand Identity Design", description: "Custom logo design with brand guidelines and social media kit", category: "design", listing_type: "fixed_price", price: 1500, currency_code: "SAR", delivery_time_days: 5, status: "active", metadata: { thumbnail: "/seed-images/freelance/1499951710-eda08ae3b3ea.jpg" } },
-    { tenant_id: "default", freelancer_id: "freelancer_seed_2", title: "Full Stack Web Application Development", description: "Custom web app development with React and Node.js", category: "development", listing_type: "milestone", price: 8000, currency_code: "SAR", delivery_time_days: 14, status: "active", metadata: { thumbnail: "/seed-images/freelance/1551434678-e076c223a692.jpg" } },
-    { tenant_id: "default", freelancer_id: "freelancer_seed_3", title: "Arabic-English Translation & Localization", description: "Professional translation for business, legal, and technical documents", category: "writing", listing_type: "fixed_price", price: 500, currency_code: "SAR", delivery_time_days: 3, status: "active", metadata: { thumbnail: "/seed-images/freelance/1559136555-9303baea4eee.jpg" } },
-    { tenant_id: "default", freelancer_id: "freelancer_seed_4", title: "Social Media Marketing Campaign", description: "30-day social media strategy with content creation and analytics", category: "marketing", listing_type: "fixed_price", price: 3000, currency_code: "SAR", delivery_time_days: 30, status: "active", metadata: { thumbnail: "/seed-images/freelance/1460925895917-afdab827c52f.jpg" } },
-    { tenant_id: "default", freelancer_id: "freelancer_seed_5", title: "Professional Video Production", description: "Corporate video, ads, and promotional content", category: "video", listing_type: "fixed_price", price: 5000, currency_code: "SAR", delivery_time_days: 10, status: "active", metadata: { thumbnail: "/seed-images/freelance/1522202176988-66273c2fd55f.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      freelancer_id: "freelancer_seed_1",
+      title: "Professional Logo & Brand Identity Design",
+      description:
+        "Custom logo design with brand guidelines and social media kit",
+      category: "design",
+      listing_type: "fixed_price",
+      price: 1500,
+      currency_code: "SAR",
+      delivery_time_days: 5,
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/freelance/1499951710-eda08ae3b3ea.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      freelancer_id: "freelancer_seed_2",
+      title: "Full Stack Web Application Development",
+      description: "Custom web app development with React and Node.js",
+      category: "development",
+      listing_type: "milestone",
+      price: 8000,
+      currency_code: "SAR",
+      delivery_time_days: 14,
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/freelance/1551434678-e076c223a692.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      freelancer_id: "freelancer_seed_3",
+      title: "Arabic-English Translation & Localization",
+      description:
+        "Professional translation for business, legal, and technical documents",
+      category: "writing",
+      listing_type: "fixed_price",
+      price: 500,
+      currency_code: "SAR",
+      delivery_time_days: 3,
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/freelance/1559136555-9303baea4eee.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      freelancer_id: "freelancer_seed_4",
+      title: "Social Media Marketing Campaign",
+      description:
+        "30-day social media strategy with content creation and analytics",
+      category: "marketing",
+      listing_type: "fixed_price",
+      price: 3000,
+      currency_code: "SAR",
+      delivery_time_days: 30,
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/freelance/1460925895917-afdab827c52f.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      freelancer_id: "freelancer_seed_5",
+      title: "Professional Video Production",
+      description: "Corporate video, ads, and promotional content",
+      category: "video",
+      listing_type: "fixed_price",
+      price: 5000,
+      currency_code: "SAR",
+      delivery_time_days: 10,
+      status: "active",
+      metadata: {
+        thumbnail: "/seed-images/freelance/1522202176988-66273c2fd55f.jpg",
+      },
+    },
+  ]);
 
   await seedModule("membership_tiers", "membership", "createMembershipTiers", [
-    { tenant_id: "default", name: "Silver", description: "Entry-level membership with basic perks", tier_level: 1, annual_fee: 500, currency_code: "SAR", benefits: ["10% discount on all purchases", "Free standard shipping", "Member-only newsletter"], is_active: true, color_code: "#C0C0C0", metadata: { thumbnail: "/seed-images/memberships/1579547945413-497e1b99dac0.jpg" } },
-    { tenant_id: "default", name: "Gold", description: "Premium membership with enhanced benefits", tier_level: 2, annual_fee: 1500, currency_code: "SAR", benefits: ["20% discount on purchases", "Free express shipping", "Priority support", "Exclusive events access"], is_active: true, color_code: "#FFD700", metadata: { thumbnail: "/seed-images/memberships/1556742049-0cfb2816cce5.jpg" } },
-    { tenant_id: "default", name: "Platinum", description: "VIP membership with the best perks", tier_level: 3, annual_fee: 5000, currency_code: "SAR", benefits: ["30% discount on purchases", "Free same-day delivery", "Personal concierge", "VIP lounge access", "Annual gift"], is_active: true, color_code: "#E5E4E2", metadata: { thumbnail: "/seed-images/memberships/1579547945413-497e1b99dac0.jpg" } },
-  ])
+    {
+      tenant_id: "default",
+      name: "Silver",
+      description: "Entry-level membership with basic perks",
+      tier_level: 1,
+      annual_fee: 500,
+      currency_code: "SAR",
+      benefits: [
+        "10% discount on all purchases",
+        "Free standard shipping",
+        "Member-only newsletter",
+      ],
+      is_active: true,
+      color_code: "#C0C0C0",
+      metadata: {
+        thumbnail: "/seed-images/memberships/1579547945413-497e1b99dac0.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Gold",
+      description: "Premium membership with enhanced benefits",
+      tier_level: 2,
+      annual_fee: 1500,
+      currency_code: "SAR",
+      benefits: [
+        "20% discount on purchases",
+        "Free express shipping",
+        "Priority support",
+        "Exclusive events access",
+      ],
+      is_active: true,
+      color_code: "#FFD700",
+      metadata: {
+        thumbnail: "/seed-images/memberships/1556742049-0cfb2816cce5.jpg",
+      },
+    },
+    {
+      tenant_id: "default",
+      name: "Platinum",
+      description: "VIP membership with the best perks",
+      tier_level: 3,
+      annual_fee: 5000,
+      currency_code: "SAR",
+      benefits: [
+        "30% discount on purchases",
+        "Free same-day delivery",
+        "Personal concierge",
+        "VIP lounge access",
+        "Annual gift",
+      ],
+      is_active: true,
+      color_code: "#E5E4E2",
+      metadata: {
+        thumbnail: "/seed-images/memberships/1579547945413-497e1b99dac0.jpg",
+      },
+    },
+  ]);
 
-  await seedModule("subscription_plans", "subscription", "createSubscriptionPlans", [
-    { tenant_id: "default", name: "Basic Monthly", handle: "basic-monthly", description: "Essential features for individuals", status: "active", billing_interval: "monthly", price: 49, currency_code: "SAR", trial_period_days: 14, features: ["5 projects", "Basic analytics", "Email support"], metadata: { thumbnail: "/seed-images/subscriptions/1563013544-824ae1b704d3.jpg" } },
-    { tenant_id: "default", name: "Pro Monthly", handle: "pro-monthly", description: "Advanced features for professionals", status: "active", billing_interval: "monthly", price: 149, currency_code: "SAR", trial_period_days: 14, features: ["Unlimited projects", "Advanced analytics", "Priority support", "API access"], metadata: { thumbnail: "/seed-images/subscriptions/1612404730960-5c71577fca11.jpg" } },
-    { tenant_id: "default", name: "Enterprise", handle: "enterprise", description: "Full-featured plan for organizations", status: "active", billing_interval: "monthly", price: 499, currency_code: "SAR", trial_period_days: 30, features: ["Everything in Pro", "Dedicated account manager", "Custom integrations", "SLA guarantee", "Training"], metadata: { thumbnail: "/seed-images/subscriptions/1610375461246-83df859d849d.jpg" } },
-  ])
+  await seedModule(
+    "subscription_plans",
+    "subscription",
+    "createSubscriptionPlans",
+    [
+      {
+        tenant_id: "default",
+        name: "Basic Monthly",
+        handle: "basic-monthly",
+        description: "Essential features for individuals",
+        status: "active",
+        billing_interval: "monthly",
+        price: 49,
+        currency_code: "SAR",
+        trial_period_days: 14,
+        features: ["5 projects", "Basic analytics", "Email support"],
+        metadata: {
+          thumbnail: "/seed-images/subscriptions/1563013544-824ae1b704d3.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        name: "Pro Monthly",
+        handle: "pro-monthly",
+        description: "Advanced features for professionals",
+        status: "active",
+        billing_interval: "monthly",
+        price: 149,
+        currency_code: "SAR",
+        trial_period_days: 14,
+        features: [
+          "Unlimited projects",
+          "Advanced analytics",
+          "Priority support",
+          "API access",
+        ],
+        metadata: {
+          thumbnail:
+            "/seed-images/subscriptions/1612404730960-5c71577fca11.jpg",
+        },
+      },
+      {
+        tenant_id: "default",
+        name: "Enterprise",
+        handle: "enterprise",
+        description: "Full-featured plan for organizations",
+        status: "active",
+        billing_interval: "monthly",
+        price: 499,
+        currency_code: "SAR",
+        trial_period_days: 30,
+        features: [
+          "Everything in Pro",
+          "Dedicated account manager",
+          "Custom integrations",
+          "SLA guarantee",
+          "Training",
+        ],
+        metadata: {
+          thumbnail:
+            "/seed-images/subscriptions/1610375461246-83df859d849d.jpg",
+        },
+      },
+    ],
+  );
 
   await seedModule("class_schedules", "fitness", "createClassSchedules", [
-    { tenant_id: "default", class_name: "Morning Vinyasa Yoga", class_type: "yoga", day_of_week: "monday", start_time: "07:00", end_time: "08:00", duration_minutes: 60, max_capacity: 25, difficulty: "all_levels", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg", instructor: "Sarah Chen" } },
-    { tenant_id: "default", class_name: "Morning Vinyasa Yoga", class_type: "yoga", day_of_week: "wednesday", start_time: "07:00", end_time: "08:00", duration_minutes: 60, max_capacity: 25, difficulty: "all_levels", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg", instructor: "Sarah Chen" } },
-    { tenant_id: "default", class_name: "Morning Vinyasa Yoga", class_type: "yoga", day_of_week: "friday", start_time: "07:00", end_time: "08:00", duration_minutes: 60, max_capacity: 25, difficulty: "all_levels", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg", instructor: "Sarah Chen" } },
-    { tenant_id: "default", class_name: "HIIT Power Hour", class_type: "hiit", day_of_week: "tuesday", start_time: "18:00", end_time: "19:00", duration_minutes: 60, max_capacity: 30, difficulty: "intermediate", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1534438327573-98b2a65945b2.jpg", instructor: "Marcus Rodriguez" } },
-    { tenant_id: "default", class_name: "HIIT Power Hour", class_type: "hiit", day_of_week: "thursday", start_time: "18:00", end_time: "19:00", duration_minutes: 60, max_capacity: 30, difficulty: "intermediate", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1534438327573-98b2a65945b2.jpg", instructor: "Marcus Rodriguez" } },
-    { tenant_id: "default", class_name: "Spinning Rush", class_type: "spinning", day_of_week: "monday", start_time: "17:30", end_time: "18:15", duration_minutes: 45, max_capacity: 20, difficulty: "advanced", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1534438327573-98b2a65945b2.jpg", instructor: "Layla Al-Farsi" } },
-    { tenant_id: "default", class_name: "Pilates Foundations", class_type: "pilates", day_of_week: "saturday", start_time: "09:00", end_time: "10:00", duration_minutes: 60, max_capacity: 15, difficulty: "beginner", is_active: true, metadata: { thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg", instructor: "Noura Al-Salem" } },
-  ])
+    {
+      tenant_id: "default",
+      class_name: "Morning Vinyasa Yoga",
+      class_type: "yoga",
+      day_of_week: "monday",
+      start_time: "07:00",
+      end_time: "08:00",
+      duration_minutes: 60,
+      max_capacity: 25,
+      difficulty: "all_levels",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg",
+        instructor: "Sarah Chen",
+      },
+    },
+    {
+      tenant_id: "default",
+      class_name: "Morning Vinyasa Yoga",
+      class_type: "yoga",
+      day_of_week: "wednesday",
+      start_time: "07:00",
+      end_time: "08:00",
+      duration_minutes: 60,
+      max_capacity: 25,
+      difficulty: "all_levels",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg",
+        instructor: "Sarah Chen",
+      },
+    },
+    {
+      tenant_id: "default",
+      class_name: "Morning Vinyasa Yoga",
+      class_type: "yoga",
+      day_of_week: "friday",
+      start_time: "07:00",
+      end_time: "08:00",
+      duration_minutes: 60,
+      max_capacity: 25,
+      difficulty: "all_levels",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg",
+        instructor: "Sarah Chen",
+      },
+    },
+    {
+      tenant_id: "default",
+      class_name: "HIIT Power Hour",
+      class_type: "hiit",
+      day_of_week: "tuesday",
+      start_time: "18:00",
+      end_time: "19:00",
+      duration_minutes: 60,
+      max_capacity: 30,
+      difficulty: "intermediate",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1534438327573-98b2a65945b2.jpg",
+        instructor: "Marcus Rodriguez",
+      },
+    },
+    {
+      tenant_id: "default",
+      class_name: "HIIT Power Hour",
+      class_type: "hiit",
+      day_of_week: "thursday",
+      start_time: "18:00",
+      end_time: "19:00",
+      duration_minutes: 60,
+      max_capacity: 30,
+      difficulty: "intermediate",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1534438327573-98b2a65945b2.jpg",
+        instructor: "Marcus Rodriguez",
+      },
+    },
+    {
+      tenant_id: "default",
+      class_name: "Spinning Rush",
+      class_type: "spinning",
+      day_of_week: "monday",
+      start_time: "17:30",
+      end_time: "18:15",
+      duration_minutes: 45,
+      max_capacity: 20,
+      difficulty: "advanced",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1534438327573-98b2a65945b2.jpg",
+        instructor: "Layla Al-Farsi",
+      },
+    },
+    {
+      tenant_id: "default",
+      class_name: "Pilates Foundations",
+      class_type: "pilates",
+      day_of_week: "saturday",
+      start_time: "09:00",
+      end_time: "10:00",
+      duration_minutes: 60,
+      max_capacity: 15,
+      difficulty: "beginner",
+      is_active: true,
+      metadata: {
+        thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg",
+        instructor: "Noura Al-Salem",
+      },
+    },
+  ]);
 
   await seedModule("reviews", "review", "createReviews", [
-    { product_id: "prod_review_1", customer_id: "cust_review_1", customer_name: "Mohammed Al-Rashid", title: "Excellent Quality", content: "Outstanding product quality, exceeded all my expectations. Fast shipping too.", rating: 5, status: "approved", is_verified: true, metadata: {} },
-    { product_id: "prod_review_1", customer_id: "cust_review_2", customer_name: "Fatima Al-Zahrani", title: "Great Value", content: "Perfect balance of quality and price. Would definitely recommend.", rating: 4, status: "approved", is_verified: true, metadata: {} },
-    { product_id: "prod_review_2", customer_id: "cust_review_3", customer_name: "Ahmed Hassan", title: "Love It", content: "Exactly what I was looking for. The delivery was fast and packaging was great.", rating: 5, status: "approved", is_verified: true, metadata: {} },
-    { product_id: "prod_review_2", customer_id: "cust_review_4", customer_name: "Sara Al-Otaibi", title: "Good Product", content: "Solid product overall. Minor issue with sizing but customer service was helpful.", rating: 4, status: "approved", is_verified: true, metadata: {} },
-    { product_id: "prod_review_3", customer_id: "cust_review_5", customer_name: "Khalid Al-Dosari", title: "Highly Recommend", content: "Best purchase I've made this year. Premium quality materials.", rating: 5, status: "approved", is_verified: true, metadata: {} },
-  ])
+    {
+      product_id: "prod_review_1",
+      customer_id: "cust_review_1",
+      customer_name: "Mohammed Al-Rashid",
+      title: "Excellent Quality",
+      content:
+        "Outstanding product quality, exceeded all my expectations. Fast shipping too.",
+      rating: 5,
+      status: "approved",
+      is_verified: true,
+      metadata: {},
+    },
+    {
+      product_id: "prod_review_1",
+      customer_id: "cust_review_2",
+      customer_name: "Fatima Al-Zahrani",
+      title: "Great Value",
+      content:
+        "Perfect balance of quality and price. Would definitely recommend.",
+      rating: 4,
+      status: "approved",
+      is_verified: true,
+      metadata: {},
+    },
+    {
+      product_id: "prod_review_2",
+      customer_id: "cust_review_3",
+      customer_name: "Ahmed Hassan",
+      title: "Love It",
+      content:
+        "Exactly what I was looking for. The delivery was fast and packaging was great.",
+      rating: 5,
+      status: "approved",
+      is_verified: true,
+      metadata: {},
+    },
+    {
+      product_id: "prod_review_2",
+      customer_id: "cust_review_4",
+      customer_name: "Sara Al-Otaibi",
+      title: "Good Product",
+      content:
+        "Solid product overall. Minor issue with sizing but customer service was helpful.",
+      rating: 4,
+      status: "approved",
+      is_verified: true,
+      metadata: {},
+    },
+    {
+      product_id: "prod_review_3",
+      customer_id: "cust_review_5",
+      customer_name: "Khalid Al-Dosari",
+      title: "Highly Recommend",
+      content: "Best purchase I've made this year. Premium quality materials.",
+      rating: 5,
+      status: "approved",
+      is_verified: true,
+      metadata: {},
+    },
+  ]);
 
-  return res.json({ success: true, results })
+  return res.json({ success: true, results });
 }

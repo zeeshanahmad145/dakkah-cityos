@@ -6,14 +6,14 @@ export default async function orderPlacedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const logger = container.resolve("logger");
+  const logger = container.resolve("logger") as unknown as any;
   logger.info(
     `[PayloadSync] order.placed received for ${data.id}. Discovering inventory to sync...`,
   );
 
   try {
     // 1. Fetch the order and its items
-    const query = container.resolve("query");
+    const query = container.resolve("query") as unknown as any;
     const { data: orders } = await query.graph({
       entity: "order",
       fields: ["items.variant_id"],
@@ -45,14 +45,14 @@ export default async function orderPlacedHandler({
     );
 
     // 3. Trigger inventory sync workflow for each affected inventory item
-    for (const inventoryItemId of inventoryItemIds) {
+    for (const inventoryItemId of inventoryItemIds as string[]) {
       await syncInventoryToPayloadWorkflow(container).run({
         input: { inventoryItemId },
       });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error(
-      `[PayloadSync] Order workflow failed for order ${data.id}: ${error.message}`,
+      `[PayloadSync] Order workflow failed for order ${data.id}: ${(error instanceof Error ? error.message : String(error))}`,
     );
   }
 
@@ -63,9 +63,9 @@ export default async function orderPlacedHandler({
     await syncOrderToErpnextWorkflow(container).run({
       input: { orderId: data.id },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error(
-      `[ERPNextSync] Order sync failed for order ${data.id}: ${error.message}`,
+      `[ERPNextSync] Order sync failed for order ${data.id}: ${(error instanceof Error ? error.message : String(error))}`,
     );
   }
 }
@@ -73,3 +73,4 @@ export default async function orderPlacedHandler({
 export const config: SubscriberConfig = {
   event: "order.placed",
 };
+

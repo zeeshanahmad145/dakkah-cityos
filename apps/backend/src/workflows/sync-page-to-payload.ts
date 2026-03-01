@@ -21,7 +21,7 @@ const syncPageApiStep = createStep(
         });
       }
 
-      const query = container.resolve("query");
+      const query = container.resolve("query") as unknown as any;
 
       const { data: pages } = await query.graph({
         entity: "cms_page",
@@ -93,10 +93,10 @@ const syncPageApiStep = createStep(
         data: await res.json(),
         method,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       return new StepResponse<any, any>({
         status: "error",
-        message: error.message,
+        message: (error instanceof Error ? error.message : String(error)),
       });
     }
   },

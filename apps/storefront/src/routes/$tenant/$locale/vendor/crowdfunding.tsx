@@ -29,7 +29,7 @@ function VendorCrowdfundingRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -42,9 +42,12 @@ function VendorCrowdfundingRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/crowdfunding${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: CrowdfundingCampaign[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: CrowdfundingCampaign[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -93,7 +96,9 @@ function VendorCrowdfundingRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -104,24 +109,38 @@ function VendorCrowdfundingRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No crowdfunding campaigns yet</p>
-          <p className="text-sm">Launch your first campaign to start raising funds.</p>
+          <p className="text-sm">
+            Launch your first campaign to start raising funds.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((campaign) => {
-            const progress = getProgress(campaign.raised_amount, campaign.goal_amount)
+            const progress = getProgress(
+              campaign.raised_amount,
+              campaign.goal_amount,
+            )
             return (
-              <div key={campaign.id} className="border rounded-lg p-6 hover:shadow-md transition">
+              <div
+                key={campaign.id}
+                className="border rounded-lg p-6 hover:shadow-md transition"
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold">{campaign.title}</h3>
-                      <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[campaign.status] || "bg-ds-muted text-ds-foreground"}`}>
+                      <h3 className="text-lg font-semibold">
+                        {campaign.title}
+                      </h3>
+                      <span
+                        className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[campaign.status] || "bg-ds-muted text-ds-foreground"}`}
+                      >
                         {campaign.status}
                       </span>
                     </div>
                     {campaign.description && (
-                      <p className="text-ds-muted-foreground text-sm mb-3">{campaign.description}</p>
+                      <p className="text-ds-muted-foreground text-sm mb-3">
+                        {campaign.description}
+                      </p>
                     )}
                     <div className="w-full bg-ds-border rounded-full h-2 mb-3">
                       <div
@@ -131,12 +150,20 @@ function VendorCrowdfundingRoute() {
                     </div>
                     <div className="flex items-center gap-6 text-sm text-ds-muted-foreground">
                       <span className="font-medium text-ds-foreground">
-                        {campaign.currency_code?.toUpperCase()} {(campaign.raised_amount / 100).toFixed(2)}
-                        <span className="text-ds-muted-foreground font-normal"> / {(campaign.goal_amount / 100).toFixed(2)}</span>
+                        {campaign.currency_code?.toUpperCase()}{" "}
+                        {(campaign.raised_amount / 100).toFixed(2)}
+                        <span className="text-ds-muted-foreground font-normal">
+                          {" "}
+                          / {(campaign.goal_amount / 100).toFixed(2)}
+                        </span>
                       </span>
-                      <span className="font-medium text-ds-primary">{progress}%</span>
+                      <span className="font-medium text-ds-primary">
+                        {progress}%
+                      </span>
                       <span>{campaign.backer_count} backers</span>
-                      <span>Ends {new Date(campaign.end_date).toLocaleDateString()}</span>
+                      <span>
+                        Ends {new Date(campaign.end_date!).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
                   <button className="text-sm text-ds-primary hover:underline ms-4">

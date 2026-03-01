@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -19,8 +19,8 @@ export async function POST(
   }
   const { notify_customer } = parsed.data
   
-  const query = req.scope.resolve("query")
-  const quoteService = req.scope.resolve("quoteModuleService")
+  const query = req.scope.resolve("query") as unknown as any
+  const quoteService = req.scope.resolve("quoteModuleService") as unknown as any
 
   const { data: quotes } = await query.graph({
     entity: "quote",
@@ -61,7 +61,7 @@ export async function POST(
 
   try {
     // Create cart from quote
-    const cartService = req.scope.resolve("cartModuleService")
+    const cartService = req.scope.resolve("cartModuleService") as unknown as any
     
     const cart = await cartService.createCarts({
       customer_id: quote.customer_id,
@@ -105,7 +105,7 @@ export async function POST(
       quote_id: id,
       cart_id: cart.id
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-QUOTES-ID-CONVERT")}
 }
 

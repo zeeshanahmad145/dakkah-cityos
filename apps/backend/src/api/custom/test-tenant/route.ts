@@ -18,7 +18,7 @@ const createTenantSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenantModuleService");
+    const tenantModuleService = req.scope.resolve("tenantModuleService") as unknown as any;
 
     const {
       limit = 20,
@@ -33,12 +33,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const filters: Record<string, any> = {};
     if (status) filters.status = status;
 
-    const [tenants, count] = await (
-      tenantModuleService as any
-    ).listAndCountTenants(filters, {
-      skip: Number(offset),
-      take: Number(limit),
-    });
+    const [tenants, count] = await tenantModuleService.listAndCountTenants(
+      filters,
+      {
+        skip: Number(offset),
+        take: Number(limit),
+      },
+    );
 
     res.json({
       tenants,
@@ -46,14 +47,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset: Number(offset),
       limit: Number(limit),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin tenants");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenantModuleService");
+    const tenantModuleService = req.scope.resolve("tenantModuleService") as unknown as any;
     const parsed = createTenantSchema.safeParse(req.body);
     if (!parsed.success) {
       return res
@@ -64,7 +65,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const tenant = await tenantModuleService.createTenants(parsed.data);
 
     res.status(201).json({ tenant });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin tenants");
   }
 }

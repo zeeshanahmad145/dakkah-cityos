@@ -3,7 +3,11 @@ import { useQuery } from "@tanstack/react-query"
 import { ManageLayout } from "@/components/manage"
 import { Container } from "./container"
 import { PageHeader } from "./page-header"
-import { DataTable, type DataTableColumn, type DataTableFilter } from "./data-table"
+import {
+  DataTable,
+  type DataTableColumn,
+  type DataTableFilter,
+} from "./data-table"
 import { StatsGrid } from "./stats-grid"
 import { Drawer } from "./drawer"
 import { Button } from "./button"
@@ -42,7 +46,13 @@ interface CrudPageProps {
   emptyAction?: ReactNode
   countLabel?: string
   actions?: ReactNode
-  stats?: Array<{ label: string; value: string | number; trend?: { value: number; positive: boolean }; icon?: ReactNode; description?: string }>
+  stats?: Array<{
+    label: string
+    value: string | number
+    trend?: { value: number; positive: boolean }
+    icon?: ReactNode
+    description?: string
+  }>
   drawerTitle?: string
   drawerContent?: ReactNode
   drawerFooter?: ReactNode
@@ -121,9 +131,7 @@ export function CrudPage({
           }
         />
 
-        {stats && stats.length > 0 && (
-          <StatsGrid stats={stats} />
-        )}
+        {stats && stats.length > 0 && <StatsGrid stats={stats} />}
 
         <DataTable
           columns={columns as DataTableColumn<Record<string, unknown>>[]}
@@ -173,7 +181,13 @@ interface ManageModulePageProps {
   countLabel?: string
   addLabel?: string
   actions?: ReactNode
-  stats?: Array<{ label: string; value: string | number; trend?: { value: number; positive: boolean }; icon?: ReactNode; description?: string }>
+  stats?: Array<{
+    label: string
+    value: string | number
+    trend?: { value: number; positive: boolean }
+    icon?: ReactNode
+    description?: string
+  }>
   transformData?: (response: any) => any[]
   queryParams?: Record<string, unknown>
   onRowClick?: (row: any, index: number) => void
@@ -226,7 +240,9 @@ export function ManageModulePage({
       <Plus className="w-4 h-4" />
       {addLabel}
     </Button>
-  ) : actions
+  ) : (
+    actions
+  )
 
   return (
     <CrudPage

@@ -15,17 +15,18 @@ export function HeroSection({ config }: HeroSectionProps) {
             {config.title || "Welcome to Our Store"}
           </h1>
           <p className="mt-6 text-lg md:text-xl text-ds-muted-foreground">
-            {config.subtitle || "Discover amazing products at great prices. Quality guaranteed."}
+            {config.subtitle ||
+              "Discover amazing products at great prices. Quality guaranteed."}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <Link
-              to={`${prefix}/store` as any}
+              to={`${prefix}/store` as never}
               className="inline-flex items-center justify-center px-8 py-3 bg-ds-background text-ds-foreground font-medium rounded-md hover:bg-ds-muted transition-colors"
             >
               Shop Now
             </Link>
             <Link
-              to={`${prefix}/store` as any}
+              to={`${prefix}/store` as never}
               className="inline-flex items-center justify-center px-8 py-3 border border-white text-ds-primary-foreground font-medium rounded-md hover:bg-ds-muted/10 transition-colors"
             >
               Browse Categories

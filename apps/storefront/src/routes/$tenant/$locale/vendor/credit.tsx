@@ -27,7 +27,7 @@ function VendorCreditRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -85,7 +85,9 @@ function VendorCreditRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -96,17 +98,24 @@ function VendorCreditRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No credit options yet</p>
-          <p className="text-sm">Create financing options to offer customers flexible payment plans.</p>
+          <p className="text-sm">
+            Create financing options to offer customers flexible payment plans.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((option) => (
-            <div key={option.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={option.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{option.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[option.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[option.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {option.status}
                     </span>
                   </div>
@@ -116,18 +125,26 @@ function VendorCreditRoute() {
                       <p className="text-xs text-ds-muted-foreground">APR</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{option.term_months}mo</p>
+                      <p className="text-lg font-bold">
+                        {option.term_months}mo
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Term</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
                       <p className="text-sm font-bold">
-                        {option.currency_code?.toUpperCase()} {(option.min_amount / 100).toFixed(0)} - {(option.max_amount / 100).toFixed(0)}
+                        {option.currency_code?.toUpperCase()}{" "}
+                        {(option.min_amount / 100).toFixed(0)} -{" "}
+                        {(option.max_amount / 100).toFixed(0)}
                       </p>
-                      <p className="text-xs text-ds-muted-foreground">Amount Range</p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Amount Range
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
                       <p className="text-lg font-bold">{option.applications}</p>
-                      <p className="text-xs text-ds-muted-foreground">Applications</p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Applications
+                      </p>
                     </div>
                   </div>
                 </div>

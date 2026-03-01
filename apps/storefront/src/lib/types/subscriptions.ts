@@ -11,7 +11,8 @@ export interface SubscriptionPlan {
   currency_code: string
   setup_fee?: number
   trial_period_days: number
-  features?: Record<string, unknown>
+  trial_days?: number
+  features?: string[] | Record<string, unknown>
   limits?: Record<string, unknown>
   included_products?: string[]
   sort_order: number
@@ -38,6 +39,8 @@ export interface Subscription {
   trial_start?: string
   trial_end?: string
   canceled_at?: string
+  paused_until?: string
+  pause_end?: string
   billing_interval: "monthly" | "yearly" | "quarterly" | "weekly"
   billing_interval_count: number
   billing_anchor_day?: number

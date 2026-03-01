@@ -11,7 +11,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Unauthorized" })
   }
   
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
   
   try {
     // Verify subscription ownership
@@ -105,7 +105,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         offset: Number(offset)
       })
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-SUBSCRIPTIONS-ID-BILLING-HISTORY")}
 }
 

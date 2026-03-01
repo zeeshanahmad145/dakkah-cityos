@@ -3,20 +3,20 @@ import {
   WorkflowResponse,
   createStep,
   StepResponse,
-} from "@medusajs/framework/workflows-sdk"
+} from "@medusajs/framework/workflows-sdk";
 
 // Step: Approve vendor
 const approveVendorStep = createStep(
   "approve-vendor-step",
   async (
     input: {
-      vendorId: string
-      approvedBy: string
-      notes?: string
+      vendorId: string;
+      approvedBy: string;
+      notes?: string;
     },
-    { container }
+    { container },
   ) => {
-    const vendorModule = container.resolve("vendor") as any
+    const vendorModule = container.resolve("vendor") as unknown as any;
 
     const [vendor] = await vendorModule.updateVendors({
       id: input.vendorId,
@@ -26,14 +26,28 @@ const approveVendorStep = createStep(
       verified_by: input.approvedBy,
       verification_notes: input.notes,
       onboarded_at: new Date(),
-    })
+    });
 
-    return new StepResponse({ vendor }, { vendorId: input.vendorId, previousStatus: "pending", previousVerificationStatus: "onboarding" })
+    return new StepResponse(
+      { vendor },
+      {
+        vendorId: input.vendorId,
+        previousStatus: "pending",
+        previousVerificationStatus: "onboarding",
+      },
+    );
   },
-  async (compensationData: { vendorId: string; previousStatus: string; previousVerificationStatus: string }, { container }) => {
-    if (!compensationData?.vendorId) return
+  async (
+    compensationData: {
+      vendorId: string;
+      previousStatus: string;
+      previousVerificationStatus: string;
+    },
+    { container },
+  ) => {
+    if (!compensationData?.vendorId) return;
     try {
-      const vendorModule = container.resolve("vendor") as any
+      const vendorModule = container.resolve("vendor") as unknown as any;
       await vendorModule.updateVendors({
         id: compensationData.vendorId,
         verification_status: "pending",
@@ -41,24 +55,17 @@ const approveVendorStep = createStep(
         verified_at: null,
         verified_by: null,
         onboarded_at: null,
-      })
-    } catch (error) {
-    }
-  }
-)
+      });
+    } catch (error) {}
+  },
+);
 
 // Workflow
 export const approveVendorWorkflow = createWorkflow(
   "approve-vendor-workflow",
-  (
-    input: {
-      vendorId: string
-      approvedBy: string
-      notes?: string
-    }
-  ) => {
-    const { vendor } = approveVendorStep(input)
+  (input: { vendorId: string; approvedBy: string; notes?: string }) => {
+    const { vendor } = approveVendorStep(input);
 
-    return new WorkflowResponse({ vendor })
-  }
-)
+    return new WorkflowResponse({ vendor });
+  },
+);

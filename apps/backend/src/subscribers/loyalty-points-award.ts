@@ -12,8 +12,8 @@ export default async function loyaltyOrderCompletedSubscriber({
   const orderId = data.id;
 
   try {
-    const query = container.resolve("query") as any;
-    const loyaltyService = container.resolve("loyalty") as any;
+    const query = container.resolve("query") as unknown as any;
+    const loyaltyService = container.resolve("loyalty") as unknown as any;
 
     // Fetch order details
     const {

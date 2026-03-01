@@ -147,7 +147,7 @@ export function ReturnRequestForm({
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-ds-foreground">{item.title}</p>
                       <p className="text-xs text-ds-muted-foreground">
-                        {formatCurrency(item.price.amount, item.price.currency, locale as SupportedLocale)}
+                        {formatCurrency((item.price.amount ?? 0), item.price.currency, locale as SupportedLocale)}
                       </p>
                     </div>
                   </div>

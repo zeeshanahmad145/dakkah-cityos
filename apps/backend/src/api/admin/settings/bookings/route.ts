@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
@@ -31,7 +31,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     // In production, fetch from database or store settings
     res.json({ config: bookingConfig })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin settings bookings")}
 }
 
@@ -74,7 +74,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ config: bookingConfig, message: "Configuration saved" })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin settings bookings")}
 }
 

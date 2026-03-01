@@ -42,7 +42,10 @@ function VerificationPage() {
     },
   ]
 
-  const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
+  const statusConfig: Record<
+    string,
+    { bg: string; text: string; label: string }
+  > = {
     "not-started": {
       bg: "bg-ds-muted",
       text: "text-ds-muted-foreground",
@@ -79,10 +82,16 @@ function VerificationPage() {
 
   if (!mounted) {
     return (
-      <AccountLayout title={t(locale, "identity.verify_identity")} description={t(locale, "identity.title")}>
+      <AccountLayout
+        title={t(locale, "identity.verify_identity")}
+        description={t(locale, "identity.title")}
+      >
         <div className="space-y-4">
           {[1, 2].map((i) => (
-            <div key={i} className="h-28 bg-ds-muted rounded-lg animate-pulse" />
+            <div
+              key={i}
+              className="h-28 bg-ds-muted rounded-lg animate-pulse"
+            />
           ))}
         </div>
       </AccountLayout>
@@ -90,7 +99,10 @@ function VerificationPage() {
   }
 
   return (
-    <AccountLayout title={t(locale, "identity.verify_identity")} description={t(locale, "identity.title")}>
+    <AccountLayout
+      title={t(locale, "identity.verify_identity")}
+      description={t(locale, "identity.title")}
+    >
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {verifications.map((v) => {
@@ -106,10 +118,14 @@ function VerificationPage() {
                       {v.type === "kyc" ? "🪪" : "🔒"}
                     </span>
                     <div>
-                      <h3 className="text-sm font-semibold text-ds-foreground">{v.label}</h3>
+                      <h3 className="text-sm font-semibold text-ds-foreground">
+                        {v.label}
+                      </h3>
                     </div>
                   </div>
-                  <span className={`px-2 py-1 text-xs font-medium rounded ${config.bg} ${config.text}`}>
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded ${config.bg} ${config.text}`}
+                  >
                     {config.label}
                   </span>
                 </div>
@@ -119,27 +135,33 @@ function VerificationPage() {
                     <VerificationBadge verified type="identity" size="sm" />
                     <span>{t(locale, "identity.verified")}</span>
                     {v.verifiedAt && (
-                      <span>· {formatDate(v.verifiedAt, locale as any)}</span>
+                      <span>· {formatDate(v.verifiedAt, locale as import("@/lib/i18n").SupportedLocale)}</span>
                     )}
                   </div>
                 )}
 
                 {v.status === "rejected" && v.rejectionReason && (
-                  <p className="text-sm text-ds-destructive mb-3">{v.rejectionReason}</p>
+                  <p className="text-sm text-ds-destructive mb-3">
+                    {v.rejectionReason}
+                  </p>
                 )}
 
-                {v.type === "kyc" && (v.status === "not-started" || v.status === "rejected") && (
-                  <button
-                    onClick={() => setShowKYCForm(true)}
-                    className="w-full px-4 py-2 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
-                  >
-                    {v.status === "rejected" ? "Resubmit" : t(locale, "identity.verify_identity")}
-                  </button>
-                )}
+                {v.type === "kyc" &&
+                  (v.status === "not-started" || v.status === "rejected") && (
+                    <button
+                      onClick={() => setShowKYCForm(true)}
+                      className="w-full px-4 py-2 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
+                    >
+                      {v.status === "rejected"
+                        ? "Resubmit"
+                        : t(locale, "identity.verify_identity")}
+                    </button>
+                  )}
 
                 {v.status === "pending" && (
                   <p className="text-sm text-ds-muted-foreground">
-                    Your verification is being reviewed. This typically takes 1-3 business days.
+                    Your verification is being reviewed. This typically takes
+                    1-3 business days.
                   </p>
                 )}
               </div>
@@ -162,7 +184,8 @@ function VerificationPage() {
           <div className="bg-ds-background rounded-lg border border-ds-border p-8 text-center">
             <span className="text-3xl block mb-3">🎫</span>
             <p className="text-sm text-ds-muted-foreground">
-              No credentials issued yet. Complete your verification to receive digital credentials.
+              No credentials issued yet. Complete your verification to receive
+              digital credentials.
             </p>
           </div>
         </div>

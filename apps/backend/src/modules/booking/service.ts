@@ -1,4 +1,4 @@
-import { MedusaService } from "@medusajs/framework/utils"
+import { MedusaService } from "@medusajs/framework/utils";
 import {
   ServiceProduct,
   ServiceProvider,
@@ -7,11 +7,11 @@ import {
   Booking,
   BookingItem,
   BookingReminder,
-} from "./models"
+} from "./models";
 
 /**
  * Booking Module Service
- * 
+ *
  * Manages service bookings, availability, providers, and scheduling.
  */
 class BookingModuleService extends MedusaService({
@@ -24,13 +24,13 @@ class BookingModuleService extends MedusaService({
   BookingReminder,
 }) {
   // ============ Explicitly declare auto-generated methods for TS compiler ============
-  
+
   // Availabilities
   declare listAvailabilities: any;
   declare createAvailabilities: any;
   declare updateAvailabilities: any;
   declare deleteAvailabilities: any;
-  
+
   // Availability Exceptions
   declare listAvailabilityExceptions: any;
   declare createAvailabilityExceptions: any;
@@ -74,16 +74,19 @@ class BookingModuleService extends MedusaService({
   async getAvailableSlots(
     serviceProductId: string,
     date: Date,
-    providerId?: string
+    providerId?: string,
   ): Promise<Array<{ start: Date; end: Date; providerId?: string }>> {
-    const service = await this.retrieveServiceProduct(serviceProductId);
+    const service = await this.retrieveServiceProduct(serviceProductId) as any;
     const slots: Array<{ start: Date; end: Date; providerId?: string }> = [];
 
     // Get providers for this service
     let providerIds: string[] = [];
     if (providerId) {
       providerIds = [providerId];
-    } else if (service.assigned_providers && Array.isArray(service.assigned_providers)) {
+    } else if (
+      service.assigned_providers &&
+      Array.isArray(service.assigned_providers)
+    ) {
       providerIds = service.assigned_providers as string[];
     }
 
@@ -92,19 +95,27 @@ class BookingModuleService extends MedusaService({
       const availability = await this.getAvailabilityForDate(
         pid ? "provider" : "service",
         pid || serviceProductId,
-        date
+        date,
       );
 
       if (!availability) continue;
 
       // Generate time slots
-      const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const days = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ];
       const dayOfWeek = days[date.getDay()];
       const schedule = availability.weekly_schedule?.[dayOfWeek] || [];
 
       for (const period of schedule) {
-        const [startHour, startMin] = period.start.split(':').map(Number);
-        const [endHour, endMin] = period.end.split(':').map(Number);
+        const [startHour, startMin] = period.start.split(":").map(Number);
+        const [endHour, endMin] = period.end.split(":").map(Number);
 
         const slotStart = new Date(date);
         slotStart.setHours(startHour, startMin, 0, 0);
@@ -113,20 +124,26 @@ class BookingModuleService extends MedusaService({
         periodEnd.setHours(endHour, endMin, 0, 0);
 
         // Generate slots based on service duration
-        const slotDuration = service.duration_minutes + 
-          (service.buffer_before_minutes || 0) + 
+        const slotDuration =
+          service.duration_minutes +
+          (service.buffer_before_minutes || 0) +
           (service.buffer_after_minutes || 0);
 
         let currentSlot = new Date(slotStart);
-        while (currentSlot.getTime() + (slotDuration * 60 * 1000) <= periodEnd.getTime()) {
-          const slotEnd = new Date(currentSlot.getTime() + (service.duration_minutes * 60 * 1000));
-          
+        while (
+          currentSlot.getTime() + slotDuration * 60 * 1000 <=
+          periodEnd.getTime()
+        ) {
+          const slotEnd = new Date(
+            currentSlot.getTime() + service.duration_minutes * 60 * 1000,
+          );
+
           // Check if slot is available (no existing bookings)
           const isAvailable = await this.isSlotAvailable(
             serviceProductId,
             currentSlot,
             slotEnd,
-            pid ?? undefined
+            pid ?? undefined,
           );
 
           if (isAvailable) {
@@ -138,7 +155,9 @@ class BookingModuleService extends MedusaService({
           }
 
           // Move to next slot
-          currentSlot = new Date(currentSlot.getTime() + (slotDuration * 60 * 1000));
+          currentSlot = new Date(
+            currentSlot.getTime() + slotDuration * 60 * 1000,
+          );
         }
       }
     }
@@ -155,7 +174,7 @@ class BookingModuleService extends MedusaService({
   async getAvailabilityForDate(
     ownerType: string,
     ownerId: string,
-    date: Date
+    date: Date,
   ): Promise<any | null> {
     const availabilities = await this.listAvailabilities({
       owner_type: ownerType,
@@ -163,11 +182,14 @@ class BookingModuleService extends MedusaService({
       is_active: true,
     }) as any;
 
-    const list = Array.isArray(availabilities) ? availabilities : [availabilities].filter(Boolean);
-    
+    const list = Array.isArray(availabilities)
+      ? availabilities
+      : [availabilities].filter(Boolean);
+
     // Find applicable availability
     for (const avail of list) {
-      if (avail.effective_from && new Date(avail.effective_from) > date) continue;
+      if (avail.effective_from && new Date(avail.effective_from) > date)
+        continue;
       if (avail.effective_to && new Date(avail.effective_to) < date) continue;
       return avail;
     }
@@ -180,11 +202,13 @@ class BookingModuleService extends MedusaService({
    */
   async filterSlotsWithExceptions(
     slots: Array<{ start: Date; end: Date; providerId?: string }>,
-    date: Date
+    date: Date,
   ): Promise<Array<{ start: Date; end: Date; providerId?: string }>> {
     // Get all exceptions for the date
     const exceptions = await this.listAvailabilityExceptions({}) as any;
-    const exceptionList = Array.isArray(exceptions) ? exceptions : [exceptions].filter(Boolean);
+    const exceptionList = Array.isArray(exceptions)
+      ? exceptions
+      : [exceptions].filter(Boolean);
 
     const dateExceptions = exceptionList.filter((exc: any) => {
       const excStart = new Date(exc.start_date);
@@ -194,14 +218,17 @@ class BookingModuleService extends MedusaService({
 
     if (dateExceptions.length === 0) return slots;
 
-    return slots.filter(slot => {
+    return slots.filter((slot) => {
       for (const exc of dateExceptions) {
-        if (exc.exception_type === "blocked" || exc.exception_type === "time_off") {
+        if (
+          exc.exception_type === "blocked" ||
+          exc.exception_type === "time_off"
+        ) {
           if (exc.all_day) return false;
-          
+
           const excStart = new Date(exc.start_date);
           const excEnd = new Date(exc.end_date);
-          
+
           if (slot.start >= excStart && slot.start < excEnd) return false;
           if (slot.end > excStart && slot.end <= excEnd) return false;
         }
@@ -217,14 +244,16 @@ class BookingModuleService extends MedusaService({
     serviceProductId: string,
     startTime: Date,
     endTime: Date,
-    providerId?: string
+    providerId?: string,
   ): Promise<boolean> {
-    const service = await this.retrieveServiceProduct(serviceProductId);
-    
+    const service = await this.retrieveServiceProduct(serviceProductId) as any;
+
     // Check if within booking window
     const now = new Date();
-    const minAdvanceMs = (service.min_advance_booking_hours || 0) * 60 * 60 * 1000;
-    const maxAdvanceMs = (service.max_advance_booking_days || 60) * 24 * 60 * 60 * 1000;
+    const minAdvanceMs =
+      (service.min_advance_booking_hours || 0) * 60 * 60 * 1000;
+    const maxAdvanceMs =
+      (service.max_advance_booking_days || 60) * 24 * 60 * 60 * 1000;
 
     if (startTime.getTime() - now.getTime() < minAdvanceMs) return false;
     if (startTime.getTime() - now.getTime() > maxAdvanceMs) return false;
@@ -235,7 +264,9 @@ class BookingModuleService extends MedusaService({
       status: ["pending", "confirmed", "checked_in", "in_progress"],
     }) as any;
 
-    const bookingList = Array.isArray(bookings) ? bookings : [bookings].filter(Boolean);
+    const bookingList = Array.isArray(bookings)
+      ? bookings
+      : [bookings].filter(Boolean);
 
     for (const booking of bookingList) {
       if (providerId && booking.provider_id !== providerId) continue;
@@ -272,8 +303,8 @@ class BookingModuleService extends MedusaService({
     customerNotes?: string;
     tenantId?: string;
   }): Promise<any> {
-    const service = await this.retrieveServiceProduct(data.serviceProductId);
-    
+    const service = await this.retrieveServiceProduct(data.serviceProductId) as any;
+
     // Calculate end time
     const endTime = new Date(data.startTime);
     endTime.setMinutes(endTime.getMinutes() + service.duration_minutes);
@@ -283,7 +314,7 @@ class BookingModuleService extends MedusaService({
       data.serviceProductId,
       data.startTime,
       endTime,
-      data.providerId
+      data.providerId,
     );
 
     if (!isAvailable) {
@@ -311,7 +342,7 @@ class BookingModuleService extends MedusaService({
       location_address: service.location_address,
       customer_notes: data.customerNotes,
       status: "pending",
-    });
+    } as any);
 
     // Create booking item
     await this.createBookingItems({
@@ -323,10 +354,14 @@ class BookingModuleService extends MedusaService({
       unit_price: 0, // Will be set from product price
       subtotal: 0,
       total: 0,
-    });
+    } as any);
 
     // Schedule reminders
-    await this.scheduleReminders(booking.id, data.startTime, data.customerEmail);
+    await this.scheduleReminders(
+      booking.id,
+      data.startTime,
+      data.customerEmail,
+    );
 
     return booking;
   }
@@ -335,8 +370,8 @@ class BookingModuleService extends MedusaService({
    * Confirm booking
    */
   async confirmBooking(bookingId: string): Promise<any> {
-    const booking = await this.retrieveBooking(bookingId);
-    
+    const booking = await this.retrieveBooking(bookingId) as any;
+
     if (booking.status !== "pending") {
       throw new Error("Booking is not in pending status");
     }
@@ -345,7 +380,7 @@ class BookingModuleService extends MedusaService({
       id: bookingId,
       status: "confirmed",
       confirmed_at: new Date(),
-    });
+    } as any);
 
     return updated;
   }
@@ -354,8 +389,8 @@ class BookingModuleService extends MedusaService({
    * Check in customer
    */
   async checkInBooking(bookingId: string): Promise<any> {
-    const booking = await this.retrieveBooking(bookingId);
-    
+    const booking = await this.retrieveBooking(bookingId) as any;
+
     if (booking.status !== "confirmed") {
       throw new Error("Booking must be confirmed before check-in");
     }
@@ -364,15 +399,15 @@ class BookingModuleService extends MedusaService({
       id: bookingId,
       status: "checked_in",
       checked_in_at: new Date(),
-    });
+    } as any);
   }
 
   /**
    * Complete booking
    */
   async completeBooking(bookingId: string, notes?: string): Promise<any> {
-    const booking = await this.retrieveBooking(bookingId);
-    
+    const booking = await this.retrieveBooking(bookingId) as any;
+
     if (!["confirmed", "checked_in", "in_progress"].includes(booking.status)) {
       throw new Error("Booking cannot be completed from current status");
     }
@@ -382,7 +417,7 @@ class BookingModuleService extends MedusaService({
       status: "completed",
       completed_at: new Date(),
       provider_notes: notes,
-    });
+    } as any);
   }
 
   /**
@@ -391,21 +426,24 @@ class BookingModuleService extends MedusaService({
   async cancelBooking(
     bookingId: string,
     cancelledBy: "customer" | "provider" | "admin",
-    reason?: string
+    reason?: string,
   ): Promise<any> {
-    const booking = await this.retrieveBooking(bookingId);
-    
+    const booking = await this.retrieveBooking(bookingId) as any;
+
     if (["completed", "cancelled"].includes(booking.status)) {
       throw new Error("Booking cannot be cancelled");
     }
 
-    const service = await this.retrieveServiceProduct(booking.service_product_id);
-    
+    const service = await this.retrieveServiceProduct(
+      booking.service_product_id,
+    ) as any;
+
     // Calculate cancellation fee
     let cancellationFee = 0;
-    const hoursUntilBooking = 
-      (new Date(booking.start_time).getTime() - new Date().getTime()) / (1000 * 60 * 60);
-    
+    const hoursUntilBooking =
+      (new Date(booking.start_time).getTime() - new Date().getTime()) /
+      (1000 * 60 * 60);
+
     if (hoursUntilBooking < (service.cancellation_policy_hours || 24)) {
       // Late cancellation - may incur fee
       cancellationFee = Number(booking.total) * 0.5; // 50% fee example
@@ -418,7 +456,7 @@ class BookingModuleService extends MedusaService({
       cancelled_by: cancelledBy,
       cancellation_reason: reason,
       cancellation_fee: cancellationFee,
-    });
+    } as any);
 
     // Cancel scheduled reminders
     await this.cancelReminders(bookingId);
@@ -432,16 +470,18 @@ class BookingModuleService extends MedusaService({
   async rescheduleBooking(
     bookingId: string,
     newStartTime: Date,
-    newProviderId?: string
+    newProviderId?: string,
   ): Promise<any> {
-    const originalBooking = await this.retrieveBooking(bookingId);
-    
+    const originalBooking = await this.retrieveBooking(bookingId) as any;
+
     if (["completed", "cancelled"].includes(originalBooking.status)) {
       throw new Error("Booking cannot be rescheduled");
     }
 
-    const service = await this.retrieveServiceProduct(originalBooking.service_product_id);
-    
+    const service = await this.retrieveServiceProduct(
+      originalBooking.service_product_id,
+    ) as any;
+
     // Calculate new end time
     const newEndTime = new Date(newStartTime);
     newEndTime.setMinutes(newEndTime.getMinutes() + service.duration_minutes);
@@ -451,7 +491,7 @@ class BookingModuleService extends MedusaService({
       originalBooking.service_product_id,
       newStartTime,
       newEndTime,
-      newProviderId ?? originalBooking.provider_id ?? undefined
+      newProviderId ?? originalBooking.provider_id ?? undefined,
     );
 
     if (!isAvailable) {
@@ -470,21 +510,21 @@ class BookingModuleService extends MedusaService({
       attendeeCount: originalBooking.attendee_count,
       customerNotes: originalBooking.customer_notes ?? undefined,
       tenantId: originalBooking.tenant_id ?? undefined,
-    });
+    } as any);
 
     // Update original booking
     await this.updateBookings({
       id: bookingId,
       status: "rescheduled",
       rescheduled_to_id: newBooking.id,
-    });
+    } as any);
 
     // Update new booking
     await this.updateBookings({
       id: newBooking.id,
       rescheduled_from_id: bookingId,
       reschedule_count: (originalBooking.reschedule_count || 0) + 1,
-    });
+    } as any);
 
     return newBooking;
   }
@@ -493,8 +533,8 @@ class BookingModuleService extends MedusaService({
    * Mark as no-show
    */
   async markNoShow(bookingId: string): Promise<any> {
-    const booking = await this.retrieveBooking(bookingId);
-    
+    const booking = await this.retrieveBooking(bookingId) as any;
+
     if (booking.status !== "confirmed") {
       throw new Error("Only confirmed bookings can be marked as no-show");
     }
@@ -502,7 +542,7 @@ class BookingModuleService extends MedusaService({
     return await this.updateBookings({
       id: bookingId,
       status: "no_show",
-    });
+    } as any);
   }
 
   // ============ Reminders ============
@@ -513,11 +553,11 @@ class BookingModuleService extends MedusaService({
   async scheduleReminders(
     bookingId: string,
     startTime: Date,
-    customerEmail: string
+    customerEmail: string,
   ): Promise<void> {
     const reminderTimes = [
       { minutes: 1440, type: "email" }, // 24 hours before
-      { minutes: 60, type: "email" },   // 1 hour before
+      { minutes: 60, type: "email" }, // 1 hour before
     ];
 
     for (const reminder of reminderTimes) {
@@ -533,7 +573,7 @@ class BookingModuleService extends MedusaService({
           scheduled_for: scheduledFor,
           recipient_email: customerEmail,
           status: "scheduled",
-        });
+        } as any);
       }
     }
   }
@@ -547,13 +587,15 @@ class BookingModuleService extends MedusaService({
       status: "scheduled",
     }) as any;
 
-    const reminderList = Array.isArray(reminders) ? reminders : [reminders].filter(Boolean);
+    const reminderList = Array.isArray(reminders)
+      ? reminders
+      : [reminders].filter(Boolean);
 
     for (const reminder of reminderList) {
       await this.updateBookingReminders({
         id: reminder.id,
         status: "cancelled",
-      });
+      } as any);
     }
   }
 
@@ -565,9 +607,13 @@ class BookingModuleService extends MedusaService({
       status: "scheduled",
     }) as any;
 
-    const reminderList = Array.isArray(reminders) ? reminders : [reminders].filter(Boolean);
-    
-    return reminderList.filter((r: any) => new Date(r.scheduled_for) <= beforeDate);
+    const reminderList = Array.isArray(reminders)
+      ? reminders
+      : [reminders].filter(Boolean);
+
+    return reminderList.filter(
+      (r: any) => new Date(r.scheduled_for) <= beforeDate,
+    );
   }
 
   // ============ Provider Management ============
@@ -578,14 +624,16 @@ class BookingModuleService extends MedusaService({
   async getProviderSchedule(
     providerId: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<any[]> {
     const bookings = await this.listBookings({
       provider_id: providerId,
       status: ["pending", "confirmed", "checked_in", "in_progress"],
     }) as any;
 
-    const bookingList = Array.isArray(bookings) ? bookings : [bookings].filter(Boolean);
+    const bookingList = Array.isArray(bookings)
+      ? bookings
+      : [bookings].filter(Boolean);
 
     return bookingList.filter((b: any) => {
       const bookingStart = new Date(b.start_time);
@@ -599,29 +647,38 @@ class BookingModuleService extends MedusaService({
   async getProviderStatistics(
     providerId: string,
     periodStart: Date,
-    periodEnd: Date
+    periodEnd: Date,
   ): Promise<any> {
     const bookings = await this.listBookings({
       provider_id: providerId,
     }) as any;
 
-    const bookingList = (Array.isArray(bookings) ? bookings : [bookings].filter(Boolean))
-      .filter((b: any) => {
-        const bookingStart = new Date(b.start_time);
-        return bookingStart >= periodStart && bookingStart <= periodEnd;
-      });
+    const bookingList = (
+      Array.isArray(bookings) ? bookings : [bookings].filter(Boolean)
+    ).filter((b: any) => {
+      const bookingStart = new Date(b.start_time);
+      return bookingStart >= periodStart && bookingStart <= periodEnd;
+    });
 
-    const completed = bookingList.filter((b: any) => b.status === "completed").length;
-    const cancelled = bookingList.filter((b: any) => b.status === "cancelled").length;
-    const noShows = bookingList.filter((b: any) => b.status === "no_show").length;
+    const completed = bookingList.filter(
+      (b: any) => b.status === "completed",
+    ).length;
+    const cancelled = bookingList.filter(
+      (b: any) => b.status === "cancelled",
+    ).length;
+    const noShows = bookingList.filter(
+      (b: any) => b.status === "no_show",
+    ).length;
 
     return {
       totalBookings: bookingList.length,
       completedBookings: completed,
       cancelledBookings: cancelled,
       noShows,
-      completionRate: bookingList.length > 0 ? (completed / bookingList.length) * 100 : 0,
-      cancellationRate: bookingList.length > 0 ? (cancelled / bookingList.length) * 100 : 0,
+      completionRate:
+        bookingList.length > 0 ? (completed / bookingList.length) * 100 : 0,
+      cancellationRate:
+        bookingList.length > 0 ? (cancelled / bookingList.length) * 100 : 0,
     };
   }
 
@@ -639,21 +696,24 @@ class BookingModuleService extends MedusaService({
    * Get upcoming bookings
    */
   async getUpcomingBookings(tenantId?: string): Promise<any[]> {
-    const filters: any = {
+    const filters: Record<string, unknown> = {
       status: ["pending", "confirmed"],
     };
     if (tenantId) filters.tenant_id = tenantId;
 
     const bookings = await this.listBookings(filters) as any;
-    const bookingList = Array.isArray(bookings) ? bookings : [bookings].filter(Boolean);
+    const bookingList = Array.isArray(bookings)
+      ? bookings
+      : [bookings].filter(Boolean);
 
     const now = new Date();
     return bookingList
       .filter((b: any) => new Date(b.start_time) > now)
-      .sort((a: any, b: any) => 
-        new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+      .sort(
+        (a: any, b: any) =>
+          new Date(a.start_time).getTime() - new Date(b.start_time).getTime(),
       );
   }
 }
 
-export default BookingModuleService
+export default BookingModuleService;

@@ -80,7 +80,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
       properties: data.properties ?? null,
       revenue: data.revenue ?? null,
       currency: data.currency ?? null,
-    });
+    } as any);
   }
 
   async getEventCounts(
@@ -95,7 +95,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
     const events = await this.listAnalyticsEvents({
       tenant_id: tenantId,
       event_type: eventType,
-    });
+    }) as any;
     const filtered = events.filter((e) => {
       const createdAt = new Date(e.created_at);
       return createdAt >= dateRange.start && createdAt <= dateRange.end;
@@ -119,7 +119,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
     const events = await this.listAnalyticsEvents({
       tenant_id: tenantId,
       event_type: "purchase",
-    });
+    }) as any;
     const filtered = events.filter((e) => {
       const createdAt = new Date(e.created_at);
       return createdAt >= dateRange.start && createdAt <= dateRange.end;
@@ -141,7 +141,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
     const events = await this.listAnalyticsEvents({
       tenant_id: tenantId,
       event_type: "purchase",
-    });
+    }) as any;
     const filtered = events.filter((e) => {
       const createdAt = new Date(e.created_at);
       return (
@@ -256,7 +256,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
     const events = await this.listAnalyticsEvents({
       tenant_id: tenantId,
       event_type: "page_view",
-    });
+    }) as any;
     const filteredEvents = events.filter((e) => {
       const createdAt = new Date(e.created_at);
       return createdAt >= dateRange.start && createdAt <= dateRange.end;
@@ -284,7 +284,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
   }
 
   async generateReport(reportId: string): Promise<ReportRecord> {
-    await this.updateReports({ id: reportId, last_generated: new Date() });
+    await this.updateReports({ id: reportId, last_generated: new Date() } as any);
     return this.retrieveReport(reportId);
   }
 
@@ -295,7 +295,7 @@ class AnalyticsModuleService extends Base implements AnalyticsServiceBase {
     const list = await this.listDashboards({
       tenant_id: tenantId,
       slug: dashboardSlug,
-    });
+    }) as any;
     if (list.length === 0) {
       throw new Error(`Dashboard "${dashboardSlug}" not found`);
     }

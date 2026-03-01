@@ -1,7 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -24,13 +35,17 @@ function ManageProductsPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -50,7 +65,9 @@ function ManageProductsPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -82,7 +99,10 @@ function ManageProductsPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
@@ -97,7 +117,11 @@ function ManageProductsPage() {
     price: p.variants?.[0]?.prices?.[0]?.amount
       ? `$${(p.variants[0].prices[0].amount / 100).toFixed(2)}`
       : "$0.00",
-    inventory: p.variants?.reduce((sum: number, v: any) => sum + (v.inventory_quantity || 0), 0) ?? 0,
+    inventory:
+      p.variants?.reduce(
+        (sum: number, v: any) => sum + (v.inventory_quantity || 0),
+        0,
+      ) ?? 0,
   }))
 
   const columns = [
@@ -145,7 +169,11 @@ function ManageProductsPage() {
           items={[
             { label: t(locale, "manage.edit"), onClick: () => handleEdit(row) },
             { type: "separator" as const },
-            { label: t(locale, "manage.delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "manage.delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -188,14 +216,25 @@ function ManageProductsPage() {
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Add ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Add ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.update", "Update") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.update", "Update")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
 
       <ConfirmDialog

@@ -4,9 +4,9 @@ import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:inactive-vendor-check")
 
 export default async function inactiveVendorCheckJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const vendorService = container.resolve("vendor")
-  const eventBus = container.resolve("event_bus")
+  const query = container.resolve("query") as unknown as any
+  const vendorService = container.resolve("vendor") as unknown as any
+  const eventBus = container.resolve("event_bus") as unknown as any
   
   logger.info("[Inactive Vendor Check] Checking for inactive vendors...")
   

@@ -9,7 +9,7 @@ import {
 const validateTicketForTransfer = createStep(
   "validate-ticket-for-transfer",
   async (input: { ticketId: string; newOwnerId: string }, { container }) => {
-    const ticketingService = container.resolve("event-ticketing") as any;
+    const ticketingService = container.resolve("event-ticketing") as unknown as any;
     const capacity = await ticketingService
       .getEventCapacity(input.ticketId)
       .catch(() => null);
@@ -24,13 +24,13 @@ const validateTicketForTransfer = createStep(
 const transferTicketOwnership = createStep(
   "transfer-ticket-ownership",
   async (input: { ticketId: string; newOwnerId: string }, { container }) => {
-    const ticketingService = container.resolve("event-ticketing") as any;
+    const ticketingService = container.resolve("event-ticketing") as unknown as any;
     const ticket = await ticketingService.transferTicket(
       input.ticketId,
       input.newOwnerId,
     );
     return new StepResponse(ticket, {
-      previousOwnerId: (ticket as any).transferred_from,
+      previousOwnerId: ticket.transferred_from,
       ticketId: input.ticketId,
     });
   },
@@ -42,7 +42,7 @@ const transferTicketOwnership = createStep(
     { container },
   ) => {
     if (previousOwnerId) {
-      const ticketingService = container.resolve("event-ticketing") as any;
+      const ticketingService = container.resolve("event-ticketing") as unknown as any;
       await ticketingService
         .transferTicket(ticketId, previousOwnerId)
         .catch(() => null);

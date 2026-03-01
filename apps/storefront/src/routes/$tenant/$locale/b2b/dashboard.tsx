@@ -61,7 +61,7 @@ function B2BDashboardPage() {
               return (
                 <Link
                   key={item.path}
-                  to={`${prefix}${item.path}`}
+                  to={`${prefix}${item.path}` as never}
                   className="group flex items-start gap-4 rounded-xl border border-ds-border bg-ds-background p-5 transition-colors hover:border-ds-foreground/20 hover:bg-ds-card"
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ds-muted text-ds-muted-foreground transition-colors group-hover:bg-ds-primary/10 group-hover:text-ds-primary">

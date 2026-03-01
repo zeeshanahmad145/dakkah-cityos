@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast, Tabs } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+  Tabs,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -10,7 +22,9 @@ import { useManageCrud } from "@/lib/hooks/use-manage-crud"
 import { crudConfigs } from "@/components/manage/crud-configs"
 import { Plus } from "@medusajs/icons"
 
-export const Route = createFileRoute("/$tenant/$locale/manage/financial-products")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/manage/financial-products",
+)({
   component: ManageFinancialProductsPage,
 })
 
@@ -26,7 +40,9 @@ function ManageFinancialProductsPage() {
   const { addToast } = useToast()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const { createMutation, updateMutation, deleteMutation } = useManageCrud({
@@ -37,25 +53,30 @@ function ManageFinancialProductsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "financial-products"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/financial-products", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/financial-products", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
   })
 
-  const allProducts = ((data as any)?.products || (data as any)?.financial_products || []).map((item: any) => ({
-    id: item.id,
-    name: item.name || item.title || "—",
-    type: item.type || "—",
-    rate: item.rate || "—",
-    term: item.term || "—",
-    status: item.status || "active",
-    applications: item.applications ?? 0,
-  }))
+  const allProducts = ((data as any)?.products || (data as any)?.financial_products || []).map(
+    (item: any) => ({
+      id: item.id,
+      name: item.name || item.title || "—",
+      type: item.type || "—",
+      rate: item.rate || "—",
+      term: item.term || "—",
+      status: item.status || "active",
+      applications: item.applications ?? 0,
+    }),
+  )
 
-  const products = statusFilter === "all"
-    ? allProducts
-    : allProducts.filter((i: any) => i.status === statusFilter)
+  const products =
+    statusFilter === "all"
+      ? allProducts
+      : allProducts.filter((i: any) => i.status === statusFilter)
 
   const handleCreate = useCallback(() => {
     setEditingItem(null)
@@ -66,7 +87,9 @@ function ManageFinancialProductsPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -98,7 +121,10 @@ function ManageFinancialProductsPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
@@ -106,7 +132,9 @@ function ManageFinancialProductsPage() {
     {
       key: "name",
       header: t(locale, "manage.name"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "type",
@@ -135,11 +163,20 @@ function ManageFinancialProductsPage() {
       header: "Actions",
       align: "end" as const,
       render: (_: unknown, row: any) => (
-        <DropdownMenu items={[
-          { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
-          { type: "separator" as const },
-          { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
-        ]} />
+        <DropdownMenu
+          items={[
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
+            { type: "separator" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
+          ]}
+        />
       ),
     },
   ]
@@ -171,25 +208,44 @@ function ManageFinancialProductsPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? "All" : s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+            label:
+              s === "all"
+                ? "All"
+                : s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={products} emptyTitle="No financial products found" countLabel="financial products" />
+        <DataTable
+          columns={columns}
+          data={products}
+          emptyTitle="No financial products found"
+          countLabel="financial products"
+        />
       </Container>
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Create ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Create ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.saveChanges", "Save changes") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.saveChanges", "Save changes")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
       <ConfirmDialog
         open={!!deleteId}

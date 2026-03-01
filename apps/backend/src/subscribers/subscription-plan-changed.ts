@@ -10,8 +10,8 @@ export default async function subscriptionPlanChangedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string; old_plan_id?: string; new_plan_id?: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const subscriptionService = container.resolve("subscription")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const subscriptionService = container.resolve("subscription") as unknown as any
   
   try {
     const subscription = await subscriptionService.retrieveSubscription(data.id)

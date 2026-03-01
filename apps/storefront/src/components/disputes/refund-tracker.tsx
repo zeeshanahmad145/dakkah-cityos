@@ -48,7 +48,7 @@ export default function RefundTracker({
         </div>
         <div className="text-right">
           <p className="text-lg font-semibold text-ds-foreground">
-            {formatCurrency(amount, currency, locale)}
+            {formatCurrency(amount, currency, locale as import("@/lib/i18n").SupportedLocale)}
           </p>
           <p className="text-xs text-ds-muted-foreground">{currency}</p>
         </div>

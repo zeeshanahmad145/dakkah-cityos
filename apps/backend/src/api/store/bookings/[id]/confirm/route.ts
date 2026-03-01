@@ -17,8 +17,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Unauthorized" })
   }
   
-  const bookingService = req.scope.resolve("booking")
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const bookingService = req.scope.resolve("booking") as unknown as any
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
   
   const parsed = confirmBookingSchema.safeParse(req.body)
   if (!parsed.success) {
@@ -54,7 +54,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       }
     })
     
-    const eventBus = req.scope.resolve("event_bus")
+    const eventBus = req.scope.resolve("event_bus") as unknown as any
     await eventBus.emit("booking.confirmed", { 
       id, 
       customer_id: customerId,
@@ -62,7 +62,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     })
     
     res.json({ booking: updated })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-BOOKINGS-ID-CONFIRM")}
 }
 

@@ -52,7 +52,7 @@ const VendorsPage = () => {
     phone: "",
     description: "",
     commission_rate: 15,
-    commission_type: "percentage" as "percentage" | "flat" | "tiered",
+    commission_type: "percentage" as any as "percentage" | "flat" | "tiered",
   });
 
   const { data: vendorsData, isLoading: loadingVendors } = useVendors();
@@ -160,7 +160,7 @@ const VendorsPage = () => {
       phone: "",
       description: "",
       commission_rate: 15,
-      commission_type: "percentage",
+      commission_type: "percentage" as any,
     });
   };
 
@@ -172,7 +172,7 @@ const VendorsPage = () => {
       phone: vendor.phone || "",
       description: vendor.description || "",
       commission_rate: vendor.commission_rate,
-      commission_type: vendor.commission_type || "percentage",
+      commission_type: (vendor.commission_type || "percentage") as any,
     });
     setEditingVendor(vendor);
   };
@@ -377,7 +377,10 @@ const VendorsPage = () => {
               id="business_name"
               value={formData.business_name}
               onChange={(e) =>
-                setFormData({ ...formData, business_name: e.target.value })
+                setFormData({
+                  ...formData,
+                  business_name: e.target.value as any,
+                })
               }
             />
           </div>
@@ -387,7 +390,7 @@ const VendorsPage = () => {
               id="legal_name"
               value={formData.legal_name}
               onChange={(e) =>
-                setFormData({ ...formData, legal_name: e.target.value })
+                setFormData({ ...formData, legal_name: e.target.value as any })
               }
             />
           </div>
@@ -398,7 +401,7 @@ const VendorsPage = () => {
               type="email"
               value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setFormData({ ...formData, email: e.target.value as any })
               }
             />
           </div>
@@ -408,7 +411,7 @@ const VendorsPage = () => {
               id="phone"
               value={formData.phone}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
+                setFormData({ ...formData, phone: e.target.value as any })
               }
             />
           </div>
@@ -418,7 +421,7 @@ const VendorsPage = () => {
               id="description"
               value={formData.description}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData({ ...formData, description: e.target.value as any })
               }
             />
           </div>

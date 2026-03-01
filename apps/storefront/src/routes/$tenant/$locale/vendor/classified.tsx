@@ -30,7 +30,7 @@ function VendorClassifiedRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,9 +43,12 @@ function VendorClassifiedRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/classified${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: ClassifiedListing[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: ClassifiedListing[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -89,7 +92,9 @@ function VendorClassifiedRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -105,12 +110,17 @@ function VendorClassifiedRoute() {
       ) : (
         <div className="grid gap-4">
           {items.map((listing) => (
-            <div key={listing.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={listing.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{listing.title}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[listing.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[listing.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {listing.status}
                     </span>
                     <span className="px-2 py-0.5 text-xs rounded-full bg-ds-muted text-ds-muted-foreground">
@@ -118,14 +128,20 @@ function VendorClassifiedRoute() {
                     </span>
                   </div>
                   {listing.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{listing.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {listing.description}
+                    </p>
                   )}
                   <div className="flex items-center gap-6 text-sm text-ds-muted-foreground">
                     <span className="font-medium text-ds-foreground">
-                      {listing.currency_code?.toUpperCase()} {(listing.price / 100).toFixed(2)}
+                      {listing.currency_code?.toUpperCase()}{" "}
+                      {(listing.price / 100).toFixed(2)}
                     </span>
                     <span>{listing.views} views</span>
-                    <span>Listed {new Date(listing.listing_date).toLocaleDateString()}</span>
+                    <span>
+                      Listed{" "}
+                      {new Date(listing.listing_date!).toLocaleDateString()}
+                    </span>
                     {listing.location && <span>{listing.location}</span>}
                   </div>
                 </div>

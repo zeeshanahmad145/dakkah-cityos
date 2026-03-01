@@ -5,7 +5,7 @@ export default async function productUpdateHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const logger = container.resolve("logger");
+  const logger = container.resolve("logger") as unknown as any;
   logger.info(
     `[PayloadSync] product.updated event received for ${data.id}. Triggering workflow...`,
   );
@@ -16,9 +16,9 @@ export default async function productUpdateHandler({
         productId: data.id,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error(
-      `[PayloadSync] Workflow failed for product ${data.id}: ${error.message}`,
+      `[PayloadSync] Workflow failed for product ${data.id}: ${(error instanceof Error ? error.message : String(error))}`,
     );
   }
 }

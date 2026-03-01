@@ -1,41 +1,53 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../../../lib/api-error-handler"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../../../lib/api-error-handler";
 
-const updateWorkflowSchema = z.object({
-  workflow: z.object({
-    enabled: z.boolean(),
-    auto_approve_threshold: z.number(),
-    steps: z.array(z.object({
-      id: z.string(),
-      name: z.string(),
-      threshold: z.number(),
-      required_role: z.string(),
-      notify_on_pending: z.boolean(),
-    })),
-    escalation_hours: z.number(),
-    notify_email: z.string().optional(),
-  }),
-}).passthrough()
+const updateWorkflowSchema = z
+  .object({
+    workflow: z.object({
+      enabled: z.boolean(),
+      auto_approve_threshold: z.number(),
+      steps: z.array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          threshold: z.number(),
+          required_role: z.string(),
+          notify_on_pending: z.boolean(),
+        }),
+      ),
+      escalation_hours: z.number(),
+      notify_email: z.string().optional(),
+    }),
+  })
+  .passthrough();
 
 // B2B Approval Workflow Configuration
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve("query")
-    const { id } = req.params
-  
-    const { data: [company] } = await query.graph({
+    const query = req.scope.resolve("query") as unknown as any;
+    const { id } = req.params;
+
+    const {
+      data: [company],
+    } = await query.graph({
       entity: "company",
-      fields: ["id", "name", "requires_approval", "auto_approve_limit", "metadata"],
+      fields: [
+        "id",
+        "name",
+        "requires_approval",
+        "auto_approve_limit",
+        "metadata",
+      ],
       filters: { id },
-    })
-  
+    });
+
     if (!company) {
-      return res.status(404).json({ message: "Company not found" })
+      return res.status(404).json({ message: "Company not found" });
     }
-  
+
     // Get workflow from metadata or return defaults
-    const metadata = company.metadata || {}
+    const metadata = company.metadata || {};
     const workflow = metadata.approval_workflow || {
       enabled: company.requires_approval,
       auto_approve_threshold: company.auto_approve_limit || 0,
@@ -48,7 +60,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           notify_on_pending: true,
         },
         {
-          id: "step_2", 
+          id: "step_2",
           name: "Finance Approval",
           threshold: 5000,
           required_role: "admin",
@@ -57,35 +69,39 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       ],
       escalation_hours: 24,
       notify_email: company.email,
-    }
-  
-    res.json({ company_id: id, workflow })
+    };
 
-  } catch (error: any) {
-    handleApiError(res, error, "GET admin companies id workflow")}
+    res.json({ company_id: id, workflow });
+  } catch (error: unknown) {
+    handleApiError(res, error, "GET admin companies id workflow");
+  }
 }
 
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve("query")
-    const companyService = req.scope.resolve("companyModuleService") as any
-    const { id } = req.params
-    const parsed = updateWorkflowSchema.safeParse(req.body)
+    const query = req.scope.resolve("query") as unknown as any;
+    const companyService = req.scope.resolve("companyModuleService") as unknown as any;
+    const { id } = req.params;
+    const parsed = updateWorkflowSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.issues });
     }
-    const { workflow } = parsed.data
-  
-    const { data: [company] } = await query.graph({
+    const { workflow } = parsed.data;
+
+    const {
+      data: [company],
+    } = await query.graph({
       entity: "company",
       fields: ["id", "metadata"],
       filters: { id },
-    })
-  
+    });
+
     if (!company) {
-      return res.status(404).json({ message: "Company not found" })
+      return res.status(404).json({ message: "Company not found" });
     }
-  
+
     // Update company with new workflow
     await companyService.updateCompanies({
       id,
@@ -95,15 +111,14 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
         ...company.metadata,
         approval_workflow: workflow,
       },
-    })
-  
-    res.json({ 
-      company_id: id, 
+    });
+
+    res.json({
+      company_id: id,
       workflow,
-      message: "Workflow configuration updated" 
-    })
-
-  } catch (error: any) {
-    handleApiError(res, error, "PUT admin companies id workflow")}
+      message: "Workflow configuration updated",
+    });
+  } catch (error: unknown) {
+    handleApiError(res, error, "PUT admin companies id workflow");
+  }
 }
-

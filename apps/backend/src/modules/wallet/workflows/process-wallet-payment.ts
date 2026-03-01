@@ -14,7 +14,7 @@ const validateWalletBalanceStep = createStep(
     { walletId, amount }: { walletId: string; amount: number },
     { container },
   ) => {
-    const walletService = container.resolve("wallet") as any;
+    const walletService = container.resolve("wallet") as unknown as any;
     const wallet = await walletService.retrieveWallet(walletId);
     const balance = Number(wallet.balance || 0);
 
@@ -36,7 +36,7 @@ const debitWalletStep = createStep(
     }: { walletId: string; amount: number; orderId?: string },
     { container },
   ) => {
-    const walletService = container.resolve("wallet") as any;
+    const walletService = container.resolve("wallet") as unknown as any;
     const transaction = await walletService.debitWallet(
       walletId,
       amount,
@@ -50,7 +50,7 @@ const debitWalletStep = createStep(
     { walletId, amount }: { walletId: string; amount: number },
     { container },
   ) => {
-    const walletService = container.resolve("wallet") as any;
+    const walletService = container.resolve("wallet") as unknown as any;
     await walletService.creditWallet(
       walletId,
       amount,
@@ -70,7 +70,7 @@ const markWalletPaymentCompleteStep = createStep(
     { container },
   ) => {
     // Emit a payment event or update order payment status
-    const walletService = container.resolve("wallet") as any;
+    const walletService = container.resolve("wallet") as unknown as any;
     const wallet = await walletService.retrieveWallet(walletId);
     return new StepResponse({
       wallet_id: walletId,
@@ -103,6 +103,3 @@ export const processWalletPaymentWorkflow = createWorkflow(
     return { validated, debited, complete };
   },
 );
-
-
-

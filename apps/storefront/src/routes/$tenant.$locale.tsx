@@ -89,7 +89,7 @@ export const Route = createFileRoute("/$tenant/$locale")({
       tenant: tenantConfig,
       tenantSlug: tenant,
       locale,
-      direction: locale === "ar" ? "rtl" : "ltr",
+      direction: (locale === "ar" ? "rtl" : "ltr") as "rtl" | "ltr",
       regions,
     }
   },

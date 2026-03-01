@@ -9,8 +9,8 @@ export default async function subscriptionPaymentFailedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string; error?: string; retry_count?: number }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const subscriptionService = container.resolve("subscription")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const subscriptionService = container.resolve("subscription") as unknown as any
   
   try {
     const subscription = await subscriptionService.retrieveSubscription(data.id)

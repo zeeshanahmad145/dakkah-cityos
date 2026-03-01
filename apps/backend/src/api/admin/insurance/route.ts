@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -19,34 +19,34 @@ const createSchema = z.object({
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("insurance") as any;
+    const mod = req.scope.resolve("insurance") as unknown as any;
     const {
       limit = "20",
       offset = "0",
       status,
     } = req.query as Record<string, string | undefined>;
-    const filters: any = {};
+    const filters: Record<string, unknown> = {};
     if (status) filters.status = status;
     const items = await mod.listInsurancePolicies(filters, {
       skip: Number(offset),
       take: Number(limit),
       order: { created_at: "DESC" },
     });
-    const count = await mod.countInsurancePolicies(filters);
+    const count = await mod.listInsurancePolicies(filters);
     return res.json({
       items: Array.isArray(items) ? items : [],
       count,
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin insurance");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("insurance") as any;
+    const mod = req.scope.resolve("insurance") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success) {
       return res
@@ -67,7 +67,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       metadata: data.metadata,
     });
     return res.status(201).json({ item });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin insurance");
   }
 }

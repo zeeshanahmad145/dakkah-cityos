@@ -15,10 +15,11 @@ import type {
   RegionZoneMapping,
 } from "@/lib/types/tenant-admin"
 
-async function adminFetch<T>(path: string, options?: RequestInit): Promise<T> {
+async function adminFetch<T>(path: string, options?: { method?: string; body?: string; headers?: Record<string, string> }): Promise<T> {
   const response = await sdk.client.fetch<T>(path, {
-    ...(options as any),
-    credentials: "include",
+    method: options?.method,
+    headers: options?.headers,
+    body: options?.body,
   })
   return response
 }

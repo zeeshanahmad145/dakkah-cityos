@@ -10,7 +10,12 @@ interface BidHistoryProps {
   limit?: number
 }
 
-export function BidHistory({ locale, bids, isLoading, limit = 10 }: BidHistoryProps) {
+export function BidHistory({
+  locale,
+  bids,
+  isLoading,
+  limit = 10,
+}: BidHistoryProps) {
   const [showAll, setShowAll] = useState(false)
   const displayBids = showAll ? bids : bids.slice(0, limit)
 
@@ -101,15 +106,14 @@ export function BidHistory({ locale, bids, isLoading, limit = 10 }: BidHistoryPr
                     )}
                   </div>
                   <p className="text-xs text-ds-muted-foreground">
-                    {new Date(bid.timestamp).toLocaleString()}
+                    {new Date(bid.timestamp!).toLocaleString()}
                   </p>
                 </div>
 
                 <span className="text-sm font-semibold text-ds-foreground flex-shrink-0">
                   {formatCurrency(
                     bid.amount.amount,
-                    bid.amount.currencyCode,
-                    locale as any
+                    bid.amount.currencyCode, locale as any,
                   )}
                 </span>
               </div>
@@ -121,7 +125,9 @@ export function BidHistory({ locale, bids, isLoading, limit = 10 }: BidHistoryPr
               onClick={() => setShowAll(!showAll)}
               className="w-full mt-4 px-3 py-2 text-sm font-medium text-ds-primary hover:text-ds-primary/80 transition-colors"
             >
-              {showAll ? t(locale, "blocks.show_less") : t(locale, "blocks.show_more")}
+              {showAll
+                ? t(locale, "blocks.show_less")
+                : t(locale, "blocks.show_more")}
             </button>
           )}
         </>

@@ -1,14 +1,15 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../lib/api-error-handler"
-import { sanitizeList } from "../../../lib/image-sanitizer"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../lib/api-error-handler";
+import { sanitizeList } from "../../../lib/image-sanitizer";
 
 const SEED_CLASSIFIEDS = [
   {
     id: "cls-1",
     thumbnail: "/seed-images/classifieds/1592750475338-74b7b21085ab.jpg",
     title: "iPhone 15 Pro Max – 256GB, Like New",
-    description: "Barely used iPhone 15 Pro Max in Natural Titanium. Comes with original box, charger, and AppleCare+ until 2026. No scratches or dents.",
+    description:
+      "Barely used iPhone 15 Pro Max in Natural Titanium. Comes with original box, charger, and AppleCare+ until 2026. No scratches or dents.",
     category_id: "electronics",
     listing_type: "sale",
     condition: "like_new",
@@ -17,13 +18,17 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Riyadh",
     status: "active",
-    metadata: { thumbnail: "/seed-images/classifieds/1592750475338-74b7b21085ab.jpg", images: ["/seed-images/classifieds/1592750475338-74b7b21085ab.jpg"] },
+    metadata: {
+      thumbnail: "/seed-images/classifieds/1592750475338-74b7b21085ab.jpg",
+      images: ["/seed-images/classifieds/1592750475338-74b7b21085ab.jpg"],
+    },
   },
   {
     id: "cls-2",
     thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg",
     title: "Leather Sectional Sofa – Italian Design",
-    description: "Beautiful Italian leather L-shaped sectional sofa in dark brown. Seats 6 comfortably. Moving sale – must go this week!",
+    description:
+      "Beautiful Italian leather L-shaped sectional sofa in dark brown. Seats 6 comfortably. Moving sale – must go this week!",
     category_id: "furniture",
     listing_type: "sale",
     condition: "good",
@@ -32,13 +37,17 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Jeddah",
     status: "active",
-    metadata: { thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg", images: ["/seed-images/classifieds/1555041469-a586c61ea9bc.jpg"] },
+    metadata: {
+      thumbnail: "/seed-images/classifieds/1555041469-a586c61ea9bc.jpg",
+      images: ["/seed-images/classifieds/1555041469-a586c61ea9bc.jpg"],
+    },
   },
   {
     id: "cls-3",
     thumbnail: "/seed-images/classifieds/1621007947382-bb3c3994e3fb.jpg",
     title: "2022 Toyota Camry – Low Mileage",
-    description: "Single-owner 2022 Toyota Camry Grande with only 18,000 km. Full service history, extended warranty, pearl white color.",
+    description:
+      "Single-owner 2022 Toyota Camry Grande with only 18,000 km. Full service history, extended warranty, pearl white color.",
     category_id: "vehicles",
     listing_type: "sale",
     condition: "like_new",
@@ -47,13 +56,17 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: false,
     location_city: "Dammam",
     status: "active",
-    metadata: { thumbnail: "/seed-images/classifieds/1621007947382-bb3c3994e3fb.jpg", images: ["/seed-images/classifieds/1621007947382-bb3c3994e3fb.jpg"] },
+    metadata: {
+      thumbnail: "/seed-images/classifieds/1621007947382-bb3c3994e3fb.jpg",
+      images: ["/seed-images/classifieds/1621007947382-bb3c3994e3fb.jpg"],
+    },
   },
   {
     id: "cls-4",
     thumbnail: "/seed-images/classifieds/1517336714731-489689fd1ca8.jpg",
-    title: "MacBook Pro M3 14\" – Brand New Sealed",
-    description: "Brand new, sealed MacBook Pro 14-inch with M3 chip, 18GB RAM, 512GB SSD. Space Black. Selling because received as a duplicate gift.",
+    title: 'MacBook Pro M3 14" – Brand New Sealed',
+    description:
+      "Brand new, sealed MacBook Pro 14-inch with M3 chip, 18GB RAM, 512GB SSD. Space Black. Selling because received as a duplicate gift.",
     category_id: "electronics",
     listing_type: "sale",
     condition: "new",
@@ -62,13 +75,17 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Riyadh",
     status: "active",
-    metadata: { thumbnail: "/seed-images/classifieds/1517336714731-489689fd1ca8.jpg", images: ["/seed-images/classifieds/1517336714731-489689fd1ca8.jpg"] },
+    metadata: {
+      thumbnail: "/seed-images/classifieds/1517336714731-489689fd1ca8.jpg",
+      images: ["/seed-images/classifieds/1517336714731-489689fd1ca8.jpg"],
+    },
   },
   {
     id: "cls-5",
     thumbnail: "/seed-images/classifieds/1511379938547-c1f69419868d.jpg",
     title: "Vintage Oud Collection – 3 Pieces",
-    description: "Three beautiful vintage oud instruments from different regions. Perfect for collectors or musicians. Each piece has unique craftsmanship.",
+    description:
+      "Three beautiful vintage oud instruments from different regions. Perfect for collectors or musicians. Each piece has unique craftsmanship.",
     category_id: "collectibles",
     listing_type: "sale",
     condition: "good",
@@ -77,13 +94,17 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Madinah",
     status: "active",
-    metadata: { thumbnail: "/seed-images/classifieds/1511379938547-c1f69419868d.jpg", images: ["/seed-images/classifieds/1511379938547-c1f69419868d.jpg"] },
+    metadata: {
+      thumbnail: "/seed-images/classifieds/1511379938547-c1f69419868d.jpg",
+      images: ["/seed-images/classifieds/1511379938547-c1f69419868d.jpg"],
+    },
   },
   {
     id: "cls-6",
     thumbnail: "/seed-images/classifieds/1593062096033-9a26b09da705.jpg",
     title: "Looking for: Standing Desk – Adjustable",
-    description: "Looking to buy a quality adjustable standing desk in good condition. Preferably electric height adjustment. Budget up to 1,500 SAR.",
+    description:
+      "Looking to buy a quality adjustable standing desk in good condition. Preferably electric height adjustment. Budget up to 1,500 SAR.",
     category_id: "furniture",
     listing_type: "wanted",
     condition: "good",
@@ -92,9 +113,12 @@ const SEED_CLASSIFIEDS = [
     is_negotiable: true,
     location_city: "Riyadh",
     status: "active",
-    metadata: { thumbnail: "/seed-images/classifieds/1593062096033-9a26b09da705.jpg", images: ["/seed-images/classifieds/1593062096033-9a26b09da705.jpg"] },
+    metadata: {
+      thumbnail: "/seed-images/classifieds/1593062096033-9a26b09da705.jpg",
+      images: ["/seed-images/classifieds/1593062096033-9a26b09da705.jpg"],
+    },
   },
-]
+];
 
 const createClassifiedSchema = z.object({
   tenant_id: z.string().min(1),
@@ -113,15 +137,17 @@ const createClassifiedSchema = z.object({
   location_country: z.string().nullable().optional(),
   latitude: z.number().nullable().optional(),
   longitude: z.number().nullable().optional(),
-  status: z.enum(["draft", "active", "sold", "expired", "flagged", "removed"]).optional(),
+  status: z
+    .enum(["draft", "active", "sold", "expired", "flagged", "removed"])
+    .optional(),
   expires_at: z.string().nullable().optional(),
   promoted_until: z.string().nullable().optional(),
   metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-})
+});
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("classified") as any
+    const mod = req.scope.resolve("classified") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -132,52 +158,68 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       max_price,
       condition,
       search,
-    } = req.query as Record<string, string | undefined>
+    } = req.query as Record<string, string | undefined>;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (category) filters.category = category
-    if (location) filters.location = location
-    if (min_price) filters.min_price = Number(min_price)
-    if (max_price) filters.max_price = Number(max_price)
-    if (condition) filters.condition = condition
-    if (search) filters.search = search
-    filters.status = "active"
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (category) filters.category = category;
+    if (location) filters.location = location;
+    if (min_price) filters.min_price = Number(min_price);
+    if (max_price) filters.max_price = Number(max_price);
+    if (condition) filters.condition = condition;
+    if (search) filters.search = search;
+    filters.status = "active";
 
-    const items = await mod.listClassifiedListings(filters, { skip: Number(offset), take: Number(limit) })
-    const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_CLASSIFIEDS
-    const sanitized = sanitizeList(rawList, "classifieds")
+    const items = await mod.listClassifiedListings(filters, {
+      skip: Number(offset),
+      take: Number(limit),
+    });
+    const rawList =
+      Array.isArray(items) && items.length > 0 ? items : SEED_CLASSIFIEDS;
+    const sanitized = sanitizeList(rawList, "classifieds");
     const itemList = sanitized.map((c: any) => {
-      const raw = c.thumbnail || c.metadata?.thumbnail || c.metadata?.images?.[0] || c.images?.[0] || null
-      return { ...c, thumbnail: raw ? raw.replace(/%2F/gi, "/") : null }
-    })
+      const raw =
+        c.thumbnail ||
+        c.metadata?.thumbnail ||
+        c.metadata?.images?.[0] ||
+        c.images?.[0] ||
+        null;
+      return { ...c, thumbnail: raw ? raw.replace(/%2F/gi, "/") : null };
+    });
     return res.json({
       items: itemList,
       count: itemList.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
-    return res.json({ items: SEED_CLASSIFIEDS, count: SEED_CLASSIFIEDS.length, limit: 20, offset: 0 })
+    });
+  } catch (error: unknown) {
+    return res.json({
+      items: SEED_CLASSIFIEDS,
+      count: SEED_CLASSIFIEDS.length,
+      limit: 20,
+      offset: 0,
+    });
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const customerId = (req as any).auth_context?.actor_id
+    const customerId = req.auth_context?.actor_id;
     if (!customerId) {
-      return res.status(401).json({ message: "Authentication required" })
+      return res.status(401).json({ message: "Authentication required" });
     }
 
-    const parsed = createClassifiedSchema.safeParse(req.body)
+    const parsed = createClassifiedSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const mod = req.scope.resolve("classified") as any
-    const item = await mod.createClassifiedListings(parsed.data)
-    res.status(201).json({ item })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-CLASSIFIEDS")}
+    const mod = req.scope.resolve("classified") as unknown as any;
+    const item = await mod.createClassifiedListings(parsed.data);
+    res.status(201).json({ item });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-CLASSIFIEDS");
+  }
 }
-

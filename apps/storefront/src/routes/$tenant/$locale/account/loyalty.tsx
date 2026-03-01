@@ -19,7 +19,7 @@ const defaultEarnRules = [
 ]
 
 function LoyaltyPage() {
-  const { locale } = Route.useParams() as { tenant: string; locale: string }
+  const { locale, tenant } = Route.useParams() as { tenant: string; locale: string }
   const { data: loyalty, isLoading } = useLoyaltyPoints()
 
   return (

@@ -9,8 +9,8 @@ export async function GET(
   res: MedusaResponse
 ) {
   const { id } = req.params
-  const query = req.scope.resolve("query")
-  const vendorService = req.scope.resolve("vendorModuleService")
+  const query = req.scope.resolve("query") as unknown as any
+  const vendorService = req.scope.resolve("vendorModuleService") as unknown as any
 
   const { data: vendors } = await query.graph({
     entity: "vendors",
@@ -59,7 +59,7 @@ export async function GET(
       charges_enabled: account.charges_enabled,
       requirements: account.requirements
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-VENDORS-ID-STRIPE-CONNECT-STATUS")}
 }
 

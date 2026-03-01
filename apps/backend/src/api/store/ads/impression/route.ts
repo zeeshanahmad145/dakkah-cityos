@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const advertisingService = req.scope.resolve("advertising") as any;
+    const advertisingService = req.scope.resolve("advertising") as unknown as any;
     const { ad_id, session_id, placement, metadata } = req.body as {
       ad_id: string;
       session_id: string;
@@ -31,7 +31,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ recorded: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-ADS-IMPRESSION");
   }
 }

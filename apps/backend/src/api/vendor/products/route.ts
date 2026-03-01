@@ -1,29 +1,31 @@
 // @ts-nocheck
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { z } from "zod"
-import { handleApiError } from "../../../lib/api-error-handler"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import { z } from "zod";
+import { handleApiError } from "../../../lib/api-error-handler";
 
-const createVendorProductSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().optional(),
-  handle: z.string().optional(),
-  vendor_sku: z.string().optional(),
-  vendor_cost: z.number().optional(),
-  variants: z.array(z.record(z.string(), z.unknown())).optional(),
-  images: z.array(z.record(z.string(), z.unknown())).optional(),
-  options: z.array(z.record(z.string(), z.unknown())).optional(),
-  status: z.string().optional(),
-}).passthrough()
+const createVendorProductSchema = z
+  .object({
+    title: z.string().min(1),
+    description: z.string().optional(),
+    handle: z.string().optional(),
+    vendor_sku: z.string().optional(),
+    vendor_cost: z.number().optional(),
+    variants: z.array(z.record(z.string(), z.unknown())).optional(),
+    images: z.array(z.record(z.string(), z.unknown())).optional(),
+    options: z.array(z.record(z.string(), z.unknown())).optional(),
+    status: z.string().optional(),
+  })
+  .passthrough();
 
 // GET /vendor/products - List vendor's products
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-  
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
+
   // Get vendor from authenticated user
-  const vendorId = (req as any).vendor_id
+  const vendorId = req.vendor_id;
   if (!vendorId) {
-    return res.status(401).json({ message: "Vendor authentication required" })
+    return res.status(401).json({ message: "Vendor authentication required" });
   }
 
   const { data: vendorProducts } = await query.graph({
@@ -46,7 +48,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     filters: {
       vendor_id: vendorId,
     },
-  })
+  });
 
   const products = vendorProducts.map((vp: any) => ({
     id: vp.id,
@@ -63,26 +65,28 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     variants: vp.product?.variants || [],
     images: vp.product?.images || [],
     created_at: vp.created_at,
-  }))
+  }));
 
-  res.json({ products })
+  res.json({ products });
 }
 
 // POST /vendor/products - Create a new product for vendor
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const vendorId = (req as any).vendor_id
+  const vendorId = req.vendor_id;
   if (!vendorId) {
-    return res.status(401).json({ message: "Vendor authentication required" })
+    return res.status(401).json({ message: "Vendor authentication required" });
   }
 
-  const parsed = createVendorProductSchema.safeParse(req.body)
+  const parsed = createVendorProductSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    return res
+      .status(400)
+      .json({ message: "Validation failed", errors: parsed.error.issues });
   }
 
-  const { 
-    title, 
-    description, 
+  const {
+    title,
+    description,
     handle,
     vendor_sku,
     vendor_cost,
@@ -90,22 +94,24 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     images,
     options,
     status = "draft",
-  } = parsed.data
+  } = parsed.data;
 
-  const vendorModule = req.scope.resolve("vendor")
-  const productModule = req.scope.resolve("product")
+  const vendorModule = req.scope.resolve("vendor") as unknown as any;
+  const productModule = req.scope.resolve("product") as unknown as any;
 
   try {
     // Create the product first
-    const [product] = await productModule.createProducts([{
-      title,
-      description,
-      handle,
-      status: "draft", // Products start as draft, need admin approval
-      options: options || [],
-      variants: variants || [],
-      images: images || [],
-    }])
+    const [product] = await productModule.createProducts([
+      {
+        title,
+        description,
+        handle,
+        status: "draft", // Products start as draft, need admin approval
+        options: options || [],
+        variants: variants || [],
+        images: images || [],
+      },
+    ]);
 
     // Link product to vendor
     const vendorProduct = await vendorModule.createVendorProducts({
@@ -115,24 +121,24 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       vendor_cost,
       status: "pending_approval",
       is_primary_vendor: true,
-    })
+    });
 
-    const eventBus = req.scope.resolve("event_bus")
+    const eventBus = req.scope.resolve("event_bus") as unknown as any;
     await eventBus.emit("vendor_product.created", {
       vendor_product_id: vendorProduct.id,
       vendor_id: vendorId,
       product_id: product.id,
       tenant_id: vendorProduct.tenant_id || "01KGZ2JRYX607FWMMYQNQRKVWS",
-    })
+    });
 
-    res.status(201).json({ 
+    res.status(201).json({
       product: {
         ...vendorProduct,
         title: product.title,
         handle: product.handle,
-      }
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "VENDOR-PRODUCTS")}
+      },
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "VENDOR-PRODUCTS");
+  }
 }
-

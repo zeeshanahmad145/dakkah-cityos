@@ -25,7 +25,7 @@ function VendorTradeInRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -86,23 +86,29 @@ function VendorTradeInRoute() {
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {["", "pending", "evaluating", "accepted", "rejected", "completed"].map((s) => (
-          <button
-            key={s}
-            onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
-            }`}
-          >
-            {s || "All"}
-          </button>
-        ))}
+        {["", "pending", "evaluating", "accepted", "rejected", "completed"].map(
+          (s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                statusFilter === s
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
+              }`}
+            >
+              {s || "All"}
+            </button>
+          ),
+        )}
       </div>
 
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No trade-in offers yet</p>
-          <p className="text-sm">Create trade-in offers to accept used items from customers.</p>
+          <p className="text-sm">
+            Create trade-in offers to accept used items from customers.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -119,24 +125,36 @@ function VendorTradeInRoute() {
             </thead>
             <tbody>
               {items.map((offer) => (
-                <tr key={offer.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={offer.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 pe-4 font-medium">{offer.item_name}</td>
                   <td className="py-4 pe-4">
-                    <span className={`text-sm font-medium capitalize ${conditionColors[offer.condition] || "text-ds-muted-foreground"}`}>
+                    <span
+                      className={`text-sm font-medium capitalize ${conditionColors[offer.condition] || "text-ds-muted-foreground"}`}
+                    >
                       {offer.condition}
                     </span>
                   </td>
                   <td className="py-4 pe-4 text-right">
-                    {offer.currency_code?.toUpperCase()} {(offer.offered_value / 100).toFixed(2)}
+                    {offer.currency_code?.toUpperCase()}{" "}
+                    {(offer.offered_value / 100).toFixed(2)}
                   </td>
-                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground">{offer.customer_name}</td>
+                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground">
+                    {offer.customer_name}
+                  </td>
                   <td className="py-4 pe-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[offer.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[offer.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {offer.status}
                     </span>
                   </td>
                   <td className="py-4">
-                    <button className="text-sm text-ds-primary hover:underline">Evaluate</button>
+                    <button className="text-sm text-ds-primary hover:underline">
+                      Evaluate
+                    </button>
                   </td>
                 </tr>
               ))}

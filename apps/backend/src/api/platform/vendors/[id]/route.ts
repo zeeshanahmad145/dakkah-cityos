@@ -1,36 +1,46 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const tenantModule = req.scope.resolve("tenant") as any
-  const vendorModule = req.scope.resolve("vendor") as any
-  const { id } = req.params
+  const tenantModule = req.scope.resolve("tenant") as unknown as any;
+  const vendorModule = req.scope.resolve("vendor") as unknown as any;
+  const { id } = req.params;
 
   try {
-    const [vendor] = await vendorModule.listVendors({ id }, { take: 1 })
+    const [vendor] = await vendorModule.listVendors({ id }, { take: 1 });
     if (!vendor) {
-      return res.status(404).json({ message: "Vendor not found" })
+      return res.status(404).json({ message: "Vendor not found" });
     }
 
-    let tenant = null
-    try { tenant = await tenantModule.retrieveTenant(vendor.tenant_id) } catch {}
-
-    let pois: any[] = []
+    let tenant = null;
     try {
-      pois = await tenantModule.listTenantPois({ tenant_id: vendor.tenant_id })
-      pois = Array.isArray(pois) ? pois : [pois].filter(Boolean)
+      tenant = await tenantModule.retrieveTenant(vendor.tenant_id);
     } catch {}
 
-    let channels: any[] = []
+    let pois: any[] = [];
     try {
-      channels = await tenantModule.listServiceChannels({ tenant_id: vendor.tenant_id })
-      channels = Array.isArray(channels) ? channels : [channels].filter(Boolean)
+      pois = await tenantModule.listTenantPois({ tenant_id: vendor.tenant_id });
+      pois = Array.isArray(pois) ? pois : [pois].filter(Boolean);
     } catch {}
 
-    let relationships: any[] = []
+    let channels: any[] = [];
     try {
-      relationships = await tenantModule.listTenantRelationships({ vendor_tenant_id: vendor.tenant_id })
-      relationships = Array.isArray(relationships) ? relationships : [relationships].filter(Boolean)
+      channels = await tenantModule.listServiceChannels({
+        tenant_id: vendor.tenant_id,
+      });
+      channels = Array.isArray(channels)
+        ? channels
+        : [channels].filter(Boolean);
+    } catch {}
+
+    let relationships: any[] = [];
+    try {
+      relationships = await tenantModule.listTenantRelationships({
+        vendor_tenant_id: vendor.tenant_id,
+      });
+      relationships = Array.isArray(relationships)
+        ? relationships
+        : [relationships].filter(Boolean);
     } catch {}
 
     res.json({
@@ -40,15 +50,17 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         tenant_type: tenant?.tenant_type || "vendor",
         operating_countries: tenant?.operating_countries || [],
       },
-      tenant: tenant ? {
-        id: tenant.id,
-        name: tenant.name,
-        slug: tenant.slug,
-        scope_tier: tenant.scope_tier,
-        tenant_type: tenant.tenant_type,
-        residency_zone: tenant.residency_zone,
-        operating_countries: tenant.operating_countries,
-      } : null,
+      tenant: tenant
+        ? {
+            id: tenant.id,
+            name: tenant.name,
+            slug: tenant.slug,
+            scope_tier: tenant.scope_tier,
+            tenant_type: tenant.tenant_type,
+            residency_zone: tenant.residency_zone,
+            operating_countries: tenant.operating_countries,
+          }
+        : null,
       pois: pois.map((p: any) => ({
         id: p.id,
         name: p.name,
@@ -73,8 +85,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         status: r.status,
         commission_rate: r.commission_rate,
       })),
-    })
-  } catch (error: any) {
-    handleApiError(res, error, "PLATFORM-VENDORS-ID")}
+    });
+  } catch (error: unknown) {
+    handleApiError(res, error, "PLATFORM-VENDORS-ID");
+  }
 }
-

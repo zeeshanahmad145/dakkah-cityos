@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -19,7 +19,7 @@ export async function GET(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: tenants } = await query.graph({
       entity: "tenant",
@@ -88,7 +88,7 @@ export async function GET(
       }
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin tenants id limits")}
 }
 
@@ -112,8 +112,8 @@ export async function PUT(
       max_stores
     } = parsed.data
 
-    const tenantService = req.scope.resolve("tenantModuleService")
-    const query = req.scope.resolve("query")
+    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any
+    const query = req.scope.resolve("query") as unknown as any
 
     // Get current limits
     const { data: tenants } = await query.graph({
@@ -148,7 +148,7 @@ export async function PUT(
       limits: newLimits
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin tenants id limits")}
 }
 

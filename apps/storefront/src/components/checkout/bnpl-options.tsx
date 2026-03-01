@@ -111,7 +111,7 @@ export default function BNPLOptions({ cartTotal, currency = "USD", locale: local
                   {t(locale, "checkout.bnpl_payments_of") !== "checkout.bnpl_payments_of"
                     ? t(locale, "checkout.bnpl_payments_of")
                     : "payments of"}{" "}
-                  {formatCurrency(installmentAmount, currency, locale)}
+                  {formatCurrency(installmentAmount, currency, locale as import("@/lib/i18n").SupportedLocale)}
                 </p>
               </div>
 

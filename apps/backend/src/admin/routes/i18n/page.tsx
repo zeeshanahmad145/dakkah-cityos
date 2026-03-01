@@ -137,15 +137,15 @@ const I18nPage = () => {
         <div className="space-y-4">
           <div>
             <Label htmlFor="locale">Locale</Label>
-            <select id="locale" value={formData.locale} onChange={(e) => setFormData({ ...formData, locale: e.target.value })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
+            <select id="locale" value={formData.locale} onChange={(e) => setFormData({ ...formData, locale: e.target.value as any })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
               {LOCALES.map(l => <option key={l} value={l}>{l.toUpperCase()}</option>)}
             </select>
           </div>
-          <div><Label htmlFor="namespace">Namespace</Label><Input id="namespace" value={formData.namespace} onChange={(e) => setFormData({ ...formData, namespace: e.target.value })} placeholder="e.g. common, checkout, products" /></div>
-          <div><Label htmlFor="key">Key</Label><Input id="key" value={formData.key} onChange={(e) => setFormData({ ...formData, key: e.target.value })} placeholder="e.g. button.submit" /></div>
+          <div><Label htmlFor="namespace">Namespace</Label><Input id="namespace" value={formData.namespace} onChange={(e) => setFormData({ ...formData, namespace: e.target.value as any })} placeholder="e.g. common, checkout, products" /></div>
+          <div><Label htmlFor="key">Key</Label><Input id="key" value={formData.key} onChange={(e) => setFormData({ ...formData, key: e.target.value as any })} placeholder="e.g. button.submit" /></div>
           <div>
             <Label htmlFor="value">Value</Label>
-            <textarea id="value" value={formData.value} onChange={(e) => setFormData({ ...formData, value: e.target.value })} placeholder="Translation value" className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[80px]" />
+            <textarea id="value" value={formData.value} onChange={(e) => setFormData({ ...formData, value: e.target.value as any })} placeholder="Translation value" className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[80px]" />
           </div>
         </div>
       </FormDrawer>

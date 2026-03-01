@@ -22,7 +22,9 @@ interface DigitalProduct {
   created_at: string
 }
 
-export const Route = createFileRoute("/$tenant/$locale/vendor/digital-products")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/vendor/digital-products",
+)({
   component: VendorDigitalProductsRoute,
 })
 
@@ -31,7 +33,7 @@ function VendorDigitalProductsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -95,21 +97,32 @@ function VendorDigitalProductsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No digital products yet</p>
-          <p className="text-sm">Upload your first digital product to start selling.</p>
+          <p className="text-sm">
+            Upload your first digital product to start selling.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((product) => (
-            <div key={product.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={product.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4 flex-1">
-                  <span className="text-2xl">{fileTypeIcons[product.file_type] || "📁"}</span>
+                  <span className="text-2xl">
+                    {fileTypeIcons[product.file_type] || "📁"}
+                  </span>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-lg font-semibold">{product.title}</h3>
-                      <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
-                        product.is_active !== false ? "bg-ds-success/15 text-ds-success" : "bg-ds-muted text-ds-foreground"
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 text-xs rounded-full font-medium ${
+                          product.is_active !== false
+                            ? "bg-ds-success/15 text-ds-success"
+                            : "bg-ds-muted text-ds-foreground"
+                        }`}
+                      >
                         {product.is_active !== false ? "Active" : "Inactive"}
                       </span>
                     </div>
@@ -121,12 +134,15 @@ function VendorDigitalProductsRoute() {
                         <span>{product.download_count} downloads</span>
                       )}
                       {product.max_downloads && (
-                        <span className="text-ds-muted-foreground/70">/ {product.max_downloads} max</span>
+                        <span className="text-ds-muted-foreground/70">
+                          / {product.max_downloads} max
+                        </span>
                       )}
                     </div>
                     {product.revenue != null && (
                       <p className="text-sm font-medium text-ds-success mt-2">
-                        Revenue: {product.currency_code?.toUpperCase() || "USD"} {(product.revenue / 100).toFixed(2)}
+                        Revenue: {product.currency_code?.toUpperCase() || "USD"}{" "}
+                        {(product.revenue / 100).toFixed(2)}
                       </p>
                     )}
                   </div>

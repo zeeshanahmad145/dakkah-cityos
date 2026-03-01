@@ -69,7 +69,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
       > | null,
       is_approved: false,
       helpful_count: 0,
-    });
+    } as any);
   }
 
   async listProductReviews(
@@ -106,7 +106,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
     const reviews = await this.listReviews(
       { product_id: productId, is_approved: true },
       { select: ["rating"] },
-    );
+    ) as any;
     if (reviews.length === 0) {
       return {
         average_rating: 0,
@@ -130,7 +130,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
   }
 
   async approveReview(reviewId: string): Promise<ReviewRecord> {
-    return this.updateReviews({ id: reviewId, is_approved: true });
+    return this.updateReviews({ id: reviewId, is_approved: true } as any);
   }
 
   async rejectReview(reviewId: string): Promise<void> {
@@ -138,11 +138,11 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
   }
 
   async markHelpful(reviewId: string): Promise<ReviewRecord> {
-    const review = await this.retrieveReview(reviewId);
+    const review = await this.retrieveReview(reviewId) as any;
     return this.updateReviews({
       id: reviewId,
       helpful_count: (review.helpful_count ?? 0) + 1,
-    });
+    } as any);
   }
 
   async getReviewAnalytics(vendorId: string): Promise<{
@@ -156,7 +156,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
     const reviews = await this.listReviews({
       vendor_id: vendorId,
       is_approved: true,
-    });
+    }) as any;
     if (reviews.length === 0) {
       return {
         vendorId,
@@ -205,7 +205,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
       throw new Error("Review ID, reason, and reporter ID are required");
     }
 
-    const review = await this.retrieveReview(reviewId);
+    const review = await this.retrieveReview(reviewId) as any;
     const meta = review.metadata as Record<string, unknown> | null;
     const existingFlags = Array.isArray(meta?.flags)
       ? (meta.flags as Array<{ reporterId: string }>)
@@ -223,7 +223,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
     await this.updateReviews({
       id: reviewId,
       metadata: {
-        ...(meta ?? {}),
+        ...(meta ?? {} as any),
         flags: updatedFlags,
         flag_count: flagCount,
         needs_moderation: needsModeration,
@@ -258,7 +258,7 @@ class ReviewModuleService extends Base implements ReviewServiceBase {
     const reviews = await this.listReviews({
       vendor_id: vendorId,
       is_approved: true,
-    });
+    }) as any;
     const monthNames = [
       "Jan",
       "Feb",

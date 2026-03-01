@@ -1,6 +1,11 @@
 import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
-import { ArrowPath, DocumentText, ArrowUturnLeft, ChatBubbleLeftRight } from "@medusajs/icons"
+import {
+  ArrowPath,
+  DocumentText,
+  ArrowUturnLeft,
+  ChatBubbleLeftRight,
+} from "@medusajs/icons"
 import { useTenantPrefix } from "@/lib/context/tenant-context"
 
 interface OrderActionsProps {
@@ -23,7 +28,7 @@ export function OrderActions({
   return (
     <div className="bg-ds-background rounded-xl border border-ds-border p-6">
       <h3 className="text-lg font-semibold text-ds-foreground mb-4">Actions</h3>
-      
+
       <div className="space-y-3">
         {/* Reorder */}
         <Button
@@ -47,7 +52,7 @@ export function OrderActions({
 
         {/* Track Order */}
         {canTrack && (
-          <Link to={`${prefix}/account/orders/${orderId}/track` as any}>
+          <Link to={`${prefix}/account/orders/${orderId}/track` as never}>
             <Button variant="outline" className="w-full justify-start">
               <DocumentText className="w-4 h-4 me-2" />
               Track Shipment
@@ -57,7 +62,7 @@ export function OrderActions({
 
         {/* Return Request */}
         {canReturn && (
-          <Link to={`${prefix}/account/orders/${orderId}/return` as any}>
+          <Link to={`${prefix}/account/orders/${orderId}/return` as never}>
             <Button variant="outline" className="w-full justify-start">
               <ArrowUturnLeft className="w-4 h-4 me-2" />
               Request Return
@@ -66,7 +71,10 @@ export function OrderActions({
         )}
 
         {/* Get Help */}
-        <Button variant="ghost" className="w-full justify-start text-ds-muted-foreground">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-ds-muted-foreground"
+        >
           <ChatBubbleLeftRight className="w-4 h-4 me-2" />
           Get Help with Order
         </Button>

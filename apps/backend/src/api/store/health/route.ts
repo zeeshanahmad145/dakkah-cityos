@@ -14,17 +14,17 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   }
 
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
     await query.graph({
       entity: "region",
       fields: ["id"],
       pagination: { take: 1 },
     })
     ;(health.checks as Record<string, unknown>).database = { status: "healthy" }
-  } catch (error: any) {
+  } catch (error: unknown) {
     ;(health.checks as Record<string, unknown>).database = {
       status: "unhealthy",
-      error: error instanceof Error ? error.message : "Connection failed",}
+      error: error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Connection failed",}
     health.status = "degraded"
   }
 

@@ -204,7 +204,7 @@ export function StatusWorkflow({
                       <span className="font-medium">{formatStatus(entry.to)}</span>
                     </p>
                     <p className="text-xs text-ds-muted-foreground mt-0.5">
-                      {new Date(entry.timestamp).toLocaleString()}
+                      {new Date(entry.timestamp!).toLocaleString()}
                       {entry.user && ` · ${entry.user}`}
                     </p>
                     {entry.note && (

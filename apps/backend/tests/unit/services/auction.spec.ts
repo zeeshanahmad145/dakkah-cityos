@@ -1,166 +1,227 @@
 jest.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
-      primaryKey: () => chain, nullable: () => chain, default: () => chain,
-      unique: () => chain, searchable: () => chain, index: () => chain,
-    }
-    return chain
-  }
+      primaryKey: () => chain,
+      nullable: () => chain,
+      default: () => chain,
+      unique: () => chain,
+      searchable: () => chain,
+      index: () => chain,
+    };
+    return chain;
+  };
   return {
     MedusaService: () =>
       class MockMedusaBase {
-        async retrieveAuctionListing(_id: string): Promise<any> { return null }
-        async listBids(_filter: any): Promise<any> { return [] }
-        async createBids(_data: any): Promise<any> { return {} }
-        async updateAuctionListings(_data: any): Promise<any> { return {} }
-        async createAuctionResults(_data: any): Promise<any> { return {} }
+        async retrieveAuctionListing(_id: string): Promise<any> {
+          return null;
+        }
+        async listBids(_filter: any): Promise<any> {
+          return [];
+        }
+        async createBids(_data: any): Promise<any> {
+          return {};
+        }
+        async updateAuctionListings(_data: any): Promise<any> {
+          return {};
+        }
+        async createAuctionResults(_data: any): Promise<any> {
+          return {};
+        }
       },
     model: {
       define: () => ({ indexes: () => ({}) }),
-      id: chainable, text: chainable, number: chainable, json: chainable,
-      enum: () => chainable(), boolean: chainable, dateTime: chainable,
-      bigNumber: chainable, float: chainable, array: chainable,
-      hasOne: () => chainable(), hasMany: () => chainable(),
-      belongsTo: () => chainable(), manyToMany: () => chainable(),
+      id: chainable,
+      text: chainable,
+      number: chainable,
+      json: chainable,
+      enum: () => chainable(),
+      boolean: chainable,
+      dateTime: chainable,
+      bigNumber: chainable,
+      float: chainable,
+      array: chainable,
+      hasOne: () => chainable(),
+      hasMany: () => chainable(),
+      belongsTo: () => chainable(),
+      manyToMany: () => chainable(),
     },
-  }
-})
+  };
+});
 
-import AuctionModuleService from "../../../src/modules/auction/service"
+import AuctionModuleService from "../../../src/modules/auction/service";
 
 describe("AuctionModuleService", () => {
-  let service: AuctionModuleService
+  let service: AuctionModuleService;
 
   beforeEach(() => {
-    service = new AuctionModuleService()
-    jest.clearAllMocks()
-  })
+    service = new AuctionModuleService();
+    jest.clearAllMocks();
+  });
 
-  const futureDate = new Date()
-  futureDate.setDate(futureDate.getDate() + 7)
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 7);
 
   const activeAuction = {
-    id: "auc_01", status: "active", starting_price: 100, current_price: 200,
-    reserve_price: 500, bid_increment: 10, ends_at: futureDate.toISOString(),
-  }
+    id: "auc_01",
+    status: "active",
+    starting_price: 100,
+    current_price: 200,
+    reserve_price: 500,
+    bid_increment: 10,
+    ends_at: futureDate.toISOString(),
+  };
 
   describe("placeBid", () => {
     it("should accept a valid first bid at starting price", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue({
-        ...activeAuction, current_price: 100,
-      })
-      jest.spyOn(service, "getHighestBid" as any).mockResolvedValue(null)
-      jest.spyOn(service, "createBids" as any).mockResolvedValue({
-        id: "bid_01", amount: 100, status: "active",
-      })
-      jest.spyOn(service, "updateAuctionListings" as any).mockResolvedValue({})
+      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+        ...activeAuction,
+        current_price: 100,
+      });
+      jest.spyOn(service, "getHighestBid").mockResolvedValue(null);
+      jest.spyOn(service, "createBids").mockResolvedValue({
+        id: "bid_01",
+        amount: 100,
+        status: "active",
+      });
+      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
-      const result = await service.placeBid("auc_01", "user_01", 100)
-      expect(result.id).toBe("bid_01")
-    })
+      const result = await service.placeBid("auc_01", "user_01", 100);
+      expect(result.id).toBe("bid_01");
+    });
 
     it("should reject bid below minimum increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue(activeAuction)
-      jest.spyOn(service, "getHighestBid" as any).mockResolvedValue({ id: "bid_01", amount: 200 })
+      jest
+        .spyOn(service, "retrieveAuctionListing")
+        .mockResolvedValue(activeAuction);
+      jest
+        .spyOn(service, "getHighestBid")
+        .mockResolvedValue({ id: "bid_01", amount: 200 });
 
-      await expect(service.placeBid("auc_01", "user_02", 205)).rejects.toThrow()
-    })
+      await expect(
+        service.placeBid("auc_01", "user_02", 205),
+      ).rejects.toThrow();
+    });
 
     it("should reject bid on inactive auction", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue({
-        ...activeAuction, status: "ended",
-      })
+      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+        ...activeAuction,
+        status: "ended",
+      });
 
-      await expect(service.placeBid("auc_01", "user_01", 500)).rejects.toThrow("Auction is not active")
-    })
+      await expect(service.placeBid("auc_01", "user_01", 500)).rejects.toThrow(
+        "Auction is not active",
+      );
+    });
 
     it("should reject zero amount bid", async () => {
       await expect(service.placeBid("auc_01", "user_01", 0)).rejects.toThrow(
-        "Bid amount must be greater than zero"
-      )
-    })
-  })
+        "Bid amount must be greater than zero",
+      );
+    });
+  });
 
   describe("closeAuction", () => {
     it("should determine winner when highest bid meets reserve", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue(activeAuction)
-      jest.spyOn(service, "getHighestBid" as any).mockResolvedValue({
-        id: "bid_10", bidder_id: "user_05", amount: 600,
-      })
-      jest.spyOn(service, "updateAuctionListings" as any).mockResolvedValue({})
-      jest.spyOn(service, "createAuctionResults" as any).mockResolvedValue({
-        auction_id: "auc_01", winner_id: "user_05", final_price: 600,
-      })
+      jest
+        .spyOn(service, "retrieveAuctionListing")
+        .mockResolvedValue(activeAuction);
+      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+        id: "bid_10",
+        bidder_id: "user_05",
+        amount: 600,
+      });
+      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      jest.spyOn(service, "createAuctionResults").mockResolvedValue({
+        auction_id: "auc_01",
+        winner_id: "user_05",
+        final_price: 600,
+      });
 
-      const result = await service.closeAuction("auc_01")
-      expect(result.winner_id).toBe("user_05")
-    })
+      const result = await service.closeAuction("auc_01");
+      expect(result.winner_id).toBe("user_05");
+    });
 
     it("should end without winner when bid below reserve", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue(activeAuction)
-      jest.spyOn(service, "getHighestBid" as any).mockResolvedValue({
-        id: "bid_11", bidder_id: "user_06", amount: 300,
-      })
-      jest.spyOn(service, "updateAuctionListings" as any).mockResolvedValue({})
+      jest
+        .spyOn(service, "retrieveAuctionListing")
+        .mockResolvedValue(activeAuction);
+      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+        id: "bid_11",
+        bidder_id: "user_06",
+        amount: 300,
+      });
+      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
-      const result = await service.closeAuction("auc_01")
-      expect(result.winner).toBeNull()
-    })
+      const result = await service.closeAuction("auc_01");
+      expect(result.winner).toBeNull();
+    });
 
     it("should reject closing a non-active auction", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue({
-        ...activeAuction, status: "ended",
-      })
+      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+        ...activeAuction,
+        status: "ended",
+      });
 
-      await expect(service.closeAuction("auc_01")).rejects.toThrow("Auction is not active")
-    })
-  })
+      await expect(service.closeAuction("auc_01")).rejects.toThrow(
+        "Auction is not active",
+      );
+    });
+  });
 
   describe("checkAntiSniping", () => {
     it("should extend when bid placed within 5 minutes of end", async () => {
-      const nearEnd = new Date()
-      nearEnd.setMinutes(nearEnd.getMinutes() + 3)
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue({
-        ...activeAuction, ends_at: nearEnd.toISOString(),
-      })
-      jest.spyOn(service, "updateAuctionListings" as any).mockResolvedValue({})
+      const nearEnd = new Date();
+      nearEnd.setMinutes(nearEnd.getMinutes() + 3);
+      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+        ...activeAuction,
+        ends_at: nearEnd.toISOString(),
+      });
+      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
-      const result = await service.checkAntiSniping("auc_01", new Date())
-      expect(result.extended).toBe(true)
-    })
+      const result = await service.checkAntiSniping("auc_01", new Date());
+      expect(result.extended).toBe(true);
+    });
 
     it("should not extend when sufficient time remains", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue(activeAuction)
+      jest
+        .spyOn(service, "retrieveAuctionListing")
+        .mockResolvedValue(activeAuction);
 
-      const result = await service.checkAntiSniping("auc_01", new Date())
-      expect(result.extended).toBe(false)
-    })
-  })
+      const result = await service.checkAntiSniping("auc_01", new Date());
+      expect(result.extended).toBe(false);
+    });
+  });
 
   describe("validateBidIncrement", () => {
     it("should validate bid at or above 5% increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue(activeAuction)
+      jest
+        .spyOn(service, "retrieveAuctionListing")
+        .mockResolvedValue(activeAuction);
 
-      const minimumBid = 200 + (200 * 0.05)
-      const result = await service.validateBidIncrement("auc_01", minimumBid)
-      expect(result.valid).toBe(true)
-    })
+      const minimumBid = 200 + 200 * 0.05;
+      const result = await service.validateBidIncrement("auc_01", minimumBid);
+      expect(result.valid).toBe(true);
+    });
 
     it("should reject bid below 5% minimum increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue(activeAuction)
+      jest
+        .spyOn(service, "retrieveAuctionListing")
+        .mockResolvedValue(activeAuction);
 
-      const result = await service.validateBidIncrement("auc_01", 200)
-      expect(result.valid).toBe(false)
-    })
+      const result = await service.validateBidIncrement("auc_01", 200);
+      expect(result.valid).toBe(false);
+    });
 
     it("should use starting price when current_price is not set", async () => {
-      jest.spyOn(service, "retrieveAuctionListing" as any).mockResolvedValue({
-        ...activeAuction, current_price: null,
-      })
+      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+        ...activeAuction,
+        current_price: null,
+      });
 
-      const result = await service.validateBidIncrement("auc_01", 105)
-      expect(result.valid).toBe(true)
-      expect(result.currentPrice).toBe(100)
-    })
-  })
-})
+      const result = await service.validateBidIncrement("auc_01", 105);
+      expect(result.valid).toBe(true);
+      expect(result.currentPrice).toBe(100);
+    });
+  });
+});

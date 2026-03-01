@@ -5,7 +5,7 @@ export default async function inventoryItemUpdateHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const logger = container.resolve("logger");
+  const logger = container.resolve("logger") as unknown as any;
   logger.info(
     `[PayloadSync] inventory-item.updated received for ${data.id}. Syncing availability...`,
   );
@@ -16,9 +16,9 @@ export default async function inventoryItemUpdateHandler({
         inventoryItemId: data.id,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error(
-      `[PayloadSync] Inventory workflow failed for item ${data.id}: ${error.message}`,
+      `[PayloadSync] Inventory workflow failed for item ${data.id}: ${(error instanceof Error ? error.message : String(error))}`,
     );
   }
 }

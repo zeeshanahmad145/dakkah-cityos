@@ -13,7 +13,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     await storageService.serveMediaCached(objectPath, res, 31536000)
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof ObjectNotFoundError) {
       return res.status(404).json({ error: "Object not found" })
     }

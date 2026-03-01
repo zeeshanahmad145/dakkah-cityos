@@ -13,7 +13,7 @@ export type CancelFleetDispatchInput = {
 const cancelDispatchApiStep = createStep(
   "cancel-fleetbase-dispatch-step",
   async (input: CancelFleetDispatchInput, { container }) => {
-    const logger = container.resolve("logger");
+    const logger = container.resolve("logger") as unknown as any;
 
     try {
       if (!appConfig.fleetbase.isConfigured) {
@@ -61,11 +61,11 @@ const cancelDispatchApiStep = createStep(
         status: "success",
         data: { orderId: input.orderId },
       });
-    } catch (error: any) {
-      logger.error(`Fleetbase cancellation step failed: ${error.message}`);
+    } catch (error: unknown) {
+      logger.error(`Fleetbase cancellation step failed: ${(error instanceof Error ? error.message : String(error))}`);
       return new StepResponse<any, any>({
         status: "error",
-        message: error.message,
+        message: (error instanceof Error ? error.message : String(error)),
       });
     }
   },

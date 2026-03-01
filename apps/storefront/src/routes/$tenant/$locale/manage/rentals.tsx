@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast, Tabs } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+  Tabs,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -26,7 +38,9 @@ function ManageRentalsPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
@@ -34,10 +48,14 @@ function ManageRentalsPage() {
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
       try {
-        const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+        const response = await sdk.client.fetch(config.apiEndpoint, {
+          method: "GET",
+        })
         return response
       } catch {
-        const response = await sdk.client.fetch("/store/rentals", { method: "GET" })
+        const response = await sdk.client.fetch("/store/rentals", {
+          method: "GET",
+        })
         return response
       }
     },
@@ -58,7 +76,9 @@ function ManageRentalsPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -90,7 +110,10 @@ function ManageRentalsPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
@@ -98,21 +121,28 @@ function ManageRentalsPage() {
     id: item.id,
     item: item.item || item.name || item.title || "—",
     category: item.category || "—",
-    daily_rate: item.daily_rate ? `$${(item.daily_rate / 100).toFixed(2)}` : "$0.00",
+    daily_rate: item.daily_rate
+      ? `$${(item.daily_rate / 100).toFixed(2)}`
+      : "$0.00",
     status: item.status || "available",
     current_renter: item.current_renter?.name || item.current_renter || "—",
-    return_date: item.return_date ? new Date(item.return_date).toLocaleDateString() : "—",
+    return_date: item.return_date
+      ? new Date(item.return_date!).toLocaleDateString()
+      : "—",
   }))
 
-  const rentals = statusFilter === "all"
-    ? allRentals
-    : allRentals.filter((i: any) => i.status === statusFilter)
+  const rentals =
+    statusFilter === "all"
+      ? allRentals
+      : allRentals.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "item",
       header: t(locale, "manage.item"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "category",
@@ -143,9 +173,16 @@ function ManageRentalsPage() {
       render: (_: unknown, row: any) => (
         <DropdownMenu
           items={[
-            { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
             { type: "separator" as const },
-            { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -179,26 +216,45 @@ function ManageRentalsPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={rentals} emptyTitle="No rentals found" countLabel="rentals" />
+        <DataTable
+          columns={columns}
+          data={rentals}
+          emptyTitle="No rentals found"
+          countLabel="rentals"
+        />
       </Container>
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Create ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Create ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.saveChanges", "Save changes") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.saveChanges", "Save changes")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
 
       <ConfirmDialog

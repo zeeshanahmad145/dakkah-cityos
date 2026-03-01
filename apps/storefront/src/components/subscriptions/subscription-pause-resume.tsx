@@ -49,7 +49,7 @@ export function SubscriptionPauseResume({ subscription }: SubscriptionPauseResum
             <p className="font-medium text-ds-warning">Subscription Paused</p>
             {subscription.pause_end && (
               <p className="text-sm text-ds-warning">
-                Resumes: {new Date(subscription.pause_end).toLocaleDateString()}
+                Resumes: {new Date(subscription.pause_end!).toLocaleDateString()}
               </p>
             )}
           </div>

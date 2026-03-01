@@ -53,8 +53,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       tenant_id,
       result,
     })
-  } catch (error: any) {
-    logger.error(`[NodeHierarchySync] in hierarchy sync: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[NodeHierarchySync] in hierarchy sync: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC-NODE-HIERARCHY")}
 }
 
@@ -73,8 +73,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       tenant_id,
       hierarchy,
     })
-  } catch (error: any) {
-    logger.error(`[NodeHierarchySync] fetching hierarchy: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[NodeHierarchySync] fetching hierarchy: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC-NODE-HIERARCHY")}
 }
 

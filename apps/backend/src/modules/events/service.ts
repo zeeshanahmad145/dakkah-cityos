@@ -1,23 +1,23 @@
-import { MedusaService } from "@medusajs/framework/utils"
-import EventOutbox from "./models/event-outbox"
+import { MedusaService } from "@medusajs/framework/utils";
+import EventOutbox from "./models/event-outbox";
 
 class EventModuleService extends MedusaService({
   EventOutbox,
 }) {
   async publishEvent(data: {
-    tenantId: string
-    eventType: string
-    aggregateType: string
-    aggregateId: string
-    payload: Record<string, any>
-    actorId?: string
-    actorRole?: string
-    nodeId?: string
-    channel?: string
-    correlationId?: string
-    causationId?: string
+    tenantId: string;
+    eventType: string;
+    aggregateType: string;
+    aggregateId: string;
+    payload: Record<string, any>;
+    actorId?: string;
+    actorRole?: string;
+    nodeId?: string;
+    channel?: string;
+    correlationId?: string;
+    causationId?: string;
   }) {
-    return await (this as any).createEventOutboxs({
+    return await this.createEventOutboxes({
       tenant_id: data.tenantId,
       event_type: data.eventType,
       aggregate_type: data.aggregateType,
@@ -31,41 +31,40 @@ class EventModuleService extends MedusaService({
       causation_id: data.causationId || null,
       status: "pending",
       retry_count: 0,
-    })
+    } as any);
   }
 
   async listPendingEvents(tenantId?: string, limit?: number) {
-    const filters: Record<string, any> = { status: "pending" }
+    const filters: Record<string, any> = { status: "pending" };
     if (tenantId) {
-      filters.tenant_id = tenantId
+      filters.tenant_id = tenantId;
     }
 
-    const events = await this.listEventOutboxes(
-      filters,
-      { take: limit || 100 }
-    ) as any
+    const events = await this.listEventOutboxes(filters, {
+      take: limit || 100,
+    }) as any;
 
-    return Array.isArray(events) ? events : [events].filter(Boolean)
+    return Array.isArray(events) ? events : [events].filter(Boolean);
   }
 
   async markPublished(eventId: string) {
-    return await (this as any).updateEventOutboxs({
+    return await this.updateEventOutboxes({
       id: eventId,
       status: "published",
       published_at: new Date(),
-    })
+    } as any);
   }
 
   async markFailed(eventId: string, error: string) {
-    const event = await this.retrieveEventOutbox(eventId) as any
-    const retryCount = (event?.retry_count || 0) + 1
+    const event = await this.retrieveEventOutbox(eventId) as any;
+    const retryCount = (event?.retry_count || 0) + 1;
 
-    return await (this as any).updateEventOutboxs({
+    return await this.updateEventOutboxes({
       id: eventId,
       status: "failed",
       error,
       retry_count: retryCount,
-    })
+    } as any);
   }
 
   buildEnvelope(event: any) {
@@ -89,102 +88,128 @@ class EventModuleService extends MedusaService({
       },
       payload: event.payload,
       metadata: event.metadata,
-    }
+    };
   }
 
   async retryFailedEvents(tenantId?: string, maxRetries: number = 3) {
-    const filters: Record<string, any> = { status: "failed" }
+    const filters: Record<string, any> = { status: "failed" };
     if (tenantId) {
-      filters.tenant_id = tenantId
+      filters.tenant_id = tenantId;
     }
 
-    const failedEvents = await this.listEventOutboxes(filters) as any
-    const list = Array.isArray(failedEvents) ? failedEvents : [failedEvents].filter(Boolean)
+    const failedEvents = await this.listEventOutboxes(filters) as any;
+    const list = Array.isArray(failedEvents)
+      ? failedEvents
+      : [failedEvents].filter(Boolean);
 
-    const retried: any[] = []
-    const skipped: any[] = []
+    const retried: any[] = [];
+    const skipped: any[] = [];
 
     for (const event of list) {
       if ((event.retry_count || 0) >= maxRetries) {
-        skipped.push({ id: event.id, retry_count: event.retry_count })
-        continue
+        skipped.push({ id: event.id, retry_count: event.retry_count });
+        continue;
       }
 
-      const updated = await (this as any).updateEventOutboxs({
+      const updated = await this.updateEventOutboxes({
         id: event.id,
         status: "pending",
         error: null,
-      })
-      retried.push(updated)
+      } as any);
+      retried.push(updated);
     }
 
-    return { retried: retried.length, skipped: skipped.length, retriedEvents: retried, skippedEvents: skipped }
+    return {
+      retried: retried.length,
+      skipped: skipped.length,
+      retriedEvents: retried,
+      skippedEvents: skipped,
+    };
   }
 
   async purgeOldEvents(olderThanDays: number) {
     if (olderThanDays < 1) {
-      throw new Error("olderThanDays must be at least 1")
+      throw new Error("olderThanDays must be at least 1");
     }
 
-    const cutoffDate = new Date()
-    cutoffDate.setDate(cutoffDate.getDate() - olderThanDays)
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
 
-    const publishedEvents = await this.listEventOutboxes({ status: "published" }) as any
-    const list = Array.isArray(publishedEvents) ? publishedEvents : [publishedEvents].filter(Boolean)
+    const publishedEvents = await this.listEventOutboxes({
+      status: "published",
+    }) as any;
+    const list = Array.isArray(publishedEvents)
+      ? publishedEvents
+      : [publishedEvents].filter(Boolean);
 
     const toDelete = list.filter((e: any) => {
-      const publishedAt = e.published_at ? new Date(e.published_at) : new Date(e.created_at)
-      return publishedAt < cutoffDate
-    })
+      const publishedAt = e.published_at
+        ? new Date(e.published_at)
+        : new Date(e.created_at);
+      return publishedAt < cutoffDate;
+    });
 
     for (const event of toDelete) {
-      await (this as any).deleteEventOutboxs(event.id)
+      await this.deleteEventOutboxes(event.id);
     }
 
-    return { purged: toDelete.length, cutoffDate }
+    return { purged: toDelete.length, cutoffDate };
   }
 
   async getEventStats(tenantId: string) {
-    const allEvents = await this.listEventOutboxes({ tenant_id: tenantId }) as any
-    const list = Array.isArray(allEvents) ? allEvents : [allEvents].filter(Boolean)
+    const allEvents = await this.listEventOutboxes({
+      tenant_id: tenantId,
+    }) as any;
+    const list = Array.isArray(allEvents)
+      ? allEvents
+      : [allEvents].filter(Boolean);
 
-    const byStatus: Record<string, number> = { pending: 0, published: 0, failed: 0 }
-    const byEventType: Record<string, number> = {}
+    const byStatus: Record<string, number> = {
+      pending: 0,
+      published: 0,
+      failed: 0,
+    };
+    const byEventType: Record<string, number> = {};
 
     for (const event of list) {
-      const status = event.status || "unknown"
-      byStatus[status] = (byStatus[status] || 0) + 1
+      const status = event.status || "unknown";
+      byStatus[status] = (byStatus[status] || 0) + 1;
 
-      const eventType = event.event_type || "unknown"
-      byEventType[eventType] = (byEventType[eventType] || 0) + 1
+      const eventType = event.event_type || "unknown";
+      byEventType[eventType] = (byEventType[eventType] || 0) + 1;
     }
 
-    return { tenantId, total: list.length, byStatus, byEventType }
+    return { tenantId, total: list.length, byStatus, byEventType };
   }
 
   async batchPublish(eventIds: string[]) {
     if (!eventIds || eventIds.length === 0) {
-      throw new Error("No event IDs provided")
+      throw new Error("No event IDs provided");
     }
 
-    const results: any[] = []
-    const errors: any[] = []
+    const results: any[] = [];
+    const errors: any[] = [];
 
     for (const eventId of eventIds) {
       try {
-        const updated = await (this as any).updateEventOutboxs({
+        const updated = await this.updateEventOutboxes({
           id: eventId,
           status: "published",
           published_at: new Date(),
-        })
-        results.push(updated)
-      } catch (error: any) {
-        errors.push({ eventId, error: error.message })
+        } as any);
+        results.push(updated);
+      } catch (error: unknown) {
+        errors.push({ eventId, error: (error instanceof Error ? error.message : String(error)) });
       }
     }
 
-    return { published: results.length, failed: errors.length, results, errors }
+    return {
+      published: results.length,
+      failed: errors.length,
+      results,
+      errors,
+    };
   }
 }
 
-export default EventModuleService
+export default EventModuleService;

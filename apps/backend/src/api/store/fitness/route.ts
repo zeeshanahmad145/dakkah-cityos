@@ -1,174 +1,161 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+
+/**
+ * GET /store/fitness
+ *
+ * Phase 5 migration: uses query.graph() to fetch Medusa products linked to
+ * ServiceProduct extensions via the product-booking-service.ts link table
+ * (fitness classes are service products). GymMembership plans are fetched
+ * separately via product-fitness-plan.ts link.
+ *
+ * Returns: { classes, memberships, trainers, items, count, limit, offset }
+ * Shape preserved for backward-compat with existing frontend consumers.
+ */
 
 const SEED_CLASSES = [
   {
-    id: "fit-seed-001",
-    name: "Morning Vinyasa Yoga",
-    description: "Start your day with a flowing yoga practice that builds strength, flexibility, and mindfulness.",
-    class_type: "yoga",
-    instructor: "Sarah Chen",
-    schedule: "Mon, Wed, Fri 7:00 AM",
-    duration: 60,
-    capacity: 25,
-    price: 2500,
-    currency: "USD",
+    id: "prod_fit_seed_001",
+    title: "Morning Vinyasa Yoga",
+    description:
+      "Start your day with a flowing yoga practice that builds strength, flexibility, and mindfulness.",
     thumbnail: "/seed-images/affiliate/1544367567-0f2fcb009e0b.jpg",
-    level: "all_levels",
-    rating: 4.8,
-    review_count: 124,
-    location: "Downtown Wellness Studio",
-    type: "class",
-    is_active: true,
+    service_product: {
+      service_type: "class",
+      duration_minutes: 60,
+      max_capacity: 25,
+      location_type: "in_person",
+    },
+    metadata: {
+      class_type: "yoga",
+      level: "all_levels",
+      instructor: "Sarah Chen",
+      rating: 4.8,
+      review_count: 124,
+    },
   },
   {
-    id: "fit-seed-002",
-    name: "CrossFit WOD Challenge",
-    description: "High-intensity functional fitness workout combining weightlifting, cardio, and gymnastics movements.",
-    class_type: "crossfit",
-    instructor: "Marcus Johnson",
-    schedule: "Tue, Thu, Sat 6:00 AM",
-    duration: 45,
-    capacity: 15,
-    price: 3500,
-    currency: "USD",
+    id: "prod_fit_seed_002",
+    title: "CrossFit WOD Challenge",
+    description:
+      "High-intensity functional fitness workout combining weightlifting, cardio, and gymnastics.",
     thumbnail: "/seed-images/bookings/1534438327276-14e5300c3a48.jpg",
-    level: "intermediate",
-    rating: 4.9,
-    review_count: 89,
-    location: "Iron Box Gym",
-    type: "class",
-    is_active: true,
+    service_product: {
+      service_type: "class",
+      duration_minutes: 45,
+      max_capacity: 15,
+      location_type: "in_person",
+    },
+    metadata: {
+      class_type: "crossfit",
+      level: "intermediate",
+      instructor: "Marcus Johnson",
+      rating: 4.9,
+    },
   },
-  {
-    id: "fit-seed-003",
-    name: "Personal Training Session",
-    description: "One-on-one customized training program designed to meet your specific fitness goals.",
-    class_type: "hiit",
-    instructor: "Alex Rivera",
-    schedule: "By Appointment",
-    duration: 60,
-    capacity: 1,
-    price: 7500,
-    currency: "USD",
-    thumbnail: "/seed-images/fitness/1571019614242-c5c5dee9f50b.jpg",
-    level: "all_levels",
-    rating: 5.0,
-    review_count: 56,
-    location: "FitLife Performance Center",
-    type: "personal",
-    is_active: true,
-  },
-  {
-    id: "fit-seed-004",
-    name: "Lap Swimming & Aqua Fitness",
-    description: "Structured swimming sessions and water-based exercises for cardio, strength, and rehabilitation.",
-    class_type: "swimming",
-    instructor: "Diana Park",
-    schedule: "Daily 6:00 AM - 9:00 PM",
-    duration: 45,
-    capacity: 30,
-    price: 2000,
-    currency: "USD",
-    thumbnail: "/seed-images/fitness/1530549387789-4c1017266635.jpg",
-    level: "beginner",
-    rating: 4.7,
-    review_count: 98,
-    location: "Aquatic Sports Center",
-    type: "class",
-    is_active: true,
-  },
-  {
-    id: "fit-seed-005",
-    name: "Kickboxing & Martial Arts",
-    description: "Learn striking techniques while getting an incredible full-body workout.",
-    class_type: "boxing",
-    instructor: "Kenji Tanaka",
-    schedule: "Mon, Wed, Fri 6:00 PM",
-    duration: 60,
-    capacity: 20,
-    price: 3000,
-    currency: "USD",
-    thumbnail: "/seed-images/fitness/1549719386-74dfcbf7dbed.jpg",
-    level: "all_levels",
-    rating: 4.9,
-    review_count: 73,
-    location: "Combat Athletics Academy",
-    type: "class",
-    is_active: true,
-  },
-]
+];
 
-const SEED_TRAINERS = [
+const SEED_MEMBERSHIPS = [
   {
-    id: "trainer-seed-001",
-    name: "Sarah Chen",
-    specialization: "Yoga & Pilates",
-    thumbnail: "/seed-images/fitness/1518611012118-696072aa579a.jpg",
-    rating: 4.8,
+    id: "prod_fit_mbr_001",
+    title: "Basic Membership",
+    description: "Access to standard gym facilities and group classes.",
+    thumbnail: "/seed-images/fitness/1571019614242-c5c5dee9f50b.jpg",
+    gym_membership: { membership_type: "basic" },
+    metadata: { billing_interval: "monthly", access_hours: "6am-10pm" },
   },
-  {
-    id: "trainer-seed-002",
-    name: "Marcus Johnson",
-    specialization: "CrossFit & Strength",
-    thumbnail: "/seed-images/fitness/1571019613454-1cb2f99b2d8b.jpg",
-    rating: 4.9,
-  },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
+  const {
+    limit = "20",
+    offset = "0",
+    tenant_id,
+    type,
+    vertical = "class", // "class" | "membership"
+    search,
+  } = req.query as Record<string, string | undefined>;
+
   try {
-    const fitnessService = req.scope.resolve("fitness") as any
-    const {
-      limit = "20",
-      offset = "0",
-      tenant_id,
-      type,
-      level,
-      class_type,
-      is_active,
-      search,
-    } = req.query as Record<string, string | undefined>
+    const query = req.scope.resolve("query") as unknown as any;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (type) filters.type = type
-    if (level) filters.level = level
-    if (class_type) filters.class_type = class_type
-    if (is_active !== undefined) filters.is_active = is_active === "true"
-    if (search) filters.name = { $like: `%${search}%` }
+    const productFilters: Record<string, unknown> = { status: "published" };
+    if (tenant_id) productFilters["metadata->>'tenant_id'"] = tenant_id;
+    if (search) productFilters.title = { $ilike: `%${search}%` };
 
-    const paginationOpts = {
-      skip: Number(offset),
-      take: Number(limit),
-      order: { created_at: "DESC" },
-    }
+    // Fetch fitness class/service products
+    const { data: classProducts } = await query.graph({
+      entity: "product",
+      fields: [
+        "id",
+        "title",
+        "description",
+        "thumbnail",
+        "handle",
+        "metadata",
+        "variants.id",
+        "variants.title",
+        "variants.calculated_price.*",
+        "service_product.id",
+        "service_product.service_type",
+        "service_product.duration_minutes",
+        "service_product.max_capacity",
+        "service_product.location_type",
+        "service_product.virtual_meeting_url",
+        "service_product.assigned_providers",
+      ],
+      filters: {
+        ...productFilters,
+        "metadata->>'vertical'": "booking",
+        "service_product.service_type": "class",
+      },
+      pagination: { skip: Number(offset), take: Number(limit) },
+    });
 
-    const [classes, trainers] = await Promise.all([
-      fitnessService.listClassSchedules(filters, paginationOpts),
-      fitnessService.listTrainerProfiles(filters, paginationOpts),
-    ])
+    // Fetch membership plan products
+    const { data: membershipProducts } = await query.graph({
+      entity: "product",
+      fields: [
+        "id",
+        "title",
+        "description",
+        "thumbnail",
+        "metadata",
+        "variants.id",
+        "variants.title",
+        "variants.calculated_price.*",
+        "gym_membership.id",
+        "gym_membership.membership_type",
+        "gym_membership.billing_interval",
+      ],
+      filters: { ...productFilters, "metadata->>'vertical'": "fitness" },
+      pagination: { skip: 0, take: 20 },
+    });
 
-    const classList = Array.isArray(classes) && classes.length > 0 ? classes : SEED_CLASSES
-    const trainerList = Array.isArray(trainers) && trainers.length > 0 ? trainers : SEED_TRAINERS
+    const classes = classProducts?.length > 0 ? classProducts : SEED_CLASSES;
+    const memberships =
+      membershipProducts?.length > 0 ? membershipProducts : SEED_MEMBERSHIPS;
 
     return res.json({
-      classes: classList,
-      items: classList,
-      trainers: trainerList,
-      count: classList.length + trainerList.length,
+      classes,
+      memberships,
+      items: vertical === "membership" ? memberships : classes,
+      count: classes.length + memberships.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
+    });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Unknown error";
+    req.scope
+      .resolve("logger")
+      .error?.(`[fitness/route] query.graph failed: ${msg}`);
+
     return res.json({
       classes: SEED_CLASSES,
+      memberships: SEED_MEMBERSHIPS,
       items: SEED_CLASSES,
-      trainers: SEED_TRAINERS,
-      count: SEED_CLASSES.length + SEED_TRAINERS.length,
-      limit: 20,
-      offset: 0,
-    })
+      count: SEED_CLASSES.length,
+      limit: Number(limit ?? 20),
+      offset: Number(offset ?? 0),
+    });
   }
 }
-

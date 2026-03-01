@@ -77,7 +77,7 @@ export class ERPNextService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to create invoice: ${error.response?.data?.message || error.message}`
+        `Failed to create invoice: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -122,7 +122,7 @@ export class ERPNextService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to sync customer: ${error.message}`
+        `Failed to sync customer: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -170,7 +170,7 @@ export class ERPNextService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to sync product: ${error.message}`
+        `Failed to sync product: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -208,7 +208,7 @@ export class ERPNextService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to record payment: ${error.message}`
+        `Failed to record payment: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -250,7 +250,7 @@ export class ERPNextService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to get AR report: ${error.message}`
+        `Failed to get AR report: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }

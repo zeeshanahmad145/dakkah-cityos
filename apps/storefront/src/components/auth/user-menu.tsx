@@ -27,7 +27,7 @@ function formatRoleName(role: string | null): string {
   if (!role) return ""
   return role
     .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
 }
 
@@ -48,9 +48,7 @@ export function UserMenu() {
   }
 
   if (isLoading) {
-    return (
-      <div className="w-8 h-8 rounded-full bg-ds-muted animate-pulse" />
-    )
+    return <div className="w-8 h-8 rounded-full bg-ds-muted animate-pulse" />
   }
 
   if (!isAuthenticated) {
@@ -71,7 +69,8 @@ export function UserMenu() {
   }
 
   const initials = customer
-    ? `${customer.first_name?.[0] || ""}${customer.last_name?.[0] || ""}`.toUpperCase() || "U"
+    ? `${customer.first_name?.[0] || ""}${customer.last_name?.[0] || ""}`.toUpperCase() ||
+      "U"
     : "U"
 
   return (
@@ -92,40 +91,49 @@ export function UserMenu() {
             <p className="text-sm font-medium">
               {customer?.first_name} {customer?.last_name}
             </p>
-            <p className="text-xs text-ds-muted-foreground truncate">{customer?.email}</p>
+            <p className="text-xs text-ds-muted-foreground truncate">
+              {customer?.email}
+            </p>
             {hasAccess && role && (
-              <p className="text-xs text-ds-primary font-medium">{formatRoleName(role)}</p>
+              <p className="text-xs text-ds-primary font-medium">
+                {formatRoleName(role)}
+              </p>
             )}
             {isB2B && customer?.company && (
-              <p className="text-xs text-ds-info font-medium">{customer.company.name}</p>
+              <p className="text-xs text-ds-info font-medium">
+                {customer.company.name}
+              </p>
             )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link to={`${prefix}/account` as any} className="cursor-pointer">
+          <Link to={`${prefix}/account` as never} className="cursor-pointer">
             <User className="me-2 h-4 w-4" />
             My Account
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link to={`${prefix}/account/orders` as any} className="cursor-pointer">
+          <Link to={`${prefix}/account/orders` as never} className="cursor-pointer">
             <ShoppingBag className="me-2 h-4 w-4" />
             Orders
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link to={`${prefix}/account/subscriptions` as any} className="cursor-pointer">
+          <Link
+            to={`${prefix}/account/subscriptions` as never}
+            className="cursor-pointer"
+          >
             <CreditCard className="me-2 h-4 w-4" />
             Subscriptions
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link to={`${prefix}/account/bookings` as any} className="cursor-pointer">
+          <Link to={`${prefix}/account/bookings` as never} className="cursor-pointer">
             <Calendar className="me-2 h-4 w-4" />
             Bookings
           </Link>
@@ -134,9 +142,11 @@ export function UserMenu() {
         {isB2B && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel className="text-xs text-ds-muted-foreground">Business</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-ds-muted-foreground">
+              Business
+            </DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link to={`${prefix}/b2b/dashboard` as any} className="cursor-pointer">
+              <Link to={`${prefix}/b2b/dashboard` as never} className="cursor-pointer">
                 <BuildingStorefront className="me-2 h-4 w-4" />
                 Company Dashboard
               </Link>
@@ -147,9 +157,11 @@ export function UserMenu() {
         {hasAccess && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel className="text-xs text-ds-muted-foreground">Management</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-ds-muted-foreground">
+              Management
+            </DropdownMenuLabel>
             <DropdownMenuItem asChild>
-              <Link to={`${prefix}/manage` as any} className="cursor-pointer">
+              <Link to={`${prefix}/manage` as never} className="cursor-pointer">
                 <BuildingStorefront className="me-2 h-4 w-4" />
                 Store Dashboard
               </Link>
@@ -160,7 +172,7 @@ export function UserMenu() {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link to={`${prefix}/account/settings` as any} className="cursor-pointer">
+          <Link to={`${prefix}/account/settings` as never} className="cursor-pointer">
             <CogSixTooth className="me-2 h-4 w-4" />
             Settings
           </Link>

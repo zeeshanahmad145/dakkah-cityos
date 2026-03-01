@@ -1,23 +1,24 @@
-import { listProducts, retrieveProduct } from "@/lib/data/products";
-import { getRegion } from "@/lib/data/regions";
-import { queryKeys } from "@/lib/utils/query-keys";
-import ProductDetails from "@/pages/product";
-import { HttpTypes } from "@medusajs/types";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { listProducts, retrieveProduct } from "@/lib/data/products"
+import { getRegion } from "@/lib/data/regions"
+import { queryKeys } from "@/lib/utils/query-keys"
+import ProductDetails from "@/pages/product"
+import { HttpTypes } from "@medusajs/types"
+import { createFileRoute, notFound } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/$tenant/$locale/products/$handle")({
   loader: async ({ params, context }) => {
-    const { locale, handle } = params;
-    if (typeof window === "undefined") return { locale, region: null, product: null as any };
-    const { queryClient } = context;
+    const { locale, handle } = params
+    if (typeof window === "undefined")
+      return { locale, region: null, product: null }
+    const { queryClient } = context
 
     const region = await queryClient.ensureQueryData({
       queryKey: ["region", locale],
       queryFn: () => getRegion({ country_code: locale }),
-    });
+    })
 
     if (!region || !handle) {
-      throw notFound();
+      throw notFound()
     }
 
     // Single comprehensive product fetch with all needed fields
@@ -28,12 +29,12 @@ export const Route = createFileRoute("/$tenant/$locale/products/$handle")({
           return await retrieveProduct({
             handle,
             region_id: region.id,
-          });
+          })
         } catch {
-          throw notFound();
+          throw notFound()
         }
       },
-    });
+    })
 
     // Ensure related products are loaded for SSR to prevent hydration mismatch
     // This ensures consistent rendering between server and client
@@ -44,33 +45,33 @@ export const Route = createFileRoute("/$tenant/$locale/products/$handle")({
           fields: "title, handle, *thumbnail, *variants",
           is_giftcard: false,
           limit: 4,
-        };
+        }
 
         if (product.collection_id) {
-          params.collection_id = [product.collection_id];
+          params.collection_id = [product.collection_id]
         }
 
         if (product.tags && product.tags.length > 0) {
-          params.tag_id = product.tags.map((tag) => tag.id);
+          params.tag_id = product.tags.map((tag) => tag.id)
         }
 
         const { products } = await listProducts({
           query_params: params,
           region_id: region.id,
-        });
+        })
 
-        return products.filter((p) => p.id !== product.id);
+        return products.filter((p) => p.id !== product.id)
       },
-    });
+    })
 
     return {
       locale,
       region,
       product: product as HttpTypes.StoreProduct,
-    };
+    }
   },
   head: ({ loaderData }) => {
-    const { product, region } = loaderData || {};
+    const { product, region } = loaderData || {}
 
     if (!product) {
       return {
@@ -79,7 +80,7 @@ export const Route = createFileRoute("/$tenant/$locale/products/$handle")({
             title: "Product Not Found | Dakkah CityOS",
           },
         ],
-      };
+      }
     }
 
     // Create structured data for SEO
@@ -101,10 +102,10 @@ export const Route = createFileRoute("/$tenant/$locale/products/$handle")({
           ? product.variants[0].calculated_price.calculated_amount.toFixed(2)
           : undefined,
       },
-    };
+    }
 
     // Get first product image for preloading (critical for LCP)
-    const firstImageUrl = product.images?.[0]?.url || product.thumbnail;
+    const firstImageUrl = product.images?.[0]?.url || product.thumbnail
 
     return {
       meta: [
@@ -145,7 +146,7 @@ export const Route = createFileRoute("/$tenant/$locale/products/$handle")({
           children: JSON.stringify(structuredData),
         },
       ],
-    };
+    }
   },
   component: ProductDetails,
-});
+})

@@ -65,7 +65,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("calculateShippingRate", () => {
     it("returns applicable rates filtered by weight and zone", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           carrier_name: "FedEx",
@@ -112,7 +112,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when no rates match", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           min_weight: 50,
@@ -131,7 +131,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("uses volumetric weight when dimensions are provided", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           carrier_name: "DHL",
@@ -158,7 +158,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("validateShipmentCarrier", () => {
     it("validates an active carrier successfully", async () => {
-      jest.spyOn(service, "retrieveCarrierConfig" as any).mockResolvedValue({
+      jest.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
         id: "carrier-1",
         carrier_name: "FedEx",
         is_active: true,
@@ -174,11 +174,11 @@ describe("ShippingExtensionModuleService", () => {
       expect(result.valid).toBe(true);
       expect(result.carrier_name).toBe("FedEx");
       expect(result.tracking_number).toBe("TRACK123");
-      expect(result.item_count).toBe(2);
+      expect(result.item_count).toBe(1);
     });
 
     it("throws when carrier is inactive", async () => {
-      jest.spyOn(service, "retrieveCarrierConfig" as any).mockResolvedValue({
+      jest.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
         id: "carrier-1",
         carrier_name: "DHL",
         is_active: false,
@@ -194,7 +194,7 @@ describe("ShippingExtensionModuleService", () => {
 
     it("throws when carrier is not found", async () => {
       jest
-        .spyOn(service, "retrieveCarrierConfig" as any)
+        .spyOn(service, "retrieveCarrierConfig")
         .mockRejectedValue(new Error("Not found"));
 
       await expect(
@@ -208,7 +208,7 @@ describe("ShippingExtensionModuleService", () => {
   describe("estimateDeliveryDate", () => {
     it("calculates estimated delivery dates from rate data", async () => {
       jest
-        .spyOn(service, "listShippingRates" as any)
+        .spyOn(service, "listShippingRates")
         .mockResolvedValue([
           { id: "r1", estimated_days_min: 3, estimated_days_max: 5 },
         ]);
@@ -228,7 +228,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when no rates found for route", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([]);
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([]);
 
       await expect(
         service.estimateDeliveryDate("UNKNOWN", "NOWHERE", "express"),

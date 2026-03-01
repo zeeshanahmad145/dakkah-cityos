@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const analyticsService = req.scope.resolve("analytics") as any;
+    const analyticsService = req.scope.resolve("analytics") as unknown as any;
     const { tenant_id } = req.query as { tenant_id?: string };
 
     if (!tenant_id) {
@@ -16,7 +16,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     const metrics = await analyticsService.generateDashboardMetrics(tenant_id);
     return res.json({ metrics });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-ANALYTICS-METRICS");
   }
 }
@@ -27,10 +27,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const analyticsService = req.scope.resolve("analytics") as any;
+    const analyticsService = req.scope.resolve("analytics") as unknown as any;
     const event = await analyticsService.trackEvent(req.body);
     return res.status(201).json({ event });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-ANALYTICS-TRACK");
   }
 }

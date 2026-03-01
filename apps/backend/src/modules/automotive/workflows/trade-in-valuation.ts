@@ -18,7 +18,7 @@ const submitTradeInStep = createStep(
     }: { vehicleId: string; customerId: string; description?: string },
     { container },
   ) => {
-    const automotiveService = container.resolve("automotive") as any;
+    const automotiveService = container.resolve("automotive") as unknown as any;
     const tradeIn = await automotiveService.submitTradeIn(
       vehicleId,
       customerId,
@@ -27,8 +27,8 @@ const submitTradeInStep = createStep(
     return new StepResponse({ tradeIn }, { tradeInId: tradeIn.id });
   },
   async ({ tradeInId }: { tradeInId: string }, { container }) => {
-    const automotiveService = container.resolve("automotive") as any;
-    await (automotiveService as any).updateTradeIns?.({
+    const automotiveService = container.resolve("automotive") as unknown as any;
+    await automotiveService.updateTradeIns?.({
       id: tradeInId,
       status: "withdrawn",
     });
@@ -41,7 +41,7 @@ const evaluateTradeInStep = createStep(
     { tradeInId, overrideValue }: { tradeInId: string; overrideValue?: number },
     { container },
   ) => {
-    const automotiveService = container.resolve("automotive") as any;
+    const automotiveService = container.resolve("automotive") as unknown as any;
     const evaluated = await automotiveService.evaluateVehicle(
       tradeInId,
       overrideValue,
@@ -56,9 +56,9 @@ const presentOfferStep = createStep(
     { tradeInId, accepted }: { tradeInId: string; accepted?: boolean },
     { container },
   ) => {
-    const automotiveService = container.resolve("automotive") as any;
+    const automotiveService = container.resolve("automotive") as unknown as any;
     const finalStatus = accepted === false ? "declined" : "offer_presented";
-    const updated = await (automotiveService as any).updateTradeIns?.({
+    const updated = await automotiveService.updateTradeIns?.({
       id: tradeInId,
       status: finalStatus,
       offer_presented_at: new Date(),
@@ -86,16 +86,13 @@ export const tradeInValuationWorkflow = createWorkflow(
       description: input.description,
     });
     const evaluated = evaluateTradeInStep({
-      tradeInId: submitted.tradeIn.id as any,
+      tradeInId: submitted.tradeIn.id,
       overrideValue: input.overrideValue,
     });
     const offer = presentOfferStep({
-      tradeInId: submitted.tradeIn.id as any,
+      tradeInId: submitted.tradeIn.id,
       accepted: input.accepted,
     });
     return { submitted, evaluated, offer };
   },
 );
-
-
-

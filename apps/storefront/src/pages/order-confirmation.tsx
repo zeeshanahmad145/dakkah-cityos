@@ -10,9 +10,7 @@ import { useLoaderData } from "@tanstack/react-router"
  * - OrderDetails component for order information
  */
 const OrderConfirmation = () => {
-  const { order } = useLoaderData({
-    strict: false,
-  }) as any
+  const { order } = (useLoaderData({ strict: false }) as any) || {}
 
   return (
     <div className="content-container py-6">

@@ -30,9 +30,9 @@ export function ServicesSection({ services, config }: ServicesSectionProps) {
   }
 
   const formatPrice = (amount: number, currency: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency.toUpperCase()
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency.toUpperCase(),
     }).format(amount)
   }
 
@@ -49,7 +49,7 @@ export function ServicesSection({ services, config }: ServicesSectionProps) {
             </p>
           </div>
           <Link
-            to={`${prefix}/bookings` as any}
+            to={`${prefix}/bookings` as never}
             className="text-sm font-medium text-ds-muted-foreground hover:text-ds-foreground"
           >
             View All Services
@@ -57,10 +57,10 @@ export function ServicesSection({ services, config }: ServicesSectionProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map(service => (
+          {services.map((service) => (
             <Link
               key={service.id}
-              to={`${prefix}/bookings/${service.handle}` as any}
+              to={`${prefix}/bookings/${service.handle}` as never}
               className="group bg-ds-background rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
               {service.image ? (

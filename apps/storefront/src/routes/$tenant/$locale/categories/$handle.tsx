@@ -2,7 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState, useMemo } from "react"
 import { t } from "@/lib/i18n"
 import ProductCard from "@/components/product-card"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 
 const LOCALE_TO_COUNTRY: Record<string, string> = {
   en: "us",
@@ -25,9 +29,11 @@ export const Route = createFileRoute("/$tenant/$locale/categories/$handle")({
     try {
       const catRes = await fetchWithTimeout(
         `${baseUrl}/store/product-categories?handle=${handle}&fields=id,name,handle,description`,
-        { headers }
+        { headers },
       )
-      const catData = catRes.ok ? await catRes.json() : { product_categories: [] }
+      const catData = catRes.ok
+        ? await catRes.json()
+        : { product_categories: [] }
       const category = catData.product_categories?.[0] || null
 
       if (!category) {
@@ -35,19 +41,23 @@ export const Route = createFileRoute("/$tenant/$locale/categories/$handle")({
       }
 
       const countryCode = LOCALE_TO_COUNTRY[locale?.toLowerCase()] || "us"
-      const regionsRes = await fetchWithTimeout(`${baseUrl}/store/regions`, { headers })
-      const regionsData = regionsRes.ok ? await regionsRes.json() : { regions: [] }
+      const regionsRes = await fetchWithTimeout(`${baseUrl}/store/regions`, {
+        headers,
+      })
+      const regionsData = regionsRes.ok
+        ? await regionsRes.json()
+        : { regions: [] }
       const regions = regionsData.regions || []
       const region =
         regions.find((r: any) =>
-          r.countries?.some((c: any) => c.iso_2 === countryCode)
+          r.countries?.some((c: any) => c.iso_2 === countryCode),
         ) || regions[0]
 
       let products: any[] = []
       if (region) {
         const prodRes = await fetchWithTimeout(
           `${baseUrl}/store/products?category_id[]=${category.id}&region_id=${region.id}&fields=*variants.calculated_price&limit=50`,
-          { headers }
+          { headers },
         )
         const prodData = prodRes.ok ? await prodRes.json() : { products: [] }
         products = prodData.products || []
@@ -55,9 +65,11 @@ export const Route = createFileRoute("/$tenant/$locale/categories/$handle")({
 
       const allCatRes = await fetchWithTimeout(
         `${baseUrl}/store/product-categories?fields=id,name,handle&limit=50`,
-        { headers }
+        { headers },
       )
-      const allCatData = allCatRes.ok ? await allCatRes.json() : { product_categories: [] }
+      const allCatData = allCatRes.ok
+        ? await allCatRes.json()
+        : { product_categories: [] }
 
       return {
         category,
@@ -86,6 +98,7 @@ function CategoryPage() {
   const { tenant, locale } = Route.useParams()
   const [searchQuery, setSearchQuery] = useState("")
   const [sortBy, setSortBy] = useState("default")
+  const prefix = `/${tenant}/${locale}`
 
   const filteredProducts = useMemo(() => {
     let result = products || []
@@ -93,7 +106,7 @@ function CategoryPage() {
       result = result.filter(
         (p: any) =>
           p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.description?.toLowerCase().includes(searchQuery.toLowerCase())
+          p.description?.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     }
     if (sortBy === "price-asc") {
@@ -110,7 +123,7 @@ function CategoryPage() {
       })
     } else if (sortBy === "name") {
       result = [...result].sort((a: any, b: any) =>
-        (a.title || "").localeCompare(b.title || "")
+        (a.title || "").localeCompare(b.title || ""),
       )
     }
     return result
@@ -127,8 +140,7 @@ function CategoryPage() {
             The category you're looking for doesn't exist.
           </p>
           <Link
-            to="/$tenant/$locale/store"
-            params={{ tenant, locale }}
+            to={`${prefix}/store` as never}
             className="inline-flex items-center px-6 py-3 bg-ds-primary text-ds-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
           >
             Browse All Products
@@ -151,11 +163,7 @@ function CategoryPage() {
               Home
             </Link>
             <span>/</span>
-            <Link
-              to="/$tenant/$locale/store"
-              params={{ tenant, locale }}
-              className="hover:underline"
-            >
+            <Link to={`${prefix}/store` as never} className="hover:underline">
               Shop
             </Link>
             <span>/</span>
@@ -178,10 +186,12 @@ function CategoryPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="w-full lg:w-64 flex-shrink-0">
             <div className="bg-ds-background rounded-lg border border-ds-border p-5 sticky top-24">
-              <h3 className="font-semibold text-ds-foreground mb-3">{t(locale, 'verticals.search_label')}</h3>
+              <h3 className="font-semibold text-ds-foreground mb-3">
+                {t(locale, "verticals.search_label")}
+              </h3>
               <input
                 type="text"
-                placeholder={t(locale, 'categories.search_placeholder')}
+                placeholder={t(locale, "categories.search_placeholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-3 py-2 border border-ds-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ds-ring bg-ds-background"
@@ -195,10 +205,18 @@ function CategoryPage() {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="w-full px-3 py-2 border border-ds-border rounded-md text-sm bg-ds-background focus:outline-none focus:ring-2 focus:ring-ds-ring"
               >
-                <option value="default">{t(locale, "common.sort.default", "Default")}</option>
-                <option value="name">{t(locale, "common.sort.nameAZ", "Name A-Z")}</option>
-                <option value="price-asc">{t(locale, "common.sort.priceLowHigh", "Price: Low to High")}</option>
-                <option value="price-desc">{t(locale, "common.sort.priceHighLow", "Price: High to Low")}</option>
+                <option value="default">
+                  {t(locale, "common.sort.default", "Default")}
+                </option>
+                <option value="name">
+                  {t(locale, "common.sort.nameAZ", "Name A-Z")}
+                </option>
+                <option value="price-asc">
+                  {t(locale, "common.sort.priceLowHigh", "Price: Low to High")}
+                </option>
+                <option value="price-desc">
+                  {t(locale, "common.sort.priceHighLow", "Price: High to Low")}
+                </option>
               </select>
 
               {allCategories.length > 0 && (
@@ -251,7 +269,7 @@ function CategoryPage() {
                 </h3>
                 <p className="text-ds-muted-foreground text-sm">
                   {searchQuery
-                    ? t(locale, 'verticals.try_adjusting')
+                    ? t(locale, "verticals.try_adjusting")
                     : "Products in this category will appear here soon."}
                 </p>
               </div>

@@ -8,7 +8,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const customerId = (req as any).auth_context?.actor_id;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -36,7 +36,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       claim: (result as any)?.filed?.claim,
       assessment: (result as any)?.assessed,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-INSURANCE-CLAIMS-CREATE");
   }
 }
+

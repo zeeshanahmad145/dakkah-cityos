@@ -185,7 +185,7 @@ const WarrantyPage = () => {
       key: "plan_type",
       header: "Coverage",
       cell: (t: WarrantyTemplate) => (
-        <Badge color={getCoverageBadgeColor(t.plan_type) as any}>
+        <Badge color={getCoverageBadgeColor(t.plan_type)}>
           {t.plan_type.charAt(0).toUpperCase() + t.plan_type.slice(1)}
         </Badge>
       ),
@@ -293,7 +293,7 @@ const WarrantyPage = () => {
               id="name"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, name: e.target.value as any })
               }
               placeholder="Standard Warranty"
             />
@@ -304,7 +304,7 @@ const WarrantyPage = () => {
               id="description"
               value={formData.description}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData({ ...formData, description: e.target.value as any })
               }
               placeholder="Coverage description"
             />
@@ -356,7 +356,7 @@ const WarrantyPage = () => {
               id="currency_code"
               value={formData.currency_code}
               onChange={(e) =>
-                setFormData({ ...formData, currency_code: e.target.value })
+                setFormData({ ...formData, currency_code: e.target.value as any })
               }
             />
           </div>
@@ -366,7 +366,7 @@ const WarrantyPage = () => {
               id="coverage_terms"
               value={formData.coverage_terms}
               onChange={(e) =>
-                setFormData({ ...formData, coverage_terms: e.target.value })
+                setFormData({ ...formData, coverage_terms: e.target.value as any })
               }
               placeholder="Warranty terms and conditions..."
               className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[100px] resize-y"

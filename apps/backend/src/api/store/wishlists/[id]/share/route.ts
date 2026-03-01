@@ -7,9 +7,9 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const wishlistService = req.scope.resolve("wishlist") as any;
+    const wishlistService = req.scope.resolve("wishlist") as unknown as any;
     const wishlistId = req.params.id;
-    const customerId = (req as any).auth_context?.actor_id;
+    const customerId = req.auth_context?.actor_id;
 
     const wishlists = await wishlistService.listWishlists?.({ id: wishlistId });
     const list = Array.isArray(wishlists)
@@ -38,7 +38,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       share_url: shareUrl,
       visibility: wishlist.visibility,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-WISHLIST-SHARE");
   }
 }

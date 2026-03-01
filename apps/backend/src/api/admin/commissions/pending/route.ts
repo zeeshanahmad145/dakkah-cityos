@@ -1,10 +1,10 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 // GET /admin/commissions/pending — list unpaid commission transactions
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const commissionService = req.scope.resolve("commission") as any;
+    const commissionService = req.scope.resolve("commission") as unknown as any;
     const {
       vendor_id,
       tenant_id,
@@ -12,7 +12,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset = "0",
     } = req.query as Record<string, string | undefined>;
 
-    const filters: any = { payout_status: "unpaid", status: "pending" };
+    const filters: Record<string, unknown> = { payout_status: "unpaid", status: "pending" };
     if (vendor_id) filters.vendor_id = vendor_id;
     if (tenant_id) filters.tenant_id = tenant_id;
 
@@ -36,7 +36,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       count: list.length,
       total_unpaid: totalUnpaid,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-COMMISSIONS-PENDING");
   }
 }
@@ -44,7 +44,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 // POST /admin/commissions/pending — bulk settle
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const commissionService = req.scope.resolve("commission") as any;
+    const commissionService = req.scope.resolve("commission") as unknown as any;
     const { transaction_ids } = req.body as { transaction_ids: string[] };
 
     if (!transaction_ids?.length) {
@@ -59,7 +59,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       result,
       message: `Settled ${result.processed_count} commission transactions`,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-COMMISSIONS-SETTLE");
   }
 }

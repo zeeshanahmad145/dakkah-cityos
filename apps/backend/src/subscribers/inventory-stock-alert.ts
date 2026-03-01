@@ -9,8 +9,8 @@ export default async function inventoryStockAlertHandler({
   container,
 }: SubscriberArgs<{ id: string }>) {
   try {
-    const inventoryExtension = container.resolve("inventoryExtension") as any;
-    const query = container.resolve("query");
+    const inventoryExtension = container.resolve("inventoryExtension") as unknown as any;
+    const query = container.resolve("query") as unknown as any;
 
     const { data: items } = await query.graph({
       entity: "inventory_item",

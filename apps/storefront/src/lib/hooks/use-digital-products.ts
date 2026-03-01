@@ -59,7 +59,7 @@ async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
     const error = await response
       .json()
       .catch(() => ({ message: "Request failed" }))
-    throw new Error(error.message || "Request failed")
+    throw new Error((error instanceof Error ? error.message : String(error)) || "Request failed")
   }
 
   return response.json()

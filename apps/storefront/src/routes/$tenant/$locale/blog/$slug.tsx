@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { useBlogPost } from "@/lib/hooks/use-content"
 import { ArticleDetail } from "@/components/blog/article-detail"
 import { RelatedArticles } from "@/components/blog/related-articles"
@@ -8,22 +12,35 @@ import { useState, useEffect } from "react"
 
 export const Route = createFileRoute("/$tenant/$locale/blog/$slug")({
   component: BlogPostPage,
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Blog Post"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
-    ],
-  }),
+  head: ({ loaderData: ld }) => {
+    const loaderData = ld as any
+    return {
+      meta: [
+        {
+          title: `${loaderData?.title || loaderData?.name || "Blog Post"} | Dakkah CityOS`,
+        },
+        {
+          name: "description",
+          content: loaderData?.description || loaderData?.excerpt || "",
+        },
+      ],
+    }
+  },
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/platform/cms/blog/${params.slug}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/platform/cms/blog/${params.slug}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: data.item || data }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
 })
 
@@ -46,7 +63,10 @@ function BlogPostPage() {
           <div className="h-4 bg-ds-background rounded animate-pulse w-1/2" />
           <div className="space-y-2 mt-8">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-4 bg-ds-background rounded animate-pulse" />
+              <div
+                key={i}
+                className="h-4 bg-ds-background rounded animate-pulse"
+              />
             ))}
           </div>
         </div>
@@ -59,9 +79,11 @@ function BlogPostPage() {
       <div className="min-h-screen bg-ds-muted flex items-center justify-center">
         <div className="text-center">
           <span className="text-4xl block mb-4">📄</span>
-          <p className="text-ds-muted-foreground mb-4">{t(locale, "common.not_found")}</p>
+          <p className="text-ds-muted-foreground mb-4">
+            {t(locale, "common.not_found")}
+          </p>
           <Link
-            to={`${prefix}/blog` as any}
+            to={`${prefix}/blog` as never}
             className="text-sm text-ds-primary hover:underline"
           >
             {t(locale, "common.back")}
@@ -87,11 +109,21 @@ function BlogPostPage() {
       <div className="content-container py-8">
         <div className="max-w-3xl mx-auto">
           <Link
-            to={`${prefix}/blog` as any}
+            to={`${prefix}/blog` as never}
             className="inline-flex items-center text-sm text-ds-muted-foreground hover:text-ds-foreground mb-4 transition-colors"
           >
-            <svg className="h-4 w-4 me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="h-4 w-4 me-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             {t(locale, "common.back")}
           </Link>

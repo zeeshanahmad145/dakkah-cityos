@@ -26,7 +26,7 @@ export function InvoiceDetail({ invoiceId }: InvoiceDetailProps) {
         <div>
           <h1 className="text-2xl font-bold">Invoice {invoice.invoice_number}</h1>
           <p className="text-muted-foreground">
-            Issued: {new Date(invoice.issued_at).toLocaleDateString()}
+            Issued: {new Date(invoice.issued_at!).toLocaleDateString()}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -66,7 +66,7 @@ export function InvoiceDetail({ invoiceId }: InvoiceDetailProps) {
             <div>
               <p className="font-medium text-ds-success">Early Payment Discount Available</p>
               <p className="text-sm text-ds-success">
-                Pay by {new Date(earlyPayment.deadline).toLocaleDateString()} and save ${earlyPayment.savings.toFixed(2)} ({earlyPayment.discount_percentage}% off)
+                Pay by {new Date(earlyPayment.deadline!).toLocaleDateString()} and save ${earlyPayment.savings.toFixed(2)} ({earlyPayment.discount_percentage}% off)
               </p>
               <p className="text-sm font-medium text-ds-success mt-1">
                 Discounted total: ${earlyPayment.discounted_total.toFixed(2)}

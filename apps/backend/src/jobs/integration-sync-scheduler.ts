@@ -75,8 +75,8 @@ export class IntegrationSyncScheduler {
           (entry) => new Date(entry.created_at) < thirtyDaysAgo
         )
         logger.info(`[SyncScheduler] Cleanup complete: ${oldEntries.length} old log entries identified`)
-      } catch (error: any) {
-        logger.info(`[SyncScheduler] Log cleanup error: ${error.message}`)
+      } catch (error: unknown) {
+        logger.info(`[SyncScheduler] Log cleanup error: ${(error instanceof Error ? error.message : String(error))}`)
       }
     })
     this.tasks.push(cleanupTask)
@@ -133,8 +133,8 @@ export default async function integrationSyncSchedulerJob(container: MedusaConta
     } catch (err: any) {
       logger.warn(`[SyncScheduler] Failed to dispatch hierarchy reconciliation: ${err.message}`)
     }
-  } catch (error: any) {
-    logger.info(`[SyncScheduler] Integration sync scheduler error: ${error.message}`)
+  } catch (error: unknown) {
+    logger.info(`[SyncScheduler] Integration sync scheduler error: ${(error instanceof Error ? error.message : String(error))}`)
   }
 }
 

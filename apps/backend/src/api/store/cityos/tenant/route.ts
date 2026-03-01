@@ -1,23 +1,23 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const slug = req.query?.slug as string
-  const domain = req.query?.domain as string
-  const handle = req.query?.handle as string
+  const slug = req.query?.slug as string;
+  const domain = req.query?.domain as string;
+  const handle = req.query?.handle as string;
 
   if (!slug && !domain && !handle) {
     return res.status(400).json({
       message: "Must provide slug, domain, or handle query parameter",
-    })
+    });
   }
 
   try {
-    const tenantModule = req.scope.resolve("tenant") as any
-    const tenant = await tenantModule.resolveTenant({ slug, domain, handle })
+    const tenantModule = req.scope.resolve("tenant") as unknown as any;
+    const tenant = await tenantModule.resolveTenant({ slug, domain, handle });
 
     if (!tenant) {
-      return res.status(404).json({ message: "Tenant not found" })
+      return res.status(404).json({ message: "Tenant not found" });
     }
 
     return res.json({
@@ -40,8 +40,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         branding: tenant.branding,
         status: tenant.status,
       },
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-CITYOS-TENANT")}
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-CITYOS-TENANT");
+  }
 }
-

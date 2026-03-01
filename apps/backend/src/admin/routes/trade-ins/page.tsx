@@ -51,7 +51,7 @@ const TradeInsPage = () => {
 
       {isError && (
         <div className="text-red-500 mb-4">
-          Error: {error instanceof Error ? error.message : "Unknown error"}
+          Error: {error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Unknown error"}
         </div>
       )}
 

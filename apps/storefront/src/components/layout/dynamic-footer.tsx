@@ -17,58 +17,70 @@ export function DynamicFooter({ categories = [] }: DynamicFooterProps) {
     setYear(new Date().getFullYear().toString())
   }, [])
 
-  const sections: Array<{ title: string; links: Array<{ label: string; href: string }> }> = []
+  const sections: Array<{
+    title: string
+    links: Array<{ label: string; href: string }>
+  }> = []
 
   if (footer.showCategories && categories.length > 0) {
     sections.push({
       title: "Shop",
-      links: categories.slice(0, 6).map(cat => ({
+      links: categories.slice(0, 6).map((cat) => ({
         label: cat.name,
-        href: `${prefix}/categories/${cat.handle}`
-      }))
+        href: `${prefix}/categories/${cat.handle}`,
+      })),
     })
   }
 
-  if (footer.showVendors && isEnabled('marketplace')) {
+  if (footer.showVendors && isEnabled("marketplace")) {
     sections.push({
       title: "Marketplace",
       links: [
         { label: "Browse Vendors", href: `${prefix}/vendors` },
-        { label: "Become a Vendor", href: `${prefix}/vendor/register` }
-      ]
+        { label: "Become a Vendor", href: `${prefix}/vendor/register` },
+      ],
     })
   }
 
-  if (footer.showServices && isEnabled('bookings')) {
+  if (footer.showServices && isEnabled("bookings")) {
     sections.push({
       title: "Services",
       links: [
         { label: "Browse Services", href: `${prefix}/services` },
-        { label: "Book Appointment", href: `${prefix}/bookings` }
-      ]
+        { label: "Book Appointment", href: `${prefix}/bookings` },
+      ],
     })
   }
 
   const customerLinks = [
     { label: "My Account", href: `${prefix}/account` },
-    { label: "Order History", href: `${prefix}/account/orders` }
+    { label: "Order History", href: `${prefix}/account/orders` },
   ]
 
-  if (isEnabled('wishlists')) {
-    customerLinks.push({ label: "Wishlist", href: `${prefix}/account/wishlist` })
+  if (isEnabled("wishlists")) {
+    customerLinks.push({
+      label: "Wishlist",
+      href: `${prefix}/account/wishlist`,
+    })
   }
 
-  if (isEnabled('subscriptions')) {
-    customerLinks.push({ label: "Subscriptions", href: `${prefix}/account/subscriptions` })
+  if (isEnabled("subscriptions")) {
+    customerLinks.push({
+      label: "Subscriptions",
+      href: `${prefix}/account/subscriptions`,
+    })
   }
 
-  if (isEnabled('b2b')) {
-    customerLinks.push({ label: "Business Portal", href: `${prefix}/b2b/dashboard` })
+  if (isEnabled("b2b")) {
+    customerLinks.push({
+      label: "Business Portal",
+      href: `${prefix}/b2b/dashboard`,
+    })
   }
 
   sections.push({
     title: "Account",
-    links: customerLinks
+    links: customerLinks,
   })
 
   sections.push({
@@ -77,17 +89,17 @@ export function DynamicFooter({ categories = [] }: DynamicFooterProps) {
       { label: "Contact Us", href: `${prefix}/help` },
       { label: "Shipping Info", href: `${prefix}/shipping` },
       { label: "Returns", href: `${prefix}/returns` },
-      { label: "FAQ", href: `${prefix}/help` }
-    ]
+      { label: "FAQ", href: `${prefix}/help` },
+    ],
   })
 
-  footer.customSections?.forEach(section => {
+  footer.customSections?.forEach((section) => {
     sections.push({
       title: section.title,
-      links: (section.links || []).map(link => ({
+      links: (section.links || []).map((link) => ({
         label: link.label,
-        href: link.href.startsWith('/') ? `${prefix}${link.href}` : link.href
-      }))
+        href: link.href.startsWith("/") ? `${prefix}${link.href}` : link.href,
+      })),
     })
   })
 
@@ -96,7 +108,7 @@ export function DynamicFooter({ categories = [] }: DynamicFooterProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1">
-            <Link to={`${prefix}` as any} className="text-xl font-bold">
+            <Link to={`${prefix}` as never} className="text-xl font-bold">
               Store
             </Link>
             <p className="mt-4 text-ds-muted-foreground text-sm">
@@ -131,10 +143,16 @@ export function DynamicFooter({ categories = [] }: DynamicFooterProps) {
               {year || ""} Store. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link to={`${prefix}/privacy` as any} className="text-ds-muted-foreground hover:text-ds-primary-foreground text-sm">
+              <Link
+                to={`${prefix}/privacy` as never}
+                className="text-ds-muted-foreground hover:text-ds-primary-foreground text-sm"
+              >
                 Privacy Policy
               </Link>
-              <Link to={`${prefix}/terms` as any} className="text-ds-muted-foreground hover:text-ds-primary-foreground text-sm">
+              <Link
+                to={`${prefix}/terms` as never}
+                className="text-ds-muted-foreground hover:text-ds-primary-foreground text-sm"
+              >
                 Terms of Service
               </Link>
             </div>

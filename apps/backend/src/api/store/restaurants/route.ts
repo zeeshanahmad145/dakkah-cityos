@@ -1,163 +1,109 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
-import { sanitizeList } from "../../../lib/image-sanitizer"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import {
+  parseStoreQuery,
+  restaurantQuerySchema,
+} from "../../../lib/route-query-validator";
 
-const SEED_RESTAURANTS = [
+/**
+ * GET /store/restaurants/:id/order (and base /store/restaurants)
+ * Phase 5: uses query.graph() to fetch Medusa products linked to
+ * MenuItem extensions via the product-menu-item.ts link table.
+ */
+
+const SEED_MENUS = [
   {
-    id: "rst-1",
-    thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg",
-    name: "Al Najd Village",
-    description: "Authentic Najdi cuisine served in a traditional setting with live oud music. Famous for kabsa, jareesh, and haneeth.",
-    cuisine_type: "najdi",
-    city: "Riyadh",
-    phone: "+966 11 234 5678",
-    rating: 4.8,
-    review_count: 1240,
-    price_range: "$$$",
-    operating_hours: "12:00 PM – 12:00 AM",
-    delivery_available: true,
-    pickup_available: true,
-    dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants/1555396273-367ea4eb4db5.jpg" },
+    id: "prod_menu_seed_001",
+    title: "Grilled Chicken Burger",
+    description:
+      "Flame-grilled chicken with lettuce, tomato, and special sauce.",
+    thumbnail: "/seed-images/restaurant/burger.jpg",
+    menu_item: {
+      category: "Mains",
+      prep_time_minutes: 15,
+      allergens: [],
+      dietary_tags: ["halal"],
+      calories: 650,
+    },
+    metadata: { vertical: "restaurant" },
   },
   {
-    id: "rst-2",
-    thumbnail: "/seed-images/restaurants/1579871494447-9811cf80d66c.jpg",
-    name: "Sakura Japanese Kitchen",
-    description: "Premium Japanese dining featuring fresh sushi, sashimi, and teppanyaki prepared by Tokyo-trained chefs.",
-    cuisine_type: "japanese",
-    city: "Jeddah",
-    phone: "+966 12 345 6789",
-    rating: 4.7,
-    review_count: 856,
-    price_range: "$$$$",
-    operating_hours: "1:00 PM – 11:30 PM",
-    delivery_available: true,
-    pickup_available: true,
-    dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants/1579871494447-9811cf80d66c.jpg" },
+    id: "prod_menu_seed_002",
+    title: "Caesar Salad",
+    description:
+      "Fresh romaine, parmesan, croutons, house-made Caesar dressing.",
+    thumbnail: "/seed-images/restaurant/salad.jpg",
+    menu_item: {
+      category: "Starters",
+      prep_time_minutes: 5,
+      allergens: ["gluten", "dairy"],
+      dietary_tags: [],
+      calories: 420,
+    },
+    metadata: { vertical: "restaurant" },
   },
-  {
-    id: "rst-3",
-    thumbnail: "/seed-images/restaurants/1517248135467-4c7edcad34c4.jpg",
-    name: "Mama's Italian Kitchen",
-    description: "Family-style Italian restaurant with handmade pasta, wood-fired pizzas, and an extensive selection of desserts.",
-    cuisine_type: "italian",
-    city: "Riyadh",
-    phone: "+966 11 456 7890",
-    rating: 4.6,
-    review_count: 678,
-    price_range: "$$",
-    operating_hours: "11:00 AM – 11:00 PM",
-    delivery_available: true,
-    pickup_available: true,
-    dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants/1517248135467-4c7edcad34c4.jpg" },
-  },
-  {
-    id: "rst-4",
-    thumbnail: "/seed-images/restaurants/1585937421612-70a008356fbe.jpg",
-    name: "Spice Route Indian Bistro",
-    description: "Vibrant Indian flavors from North and South India. Signature tandoori dishes, biryanis, and freshly baked naan bread.",
-    cuisine_type: "indian",
-    city: "Dammam",
-    phone: "+966 13 567 8901",
-    rating: 4.5,
-    review_count: 432,
-    price_range: "$$",
-    operating_hours: "12:00 PM – 11:30 PM",
-    delivery_available: true,
-    pickup_available: true,
-    dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/restaurants/1585937421612-70a008356fbe.jpg" },
-  },
-  {
-    id: "rst-5",
-    thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg",
-    name: "The Arabian Table",
-    description: "Modern Arabic cuisine with a contemporary twist. Featuring mezzeh platters, grilled meats, and traditional sweets.",
-    cuisine_type: "arabic",
-    city: "Riyadh",
-    phone: "+966 11 678 9012",
-    rating: 4.9,
-    review_count: 1567,
-    price_range: "$$$",
-    operating_hours: "10:00 AM – 1:00 AM",
-    delivery_available: true,
-    pickup_available: false,
-    dine_in_available: true,
-    metadata: { thumbnail: "/seed-images/bundles/1504674900247-0877df9cc836.jpg" },
-  },
-  {
-    id: "rst-6",
-    thumbnail: "/seed-images/restaurants/1562565652-a0d8f0c59eb4.jpg",
-    name: "Bangkok Street Kitchen",
-    description: "Authentic Thai street food brought to life with bold flavors. Known for pad thai, green curry, and mango sticky rice.",
-    cuisine_type: "thai",
-    city: "Jeddah",
-    phone: "+966 12 789 0123",
-    rating: 4.4,
-    review_count: 298,
-    price_range: "$",
-    operating_hours: "11:30 AM – 10:30 PM",
-    delivery_available: true,
-    pickup_available: true,
-    dine_in_available: false,
-    metadata: { thumbnail: "/seed-images/restaurants/1562565652-a0d8f0c59eb4.jpg" },
-  },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
+  const q = parseStoreQuery(req, res, restaurantQuerySchema);
+  if (!q) return;
+  const { limit, offset, tenant_id, search, category, menu_id } = q;
+
   try {
-    const restaurantService = req.scope.resolve("restaurant") as any
-    const {
-      limit = "20",
-      offset = "0",
-      tenant_id,
-      city,
-      cuisine_type,
-      delivery_available,
-      price_range,
-      is_active,
-      search,
-    } = req.query as Record<string, string | undefined>
+    const query = req.scope.resolve("query") as unknown as any;
+    const filters: Record<string, unknown> = {
+      status: "published",
+      "metadata->>'vertical'": "restaurant",
+    };
+    if (tenant_id) filters["menu_item.tenant_id"] = tenant_id;
+    if (category) filters["menu_item.category"] = category;
+    if (menu_id) filters["menu_item.menu_id"] = menu_id;
+    if (search) filters.title = { $ilike: `%${search}%` };
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (city) filters.city = city
-    if (cuisine_type) filters.cuisine_types = cuisine_type
-    if (delivery_available !== undefined) {
-      filters.delivery_available = delivery_available === "true"
-    }
-    if (price_range) filters.price_range = price_range
-    if (is_active !== undefined) {
-      filters.is_active = is_active === "true"
-    } else {
-      filters.is_active = true
-    }
-    if (search) filters.name = { $like: `%${search}%` }
+    const { data: products, metadata } = await query.graph({
+      entity: "product",
+      fields: [
+        "id",
+        "title",
+        "description",
+        "thumbnail",
+        "handle",
+        "metadata",
+        "variants.id",
+        "variants.title",
+        "variants.calculated_price.*",
+        "menu_item.id",
+        "menu_item.category",
+        "menu_item.menu_id",
+        "menu_item.is_featured",
+        "menu_item.calories",
+        "menu_item.allergens",
+        "menu_item.dietary_tags",
+        "menu_item.prep_time_minutes",
+        "menu_item.display_order",
+      ],
+      filters,
+      pagination: {
+        skip: offset,
+        take: limit,
+        order: { "menu_item.display_order": "ASC" },
+      },
+    });
 
-    const items = await restaurantService.listRestaurants(filters, {
-      skip: Number(offset),
-      take: Number(limit),
-      order: { created_at: "DESC" },
-    })
-
-    const rawList = Array.isArray(items) && items.length > 0 ? items : SEED_RESTAURANTS
-    const sanitized = sanitizeList(rawList, "restaurants")
-    const itemList = sanitized.map((r: any) => {
-      const raw = r.thumbnail || r.banner_url || r.metadata?.thumbnail || null
-      return { ...r, thumbnail: raw ? raw.replace(/%2F/gi, "/") : null }
-    })
-
+    const items = products?.length > 0 ? products : SEED_MENUS;
     return res.json({
-      items: itemList,
-      count: itemList.length,
-      limit: Number(limit),
-      offset: Number(offset),
-    })
-  } catch (error: any) {
-    return res.json({ items: SEED_RESTAURANTS, count: SEED_RESTAURANTS.length, limit: 20, offset: 0 })
+      items,
+      count: metadata?.count ?? items.length,
+      limit,
+      offset,
+    });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error);
+    req.scope.resolve("logger").error?.(`[restaurants/route] ${msg}`);
+    return res.json({
+      items: SEED_MENUS,
+      count: SEED_MENUS.length,
+      limit,
+      offset,
+    });
   }
 }
-

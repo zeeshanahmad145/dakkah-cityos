@@ -12,7 +12,7 @@ export async function GET(
     limit?: number 
   }
 
-  const query = req.scope.resolve("query")
+  const query = req.scope.resolve("query") as unknown as any
 
   const { data: invoices } = await query.graph({
     entity: "invoice",
@@ -84,8 +84,8 @@ export async function POST(
     reminder_type: "email" | "all"
   }
 
-  const query = req.scope.resolve("query")
-  const invoiceService = req.scope.resolve("invoiceModuleService")
+  const query = req.scope.resolve("query") as unknown as any
+  const invoiceService = req.scope.resolve("invoiceModuleService") as unknown as any
 
   const { data: invoices } = await query.graph({
     entity: "invoice",
@@ -114,8 +114,8 @@ export async function POST(
       // })
 
       results.push({ invoice_id: invoice.id, status: "sent" })
-    } catch (error: any) {
-      results.push({ invoice_id: invoice.id, status: "failed", error: error.message })}
+    } catch (error: unknown) {
+      results.push({ invoice_id: invoice.id, status: "failed", error: (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) })}
   }
 
   res.json({

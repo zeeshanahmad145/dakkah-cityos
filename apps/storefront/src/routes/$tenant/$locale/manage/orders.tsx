@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Tabs, DropdownMenu, FormDrawer, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Tabs,
+  DropdownMenu,
+  FormDrawer,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -15,7 +25,14 @@ export const Route = createFileRoute("/$tenant/$locale/manage/orders")({
   component: ManageOrdersPage,
 })
 
-const STATUS_FILTERS = ["all", "pending", "processing", "shipped", "delivered", "cancelled"] as const
+const STATUS_FILTERS = [
+  "all",
+  "pending",
+  "processing",
+  "shipped",
+  "delivered",
+  "cancelled",
+] as const
 
 function ManageOrdersPage() {
   const { locale: routeLocale } = Route.useParams()
@@ -25,13 +42,17 @@ function ManageOrdersPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -45,7 +66,9 @@ function ManageOrdersPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -77,18 +100,21 @@ function ManageOrdersPage() {
     status: o.fulfillment_status || o.status || "pending",
     fulfillment_status: o.fulfillment_status || "not_fulfilled",
     notes: o.notes || "",
-    date: o.created_at ? new Date(o.created_at).toLocaleDateString() : "—",
+    date: o.created_at ? new Date(o.created_at!).toLocaleDateString() : "—",
   }))
 
-  const orders = statusFilter === "all"
-    ? allOrders
-    : allOrders.filter((o: any) => o.status === statusFilter)
+  const orders =
+    statusFilter === "all"
+      ? allOrders
+      : allOrders.filter((o: any) => o.status === statusFilter)
 
   const columns = [
     {
       key: "display_id",
       header: t(locale, "manage.order_number"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "customer",
@@ -143,7 +169,10 @@ function ManageOrdersPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
@@ -160,7 +189,10 @@ function ManageOrdersPage() {
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
         title={`Edit ${config.singularLabel}`}
         fields={config.fields}
         values={formValues}

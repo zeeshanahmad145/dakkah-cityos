@@ -27,7 +27,7 @@ function VendorShippingRulesRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -84,7 +84,9 @@ function VendorShippingRulesRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -95,7 +97,9 @@ function VendorShippingRulesRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No shipping rules configured</p>
-          <p className="text-sm">Add shipping rules to define rates and methods for your products.</p>
+          <p className="text-sm">
+            Add shipping rules to define rates and methods for your products.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -113,16 +117,22 @@ function VendorShippingRulesRoute() {
             </thead>
             <tbody>
               {items.map((rule) => (
-                <tr key={rule.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={rule.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 px-4 font-medium">{rule.name}</td>
-                  <td className="py-4 px-4 text-ds-muted-foreground">{rule.region}</td>
+                  <td className="py-4 px-4 text-ds-muted-foreground">
+                    {rule.region}
+                  </td>
                   <td className="py-4 px-4">
                     <span className="px-2 py-0.5 text-xs rounded-full bg-ds-muted text-ds-muted-foreground">
                       {rule.method}
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    {rule.currency_code?.toUpperCase()} {(rule.rate / 100).toFixed(2)}
+                    {rule.currency_code?.toUpperCase()}{" "}
+                    {(rule.rate / 100).toFixed(2)}
                   </td>
                   <td className="py-4 px-4 text-ds-muted-foreground">
                     {rule.free_above_threshold
@@ -130,12 +140,16 @@ function VendorShippingRulesRoute() {
                       : "—"}
                   </td>
                   <td className="py-4 px-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[rule.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[rule.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {rule.status}
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    <button className="text-sm text-ds-primary hover:underline">Edit</button>
+                    <button className="text-sm text-ds-primary hover:underline">
+                      Edit
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -17,7 +17,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Unauthorized" })
   }
   
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
   
   try {
     const { data: subscriptions } = await query.graph({
@@ -61,7 +61,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     } else {
       res.json({ payment_method: null })
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-SUBSCRIPTIONS-ID-PAYMENT-METHOD")}
 }
 
@@ -80,8 +80,8 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 
   const { payment_method_id } = parsed.data
   
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-  const subscriptionService = req.scope.resolve("subscription")
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
+  const subscriptionService = req.scope.resolve("subscription") as unknown as any
   
   try {
     const { data: subscriptions } = await query.graph({
@@ -132,7 +132,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     })
     
     res.json({ subscription: updated })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-SUBSCRIPTIONS-ID-PAYMENT-METHOD")}
 }
 

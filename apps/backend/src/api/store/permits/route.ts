@@ -8,8 +8,8 @@ import { handleApiError } from "../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const governmentService = req.scope.resolve("government") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const governmentService = req.scope.resolve("government") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -20,7 +20,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       string | undefined
     >;
 
-    const permits = await (governmentService as any).listPermits(
+    const permits = await governmentService.listPermits(
       { applicant_id: customerId },
       {
         skip: Number(offset),
@@ -35,15 +35,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-PERMITS-LIST");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const governmentService = req.scope.resolve("government") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const governmentService = req.scope.resolve("government") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -63,9 +63,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     // 1. Create the permit application record in government module
-    const application = await (
-      governmentService as any
-    ).createPermitApplications({
+    const application = await governmentService.createPermitApplications({
       applicant_id: customerId,
       permit_type,
       description,
@@ -84,7 +82,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       message: "Permit application submitted successfully",
       permit: (result as any)?.submitted?.application ?? application,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-PERMITS-CREATE");
   }
 }

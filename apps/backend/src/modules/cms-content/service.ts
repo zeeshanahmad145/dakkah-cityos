@@ -68,7 +68,7 @@ class CMSContentModuleService extends Base implements CMSContentServiceBase {
     };
     if (data.locale) filters.locale = data.locale;
 
-    const pages = await this.listCmsPages(filters);
+    const pages = await this.listCmsPages(filters) as any;
     if (pages.length === 0) return null;
 
     if (data.countryCode || data.regionZone) {
@@ -94,20 +94,20 @@ class CMSContentModuleService extends Base implements CMSContentServiceBase {
   }
 
   async publish(pageId: string): Promise<CmsPageRecord> {
-    const page = await this.retrieveCmsPage(pageId);
+    const page = await this.retrieveCmsPage(pageId) as any;
     if (page.status === "published")
       throw new Error("Page is already published");
     return this.updateCmsPages({
       id: pageId,
       status: "published",
       published_at: new Date(),
-    });
+    } as any);
   }
 
   async archive(pageId: string): Promise<CmsPageRecord> {
-    const page = await this.retrieveCmsPage(pageId);
+    const page = await this.retrieveCmsPage(pageId) as any;
     if (page.status === "archived") throw new Error("Page is already archived");
-    return this.updateCmsPages({ id: pageId, status: "archived" });
+    return this.updateCmsPages({ id: pageId, status: "archived" } as any);
   }
 
   async getNavigation(data: {
@@ -122,7 +122,7 @@ class CMSContentModuleService extends Base implements CMSContentServiceBase {
     };
     if (data.locale) filters.locale = data.locale;
 
-    const navs = await this.listCmsNavigations(filters);
+    const navs = await this.listCmsNavigations(filters) as any;
     if (navs.length === 0) return null;
     if (data.locale) {
       const localized = navs.find((n) => n.locale === data.locale);
@@ -149,7 +149,7 @@ class CMSContentModuleService extends Base implements CMSContentServiceBase {
         id: existing.id,
         items: data.items as unknown as Record<string, unknown>,
         metadata: data.metadata ?? existing.metadata,
-      });
+      } as any);
     }
 
     return this.createCmsNavigations({
@@ -159,7 +159,7 @@ class CMSContentModuleService extends Base implements CMSContentServiceBase {
       items: data.items as unknown as Record<string, unknown>,
       status: "active",
       metadata: data.metadata ?? null,
-    });
+    } as any);
   }
 
   async listPublishedPages(
@@ -182,7 +182,7 @@ class CMSContentModuleService extends Base implements CMSContentServiceBase {
     pageId: string,
     newSlug?: string,
   ): Promise<CmsPageRecord> {
-    const original = await this.retrieveCmsPage(pageId);
+    const original = await this.retrieveCmsPage(pageId) as any;
     return this.createCmsPages({
       tenant_id: original.tenant_id,
       title: `${original.title} (Copy)`,

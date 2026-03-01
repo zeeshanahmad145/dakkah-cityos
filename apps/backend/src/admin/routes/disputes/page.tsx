@@ -182,7 +182,7 @@ const DisputesPage = () => {
               id="status"
               value={formData.status}
               onChange={(e) =>
-                setFormData({ ...formData, status: e.target.value })
+                setFormData({ ...formData, status: e.target.value as any })
               }
               className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base"
             >
@@ -198,7 +198,7 @@ const DisputesPage = () => {
               id="resolution"
               value={formData.resolution}
               onChange={(e) =>
-                setFormData({ ...formData, resolution: e.target.value })
+                setFormData({ ...formData, resolution: e.target.value as any })
               }
               placeholder="Add notes about this dispute..."
             />

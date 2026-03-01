@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
 // GET - Review analytics
@@ -17,7 +17,7 @@ export async function GET(
       vendor_id?: string
     }
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     // Calculate date range
     const now = new Date()
@@ -109,7 +109,7 @@ export async function GET(
       top_reviewed_products: topProducts
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin reviews analytics")}
 }
 

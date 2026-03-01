@@ -75,11 +75,11 @@ const LoyaltyPage = () => {
       </div>
       <FormDrawer open={showDrawer} onOpenChange={(open) => { if (!open) { setShowDrawer(false); setEditing(null) } }} title={editing ? "Edit Program" : "Create Program"} onSubmit={handleSubmit} submitLabel={editing ? "Update" : "Create"} loading={createProgram.isPending || updateProgram.isPending}>
         <div className="space-y-4">
-          <div><Label htmlFor="name">Program Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Gold Rewards" /></div>
-          <div><Label htmlFor="description">Description</Label><Input id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Describe the program" /></div>
-          <div><Label htmlFor="points_per_currency">Points per Currency</Label><Input id="points_per_currency" type="number" value={formData.points_per_currency} onChange={(e) => setFormData({ ...formData, points_per_currency: e.target.value })} /></div>
-          <div><Label htmlFor="currency_per_point">Currency per Point</Label><Input id="currency_per_point" type="number" step="0.01" value={formData.currency_per_point} onChange={(e) => setFormData({ ...formData, currency_per_point: e.target.value })} /></div>
-          <div><Label htmlFor="min_redemption">Min Redemption Points</Label><Input id="min_redemption" type="number" value={formData.min_redemption_points} onChange={(e) => setFormData({ ...formData, min_redemption_points: e.target.value })} /></div>
+          <div><Label htmlFor="name">Program Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value as any })} placeholder="Gold Rewards" /></div>
+          <div><Label htmlFor="description">Description</Label><Input id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value as any })} placeholder="Describe the program" /></div>
+          <div><Label htmlFor="points_per_currency">Points per Currency</Label><Input id="points_per_currency" type="number" value={formData.points_per_currency} onChange={(e) => setFormData({ ...formData, points_per_currency: e.target.value as any })} /></div>
+          <div><Label htmlFor="currency_per_point">Currency per Point</Label><Input id="currency_per_point" type="number" step="0.01" value={formData.currency_per_point} onChange={(e) => setFormData({ ...formData, currency_per_point: e.target.value as any })} /></div>
+          <div><Label htmlFor="min_redemption">Min Redemption Points</Label><Input id="min_redemption" type="number" value={formData.min_redemption_points} onChange={(e) => setFormData({ ...formData, min_redemption_points: e.target.value as any })} /></div>
         </div>
       </FormDrawer>
     </Container>

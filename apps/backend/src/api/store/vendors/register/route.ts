@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 const vendorRegisterSchema = z.object({
   company_name: z.string().min(1),
@@ -18,17 +18,19 @@ const vendorRegisterSchema = z.object({
   expected_volume: z.string().optional(),
   existing_sales_channels: z.array(z.string()).optional(),
   agree_to_terms: z.literal(true),
-})
+});
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const customerId = (req as any).auth_context?.actor_id
+  const customerId = req.auth_context?.actor_id;
   if (!customerId) {
-    return res.status(401).json({ message: "Authentication required" })
+    return res.status(401).json({ message: "Authentication required" });
   }
 
-  const parsed = vendorRegisterSchema.safeParse(req.body)
+  const parsed = vendorRegisterSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    return res
+      .status(400)
+      .json({ message: "Validation failed", errors: parsed.error.issues });
   }
 
   const {
@@ -46,19 +48,21 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     expected_volume,
     existing_sales_channels,
     agree_to_terms,
-  } = parsed.data
+  } = parsed.data;
 
-  const vendorModule = req.scope.resolve("vendor")
+  const vendorModule = req.scope.resolve("vendor") as unknown as any;
 
   try {
     const handle = company_name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")
+      .replace(/^-|-$/g, "");
 
-    const existingVendors = await vendorModule.listVendors({ handle })
+    const existingVendors = await vendorModule.listVendors({ handle });
     if (existingVendors.length > 0) {
-      return res.status(400).json({ message: "A vendor with this name already exists" })
+      return res
+        .status(400)
+        .json({ message: "A vendor with this name already exists" });
     }
 
     const vendor = await vendorModule.createVendors({
@@ -81,14 +85,14 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         existing_sales_channels,
         application_date: new Date().toISOString(),
       },
-    })
+    });
 
-    const eventBus = req.scope.resolve("event_bus")
+    const eventBus = req.scope.resolve("event_bus") as unknown as any;
     await eventBus.emit("vendor.application_submitted", {
       vendor_id: vendor.id,
       company_name,
       business_email,
-    })
+    });
 
     res.status(201).json({
       success: true,
@@ -98,8 +102,10 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         handle: vendor.handle,
         status: vendor.status,
       },
-      message: "Your vendor application has been submitted. We'll review it within 2-3 business days.",
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-VENDORS-REGISTER")}
+      message:
+        "Your vendor application has been submitted. We'll review it within 2-3 business days.",
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-VENDORS-REGISTER");
+  }
 }

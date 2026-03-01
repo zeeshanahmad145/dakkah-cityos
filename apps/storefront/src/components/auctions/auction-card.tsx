@@ -30,8 +30,7 @@ const typeLabels: Record<string, string> = {
 }
 
 export function AuctionCard({
-  auction,
-  locale,
+  auction, locale,
   prefix,
   onWatch,
 }: {
@@ -42,7 +41,7 @@ export function AuctionCard({
 }) {
   return (
     <div className="group bg-ds-background border border-ds-border rounded-xl overflow-hidden hover:border-ds-ring transition-colors">
-      <Link to={`${prefix}/auctions/${auction.id}` as any} className="block">
+      <Link to={`${prefix}/auctions/${auction.id}` as never} className="block">
         <div className="relative aspect-[4/3] bg-ds-muted overflow-hidden">
           {auction.thumbnail ? (
             <img
@@ -84,7 +83,7 @@ export function AuctionCard({
       </Link>
 
       <div className="p-4 space-y-3">
-        <Link to={`${prefix}/auctions/${auction.id}` as any} className="block">
+        <Link to={`${prefix}/auctions/${auction.id}` as never} className="block">
           <h3 className="font-semibold text-ds-foreground line-clamp-2 group-hover:text-ds-primary transition-colors">
             {auction.title}
           </h3>
@@ -98,8 +97,7 @@ export function AuctionCard({
             <p className="text-lg font-bold text-ds-foreground">
               {formatCurrency(
                 auction.currentPrice.amount,
-                auction.currentPrice.currencyCode,
-                locale as any
+                auction.currentPrice.currencyCode, locale as any,
               )}
             </p>
           </div>
@@ -121,7 +119,7 @@ export function AuctionCard({
 
         <div className="flex gap-2 pt-1">
           <Link
-            to={`${prefix}/auctions/${auction.id}` as any}
+            to={`${prefix}/auctions/${auction.id}` as never}
             className="flex-1 text-center px-3 py-2 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 transition-colors"
           >
             {auction.status === "active"

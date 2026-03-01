@@ -87,7 +87,7 @@ export function GiftCardBalance({
           </button>
           {showHistory && (
             <div className="px-4 md:px-6 pb-4 divide-y divide-ds-border">
-              {transactions.map((tx) => (
+              {transactions.map((tx: any) => (
                 <div key={tx.id} className="flex items-center justify-between py-3">
                   <div>
                     <p className="text-sm text-ds-foreground">{tx.description}</p>
@@ -101,7 +101,7 @@ export function GiftCardBalance({
                       : "text-ds-destructive"
                   }`}>
                     {tx.type === "purchase" || tx.type === "refund" ? "+" : "-"}
-                    {formatCurrency(tx.amount, currencyCode, locale as SupportedLocale)}
+                    {formatCurrency((tx.amount ?? 0), currencyCode, locale as SupportedLocale)}
                   </span>
                 </div>
               ))}

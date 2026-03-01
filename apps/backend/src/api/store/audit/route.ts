@@ -3,7 +3,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const auditService = req.scope.resolve("audit")
+  const auditService = req.scope.resolve("audit") as unknown as any
   const customerId = req.auth_context?.actor_id
 
   if (!customerId) {
@@ -50,7 +50,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: parsedLimit,
       offset: parsedOffset,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-AUDIT")}
 }
 

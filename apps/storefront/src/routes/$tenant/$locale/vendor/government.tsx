@@ -29,7 +29,7 @@ function VendorGovernmentRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -42,9 +42,12 @@ function VendorGovernmentRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/government${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: GovernmentService[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: GovernmentService[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -83,12 +86,21 @@ function VendorGovernmentRoute() {
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {["", "active", "inactive", "pending_approval", "under_review", "suspended"].map((s) => (
+        {[
+          "",
+          "active",
+          "inactive",
+          "pending_approval",
+          "under_review",
+          "suspended",
+        ].map((s) => (
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s ? s.replace(/_/g, " ") : "All"}
@@ -99,46 +111,74 @@ function VendorGovernmentRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No government services yet</p>
-          <p className="text-sm">Add your first service to start processing applications.</p>
+          <p className="text-sm">
+            Add your first service to start processing applications.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((service) => (
-            <div key={service.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={service.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{service.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[service.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[service.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {service.status.replace(/_/g, " ")}
                     </span>
                   </div>
                   {service.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{service.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {service.description}
+                    </p>
                   )}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-sm font-bold truncate">{service.department}</p>
-                      <p className="text-xs text-ds-muted-foreground">Department</p>
+                      <p className="text-sm font-bold truncate">
+                        {service.department}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Department
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{service.applications_count}</p>
-                      <p className="text-xs text-ds-muted-foreground">Applications</p>
+                      <p className="text-lg font-bold">
+                        {service.applications_count}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Applications
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-sm font-bold">{service.processing_time}</p>
-                      <p className="text-xs text-ds-muted-foreground">Processing Time</p>
+                      <p className="text-sm font-bold">
+                        {service.processing_time}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Processing Time
+                      </p>
                     </div>
                     {service.fee !== undefined && (
                       <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                        <p className="text-lg font-bold">{service.currency_code?.toUpperCase()} {(service.fee / 100).toFixed(2)}</p>
+                        <p className="text-lg font-bold">
+                          {service.currency_code?.toUpperCase()}{" "}
+                          {(service.fee / 100).toFixed(2)}
+                        </p>
                         <p className="text-xs text-ds-muted-foreground">Fee</p>
                       </div>
                     )}
                   </div>
                   <div className="flex items-center gap-4 text-sm text-ds-muted-foreground">
-                    {service.category && <span>Category: {service.category}</span>}
-                    {service.eligibility && <span>Eligibility: {service.eligibility}</span>}
+                    {service.category && (
+                      <span>Category: {service.category}</span>
+                    )}
+                    {service.eligibility && (
+                      <span>Eligibility: {service.eligibility}</span>
+                    )}
                   </div>
                 </div>
                 <button className="text-sm text-ds-primary hover:underline ms-4">

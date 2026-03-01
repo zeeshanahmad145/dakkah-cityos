@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const travelService = req.scope.resolve("travel") as any;
+    const travelService = req.scope.resolve("travel") as unknown as any;
     const {
       location,
       check_in,
@@ -45,7 +45,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const filters: Record<string, unknown> = { status: "active" };
     if (property_type) filters.property_type = property_type;
 
-    const properties = await (travelService as any).listPropertys(filters, {
+    const properties = await travelService.listPropertys(filters, {
       take: 20,
       skip: 0,
     });
@@ -68,7 +68,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       count: results.length,
       search: { location, check_in, check_out, guests, nights },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-TRAVEL-SEARCH");
   }
 }

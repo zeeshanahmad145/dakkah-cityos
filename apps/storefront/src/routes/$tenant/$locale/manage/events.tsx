@@ -1,7 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Tabs, DropdownMenu, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Tabs,
+  DropdownMenu,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -24,7 +33,9 @@ function ManageEventsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "events"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/event-ticketing", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/event-ticketing", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -39,15 +50,18 @@ function ManageEventsPage() {
     status: item.status || "pending",
   }))
 
-  const items = statusFilter === "all"
-    ? allItems
-    : allItems.filter((i: any) => i.status === statusFilter)
+  const items =
+    statusFilter === "all"
+      ? allItems
+      : allItems.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "name",
       header: t(locale, "manage.name"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "type",
@@ -81,22 +95,27 @@ function ManageEventsPage() {
   return (
     <ManageLayout locale={locale}>
       <Container>
-        <PageHeader
-          title={config.label}
-          subtitle="View system events"
-        />
+        <PageHeader title={config.label} subtitle="View system events" />
 
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No events found" countLabel="events" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No events found"
+          countLabel="events"
+        />
       </Container>
     </ManageLayout>
   )

@@ -23,7 +23,7 @@ export async function GET(
 ) {
   try {
     const { serviceId } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: providers } = await query.graph({
       entity: "service_provider",
@@ -69,7 +69,7 @@ export async function GET(
       providers: serviceProviders,
       count: serviceProviders.length,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     res.json({
       providers: [],
       count: 0,

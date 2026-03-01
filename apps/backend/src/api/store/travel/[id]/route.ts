@@ -1,13 +1,13 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { enrichDetailItem } from "../../../../lib/detail-enricher"
-
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { enrichDetailItem } from "../../../../lib/detail-enricher";
 
 const SEED_DATA = [
   {
     id: "travel_seed_1",
     tenant_id: "default",
     name: "The Ritz-Carlton Riyadh",
-    description: "Experience unparalleled luxury at The Ritz-Carlton Riyadh. Featuring elegant suites, world-class dining, a full-service spa, and stunning gardens.",
+    description:
+      "Experience unparalleled luxury at The Ritz-Carlton Riyadh. Featuring elegant suites, world-class dining, a full-service spa, and stunning gardens.",
     property_type: "hotel",
     star_rating: 5,
     city: "Riyadh",
@@ -15,33 +15,115 @@ const SEED_DATA = [
     price: 250000,
     currency: "SAR",
     currency_code: "SAR",
-    amenities: ["Spa", "Pool", "Fine Dining", "Fitness Center", "Concierge", "Valet Parking"],
+    amenities: [
+      "Spa",
+      "Pool",
+      "Fine Dining",
+      "Fitness Center",
+      "Concierge",
+      "Valet Parking",
+    ],
     rating: 4.9,
     review_count: 342,
     is_active: true,
-    metadata: { thumbnail: "/seed-images/event-ticketing/1488646953014-85cb44e25828.jpg" },
+    metadata: {
+      thumbnail: "/seed-images/event-ticketing/1488646953014-85cb44e25828.jpg",
+    },
     thumbnail: "/seed-images/event-ticketing/1488646953014-85cb44e25828.jpg",
     itinerary: [
-      { day: 1, title: "Arrival & Welcome", description: "Check in and enjoy a welcome dinner at the hotel's fine dining restaurant.", activities: ["Airport transfer", "Hotel check-in", "Welcome dinner", "Evening at leisure"] },
-      { day: 2, title: "City Exploration", description: "Guided tour of Riyadh's historical landmarks and modern architecture.", activities: ["Visit Masmak Fortress", "Explore Diriyah Gate", "Lunch at local restaurant", "Kingdom Centre observation deck"] },
-      { day: 3, title: "Cultural Immersion", description: "Deep dive into Saudi culture and traditions.", activities: ["National Museum visit", "Traditional souk shopping", "Arabic coffee ceremony", "Farewell dinner"] },
+      {
+        day: 1,
+        title: "Arrival & Welcome",
+        description:
+          "Check in and enjoy a welcome dinner at the hotel's fine dining restaurant.",
+        activities: [
+          "Airport transfer",
+          "Hotel check-in",
+          "Welcome dinner",
+          "Evening at leisure",
+        ],
+      },
+      {
+        day: 2,
+        title: "City Exploration",
+        description:
+          "Guided tour of Riyadh's historical landmarks and modern architecture.",
+        activities: [
+          "Visit Masmak Fortress",
+          "Explore Diriyah Gate",
+          "Lunch at local restaurant",
+          "Kingdom Centre observation deck",
+        ],
+      },
+      {
+        day: 3,
+        title: "Cultural Immersion",
+        description: "Deep dive into Saudi culture and traditions.",
+        activities: [
+          "National Museum visit",
+          "Traditional souk shopping",
+          "Arabic coffee ceremony",
+          "Farewell dinner",
+        ],
+      },
     ],
-    included: ["5-star hotel accommodation", "Daily breakfast and dinner", "Airport transfers", "Guided city tours", "Museum entrance fees"],
-    not_included: ["International flights", "Travel insurance", "Personal expenses"],
+    included: [
+      "5-star hotel accommodation",
+      "Daily breakfast and dinner",
+      "Airport transfers",
+      "Guided city tours",
+      "Museum entrance fees",
+    ],
+    not_included: [
+      "International flights",
+      "Travel insurance",
+      "Personal expenses",
+    ],
     departure_dates: ["2025-03-15", "2025-04-01", "2025-05-10", "2025-06-20"],
     reviews: [
-      { author: "Sarah M.", rating: 5, comment: "Absolutely stunning hotel with impeccable service. The spa was heavenly!" , created_at: "2024-08-15T00:00:00Z" },
-      { author: "Ahmed K.", rating: 5, comment: "Best luxury experience in Riyadh. The gardens are breathtaking." , created_at: "2024-08-10T00:00:00Z" },
-      { author: "James R.", rating: 4, comment: "Wonderful stay, excellent dining options. Would definitely return." , created_at: "2024-07-28T00:00:00Z" },
-      { author: "Fatima A.", rating: 5, comment: "The concierge arranged everything perfectly. A true 5-star experience." , created_at: "2024-07-20T00:00:00Z" },
-      { author: "Michael T.", rating: 4, comment: "Beautiful property, great location near the Diplomatic Quarter." , created_at: "2024-07-15T00:00:00Z" },
+      {
+        author: "Sarah M.",
+        rating: 5,
+        comment:
+          "Absolutely stunning hotel with impeccable service. The spa was heavenly!",
+        created_at: "2024-08-15T00:00:00Z",
+      },
+      {
+        author: "Ahmed K.",
+        rating: 5,
+        comment:
+          "Best luxury experience in Riyadh. The gardens are breathtaking.",
+        created_at: "2024-08-10T00:00:00Z",
+      },
+      {
+        author: "James R.",
+        rating: 4,
+        comment:
+          "Wonderful stay, excellent dining options. Would definitely return.",
+        created_at: "2024-07-28T00:00:00Z",
+      },
+      {
+        author: "Fatima A.",
+        rating: 5,
+        comment:
+          "The concierge arranged everything perfectly. A true 5-star experience.",
+        created_at: "2024-07-20T00:00:00Z",
+      },
+      {
+        author: "Michael T.",
+        rating: 4,
+        comment:
+          "Beautiful property, great location near the Diplomatic Quarter.",
+        created_at: "2024-07-15T00:00:00Z",
+      },
     ],
   },
   {
     id: "travel_seed_2",
     tenant_id: "default",
     name: "Coral Beach Resort Jeddah",
-    description: "Beachfront resort on the Red Sea with private beach, water sports, multiple restaurants, and family-friendly entertainment.",
+    description:
+      "Beachfront resort on the Red Sea with private beach, water sports, multiple restaurants, and family-friendly entertainment.",
     property_type: "resort",
     star_rating: 4,
     city: "Jeddah",
@@ -49,33 +131,108 @@ const SEED_DATA = [
     price: 180000,
     currency: "SAR",
     currency_code: "SAR",
-    amenities: ["Private Beach", "Water Sports", "Kids Club", "Pool", "Restaurant"],
+    amenities: [
+      "Private Beach",
+      "Water Sports",
+      "Kids Club",
+      "Pool",
+      "Restaurant",
+    ],
     rating: 4.6,
     review_count: 218,
     is_active: true,
-    metadata: { thumbnail: "/seed-images/event-ticketing/1507525428034-b723cf961d3e.jpg" },
+    metadata: {
+      thumbnail: "/seed-images/event-ticketing/1507525428034-b723cf961d3e.jpg",
+    },
     thumbnail: "/seed-images/event-ticketing/1507525428034-b723cf961d3e.jpg",
     itinerary: [
-      { day: 1, title: "Beach Arrival", description: "Settle into your beachfront room and enjoy the Red Sea sunset.", activities: ["Resort check-in", "Beach orientation", "Sunset cocktails", "Seafood dinner"] },
-      { day: 2, title: "Water Adventures", description: "Full day of water sports and marine exploration.", activities: ["Snorkeling trip", "Jet ski session", "Beach volleyball", "Poolside BBQ"] },
-      { day: 3, title: "Relaxation Day", description: "Spa treatments and leisure time by the pool.", activities: ["Morning yoga", "Spa treatment", "Pool time", "Farewell dinner"] },
+      {
+        day: 1,
+        title: "Beach Arrival",
+        description:
+          "Settle into your beachfront room and enjoy the Red Sea sunset.",
+        activities: [
+          "Resort check-in",
+          "Beach orientation",
+          "Sunset cocktails",
+          "Seafood dinner",
+        ],
+      },
+      {
+        day: 2,
+        title: "Water Adventures",
+        description: "Full day of water sports and marine exploration.",
+        activities: [
+          "Snorkeling trip",
+          "Jet ski session",
+          "Beach volleyball",
+          "Poolside BBQ",
+        ],
+      },
+      {
+        day: 3,
+        title: "Relaxation Day",
+        description: "Spa treatments and leisure time by the pool.",
+        activities: [
+          "Morning yoga",
+          "Spa treatment",
+          "Pool time",
+          "Farewell dinner",
+        ],
+      },
     ],
-    included: ["Beachfront accommodation", "All meals included", "Water sports equipment", "Kids club access", "Pool and beach towels"],
+    included: [
+      "Beachfront accommodation",
+      "All meals included",
+      "Water sports equipment",
+      "Kids club access",
+      "Pool and beach towels",
+    ],
     not_included: ["Spa treatments", "Scuba diving courses", "Minibar"],
     departure_dates: ["2025-03-01", "2025-04-15", "2025-06-01", "2025-07-15"],
     reviews: [
-      { author: "Lisa W.", rating: 5, comment: "Perfect family vacation. Kids loved the beach and water sports!" , created_at: "2024-06-15T00:00:00Z" },
-      { author: "Omar H.", rating: 4, comment: "Beautiful resort with great Red Sea views. Food was excellent." , created_at: "2024-06-10T00:00:00Z" },
-      { author: "Priya S.", rating: 5, comment: "The private beach is stunning. Best resort experience in Jeddah." , created_at: "2024-06-05T00:00:00Z" },
-      { author: "David L.", rating: 4, comment: "Great value for money. The kids club was a lifesaver." , created_at: "2024-05-28T00:00:00Z" },
-      { author: "Noura B.", rating: 5, comment: "We visit every year. The staff remembers us and always goes above and beyond." , created_at: "2024-05-20T00:00:00Z" },
+      {
+        author: "Lisa W.",
+        rating: 5,
+        comment:
+          "Perfect family vacation. Kids loved the beach and water sports!",
+        created_at: "2024-06-15T00:00:00Z",
+      },
+      {
+        author: "Omar H.",
+        rating: 4,
+        comment:
+          "Beautiful resort with great Red Sea views. Food was excellent.",
+        created_at: "2024-06-10T00:00:00Z",
+      },
+      {
+        author: "Priya S.",
+        rating: 5,
+        comment:
+          "The private beach is stunning. Best resort experience in Jeddah.",
+        created_at: "2024-06-05T00:00:00Z",
+      },
+      {
+        author: "David L.",
+        rating: 4,
+        comment: "Great value for money. The kids club was a lifesaver.",
+        created_at: "2024-05-28T00:00:00Z",
+      },
+      {
+        author: "Noura B.",
+        rating: 5,
+        comment:
+          "We visit every year. The staff remembers us and always goes above and beyond.",
+        created_at: "2024-05-20T00:00:00Z",
+      },
     ],
   },
   {
     id: "travel_seed_3",
     tenant_id: "default",
     name: "AlUla Heritage Hostel",
-    description: "Charming boutique hostel near the historic sites of AlUla. Rooftop terrace with desert views, communal kitchen, and guided tour services.",
+    description:
+      "Charming boutique hostel near the historic sites of AlUla. Rooftop terrace with desert views, communal kitchen, and guided tour services.",
     property_type: "hostel",
     star_rating: 3,
     city: "AlUla",
@@ -87,28 +244,89 @@ const SEED_DATA = [
     rating: 4.4,
     review_count: 96,
     is_active: true,
-    metadata: { thumbnail: "/seed-images/travel/1476514525535-07fb3b4ae5f1.jpg" },
+    metadata: {
+      thumbnail: "/seed-images/travel/1476514525535-07fb3b4ae5f1.jpg",
+    },
     thumbnail: "/seed-images/travel/1476514525535-07fb3b4ae5f1.jpg",
     itinerary: [
-      { day: 1, title: "Desert Welcome", description: "Arrive in AlUla and explore the ancient heritage sites.", activities: ["Airport pickup", "Hostel check-in", "Old Town walking tour", "Rooftop sunset viewing"] },
-      { day: 2, title: "Heritage Discovery", description: "Visit the UNESCO World Heritage Site of Hegra.", activities: ["Hegra guided tour", "Elephant Rock visit", "Traditional lunch", "Stargazing session"] },
+      {
+        day: 1,
+        title: "Desert Welcome",
+        description: "Arrive in AlUla and explore the ancient heritage sites.",
+        activities: [
+          "Airport pickup",
+          "Hostel check-in",
+          "Old Town walking tour",
+          "Rooftop sunset viewing",
+        ],
+      },
+      {
+        day: 2,
+        title: "Heritage Discovery",
+        description: "Visit the UNESCO World Heritage Site of Hegra.",
+        activities: [
+          "Hegra guided tour",
+          "Elephant Rock visit",
+          "Traditional lunch",
+          "Stargazing session",
+        ],
+      },
     ],
-    included: ["Hostel accommodation", "Daily breakfast", "Guided heritage tours", "Airport transfer"],
-    not_included: ["Lunch and dinner", "Adventure activities", "Travel insurance"],
+    included: [
+      "Hostel accommodation",
+      "Daily breakfast",
+      "Guided heritage tours",
+      "Airport transfer",
+    ],
+    not_included: [
+      "Lunch and dinner",
+      "Adventure activities",
+      "Travel insurance",
+    ],
     departure_dates: ["2025-02-20", "2025-03-10", "2025-10-01", "2025-11-15"],
     reviews: [
-      { author: "Emma C.", rating: 5, comment: "AlUla is magical! The hostel rooftop has the best desert views." , created_at: "2024-05-15T00:00:00Z" },
-      { author: "Yusuf A.", rating: 4, comment: "Great budget option for exploring AlUla. Very friendly staff." , created_at: "2024-05-10T00:00:00Z" },
-      { author: "Sophie D.", rating: 5, comment: "The guided tour of Hegra was the highlight of my trip to Saudi Arabia." , created_at: "2024-04-28T00:00:00Z" },
-      { author: "Carlos M.", rating: 4, comment: "Clean and comfortable hostel. The stargazing was incredible." , created_at: "2024-04-20T00:00:00Z" },
-      { author: "Hana K.", rating: 5, comment: "Perfect base for AlUla exploration. The communal kitchen saved us money." , created_at: "2024-04-15T00:00:00Z" },
+      {
+        author: "Emma C.",
+        rating: 5,
+        comment:
+          "AlUla is magical! The hostel rooftop has the best desert views.",
+        created_at: "2024-05-15T00:00:00Z",
+      },
+      {
+        author: "Yusuf A.",
+        rating: 4,
+        comment:
+          "Great budget option for exploring AlUla. Very friendly staff.",
+        created_at: "2024-05-10T00:00:00Z",
+      },
+      {
+        author: "Sophie D.",
+        rating: 5,
+        comment:
+          "The guided tour of Hegra was the highlight of my trip to Saudi Arabia.",
+        created_at: "2024-04-28T00:00:00Z",
+      },
+      {
+        author: "Carlos M.",
+        rating: 4,
+        comment: "Clean and comfortable hostel. The stargazing was incredible.",
+        created_at: "2024-04-20T00:00:00Z",
+      },
+      {
+        author: "Hana K.",
+        rating: 5,
+        comment:
+          "Perfect base for AlUla exploration. The communal kitchen saved us money.",
+        created_at: "2024-04-15T00:00:00Z",
+      },
     ],
   },
   {
     id: "travel_seed_4",
     tenant_id: "default",
     name: "KAFD Luxury Serviced Apartment",
-    description: "Modern fully-furnished apartment in the King Abdullah Financial District. High-speed internet, gym access, and daily housekeeping included.",
+    description:
+      "Modern fully-furnished apartment in the King Abdullah Financial District. High-speed internet, gym access, and daily housekeeping included.",
     property_type: "apartment",
     star_rating: 4,
     city: "Riyadh",
@@ -120,28 +338,85 @@ const SEED_DATA = [
     rating: 4.7,
     review_count: 154,
     is_active: true,
-    metadata: { thumbnail: "/seed-images/travel/1469854523086-cc02fe5d8800.jpg" },
+    metadata: {
+      thumbnail: "/seed-images/travel/1469854523086-cc02fe5d8800.jpg",
+    },
     thumbnail: "/seed-images/travel/1469854523086-cc02fe5d8800.jpg",
     itinerary: [
-      { day: 1, title: "Move In", description: "Settle into your luxury apartment in KAFD.", activities: ["Key collection", "Apartment orientation", "Grocery delivery arranged", "Neighborhood walk"] },
-      { day: 2, title: "Business & Leisure", description: "Experience the business district lifestyle.", activities: ["Co-working space access", "Gym session", "Explore KAFD dining", "Evening networking event"] },
+      {
+        day: 1,
+        title: "Move In",
+        description: "Settle into your luxury apartment in KAFD.",
+        activities: [
+          "Key collection",
+          "Apartment orientation",
+          "Grocery delivery arranged",
+          "Neighborhood walk",
+        ],
+      },
+      {
+        day: 2,
+        title: "Business & Leisure",
+        description: "Experience the business district lifestyle.",
+        activities: [
+          "Co-working space access",
+          "Gym session",
+          "Explore KAFD dining",
+          "Evening networking event",
+        ],
+      },
     ],
-    included: ["Fully furnished apartment", "High-speed WiFi", "Gym access", "Daily housekeeping", "Parking space"],
+    included: [
+      "Fully furnished apartment",
+      "High-speed WiFi",
+      "Gym access",
+      "Daily housekeeping",
+      "Parking space",
+    ],
     not_included: ["Meals", "Laundry service", "Airport transfer"],
     departure_dates: ["2025-01-15", "2025-03-01", "2025-06-01", "2025-09-01"],
     reviews: [
-      { author: "Robert J.", rating: 5, comment: "Perfect for business travelers. The apartment was spotless and modern." , created_at: "2024-04-10T00:00:00Z" },
-      { author: "Nadia F.", rating: 4, comment: "Great location in KAFD. Very convenient for work and dining." , created_at: "2024-03-28T00:00:00Z" },
-      { author: "Chen W.", rating: 5, comment: "Excellent value for a serviced apartment. Felt like home." , created_at: "2024-03-20T00:00:00Z" },
-      { author: "Laura P.", rating: 5, comment: "The gym and business center were top notch. Highly recommend." , created_at: "2024-03-15T00:00:00Z" },
-      { author: "Khalid S.", rating: 4, comment: "Modern and comfortable. The housekeeping service was excellent." , created_at: "2024-03-10T00:00:00Z" },
+      {
+        author: "Robert J.",
+        rating: 5,
+        comment:
+          "Perfect for business travelers. The apartment was spotless and modern.",
+        created_at: "2024-04-10T00:00:00Z",
+      },
+      {
+        author: "Nadia F.",
+        rating: 4,
+        comment: "Great location in KAFD. Very convenient for work and dining.",
+        created_at: "2024-03-28T00:00:00Z",
+      },
+      {
+        author: "Chen W.",
+        rating: 5,
+        comment: "Excellent value for a serviced apartment. Felt like home.",
+        created_at: "2024-03-20T00:00:00Z",
+      },
+      {
+        author: "Laura P.",
+        rating: 5,
+        comment:
+          "The gym and business center were top notch. Highly recommend.",
+        created_at: "2024-03-15T00:00:00Z",
+      },
+      {
+        author: "Khalid S.",
+        rating: 4,
+        comment:
+          "Modern and comfortable. The housekeeping service was excellent.",
+        created_at: "2024-03-10T00:00:00Z",
+      },
     ],
   },
   {
     id: "travel_seed_5",
     tenant_id: "default",
     name: "Desert Oasis Private Villa",
-    description: "Exclusive private villa on the edge of the Rub' al Khali desert. Infinity pool, outdoor dining, stargazing deck, and personal butler service.",
+    description:
+      "Exclusive private villa on the edge of the Rub' al Khali desert. Infinity pool, outdoor dining, stargazing deck, and personal butler service.",
     property_type: "villa",
     star_rating: 5,
     city: "NEOM",
@@ -149,50 +424,171 @@ const SEED_DATA = [
     price: 450000,
     currency: "SAR",
     currency_code: "SAR",
-    amenities: ["Private Pool", "Butler Service", "Desert Safari", "Stargazing", "Gourmet Dining"],
+    amenities: [
+      "Private Pool",
+      "Butler Service",
+      "Desert Safari",
+      "Stargazing",
+      "Gourmet Dining",
+    ],
     rating: 4.9,
     review_count: 67,
     is_active: true,
-    metadata: { thumbnail: "/seed-images/travel/1476514525535-07fb3b4ae5f1.jpg" },
+    metadata: {
+      thumbnail: "/seed-images/travel/1476514525535-07fb3b4ae5f1.jpg",
+    },
     thumbnail: "/seed-images/travel/1476514525535-07fb3b4ae5f1.jpg",
     itinerary: [
-      { day: 1, title: "Desert Arrival", description: "Helicopter transfer to your private desert villa.", activities: ["Helicopter transfer", "Villa welcome ceremony", "Infinity pool time", "Private chef dinner under the stars"] },
-      { day: 2, title: "Desert Safari", description: "Full day desert adventure with luxury touches.", activities: ["Morning dune bashing", "Camel trek", "Desert picnic lunch", "Sunset photography session"] },
-      { day: 3, title: "Stargazing & Spa", description: "Relaxation and astronomical experiences.", activities: ["Private spa treatment", "Astronomy session with telescope", "Gourmet farewell dinner", "Desert bonfire"] },
+      {
+        day: 1,
+        title: "Desert Arrival",
+        description: "Helicopter transfer to your private desert villa.",
+        activities: [
+          "Helicopter transfer",
+          "Villa welcome ceremony",
+          "Infinity pool time",
+          "Private chef dinner under the stars",
+        ],
+      },
+      {
+        day: 2,
+        title: "Desert Safari",
+        description: "Full day desert adventure with luxury touches.",
+        activities: [
+          "Morning dune bashing",
+          "Camel trek",
+          "Desert picnic lunch",
+          "Sunset photography session",
+        ],
+      },
+      {
+        day: 3,
+        title: "Stargazing & Spa",
+        description: "Relaxation and astronomical experiences.",
+        activities: [
+          "Private spa treatment",
+          "Astronomy session with telescope",
+          "Gourmet farewell dinner",
+          "Desert bonfire",
+        ],
+      },
     ],
-    included: ["Private villa accommodation", "Personal butler service", "All gourmet meals", "Desert safari experience", "Helicopter transfers"],
+    included: [
+      "Private villa accommodation",
+      "Personal butler service",
+      "All gourmet meals",
+      "Desert safari experience",
+      "Helicopter transfers",
+    ],
     not_included: ["International flights", "Travel insurance", "Gratuities"],
     departure_dates: ["2025-02-01", "2025-03-20", "2025-10-15", "2025-12-01"],
     reviews: [
-      { author: "Victoria R.", rating: 5, comment: "The most exclusive experience I've ever had. The butler service was phenomenal." , created_at: "2024-02-28T00:00:00Z" },
-      { author: "Mohammed A.", rating: 5, comment: "Stargazing from the desert villa was absolutely magical." , created_at: "2024-02-20T00:00:00Z" },
-      { author: "Isabella C.", rating: 5, comment: "Worth every penny. The infinity pool overlooking the desert is surreal." , created_at: "2024-02-15T00:00:00Z" },
-      { author: "Alexander W.", rating: 5, comment: "A once-in-a-lifetime experience. The desert safari was thrilling." , created_at: "2024-02-10T00:00:00Z" },
-      { author: "Aisha M.", rating: 5, comment: "Pure luxury in the middle of the desert. The chef prepared incredible meals." , created_at: "2024-02-05T00:00:00Z" },
+      {
+        author: "Victoria R.",
+        rating: 5,
+        comment:
+          "The most exclusive experience I've ever had. The butler service was phenomenal.",
+        created_at: "2024-02-28T00:00:00Z",
+      },
+      {
+        author: "Mohammed A.",
+        rating: 5,
+        comment: "Stargazing from the desert villa was absolutely magical.",
+        created_at: "2024-02-20T00:00:00Z",
+      },
+      {
+        author: "Isabella C.",
+        rating: 5,
+        comment:
+          "Worth every penny. The infinity pool overlooking the desert is surreal.",
+        created_at: "2024-02-15T00:00:00Z",
+      },
+      {
+        author: "Alexander W.",
+        rating: 5,
+        comment:
+          "A once-in-a-lifetime experience. The desert safari was thrilling.",
+        created_at: "2024-02-10T00:00:00Z",
+      },
+      {
+        author: "Aisha M.",
+        rating: 5,
+        comment:
+          "Pure luxury in the middle of the desert. The chef prepared incredible meals.",
+        created_at: "2024-02-05T00:00:00Z",
+      },
     ],
   },
-]
+];
 
 const SEED_ROOM_TYPES = [
-  { id: "room-1", name: "Standard Room", price_per_night: 85000, capacity: 2, description: "Comfortable room with king-size bed, en-suite bathroom, and city views.", amenities: ["King bed", "Free WiFi", "Mini bar", "Room service"] },
-  { id: "room-2", name: "Deluxe Suite", price_per_night: 150000, capacity: 3, description: "Spacious suite with separate living area, premium amenities, and panoramic views.", amenities: ["King bed", "Living area", "Jacuzzi", "Butler service"] },
-  { id: "room-3", name: "Family Room", price_per_night: 120000, capacity: 4, description: "Large room with two queen beds, kid-friendly amenities, and connecting door option.", amenities: ["Two queen beds", "Kids welcome pack", "Extra space", "Connecting rooms"] },
-  { id: "room-4", name: "Presidential Suite", price_per_night: 350000, capacity: 4, description: "Ultimate luxury with private terrace, dining room, and dedicated concierge service.", amenities: ["Master bedroom", "Private terrace", "Dining room", "Personal concierge"] },
-]
+  {
+    id: "room-1",
+    name: "Standard Room",
+    price_per_night: 85000,
+    capacity: 2,
+    description:
+      "Comfortable room with king-size bed, en-suite bathroom, and city views.",
+    amenities: ["King bed", "Free WiFi", "Mini bar", "Room service"],
+  },
+  {
+    id: "room-2",
+    name: "Deluxe Suite",
+    price_per_night: 150000,
+    capacity: 3,
+    description:
+      "Spacious suite with separate living area, premium amenities, and panoramic views.",
+    amenities: ["King bed", "Living area", "Jacuzzi", "Butler service"],
+  },
+  {
+    id: "room-3",
+    name: "Family Room",
+    price_per_night: 120000,
+    capacity: 4,
+    description:
+      "Large room with two queen beds, kid-friendly amenities, and connecting door option.",
+    amenities: [
+      "Two queen beds",
+      "Kids welcome pack",
+      "Extra space",
+      "Connecting rooms",
+    ],
+  },
+  {
+    id: "room-4",
+    name: "Presidential Suite",
+    price_per_night: 350000,
+    capacity: 4,
+    description:
+      "Ultimate luxury with private terrace, dining room, and dedicated concierge service.",
+    amenities: [
+      "Master bedroom",
+      "Private terrace",
+      "Dining room",
+      "Personal concierge",
+    ],
+  },
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("travel") as any
-    const { id } = req.params
-    const [item] = await mod.listTravelProperties({ id }, { take: 1 })
+    const mod = req.scope.resolve("travel") as unknown as any;
+    const { id } = req.params;
+    const [item] = await mod.listTravelProperties({ id }, { take: 1 });
     if (!item) {
-      const seedItem = SEED_DATA.find((s) => s.id === id) || SEED_DATA[0]
-      return res.json({ item: { ...seedItem, room_types: SEED_ROOM_TYPES } })
+      const seedItem = SEED_DATA.find((s) => s.id === id) || SEED_DATA[0];
+      return res.json({ item: { ...seedItem, room_types: SEED_ROOM_TYPES } });
     }
-    const roomTypes = await mod.listRoomTypes({ property_id: id }, { take: 100 })
-    return res.json({ item: enrichDetailItem({ ...item, room_types: roomTypes }, "travel") })
-  } catch (error: any) {
-    const seedItem = SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0]
-    return res.json({ item: { ...seedItem, room_types: SEED_ROOM_TYPES } })
+    const roomTypes = await mod.listRoomTypes(
+      { property_id: id },
+      { take: 100 },
+    );
+    return res.json({
+      item: enrichDetailItem({ ...item, room_types: roomTypes }, "travel"),
+    });
+  } catch (error: unknown) {
+    const seedItem =
+      SEED_DATA.find((s) => s.id === req.params.id) || SEED_DATA[0];
+    return res.json({ item: { ...seedItem, room_types: SEED_ROOM_TYPES } });
   }
 }

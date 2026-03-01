@@ -19,21 +19,30 @@ const statusColors: Record<string, string> = {
 }
 
 function BookingsPage() {
-  const { tenant, locale } = Route.useParams() as { locale: string }
+  const { tenant, locale } = Route.useParams()
   const { data: bookings, isLoading } = useCustomerBookings()
   const baseHref = `/${tenant}/${locale}`
   const [filter, setFilter] = useState<"upcoming" | "past" | "all">("upcoming")
 
   const now = new Date()
   const filteredBookings = bookings?.filter((booking) => {
-    const bookingDate = new Date(booking.scheduled_at)
-    if (filter === "upcoming") return bookingDate > now && booking.status !== "canceled"
-    if (filter === "past") return bookingDate <= now || booking.status === "completed"
+    const bookingDate = new Date(booking.scheduled_at!)
+    if (filter === "upcoming")
+      return bookingDate > now && booking.status !== "canceled"
+    if (filter === "past")
+      return bookingDate <= now || booking.status === "completed"
     return true
   })
 
   return (
-    <AccountLayout title={t(locale, "account.bookings_title", "Bookings")} description={t(locale, "account.bookings_description", "Manage your scheduled appointments")}>
+    <AccountLayout
+      title={t(locale, "account.bookings_title", "Bookings")}
+      description={t(
+        locale,
+        "account.bookings_description",
+        "Manage your scheduled appointments",
+      )}
+    >
       {/* Filter Tabs */}
       <div className="flex gap-2 mb-6">
         {(["upcoming", "past", "all"] as const).map((f) => (
@@ -54,7 +63,10 @@ function BookingsPage() {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-28 bg-ds-muted rounded-lg animate-pulse" />
+            <div
+              key={i}
+              className="h-28 bg-ds-muted rounded-lg animate-pulse"
+            />
           ))}
         </div>
       ) : !filteredBookings?.length ? (
@@ -64,11 +76,11 @@ function BookingsPage() {
             {filter === "upcoming"
               ? "No upcoming bookings"
               : filter === "past"
-              ? "No past bookings"
-              : "No bookings yet"}
+                ? "No past bookings"
+                : "No bookings yet"}
           </p>
           <Link
-            to={`${baseHref}/bookings` as any}
+            to={`${baseHref}/bookings` as never}
             className="inline-flex items-center text-sm font-medium text-ds-foreground hover:underline"
           >
             Book a service
@@ -78,21 +90,28 @@ function BookingsPage() {
       ) : (
         <div className="space-y-4">
           {filteredBookings.map((booking) => {
-            const scheduledDate = new Date(booking.scheduled_at || booking.start_time)
-            const serviceName = booking.service?.name || booking.customer_notes || "Booking"
-            const servicePrice = booking.service?.price || booking.total || booking.subtotal || 0
-            const serviceCurrency = booking.service?.currency_code || booking.currency_code || "sar"
+            const scheduledDate = new Date(
+              booking.scheduled_at || booking.start_time,
+            )
+            const serviceName =
+              booking.service?.name || (booking as any).customer_notes || "Booking"
+            const servicePrice =
+              booking.service?.price || (booking as any).total || (booking as any).subtotal || 0
+            const serviceCurrency =
+              booking.service?.currency_code || booking.currency_code || "sar"
             const serviceDuration = booking.service?.duration
             return (
               <Link
                 key={booking.id}
-                to={`${baseHref}/account/bookings/${booking.id}` as any}
+                to={`${baseHref}/account/bookings/${booking.id}` as never}
                 className="flex items-center gap-4 p-4 bg-ds-background rounded-lg border border-ds-border hover:border-ds-border transition-colors"
               >
                 {/* Date Box */}
                 <div className="flex flex-col items-center justify-center w-16 h-16 bg-ds-muted rounded-lg flex-shrink-0">
                   <span className="text-xs font-medium text-ds-muted-foreground uppercase">
-                    {scheduledDate.toLocaleDateString("en-US", { month: "short" })}
+                    {scheduledDate.toLocaleDateString("en-US", {
+                      month: "short",
+                    })}
                   </span>
                   <span className="text-2xl font-bold text-ds-foreground">
                     {scheduledDate.getDate()}
@@ -101,7 +120,9 @@ function BookingsPage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-ds-foreground">{serviceName}</h3>
+                  <h3 className="font-semibold text-ds-foreground">
+                    {serviceName}
+                  </h3>
                   <div className="flex items-center gap-3 mt-1">
                     <div className="flex items-center gap-1 text-sm text-ds-muted-foreground">
                       <Clock className="h-4 w-4" />
@@ -111,12 +132,15 @@ function BookingsPage() {
                       })}
                     </div>
                     {booking.provider && (
-                      <span className="text-sm text-ds-muted-foreground">with {booking.provider.name}</span>
+                      <span className="text-sm text-ds-muted-foreground">
+                        with {booking.provider.name}
+                      </span>
                     )}
                   </div>
                   <span
                     className={`inline-block mt-2 px-2 py-1 text-xs font-medium rounded ${
-                      statusColors[booking.status] || "bg-ds-muted text-ds-foreground"
+                      statusColors[booking.status] ||
+                      "bg-ds-muted text-ds-foreground"
                     }`}
                   >
                     {booking.status}
@@ -129,7 +153,9 @@ function BookingsPage() {
                     {formatPrice(servicePrice, serviceCurrency)}
                   </p>
                   {serviceDuration && (
-                    <p className="text-sm text-ds-muted-foreground">{serviceDuration} min</p>
+                    <p className="text-sm text-ds-muted-foreground">
+                      {serviceDuration} min
+                    </p>
                   )}
                 </div>
 

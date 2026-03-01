@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -17,7 +17,7 @@ export async function GET(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: discounts } = await query.graph({
       entity: "subscription_discount",
@@ -47,7 +47,7 @@ export async function GET(
 
     res.json({ discount: discounts[0] })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin subscriptions discounts id")}
 }
 
@@ -69,7 +69,7 @@ export async function PUT(
       status
     } = parsed.data
 
-    const subscriptionService = req.scope.resolve("subscriptionModuleService")
+    const subscriptionService = req.scope.resolve("subscriptionModuleService") as unknown as any
 
     await subscriptionService.updateSubscriptionDiscounts({
       selector: { id },
@@ -81,7 +81,7 @@ export async function PUT(
       }
     })
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
     const { data: discounts } = await query.graph({
       entity: "subscription_discount",
       fields: ["id", "code", "type", "value", "usage_limit", "usage_count", "status"],
@@ -90,7 +90,7 @@ export async function PUT(
 
     res.json({ discount: discounts[0] })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin subscriptions discounts id")}
 }
 
@@ -101,13 +101,13 @@ export async function DELETE(
 ) {
   try {
     const { id } = req.params
-    const subscriptionService = req.scope.resolve("subscriptionModuleService")
+    const subscriptionService = req.scope.resolve("subscriptionModuleService") as unknown as any
 
     await subscriptionService.deleteSubscriptionDiscounts(id)
 
     res.json({ message: "Discount deleted", id })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin subscriptions discounts id")}
 }
 

@@ -30,35 +30,35 @@ export function RentalPricingTable({
   const rows: { label: string; value: string; highlight?: boolean }[] = [
     {
       label: t(locale, "rental.per_day"),
-      value: formatCurrency(daily.amount, daily.currencyCode, loc),
+      value: formatCurrency((daily.amount ?? 0), daily.currencyCode, loc),
     },
   ]
 
   if (weekly) {
     rows.push({
       label: t(locale, "rental.per_week"),
-      value: formatCurrency(weekly.amount, weekly.currencyCode, loc),
+      value: formatCurrency((weekly.amount ?? 0), weekly.currencyCode, loc),
     })
   }
 
   if (monthly) {
     rows.push({
       label: t(locale, "rental.per_month"),
-      value: formatCurrency(monthly.amount, monthly.currencyCode, loc),
+      value: formatCurrency((monthly.amount ?? 0), monthly.currencyCode, loc),
     })
   }
 
   if (deposit) {
     rows.push({
       label: t(locale, "rental.deposit"),
-      value: formatCurrency(deposit.amount, deposit.currencyCode, loc),
+      value: formatCurrency((deposit.amount ?? 0), deposit.currencyCode, loc),
     })
   }
 
   if (insurance) {
     rows.push({
       label: t(locale, "rental.insurance"),
-      value: formatCurrency(insurance.amount, insurance.currencyCode, loc),
+      value: formatCurrency((insurance.amount ?? 0), insurance.currencyCode, loc),
     })
   }
 

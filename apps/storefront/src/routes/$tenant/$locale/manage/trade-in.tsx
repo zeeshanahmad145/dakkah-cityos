@@ -2,7 +2,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast, Tabs } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+  Tabs,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -16,7 +28,13 @@ export const Route = createFileRoute("/$tenant/$locale/manage/trade-in")({
 
 const config = crudConfigs["trade-in"]
 
-const STATUS_FILTERS = ["all", "pending", "approved", "rejected", "completed"] as const
+const STATUS_FILTERS = [
+  "all",
+  "pending",
+  "approved",
+  "rejected",
+  "completed",
+] as const
 
 function ManageTradeInPage() {
   const { locale: routeLocale } = Route.useParams()
@@ -26,14 +44,18 @@ function ManageTradeInPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -47,7 +69,9 @@ function ManageTradeInPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -76,28 +100,38 @@ function ManageTradeInPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
-  const allItems = ((data as any)?.trade_ins || (data as any)?.trade_in || []).map((item: any) => ({
-    id: item.id,
-    item_name: item.item_name || item.name || item.product_name || "—",
-    condition: item.condition || "—",
-    offered_value: item.offered_value ? `$${(item.offered_value / 100).toFixed(2)}` : "$0.00",
-    customer: item.customer || item.customer_name || "—",
-    status: item.status || "pending",
-  }))
+  const allItems = (data?.trade_ins || data?.trade_in || []).map(
+    (item: any) => ({
+      id: item.id,
+      item_name: item.item_name || item.name || item.product_name || "—",
+      condition: item.condition || "—",
+      offered_value: item.offered_value
+        ? `$${(item.offered_value / 100).toFixed(2)}`
+        : "$0.00",
+      customer: item.customer || item.customer_name || "—",
+      status: item.status || "pending",
+    }),
+  )
 
-  const items = statusFilter === "all"
-    ? allItems
-    : allItems.filter((i: any) => i.status === statusFilter)
+  const items =
+    statusFilter === "all"
+      ? allItems
+      : allItems.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "item_name",
       header: "Item",
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "condition",
@@ -124,11 +158,24 @@ function ManageTradeInPage() {
       render: (_: unknown, row: any) => (
         <DropdownMenu
           items={[
-            { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
-            { label: t(locale, "common.actions.approve", "Approve"), onClick: () => handleEdit({ ...row, status: "approved" }) },
-            { label: t(locale, "common.actions.reject", "Reject"), onClick: () => handleEdit({ ...row, status: "rejected" }) },
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
+            {
+              label: t(locale, "common.actions.approve", "Approve"),
+              onClick: () => handleEdit({ ...row, status: "approved" }),
+            },
+            {
+              label: t(locale, "common.actions.reject", "Reject"),
+              onClick: () => handleEdit({ ...row, status: "rejected" }),
+            },
             { type: "separator" as const },
-            { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -156,19 +203,30 @@ function ManageTradeInPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No trade-ins found" countLabel="trade-ins" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No trade-ins found"
+          countLabel="trade-ins"
+        />
       </Container>
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
         title={`Edit ${config.singularLabel}`}
         fields={config.fields}
         values={formValues}

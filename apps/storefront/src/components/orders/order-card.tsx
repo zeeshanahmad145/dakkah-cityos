@@ -60,15 +60,19 @@ export function OrderCard({
 
   return (
     <Link
-      to={`${prefix}/account/orders/${id}` as any}
+      to={`${prefix}/account/orders/${id}` as never}
       className="block bg-ds-background rounded-xl border border-ds-border p-6 hover:border-ds-border hover:shadow-sm transition-all"
     >
       <div className="flex items-start justify-between mb-4">
         <div>
           <p className="font-semibold text-ds-foreground">Order #{displayId}</p>
-          <p className="text-sm text-ds-muted-foreground">{formatDate(createdAt)}</p>
+          <p className="text-sm text-ds-muted-foreground">
+            {formatDate(createdAt)}
+          </p>
         </div>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(status)}`}>
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(status)}`}
+        >
           {status}
         </span>
       </div>
@@ -81,7 +85,12 @@ export function OrderCard({
               className="w-12 h-12 rounded-lg bg-ds-muted border-2 border-white overflow-hidden"
             >
               {item.thumbnail ? (
-                <img loading="lazy" src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" />
+                <img
+                  loading="lazy"
+                  src={item.thumbnail}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-ds-muted-foreground text-xs">
                   No img

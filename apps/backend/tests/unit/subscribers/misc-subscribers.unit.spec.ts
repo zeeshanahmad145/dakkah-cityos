@@ -9,6 +9,7 @@ jest.mock("../../../src/lib/logger", () => ({
 jest.mock("../../../src/lib/config", () => ({
   appConfig: {
     storefrontUrl: "https://store.test",
+    urls: { storefront: "https://store.test" },
     emails: { support: "support@test.com" },
     features: {
       enableEmailNotifications: true,
@@ -17,6 +18,11 @@ jest.mock("../../../src/lib/config", () => ({
     subscription: {
       maxPaymentRetries: 3,
       gracePeriodDays: 7,
+    },
+    temporal: {
+      isConfigured: true,
+      namespace: "default",
+      taskQueue: "cityos-main",
     },
   },
 }));
@@ -63,8 +69,9 @@ function makeContainer() {
     resolve: jest.fn((dep: string) => {
       if (dep === "notification")
         return { createNotifications: mockCreateNotifications };
-      if (dep === "query") return { graph: mockGraph }
-      if (dep === "logger") return { info: jest.fn(), error: jest.fn(), warn: jest.fn() };
+      if (dep === "query") return { graph: mockGraph };
+      if (dep === "logger")
+        return { info: jest.fn(), error: jest.fn(), warn: jest.fn() };
       if (dep === "company") return { retrieveCompany: mockRetrieveCompany };
       if (dep === "purchaseOrder")
         return { retrievePurchaseOrder: mockRetrievePurchaseOrder };
@@ -75,7 +82,7 @@ function makeContainer() {
 }
 
 function makeArgs(data: any) {
-  return { event: { data }, container: makeContainer() } as any;
+  return { event: { data }, container: makeContainer() };
 }
 
 beforeEach(() => {
@@ -402,7 +409,7 @@ describe("integration-sync-subscriber", () => {
   });
 
   it("is a no-op handler", async () => {
-    await integrationSyncHandler({ event: { data: {} } } as any);
+    await integrationSyncHandler({ event: { data: {} } });
     expect(mockCreateNotifications).not.toHaveBeenCalled();
   });
 });
@@ -440,7 +447,7 @@ describe("temporal-event-bridge subscriber", () => {
     await temporalEventBridge({
       event: { name: "order.placed", data: { id: "order_1", tenant_id: "t1" } },
       container: makeContainer(),
-    } as any);
+    });
 
     expect(dispatchEventToTemporal).toHaveBeenCalledWith(
       "order.placed",
@@ -449,12 +456,15 @@ describe("temporal-event-bridge subscriber", () => {
     );
   });
 
-  it("skips dispatch when TEMPORAL_API_KEY is not set", async () => {
-    delete process.env.TEMPORAL_API_KEY;
+  it("skips dispatch when Temporal is not configured", async () => {
+    const configModule = jest.requireMock("../../../src/lib/config");
+    const origIsConfigured = configModule.appConfig.temporal.isConfigured;
+    configModule.appConfig.temporal.isConfigured = false;
     await temporalEventBridge({
       event: { name: "order.placed", data: {} },
       container: makeContainer(),
-    } as any);
+    });
+    configModule.appConfig.temporal.isConfigured = origIsConfigured;
 
     expect(dispatchEventToTemporal).not.toHaveBeenCalled();
   });
@@ -465,7 +475,7 @@ describe("temporal-event-bridge subscriber", () => {
     await temporalEventBridge({
       event: { name: "unknown.event", data: {} },
       container: makeContainer(),
-    } as any);
+    });
 
     expect(dispatchEventToTemporal).not.toHaveBeenCalled();
   });
@@ -482,7 +492,7 @@ describe("temporal-event-bridge subscriber", () => {
       temporalEventBridge({
         event: { name: "order.placed", data: {} },
         container: makeContainer(),
-      } as any),
+      }),
     ).resolves.toBeUndefined();
   });
 });

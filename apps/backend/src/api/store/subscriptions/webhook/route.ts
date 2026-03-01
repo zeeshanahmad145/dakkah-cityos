@@ -27,10 +27,10 @@ export async function POST(
     } else {
       event = req.body
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-SUBSCRIPTIONS-WEBHOOK")}
 
-  const subscriptionService = req.scope.resolve("subscription")
+  const subscriptionService = req.scope.resolve("subscription") as unknown as any
 
   try {
     switch (event.type) {
@@ -145,7 +145,7 @@ export async function POST(
     }
 
     res.json({ received: true })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-SUBSCRIPTIONS-WEBHOOK")}
 }
 

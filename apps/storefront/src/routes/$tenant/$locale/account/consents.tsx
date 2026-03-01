@@ -16,7 +16,7 @@ const defaultCategories = [
 ]
 
 function ConsentsPage() {
-  const { locale } = Route.useParams()
+  const { locale, tenant } = Route.useParams()
   const [preferences, setPreferences] = useState<Record<string, boolean>>({})
 
   useEffect(() => {

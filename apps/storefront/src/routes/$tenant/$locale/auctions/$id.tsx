@@ -1,5 +1,9 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t } from "@/lib/i18n"
 import { formatCurrency } from "@/lib/i18n"
@@ -13,29 +17,74 @@ import { useToast } from "@/components/ui/toast"
 
 function normalizePriceField(val: any, currency: string) {
   if (val == null) return null
-  if (typeof val === 'object' && val.amount != null) return val
+  if (typeof val === "object" && val.amount != null) return val
   return { amount: Number(val), currencyCode: currency }
 }
 
 function normalizeDetail(item: any) {
   if (!item) return null
-  const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
-  const currency = item.currency || item.currency_code || meta.currency || meta.currency_code || "USD"
-  return { ...meta, ...item,
-    thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
-    images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
+  const meta =
+    typeof item.metadata === "string"
+      ? JSON.parse(item.metadata)
+      : item.metadata || {}
+  const currency =
+    item.currency ||
+    item.currency_code ||
+    meta.currency ||
+    meta.currency_code ||
+    "USD"
+  return {
+    ...meta,
+    ...item,
+    thumbnail:
+      item.thumbnail ||
+      item.image_url ||
+      item.photo_url ||
+      item.banner_url ||
+      item.logo_url ||
+      meta.thumbnail ||
+      (meta.images && meta.images[0]) ||
+      null,
+    images:
+      meta.images ||
+      [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
     price: item.price ?? meta.price ?? null,
     currency,
-    startingPrice: normalizePriceField(item.startingPrice ?? item.starting_price ?? item.price ?? meta.starting_price, currency),
-    currentPrice: normalizePriceField(item.currentPrice ?? item.current_price ?? meta.current_price, currency),
-    buyNowPrice: normalizePriceField(item.buyNowPrice ?? item.buy_now_price ?? meta.buy_now_price, currency),
-    endsAt: item.endsAt || item.ends_at || item.end_date || meta.ends_at || meta.end_date || null,
-    auctionType: item.auctionType || item.auction_type || meta.auction_type || "english",
-    totalBids: item.totalBids ?? item.total_bids ?? item.bid_count ?? meta.total_bids ?? 0,
+    startingPrice: normalizePriceField(
+      item.startingPrice ??
+        item.starting_price ??
+        item.price ??
+        meta.starting_price,
+      currency,
+    ),
+    currentPrice: normalizePriceField(
+      item.currentPrice ?? item.current_price ?? meta.current_price,
+      currency,
+    ),
+    buyNowPrice: normalizePriceField(
+      item.buyNowPrice ?? item.buy_now_price ?? meta.buy_now_price,
+      currency,
+    ),
+    endsAt:
+      item.endsAt ||
+      item.ends_at ||
+      item.end_date ||
+      meta.ends_at ||
+      meta.end_date ||
+      null,
+    auctionType:
+      item.auctionType || item.auction_type || meta.auction_type || "english",
+    totalBids:
+      item.totalBids ??
+      item.total_bids ??
+      item.bid_count ??
+      meta.total_bids ??
+      0,
     rating: item.rating ?? item.avg_rating ?? meta.rating ?? null,
     review_count: item.review_count ?? meta.review_count ?? null,
-    location: item.location || item.city || item.address || meta.location || null,
+    location:
+      item.location || item.city || item.address || meta.location || null,
   }
 }
 
@@ -43,19 +92,33 @@ export const Route = createFileRoute("/$tenant/$locale/auctions/$id")({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/auctions/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/auctions/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
-      return { item: normalizeDetail(data.item || data.booking || data.event || data.auction || data) }
-    } catch { return { item: null } }
+      return {
+        item: normalizeDetail(
+          data.item || data.booking || data.event || data.auction || data,
+        ),
+      }
+    } catch {
+      return { item: null }
+    }
   },
   component: AuctionDetailPage,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Auction Details"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
+      {
+        title: `${loaderData?.title || loaderData?.name || "Auction Details"} | Dakkah CityOS`,
+      },
+      {
+        name: "description",
+        content: loaderData?.description || loaderData?.excerpt || "",
+      },
     ],
   }),
 })
@@ -91,14 +154,20 @@ function AuctionDetailPage() {
     try {
       const resp = await fetch(`${baseUrl}/store/auctions/${id}/bid`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        headers: {
+          "Content-Type": "application/json",
+          "x-publishable-api-key": publishableKey,
+        },
         credentials: "include",
-        body: JSON.stringify({ amount })
+        body: JSON.stringify({ amount }),
       })
       if (resp.ok) toast.success("Bid placed successfully!")
       else toast.error("Something went wrong. Please try again.")
-    } catch { toast.error("Network error. Please try again.") }
-    finally { setBidLoading(false) }
+    } catch {
+      toast.error("Network error. Please try again.")
+    } finally {
+      setBidLoading(false)
+    }
   }
 
   const handleBuyNow = async () => {
@@ -106,14 +175,23 @@ function AuctionDetailPage() {
     try {
       const resp = await fetch(`${baseUrl}/store/auctions/${id}/bid`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        headers: {
+          "Content-Type": "application/json",
+          "x-publishable-api-key": publishableKey,
+        },
         credentials: "include",
-        body: JSON.stringify({ amount: auction?.buyNowPrice?.amount, buy_now: true })
+        body: JSON.stringify({
+          amount: auction?.buyNowPrice?.amount,
+          buy_now: true,
+        }),
       })
       if (resp.ok) toast.success("Buy Now completed successfully!")
       else toast.error("Something went wrong. Please try again.")
-    } catch { toast.error("Network error. Please try again.") }
-    finally { setBidLoading(false) }
+    } catch {
+      toast.error("Network error. Please try again.")
+    } finally {
+      setBidLoading(false)
+    }
   }
 
   if (!auction) {
@@ -141,7 +219,7 @@ function AuctionDetailPage() {
               {t(locale, "auction.no_auctions")}
             </p>
             <Link
-              to={`${prefix}/auctions` as any}
+              to={`${prefix}/auctions` as never}
               className="inline-flex items-center px-4 py-2 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 transition-colors"
             >
               {t(locale, "auction.browse_auctions")}
@@ -157,12 +235,15 @@ function AuctionDetailPage() {
       <div className="bg-ds-card border-b border-ds-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
-            <Link to={`${prefix}` as any} className="hover:text-ds-foreground transition-colors">
+            <Link
+              to={`${prefix}` as never}
+              className="hover:text-ds-foreground transition-colors"
+            >
               {t(locale, "common.home")}
             </Link>
             <span>/</span>
             <Link
-              to={`${prefix}/auctions` as any}
+              to={`${prefix}/auctions` as never}
               className="hover:text-ds-foreground transition-colors"
             >
               {t(locale, "auction.title")}
@@ -210,7 +291,10 @@ function AuctionDetailPage() {
                   {t(locale, `auction.${auction.status}`)}
                 </span>
                 <span className="px-3 py-1 text-xs font-medium rounded-full bg-ds-background/80 text-ds-foreground backdrop-blur-sm">
-                  {t(locale, typeLabels[auction.auctionType] || "auction.english")}
+                  {t(
+                    locale,
+                    typeLabels[auction.auctionType] || "auction.english",
+                  )}
                 </span>
               </div>
             </div>
@@ -235,7 +319,7 @@ function AuctionDetailPage() {
                     {formatCurrency(
                       auction.startingPrice.amount,
                       auction.startingPrice.currencyCode,
-                      locale as any
+                      locale,
                     )}
                   </span>
                 </div>

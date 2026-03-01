@@ -194,7 +194,7 @@ export function LoyaltyDashboardPage({
                 <div>
                   <p className="text-sm font-medium text-ds-foreground">{activity.description}</p>
                   <p className="text-xs text-ds-muted-foreground">
-                    {new Date(activity.date).toLocaleDateString()}
+                    {new Date(activity.date!).toLocaleDateString()}
                   </p>
                 </div>
                 <span

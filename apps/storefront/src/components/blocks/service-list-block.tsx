@@ -81,7 +81,7 @@ export const ServiceListBlock: React.FC<ServiceListBlockProps> = ({
         <div className="flex items-center gap-3 mb-3">
           {showPricing && service.price && (
             <span className="text-sm font-semibold text-ds-primary">
-              {formatPrice(service.price)}
+              {formatPrice(service.price ?? 0)}
             </span>
           )}
           {service.duration && (
@@ -132,7 +132,7 @@ export const ServiceListBlock: React.FC<ServiceListBlockProps> = ({
         <div className="flex flex-wrap items-center gap-3">
           {showPricing && service.price && (
             <span className="text-sm font-semibold text-ds-primary">
-              {formatPrice(service.price)}
+              {formatPrice(service.price ?? 0)}
             </span>
           )}
           {service.duration && (

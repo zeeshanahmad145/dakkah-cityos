@@ -132,7 +132,7 @@ const PayoutsPage = () => {
       key: "payment_method",
       header: "Method",
       cell: (p: Payout) => (
-        <Badge color={getMethodBadgeColor(p.payment_method) as any}>
+        <Badge color={getMethodBadgeColor(p.payment_method)}>
           {p.payment_method || "-"}
         </Badge>
       ),

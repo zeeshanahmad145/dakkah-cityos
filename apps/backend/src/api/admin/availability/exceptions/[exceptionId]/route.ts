@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
@@ -21,7 +21,7 @@ const updateExceptionSchema = z
 export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { exceptionId } = req.params;
-    const bookingService = req.scope.resolve("booking") as any;
+    const bookingService = req.scope.resolve("booking") as unknown as any;
 
     const {
       exception_type,
@@ -59,7 +59,7 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
     ]);
 
     res.json({ exception: exception[0] });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin availability exceptions exceptionId");
   }
 };
@@ -67,12 +67,12 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
 export const DELETE = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { exceptionId } = req.params;
-    const bookingService = req.scope.resolve("booking") as any;
+    const bookingService = req.scope.resolve("booking") as unknown as any;
 
     await bookingService.deleteAvailabilityExceptions([exceptionId]);
 
     res.status(200).json({ id: exceptionId, deleted: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(
       res,
       error,

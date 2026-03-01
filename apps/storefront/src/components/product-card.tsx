@@ -5,15 +5,15 @@ import { HttpTypes } from "@medusajs/types"
 import { Link } from "@tanstack/react-router"
 
 interface ProductCardProps {
-  product: HttpTypes.StoreProduct;
+  product: HttpTypes.StoreProduct
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const prefix = useTenantPrefix();
+  const prefix = useTenantPrefix()
 
   return (
     <Link
-      to={`${prefix}/products/${product.handle}` as any}
+      to={`${prefix}/products/${product.handle}` as never}
       className="group flex flex-col w-full"
     >
       <div className="aspect-[29/34] w-full overflow-hidden bg-ds-muted relative">
@@ -33,7 +33,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         />
       </div>
     </Link>
-  );
-};
+  )
+}
 
-export default ProductCard;
+export default ProductCard

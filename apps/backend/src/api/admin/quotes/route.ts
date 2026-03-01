@@ -1,11 +1,11 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../lib/api-error-handler"
 
 // GET /admin/quotes - List all quotes
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
   
     const { status, company_id, customer_id, limit = "50", offset = "0" } = req.query
   
@@ -72,7 +72,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ quotes: enrichedQuotes, count: enrichedQuotes.length })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin quotes")}
 }
 

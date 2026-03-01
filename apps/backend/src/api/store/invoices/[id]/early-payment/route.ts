@@ -14,7 +14,7 @@ import { handleApiError } from "../../../../../lib/api-error-handler"
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
 
     // Fetch invoice with customer validation
     const { data: invoices } = await query.graph({
@@ -117,7 +117,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
             : "Standard payment terms apply"
       }
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-INVOICES-ID-EARLY-PAYMENT")}
 }
 

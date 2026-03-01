@@ -46,7 +46,7 @@ export function InstallmentPlanCard({
         <div>
           <p className="text-sm text-ds-muted-foreground">{t(locale, "installments.plan")}</p>
           <p className="text-xl font-bold text-ds-foreground">
-            {plan.installments}x {formatCurrency(plan.monthlyAmount, cur, loc)}
+            {plan.installments}x {formatCurrency((plan.monthlyAmount ?? 0), cur, loc)}
           </p>
         </div>
         {plan.status && (
@@ -60,7 +60,7 @@ export function InstallmentPlanCard({
       <div className="grid grid-cols-2 gap-3 text-sm">
         <div className="bg-ds-muted rounded-lg p-3">
           <p className="text-xs text-ds-muted-foreground mb-1">{t(locale, "installments.total_cost")}</p>
-          <p className="font-semibold text-ds-foreground">{formatCurrency(plan.totalAmount, cur, loc)}</p>
+          <p className="font-semibold text-ds-foreground">{formatCurrency((plan.totalAmount ?? 0), cur, loc)}</p>
         </div>
         <div className="bg-ds-muted rounded-lg p-3">
           <p className="text-xs text-ds-muted-foreground mb-1">{t(locale, "installments.interest_rate")}</p>

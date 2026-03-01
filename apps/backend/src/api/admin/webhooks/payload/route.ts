@@ -50,8 +50,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
             } else {
               logger.info("[Webhook:Payload] Missing PAYLOAD_CMS_URL_DEV or PAYLOAD_API_KEY, skipping sync")
             }
-          } catch (error: any) {
-            logger.error(`[Webhook:Payload] syncing product content: ${error instanceof Error ? error.message : error}`)}
+          } catch (error: unknown) {
+            logger.error(`[Webhook:Payload] syncing product content: ${error instanceof Error ? (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) : error}`)}
         }
         break
       }
@@ -69,8 +69,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
               processed = true
               logger.info(`[Webhook:Payload] Page synced: ${pageId}`)
             }
-          } catch (error: any) {
-            logger.error(`[Webhook:Payload] syncing page: ${error instanceof Error ? error.message : error}`)}
+          } catch (error: unknown) {
+            logger.error(`[Webhook:Payload] syncing page: ${error instanceof Error ? (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) : error}`)}
         }
         break
       }
@@ -114,8 +114,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
               processed = true
               logger.info(`[Webhook:Payload] Media synced: ${mediaId}`)
             }
-          } catch (error: any) {
-            logger.error(`[Webhook:Payload] syncing media: ${error instanceof Error ? error.message : error}`)}
+          } catch (error: unknown) {
+            logger.error(`[Webhook:Payload] syncing media: ${error instanceof Error ? (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) : error}`)}
         }
         break
       }
@@ -140,8 +140,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.status(200).json({ received: true, event, processed })
-  } catch (error: any) {
-    logger.error(`[Webhook:Payload] ${error instanceof Error ? error.message : error}`)
+  } catch (error: unknown) {
+    logger.error(`[Webhook:Payload] ${error instanceof Error ? (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) : error}`)
     return handleApiError(res, error, "ADMIN-WEBHOOKS-PAYLOAD")}
 }
 

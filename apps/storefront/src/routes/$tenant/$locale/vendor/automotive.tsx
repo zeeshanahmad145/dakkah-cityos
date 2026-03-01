@@ -31,7 +31,7 @@ function VendorAutomotiveRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -96,7 +96,9 @@ function VendorAutomotiveRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -112,40 +114,62 @@ function VendorAutomotiveRoute() {
       ) : (
         <div className="grid gap-4">
           {items.map((vehicle) => (
-            <div key={vehicle.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={vehicle.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold">{vehicle.year} {vehicle.make} {vehicle.model}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[vehicle.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <h3 className="text-lg font-semibold">
+                      {vehicle.year} {vehicle.make} {vehicle.model}
+                    </h3>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[vehicle.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {vehicle.status}
                     </span>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${conditionColors[vehicle.condition] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${conditionColors[vehicle.condition] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {vehicle.condition}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{vehicle.currency_code?.toUpperCase()} {(vehicle.price / 100).toFixed(2)}</p>
+                      <p className="text-lg font-bold">
+                        {vehicle.currency_code?.toUpperCase()}{" "}
+                        {(vehicle.price / 100).toFixed(2)}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Price</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{vehicle.mileage.toLocaleString()}</p>
-                      <p className="text-xs text-ds-muted-foreground">Mileage</p>
+                      <p className="text-lg font-bold">
+                        {vehicle.mileage.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Mileage
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
                       <p className="text-lg font-bold">{vehicle.year}</p>
                       <p className="text-xs text-ds-muted-foreground">Year</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-sm font-mono font-bold truncate">{vehicle.vin}</p>
+                      <p className="text-sm font-mono font-bold truncate">
+                        {vehicle.vin}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">VIN</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-ds-muted-foreground">
                     {vehicle.color && <span>Color: {vehicle.color}</span>}
-                    {vehicle.fuel_type && <span>Fuel: {vehicle.fuel_type}</span>}
-                    {vehicle.transmission && <span>{vehicle.transmission}</span>}
+                    {vehicle.fuel_type && (
+                      <span>Fuel: {vehicle.fuel_type}</span>
+                    )}
+                    {vehicle.transmission && (
+                      <span>{vehicle.transmission}</span>
+                    )}
                   </div>
                 </div>
                 <button className="text-sm text-ds-primary hover:underline ms-4">

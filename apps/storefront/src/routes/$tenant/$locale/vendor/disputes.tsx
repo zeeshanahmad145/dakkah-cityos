@@ -156,7 +156,7 @@ function VendorDisputesRoute() {
                     </div>
                   )}
                   <p className="text-xs text-muted-foreground mt-2">
-                    Opened: {new Date(dispute.created_at).toLocaleDateString()}
+                    Opened: {new Date(dispute.created_at!).toLocaleDateString()}
                   </p>
                 </div>
                 {dispute.status === "pending" && (

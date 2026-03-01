@@ -2,7 +2,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, Tabs, DropdownMenu, FormDrawer, ConfirmDialog, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  Tabs,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -17,7 +29,12 @@ export const Route = createFileRoute("/$tenant/$locale/manage/commissions")({
   component: ManageCommissionsPage,
 })
 
-const COMMISSION_STATUS_FILTERS = ["all", "pending", "calculated", "paid"] as const
+const COMMISSION_STATUS_FILTERS = [
+  "all",
+  "pending",
+  "calculated",
+  "paid",
+] as const
 const RULES_STATUS_FILTERS = ["all", "active", "inactive"] as const
 
 const rulesConfig = {
@@ -27,22 +44,61 @@ const rulesConfig = {
   label: "Commission Rules",
   apiEndpoint: "/admin/commission-rules",
   fields: [
-    { key: "name", label: "Name", type: "text" as const, required: true, placeholder: "Rule name" },
-    { key: "vendor_type", label: "Vendor Type", type: "select" as const, options: [
-      { value: "all", label: "All Vendors" },
-      { value: "standard", label: "Standard" },
-      { value: "premium", label: "Premium" },
-      { value: "enterprise", label: "Enterprise" },
-    ]},
-    { key: "rate", label: "Rate (%)", type: "number" as const, required: true, placeholder: "0" },
-    { key: "min_amount", label: "Min Amount", type: "number" as const, placeholder: "0" },
-    { key: "max_amount", label: "Max Amount", type: "number" as const, placeholder: "0" },
-    { key: "status", label: "Status", type: "select" as const, options: [
-      { value: "active", label: "Active" },
-      { value: "inactive", label: "Inactive" },
-    ]},
+    {
+      key: "name",
+      label: "Name",
+      type: "text" as const,
+      required: true,
+      placeholder: "Rule name",
+    },
+    {
+      key: "vendor_type",
+      label: "Vendor Type",
+      type: "select" as const,
+      options: [
+        { value: "all", label: "All Vendors" },
+        { value: "standard", label: "Standard" },
+        { value: "premium", label: "Premium" },
+        { value: "enterprise", label: "Enterprise" },
+      ],
+    },
+    {
+      key: "rate",
+      label: "Rate (%)",
+      type: "number" as const,
+      required: true,
+      placeholder: "0",
+    },
+    {
+      key: "min_amount",
+      label: "Min Amount",
+      type: "number" as const,
+      placeholder: "0",
+    },
+    {
+      key: "max_amount",
+      label: "Max Amount",
+      type: "number" as const,
+      placeholder: "0",
+    },
+    {
+      key: "status",
+      label: "Status",
+      type: "select" as const,
+      options: [
+        { value: "active", label: "Active" },
+        { value: "inactive", label: "Inactive" },
+      ],
+    },
   ],
-  defaultValues: { name: "", vendor_type: "all", rate: 0, min_amount: 0, max_amount: 0, status: "active" },
+  defaultValues: {
+    name: "",
+    vendor_type: "all",
+    rate: 0,
+    min_amount: 0,
+    max_amount: 0,
+    status: "active",
+  },
 }
 
 const PAGE_TABS = [
@@ -59,20 +115,26 @@ function ManageCommissionsPage() {
   const [activePageTab, setActivePageTab] = useState<string>("commissions")
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
   const [rulesDrawerOpen, setRulesDrawerOpen] = useState(false)
   const [editingRule, setEditingRule] = useState<any>(null)
-  const [rulesFormValues, setRulesFormValues] = useState<Record<string, any>>(rulesConfig.defaultValues)
+  const [rulesFormValues, setRulesFormValues] = useState<Record<string, any>>(
+    rulesConfig.defaultValues,
+  )
   const [deleteRuleId, setDeleteRuleId] = useState<string | null>(null)
   const [rulesStatusFilter, setRulesStatusFilter] = useState<string>("all")
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -81,7 +143,9 @@ function ManageCommissionsPage() {
   const { data: rulesData, isLoading: rulesLoading } = useQuery({
     queryKey: ["manage", rulesConfig.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(rulesConfig.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(rulesConfig.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -92,7 +156,11 @@ function ManageCommissionsPage() {
     apiEndpoint: config.apiEndpoint,
   })
 
-  const { createMutation: createRuleMutation, updateMutation: updateRuleMutation, deleteMutation: deleteRuleMutation } = useManageCrud({
+  const {
+    createMutation: createRuleMutation,
+    updateMutation: updateRuleMutation,
+    deleteMutation: deleteRuleMutation,
+  } = useManageCrud({
     moduleKey: rulesConfig.moduleKey,
     apiEndpoint: rulesConfig.apiEndpoint,
   })
@@ -106,7 +174,9 @@ function ManageCommissionsPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -138,7 +208,10 @@ function ManageCommissionsPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
@@ -151,7 +224,9 @@ function ManageCommissionsPage() {
   const handleEditRule = useCallback((row: any) => {
     setEditingRule(row)
     const values: Record<string, any> = {}
-    rulesConfig.fields.forEach((f) => { values[f.key] = row[f.key] ?? rulesConfig.defaultValues[f.key] ?? "" })
+    rulesConfig.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? rulesConfig.defaultValues[f.key] ?? ""
+    })
     setRulesFormValues(values)
     setRulesDrawerOpen(true)
   }, [])
@@ -163,7 +238,10 @@ function ManageCommissionsPage() {
   const handleRulesSubmit = useCallback(async () => {
     try {
       if (editingRule) {
-        await updateRuleMutation.mutateAsync({ id: editingRule.id, ...rulesFormValues })
+        await updateRuleMutation.mutateAsync({
+          id: editingRule.id,
+          ...rulesFormValues,
+        })
         addToast("success", `${rulesConfig.singularLabel} updated successfully`)
       } else {
         await createRuleMutation.mutateAsync(rulesFormValues)
@@ -172,9 +250,18 @@ function ManageCommissionsPage() {
       setRulesDrawerOpen(false)
       setEditingRule(null)
     } catch (e) {
-      addToast("error", `Failed to save ${rulesConfig.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to save ${rulesConfig.singularLabel.toLowerCase()}`,
+      )
     }
-  }, [editingRule, rulesFormValues, updateRuleMutation, createRuleMutation, addToast])
+  }, [
+    editingRule,
+    rulesFormValues,
+    updateRuleMutation,
+    createRuleMutation,
+    addToast,
+  ])
 
   const handleDeleteRule = useCallback(async () => {
     if (!deleteRuleId) return
@@ -183,11 +270,14 @@ function ManageCommissionsPage() {
       addToast("success", `${rulesConfig.singularLabel} deleted successfully`)
       setDeleteRuleId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${rulesConfig.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${rulesConfig.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteRuleId, deleteRuleMutation, addToast])
 
-  const allCommissions = ((data as any)?.transactions || []).map((c: any) => ({
+  const allCommissions = (data?.transactions || []).map((c: any) => ({
     id: c.id,
     vendor_id: c.vendor_id || "",
     vendor: c.vendor?.company_name || c.vendor_name || "—",
@@ -195,35 +285,43 @@ function ManageCommissionsPage() {
     amount: c.amount ? `$${(c.amount / 100).toFixed(2)}` : "$0.00",
     rate: c.commission_rate || c.rate || 0,
     commission_rate: c.commission_rate ? `${c.commission_rate}%` : "—",
-    commission_amount: c.commission_amount ? `$${(c.commission_amount / 100).toFixed(2)}` : "$0.00",
+    commission_amount: c.commission_amount
+      ? `$${(c.commission_amount / 100).toFixed(2)}`
+      : "$0.00",
     type: c.type || "percentage",
     status: c.status || "pending",
-    date: c.created_at ? new Date(c.created_at).toLocaleDateString() : "—",
+    date: c.created_at ? new Date(c.created_at!).toLocaleDateString() : "—",
   }))
 
-  const commissions = statusFilter === "all"
-    ? allCommissions
-    : allCommissions.filter((c: any) => c.status === statusFilter)
+  const commissions =
+    statusFilter === "all"
+      ? allCommissions
+      : allCommissions.filter((c: any) => c.status === statusFilter)
 
-  const allRules = ((rulesData as any)?.items || (rulesData as any)?.commission_rules || []).map((item: any) => ({
-    id: item.id,
-    name: item.name || "—",
-    vendor_type: item.vendor_type || "—",
-    rate: item.rate != null ? `${item.rate}%` : "—",
-    min_amount: item.min_amount ?? "—",
-    max_amount: item.max_amount ?? "—",
-    status: item.status || "active",
-  }))
+  const allRules = (rules(data as any)?.items || rulesData?.commission_rules || []).map(
+    (item: any) => ({
+      id: item.id,
+      name: item.name || "—",
+      vendor_type: item.vendor_type || "—",
+      rate: item.rate != null ? `${item.rate}%` : "—",
+      min_amount: item.min_amount ?? "—",
+      max_amount: item.max_amount ?? "—",
+      status: item.status || "active",
+    }),
+  )
 
-  const rules = rulesStatusFilter === "all"
-    ? allRules
-    : allRules.filter((i: any) => i.status === rulesStatusFilter)
+  const rules =
+    rulesStatusFilter === "all"
+      ? allRules
+      : allRules.filter((i: any) => i.status === rulesStatusFilter)
 
   const commissionsColumns = [
     {
       key: "vendor",
       header: t(locale, "manage.vendor"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "order_id",
@@ -262,7 +360,11 @@ function ManageCommissionsPage() {
           items={[
             { label: t(locale, "manage.edit"), onClick: () => handleEdit(row) },
             { type: "separator" as const },
-            { label: t(locale, "manage.delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "manage.delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -273,7 +375,9 @@ function ManageCommissionsPage() {
     {
       key: "name",
       header: t(locale, "manage.name"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     { key: "vendor_type", header: "Vendor Type" },
     { key: "rate", header: "Rate" },
@@ -291,9 +395,16 @@ function ManageCommissionsPage() {
       render: (_: unknown, row: any) => (
         <DropdownMenu
           items={[
-            { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEditRule(row) },
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEditRule(row),
+            },
             { type: "separator" as const },
-            { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteRuleId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteRuleId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -336,7 +447,11 @@ function ManageCommissionsPage() {
         <Tabs
           tabs={PAGE_TABS.map((tab) => ({ id: tab.id, label: tab.label }))}
           activeTab={activePageTab}
-          onTabChange={(tab) => { setActivePageTab(tab); setStatusFilter("all"); setRulesStatusFilter("all") }}
+          onTabChange={(tab) => {
+            setActivePageTab(tab)
+            setStatusFilter("all")
+            setRulesStatusFilter("all")
+          }}
           className="mb-4"
         />
 
@@ -345,7 +460,10 @@ function ManageCommissionsPage() {
             <Tabs
               tabs={COMMISSION_STATUS_FILTERS.map((s) => ({
                 id: s,
-                label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+                label:
+                  s === "all"
+                    ? t(locale, "manage.all_statuses")
+                    : s.replace(/_/g, " "),
               }))}
               activeTab={statusFilter}
               onTabChange={setStatusFilter}
@@ -366,40 +484,70 @@ function ManageCommissionsPage() {
             <Tabs
               tabs={RULES_STATUS_FILTERS.map((s) => ({
                 id: s,
-                label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+                label:
+                  s === "all"
+                    ? t(locale, "manage.all_statuses")
+                    : s.replace(/_/g, " "),
               }))}
               activeTab={rulesStatusFilter}
               onTabChange={setRulesStatusFilter}
               className="mb-4"
             />
 
-            <DataTable columns={rulesColumns} data={rules} emptyTitle="No commission rules found" countLabel="rules" />
+            <DataTable
+              columns={rulesColumns}
+              data={rules}
+              emptyTitle="No commission rules found"
+              countLabel="rules"
+            />
           </>
         )}
       </Container>
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Add ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Add ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.update", "Update") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.update", "Update")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
 
       <FormDrawer
         open={rulesDrawerOpen}
-        onClose={() => { setRulesDrawerOpen(false); setEditingRule(null) }}
-        title={editingRule ? `Edit ${rulesConfig.singularLabel}` : `Create ${rulesConfig.singularLabel}`}
+        onClose={() => {
+          setRulesDrawerOpen(false)
+          setEditingRule(null)
+        }}
+        title={
+          editingRule
+            ? `Edit ${rulesConfig.singularLabel}`
+            : `Create ${rulesConfig.singularLabel}`
+        }
         fields={rulesConfig.fields}
         values={rulesFormValues}
         onChange={handleRulesFormChange}
         onSubmit={handleRulesSubmit}
         loading={createRuleMutation.isPending || updateRuleMutation.isPending}
-        submitLabel={editingRule ? t(locale, "common.actions.saveChanges", "Save changes") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingRule
+            ? t(locale, "common.actions.saveChanges", "Save changes")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
 
       {config.canDelete !== false && (

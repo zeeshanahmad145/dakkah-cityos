@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -24,8 +24,8 @@ export async function POST(
     const { id } = req.params
     const { amount, payment_method, reference, notes } = parsed.data
 
-    const query = req.scope.resolve("query")
-    const invoiceService = req.scope.resolve("invoiceModuleService")
+    const query = req.scope.resolve("query") as unknown as any
+    const invoiceService = req.scope.resolve("invoiceModuleService") as unknown as any
 
     const { data: invoices } = await query.graph({
       entity: "invoice",
@@ -94,7 +94,7 @@ export async function POST(
       status: newStatus
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin invoices id partial-payment")}
 }
 
@@ -105,7 +105,7 @@ export async function GET(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: invoices } = await query.graph({
       entity: "invoice",
@@ -127,7 +127,7 @@ export async function GET(
       payments: invoice.payments || []
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin invoices id partial-payment")}
 }
 

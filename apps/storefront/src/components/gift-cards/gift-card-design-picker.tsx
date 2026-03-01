@@ -26,7 +26,7 @@ export function GiftCardDesignPicker({
         {t(locale, "giftCards.choose_design")}
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {designs.map((design) => (
+        {designs.map((design: any) => (
           <button
             key={design.id}
             type="button"

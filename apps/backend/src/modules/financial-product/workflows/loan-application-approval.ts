@@ -9,7 +9,7 @@ import {
 const assessLoanApplication = createStep(
   "assess-loan-application",
   async (input: { applicationId: string }, { container }) => {
-    const financialService = container.resolve("financial-product") as any;
+    const financialService = container.resolve("financial-product") as unknown as any;
     const assessment = await financialService.assessApplication(
       input.applicationId,
     );
@@ -28,7 +28,7 @@ const approveLoanApplication = createStep(
     },
     { container },
   ) => {
-    const financialService = container.resolve("financial-product") as any;
+    const financialService = container.resolve("financial-product") as unknown as any;
     const result = await financialService.approveApplication(
       input.applicationId,
       input.approvedBy,
@@ -37,7 +37,7 @@ const approveLoanApplication = createStep(
     return new StepResponse(result);
   },
   async (input: { applicationId: string }, { container }) => {
-    const financialService = container.resolve("financial-product") as any;
+    const financialService = container.resolve("financial-product") as unknown as any;
     await financialService.rejectApplication(
       input.applicationId,
       "Approval cancelled during rollback",
@@ -48,7 +48,7 @@ const approveLoanApplication = createStep(
 const rejectLoanApplication = createStep(
   "reject-loan-application",
   async (input: { applicationId: string; reason: string }, { container }) => {
-    const financialService = container.resolve("financial-product") as any;
+    const financialService = container.resolve("financial-product") as unknown as any;
     const result = await financialService.rejectApplication(
       input.applicationId,
       input.reason,

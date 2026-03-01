@@ -16,18 +16,66 @@ export const Route = createFileRoute("/$tenant/$locale/track")({
   }),
 })
 
-const demoEvents = [
-  { id: "e1", status: "preparing", description: t(locale, "track.description1_order_confirmed_and", "Order confirmed and being prepared"), timestamp: "2026-02-11T09:00:00Z", location: "Warehouse" },
-  { id: "e2", status: "picked-up", description: t(locale, "track.description2_package_picked_up_by", "Package picked up by courier"), timestamp: "2026-02-11T11:30:00Z", location: "Distribution Center" },
-  { id: "e3", status: "in-transit", description: t(locale, "track.description3_package_is_on_its_wa", "Package is on its way"), timestamp: "2026-02-11T14:00:00Z", location: "In Transit" },
-  { id: "e4", status: "nearby", description: t(locale, "track.description4_driver_is_nearby_you", "Driver is nearby your location"), timestamp: "2026-02-11T16:30:00Z" },
-  { id: "e5", status: "delivered", description: t(locale, "track.description5_package_delivered", "Package delivered"), timestamp: "2026-02-11T17:00:00Z" },
-]
-
 function TrackPage() {
-  const { locale } = Route.useParams()
+  const { locale, tenant } = Route.useParams()
   const [orderId, setOrderId] = useState("")
   const [showTracking, setShowTracking] = useState(false)
+
+  const demoEvents = [
+    {
+      id: "e1",
+      status: "preparing",
+      description: t(
+        locale,
+        "track.description1_order_confirmed_and",
+        "Order confirmed and being prepared",
+      ),
+      timestamp: "2026-02-11T09:00:00Z",
+      location: "Warehouse",
+    },
+    {
+      id: "e2",
+      status: "picked-up",
+      description: t(
+        locale,
+        "track.description2_package_picked_up_by",
+        "Package picked up by courier",
+      ),
+      timestamp: "2026-02-11T11:30:00Z",
+      location: "Distribution Center",
+    },
+    {
+      id: "e3",
+      status: "in-transit",
+      description: t(
+        locale,
+        "track.description3_package_is_on_its_wa",
+        "Package is on its way",
+      ),
+      timestamp: "2026-02-11T14:00:00Z",
+      location: "In Transit",
+    },
+    {
+      id: "e4",
+      status: "nearby",
+      description: t(
+        locale,
+        "track.description4_driver_is_nearby_you",
+        "Driver is nearby your location",
+      ),
+      timestamp: "2026-02-11T16:30:00Z",
+    },
+    {
+      id: "e5",
+      status: "delivered",
+      description: t(
+        locale,
+        "track.description5_package_delivered",
+        "Package delivered",
+      ),
+      timestamp: "2026-02-11T17:00:00Z",
+    },
+  ]
 
   const handleTrack = () => {
     if (orderId.trim()) setShowTracking(true)
@@ -73,8 +121,8 @@ function TrackPage() {
             <OrderTrackingMap
               orderId={orderId || "DEMO-001"}
               driverLocation={{ lat: 25.25, lng: 55.35 }}
-              destinationLocation={{ lat: 25.20, lng: 55.30 }}
-              pickupLocation={{ lat: 25.30, lng: 55.40 }}
+              destinationLocation={{ lat: 25.2, lng: 55.3 }}
+              pickupLocation={{ lat: 25.3, lng: 55.4 }}
               estimatedArrival="5:00 PM"
               status="in-transit"
               locale={locale}

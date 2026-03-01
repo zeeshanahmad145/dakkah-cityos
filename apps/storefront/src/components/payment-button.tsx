@@ -7,9 +7,9 @@ import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 
 type PaymentButtonProps = {
-  cart: HttpTypes.StoreCart;
-  className?: string;
-};
+  cart: HttpTypes.StoreCart
+  className?: string
+}
 
 const PaymentButton = ({ cart, className }: PaymentButtonProps) => {
   const notReady =
@@ -17,48 +17,46 @@ const PaymentButton = ({ cart, className }: PaymentButtonProps) => {
     !cart.shipping_address ||
     !cart.billing_address ||
     !cart.email ||
-    (cart.shipping_methods?.length ?? 0) < 1;
+    (cart.shipping_methods?.length ?? 0) < 1
 
-  const paymentSession = cart.payment_collection?.payment_sessions?.[0];
+  const paymentSession = cart.payment_collection?.payment_sessions?.[0]
 
   switch (true) {
     case isStripe(paymentSession?.provider_id):
-      return <StripePaymentButton notReady={notReady} className={className} />;
+      return <StripePaymentButton notReady={notReady} className={className} />
     case isManual(paymentSession?.provider_id):
-      return <ManualPaymentButton notReady={notReady} className={className} />;
+      return <ManualPaymentButton notReady={notReady} className={className} />
     default:
-      return <Button disabled>Select a payment method</Button>;
+      return <Button disabled>Select a payment method</Button>
   }
-};
+}
 
 const StripePaymentButton = ({
   notReady,
   className,
 }: {
-  notReady: boolean;
-  className?: string;
+  notReady: boolean
+  className?: string
 }) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const prefix = useTenantPrefix();
-  const completeOrderMutation = useCompleteCartOrder();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const navigate = useNavigate()
+  const prefix = useTenantPrefix()
+  const completeOrderMutation = useCompleteCartOrder()
 
   const handlePayment = async () => {
-    setErrorMessage(null);
+    setErrorMessage(null)
 
     try {
-      const order = await completeOrderMutation.mutateAsync();
+      const order = await completeOrderMutation.mutateAsync()
 
       navigate({
-        to: `${prefix}/order/${order.id}/confirmed` as any,
+        to: `${prefix}/order/${order.id}/confirmed`,
         replace: true,
-      });
+      })
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Payment failed"
-      );
+      setErrorMessage(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Payment failed")
     }
-  };
+  }
 
   return (
     <>
@@ -74,41 +72,41 @@ const StripePaymentButton = ({
         <div className="text-ds-destructive text-sm mt-2">{errorMessage}</div>
       )}
     </>
-  );
-};
+  )
+}
 
 const ManualPaymentButton = ({
   notReady,
   className,
 }: {
-  notReady: boolean;
-  className?: string;
+  notReady: boolean
+  className?: string
 }) => {
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const prefix = useTenantPrefix();
-  const completeOrderMutation = useCompleteCartOrder();
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const navigate = useNavigate()
+  const prefix = useTenantPrefix()
+  const completeOrderMutation = useCompleteCartOrder()
 
   const handlePayment = async () => {
-    setSubmitting(true);
-    setErrorMessage(null);
+    setSubmitting(true)
+    setErrorMessage(null)
 
     try {
-      const order = await completeOrderMutation.mutateAsync();
+      const order = await completeOrderMutation.mutateAsync()
 
       navigate({
-        to: `${prefix}/order/${order.id}/confirmed` as any,
+        to: `${prefix}/order/${order.id}/confirmed`,
         replace: true,
-      });
+      })
     } catch (error) {
       setErrorMessage(
-        error instanceof Error ? error.message : "Failed to place order"
-      );
+        error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Failed to place order",
+      )
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   return (
     <>
@@ -124,7 +122,7 @@ const ManualPaymentButton = ({
         <div className="text-ds-destructive text-sm mt-2">{errorMessage}</div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default PaymentButton;
+export default PaymentButton

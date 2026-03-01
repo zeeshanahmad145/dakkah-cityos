@@ -11,7 +11,11 @@ interface ArticleDetailProps {
   locale?: string
 }
 
-export function ArticleDetail({ post, shareUrl, locale: localeProp }: ArticleDetailProps) {
+export function ArticleDetail({
+  post,
+  shareUrl,
+  locale: localeProp,
+}: ArticleDetailProps) {
   const { locale: ctxLocale } = useTenant()
   const locale = localeProp || ctxLocale || "en"
 
@@ -31,16 +35,23 @@ export function ArticleDetail({ post, shareUrl, locale: localeProp }: ArticleDet
         {post.author && (
           <div className="flex items-center gap-2">
             {post.author.avatar && (
-              <img loading="lazy" src={post.author.avatar} alt={post.author.name} className="w-8 h-8 rounded-full" />
+              <img
+                loading="lazy"
+                src={post.author.avatar}
+                alt={post.author.name}
+                className="w-8 h-8 rounded-full"
+              />
             )}
             <span className="font-medium text-ds-foreground">
               {t(locale, "blog.by_author")} {post.author.name}
             </span>
           </div>
         )}
-        <span>{formatDate(post.publishedAt, locale as any)}</span>
+        <span>{formatDate(post.publishedAt, locale as import("@/lib/i18n").SupportedLocale)}</span>
         {post.readingTime && (
-          <span>{post.readingTime} {t(locale, "blog.min_read")}</span>
+          <span>
+            {post.readingTime} {t(locale, "blog.min_read")}
+          </span>
         )}
       </div>
 

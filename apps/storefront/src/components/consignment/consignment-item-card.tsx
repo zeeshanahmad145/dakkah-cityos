@@ -51,7 +51,7 @@ export function ConsignmentItemCard({
           <div>
             <p className="text-xs text-ds-muted-foreground">{t(locale, "consignment.asking_price")}</p>
             <p className="text-lg font-bold text-ds-foreground">
-              {formatCurrency(item.askingPrice.amount, item.askingPrice.currencyCode, locale as SupportedLocale)}
+              {formatCurrency((item.askingPrice.amount ?? 0), item.askingPrice.currencyCode, locale as SupportedLocale)}
             </p>
           </div>
           <div className="text-end">

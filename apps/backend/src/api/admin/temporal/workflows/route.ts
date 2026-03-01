@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { getTemporalClient } from "../../../../lib/temporal-client";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
@@ -35,7 +35,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ workflows, count: workflows.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-WORKFLOWS");
   }
 }

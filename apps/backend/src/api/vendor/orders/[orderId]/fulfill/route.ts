@@ -1,32 +1,36 @@
 // @ts-nocheck
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { z } from "zod"
-import { handleApiError } from "../../../../../lib/api-error-handler"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import { z } from "zod";
+import { handleApiError } from "../../../../../lib/api-error-handler";
 
-const fulfillOrderSchema = z.object({
-  tracking_number: z.string().optional(),
-  carrier: z.string().optional(),
-  items: z.array(z.record(z.string(), z.unknown())).optional(),
-}).passthrough()
+const fulfillOrderSchema = z
+  .object({
+    tracking_number: z.string().optional(),
+    carrier: z.string().optional(),
+    items: z.array(z.record(z.string(), z.unknown())).optional(),
+  })
+  .passthrough();
 
 // POST /vendor/orders/:orderId/fulfill - Mark order as fulfilled/shipped
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const vendorId = (req as any).vendor_id
+  const vendorId = req.vendor_id;
   if (!vendorId) {
-    return res.status(401).json({ message: "Vendor authentication required" })
+    return res.status(401).json({ message: "Vendor authentication required" });
   }
 
-  const parsed = fulfillOrderSchema.safeParse(req.body)
+  const parsed = fulfillOrderSchema.safeParse(req.body);
   if (!parsed.success) {
-    return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+    return res
+      .status(400)
+      .json({ message: "Validation failed", errors: parsed.error.issues });
   }
 
-  const { orderId } = req.params
-  const { tracking_number, carrier, items } = parsed.data
+  const { orderId } = req.params;
+  const { tracking_number, carrier, items } = parsed.data;
 
-  const vendorModule = req.scope.resolve("vendor")
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const vendorModule = req.scope.resolve("vendor") as unknown as any;
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
 
   // Verify ownership
   const { data: vendorOrders } = await query.graph({
@@ -36,16 +40,16 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       id: orderId,
       vendor_id: vendorId,
     },
-  })
+  });
 
   if (!vendorOrders.length) {
-    return res.status(404).json({ message: "Order not found" })
+    return res.status(404).json({ message: "Order not found" });
   }
 
-  const vo = vendorOrders[0]
+  const vo = vendorOrders[0];
 
   if (vo.status === "shipped" || vo.status === "delivered") {
-    return res.status(400).json({ message: "Order already fulfilled" })
+    return res.status(400).json({ message: "Order already fulfilled" });
   }
 
   try {
@@ -55,22 +59,22 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       shipped_at: new Date(),
       tracking_number,
       carrier,
-    })
+    });
 
     // Emit event for notifications
-    const eventBus = req.scope.resolve("event_bus")
+    const eventBus = req.scope.resolve("event_bus") as unknown as any;
     await eventBus.emit("vendor_order.shipped", {
       vendor_order_id: orderId,
       order_id: vo.order_id,
       tracking_number,
       carrier,
-    })
+    });
 
-    res.json({ 
+    res.json({
       success: true,
       message: "Order marked as shipped",
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "VENDOR-ORDERS-ORDERID-FULFILL")}
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "VENDOR-ORDERS-ORDERID-FULFILL");
+  }
 }
-

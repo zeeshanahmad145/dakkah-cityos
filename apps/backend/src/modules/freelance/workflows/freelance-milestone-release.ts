@@ -11,12 +11,12 @@ import {
 const approveMilestoneStep = createStep(
   "approve-milestone",
   async ({ milestoneId }: { milestoneId: string }, { container }) => {
-    const freelanceService = container.resolve("freelance") as any;
+    const freelanceService = container.resolve("freelance") as unknown as any;
     let milestone: any;
     if (typeof freelanceService.approveMilestone === "function") {
       milestone = await freelanceService.approveMilestone(milestoneId);
     } else {
-      milestone = await (freelanceService as any).updateMilestones?.({
+      milestone = await freelanceService.updateMilestones?.({
         id: milestoneId,
         status: "approved",
         approved_at: new Date(),
@@ -25,8 +25,8 @@ const approveMilestoneStep = createStep(
     return new StepResponse({ milestone }, { milestoneId });
   },
   async ({ milestoneId }: { milestoneId: string }, { container }) => {
-    const freelanceService = container.resolve("freelance") as any;
-    await (freelanceService as any).updateMilestones?.({
+    const freelanceService = container.resolve("freelance") as unknown as any;
+    await freelanceService.updateMilestones?.({
       id: milestoneId,
       status: "submitted",
     });
@@ -36,7 +36,7 @@ const approveMilestoneStep = createStep(
 const releaseEscrowStep = createStep(
   "release-escrow-funds",
   async ({ milestoneId }: { milestoneId: string }, { container }) => {
-    const freelanceService = container.resolve("freelance") as any;
+    const freelanceService = container.resolve("freelance") as unknown as any;
     let result: any = { released: true };
     if (typeof freelanceService.releaseMilestone === "function") {
       result = await freelanceService.releaseMilestone(milestoneId);
@@ -54,6 +54,3 @@ export const freelanceMilestoneReleaseWorkflow = createWorkflow(
     return { approved, released };
   },
 );
-
-
-

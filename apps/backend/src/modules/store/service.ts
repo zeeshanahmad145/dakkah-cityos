@@ -1,5 +1,5 @@
-import { MedusaService } from "@medusajs/framework/utils"
-import Store from "./models/store"
+import { MedusaService } from "@medusajs/framework/utils";
+import Store from "./models/store";
 
 /**
  * Store Module Service
@@ -11,11 +11,14 @@ class StoreModuleService extends MedusaService({
   /**
    * Retrieve stores by tenant
    */
-  async listStoresByTenant(tenant_id: string, filters?: Record<string, unknown>) {
+  async listStoresByTenant(
+    tenant_id: string,
+    filters?: Record<string, unknown>,
+  ) {
     return await this.listStores({
       tenant_id,
       ...filters,
-    })
+    }) as any;
   }
 
   /**
@@ -25,8 +28,8 @@ class StoreModuleService extends MedusaService({
     const [stores] = await this.listStores({
       subdomain,
       status: ["active", "maintenance"],
-    })
-    return stores[0] || null
+    }) as any;
+    return stores[0] || null;
   }
 
   /**
@@ -36,8 +39,8 @@ class StoreModuleService extends MedusaService({
     const [stores] = await this.listStores({
       custom_domain: domain,
       status: ["active", "maintenance"],
-    })
-    return stores[0] || null
+    }) as any;
+    return stores[0] || null;
   }
 
   /**
@@ -46,8 +49,8 @@ class StoreModuleService extends MedusaService({
   async retrieveStoreByHandle(handle: string) {
     const [stores] = await this.listStores({
       handle,
-    })
-    return stores[0] || null
+    }) as any;
+    return stores[0] || null;
   }
 
   /**
@@ -56,8 +59,8 @@ class StoreModuleService extends MedusaService({
   async retrieveStoreBySalesChannel(sales_channel_id: string) {
     const [stores] = await this.listStores({
       sales_channel_id,
-    })
-    return stores[0] || null
+    }) as any;
+    return stores[0] || null;
   }
 
   /**
@@ -67,7 +70,7 @@ class StoreModuleService extends MedusaService({
     return await this.updateStores({
       id: store_id,
       status: "active",
-    })
+    } as any);
   }
 
   /**
@@ -77,34 +80,34 @@ class StoreModuleService extends MedusaService({
     return await this.updateStores({
       id: store_id,
       status: enabled ? "maintenance" : "active",
-    })
+    } as any);
   }
 
   async suspendStore(storeId: string, reason: string): Promise<any> {
     if (!reason || !reason.trim()) {
-      throw new Error("Suspension reason is required")
+      throw new Error("Suspension reason is required");
     }
-    const store = await this.retrieveStore(storeId) as any
+    const store = await this.retrieveStore(storeId) as any;
     if (store.status === "suspended") {
-      throw new Error("Store is already suspended")
+      throw new Error("Store is already suspended");
     }
-    return await (this as any).updateStores({
+    return await this.updateStores({
       id: storeId,
       status: "suspended",
       suspension_reason: reason,
       suspended_at: new Date(),
-    })
+    } as any);
   }
 
   async getStoreMetrics(storeId: string): Promise<{
-    storeId: string
-    status: string
-    productCount: number
-    orderCount: number
-    revenue: number
-    averageRating: number
+    storeId: string;
+    status: string;
+    productCount: number;
+    orderCount: number;
+    revenue: number;
+    averageRating: number;
   }> {
-    const store = await this.retrieveStore(storeId) as any
+    const store = await this.retrieveStore(storeId) as any;
     return {
       storeId,
       status: store.status || "unknown",
@@ -112,25 +115,38 @@ class StoreModuleService extends MedusaService({
       orderCount: Number(store.order_count || 0),
       revenue: Number(store.total_revenue || 0),
       averageRating: Number(store.average_rating || 0),
-    }
+    };
   }
 
-  async updateStoreHours(storeId: string, hours: Record<string, any>): Promise<any> {
+  async updateStoreHours(
+    storeId: string,
+    hours: Record<string, any>,
+  ): Promise<any> {
     if (!hours || Object.keys(hours).length === 0) {
-      throw new Error("Operating hours data is required")
+      throw new Error("Operating hours data is required");
     }
-    const validDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    const validDays = [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ];
     for (const day of Object.keys(hours)) {
       if (!validDays.includes(day.toLowerCase())) {
-        throw new Error(`Invalid day: ${day}. Must be one of: ${validDays.join(", ")}`)
+        throw new Error(
+          `Invalid day: ${day}. Must be one of: ${validDays.join(", ")}`,
+        );
       }
     }
-    await this.retrieveStore(storeId)
-    return await (this as any).updateStores({
+    await this.retrieveStore(storeId) as any;
+    return await this.updateStores({
       id: storeId,
       operating_hours: hours,
-    })
+    } as any);
   }
 }
 
-export default StoreModuleService
+export default StoreModuleService;

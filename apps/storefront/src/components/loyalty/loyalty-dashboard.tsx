@@ -62,7 +62,7 @@ export function LoyaltyDashboard({
             {t(locale, "loyalty.available_rewards")}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(rewards || []).map((reward) => (
+            {(rewards || []).map((reward: any) => (
               <RewardCard
                 key={reward.id}
                 reward={reward}

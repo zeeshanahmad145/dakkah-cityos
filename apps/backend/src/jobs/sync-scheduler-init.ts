@@ -24,8 +24,8 @@ export default async function syncSchedulerInitJob(container: MedusaContainer) {
       logger.warn(`[SyncSchedulerInit] Failed to start scheduler instance: ${startError.message}`)
       throw startError
     }
-  } catch (error: any) {
-    logger.warn(`[SyncSchedulerInit] Failed to initialize sync scheduler: ${error.message}`)
+  } catch (error: unknown) {
+    logger.warn(`[SyncSchedulerInit] Failed to initialize sync scheduler: ${(error instanceof Error ? error.message : String(error))}`)
   }
 }
 

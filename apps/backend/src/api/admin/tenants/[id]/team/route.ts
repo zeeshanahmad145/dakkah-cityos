@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -16,7 +16,7 @@ export async function GET(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: members } = await query.graph({
       entity: "tenant_user",
@@ -38,7 +38,7 @@ export async function GET(
 
     res.json({ members })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin tenants id team")}
 }
 
@@ -55,8 +55,8 @@ export async function POST(
     }
     const { email, role, permissions } = parsed.data
 
-    const tenantService = req.scope.resolve("tenantModuleService")
-    const query = req.scope.resolve("query")
+    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any
+    const query = req.scope.resolve("query") as unknown as any
 
     // Check if user already a member
     const { data: existing } = await query.graph({
@@ -87,7 +87,7 @@ export async function POST(
       invitation
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin tenants id team")}
 }
 

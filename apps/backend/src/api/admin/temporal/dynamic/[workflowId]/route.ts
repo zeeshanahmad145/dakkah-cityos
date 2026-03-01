@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 import {
@@ -18,7 +18,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const status = await queryDynamicWorkflowStatus(workflowId)
     return res.json(status)
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-DYNAMIC-WORKFLOWID")
   }
 }
@@ -45,7 +45,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       workflowId,
       signal,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-DYNAMIC-WORKFLOWID")
   }
 }
@@ -61,7 +61,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
       workflowId,
       message: "Workflow cancellation requested",
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-DYNAMIC-WORKFLOWID")
   }
 }

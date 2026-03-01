@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Tabs, DropdownMenu, FormDrawer, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Tabs,
+  DropdownMenu,
+  FormDrawer,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -15,7 +25,14 @@ export const Route = createFileRoute("/$tenant/$locale/manage/payouts")({
   component: ManagePayoutsPage,
 })
 
-const STATUS_FILTERS = ["all", "pending", "processing", "completed", "failed", "on_hold"] as const
+const STATUS_FILTERS = [
+  "all",
+  "pending",
+  "processing",
+  "completed",
+  "failed",
+  "on_hold",
+] as const
 
 function ManagePayoutsPage() {
   const { locale: routeLocale } = Route.useParams()
@@ -25,13 +42,17 @@ function ManagePayoutsPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -45,7 +66,9 @@ function ManagePayoutsPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -74,18 +97,21 @@ function ManagePayoutsPage() {
     status: p.status || "pending",
     notes: p.notes || "",
     method: p.method || p.payout_method || "—",
-    date: p.created_at ? new Date(p.created_at).toLocaleDateString() : "—",
+    date: p.created_at ? new Date(p.created_at!).toLocaleDateString() : "—",
   }))
 
-  const payouts = statusFilter === "all"
-    ? allPayouts
-    : allPayouts.filter((p: any) => p.status === statusFilter)
+  const payouts =
+    statusFilter === "all"
+      ? allPayouts
+      : allPayouts.filter((p: any) => p.status === statusFilter)
 
   const columns = [
     {
       key: "vendor",
       header: t(locale, "manage.vendor"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "amount",
@@ -140,7 +166,10 @@ function ManagePayoutsPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
@@ -157,7 +186,10 @@ function ManagePayoutsPage() {
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
         title={`Edit ${config.singularLabel}`}
         fields={config.fields}
         values={formValues}

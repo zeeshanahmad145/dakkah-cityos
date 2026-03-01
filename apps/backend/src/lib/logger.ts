@@ -50,7 +50,7 @@ export function createLogger(module: string) {
     error(message: string, error?: Error | unknown, context?: LogContext) {
       if (shouldLog("error")) {
         const errorContext = error instanceof Error
-          ? { ...context, error: error.message, stack: error.stack }
+          ? { ...context, error: (error instanceof Error ? error.message : String(error)), stack: error.stack }
           : { ...context, error: String(error) }
         console.error(formatMessage("error", module, message, errorContext))
       }

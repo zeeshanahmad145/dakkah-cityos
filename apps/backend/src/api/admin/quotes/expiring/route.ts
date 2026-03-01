@@ -19,7 +19,7 @@ export async function GET(
     include_expired?: string
   }
 
-  const query = req.scope.resolve("query")
+  const query = req.scope.resolve("query") as unknown as any
   const now = new Date()
   const futureDate = new Date(now.getTime() + Number(days_until_expiry) * 24 * 60 * 60 * 1000)
 
@@ -118,8 +118,8 @@ export async function POST(
 
   const { quote_ids, extend_days, notify_customers } = parsed.data
 
-  const quoteService = req.scope.resolve("quoteModuleService")
-  const query = req.scope.resolve("query")
+  const quoteService = req.scope.resolve("quoteModuleService") as unknown as any
+  const query = req.scope.resolve("query") as unknown as any
 
   if (extend_days < 1) {
     return res.status(400).json({ message: "Extension must be at least 1 day" })
@@ -158,8 +158,8 @@ export async function POST(
         status: "extended", 
         new_valid_until: newExpiry 
       })
-    } catch (error: any) {
-      results.push({ quote_id: quoteId, status: "error", error: error.message })}
+    } catch (error: unknown) {
+      results.push({ quote_id: quoteId, status: "error", error: (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) })}
   }
 
   res.json({

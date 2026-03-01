@@ -24,7 +24,7 @@ export function EarnRulesList({
         {t(locale, "loyalty.how_to_earn")}
       </h3>
       <div className="space-y-3">
-        {rules.map((rule) => (
+        {rules.map((rule: any) => (
           <div
             key={rule.id}
             className="flex items-center gap-3 p-3 bg-ds-muted/50 rounded-lg"

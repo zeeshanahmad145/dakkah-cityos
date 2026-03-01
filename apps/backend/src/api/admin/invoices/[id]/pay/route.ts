@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
@@ -11,14 +11,14 @@ const payInvoiceSchema = z
 // POST /admin/invoices/:id/pay - Record payment on invoice
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const invoiceModule = req.scope.resolve("invoice") as any;
+    const invoiceModule = req.scope.resolve("invoice") as unknown as any;
     const { id } = req.params;
     const { amount } = req.body as { amount?: number };
 
     const invoice = await invoiceModule.markAsPaid(id, amount);
 
     res.json({ invoice });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin invoices id pay");
   }
 }

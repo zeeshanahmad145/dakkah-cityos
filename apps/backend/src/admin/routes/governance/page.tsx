@@ -257,7 +257,7 @@ const GovernancePage = () => {
               id="name"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, name: e.target.value as any })
               }
               placeholder="e.g. Dubai Health Authority"
             />

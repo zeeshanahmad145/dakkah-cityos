@@ -10,7 +10,11 @@ interface AuthGuardProps {
   fallbackPath?: string
 }
 
-export function AuthGuard({ children, requireB2B = false, fallbackPath }: AuthGuardProps) {
+export function AuthGuard({
+  children,
+  requireB2B = false,
+  fallbackPath,
+}: AuthGuardProps) {
   const { isAuthenticated, isB2B, isLoading } = useRequireAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -27,15 +31,25 @@ export function AuthGuard({ children, requireB2B = false, fallbackPath }: AuthGu
     if (!isAuthenticated) {
       const redirectPath = fallbackPath || `${prefix}/login`
       navigate({
-        to: redirectPath as any,
+        to: redirectPath,
       })
       return
     }
 
     if (requireB2B && !isB2B) {
-      navigate({ to: `${prefix}/account` as any })
+      navigate({ to: `${prefix}/account` })
     }
-  }, [isMounted, isAuthenticated, isB2B, isLoading, requireB2B, navigate, location.pathname, prefix, fallbackPath])
+  }, [
+    isMounted,
+    isAuthenticated,
+    isB2B,
+    isLoading,
+    requireB2B,
+    navigate,
+    location.pathname,
+    prefix,
+    fallbackPath,
+  ])
 
   if (!isMounted || isLoading) {
     return (
@@ -61,11 +75,14 @@ export function AuthGuard({ children, requireB2B = false, fallbackPath }: AuthGu
 
 export function withAuth<P extends object>(
   Component: React.ComponentType<P>,
-  options?: { requireB2B?: boolean; fallbackPath?: string }
+  options?: { requireB2B?: boolean; fallbackPath?: string },
 ) {
   return function AuthenticatedComponent(props: P) {
     return (
-      <AuthGuard requireB2B={options?.requireB2B} fallbackPath={options?.fallbackPath}>
+      <AuthGuard
+        requireB2B={options?.requireB2B}
+        fallbackPath={options?.fallbackPath}
+      >
         <Component {...props} />
       </AuthGuard>
     )

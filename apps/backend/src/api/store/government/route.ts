@@ -1,6 +1,6 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 const createServiceRequestSchema = z.object({
   tenant_id: z.string().min(1),
@@ -18,7 +18,16 @@ const createServiceRequestSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   location: z.record(z.string(), z.unknown()).optional(),
-  status: z.enum(["submitted", "acknowledged", "in_progress", "resolved", "closed", "rejected"]).optional(),
+  status: z
+    .enum([
+      "submitted",
+      "acknowledged",
+      "in_progress",
+      "resolved",
+      "closed",
+      "rejected",
+    ])
+    .optional(),
   priority: z.enum(["low", "medium", "high", "urgent"]).optional(),
   assigned_to: z.string().optional(),
   department: z.string().optional(),
@@ -26,17 +35,23 @@ const createServiceRequestSchema = z.object({
   photos: z.array(z.string()).optional(),
   reference_number: z.string().optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
-})
+});
 
 const SEED_DATA = [
   {
     id: "gov_001",
     name: "Business License",
     title: "Business License",
-    description: "Register and obtain a license to operate your business within the municipality. Required for all commercial activities.",
+    description:
+      "Register and obtain a license to operate your business within the municipality. Required for all commercial activities.",
     department: "municipal",
     icon: "briefcase",
-    required_documents: ["ID/Passport copy", "Commercial registration", "Lease agreement", "Tax registration certificate"],
+    required_documents: [
+      "ID/Passport copy",
+      "Commercial registration",
+      "Lease agreement",
+      "Tax registration certificate",
+    ],
     processing_time: "5-7 business days",
     fee: 25000,
     status: "available",
@@ -46,10 +61,16 @@ const SEED_DATA = [
     id: "gov_002",
     name: "Building Permit",
     title: "Building Permit",
-    description: "Apply for construction or renovation permits for residential and commercial properties.",
+    description:
+      "Apply for construction or renovation permits for residential and commercial properties.",
     department: "municipal",
     icon: "building",
-    required_documents: ["Architectural plans", "Land ownership deed", "Engineering drawings", "Environmental impact assessment"],
+    required_documents: [
+      "Architectural plans",
+      "Land ownership deed",
+      "Engineering drawings",
+      "Environmental impact assessment",
+    ],
     processing_time: "15-30 business days",
     fee: 50000,
     status: "available",
@@ -59,10 +80,16 @@ const SEED_DATA = [
     id: "gov_003",
     name: "Event Permit",
     title: "Event Permit",
-    description: "Obtain permission for public events, gatherings, exhibitions, and festivals within city limits.",
+    description:
+      "Obtain permission for public events, gatherings, exhibitions, and festivals within city limits.",
     department: "municipal",
     icon: "calendar",
-    required_documents: ["Event proposal", "Security plan", "Insurance certificate", "Venue approval letter"],
+    required_documents: [
+      "Event proposal",
+      "Security plan",
+      "Insurance certificate",
+      "Venue approval letter",
+    ],
     processing_time: "10-14 business days",
     fee: 15000,
     status: "available",
@@ -72,10 +99,16 @@ const SEED_DATA = [
     id: "gov_004",
     name: "Trade License",
     title: "Trade License",
-    description: "Import/export license for businesses engaged in international trade and commerce activities.",
+    description:
+      "Import/export license for businesses engaged in international trade and commerce activities.",
     department: "trade",
     icon: "globe",
-    required_documents: ["Business license", "Trade registration", "Bank guarantee", "Customs broker authorization"],
+    required_documents: [
+      "Business license",
+      "Trade registration",
+      "Bank guarantee",
+      "Customs broker authorization",
+    ],
     processing_time: "7-10 business days",
     fee: 35000,
     status: "available",
@@ -85,20 +118,26 @@ const SEED_DATA = [
     id: "gov_005",
     name: "Health Certificate",
     title: "Health Certificate",
-    description: "Health and safety certification required for food establishments, healthcare facilities, and wellness centers.",
+    description:
+      "Health and safety certification required for food establishments, healthcare facilities, and wellness centers.",
     department: "health",
     icon: "heart",
-    required_documents: ["Facility inspection report", "Staff health records", "Food safety plan", "Waste management protocol"],
+    required_documents: [
+      "Facility inspection report",
+      "Staff health records",
+      "Food safety plan",
+      "Waste management protocol",
+    ],
     processing_time: "10-15 business days",
     fee: 20000,
     status: "available",
     thumbnail: "/seed-images/government/1579684385127-1ef15d508118.jpg",
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("government") as any
+    const mod = req.scope.resolve("government") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -108,49 +147,56 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       department,
       service_type,
       search,
-    } = req.query as Record<string, string | undefined>
+    } = req.query as Record<string, string | undefined>;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (status) filters.status = status
-    if (type) filters.type = type
-    if (department) filters.department = department
-    if (service_type) filters.service_type = service_type
-    if (search) filters.search = search
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (status) filters.status = status;
+    if (type) filters.type = type;
+    if (department) filters.department = department;
+    if (service_type) filters.service_type = service_type;
+    if (search) filters.search = search;
 
-    const items = await mod.listServiceRequests(filters, { skip: Number(offset), take: Number(limit) })
-    const results = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const items = await mod.listServiceRequests(filters, {
+      skip: Number(offset),
+      take: Number(limit),
+    });
+    const results =
+      Array.isArray(items) && items.length > 0 ? items : SEED_DATA;
     return res.json({
       items: results,
       count: results.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
+    });
+  } catch (error: unknown) {
     return res.json({
       items: SEED_DATA,
       count: SEED_DATA.length,
       limit: 20,
       offset: 0,
-    })
+    });
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const customerId = (req as any).auth_context?.actor_id
+    const customerId = req.auth_context?.actor_id;
     if (!customerId) {
-      return res.status(401).json({ message: "Authentication required" })
+      return res.status(401).json({ message: "Authentication required" });
     }
 
-    const parsed = createServiceRequestSchema.safeParse(req.body)
+    const parsed = createServiceRequestSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const mod = req.scope.resolve("government") as any
-    const item = await mod.createServiceRequests(parsed.data)
-    res.status(201).json({ item })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-GOVERNMENT")}
+    const mod = req.scope.resolve("government") as unknown as any;
+    const item = await mod.createServiceRequests(parsed.data);
+    res.status(201).json({ item });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-GOVERNMENT");
+  }
 }

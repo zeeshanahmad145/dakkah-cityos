@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const insuranceService = req.scope.resolve("insurance") as any;
+    const insuranceService = req.scope.resolve("insurance") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -17,7 +17,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const filters: Record<string, unknown> = {};
     if (status) filters.status = status;
 
-    const claims = await (insuranceService as any).listInsClaims(filters, {
+    const claims = await (insuranceService as any).listInsuranceClaims(filters, {
       skip: Number(offset),
       take: Number(limit),
     });
@@ -29,7 +29,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-INSURANCE-CLAIMS-LIST");
   }
 }

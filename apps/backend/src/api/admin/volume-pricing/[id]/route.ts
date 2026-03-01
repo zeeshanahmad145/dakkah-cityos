@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
@@ -31,7 +31,7 @@ const updateVolumePricingSchema = z.object({
 // GET /admin/volume-pricing/:id
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { id } = req.params
   
     const { data: rules } = await query.graph({
@@ -55,15 +55,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ rule: { ...rule, tiers } })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin volume-pricing id")}
 }
 
 // PUT /admin/volume-pricing/:id
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const volumePricingModule = req.scope.resolve("volumePricing")
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const volumePricingModule = req.scope.resolve("volumePricing") as unknown as any
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { id } = req.params
   
     const parsed = updateVolumePricingSchema.safeParse(req.body)
@@ -140,15 +140,15 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ rule: { ...rule, tiers: updatedTiers } })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin volume-pricing id")}
 }
 
 // DELETE /admin/volume-pricing/:id
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const volumePricingModule = req.scope.resolve("volumePricing")
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const volumePricingModule = req.scope.resolve("volumePricing") as unknown as any
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { id } = req.params
   
     // Delete tiers first
@@ -167,7 +167,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ success: true })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin volume-pricing id")}
 }
 

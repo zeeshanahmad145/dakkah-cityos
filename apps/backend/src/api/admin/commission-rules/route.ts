@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { apiLogger } from "../../../lib/logger"
@@ -34,7 +34,7 @@ const querySchema = paginationSchema.extend({
 })
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
   
   try {
     const parseResult = querySchema.safeParse(req.query)
@@ -67,13 +67,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit,
       offset
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error("Failed to fetch commission rules", error)
     handleApiError(res, error, "ADMIN-COMMISSION-RULES")}
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const commissionService = req.scope.resolve("commission") as any
+  const commissionService = req.scope.resolve("commission") as unknown as any
   
   try {
     const parseResult = createCommissionRuleSchema.safeParse(req.body)
@@ -84,11 +84,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       })
     }
     
-    const rule = await commissionService.createCommissionRules(parseResult.data)
+    const rule = await commissionService.createCommissions(parseResult.data)
     
     logger.info("Commission rule created", { ruleId: rule.id })
     res.status(201).json({ commission_rule: rule })
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error("Failed to create commission rule", error)
     handleApiError(res, error, "ADMIN-COMMISSION-RULES")}
 }

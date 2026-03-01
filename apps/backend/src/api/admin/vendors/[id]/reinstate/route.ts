@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -22,8 +22,8 @@ export async function POST(
     const { id } = req.params
     const { reason, notify_vendor } = parsed.data
 
-    const query = req.scope.resolve("query")
-    const vendorService = req.scope.resolve("vendorModuleService")
+    const query = req.scope.resolve("query") as unknown as any
+    const vendorService = req.scope.resolve("vendorModuleService") as unknown as any
 
     const { data: vendors } = await query.graph({
       entity: "vendors",
@@ -68,7 +68,7 @@ export async function POST(
       reinstated_at: new Date()
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin vendors id reinstate")}
 }
 

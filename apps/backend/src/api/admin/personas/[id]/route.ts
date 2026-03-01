@@ -1,55 +1,61 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../../lib/api-error-handler"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
-const updateSchema = z.object({
-  name: z.string().min(1).optional(),
-  slug: z.string().optional(),
-  category: z.enum(["consumer", "creator", "business", "cityops", "platform"]).optional(),
-  axes: z.any().nullable().optional(),
-  constraints: z.any().nullable().optional(),
-  allowed_workflows: z.any().nullable().optional(),
-  allowed_tools: z.any().nullable().optional(),
-  allowed_surfaces: z.any().nullable().optional(),
-  feature_overrides: z.any().nullable().optional(),
-  priority: z.number().optional(),
-  status: z.enum(["active", "inactive"]).optional(),
-  metadata: z.record(z.string(), z.unknown()).nullable().optional(),
-}).passthrough()
+const updateSchema = z
+  .object({
+    name: z.string().min(1).optional(),
+    slug: z.string().optional(),
+    category: z
+      .enum(["consumer", "creator", "business", "cityops", "platform"])
+      .optional(),
+    axes: z.any().nullable().optional(),
+    constraints: z.any().nullable().optional(),
+    allowed_workflows: z.any().nullable().optional(),
+    allowed_tools: z.any().nullable().optional(),
+    allowed_surfaces: z.any().nullable().optional(),
+    feature_overrides: z.any().nullable().optional(),
+    priority: z.number().optional(),
+    status: z.enum(["active", "inactive"]).optional(),
+    metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  })
+  .passthrough();
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("persona") as any
-    const { id } = req.params
-    const [item] = await moduleService.listPersonas({ id }, { take: 1 })
-    if (!item) return res.status(404).json({ message: "Not found" })
-    return res.json({ item })
-
-  } catch (error: any) {
-    handleApiError(res, error, "GET admin personas id")}
+    const moduleService = req.scope.resolve("persona") as unknown as any;
+    const { id } = req.params;
+    const [item] = await moduleService.listPersonas({ id }, { take: 1 });
+    if (!item) return res.status(404).json({ message: "Not found" });
+    return res.json({ item });
+  } catch (error: unknown) {
+    handleApiError(res, error, "GET admin personas id");
+  }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("persona") as any
-    const { id } = req.params
-    const parsed = updateSchema.safeParse(req.body)
-    if (!parsed.success) return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
-    const item = await moduleService.updatePersonas({ id, ...parsed.data })
-    return res.json({ item })
-
-  } catch (error: any) {
-    handleApiError(res, error, "POST admin personas id")}
+    const moduleService = req.scope.resolve("persona") as unknown as any;
+    const { id } = req.params;
+    const parsed = updateSchema.safeParse(req.body);
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.issues });
+    const item = await moduleService.updatePersonas({ id, ...parsed.data });
+    return res.json({ item });
+  } catch (error: unknown) {
+    handleApiError(res, error, "POST admin personas id");
+  }
 }
 
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("persona") as any
-    const { id } = req.params
-    await moduleService.deletePersonas([id])
-    return res.status(204).send()
-
-  } catch (error: any) {
-    handleApiError(res, error, "DELETE admin personas id")}
+    const moduleService = req.scope.resolve("persona") as unknown as any;
+    const { id } = req.params;
+    await moduleService.deletePersonas([id]);
+    return res.status(204).send();
+  } catch (error: unknown) {
+    handleApiError(res, error, "DELETE admin personas id");
+  }
 }
-

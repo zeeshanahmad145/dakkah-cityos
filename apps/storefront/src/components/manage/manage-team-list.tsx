@@ -134,7 +134,7 @@ export function ManageTeamList({ members = [], locale: localeProp, onInvite }: M
                       </div>
                     </td>
                     <td className="px-4 py-3 text-sm text-ds-muted">
-                      {member.last_active_at ? new Date(member.last_active_at).toLocaleDateString(locale) : "—"}
+                      {member.last_active_at ? new Date(member.last_active_at!).toLocaleDateString(locale) : "—"}
                     </td>
                   </tr>
                 ))

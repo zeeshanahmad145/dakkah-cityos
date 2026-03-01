@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
@@ -19,7 +19,7 @@ const createCarrierSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("shippingExtension") as any;
+    const service = req.scope.resolve("shippingExtension") as unknown as any;
     const filters: Record<string, any> = {};
     if (req.query.is_active !== undefined)
       filters.is_active = req.query.is_active === "true";
@@ -27,14 +27,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     res.json({
       carriers: Array.isArray(carriers) ? carriers : [carriers].filter(Boolean),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-SHIPPING-EXT-CARRIERS");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("shippingExtension") as any;
+    const service = req.scope.resolve("shippingExtension") as unknown as any;
     const parsed = createCarrierSchema.safeParse(req.body);
     if (!parsed.success) {
       return res
@@ -43,7 +43,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
     const carrier = await service.createCarrierConfigs(parsed.data);
     res.status(201).json({ carrier });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-SHIPPING-EXT-CARRIERS");
   }
 }

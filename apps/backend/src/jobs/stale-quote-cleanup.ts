@@ -4,8 +4,8 @@ import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:stale-quote-cleanup")
 
 export default async function staleQuoteCleanupJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const quoteService = container.resolve("quote")
+  const query = container.resolve("query") as unknown as any
+  const quoteService = container.resolve("quote") as unknown as any
   
   logger.info("[Quote Cleanup] Checking for stale quotes...")
   

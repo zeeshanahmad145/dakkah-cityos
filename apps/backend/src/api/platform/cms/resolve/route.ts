@@ -1,24 +1,30 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { resolveLocalCMSPage } from "../../../../lib/platform/cms-registry"
-import { handleApiError } from "../../../../lib/api-error-handler"
-import { appConfig } from "../../../../lib/config"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { resolveLocalCMSPage } from "../../../../lib/platform/cms-registry";
+import { handleApiError } from "../../../../lib/api-error-handler";
+import { appConfig } from "../../../../lib/config";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const { path, tenant, locale, tenant_id, countryCode, country_code } = req.query as Record<string, string>
+    const { path, tenant, locale, tenant_id, countryCode, country_code } =
+      req.query as Record<string, string>;
 
     if (!path) {
       return res.status(400).json({
         success: false,
         error: "Missing required query parameter: path",
         errors: [{ message: "Missing required query parameter: path" }],
-      })
+      });
     }
 
-    const resolvedCountryCode = countryCode || country_code || undefined
-    const resolvedTenantId = tenant_id || await resolveTenantId(req, tenant)
+    const resolvedCountryCode = countryCode || country_code || undefined;
+    const resolvedTenantId = tenant_id || (await resolveTenantId(req, tenant));
 
-    const localPage = resolveLocalCMSPage(path, resolvedTenantId, locale, resolvedCountryCode)
+    const localPage = resolveLocalCMSPage(
+      path,
+      resolvedTenantId,
+      locale,
+      resolvedCountryCode,
+    );
     if (localPage) {
       const payloadShape = {
         docs: [localPage],
@@ -31,9 +37,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         pagingCounter: 1,
         prevPage: null,
         nextPage: null,
-      }
+      };
 
-      res.setHeader("Cache-Control", "public, max-age=30, s-maxage=120")
+      res.setHeader("Cache-Control", "public, max-age=30, s-maxage=120");
       return res.status(200).json({
         success: true,
         data: {
@@ -46,44 +52,46 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           countryCode: resolvedCountryCode || null,
         },
         payload: payloadShape,
-      })
+      });
     }
 
-    const payloadUrl = appConfig.payloadCms.url
+    const payloadUrl = appConfig.payloadCms.url;
 
     const where: Record<string, any> = {
       path: { equals: path },
       _status: { equals: "published" },
-    }
+    };
 
     if (resolvedTenantId) {
-      where.tenant = { equals: resolvedTenantId }
+      where.tenant = { equals: resolvedTenantId };
     }
 
     if (locale) {
-      where.locale = { in: [locale, "all"] }
+      where.locale = { in: [locale, "all"] };
     }
 
     if (resolvedCountryCode) {
-      where.countryCode = { equals: resolvedCountryCode }
+      where.countryCode = { equals: resolvedCountryCode };
     }
 
     const query = new URLSearchParams({
       where: JSON.stringify(where),
       limit: "1",
       depth: "2",
-    })
+    });
 
     try {
-      const payloadApiKey = appConfig.payloadCms.apiKey
+      const payloadApiKey = appConfig.payloadCms.apiKey;
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
-      }
+      };
       if (payloadApiKey) {
-        headers["Authorization"] = `Bearer ${payloadApiKey}`
+        headers["Authorization"] = `Bearer ${payloadApiKey}`;
       }
 
-      const response = await fetch(`${payloadUrl}/api/pages?${query}`, { headers })
+      const response = await fetch(`${payloadUrl}/api/pages?${query}`, {
+        headers,
+      });
 
       if (!response.ok) {
         const emptyPayload = {
@@ -97,17 +105,24 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           pagingCounter: 1,
           prevPage: null,
           nextPage: null,
-        }
+        };
 
         return res.status(200).json({
           success: true,
-          data: { page: null, resolved: false, source: "payload", error: `Payload returned ${response.status}`, tenantId: resolvedTenantId, path },
+          data: {
+            page: null,
+            resolved: false,
+            source: "payload",
+            error: `Payload returned ${response.status}`,
+            tenantId: resolvedTenantId,
+            path,
+          },
           payload: emptyPayload,
-        })
+        });
       }
 
-      const data = await response.json()
-      const page = data.docs?.[0] || null
+      const data = await response.json();
+      const page = data.docs?.[0] || null;
 
       const payloadShape = page
         ? {
@@ -133,9 +148,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
             pagingCounter: 1,
             prevPage: null,
             nextPage: null,
-          }
+          };
 
-      res.setHeader("Cache-Control", "public, max-age=30, s-maxage=120")
+      res.setHeader("Cache-Control", "public, max-age=30, s-maxage=120");
 
       return res.status(200).json({
         success: true,
@@ -149,7 +164,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           countryCode: resolvedCountryCode || null,
         },
         payload: payloadShape,
-      })
+      });
     } catch (fetchError) {
       const emptyPayload = {
         docs: [],
@@ -162,7 +177,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         pagingCounter: 1,
         prevPage: null,
         nextPage: null,
-      }
+      };
 
       return res.status(200).json({
         success: true,
@@ -175,31 +190,32 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           path,
         },
         payload: emptyPayload,
-      })
+      });
     }
-  } catch (error: any) {
-return handleApiError(res, error, "PLATFORM-CMS-RESOLVE")
+  } catch (error: unknown) {
+    return handleApiError(res, error, "PLATFORM-CMS-RESOLVE");
   }
 }
 
-async function resolveTenantId(req: MedusaRequest, tenantSlug?: string): Promise<string> {
-  const DEFAULT_TENANT_ID = "01KGZ2JRYX607FWMMYQNQRKVWS"
+async function resolveTenantId(
+  req: MedusaRequest,
+  tenantSlug?: string,
+): Promise<string> {
+  const DEFAULT_TENANT_ID = "01KGZ2JRYX607FWMMYQNQRKVWS";
 
   if (!tenantSlug || tenantSlug === "dakkah") {
-    return DEFAULT_TENANT_ID
+    return DEFAULT_TENANT_ID;
   }
 
   try {
-    const tenantService = req.scope.resolve("tenantModuleService") as any
+    const tenantService = req.scope.resolve("tenantModuleService") as unknown as any;
     if (tenantService?.listTenants) {
-      const [tenants] = await tenantService.listTenants({ slug: tenantSlug })
+      const [tenants] = await tenantService.listTenants({ slug: tenantSlug });
       if (tenants?.length > 0) {
-        return tenants[0].id
+        return tenants[0].id;
       }
     }
-  } catch {
-  }
+  } catch {}
 
-  return DEFAULT_TENANT_ID
+  return DEFAULT_TENANT_ID;
 }
-

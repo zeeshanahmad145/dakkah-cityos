@@ -1,7 +1,13 @@
 // @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -19,13 +25,15 @@ function ManageTemporalPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "temporal"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/temporal", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/temporal", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
   })
 
-  const items = ((data as any)?.items || (data as any)?.workflows || []).map((item: any) => ({
+  const items = ((data as any)?.items || data?.workflows || []).map((item: any) => ({
     id: item.id || item.workflow_id,
     workflow_id: item.workflow_id || item.id || "—",
     type: item.type || item.workflow_type || "—",
@@ -38,7 +46,9 @@ function ManageTemporalPage() {
     {
       key: "workflow_id",
       header: "Workflow ID",
-      render: (val: unknown) => <span className="font-medium font-mono text-sm">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium font-mono text-sm">{val as string}</span>
+      ),
     },
     { key: "type", header: t(locale, "manage.type") },
     {
@@ -68,7 +78,12 @@ function ManageTemporalPage() {
           subtitle="Monitor temporal workflow executions"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No workflows found" countLabel="workflows" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No workflows found"
+          countLabel="workflows"
+        />
       </Container>
     </ManageLayout>
   )

@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const shippingExtService = req.scope.resolve("shipping-extension") as any;
+    const shippingExtService = req.scope.resolve("shipping-extension") as unknown as any;
     const { origin, destination, weight_kg, dimensions, carrier } =
       req.body as {
         origin: { country: string; postal_code: string };
@@ -62,7 +62,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ rates, count: rates.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-SHIPPING-RATES");
   }
 }

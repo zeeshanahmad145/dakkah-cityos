@@ -9,8 +9,8 @@ export default async function orderShippedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string; fulfillment_id?: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const query = container.resolve("query")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const query = container.resolve("query") as unknown as any
 
   try {
     const { data: orders } = await query.graph({

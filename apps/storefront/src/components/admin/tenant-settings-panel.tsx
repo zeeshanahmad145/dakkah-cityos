@@ -125,8 +125,8 @@ function UsageCard({ usage }: { usage: TenantUsageRecord }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <MetricItem label="Type" value={usage.usage_type} />
         <MetricItem label="Quantity" value={usage.quantity.toLocaleString()} />
-        <MetricItem label="Period Start" value={new Date(usage.period_start).toLocaleDateString()} />
-        <MetricItem label="Period End" value={new Date(usage.period_end).toLocaleDateString()} />
+        <MetricItem label="Period Start" value={new Date(usage.period_start!).toLocaleDateString()} />
+        <MetricItem label="Period End" value={new Date(usage.period_end!).toLocaleDateString()} />
         {usage.metrics && (
           <>
             {usage.metrics.api_calls !== undefined && <MetricItem label="API Calls" value={usage.metrics.api_calls.toLocaleString()} />}
@@ -162,7 +162,7 @@ function InvoicesList({ invoices }: { invoices: TenantInvoice[] }) {
               <p className="font-medium">{invoice.invoice_number || `Invoice #${invoice.id.slice(0, 8)}`}</p>
               {invoice.period_start && invoice.period_end && (
                 <p className="text-sm text-muted-foreground">
-                  {new Date(invoice.period_start).toLocaleDateString()} - {new Date(invoice.period_end).toLocaleDateString()}
+                  {new Date(invoice.period_start!).toLocaleDateString()} - {new Date(invoice.period_end!).toLocaleDateString()}
                 </p>
               )}
             </div>

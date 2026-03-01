@@ -9,8 +9,8 @@ export default async function companyCreatedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const companyService = container.resolve("company")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const companyService = container.resolve("company") as unknown as any
   
   try {
     const company = await companyService.retrieveCompany(data.id)

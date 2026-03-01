@@ -10,50 +10,54 @@ interface DynamicHeaderProps {
   isLoggedIn?: boolean
 }
 
-export function DynamicHeader({ 
-  categories = [], 
+export function DynamicHeader({
+  categories = [],
   cartItemCount = 0,
-  isLoggedIn = false 
+  isLoggedIn = false,
 }: DynamicHeaderProps) {
   const { getNavigation, isEnabled } = useFeatures()
   const prefix = useTenantPrefix()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  
+
   const navigation = getNavigation()
   const { header } = navigation
 
-  const navItems: Array<{ label: string; href: string; children?: Array<{ label: string; href: string }> }> = []
+  const navItems: Array<{
+    label: string
+    href: string
+    children?: Array<{ label: string; href: string }>
+  }> = []
 
   if (header.showCategories && categories.length > 0) {
     navItems.push({
       label: "Shop",
       href: `${prefix}/categories`,
-      children: categories.map(cat => ({
+      children: categories.map((cat) => ({
         label: cat.name,
-        href: `${prefix}/categories/${cat.handle}`
-      }))
+        href: `${prefix}/categories/${cat.handle}`,
+      })),
     })
   }
 
-  if (header.showVendors && isEnabled('marketplace')) {
+  if (header.showVendors && isEnabled("marketplace")) {
     navItems.push({
       label: "Vendors",
-      href: `${prefix}/vendors`
+      href: `${prefix}/vendors`,
     })
   }
 
-  if (header.showServices && isEnabled('bookings')) {
+  if (header.showServices && isEnabled("bookings")) {
     navItems.push({
       label: "Services",
-      href: `${prefix}/services`
+      href: `${prefix}/services`,
     })
   }
 
-  if (header.showB2BPortal && isEnabled('b2b')) {
+  if (header.showB2BPortal && isEnabled("b2b")) {
     navItems.push({
       label: "Business",
-      href: `${prefix}/b2b/dashboard`
+      href: `${prefix}/b2b/dashboard`,
     })
   }
 
@@ -73,13 +77,13 @@ export function DynamicHeader({
       { label: "Rentals", href: `${prefix}/rentals` },
       { label: "Freelance", href: `${prefix}/freelance` },
       { label: "Digital Products", href: `${prefix}/digital-products` },
-    ]
+    ],
   })
 
-  header.customLinks?.forEach(link => {
+  header.customLinks?.forEach((link) => {
     navItems.push({
       label: link.label,
-      href: link.href.startsWith('/') ? `${prefix}${link.href}` : link.href
+      href: link.href.startsWith("/") ? `${prefix}${link.href}` : link.href,
     })
   })
 
@@ -87,16 +91,18 @@ export function DynamicHeader({
     <header className="bg-ds-background border-b border-ds-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to={`${prefix}` as any} className="flex-shrink-0">
+          <Link to={`${prefix}` as never} className="flex-shrink-0">
             <span className="text-xl font-bold">Store</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
-              <div 
+              <div
                 key={index}
                 className="relative"
-                onMouseEnter={() => item.children && setActiveDropdown(item.label)}
+                onMouseEnter={() =>
+                  item.children && setActiveDropdown(item.label)
+                }
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 <Link
@@ -104,9 +110,11 @@ export function DynamicHeader({
                   className="flex items-center text-ds-foreground hover:text-ds-foreground text-sm font-medium"
                 >
                   {item.label}
-                  {item.children && <ChevronDownMini className="ms-1 h-4 w-4" />}
+                  {item.children && (
+                    <ChevronDownMini className="ms-1 h-4 w-4" />
+                  )}
                 </Link>
-                
+
                 {item.children && activeDropdown === item.label && (
                   <div className="absolute start-0 mt-2 w-48 bg-ds-background rounded-md shadow-lg py-1 z-50">
                     {item.children.map((child, childIndex) => (
@@ -126,14 +134,14 @@ export function DynamicHeader({
 
           <div className="flex items-center space-x-4">
             <Link
-              to={(isLoggedIn ? `${prefix}/account` : `${prefix}/login`) as any}
+              to={isLoggedIn ? `${prefix}/account` : `${prefix}/login`} {...({} as any)} {...{} as any}
               className="text-ds-foreground hover:text-ds-foreground"
             >
               <User className="h-6 w-6" />
             </Link>
 
             <Link
-              to={`${prefix}/cart` as any}
+              to={`${prefix}/cart` as never}
               className="text-ds-foreground hover:text-ds-foreground relative"
             >
               <ShoppingBag className="h-6 w-6" />
@@ -148,7 +156,11 @@ export function DynamicHeader({
               className="md:hidden text-ds-foreground"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <XMark className="h-6 w-6" /> : <span className="text-2xl">&#9776;</span>}
+              {mobileMenuOpen ? (
+                <XMark className="h-6 w-6" />
+              ) : (
+                <span className="text-2xl">&#9776;</span>
+              )}
             </button>
           </div>
         </div>

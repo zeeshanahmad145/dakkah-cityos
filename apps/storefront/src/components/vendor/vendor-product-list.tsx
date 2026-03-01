@@ -1,52 +1,55 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
-import { sdk } from "@/lib/utils/sdk";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash, PencilSquare } from "@medusajs/icons";
-import { useTenantPrefix } from "@/lib/context/tenant-context";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
+import { sdk } from "@/lib/utils/sdk"
+import { Button } from "@/components/ui/button"
+import { Plus, Trash, PencilSquare } from "@medusajs/icons"
+import { useTenantPrefix } from "@/lib/context/tenant-context"
 
 interface VendorProduct {
-  id: string;
-  title: string;
-  description?: string;
-  thumbnail?: string;
-  status: string;
+  id: string
+  title: string
+  description?: string
+  thumbnail?: string
+  status: string
   variants?: Array<{
-    id: string;
+    id: string
     prices?: Array<{
-      amount: number;
-      currency_code: string;
-    }>;
-  }>;
+      amount: number
+      currency_code: string
+    }>
+  }>
 }
 
 export function VendorProductList() {
-  const prefix = useTenantPrefix();
-  const queryClient = useQueryClient();
+  const prefix = useTenantPrefix()
+  const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ["vendor-products"],
     queryFn: async () => {
-      const response = await sdk.client.fetch<{ products: VendorProduct[] }>("/vendor/products", {
-        credentials: "include",
-      });
-      return response;
+      const response = await sdk.client.fetch<{ products: VendorProduct[] }>(
+        "/vendor/products",
+        {
+          credentials: "include",
+        },
+      )
+      return response
     },
-  });
+  })
 
   const deleteMutation = useMutation({
     mutationFn: async (productId: string) => {
       return sdk.client.fetch(`/vendor/products/${productId}`, {
         method: "DELETE",
         credentials: "include",
-      });
+      })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["vendor-products"] });
+      queryClient.invalidateQueries({ queryKey: ["vendor-products"] })
     },
-  });
+  })
 
-  const products = data?.products || [];
+  const products = data?.products || []
 
   if (isLoading) {
     return (
@@ -63,14 +66,14 @@ export function VendorProductList() {
           </div>
         ))}
       </div>
-    );
+    )
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Your Products</h1>
-        <Link to={`${prefix}/vendor/products/new` as any}>
+        <Link to={`${prefix}/vendor/products/new` as never}>
           <Button>
             <Plus className="w-4 h-4 me-2" />
             Add Product
@@ -80,8 +83,10 @@ export function VendorProductList() {
 
       {products.length === 0 ? (
         <div className="text-center py-12 border rounded-lg">
-          <p className="text-muted-foreground mb-4">You haven't added any products yet</p>
-          <Link to={`${prefix}/vendor/products/new` as any}>
+          <p className="text-muted-foreground mb-4">
+            You haven't added any products yet
+          </p>
+          <Link to={`${prefix}/vendor/products/new` as never}>
             <Button>
               <Plus className="w-4 h-4 me-2" />
               Add Your First Product
@@ -119,7 +124,7 @@ export function VendorProductList() {
                   <div className="flex items-center gap-4 mt-3">
                     {product.variants?.[0]?.prices?.[0] && (
                       <span className="font-medium">
-                        ${(product.variants[0].prices[0].amount).toFixed(2)}
+                        ${product.variants[0].prices[0].amount.toFixed(2)}
                       </span>
                     )}
                     <div className="flex gap-2">
@@ -144,18 +149,20 @@ export function VendorProductList() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function ProductStatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
     published: "bg-ds-success text-ds-success",
     draft: "bg-ds-muted text-ds-foreground",
-  };
+  }
 
   return (
-    <span className={`px-2 py-1 rounded text-xs font-medium ${styles[status] || "bg-ds-muted"}`}>
+    <span
+      className={`px-2 py-1 rounded text-xs font-medium ${styles[status] || "bg-ds-muted"}`}
+    >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
-  );
+  )
 }

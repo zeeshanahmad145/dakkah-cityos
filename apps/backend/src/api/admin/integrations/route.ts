@@ -30,8 +30,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       total: systems.length,
       configured_count: systems.filter((s) => s.configured).length,
     })
-  } catch (error: any) {
-    logger.error(`[Integrations] fetching integration overview: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[Integrations] fetching integration overview: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
     return handleApiError(res, error, "ADMIN-INTEGRATIONS")}
 }
 

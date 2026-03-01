@@ -43,10 +43,10 @@ function normalizeServiceDetail(raw: any) {
 
 export const Route = createFileRoute("/$tenant/$locale/bookings/$serviceHandle")({
   component: ServiceBookingPage,
-  head: ({ loaderData }) => ({
+  head: ({ loaderData: _ld }) => ({
     meta: [
-      { title: `${loaderData?.service?.name || "Booking Service"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.service?.description || "" },
+      { title: `${(_ld as any)?.service?.name || "Booking Service"} | Dakkah CityOS` },
+      { name: "description", content: (_ld as any)?.service?.description || "" },
     ],
   }),
   loader: async ({ params, abortController }) => {
@@ -91,9 +91,9 @@ function ServiceBookingPage() {
   const { addToast } = useToast()
 
   const loaderData = Route.useLoaderData()
-  const service = loaderData?.service
+  const service = (loaderData as any)?.service
   const serviceLoading = false
-  const providers = loaderData?.providers || []
+  const providers = (loaderData as any)?.providers || []
   const providersLoading = false
   const createBooking = useCreateBooking()
 
@@ -140,7 +140,7 @@ function ServiceBookingPage() {
   }
 
   const selectedProviderData = useMemo(() => {
-    return providers?.find((p) => p.id === selectedProvider)
+    return providers?.find((p: any) => (p as any).id === selectedProvider)
   }, [providers, selectedProvider])
 
   const validateDate = (date: string): string | undefined => {
@@ -276,7 +276,7 @@ function ServiceBookingPage() {
         search: { id: booking.id },
       })
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to create booking"
+      const errorMessage = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Failed to create booking"
       addToast("error", errorMessage)
     } finally {
       setIsSubmitting(false)

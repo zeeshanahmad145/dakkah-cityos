@@ -36,7 +36,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       },
       source: "stub", // Replace with "nhtsa" when integrated
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-VIN-LOOKUP");
   }
 }
@@ -47,7 +47,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const automotiveService = req.scope.resolve("automotive") as any;
+    const automotiveService = req.scope.resolve("automotive") as unknown as any;
     const { price, down_payment, term_months, annual_rate } =
       req.query as Record<string, string>;
 
@@ -65,7 +65,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     );
 
     return res.json({ financing: result });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-VEHICLE-FINANCING");
   }
 }

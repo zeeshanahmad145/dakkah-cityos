@@ -86,12 +86,12 @@ export function ReturnsCenter({
                       {t(locale, "returns.order_id")}: {ret.orderId} · {ret.itemCount} {t(locale, "returns.items")}
                     </p>
                     <p className="text-xs text-ds-muted-foreground mt-1">
-                      {new Date(ret.createdAt).toLocaleDateString(locale)}
+                      {new Date(ret.createdAt!).toLocaleDateString(locale)}
                     </p>
                   </div>
                   {ret.refundAmount && (
                     <span className="text-sm font-semibold text-ds-foreground flex-shrink-0">
-                      {formatCurrency(ret.refundAmount.amount, ret.refundAmount.currency, locale as SupportedLocale)}
+                      {formatCurrency((ret.refundAmount.amount ?? 0), ret.refundAmount.currency, locale as SupportedLocale)}
                     </span>
                   )}
                 </div>

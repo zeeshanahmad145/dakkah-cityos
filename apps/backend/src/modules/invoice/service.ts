@@ -67,7 +67,7 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
 
     const invoices = await this.listInvoices({
       company_id: companyId,
-    });
+    }) as any;
     const count = invoices.filter((inv) =>
       inv.invoice_number.startsWith(`INV-${prefix}-${year}${month}`),
     ).length;
@@ -134,7 +134,7 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
       currency_code: data.currency_code ?? "usd",
       notes: data.notes ?? null,
       metadata: data.metadata ?? null,
-    });
+    } as any);
 
     const createdItems = await this.createInvoiceItems(
       itemsWithTotals.map((item) => ({ ...item, invoice_id: invoice.id })),
@@ -144,11 +144,11 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
   }
 
   async markAsSent(invoiceId: string): Promise<InvoiceRecord> {
-    return this.updateInvoices({ id: invoiceId, status: "sent" });
+    return this.updateInvoices({ id: invoiceId, status: "sent" } as any);
   }
 
   async markAsPaid(invoiceId: string, amount?: number): Promise<InvoiceRecord> {
-    const invoiceList = await this.listInvoices({ id: invoiceId });
+    const invoiceList = await this.listInvoices({ id: invoiceId }) as any;
     const invoice = invoiceList[0];
     if (!invoice) throw new Error(`Invoice ${invoiceId} not found`);
 
@@ -162,21 +162,21 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
       amount_paid: newAmountPaid,
       amount_due: Math.max(0, amountDue),
       paid_at: amountDue <= 0 ? new Date() : null,
-    });
+    } as any);
   }
 
   async markOverdueInvoices(): Promise<InvoiceRecord[]> {
     const now = new Date();
     const overdueInvoices = await this.listInvoices({
       status: "sent",
-      due_date: { $lt: now.toISOString() },
+      due_date: { $lt: now.toISOString() as any },
     });
     const updated: InvoiceRecord[] = [];
     for (const invoice of overdueInvoices) {
       const result = await this.updateInvoices({
         id: invoice.id,
         status: "overdue",
-      });
+      } as any);
       updated.push(result);
     }
     return updated;
@@ -190,13 +190,13 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
       id: invoiceId,
       status: "void",
       internal_notes: reason ?? null,
-    });
+    } as any);
   }
 
   async generateInvoiceNumberByTenant(tenantId: string): Promise<string> {
     const now = new Date();
     const year = now.getFullYear();
-    const invoices = await this.listInvoices({ company_id: tenantId });
+    const invoices = await this.listInvoices({ company_id: tenantId }) as any;
     const matching = invoices.filter((inv) =>
       inv.invoice_number.startsWith(`INV-${year}-`),
     );
@@ -204,16 +204,15 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
     return `INV-${year}-${sequence}`;
   }
 
-  async calculateInvoiceTotals(
-    invoiceId: string,
-  ): Promise<{
+  async calculateInvoiceTotals(invoiceId: string): Promise<{
     subtotal: number;
     taxTotal: number;
     total: number;
     itemCount: number;
   }> {
-    const invoice = await this.retrieveInvoice(invoiceId);
-    const items = await this.listInvoiceItems({ invoice_id: invoiceId });
+    const invoice = await this.retrieveInvoice(invoiceId) as any;
+    if (!invoice) throw new Error("Invoice not found");
+    const items = await this.listInvoiceItems({ invoice_id: invoiceId }) as any;
 
     let subtotal = 0;
     let taxTotal = 0;
@@ -231,7 +230,7 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
       tax_total: taxTotal,
       total,
       amount_due: total - Number(invoice.amount_paid),
-    });
+    } as any);
 
     return { subtotal, taxTotal, total, itemCount: items.length };
   }
@@ -243,11 +242,11 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
     const invoices = await this.listInvoices({
       company_id: tenantId,
       status: "sent",
-      due_date: { $lt: now.toISOString() },
+      due_date: { $lt: now.toISOString() as any },
     });
     const updatedIds: string[] = [];
     for (const invoice of invoices) {
-      await this.updateInvoices({ id: invoice.id, status: "overdue" });
+      await this.updateInvoices({ id: invoice.id, status: "overdue" } as any);
       updatedIds.push(invoice.id);
     }
     return { updated: updatedIds.length, invoiceIds: updatedIds };
@@ -264,7 +263,8 @@ class InvoiceModuleService extends Base implements InvoiceServiceBase {
     dueDate: Date | null;
     isOverdue: boolean;
   }> {
-    const invoice = await this.retrieveInvoice(invoiceId);
+    const invoice = await this.retrieveInvoice(invoiceId) as any;
+    if (!invoice) throw new Error("Invoice not found");
     const total = Number(invoice.total);
     const amountPaid = Number(invoice.amount_paid);
     const balanceRemaining = Math.max(0, total - amountPaid);

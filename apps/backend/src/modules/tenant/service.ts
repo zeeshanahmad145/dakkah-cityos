@@ -1,24 +1,28 @@
-import { MedusaService } from "@medusajs/framework/utils"
-import Tenant from "./models/tenant"
-import { TenantBilling, TenantUsageRecord, TenantInvoice } from "./models/tenant-billing"
-import { TenantSettings } from "./models/tenant-settings"
-import { TenantUser } from "./models/tenant-user"
-import TenantRelationship from "./models/tenant-relationship"
-import TenantPOI from "./models/tenant-poi"
-import ServiceChannel from "./models/service-channel"
+import { MedusaService } from "@medusajs/framework/utils";
+import Tenant from "./models/tenant";
+import {
+  TenantBilling,
+  TenantUsageRecord,
+  TenantInvoice,
+} from "./models/tenant-billing";
+import { TenantSettings } from "./models/tenant-settings";
+import { TenantUser } from "./models/tenant-user";
+import TenantRelationship from "./models/tenant-relationship";
+import TenantPOI from "./models/tenant-poi";
+import ServiceChannel from "./models/service-channel";
 
 const ROLE_LEVEL_MAP: Record<string, number> = {
   "super-admin": 100,
   "tenant-admin": 90,
   "compliance-officer": 85,
-  "auditor": 80,
+  auditor: 80,
   "city-manager": 70,
   "district-manager": 60,
   "zone-operator": 50,
   "facility-operator": 40,
   "asset-technician": 30,
-  "viewer": 10,
-}
+  viewer: 10,
+};
 
 class TenantModuleService extends MedusaService({
   Tenant,
@@ -34,80 +38,88 @@ class TenantModuleService extends MedusaService({
   // ============ Tenant Lookup ============
 
   async retrieveTenantBySlug(slug: string) {
-    const tenants = await this.listTenants({ slug }) as any
-    const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean)
-    const filtered = list.filter((t: any) => t.status === "active" || t.status === "trial")
-    return filtered[0] || null
+    const tenants = (await this.listTenants({ slug })) as any;
+    const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean);
+    const filtered = list.filter(
+      (t: any) => t.status === "active" || t.status === "trial",
+    );
+    return filtered[0] || null;
   }
 
   async retrieveTenantByDomain(domain: string) {
-    const tenants = await this.listTenants({ domain }) as any
-    const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean)
-    const filtered = list.filter((t: any) => t.status === "active" || t.status === "trial")
-    return filtered[0] || null
+    const tenants = (await this.listTenants({ domain })) as any;
+    const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean);
+    const filtered = list.filter(
+      (t: any) => t.status === "active" || t.status === "trial",
+    );
+    return filtered[0] || null;
   }
 
   async retrieveTenantByHandle(handle: string) {
-    const tenants = await this.listTenants({ handle }) as any
-    const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean)
-    return list[0] || null
+    const tenants = (await this.listTenants({ handle })) as any;
+    const list = Array.isArray(tenants) ? tenants : [tenants].filter(Boolean);
+    return list[0] || null;
   }
 
-  async resolveTenant(query: { slug?: string; domain?: string; handle?: string }) {
+  async resolveTenant(query: {
+    slug?: string;
+    domain?: string;
+    handle?: string;
+  }) {
     if (query.slug) {
-      const tenant = await this.retrieveTenantBySlug(query.slug)
-      if (tenant) return tenant
+      const tenant = (await this.retrieveTenantBySlug(query.slug)) as any;
+      if (tenant) return tenant;
     }
 
     if (query.domain) {
-      const tenant = await this.retrieveTenantByDomain(query.domain)
-      if (tenant) return tenant
+      const tenant = (await this.retrieveTenantByDomain(query.domain)) as any;
+      if (tenant) return tenant;
     }
 
     if (query.handle) {
-      const tenant = await this.retrieveTenantByHandle(query.handle)
-      if (tenant) return tenant
+      const tenant = (await this.retrieveTenantByHandle(query.handle)) as any;
+      if (tenant) return tenant;
     }
 
-    return null
+    return null;
   }
 
   async getTenantWithGovernance(tenantId: string) {
-    const tenant = await this.retrieveTenant(tenantId)
-    if (!tenant) return null
+    const tenant = (await this.retrieveTenant(tenantId)) as any;
+    if (!tenant) return null;
 
     return {
       ...tenant,
       governance: {
-        country_id: (tenant as any).country_id,
-        governance_authority_id: (tenant as any).governance_authority_id,
-        residency_zone: (tenant as any).residency_zone,
+        country_id: tenant.country_id,
+        governance_authority_id: tenant.governance_authority_id,
+        residency_zone: tenant.residency_zone,
       },
-    }
+    };
   }
 
   async listTenantsByHierarchy(filters: {
-    country_id?: string
-    residency_zone?: string
-    governance_authority_id?: string
+    country_id?: string;
+    residency_zone?: string;
+    governance_authority_id?: string;
   }) {
-    return await this.listTenants(filters)
+    return (await this.listTenants(filters)) as any;
   }
 
   async activateTenant(tenant_id: string) {
-    return await (this as any).updateTenants({
+    return await this.updateTenants({
       id: tenant_id,
       status: "active",
       trial_ends_at: null,
-    })
+    } as any);
   }
 
   async suspendTenant(tenant_id: string, reason?: string) {
-    return await (this as any).updateTenants({
+    return await this.updateTenants({
       id: tenant_id,
       status: "suspended",
       metadata: { suspension_reason: reason },
-    })
+    });
   }
 
   // ============ Tenant Onboarding ============
@@ -140,7 +152,7 @@ class TenantModuleService extends MedusaService({
     const trialEndsAt = new Date();
     trialEndsAt.setDate(trialEndsAt.getDate() + (data.trialDays || 14));
 
-    const tenant = await (this as any).createTenants({
+    const tenant = await this.createTenants({
       name: data.name,
       handle: data.handle,
       slug: data.slug,
@@ -165,30 +177,30 @@ class TenantModuleService extends MedusaService({
       accent_color: data.accent_color || null,
       font_family: data.font_family || null,
       branding: data.branding || null,
-    });
+    } as any);
 
-    await (this as any).createTenantSettings({
+    await this.createTenantSettings({
       tenant_id: tenant.id,
       default_locale: data.default_locale || "en",
       supported_locales: data.supported_locales || ["en"],
       timezone: data.timezone || "UTC",
       default_currency: data.default_currency || "usd",
-    });
+    } as any);
 
-    await (this as any).createTenantBillings({
+    await this.createTenantBillings({
       tenant_id: tenant.id,
       subscription_status: "trialing",
       current_period_start: new Date(),
       current_period_end: trialEndsAt,
-    });
+    } as any);
 
-    await (this as any).createTenantUsers({
+    await this.createTenantUsers({
       tenant_id: tenant.id,
       user_id: data.ownerId,
       role: "tenant-admin",
       role_level: ROLE_LEVEL_MAP["tenant-admin"],
       status: "active",
-    });
+    } as any);
 
     return tenant;
   }
@@ -196,8 +208,12 @@ class TenantModuleService extends MedusaService({
   // ============ Billing Management ============
 
   async getTenantBilling(tenantId: string): Promise<any> {
-    const billings = await this.listTenantBillings({ tenant_id: tenantId }) as any;
-    const list = Array.isArray(billings) ? billings : [billings].filter(Boolean);
+    const billings = (await this.listTenantBillings({
+      tenant_id: tenantId,
+    })) as any;
+    const list = Array.isArray(billings)
+      ? billings
+      : [billings].filter(Boolean);
     return list[0] || null;
   }
 
@@ -206,7 +222,7 @@ class TenantModuleService extends MedusaService({
     planId: string,
     planName: string,
     planType: "monthly" | "yearly",
-    basePrice: number
+    basePrice: number,
   ): Promise<any> {
     const billing = await this.getTenantBilling(tenantId);
     if (!billing) throw new Error("Billing not found");
@@ -218,7 +234,7 @@ class TenantModuleService extends MedusaService({
       periodEnd.setFullYear(periodEnd.getFullYear() + 1);
     }
 
-    return await (this as any).updateTenantBillings({
+    return await this.updateTenantBillings({
       id: billing.id,
       plan_id: planId,
       plan_name: planName,
@@ -227,7 +243,7 @@ class TenantModuleService extends MedusaService({
       subscription_status: "active",
       current_period_start: new Date(),
       current_period_end: periodEnd,
-    });
+    } as any);
   }
 
   async recordUsage(
@@ -235,7 +251,7 @@ class TenantModuleService extends MedusaService({
     usageType: string,
     quantity: number,
     referenceType?: string,
-    referenceId?: string
+    referenceId?: string,
   ): Promise<any> {
     const billing = await this.getTenantBilling(tenantId);
     if (!billing) throw new Error("Billing not found");
@@ -243,7 +259,7 @@ class TenantModuleService extends MedusaService({
     const unitPrice = billing.usage_price_per_unit || 0;
     const totalCost = quantity * Number(unitPrice);
 
-    const record = await (this as any).createTenantUsageRecords({
+    const record = await this.createTenantUsageRecords({
       tenant_id: tenantId,
       billing_id: billing.id,
       usage_type: usageType,
@@ -255,27 +271,32 @@ class TenantModuleService extends MedusaService({
       period_end: billing.current_period_end,
       reference_type: referenceType,
       reference_id: referenceId,
-    });
+    } as any);
 
-    await (this as any).updateTenantBillings({
+    await this.updateTenantBillings({
       id: billing.id,
       current_usage: (billing.current_usage || 0) + quantity,
       current_usage_cost: Number(billing.current_usage_cost || 0) + totalCost,
-    });
+    } as any);
 
     return record;
   }
 
-  async getUsageSummary(tenantId: string, periodStart: Date, periodEnd: Date): Promise<any> {
-    const records = await this.listTenantUsageRecords({
+  async getUsageSummary(
+    tenantId: string,
+    periodStart: Date,
+    periodEnd: Date,
+  ): Promise<any> {
+    const records = (await this.listTenantUsageRecords({
       tenant_id: tenantId,
-    }) as any;
+    })) as any;
 
-    const list = (Array.isArray(records) ? records : [records].filter(Boolean))
-      .filter((r: any) => {
-        const recordedAt = new Date(r.recorded_at);
-        return recordedAt >= periodStart && recordedAt <= periodEnd;
-      });
+    const list = (
+      Array.isArray(records) ? records : [records].filter(Boolean)
+    ).filter((r: any) => {
+      const recordedAt = new Date(r.recorded_at);
+      return recordedAt >= periodStart && recordedAt <= periodEnd;
+    });
 
     const summary: Record<string, { quantity: number; cost: number }> = {};
 
@@ -295,21 +316,22 @@ class TenantModuleService extends MedusaService({
     const billing = await this.getTenantBilling(tenantId);
     if (!billing) throw new Error("Billing not found");
 
-    const tenant = await this.retrieveTenant(tenantId);
+    const tenant = (await this.retrieveTenant(tenantId)) as any;
 
     const usageSummary = await this.getUsageSummary(
       tenantId,
       billing.current_period_start,
-      billing.current_period_end
+      billing.current_period_end,
     );
 
     const usageAmount = Object.values(usageSummary).reduce(
-      (sum: number, u: any) => sum + (u.cost || 0), 0
+      (sum: number, u: any) => sum + (u.cost || 0),
+      0,
     ) as number;
 
     const totalAmount = Number(billing.base_price || 0) + usageAmount;
 
-    const invoiceNumber = `INV-${(tenant as any).handle?.toUpperCase() || "T"}-${Date.now().toString(36).toUpperCase()}`;
+    const invoiceNumber = `INV-${tenant.handle?.toUpperCase() || "T"}-${Date.now().toString(36).toUpperCase()}`;
 
     const lineItems = [
       {
@@ -329,7 +351,7 @@ class TenantModuleService extends MedusaService({
     const dueDate = new Date();
     dueDate.setDate(dueDate.getDate() + 30);
 
-    return await (this as any).createTenantInvoices({
+    return await this.createTenantInvoices({
       tenant_id: tenantId,
       billing_id: billing.id,
       invoice_number: invoiceNumber,
@@ -342,7 +364,7 @@ class TenantModuleService extends MedusaService({
       status: "open",
       due_date: dueDate,
       line_items: lineItems,
-    });
+    } as any);
   }
 
   // ============ Team Management ============
@@ -351,12 +373,13 @@ class TenantModuleService extends MedusaService({
     tenantId: string,
     email: string,
     role: string,
-    invitedById: string
+    invitedById: string,
   ): Promise<any> {
-    const invitationToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    const invitationToken =
+      Math.random().toString(36).substring(2) + Date.now().toString(36);
     const roleLevel = ROLE_LEVEL_MAP[role] || 10;
 
-    return await (this as any).createTenantUsers({
+    return await this.createTenantUsers({
       tenant_id: tenantId,
       user_id: `pending_${email}`,
       role,
@@ -365,30 +388,35 @@ class TenantModuleService extends MedusaService({
       invitation_token: invitationToken,
       invitation_sent_at: new Date(),
       invited_by_id: invitedById,
-    });
+    } as any);
   }
 
-  async acceptInvitation(invitationToken: string, userId: string): Promise<any> {
-    const users = await this.listTenantUsers({ invitation_token: invitationToken }) as any;
+  async acceptInvitation(
+    invitationToken: string,
+    userId: string,
+  ): Promise<any> {
+    const users = (await this.listTenantUsers({
+      invitation_token: invitationToken,
+    })) as any;
     const list = Array.isArray(users) ? users : [users].filter(Boolean);
-    
+
     if (list.length === 0) {
       throw new Error("Invalid invitation token");
     }
 
     const tenantUser = list[0];
 
-    return await (this as any).updateTenantUsers({
+    return await this.updateTenantUsers({
       id: tenantUser.id,
       user_id: userId,
       status: "active",
       invitation_accepted_at: new Date(),
       invitation_token: null,
-    });
+    } as any);
   }
 
   async getTenantTeam(tenantId: string): Promise<any[]> {
-    const users = await this.listTenantUsers({ tenant_id: tenantId }) as any;
+    const users = (await this.listTenantUsers({ tenant_id: tenantId })) as any;
     return Array.isArray(users) ? users : [users].filter(Boolean);
   }
 
@@ -396,13 +424,13 @@ class TenantModuleService extends MedusaService({
     tenantId: string,
     userId: string,
     resource: string,
-    action: string
+    action: string,
   ): Promise<boolean> {
-    const users = await this.listTenantUsers({
+    const users = (await this.listTenantUsers({
       tenant_id: tenantId,
       user_id: userId,
       status: "active",
-    }) as any;
+    })) as any;
 
     const list = Array.isArray(users) ? users : [users].filter(Boolean);
     if (list.length === 0) return false;
@@ -411,25 +439,28 @@ class TenantModuleService extends MedusaService({
 
     if (tenantUser.role === "super-admin") return true;
 
-    if (tenantUser.role === "tenant-admin" && action !== "transfer_ownership") return true;
+    if (tenantUser.role === "tenant-admin" && action !== "transfer_ownership")
+      return true;
 
     const permissions = tenantUser.permissions || {};
     const resourcePermissions = permissions[resource] || [];
-    
-    return resourcePermissions.includes(action) || resourcePermissions.includes("*");
+
+    return (
+      resourcePermissions.includes(action) || resourcePermissions.includes("*")
+    );
   }
 
   async hasNodeScopedAccess(
     tenantId: string,
     userId: string,
     nodeId: string,
-    requiredRoleLevel: number
+    requiredRoleLevel: number,
   ): Promise<boolean> {
-    const users = await this.listTenantUsers({
+    const users = (await this.listTenantUsers({
       tenant_id: tenantId,
       user_id: userId,
       status: "active",
-    }) as any;
+    })) as any;
 
     const list = Array.isArray(users) ? users : [users].filter(Boolean);
     if (list.length === 0) return false;
@@ -438,7 +469,8 @@ class TenantModuleService extends MedusaService({
 
     if (tenantUser.role_level < requiredRoleLevel) return false;
 
-    if (tenantUser.role === "super-admin" || tenantUser.role === "tenant-admin") return true;
+    if (tenantUser.role === "super-admin" || tenantUser.role === "tenant-admin")
+      return true;
 
     const assignedNodeIds: string[] = tenantUser.assigned_node_ids || [];
     if (assignedNodeIds.length === 0) return true;
@@ -449,25 +481,29 @@ class TenantModuleService extends MedusaService({
   // ============ Settings Management ============
 
   async getTenantSettings(tenantId: string): Promise<any> {
-    const settings = await this.listTenantSettings({ tenant_id: tenantId }) as any;
-    const list = Array.isArray(settings) ? settings : [settings].filter(Boolean);
+    const settings = (await this.listTenantSettings({
+      tenant_id: tenantId,
+    })) as any;
+    const list = Array.isArray(settings)
+      ? settings
+      : [settings].filter(Boolean);
     return list[0] || null;
   }
 
   async upsertTenantSettings(tenantId: string, updates: any): Promise<any> {
     const settings = await this.getTenantSettings(tenantId);
-    
+
     if (!settings) {
-      return await (this as any).createTenantSettings({
+      return await this.createTenantSettings({
         tenant_id: tenantId,
         ...updates,
-      });
+      } as any);
     }
 
-    return await (this as any).updateTenantSettingss({
+    return await this.updateTenantSettings({
       id: settings.id,
       ...updates,
-    });
+    } as any);
   }
 
   // ============ Limits & Quotas ============
@@ -481,7 +517,10 @@ class TenantModuleService extends MedusaService({
 
     const violations: string[] = [];
 
-    if (billing.max_orders_per_month && billing.current_usage > billing.max_orders_per_month) {
+    if (
+      billing.max_orders_per_month &&
+      billing.current_usage > billing.max_orders_per_month
+    ) {
       violations.push("max_orders_per_month");
     }
 
@@ -499,4 +538,4 @@ class TenantModuleService extends MedusaService({
   }
 }
 
-export default TenantModuleService
+export default TenantModuleService;

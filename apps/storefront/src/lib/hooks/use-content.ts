@@ -5,6 +5,8 @@ import { normalizeItem } from "@/lib/utils/normalize-item"
 export interface BlogPost {
   id: string
   title: string
+  name?: string
+  description?: string
   slug: string
   excerpt?: string
   content?: string
@@ -15,6 +17,7 @@ export interface BlogPost {
   category?: string
   tags?: string[]
   readingTime?: string
+  relatedPosts?: BlogPost[]
 }
 
 export interface HelpCategory {

@@ -27,13 +27,10 @@ export class VercelBlobFileService extends AbstractFileProviderService {
 
   constructor(container: any, options: VercelBlobFileServiceOptions) {
     super();
-    this.token_ =
-      options.token || appConfig.storage.blobToken || "";
+    this.token_ = options.token || appConfig.storage.blobToken || "";
     this.access_ = options.access || "public";
     this.defaultTenantSlug_ =
-      options.defaultTenantSlug ||
-      appConfig.tenant.defaultId ||
-      "dakkah";
+      options.defaultTenantSlug || appConfig.tenant.defaultId || "dakkah";
   }
 
   private resolvePath(filename: string): string {
@@ -59,31 +56,28 @@ export class VercelBlobFileService extends AbstractFileProviderService {
     return buildTenantPath(
       this.defaultTenantSlug_,
       MEDUSA_PRODUCT_PREFIX,
-      basename
+      basename,
     );
   }
 
   async upload(
-    file: ProviderUploadFileDTO
+    file: ProviderUploadFileDTO,
   ): Promise<{ url: string; key: string }> {
     if (!file) {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_DATA,
-        "No file provided"
-      );
+      throw new MedusaError(MedusaError.Types.INVALID_DATA, "No file provided");
     }
 
     let content: Buffer;
     if (Buffer.isBuffer(file.content)) {
       content = file.content;
     } else {
-      content = Buffer.from(file.content as any);
+      content = Buffer.from(file.content);
     }
 
     const resolvedPath = this.resolvePath(file.filename);
 
     const blob = await put(resolvedPath, content, {
-      access: this.access_ as any,
+      access: this.access_,
       addRandomSuffix: false,
       token: this.token_,
     });
@@ -101,16 +95,14 @@ export class VercelBlobFileService extends AbstractFileProviderService {
       await del(file.fileKey.startsWith("http") ? file.fileKey : file.fileKey, {
         token: this.token_,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(
-        `Failed to delete file ${file.fileKey} from Vercel Blob: ${error.message}`
+        `Failed to delete file ${file.fileKey} from Vercel Blob: ${(error instanceof Error ? error.message : String(error))}`,
       );
     }
   }
 
-  async getPresignedDownloadUrl(
-    fileData: ProviderGetFileDTO
-  ): Promise<string> {
+  async getPresignedDownloadUrl(fileData: ProviderGetFileDTO): Promise<string> {
     if (fileData.fileKey.startsWith("/platform/media")) {
       return fileData.fileKey;
     }

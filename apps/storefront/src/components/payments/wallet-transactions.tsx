@@ -80,7 +80,7 @@ export function WalletTransactions({
               <p className="text-sm font-medium text-ds-foreground truncate">{tx.description}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-xs text-ds-muted-foreground">
-                  {new Date(tx.timestamp).toLocaleDateString()}
+                  {new Date(tx.timestamp!).toLocaleDateString()}
                 </span>
                 {tx.counterparty && (
                   <>

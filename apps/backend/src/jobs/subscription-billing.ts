@@ -3,9 +3,9 @@ import { MedusaContainer } from "@medusajs/framework/types"
 import { Modules } from "@medusajs/framework/utils"
 
 export default async function subscriptionBillingJob(container: MedusaContainer) {
-  const subscriptionService = container.resolve("subscription")
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const logger = container.resolve("logger")
+  const subscriptionService = container.resolve("subscription") as unknown as any
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const logger = container.resolve("logger") as unknown as any
 
   logger.info("[subscription-billing] Starting subscription billing job")
 
@@ -69,7 +69,7 @@ export default async function subscriptionBillingJob(container: MedusaContainer)
 
         successCount++
         logger.info(`[subscription-billing] Processed subscription ${subscription.id}`)
-      } catch (error: any) {
+      } catch (error: unknown) {
         failedCount++
         logger.error(`[subscription-billing] Failed to process subscription ${subscription.id}:`, error)
 

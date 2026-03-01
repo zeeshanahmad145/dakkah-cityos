@@ -13,7 +13,7 @@ export async function GET(
       customer_group_id?: string
     }
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     // Build filters
     const filters: Record<string, any> = {
@@ -96,7 +96,7 @@ export async function GET(
       tiers: sortedTiers
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET store products id volume-pricing")}
 }
 

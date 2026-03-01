@@ -90,10 +90,10 @@ function QuotesPage() {
                         {quote.quote_number ?? quote.id}
                       </p>
                       <p className="text-xs text-ds-muted-foreground mt-0.5">
-                        {new Date(quote.created_at).toLocaleDateString()}
+                        {new Date(quote.created_at!).toLocaleDateString()}
                         {itemCount > 0 && <span className="ml-2">· {itemCount} item{itemCount !== 1 ? "s" : ""}</span>}
                         {quote.valid_until && (
-                          <span className="ml-2">· Valid until: {new Date(quote.valid_until).toLocaleDateString()}</span>
+                          <span className="ml-2">· Valid until: {new Date(quote.valid_until!).toLocaleDateString()}</span>
                         )}
                       </p>
                     </div>

@@ -7,14 +7,14 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const legalService = req.scope.resolve("legal") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const legalService = req.scope.resolve("legal") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const consultations = await (legalService as any).listConsultations({
+    const consultations = await legalService.listLegalConsultations({
       client_id: customerId,
     });
     const list = Array.isArray(consultations)
@@ -22,15 +22,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       : [consultations].filter(Boolean);
 
     return res.json({ consultations: list, count: list.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-LEGAL-CONSULTATIONS-LIST");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const legalService = req.scope.resolve("legal") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const legalService = req.scope.resolve("legal") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -56,7 +56,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ error: "practice_area and description are required" });
     }
 
-    const consultation = await (legalService as any).createConsultations({
+    const consultation = await legalService.createLegalConsultations({
       client_id: customerId,
       attorney_id: attorney_id ?? null,
       practice_area,
@@ -68,7 +68,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     });
 
     return res.status(201).json({ consultation });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-LEGAL-CONSULTATIONS-CREATE");
   }
 }

@@ -301,7 +301,7 @@ const PersonasPage = () => {
               id="name"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, name: e.target.value as any })
               }
               placeholder="Persona name"
             />
@@ -312,7 +312,7 @@ const PersonasPage = () => {
               id="slug"
               value={formData.slug}
               onChange={(e) =>
-                setFormData({ ...formData, slug: e.target.value })
+                setFormData({ ...formData, slug: e.target.value as any })
               }
               placeholder="persona-slug"
             />
@@ -343,7 +343,7 @@ const PersonasPage = () => {
               id="axes"
               value={formData.axes}
               onChange={(e) =>
-                setFormData({ ...formData, axes: e.target.value })
+                setFormData({ ...formData, axes: e.target.value as any })
               }
               placeholder='{"economic": 0.8, "social": 0.5}'
               className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[100px] font-mono text-sm"
@@ -355,7 +355,7 @@ const PersonasPage = () => {
               id="tenant_id"
               value={formData.tenant_id}
               onChange={(e) =>
-                setFormData({ ...formData, tenant_id: e.target.value })
+                setFormData({ ...formData, tenant_id: e.target.value as any })
               }
               placeholder="Tenant ID"
             />
@@ -377,7 +377,7 @@ const PersonasPage = () => {
               id="description"
               value={formData.description}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData({ ...formData, description: e.target.value as any })
               }
               placeholder="Description"
             />

@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -27,8 +27,8 @@ export async function POST(
     reason 
   } = parsed.data
 
-  const query = req.scope.resolve("query")
-  const bookingService = req.scope.resolve("bookingModuleService")
+  const query = req.scope.resolve("query") as unknown as any
+  const bookingService = req.scope.resolve("bookingModuleService") as unknown as any
 
   const { data: bookings } = await query.graph({
     entity: "booking",

@@ -8,21 +8,32 @@ import { ArrowLeft, Spinner } from "@medusajs/icons"
 export const Route = createFileRoute("/$tenant/$locale/account/orders/$id")({
   loader: async ({ params }) => {
     try {
-      const { getServerBaseUrl, fetchWithTimeout } = await import("@/lib/utils/env")
+      const { getServerBaseUrl, fetchWithTimeout } = await import(
+        "@/lib/utils/env"
+      )
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/orders/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/orders/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: data.item || data.order || data }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
   component: OrderDetailPage,
 })
 
 function OrderDetailPage() {
-  const { tenant, locale, id } = Route.useParams() as { tenant: string; locale: string; id: string }
+  const { tenant, locale, id } = Route.useParams() as {
+    tenant: string
+    locale: string
+    id: string
+  }
   const { data: order, isLoading, error } = useOrder({ order_id: id })
   const baseHref = `/${tenant}/${locale}`
 
@@ -42,7 +53,7 @@ function OrderDetailPage() {
         <div className="bg-ds-background rounded-lg border border-ds-border p-12 text-center">
           <p className="text-ds-muted-foreground mb-4">Order not found</p>
           <Link
-            to={`${baseHref}/account/orders` as any}
+            to={`${baseHref}/account/orders` as never}
             className="text-sm font-medium text-ds-foreground hover:underline"
           >
             Back to orders
@@ -57,7 +68,7 @@ function OrderDetailPage() {
       <div className="space-y-6">
         {/* Back Link */}
         <Link
-          to={`${baseHref}/account/orders` as any}
+          to={`${baseHref}/account/orders` as never}
           className="inline-flex items-center text-sm text-ds-muted-foreground hover:text-ds-foreground"
         >
           <ArrowLeft className="h-4 w-4 me-2" />

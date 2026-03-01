@@ -2,14 +2,14 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const session = req.auth_context as any;
+  const session = req.auth_context;
   const customerId = session?.actor_id;
 
   if (!customerId) {
     return res.status(401).json({ message: "Not authenticated" });
   }
 
-  const walletService = req.scope.resolve("wallet") as any;
+  const walletService = req.scope.resolve("wallet") as unknown as any;
   const limit = parseInt((req.query.limit as string) || "20");
   const offset = parseInt((req.query.offset as string) || "0");
 
@@ -26,7 +26,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       { limit, offset },
     );
     return res.json({ transactions, count: transactions.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Wallet transactions");
   }
 }

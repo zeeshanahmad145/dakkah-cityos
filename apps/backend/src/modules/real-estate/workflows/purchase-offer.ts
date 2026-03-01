@@ -9,14 +9,14 @@ import {
 const validateProperty = createStep(
   "validate-property-for-offer",
   async (input: { propertyId: string }, { container }) => {
-    const realEstateService = container.resolve("real-estate") as any;
+    const realEstateService = container.resolve("real-estate") as unknown as any;
     const property = await realEstateService.retrievePropertyListing(
       input.propertyId,
     );
-    if ((property as any).status !== "published") {
+    if (property.status !== "published") {
       throw new Error("Property is not accepting offers");
     }
-    return new StepResponse({ property, askingPrice: (property as any).price });
+    return new StepResponse({ property, askingPrice: property.price });
   },
 );
 
@@ -31,7 +31,7 @@ const submitPurchaseOffer = createStep(
     },
     { container },
   ) => {
-    const realEstateService = container.resolve("real-estate") as any;
+    const realEstateService = container.resolve("real-estate") as unknown as any;
     const offer = await realEstateService.makeOffer(
       input.propertyId,
       input.buyerId,
@@ -53,7 +53,7 @@ const schedulePurchaseViewing = createStep(
     },
     { container },
   ) => {
-    const realEstateService = container.resolve("real-estate") as any;
+    const realEstateService = container.resolve("real-estate") as unknown as any;
     const viewing = await realEstateService.scheduleViewing(
       input.propertyId,
       input.buyerId,

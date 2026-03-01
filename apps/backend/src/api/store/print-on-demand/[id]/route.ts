@@ -129,7 +129,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return res.json({ item: defaultItem })
     }
     return res.json({ item })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return res.json({ item: defaultItem })
   }
 }

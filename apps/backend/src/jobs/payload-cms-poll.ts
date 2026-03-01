@@ -57,8 +57,8 @@ export default async function payloadCmsPollJob(container: MedusaContainer) {
     }
 
     logger.info(`[PayloadCMSPoll] Poll complete: ${totalSynced} total, ${totalCreated} created, ${totalUpdated} updated, ${totalFailed} failed`)
-  } catch (error: any) {
-    logger.error(`[PayloadCMSPoll] Error during hierarchy sync: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[PayloadCMSPoll] Error during hierarchy sync: ${(error instanceof Error ? error.message : String(error))}`)
   }
 }
 

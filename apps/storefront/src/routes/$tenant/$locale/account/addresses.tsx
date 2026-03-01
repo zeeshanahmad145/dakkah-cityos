@@ -12,7 +12,7 @@ export const Route = createFileRoute("/$tenant/$locale/account/addresses")({
 })
 
 function AddressesPage() {
-  const { locale } = Route.useParams() as { locale: string }
+  const { locale, tenant } = Route.useParams()
   const [showForm, setShowForm] = useState(false)
   const [editingAddress, setEditingAddress] = useState<any>(null)
   const queryClient = useQueryClient()
@@ -56,10 +56,17 @@ function AddressesPage() {
     },
   })
 
-  const addresses = (customer as any)?.addresses || []
+  const addresses = customer?.addresses || []
 
   return (
-    <AccountLayout title={t(locale, "account.addresses_title", "Addresses")} description={t(locale, "account.addresses_description", "Manage your shipping and billing addresses")}>
+    <AccountLayout
+      title={t(locale, "account.addresses_title", "Addresses")}
+      description={t(
+        locale,
+        "account.addresses_description",
+        "Manage your shipping and billing addresses",
+      )}
+    >
       <div className="space-y-6">
         {/* Add Address Button */}
         {!showForm && !editingAddress && (
@@ -72,7 +79,9 @@ function AddressesPage() {
         {/* Add Form */}
         {showForm && (
           <div className="bg-ds-background rounded-lg border border-ds-border p-6">
-            <h2 className="text-lg font-semibold text-ds-foreground mb-6">Add New Address</h2>
+            <h2 className="text-lg font-semibold text-ds-foreground mb-6">
+              Add New Address
+            </h2>
             <AddressForm
               onSubmit={async (data) => {
                 await createAddressMutation.mutateAsync(data)
@@ -85,11 +94,16 @@ function AddressesPage() {
         {/* Edit Form */}
         {editingAddress && (
           <div className="bg-ds-background rounded-lg border border-ds-border p-6">
-            <h2 className="text-lg font-semibold text-ds-foreground mb-6">Edit Address</h2>
+            <h2 className="text-lg font-semibold text-ds-foreground mb-6">
+              Edit Address
+            </h2>
             <AddressForm
               initialData={editingAddress}
               onSubmit={async (data) => {
-                await updateAddressMutation.mutateAsync({ id: editingAddress.id, data })
+                await updateAddressMutation.mutateAsync({
+                  id: editingAddress.id,
+                  data,
+                })
               }}
               onCancel={() => setEditingAddress(null)}
               submitLabel={t(locale, "common.actions.update", "Update")}
@@ -101,13 +115,18 @@ function AddressesPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[1, 2].map((i) => (
-              <div key={i} className="h-48 bg-ds-muted rounded-lg animate-pulse" />
+              <div
+                key={i}
+                className="h-48 bg-ds-muted rounded-lg animate-pulse"
+              />
             ))}
           </div>
         ) : addresses.length === 0 && !showForm ? (
           <div className="bg-ds-background rounded-lg border border-ds-border p-12 text-center">
             <MapPin className="h-12 w-12 text-ds-muted-foreground mx-auto mb-4" />
-            <p className="text-ds-muted-foreground mb-4">No addresses saved yet</p>
+            <p className="text-ds-muted-foreground mb-4">
+              No addresses saved yet
+            </p>
             <Button onClick={() => setShowForm(true)} size="fit">
               <Plus className="h-4 w-4 me-2" />
               Add your first address
@@ -121,7 +140,9 @@ function AddressesPage() {
                 address={address}
                 onEdit={() => setEditingAddress(address)}
                 onDelete={() => {
-                  if (confirm("Are you sure you want to delete this address?")) {
+                  if (
+                    confirm("Are you sure you want to delete this address?")
+                  ) {
                     deleteAddressMutation.mutate(address.id)
                   }
                 }}

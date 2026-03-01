@@ -116,7 +116,7 @@ export function ReturnStatus({
                 <div>
                   <p className="text-sm text-ds-foreground">{event.description}</p>
                   <p className="text-xs text-ds-muted-foreground">
-                    {new Date(event.timestamp).toLocaleString(locale)}
+                    {new Date(event.timestamp!).toLocaleString(locale)}
                   </p>
                 </div>
               </div>

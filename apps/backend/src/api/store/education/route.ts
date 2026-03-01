@@ -1,13 +1,14 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
-import { enrichListItems } from "../../../lib/detail-enricher"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../lib/api-error-handler";
+import { enrichListItems } from "../../../lib/detail-enricher";
 
 const SEED_DATA = [
   {
     id: "edu_seed_01",
     tenant_id: "tenant_seed",
     title: "Full-Stack Web Development Bootcamp",
-    description: "Master modern web development with React, Node.js, and cloud deployment. Build real-world projects and launch your tech career.",
+    description:
+      "Master modern web development with React, Node.js, and cloud deployment. Build real-world projects and launch your tech career.",
     short_description: "Master React, Node.js, and cloud deployment",
     category: "technology",
     subcategory: "web_development",
@@ -35,7 +36,8 @@ const SEED_DATA = [
     id: "edu_seed_02",
     tenant_id: "tenant_seed",
     title: "Business Strategy & Leadership",
-    description: "Learn strategic thinking, leadership skills, and business management from top MBA professors and industry executives.",
+    description:
+      "Learn strategic thinking, leadership skills, and business management from top MBA professors and industry executives.",
     short_description: "Strategic thinking and leadership essentials",
     category: "business",
     subcategory: "management",
@@ -63,7 +65,8 @@ const SEED_DATA = [
     id: "edu_seed_03",
     tenant_id: "tenant_seed",
     title: "Conversational Arabic for Beginners",
-    description: "Start speaking Arabic from day one with our immersive, conversation-focused approach. Includes cultural context and real-world dialogues.",
+    description:
+      "Start speaking Arabic from day one with our immersive, conversation-focused approach. Includes cultural context and real-world dialogues.",
     short_description: "Speak Arabic confidently from day one",
     category: "language",
     subcategory: "arabic",
@@ -91,7 +94,8 @@ const SEED_DATA = [
     id: "edu_seed_04",
     tenant_id: "tenant_seed",
     title: "Digital Photography Masterclass",
-    description: "From camera basics to advanced composition and post-processing. Learn to capture stunning photos in any environment.",
+    description:
+      "From camera basics to advanced composition and post-processing. Learn to capture stunning photos in any environment.",
     short_description: "Capture stunning photos like a professional",
     category: "arts",
     subcategory: "photography",
@@ -119,7 +123,8 @@ const SEED_DATA = [
     id: "edu_seed_05",
     tenant_id: "tenant_seed",
     title: "Data Science & Machine Learning",
-    description: "Comprehensive course covering Python, statistics, machine learning algorithms, and deep learning. Includes hands-on projects with real datasets.",
+    description:
+      "Comprehensive course covering Python, statistics, machine learning algorithms, and deep learning. Includes hands-on projects with real datasets.",
     short_description: "Master data science and ML with Python",
     category: "science",
     subcategory: "data_science",
@@ -143,11 +148,11 @@ const SEED_DATA = [
     },
     created_at: "2025-01-20T00:00:00Z",
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const educationService = req.scope.resolve("education") as any
+    const educationService = req.scope.resolve("education") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -157,36 +162,36 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       status,
       instructor_id,
       search,
-    } = req.query as Record<string, string | undefined>
+    } = req.query as Record<string, string | undefined>;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (category) filters.category = category
-    if (level) filters.level = level
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (category) filters.category = category;
+    if (level) filters.level = level;
     if (status) {
-      filters.status = status
+      filters.status = status;
     } else {
-      filters.status = "published"
+      filters.status = "published";
     }
-    if (instructor_id) filters.instructor_id = instructor_id
-    if (search) filters.title = { $like: `%${search}%` }
+    if (instructor_id) filters.instructor_id = instructor_id;
+    if (search) filters.title = { $like: `%${search}%` };
 
     const items = await educationService.listCourses(filters, {
       skip: Number(offset),
       take: Number(limit),
       order: { created_at: "DESC" },
-    })
+    });
 
-    const raw = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
-    const itemList = enrichListItems(raw, "education")
+    const raw = Array.isArray(items) && items.length > 0 ? items : SEED_DATA;
+    const itemList = enrichListItems(raw, "education");
 
     return res.json({
       items: itemList,
       count: itemList.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-EDUCATION")}
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-EDUCATION");
+  }
 }
-

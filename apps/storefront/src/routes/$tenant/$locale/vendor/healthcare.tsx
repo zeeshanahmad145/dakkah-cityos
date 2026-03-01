@@ -30,7 +30,7 @@ function VendorHealthcareRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,9 +43,12 @@ function VendorHealthcareRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/healthcare${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: HealthcareService[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: HealthcareService[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -88,7 +91,9 @@ function VendorHealthcareRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -99,28 +104,43 @@ function VendorHealthcareRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No healthcare services yet</p>
-          <p className="text-sm">Add your first service to start accepting appointments.</p>
+          <p className="text-sm">
+            Add your first service to start accepting appointments.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((service) => (
-            <div key={service.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={service.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{service.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[service.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[service.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {service.status}
                     </span>
                   </div>
                   {service.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{service.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {service.description}
+                    </p>
                   )}
                   <div className="flex items-center gap-6 text-sm text-ds-muted-foreground">
-                    <span className="px-2 py-0.5 bg-ds-info/10 text-ds-info text-xs rounded-full">{service.service_type}</span>
-                    <span className="px-2 py-0.5 bg-ds-success/10 text-ds-success text-xs rounded-full">{service.specialty}</span>
+                    <span className="px-2 py-0.5 bg-ds-info/10 text-ds-info text-xs rounded-full">
+                      {service.service_type}
+                    </span>
+                    <span className="px-2 py-0.5 bg-ds-success/10 text-ds-success text-xs rounded-full">
+                      {service.specialty}
+                    </span>
                     <span>{service.appointment_count} appointments</span>
-                    <span className="text-ds-warning">★ {service.rating.toFixed(1)}</span>
+                    <span className="text-ds-warning">
+                      ★ {service.rating.toFixed(1)}
+                    </span>
                     {service.location && <span>{service.location}</span>}
                   </div>
                 </div>

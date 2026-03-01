@@ -226,13 +226,13 @@ export function WalletPage({
                 <div>
                   <p className="text-sm font-medium text-ds-foreground">{tx.description}</p>
                   <p className="text-xs text-ds-muted-foreground">
-                    {new Date(tx.date).toLocaleDateString()}
+                    {new Date(tx.date!).toLocaleDateString()}
                     {tx.paymentMethodLast4 && ` · •••• ${tx.paymentMethodLast4}`}
                   </p>
                 </div>
                 <div className="text-end">
                   <p className={`text-sm font-medium ${tx.amount > 0 ? "text-ds-success" : "text-ds-foreground"}`}>
-                    {tx.amount > 0 ? "+" : "-"}{formatPrice(tx.amount)}
+                    {tx.amount > 0 ? "+" : "-"}{formatPrice(tx.amount ?? 0)}
                   </p>
                   <span
                     className={`text-xs ${

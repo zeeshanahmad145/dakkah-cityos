@@ -1,5 +1,9 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { useToast } from "@/components/ui/toast"
@@ -9,23 +13,47 @@ import { Star } from "@medusajs/icons"
 
 function normalizeDetail(item: any) {
   if (!item) return null
-  const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
+  const meta =
+    typeof item.metadata === "string"
+      ? JSON.parse(item.metadata)
+      : item.metadata || {}
   const rawRating = item.rating ?? item.avg_rating ?? meta.rating ?? null
   const rawReviewCount = item.review_count ?? meta.review_count ?? null
-  const ratingObj = rawRating != null
-    ? (typeof rawRating === 'object' && rawRating.average != null ? rawRating : { average: Number(rawRating), count: Number(rawReviewCount || 0) })
-    : null
-  return { ...meta, ...item,
-    thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
-    images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
+  const ratingObj =
+    rawRating != null
+      ? typeof rawRating === "object" && rawRating.average != null
+        ? rawRating
+        : { average: Number(rawRating), count: Number(rawReviewCount || 0) }
+      : null
+  return {
+    ...meta,
+    ...item,
+    thumbnail:
+      item.thumbnail ||
+      item.image_url ||
+      item.photo_url ||
+      item.banner_url ||
+      item.logo_url ||
+      meta.thumbnail ||
+      (meta.images && meta.images[0]) ||
+      null,
+    images:
+      meta.images ||
+      [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
     price: item.price ?? meta.price ?? null,
-    currency_code: item.currency_code || item.currency || meta.currency_code || meta.currency || "USD",
+    currency_code:
+      item.currency_code ||
+      item.currency ||
+      meta.currency_code ||
+      meta.currency ||
+      "USD",
     file_type: item.file_type || meta.file_type || null,
     file_size: item.file_size || meta.file_size || null,
     rating: ratingObj,
     review_count: rawReviewCount,
-    location: item.location || item.city || item.address || meta.location || null,
+    location:
+      item.location || item.city || item.address || meta.location || null,
   }
 }
 
@@ -33,20 +61,30 @@ export const Route = createFileRoute("/$tenant/$locale/digital/$id")({
   component: DigitalProductDetailPage,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Digital Product Details"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
+      {
+        title: `${loaderData?.title || loaderData?.name || "Digital Product Details"} | Dakkah CityOS`,
+      },
+      {
+        name: "description",
+        content: loaderData?.description || loaderData?.excerpt || "",
+      },
     ],
   }),
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/digital-products/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/digital-products/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: normalizeDetail(data.item || data) }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
 })
 
@@ -62,10 +100,13 @@ function DigitalProductDetailPage() {
   const handlePurchase = async () => {
     setLoading(true)
     try {
-      await new Promise(r => setTimeout(r, 500))
+      await new Promise((r) => setTimeout(r, 500))
       toast.success("Purchase initiated!")
-    } catch { toast.error("Something went wrong. Please try again.") }
-    finally { setLoading(false) }
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (!product) {
@@ -73,7 +114,10 @@ function DigitalProductDetailPage() {
       <div className="min-h-screen bg-ds-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-ds-destructive mb-4">Product not found</p>
-          <Link to={`${prefix}/digital` as any} className="text-ds-primary hover:underline">
+          <Link
+            to={`${prefix}/digital` as never}
+            className="text-ds-primary hover:underline"
+          >
             Back to Digital Products
           </Link>
         </div>
@@ -86,11 +130,17 @@ function DigitalProductDetailPage() {
       <div className="bg-ds-card border-b border-ds-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
-            <Link to={`${prefix}` as any} className="hover:text-ds-foreground transition-colors">
+            <Link
+              to={`${prefix}` as never}
+              className="hover:text-ds-foreground transition-colors"
+            >
               {t(locale, "common.home")}
             </Link>
             <span>/</span>
-            <Link to={`${prefix}/digital` as any} className="hover:text-ds-foreground transition-colors">
+            <Link
+              to={`${prefix}/digital` as never}
+              className="hover:text-ds-foreground transition-colors"
+            >
               Digital Products
             </Link>
             <span>/</span>
@@ -104,11 +154,26 @@ function DigitalProductDetailPage() {
           <div>
             <div className="aspect-[4/3] bg-ds-muted rounded-lg overflow-hidden">
               {product.thumbnail ? (
-                <img loading="lazy" src={product.thumbnail} alt={product.title} className="w-full h-full object-cover" />
+                <img
+                  loading="lazy"
+                  src={product.thumbnail}
+                  alt={product.title}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <svg className="w-24 h-24 text-ds-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  <svg
+                    className="w-24 h-24 text-ds-muted-foreground"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
               )}
@@ -121,9 +186,24 @@ function DigitalProductDetailPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-ds-muted text-ds-foreground text-sm font-medium rounded-lg hover:bg-ds-accent transition-colors"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
                 </svg>
                 Preview
               </a>
@@ -132,9 +212,11 @@ function DigitalProductDetailPage() {
 
           <div>
             <div className="flex items-center gap-3 mb-2">
-              {product.file_type && <span className="inline-block px-2 py-1 text-xs font-medium rounded bg-ds-muted text-ds-muted-foreground">
-                {product.file_type.toUpperCase()}
-              </span>}
+              {product.file_type && (
+                <span className="inline-block px-2 py-1 text-xs font-medium rounded bg-ds-muted text-ds-muted-foreground">
+                  {product.file_type.toUpperCase()}
+                </span>
+              )}
               {product.category && (
                 <span className="inline-block px-2 py-1 text-xs font-medium rounded bg-ds-muted text-ds-muted-foreground">
                   {product.category}
@@ -142,7 +224,9 @@ function DigitalProductDetailPage() {
               )}
             </div>
 
-            <h1 className="text-3xl font-bold text-ds-foreground">{product.title}</h1>
+            <h1 className="text-3xl font-bold text-ds-foreground">
+              {product.title}
+            </h1>
 
             {product.vendor_name && (
               <p className="text-sm text-ds-muted-foreground mt-2">
@@ -160,45 +244,69 @@ function DigitalProductDetailPage() {
                     />
                   ))}
                 </div>
-                <span className="text-sm font-medium text-ds-foreground">{product.rating.average.toFixed(1)}</span>
-                <span className="text-sm text-ds-muted-foreground">({product.rating.count} reviews)</span>
+                <span className="text-sm font-medium text-ds-foreground">
+                  {product.rating.average.toFixed(1)}
+                </span>
+                <span className="text-sm text-ds-muted-foreground">
+                  ({product.rating.count} reviews)
+                </span>
               </div>
             )}
 
             <div className="mt-6">
               <span className="text-4xl font-bold text-ds-foreground">
-                {formatCurrency(product.price, product.currency_code, locale as SupportedLocale)}
+                {formatCurrency(
+                  product.price,
+                  product.currency_code,
+                  locale as SupportedLocale,
+                )}
               </span>
             </div>
 
             {product.description && (
               <div className="mt-6">
-                <h2 className="text-lg font-semibold text-ds-foreground mb-2">Description</h2>
-                <p className="text-ds-muted-foreground leading-relaxed">{product.description}</p>
+                <h2 className="text-lg font-semibold text-ds-foreground mb-2">
+                  Description
+                </h2>
+                <p className="text-ds-muted-foreground leading-relaxed">
+                  {product.description}
+                </p>
               </div>
             )}
 
             <div className="mt-6 p-4 bg-ds-muted rounded-lg">
-              <h3 className="text-sm font-semibold text-ds-foreground mb-3">File Details</h3>
+              <h3 className="text-sm font-semibold text-ds-foreground mb-3">
+                File Details
+              </h3>
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <span className="text-ds-muted-foreground">Type</span>
-                  <p className="font-medium text-ds-foreground">{product.file_type ? product.file_type.toUpperCase() : "—"}</p>
+                  <p className="font-medium text-ds-foreground">
+                    {product.file_type ? product.file_type.toUpperCase() : "—"}
+                  </p>
                 </div>
                 <div>
                   <span className="text-ds-muted-foreground">Size</span>
-                  <p className="font-medium text-ds-foreground">{product.file_size}</p>
+                  <p className="font-medium text-ds-foreground">
+                    {product.file_size}
+                  </p>
                 </div>
                 {product.format && (
                   <div>
                     <span className="text-ds-muted-foreground">Format</span>
-                    <p className="font-medium text-ds-foreground">{product.format}</p>
+                    <p className="font-medium text-ds-foreground">
+                      {product.format}
+                    </p>
                   </div>
                 )}
               </div>
             </div>
 
-            <button onClick={handlePurchase} disabled={loading} className="w-full mt-6 px-6 py-3 bg-ds-primary text-ds-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity text-lg disabled:opacity-50">
+            <button
+              onClick={handlePurchase}
+              disabled={loading}
+              className="w-full mt-6 px-6 py-3 bg-ds-primary text-ds-primary-foreground font-medium rounded-lg hover:opacity-90 transition-opacity text-lg disabled:opacity-50"
+            >
               {loading ? "Processing..." : "Purchase Now"}
             </button>
           </div>

@@ -28,18 +28,18 @@ async function run() {
 
     console.log("Modules loaded:", Object.keys(modules));
 
-    const tenantService = modules.tenant;
+    const tenantService = modules.tenant as any;
     if (!tenantService) {
       throw new Error("tenantModuleService is undefined in the container");
     }
 
     console.log("Calling listAndCountTenants()...");
-    const tenantResult = await (tenantService as any).listAndCountTenants();
+    const tenantResult = await tenantService.listAndCountTenants();
     console.log("Success! Tenants:", tenantResult);
 
-    const walletService = modules.wallet;
+    const walletService = modules.wallet as any;
     console.log("Calling listWallets()...");
-    const walletResult = await (walletService as any).listWallets();
+    const walletResult = await walletService.listWallets();
     console.log("Success! Wallets:", walletResult);
   } catch (error) {
     console.error("FATAL ERROR:", error);

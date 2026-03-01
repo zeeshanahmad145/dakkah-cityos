@@ -30,7 +30,7 @@ function VendorWalletRoute() {
   const auth = useAuth()
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -78,12 +78,16 @@ function VendorWalletRoute() {
     <div className="container mx-auto py-12">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Wallet</h1>
-        <p className="text-ds-muted-foreground text-sm mt-1">Financial overview and transaction history</p>
+        <p className="text-ds-muted-foreground text-sm mt-1">
+          Financial overview and transaction history
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="border rounded-lg p-6 bg-ds-success/10">
-          <p className="text-sm text-ds-muted-foreground mb-1">Available Balance</p>
+          <p className="text-sm text-ds-muted-foreground mb-1">
+            Available Balance
+          </p>
           <p className="text-3xl font-bold text-ds-success">
             {currency} {((data?.balance || 0) / 100).toFixed(2)}
           </p>
@@ -107,7 +111,9 @@ function VendorWalletRoute() {
       {transactions.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No transactions yet</p>
-          <p className="text-sm">Transactions will appear here once you start earning.</p>
+          <p className="text-sm">
+            Transactions will appear here once you start earning.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -122,19 +128,27 @@ function VendorWalletRoute() {
             </thead>
             <tbody>
               {transactions.map((tx) => (
-                <tr key={tx.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={tx.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 pe-4 text-sm text-ds-muted-foreground">
-                    {new Date(tx.date).toLocaleDateString()}
+                    {new Date(tx.date!).toLocaleDateString()}
                   </td>
                   <td className="py-4 pe-4">
                     <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-ds-muted text-ds-foreground capitalize">
                       {tx.type}
                     </span>
                   </td>
-                  <td className={`py-4 pe-4 text-right font-medium ${typeColors[tx.type] || "text-ds-foreground"}`}>
-                    {tx.amount >= 0 ? "+" : ""}{currency} {(Math.abs(tx.amount) / 100).toFixed(2)}
+                  <td
+                    className={`py-4 pe-4 text-right font-medium ${typeColors[tx.type] || "text-ds-foreground"}`}
+                  >
+                    {tx.amount >= 0 ? "+" : ""}
+                    {currency} {(Math.abs(tx.amount) / 100).toFixed(2)}
                   </td>
-                  <td className="py-4 text-sm text-ds-muted-foreground font-mono">{tx.reference}</td>
+                  <td className="py-4 text-sm text-ds-muted-foreground font-mono">
+                    {tx.reference}
+                  </td>
                 </tr>
               ))}
             </tbody>

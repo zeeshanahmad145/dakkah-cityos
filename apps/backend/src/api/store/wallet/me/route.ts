@@ -3,14 +3,14 @@ import { WALLET_MODULE } from "../../../../modules/wallet";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const session = req.auth_context as any;
+  const session = req.auth_context;
   const customerId = session?.actor_id;
 
   if (!customerId) {
     return res.status(401).json({ message: "Not authenticated" });
   }
 
-  const walletService = req.scope.resolve(WALLET_MODULE) as any;
+  const walletService = req.scope.resolve(WALLET_MODULE) as unknown as any;
 
   try {
     let wallets = await walletService.listWallets({ customer_id: customerId });
@@ -23,7 +23,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     const wallet = wallets[0];
     return res.json({ wallet });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Get customer wallet");
   }
 }

@@ -4,8 +4,8 @@ import {
   createStep,
   StepResponse,
 } from "@medusajs/framework/workflows-sdk";
-import { createLogger } from "../../lib/logger"
-const logger = createLogger("workflows:b2b")
+import { createLogger } from "../../lib/logger";
+const logger = createLogger("workflows:b2b");
 
 interface CreateCompanyInput {
   name: string;
@@ -26,7 +26,7 @@ interface CreateCompanyInput {
 const createCompanyStep = createStep(
   "create-company",
   async (input: CreateCompanyInput, { container }) => {
-    const companyService = container.resolve("company") as any;
+    const companyService = container.resolve("company") as unknown as any;
 
     const company = await companyService.createCompanies({
       name: input.name,
@@ -48,20 +48,25 @@ const createCompanyStep = createStep(
     return new StepResponse({ company, input }, { companyId: company.id });
   },
   async (compensationData: { companyId: string }, { container }) => {
-    if (!compensationData?.companyId) return
+    if (!compensationData?.companyId) return;
     try {
-      const companyService = container.resolve("company") as any;
+      const companyService = container.resolve("company") as unknown as any;
       await companyService.deleteCompanies(compensationData.companyId);
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  },
 );
 
 // Step 2: Add primary contact as admin
 const addCompanyAdminStep = createStep(
   "add-company-admin",
-  async ({ input, company }: { input: CreateCompanyInput; company: Record<string, unknown> }, { container }) => {
-    const companyService = container.resolve("company") as any;
+  async (
+    {
+      input,
+      company,
+    }: { input: CreateCompanyInput; company: Record<string, unknown> },
+    { container },
+  ) => {
+    const companyService = container.resolve("company") as unknown as any;
 
     const companyUser = await companyService.createCompanyUsers({
       company_id: company.id,
@@ -74,27 +79,28 @@ const addCompanyAdminStep = createStep(
     return new StepResponse({ companyUser }, { companyUserId: companyUser.id });
   },
   async (compensationData: { companyUserId: string }, { container }) => {
-    if (!compensationData?.companyUserId) return
+    if (!compensationData?.companyUserId) return;
     try {
-      const companyService = container.resolve("company") as any;
+      const companyService = container.resolve("company") as unknown as any;
       await companyService.deleteCompanyUsers(compensationData.companyUserId);
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  },
 );
 
 // Step 3: Log company creation
 const logCompanyCreationStep = createStep(
   "log-company-creation",
   async ({ company }: { company: Record<string, unknown> }, { container }) => {
-    logger.info(`Company created: ${company.name} (${company.id}) - Status: pending approval`);
+    logger.info(
+      `Company created: ${company.name} (${company.id}) - Status: pending approval`,
+    );
     return new StepResponse({ logged: true }, null);
-  }
+  },
 );
 
 /**
  * Create Company Workflow
- * 
+ *
  * Registers a new B2B company and assigns the first admin user.
  * Company starts in pending status awaiting approval.
  */
@@ -111,5 +117,5 @@ export const createCompanyWorkflow = createWorkflow(
     logCompanyCreationStep({ company });
 
     return new WorkflowResponse({ company, companyUser });
-  }
+  },
 );

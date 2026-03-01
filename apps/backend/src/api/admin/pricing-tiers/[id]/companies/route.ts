@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -20,7 +20,7 @@ export async function POST(
     }
     const { company_ids } = parsed.data
 
-    const companyService = req.scope.resolve("companyModuleService")
+    const companyService = req.scope.resolve("companyModuleService") as unknown as any
 
     // Update companies to use this tier
     for (const companyId of company_ids) {
@@ -36,7 +36,7 @@ export async function POST(
       company_ids
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin pricing-tiers id companies")}
 }
 
@@ -49,7 +49,7 @@ export async function DELETE(
     const { id } = req.params
     const { company_ids } = req.body as { company_ids: string[] }
 
-    const companyService = req.scope.resolve("companyModuleService")
+    const companyService = req.scope.resolve("companyModuleService") as unknown as any
 
     // Remove tier from companies
     for (const companyId of company_ids) {
@@ -65,7 +65,7 @@ export async function DELETE(
       company_ids
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin pricing-tiers id companies")}
 }
 

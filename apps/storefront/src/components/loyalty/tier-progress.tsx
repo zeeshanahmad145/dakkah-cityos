@@ -40,12 +40,12 @@ export function TierProgress({
       {tiers.length > 0 && (
         <div className="mt-4 pt-4 border-t border-ds-border">
           <div className="flex items-center justify-between gap-1">
-            {tiers.map((tier, idx) => (
+            {tiers.map((tier: any, idx: number) => (
               <div key={tier.name} className="flex flex-col items-center text-center flex-1">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                   tier.name === currentTier
                     ? "bg-ds-primary text-ds-primary-foreground"
-                    : idx < tiers.findIndex((t) => t.name === currentTier)
+                    : idx < tiers.findIndex((t: any) => t.name === currentTier)
                       ? "bg-ds-success/20 text-ds-success"
                       : "bg-ds-muted text-ds-muted-foreground"
                 }`}>

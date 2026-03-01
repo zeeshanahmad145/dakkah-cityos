@@ -170,7 +170,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const paged = items.slice(start, end)
 
     res.json({ items: paged, listings: paged, count: items.length, limit: Number(limit), offset: start })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-SOCIAL-COMMERCE")}
 }
 

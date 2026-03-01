@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const parkingService = req.scope.resolve("parking") as any;
+    const parkingService = req.scope.resolve("parking") as unknown as any;
     const { plate_number, session_id, gate_id } = req.body as {
       plate_number?: string;
       session_id?: string;
@@ -42,7 +42,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
           .json({ error: "No active session found for this vehicle" });
       }
       const session = sessionList[0];
-      const enteredAt = new Date(session.entered_at);
+      const enteredAt = new Date(session.started_at);
       const exitedAt = new Date();
       const durationMinutes = Math.ceil(
         (exitedAt.getTime() - enteredAt.getTime()) / 60000,
@@ -59,7 +59,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ result, message: "Exit recorded" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-PARKING-EXIT");
   }
 }

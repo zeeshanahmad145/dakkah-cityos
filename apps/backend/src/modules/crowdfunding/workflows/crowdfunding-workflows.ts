@@ -11,8 +11,8 @@ import {
 const markCampaignFundedStep = createStep(
   "mark-campaign-funded",
   async ({ campaignId }: { campaignId: string }, { container }) => {
-    const crowdfundingService = container.resolve("crowdfunding") as any;
-    const updated = await (crowdfundingService as any).updateCampaigns?.({
+    const crowdfundingService = container.resolve("crowdfunding") as unknown as any;
+    const updated = await crowdfundingService.updateCampaigns?.({
       id: campaignId,
       status: "funded",
       funded_at: new Date(),
@@ -20,8 +20,8 @@ const markCampaignFundedStep = createStep(
     return new StepResponse({ campaign: updated }, { campaignId });
   },
   async ({ campaignId }: { campaignId: string }, { container }) => {
-    const crowdfundingService = container.resolve("crowdfunding") as any;
-    await (crowdfundingService as any).updateCampaigns?.({
+    const crowdfundingService = container.resolve("crowdfunding") as unknown as any;
+    await crowdfundingService.updateCampaigns?.({
       id: campaignId,
       status: "active",
     });
@@ -31,7 +31,7 @@ const markCampaignFundedStep = createStep(
 const disburseFundsStep = createStep(
   "disburse-campaign-funds",
   async ({ campaignId }: { campaignId: string }, { container }) => {
-    const crowdfundingService = container.resolve("crowdfunding") as any;
+    const crowdfundingService = container.resolve("crowdfunding") as unknown as any;
     let result: any = { disbursed: true };
     if (typeof crowdfundingService.disburseFunds === "function") {
       result = await crowdfundingService.disburseFunds(campaignId);
@@ -57,8 +57,8 @@ export const crowdfundingSuccessWorkflow = createWorkflow(
 const markCampaignFailedStep = createStep(
   "mark-campaign-failed",
   async ({ campaignId }: { campaignId: string }, { container }) => {
-    const crowdfundingService = container.resolve("crowdfunding") as any;
-    const updated = await (crowdfundingService as any).updateCampaigns?.({
+    const crowdfundingService = container.resolve("crowdfunding") as unknown as any;
+    const updated = await crowdfundingService.updateCampaigns?.({
       id: campaignId,
       status: "failed",
       failed_at: new Date(),
@@ -70,7 +70,7 @@ const markCampaignFailedStep = createStep(
 const refundPledgesStep = createStep(
   "refund-all-pledges",
   async ({ campaignId }: { campaignId: string }, { container }) => {
-    const crowdfundingService = container.resolve("crowdfunding") as any;
+    const crowdfundingService = container.resolve("crowdfunding") as unknown as any;
     let result: any = { refunded: true };
     if (typeof crowdfundingService.refundAllPledges === "function") {
       result = await crowdfundingService.refundAllPledges(campaignId);
@@ -88,6 +88,3 @@ export const crowdfundingFailRefundWorkflow = createWorkflow(
     return { failed, refunded };
   },
 );
-
-
-

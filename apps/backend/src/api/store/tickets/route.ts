@@ -7,8 +7,8 @@ import { handleApiError } from "../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const ticketingService = req.scope.resolve("eventTicketing") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const ticketingService = req.scope.resolve("eventTicketing") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -19,7 +19,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       string | undefined
     >;
 
-    const tickets = await (ticketingService as any).listTickets(
+    const tickets = await ticketingService.listTickets(
       { customer_id: customerId },
       {
         skip: Number(offset),
@@ -34,15 +34,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-TICKETS-LIST");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const ticketingService = req.scope.resolve("eventTicketing") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const ticketingService = req.scope.resolve("eventTicketing") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -69,7 +69,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     // Create tickets (one per quantity)
     const created = [];
     for (let i = 0; i < quantity; i++) {
-      const ticket = await (ticketingService as any).createTickets({
+      const ticket = await ticketingService.createTickets({
         event_id,
         ticket_type_id,
         customer_id: customerId,
@@ -85,8 +85,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       tickets: created,
       message: `${quantity} ticket(s) purchased successfully`,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-TICKETS-CREATE");
   }
 }
-

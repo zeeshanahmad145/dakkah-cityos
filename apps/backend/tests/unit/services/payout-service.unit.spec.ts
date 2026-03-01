@@ -47,8 +47,18 @@ jest.mock("@medusajs/framework/utils", () => {
   };
 });
 
+const mockStripe = {
+  transfers: { create: jest.fn() },
+  accounts: {
+    create: jest.fn(),
+    createLoginLink: jest.fn(),
+    retrieve: jest.fn(),
+  },
+  accountLinks: { create: jest.fn() },
+};
+
 jest.mock("stripe", () => {
-  return jest.fn().mockImplementation(() => ({}));
+  return jest.fn().mockImplementation(() => mockStripe);
 });
 
 import PayoutModuleService from "../../../src/modules/payout/service";
@@ -63,11 +73,9 @@ describe("PayoutModuleService", () => {
   describe("createVendorPayout", () => {
     it("creates a payout with correct net amount", async () => {
       const createSpy = jest
-        .spyOn(service, "createPayouts" as any)
+        .spyOn(service, "createPayouts")
         .mockResolvedValue({ id: "po-1" });
-      jest
-        .spyOn(service, "createPayoutTransactionLinks" as any)
-        .mockResolvedValue([]);
+      jest.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
 
       const result = await service.createVendorPayout({
         vendorId: "v-1",
@@ -94,11 +102,9 @@ describe("PayoutModuleService", () => {
 
     it("sets status to pending when scheduledFor is provided", async () => {
       const createSpy = jest
-        .spyOn(service, "createPayouts" as any)
+        .spyOn(service, "createPayouts")
         .mockResolvedValue({ id: "po-1" });
-      jest
-        .spyOn(service, "createPayoutTransactionLinks" as any)
-        .mockResolvedValue([]);
+      jest.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
 
       await service.createVendorPayout({
         vendorId: "v-1",
@@ -118,11 +124,9 @@ describe("PayoutModuleService", () => {
     });
 
     it("creates transaction links for each transaction", async () => {
-      jest
-        .spyOn(service, "createPayouts" as any)
-        .mockResolvedValue({ id: "po-1" });
+      jest.spyOn(service, "createPayouts").mockResolvedValue({ id: "po-1" });
       const linkSpy = jest
-        .spyOn(service, "createPayoutTransactionLinks" as any)
+        .spyOn(service, "createPayoutTransactionLinks")
         .mockResolvedValue([]);
 
       await service.createVendorPayout({
@@ -156,11 +160,9 @@ describe("PayoutModuleService", () => {
 
     it("defaults platformFeeAmount and adjustmentAmount to 0", async () => {
       const createSpy = jest
-        .spyOn(service, "createPayouts" as any)
+        .spyOn(service, "createPayouts")
         .mockResolvedValue({ id: "po-1" });
-      jest
-        .spyOn(service, "createPayoutTransactionLinks" as any)
-        .mockResolvedValue([]);
+      jest.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
 
       await service.createVendorPayout({
         vendorId: "v-1",
@@ -186,7 +188,7 @@ describe("PayoutModuleService", () => {
   describe("retryFailedPayout", () => {
     it("retries a failed payout", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValueOnce({ id: "po-1", status: "failed", retry_count: 1 })
         .mockResolvedValueOnce({
           id: "po-1",
@@ -195,10 +197,8 @@ describe("PayoutModuleService", () => {
           payout_number: "PO-2025-001",
           vendor_id: "v-1",
         });
-      jest.spyOn(service, "updatePayouts" as any).mockResolvedValue({});
-      (service as any).stripe = {
-        transfers: { create: jest.fn().mockResolvedValue({ id: "tr-1" }) },
-      };
+      jest.spyOn(service, "updatePayouts").mockResolvedValue({});
+      mockStripe.transfers.create.mockResolvedValue({ id: "tr-1" });
 
       const result = await service.retryFailedPayout("po-1", "acct_123");
 
@@ -207,7 +207,7 @@ describe("PayoutModuleService", () => {
 
     it("throws when payout is not in failed status", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "completed" });
 
       await expect(
@@ -217,7 +217,7 @@ describe("PayoutModuleService", () => {
 
     it("throws when max retries exceeded", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "failed", retry_count: 3 });
 
       await expect(
@@ -229,10 +229,10 @@ describe("PayoutModuleService", () => {
   describe("cancelPayout", () => {
     it("cancels a pending payout", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "pending" });
       const updateSpy = jest
-        .spyOn(service, "updatePayouts" as any)
+        .spyOn(service, "updatePayouts")
         .mockResolvedValue({ id: "po-1", status: "cancelled" });
 
       await service.cancelPayout("po-1", "No longer needed");
@@ -247,10 +247,10 @@ describe("PayoutModuleService", () => {
 
     it("cancels an on_hold payout", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "on_hold" });
       jest
-        .spyOn(service, "updatePayouts" as any)
+        .spyOn(service, "updatePayouts")
         .mockResolvedValue({ id: "po-1", status: "cancelled" });
 
       await expect(
@@ -260,7 +260,7 @@ describe("PayoutModuleService", () => {
 
     it("throws when payout is in non-cancellable status", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "completed" });
 
       await expect(service.cancelPayout("po-1", "reason")).rejects.toThrow(
@@ -270,7 +270,7 @@ describe("PayoutModuleService", () => {
 
     it("throws when payout is processing", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "processing" });
 
       await expect(service.cancelPayout("po-1", "reason")).rejects.toThrow(
@@ -282,10 +282,10 @@ describe("PayoutModuleService", () => {
   describe("holdPayout", () => {
     it("puts a pending payout on hold", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "pending" });
       const updateSpy = jest
-        .spyOn(service, "updatePayouts" as any)
+        .spyOn(service, "updatePayouts")
         .mockResolvedValue({ id: "po-1", status: "on_hold" });
 
       await service.holdPayout("po-1", "Under review");
@@ -300,7 +300,7 @@ describe("PayoutModuleService", () => {
 
     it("throws when payout is not pending", async () => {
       jest
-        .spyOn(service, "retrievePayout" as any)
+        .spyOn(service, "retrievePayout")
         .mockResolvedValue({ id: "po-1", status: "processing" });
 
       await expect(service.holdPayout("po-1", "review")).rejects.toThrow(
@@ -311,7 +311,7 @@ describe("PayoutModuleService", () => {
 
   describe("processStripeConnectPayout", () => {
     it("processes payout via Stripe and updates status", async () => {
-      jest.spyOn(service, "retrievePayout" as any).mockResolvedValue({
+      jest.spyOn(service, "retrievePayout").mockResolvedValue({
         id: "po-1",
         net_amount: 1000,
         payout_number: "PO-2025-001",
@@ -320,17 +320,13 @@ describe("PayoutModuleService", () => {
         period_end: new Date(),
       });
       const updateSpy = jest
-        .spyOn(service, "updatePayouts" as any)
+        .spyOn(service, "updatePayouts")
         .mockResolvedValue({});
-      (service as any).stripe = {
-        transfers: {
-          create: jest.fn().mockResolvedValue({ id: "tr-stripe-1" }),
-        },
-      };
+      mockStripe.transfers.create.mockResolvedValue({ id: "tr-stripe-1" });
 
       await service.processStripeConnectPayout("po-1", "acct_123");
 
-      expect((service as any).stripe.transfers.create).toHaveBeenCalledWith(
+      expect(mockStripe.transfers.create).toHaveBeenCalledWith(
         expect.objectContaining({
           amount: 100000,
           currency: "usd",
@@ -346,7 +342,7 @@ describe("PayoutModuleService", () => {
     });
 
     it("updates payout to failed on Stripe error", async () => {
-      jest.spyOn(service, "retrievePayout" as any).mockResolvedValue({
+      jest.spyOn(service, "retrievePayout").mockResolvedValue({
         id: "po-1",
         net_amount: 1000,
         payout_number: "PO-2025-001",
@@ -354,13 +350,11 @@ describe("PayoutModuleService", () => {
         retry_count: 0,
       });
       const updateSpy = jest
-        .spyOn(service, "updatePayouts" as any)
+        .spyOn(service, "updatePayouts")
         .mockResolvedValue({});
-      (service as any).stripe = {
-        transfers: {
-          create: jest.fn().mockRejectedValue(new Error("Insufficient funds")),
-        },
-      };
+      mockStripe.transfers.create.mockRejectedValue(
+        new Error("Insufficient funds"),
+      );
 
       await expect(
         service.processStripeConnectPayout("po-1", "acct_123"),
@@ -375,9 +369,7 @@ describe("PayoutModuleService", () => {
     });
 
     it("throws when no stripe account ID provided", async () => {
-      jest
-        .spyOn(service, "retrievePayout" as any)
-        .mockResolvedValue({ id: "po-1" });
+      jest.spyOn(service, "retrievePayout").mockResolvedValue({ id: "po-1" });
 
       await expect(
         service.processStripeConnectPayout("po-1", ""),

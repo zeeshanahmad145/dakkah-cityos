@@ -29,7 +29,10 @@ export function TicketSelector({
     if (!ticket) return
 
     const current = selectedTickets[ticketId] || 0
-    const next = Math.max(0, Math.min(current + delta, ticket.maxPerOrder ?? ticket.available))
+    const next = Math.max(
+      0,
+      Math.min(current + delta, ticket.maxPerOrder ?? ticket.available),
+    )
 
     const updated = { ...selectedTickets }
     if (next === 0) {
@@ -66,21 +69,39 @@ export function TicketSelector({
             <div key={ticket.id} className="p-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-ds-foreground">{ticket.name}</h4>
+                  <h4 className="font-medium text-ds-foreground">
+                    {ticket.name}
+                  </h4>
                   {ticket.description && (
                     <p className="text-sm text-ds-muted-foreground mt-0.5">
                       {ticket.description}
                     </p>
                   )}
                   <p className="text-sm font-semibold text-ds-foreground mt-1">
-                    {formatCurrency(ticket.price.amount, ticket.price.currencyCode, locale as any)}
+                    {formatCurrency(
+                      ticket.price.amount,
+                      ticket.price.currencyCode, locale as any,
+                    )}
                   </p>
                   {ticket.benefits && ticket.benefits.length > 0 && (
                     <ul className="mt-2 space-y-1">
                       {ticket.benefits.map((benefit, i) => (
-                        <li key={i} className="flex items-center gap-1.5 text-xs text-ds-muted-foreground">
-                          <svg className="w-3.5 h-3.5 text-ds-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <li
+                          key={i}
+                          className="flex items-center gap-1.5 text-xs text-ds-muted-foreground"
+                        >
+                          <svg
+                            className="w-3.5 h-3.5 text-ds-success flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
                           </svg>
                           {benefit}
                         </li>
@@ -101,8 +122,18 @@ export function TicketSelector({
                     className="w-8 h-8 flex items-center justify-center rounded-lg border border-ds-border text-ds-foreground hover:bg-ds-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     aria-label="Decrease"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 12H4"
+                      />
                     </svg>
                   </button>
                   <span className="w-8 text-center text-sm font-semibold text-ds-foreground">
@@ -114,8 +145,18 @@ export function TicketSelector({
                     className="w-8 h-8 flex items-center justify-center rounded-lg border border-ds-border text-ds-foreground hover:bg-ds-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                     aria-label="Increase"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -133,7 +174,7 @@ export function TicketSelector({
                 {totalCount} {totalCount === 1 ? "ticket" : "tickets"}
               </p>
               <p className="text-lg font-bold text-ds-foreground">
-                {formatCurrency(total, currency, locale as any)}
+                {formatCurrency(total, currency, locale as import("@/lib/i18n").SupportedLocale)}
               </p>
             </div>
             <button className="px-6 py-2.5 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 transition-colors">

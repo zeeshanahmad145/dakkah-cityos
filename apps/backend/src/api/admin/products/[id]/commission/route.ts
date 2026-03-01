@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -20,7 +20,7 @@ export async function GET(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: commissions } = await query.graph({
       entity: "product_commission",
@@ -43,7 +43,7 @@ export async function GET(
       commission: commissions[0]
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin products id commission")}
 }
 
@@ -60,8 +60,8 @@ export async function POST(
     }
     const { rate, type = "percentage" } = parsed.data
 
-    const commissionService = req.scope.resolve("commissionModuleService")
-    const query = req.scope.resolve("query")
+    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any
+    const query = req.scope.resolve("query") as unknown as any
 
     // Validate rate
     if (type === "percentage" && (rate < 0 || rate > 100)) {
@@ -96,7 +96,7 @@ export async function POST(
       commission
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin products id commission")}
 }
 
@@ -113,8 +113,8 @@ export async function PUT(
     }
     const { rate, type } = parsed.data
 
-    const commissionService = req.scope.resolve("commissionModuleService")
-    const query = req.scope.resolve("query")
+    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any
+    const query = req.scope.resolve("query") as unknown as any
 
     // Find existing override
     const { data: existing } = await query.graph({
@@ -157,7 +157,7 @@ export async function PUT(
       commission: updated[0]
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin products id commission")}
 }
 
@@ -168,8 +168,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = req.params
-    const commissionService = req.scope.resolve("commissionModuleService")
-    const query = req.scope.resolve("query")
+    const commissionService = req.scope.resolve("commissionModuleService") as unknown as any
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: existing } = await query.graph({
       entity: "product_commission",
@@ -188,7 +188,7 @@ export async function DELETE(
       product_id: id
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin products id commission")}
 }
 

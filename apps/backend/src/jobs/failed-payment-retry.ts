@@ -4,9 +4,9 @@ import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:failed-payment-retry")
 
 export default async function failedPaymentRetryJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const subscriptionService = container.resolve("subscription")
-  const eventBus = container.resolve("event_bus")
+  const query = container.resolve("query") as unknown as any
+  const subscriptionService = container.resolve("subscription") as unknown as any
+  const eventBus = container.resolve("event_bus") as unknown as any
   
   logger.info("[Payment Retry] Starting retry job...")
   
@@ -84,26 +84,26 @@ export default async function failedPaymentRetryJob(container: MedusaContainer) 
         }
 
         throw new Error("Failed to dispatch payment retry to Temporal")
-      } catch (error: any) {
+      } catch (error: unknown) {
         await subscriptionService.updateSubscriptions({
           id: subscription.id,
           retry_count: retryCount + 1,
           last_retry_at: new Date(),
           metadata: {
             ...subscription.metadata,
-            last_retry_error: error.message
+            last_retry_error: (error instanceof Error ? error.message : String(error))
           }
         })
         
         await eventBus.emit("subscription.payment_failed", {
           id: subscription.id,
           customer_id: subscription.customer_id,
-          error: error.message,
+          error: (error instanceof Error ? error.message : String(error)),
           retry_count: retryCount + 1
         })
         
         failCount++
-        logger.info(`[Payment Retry] Failed for subscription ${subscription.id}: ${error.message}`)
+        logger.info(`[Payment Retry] Failed for subscription ${subscription.id}: ${(error instanceof Error ? error.message : String(error))}`)
       }
     }
     

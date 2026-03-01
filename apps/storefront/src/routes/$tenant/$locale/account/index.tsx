@@ -16,19 +16,24 @@ export const Route = createFileRoute("/$tenant/$locale/account/")({
 
 function AccountDashboard() {
   const { data: orders, isLoading: ordersLoading } = useCustomerOrders()
-  const { data: subscriptions, isLoading: subscriptionsLoading } = useCustomerSubscriptions()
+  const { data: subscriptions, isLoading: subscriptionsLoading } =
+    useCustomerSubscriptions()
   const { data: bookings, isLoading: bookingsLoading } = useCustomerBookings()
 
   // Calculate stats
   const orderCount = orders?.length || 0
-  const activeSubscriptions = subscriptions?.filter((s) => s.status === "active") || []
+  const activeSubscriptions =
+    subscriptions?.filter((s) => s.status === "active") || []
   const upcomingBookings =
     bookings?.filter(
-      (b) => b.status === "confirmed" && new Date(b.scheduled_at) > new Date()
+      (b) => b.status === "confirmed" && new Date(b.scheduled_at!) > new Date(),
     ) || []
   const pendingShipments =
-    orders?.filter((o) => o.fulfillment_status === "not_fulfilled" || o.fulfillment_status === "partially_fulfilled")
-      .length || 0
+    orders?.filter(
+      (o) =>
+        o.fulfillment_status === "not_fulfilled" ||
+        o.fulfillment_status === "partially_fulfilled",
+    ).length || 0
 
   return (
     <AccountLayout>
@@ -41,13 +46,19 @@ function AccountDashboard() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <RecentOrders orders={orders as any || []} isLoading={ordersLoading} />
+          <RecentOrders
+            orders={(orders || []) as any[]}
+            isLoading={ordersLoading}
+          />
           <div className="space-y-6">
             <ActiveSubscriptions
               subscriptions={subscriptions || []}
               isLoading={subscriptionsLoading}
             />
-            <UpcomingBookings bookings={bookings || []} isLoading={bookingsLoading} />
+            <UpcomingBookings
+              bookings={bookings || []}
+              isLoading={bookingsLoading}
+            />
           </div>
         </div>
       </div>

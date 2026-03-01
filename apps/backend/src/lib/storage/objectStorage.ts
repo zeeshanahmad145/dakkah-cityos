@@ -76,12 +76,10 @@ async function signObjectURL({
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(request),
-    }
+    },
   );
   if (!response.ok) {
-    throw new Error(
-      `Failed to sign object URL, errorcode: ${response.status}`
-    );
+    throw new Error(`Failed to sign object URL, errorcode: ${response.status}`);
   }
   const { signed_url: signedURL } = await response.json();
   return signedURL;
@@ -115,8 +113,8 @@ export class ObjectStorageService {
         pathsStr
           .split(",")
           .map((path) => path.trim())
-          .filter((path) => path.length > 0)
-      )
+          .filter((path) => path.length > 0),
+      ),
     );
     if (paths.length === 0) {
       throw new Error("PUBLIC_OBJECT_SEARCH_PATHS not set.");
@@ -154,7 +152,11 @@ export class ObjectStorageService {
     return null;
   }
 
-  async uploadBuffer(buffer: Buffer, objectPath: string, contentType: string): Promise<void> {
+  async uploadBuffer(
+    buffer: Buffer,
+    objectPath: string,
+    contentType: string,
+  ): Promise<void> {
     const bucketName = this.getBucketName();
     const bucket = objectStorageClient.bucket(bucketName);
     const file = bucket.file(objectPath);
@@ -200,7 +202,11 @@ export class ObjectStorageService {
     }
   }
 
-  async serveMediaCached(objectPath: string, res: any, cacheTtlSec: number = 31536000) {
+  async serveMediaCached(
+    objectPath: string,
+    res: any,
+    cacheTtlSec: number = 31536000,
+  ) {
     if (!objectPath.startsWith("media/")) {
       const file = await this.getFile(objectPath);
       return this.streamFile(file, res, cacheTtlSec);
@@ -226,11 +232,14 @@ export class ObjectStorageService {
 
     try {
       const [contents] = await file.download();
-      const contentType = objectPath.endsWith(".jpg") || objectPath.endsWith(".jpeg")
-        ? "image/jpeg"
-        : objectPath.endsWith(".png") ? "image/png"
-        : objectPath.endsWith(".webp") ? "image/webp"
-        : "application/octet-stream";
+      const contentType =
+        objectPath.endsWith(".jpg") || objectPath.endsWith(".jpeg")
+          ? "image/jpeg"
+          : objectPath.endsWith(".png")
+            ? "image/png"
+            : objectPath.endsWith(".webp")
+              ? "image/webp"
+              : "application/octet-stream";
       const size = contents.length;
 
       if (size <= MEDIA_CACHE_MAX_BYTES) {
@@ -259,8 +268,9 @@ export class ObjectStorageService {
         "X-Cache": "MISS",
       });
       res.end(contents);
-    } catch (error: any) {
-      if (error.code === 404) {
+    } catch (error: unknown) {
+      const gcsErr = error as { code?: number };
+      if (gcsErr?.code === 404) {
         throw new ObjectNotFoundError();
       }
       throw error;
@@ -299,7 +309,7 @@ export class ObjectStorageService {
 
   async trySetObjectEntityAclPolicy(
     rawPath: string,
-    aclPolicy: ObjectAclPolicy
+    aclPolicy: ObjectAclPolicy,
   ): Promise<string> {
     const normalizedPath = this.normalizeObjectEntityPath(rawPath);
     if (!normalizedPath.startsWith("/")) {

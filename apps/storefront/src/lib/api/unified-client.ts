@@ -255,7 +255,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs?.[0] || null
     } catch (error) {
-      console.warn(`PayloadCMS unavailable for product content "${productId}":`, error instanceof Error ? error.message : error)
+      console.warn(`PayloadCMS unavailable for product content "${productId}":`, error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return null
     }
   }
@@ -283,7 +283,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs?.[0] || null
     } catch (error) {
-      console.warn(`PayloadCMS unavailable for page "${slug}":`, error instanceof Error ? error.message : error)
+      console.warn(`PayloadCMS unavailable for page "${slug}":`, error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return null
     }
   }
@@ -310,7 +310,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs || []
     } catch (error) {
-      console.warn(`PayloadCMS unavailable for pages list:`, error instanceof Error ? error.message : error)
+      console.warn(`PayloadCMS unavailable for pages list:`, error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return []
     }
   }
@@ -337,7 +337,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs?.[0] || null
     } catch (error) {
-      console.warn(`PayloadCMS unavailable for store branding "${storeHandle}":`, error instanceof Error ? error.message : error)
+      console.warn(`PayloadCMS unavailable for store branding "${storeHandle}":`, error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return null
     }
   }
@@ -409,7 +409,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs?.[0] || null
     } catch (error) {
-      console.warn(`PayloadCMS unavailable for page path "${path}":`, error instanceof Error ? error.message : error)
+      console.warn(`PayloadCMS unavailable for page path "${path}":`, error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return null
     }
   }
@@ -440,7 +440,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs || []
     } catch (error) {
-      console.warn('PayloadCMS unavailable for page children:', error instanceof Error ? error.message : error)
+      console.warn('PayloadCMS unavailable for page children:', error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return []
     }
   }
@@ -471,7 +471,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs?.[0] || null
     } catch (error) {
-      console.warn('PayloadCMS unavailable for navigation:', error instanceof Error ? error.message : error)
+      console.warn('PayloadCMS unavailable for navigation:', error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return null
     }
   }
@@ -497,7 +497,7 @@ class UnifiedAPIClient {
       const data = await response.json()
       return data.docs || []
     } catch (error) {
-      console.warn('PayloadCMS unavailable for verticals:', error instanceof Error ? error.message : error)
+      console.warn('PayloadCMS unavailable for verticals:', error instanceof Error ? (error instanceof Error ? error.message : String(error)) : error)
       return []
     }
   }

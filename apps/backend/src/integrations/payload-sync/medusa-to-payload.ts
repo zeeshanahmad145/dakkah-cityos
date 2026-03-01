@@ -1,7 +1,7 @@
 import { MedusaContainer } from "@medusajs/framework/types";
 import axios from "axios";
-import { createLogger } from "../../lib/logger"
-const logger = createLogger("integration:payload-sync")
+import { createLogger } from "../../lib/logger";
+const logger = createLogger("integration:payload-sync");
 
 export interface PayloadSyncConfig {
   payloadUrl: string;
@@ -29,7 +29,7 @@ export class MedusaToPayloadSync {
    * Sync product to Payload ProductContent collection
    */
   async syncProduct(productId: string): Promise<void> {
-    const query = this.container.resolve("query");
+    const query = this.container.resolve("query") as unknown as any;
 
     // Get product details from Medusa
     const { data: products } = await query.graph({
@@ -76,7 +76,7 @@ export class MedusaToPayloadSync {
       // Update existing
       await this.client.patch(
         `/api/product-content/${existingContent.id}`,
-        contentData
+        contentData,
       );
     } else {
       // Create new
@@ -88,7 +88,7 @@ export class MedusaToPayloadSync {
    * Sync tenant to Payload
    */
   async syncTenant(tenantId: string): Promise<void> {
-    const tenantModuleService = this.container.resolve("tenantModuleService");
+    const tenantModuleService = this.container.resolve("tenantModuleService") as unknown as any;
 
     const tenant = await tenantModuleService.retrieveTenant(tenantId, {
       relations: ["stores"],
@@ -106,13 +106,14 @@ export class MedusaToPayloadSync {
       status: tenant.status,
       tier: tenant.subscription_tier,
       metadata: tenant.metadata || {},
-      effectivePolicies: null as any,
+      effectivePolicies: null,
       lastSyncedAt: new Date().toISOString(),
     };
 
     try {
-      const governanceModule = this.container.resolve("governance") as any;
-      tenantData.effectivePolicies = await governanceModule.resolveEffectivePolicies(tenantId);
+      const governanceModule = this.container.resolve("governance") as unknown as any;
+      tenantData.effectivePolicies =
+        await governanceModule.resolveEffectivePolicies(tenantId);
     } catch {
       tenantData.effectivePolicies = {};
     }
@@ -135,7 +136,7 @@ export class MedusaToPayloadSync {
    * Sync store to Payload
    */
   async syncStore(storeId: string): Promise<void> {
-    const storeModuleService = this.container.resolve("storeModuleService") as any;
+    const storeModuleService = this.container.resolve("storeModuleService") as unknown as any;
 
     const store = await storeModuleService.retrieveStore(storeId);
 
@@ -164,7 +165,7 @@ export class MedusaToPayloadSync {
    * Sync order data to Payload for analytics
    */
   async syncOrder(orderId: string): Promise<void> {
-    const query = this.container.resolve("query");
+    const query = this.container.resolve("query") as unknown as any;
 
     const { data: orders } = await query.graph({
       entity: "order",
@@ -191,7 +192,7 @@ export class MedusaToPayloadSync {
     // Send to Payload analytics collection
     await this.client.post("/api/order-analytics", {
       medusaOrderId: order.id,
-      displayId: (order as any).display_id,
+      displayId: order.display_id,
       status: order.status,
       total: order.total,
       currencyCode: order.currency_code,
@@ -205,7 +206,7 @@ export class MedusaToPayloadSync {
    * Find product content in Payload by Medusa product ID
    */
   private async findProductContent(
-    medusaProductId: string
+    medusaProductId: string,
   ): Promise<any | null> {
     try {
       const response = await this.client.get("/api/product-content", {
@@ -264,10 +265,15 @@ export class MedusaToPayloadSync {
   }
 
   async syncGovernancePolicies(tenantId: string): Promise<void> {
-    const governanceModule = this.container.resolve("governance") as any;
-    const effectivePolicies = await governanceModule.resolveEffectivePolicies(tenantId);
-    const authorities = await governanceModule.listGovernanceAuthorities({ tenant_id: tenantId });
-    const authorityList = Array.isArray(authorities) ? authorities : [authorities].filter(Boolean);
+    const governanceModule = this.container.resolve("governance") as unknown as any;
+    const effectivePolicies =
+      await governanceModule.resolveEffectivePolicies(tenantId);
+    const authorities = await governanceModule.listGovernanceAuthorities({
+      tenant_id: tenantId,
+    });
+    const authorityList = Array.isArray(authorities)
+      ? authorities
+      : [authorities].filter(Boolean);
 
     const policyData = {
       tenantId,
@@ -294,12 +300,17 @@ export class MedusaToPayloadSync {
       });
 
       if (existing.data.docs?.[0]) {
-        await this.client.patch(`/api/governance-policies/${existing.data.docs[0].id}`, policyData);
+        await this.client.patch(
+          `/api/governance-policies/${existing.data.docs[0].id}`,
+          policyData,
+        );
       } else {
         await this.client.post("/api/governance-policies", policyData);
       }
     } catch (err: any) {
-      logger.info(`[PayloadSync] Failed to sync governance policies for tenant ${tenantId}: ${err.message}`);
+      logger.info(
+        `[PayloadSync] Failed to sync governance policies for tenant ${tenantId}: ${err.message}`,
+      );
       throw err;
     }
   }
@@ -312,7 +323,7 @@ export class MedusaToPayloadSync {
     failed: number;
     errors: string[];
   }> {
-    const query = this.container.resolve("query");
+    const query = this.container.resolve("query") as unknown as any;
 
     const { data: products } = await query.graph({
       entity: "product",
@@ -330,7 +341,7 @@ export class MedusaToPayloadSync {
         success++;
       } catch (error) {
         failed++;
-        errors.push(`${product.id}: ${error.message}`);
+        errors.push(`${product.id}: ${(error instanceof Error ? error.message : String(error))}`);
       }
     }
 

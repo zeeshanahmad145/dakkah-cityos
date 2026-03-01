@@ -1,56 +1,56 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { sdk } from "@/lib/utils/sdk";
-import { Button } from "@/components/ui/button";
+import { useState } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { sdk } from "@/lib/utils/sdk"
+import { Button } from "@/components/ui/button"
 
 interface QuoteItem {
-  id: string;
-  product_id: string;
-  variant_id?: string;
-  title: string;
-  sku?: string;
-  thumbnail?: string;
-  quantity: number;
-  unit_price: number;
-  custom_price?: number;
+  id: string
+  product_id: string
+  variant_id?: string
+  title: string
+  sku?: string
+  thumbnail?: string
+  quantity: number
+  unit_price: number
+  custom_price?: number
 }
 
 interface Quote {
-  id: string;
-  quote_number: string;
-  status: string;
-  subtotal: number;
-  discount_total: number;
-  tax_total: number;
-  total: number;
-  customer_notes?: string;
-  internal_notes?: string;
-  discount_reason?: string;
-  created_at: string;
-  valid_until?: string;
-  items: QuoteItem[];
+  id: string
+  quote_number: string
+  status: string
+  subtotal: number
+  discount_total: number
+  tax_total: number
+  total: number
+  customer_notes?: string
+  internal_notes?: string
+  discount_reason?: string
+  created_at: string
+  valid_until?: string
+  items: QuoteItem[]
 }
 
 interface QuoteDetailsProps {
-  quote: Quote;
+  quote: Quote
 }
 
 export function QuoteDetails({ quote }: QuoteDetailsProps) {
-  const [showDeclineForm, setShowDeclineForm] = useState(false);
-  const [declineReason, setDeclineReason] = useState("");
-  const queryClient = useQueryClient();
+  const [showDeclineForm, setShowDeclineForm] = useState(false)
+  const [declineReason, setDeclineReason] = useState("")
+  const queryClient = useQueryClient()
 
   const acceptMutation = useMutation({
     mutationFn: async () => {
       return sdk.client.fetch(`/store/quotes/${quote.id}/accept`, {
         method: "POST",
         credentials: "include",
-      });
+      })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["quote", quote.id] });
+      queryClient.invalidateQueries({ queryKey: ["quote", quote.id] })
     },
-  });
+  })
 
   const declineMutation = useMutation({
     mutationFn: async (reason: string) => {
@@ -58,16 +58,17 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
         method: "POST",
         credentials: "include",
         body: { reason },
-      });
+      })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["quote", quote.id] });
-      setShowDeclineForm(false);
+      queryClient.invalidateQueries({ queryKey: ["quote", quote.id] })
+      setShowDeclineForm(false)
     },
-  });
+  })
 
-  const isExpired = quote.valid_until && new Date(quote.valid_until) < new Date();
-  const canAccept = quote.status === "approved" && !isExpired;
+  const isExpired =
+    quote.valid_until && new Date(quote.valid_until!) < new Date()
+  const canAccept = quote.status === "approved" && !isExpired
 
   return (
     <div className="space-y-6">
@@ -76,7 +77,7 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
         <div>
           <h1 className="text-2xl font-bold">{quote.quote_number}</h1>
           <p className="text-muted-foreground">
-            Created {new Date(quote.created_at).toLocaleDateString()}
+            Created {new Date(quote.created_at!).toLocaleDateString()}
           </p>
         </div>
         <QuoteStatusBadge status={quote.status} />
@@ -84,12 +85,13 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
 
       {/* Expiration Warning */}
       {quote.valid_until && (
-        <div className={`p-4 rounded-lg border ${isExpired ? "bg-red-50 border-red-200" : "bg-blue-50 border-blue-200"}`}>
+        <div
+          className={`p-4 rounded-lg border ${isExpired ? "bg-red-50 border-red-200" : "bg-blue-50 border-blue-200"}`}
+        >
           <p className={isExpired ? "text-red-700" : "text-blue-700"}>
-            {isExpired 
-              ? `This quote expired on ${new Date(quote.valid_until).toLocaleDateString()}`
-              : `Valid until ${new Date(quote.valid_until).toLocaleDateString()}`
-            }
+            {isExpired
+              ? `This quote expired on ${new Date(quote.valid_until!).toLocaleDateString()}`
+              : `Valid until ${new Date(quote.valid_until!).toLocaleDateString()}`}
           </p>
         </div>
       )}
@@ -110,9 +112,13 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
                 />
               )}
               <div className="flex-1">
-                <p className="font-medium">{item.title || (item as any).name || "Item"}</p>
+                <p className="font-medium">
+                  {item.title || (item as any).name || "Item"}
+                </p>
                 {item.sku && (
-                  <p className="text-sm text-muted-foreground">SKU: {item.sku}</p>
+                  <p className="text-sm text-muted-foreground">
+                    SKU: {item.sku}
+                  </p>
                 )}
                 <p className="text-sm">Qty: {item.quantity}</p>
               </div>
@@ -132,7 +138,14 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
                   </p>
                 )}
                 <p className="text-sm text-muted-foreground">
-                  Total: ${(Number((item as any).total || (Number(item.custom_price || item.unit_price || 0) * item.quantity)) / 100).toFixed(2)}
+                  Total: $
+                  {(
+                    Number(
+                      (item as any).total ||
+                        Number(item.custom_price || item.unit_price || 0) *
+                          item.quantity,
+                    ) / 100
+                  ).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -146,15 +159,28 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
           <span>Subtotal</span>
           <span>${(Number(quote.subtotal || 0) / 100).toFixed(2)}</span>
         </div>
-        {(quote.discount_total || (quote as any).discount || 0) > 0 && (
+        {((quote as any).discount_total || (quote as any).discount || 0) >
+          0 && (
           <div className="flex justify-between text-ds-success">
             <span>Discount</span>
-            <span>-${(Number(quote.discount_total || (quote as any).discount || 0) / 100).toFixed(2)}</span>
+            <span>
+              -$
+              {(
+                Number(
+                  (quote as any).discount_total || (quote as any).discount || 0,
+                ) / 100
+              ).toFixed(2)}
+            </span>
           </div>
         )}
         <div className="flex justify-between">
           <span>Tax</span>
-          <span>${(Number(quote.tax_total || (quote as any).tax || 0) / 100).toFixed(2)}</span>
+          <span>
+            $
+            {(
+              Number((quote as any).tax_total || (quote as any).tax || 0) / 100
+            ).toFixed(2)}
+          </span>
         </div>
         <div className="flex justify-between font-bold text-lg pt-2 border-t">
           <span>Total</span>
@@ -170,10 +196,12 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
         </div>
       )}
 
-      {quote.discount_reason && (
+      {(quote as any).discount_reason && (
         <div className="border rounded-lg p-4 bg-ds-success">
-          <h3 className="font-semibold mb-2 text-ds-success">Discount Reason</h3>
-          <p className="text-ds-success">{quote.discount_reason}</p>
+          <h3 className="font-semibold mb-2 text-ds-success">
+            Discount Reason
+          </h3>
+          <p className="text-ds-success">{(quote as any).discount_reason}</p>
         </div>
       )}
 
@@ -187,10 +215,7 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
           >
             {acceptMutation.isPending ? "Processing..." : "Accept Quote"}
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => setShowDeclineForm(true)}
-          >
+          <Button variant="secondary" onClick={() => setShowDeclineForm(true)}>
             Decline
           </Button>
         </div>
@@ -223,7 +248,7 @@ export function QuoteDetails({ quote }: QuoteDetailsProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function QuoteStatusBadge({ status }: { status: string }) {
@@ -236,7 +261,7 @@ function QuoteStatusBadge({ status }: { status: string }) {
     accepted: "bg-ds-success text-ds-success",
     declined: "bg-ds-warning/15 text-ds-warning",
     expired: "bg-ds-muted text-ds-foreground",
-  };
+  }
 
   const labels: Record<string, string> = {
     draft: "Draft",
@@ -247,11 +272,13 @@ function QuoteStatusBadge({ status }: { status: string }) {
     accepted: "Accepted",
     declined: "Declined",
     expired: "Expired",
-  };
+  }
 
   return (
-    <span className={`px-3 py-1.5 rounded text-sm font-medium ${styles[status] || "bg-ds-muted"}`}>
+    <span
+      className={`px-3 py-1.5 rounded text-sm font-medium ${styles[status] || "bg-ds-muted"}`}
+    >
       {labels[status] || status}
     </span>
-  );
+  )
 }

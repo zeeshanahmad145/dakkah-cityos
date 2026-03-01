@@ -20,7 +20,11 @@ interface FeaturedProductsSectionProps {
   config: Record<string, any>
 }
 
-export function FeaturedProductsSection({ tenantPrefix, products, config }: FeaturedProductsSectionProps) {
+export function FeaturedProductsSection({
+  tenantPrefix,
+  products,
+  config,
+}: FeaturedProductsSectionProps) {
   if (products.length === 0) return null
 
   return (
@@ -31,7 +35,7 @@ export function FeaturedProductsSection({ tenantPrefix, products, config }: Feat
             {config.title || "Featured Products"}
           </h2>
           <Link
-            to={`${tenantPrefix}/store` as any}
+            to={`${tenantPrefix}/store` as never}
             className="text-sm font-medium text-ds-muted-foreground hover:text-ds-foreground"
           >
             View All
@@ -39,13 +43,13 @@ export function FeaturedProductsSection({ tenantPrefix, products, config }: Feat
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map(product => {
+          {products.map((product) => {
             const price = product.variants?.[0]?.calculated_price
-            
+
             return (
               <Link
                 key={product.id}
-                to={`${tenantPrefix}/products/${product.handle}` as any}
+                to={`${tenantPrefix}/products/${product.handle}` as never}
                 className="group"
               >
                 <div className="aspect-square bg-ds-muted rounded-lg overflow-hidden mb-4">

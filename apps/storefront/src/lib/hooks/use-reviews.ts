@@ -96,7 +96,7 @@ export function useCreateReview() {
       })
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.message || "Failed to create review")
+        throw new Error((error instanceof Error ? error.message : String(error)) || "Failed to create review")
       }
       return response.json()
     },

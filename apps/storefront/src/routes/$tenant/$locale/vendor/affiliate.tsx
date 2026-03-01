@@ -30,7 +30,7 @@ function VendorAffiliateRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,9 +43,12 @@ function VendorAffiliateRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/affiliate${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: AffiliateProgram[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: AffiliateProgram[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -93,7 +96,9 @@ function VendorAffiliateRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -104,17 +109,24 @@ function VendorAffiliateRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No affiliate programs yet</p>
-          <p className="text-sm">Create your first program to start growing through affiliates.</p>
+          <p className="text-sm">
+            Create your first program to start growing through affiliates.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((program) => (
-            <div key={program.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={program.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{program.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[program.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[program.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {program.status}
                     </span>
                     {program.commission_type && (
@@ -124,33 +136,64 @@ function VendorAffiliateRoute() {
                     )}
                   </div>
                   {program.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{program.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {program.description}
+                    </p>
                   )}
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-3 mb-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{program.commission_rate}%</p>
-                      <p className="text-xs text-ds-muted-foreground">Commission</p>
+                      <p className="text-lg font-bold">
+                        {program.commission_rate}%
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Commission
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{program.affiliates_count}</p>
-                      <p className="text-xs text-ds-muted-foreground">Affiliates</p>
+                      <p className="text-lg font-bold">
+                        {program.affiliates_count}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Affiliates
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{program.currency_code?.toUpperCase()} {(program.revenue / 100).toFixed(2)}</p>
-                      <p className="text-xs text-ds-muted-foreground">Revenue</p>
+                      <p className="text-lg font-bold">
+                        {program.currency_code?.toUpperCase()}{" "}
+                        {(program.revenue / 100).toFixed(2)}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Revenue
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{program.conversions.toLocaleString()}</p>
-                      <p className="text-xs text-ds-muted-foreground">Conversions</p>
+                      <p className="text-lg font-bold">
+                        {program.conversions.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Conversions
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{getConversionRate(program.conversions, program.clicks || 0)}%</p>
-                      <p className="text-xs text-ds-muted-foreground">Conv. Rate</p>
+                      <p className="text-lg font-bold">
+                        {getConversionRate(
+                          program.conversions,
+                          program.clicks || 0,
+                        )}
+                        %
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Conv. Rate
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-ds-muted-foreground">
-                    {program.cookie_duration && <span>Cookie: {program.cookie_duration} days</span>}
-                    {program.clicks !== undefined && <span>{program.clicks.toLocaleString()} clicks</span>}
+                    {program.cookie_duration && (
+                      <span>Cookie: {program.cookie_duration} days</span>
+                    )}
+                    {program.clicks !== undefined && (
+                      <span>{program.clicks.toLocaleString()} clicks</span>
+                    )}
                   </div>
                 </div>
                 <button className="text-sm text-ds-primary hover:underline ms-4">

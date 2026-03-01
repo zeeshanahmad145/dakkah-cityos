@@ -33,7 +33,7 @@ function VendorAuctionsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -102,7 +102,9 @@ function VendorAuctionsRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -118,12 +120,17 @@ function VendorAuctionsRoute() {
       ) : (
         <div className="grid gap-4">
           {items.map((auction) => (
-            <div key={auction.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={auction.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{auction.title}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[auction.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[auction.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {auction.status}
                     </span>
                     <span className="px-2 py-0.5 text-xs rounded-full bg-ds-muted text-ds-muted-foreground">
@@ -132,23 +139,28 @@ function VendorAuctionsRoute() {
                   </div>
                   <div className="flex items-center gap-6 text-sm text-ds-muted-foreground mt-2">
                     <span>
-                      Starting: {auction.currency_code?.toUpperCase()} {(auction.starting_price / 100).toFixed(2)}
+                      Starting: {auction.currency_code?.toUpperCase()}{" "}
+                      {(auction.starting_price / 100).toFixed(2)}
                     </span>
                     {auction.current_bid != null && (
                       <span className="font-medium text-ds-success">
-                        Current: {auction.currency_code?.toUpperCase()} {(auction.current_bid / 100).toFixed(2)}
+                        Current: {auction.currency_code?.toUpperCase()}{" "}
+                        {(auction.current_bid / 100).toFixed(2)}
                       </span>
                     )}
                     {auction.bid_count != null && (
                       <span>{auction.bid_count} bids</span>
                     )}
-                    <span className={`font-medium ${auction.status === "active" ? "text-ds-warning" : ""}`}>
+                    <span
+                      className={`font-medium ${auction.status === "active" ? "text-ds-warning" : ""}`}
+                    >
                       {getTimeRemaining(auction.ends_at)}
                     </span>
                   </div>
                   {auction.reserve_price != null && (
                     <p className="text-xs text-ds-muted-foreground/70 mt-1">
-                      Reserve: {auction.currency_code?.toUpperCase()} {(auction.reserve_price / 100).toFixed(2)}
+                      Reserve: {auction.currency_code?.toUpperCase()}{" "}
+                      {(auction.reserve_price / 100).toFixed(2)}
                     </p>
                   )}
                 </div>

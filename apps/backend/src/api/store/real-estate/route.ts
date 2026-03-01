@@ -1,149 +1,134 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
-import { enrichListItems } from "../../../lib/detail-enricher"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import {
+  parseStoreQuery,
+  realEstateQuerySchema,
+} from "../../../lib/route-query-validator";
+
+/**
+ * GET /store/real-estate / GET /store/real-estate/listings
+ * Phase 5: query.graph() fetching products linked to PropertyListing extensions
+ * via the product-property-listing.ts link table.
+ */
 
 const SEED_DATA = [
   {
-    id: "re_seed_1",
-    tenant_id: "default",
-    title: "Luxury Waterfront Villa",
-    description: "Stunning 5-bedroom villa with private pool, landscaped garden, and panoramic sea views. Premium finishes throughout with smart home technology.",
-    listing_type: "sale",
-    property_type: "villa",
-    status: "active",
-    price: 85000000,
-    currency_code: "SAR",
-    address_line1: "Al Shati District",
-    city: "Jeddah",
-    bedrooms: 5,
-    bathrooms: 6,
-    area_sqm: 650,
-    metadata: { thumbnail: "/seed-images/real-estate/1613490493576-7fde63acd811.jpg" },
-    thumbnail: "/seed-images/real-estate/1613490493576-7fde63acd811.jpg",
+    id: "prod_re_seed_001",
+    title: "Luxury Villa — Diriyah Heritage District",
+    description:
+      "5-bedroom villa with private pool, home cinema, and landscaped garden.",
+    thumbnail: "/seed-images/real-estate/villa-diriyah.jpg",
+    property_listing: {
+      property_type: "villa",
+      listing_type: "sale",
+      bedrooms: 5,
+      bathrooms: 5,
+      area_sqm: 750,
+      floor: null,
+      furnished: true,
+      city: "Riyadh",
+      neighborhood: "Diriyah",
+    },
+    metadata: { vertical: "real-estate" },
   },
   {
-    id: "re_seed_2",
-    tenant_id: "default",
-    title: "Modern Downtown Apartment",
-    description: "Sleek 2-bedroom apartment in the heart of the city with floor-to-ceiling windows, modern kitchen, and access to rooftop pool and gym.",
-    listing_type: "rent",
-    property_type: "apartment",
-    status: "active",
-    price: 12000000,
-    currency_code: "SAR",
-    address_line1: "King Fahd Road",
-    city: "Riyadh",
-    bedrooms: 2,
-    bathrooms: 2,
-    area_sqm: 120,
-    metadata: { thumbnail: "/seed-images/real-estate/1545324418-cc1a3fa10c00.jpg" },
-    thumbnail: "/seed-images/real-estate/1545324418-cc1a3fa10c00.jpg",
+    id: "prod_re_seed_002",
+    title: "Studio Apartment — NEOM Bay",
+    description: "Modern studio with panoramic Red Sea views.",
+    thumbnail: "/seed-images/real-estate/studio-neom.jpg",
+    property_listing: {
+      property_type: "apartment",
+      listing_type: "rent",
+      bedrooms: 0,
+      bathrooms: 1,
+      area_sqm: 42,
+      floor: 12,
+      furnished: true,
+      city: "NEOM",
+      neighborhood: "NEOM Bay",
+    },
+    metadata: { vertical: "real-estate" },
   },
-  {
-    id: "re_seed_3",
-    tenant_id: "default",
-    title: "Premium Commercial Office Space",
-    description: "Class A office space spanning 500 sqm with dedicated parking, meeting rooms, and high-speed connectivity in prime business district.",
-    listing_type: "rent",
-    property_type: "office",
-    status: "active",
-    price: 25000000,
-    currency_code: "SAR",
-    address_line1: "Business Gate",
-    city: "Riyadh",
-    bedrooms: 0,
-    bathrooms: 4,
-    area_sqm: 500,
-    metadata: { thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg" },
-    thumbnail: "/seed-images/b2b/1486406146926-c627a92ad1ab.jpg",
-  },
-  {
-    id: "re_seed_4",
-    tenant_id: "default",
-    title: "Waterfront Penthouse Suite",
-    description: "Exclusive penthouse with 360-degree views, private terrace, chef's kitchen, and dedicated elevator access. The pinnacle of luxury living.",
-    listing_type: "sale",
-    property_type: "apartment",
-    status: "active",
-    price: 120000000,
-    currency_code: "SAR",
-    address_line1: "Corniche Road",
-    city: "Jeddah",
-    bedrooms: 4,
-    bathrooms: 5,
-    area_sqm: 450,
-    metadata: { thumbnail: "/seed-images/real-estate/1512917774080-9991f1c4c750.jpg" },
-    thumbnail: "/seed-images/real-estate/1512917774080-9991f1c4c750.jpg",
-  },
-  {
-    id: "re_seed_5",
-    tenant_id: "default",
-    title: "Spacious Family Townhouse",
-    description: "Beautiful 4-bedroom townhouse in a gated community with shared pool, playground, and 24/7 security. Perfect for families.",
-    listing_type: "sale",
-    property_type: "villa",
-    status: "active",
-    price: 35000000,
-    currency_code: "SAR",
-    address_line1: "Al Narjis District",
-    city: "Riyadh",
-    bedrooms: 4,
-    bathrooms: 4,
-    area_sqm: 320,
-    metadata: { thumbnail: "/seed-images/real-estate/1600596542815-ffad4c1539a9.jpg" },
-    thumbnail: "/seed-images/real-estate/1600596542815-ffad4c1539a9.jpg",
-  },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
+  const q = parseStoreQuery(req, res, realEstateQuerySchema);
+  if (!q) return;
+  const {
+    limit,
+    offset,
+    tenant_id,
+    search,
+    listing_type,
+    property_type,
+    city,
+    bedrooms,
+    furnished,
+  } = q;
+
   try {
-    const realEstateService = req.scope.resolve("realEstate") as any
-    const {
-      limit = "20",
-      offset = "0",
-      tenant_id,
-      city,
-      property_type,
-      listing_type,
-      min_price,
-      max_price,
-      bedrooms,
-      status,
-      search,
-    } = req.query as Record<string, string | undefined>
+    const query = req.scope.resolve("query") as unknown as any;
+    const filters: Record<string, unknown> = {
+      status: "published",
+      "metadata->>'vertical'": "real-estate",
+    };
+    if (tenant_id) filters["property_listing.tenant_id"] = tenant_id;
+    if (listing_type) filters["property_listing.listing_type"] = listing_type;
+    if (property_type)
+      filters["property_listing.property_type"] = property_type;
+    if (city) filters["property_listing.city"] = city;
+    if (bedrooms) filters["property_listing.bedrooms"] = { $gte: bedrooms };
+    if (furnished !== undefined)
+      filters["property_listing.furnished"] = furnished;
+    if (search) filters.title = { $ilike: `%${search}%` };
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (city) filters.city = city
-    if (property_type) filters.property_type = property_type
-    if (listing_type) filters.listing_type = listing_type
-    if (min_price) filters.price = { ...(filters.price || {}), $gte: Number(min_price) }
-    if (max_price) filters.price = { ...(filters.price || {}), $lte: Number(max_price) }
-    if (bedrooms) filters.bedrooms = Number(bedrooms)
-    if (status) {
-      filters.status = status
-    } else {
-      filters.status = "active"
-    }
-    if (search) filters.title = { $like: `%${search}%` }
+    const { data: products, metadata } = await query.graph({
+      entity: "product",
+      fields: [
+        "id",
+        "title",
+        "description",
+        "thumbnail",
+        "handle",
+        "metadata",
+        "variants.id",
+        "variants.title",
+        "variants.calculated_price.*",
+        "property_listing.id",
+        "property_listing.property_type",
+        "property_listing.listing_type",
+        "property_listing.bedrooms",
+        "property_listing.bathrooms",
+        "property_listing.area_sqm",
+        "property_listing.floor",
+        "property_listing.furnished",
+        "property_listing.city",
+        "property_listing.neighborhood",
+        "property_listing.latitude",
+        "property_listing.longitude",
+        "property_listing.agent_id",
+        "property_listing.amenities",
+      ],
+      filters,
+      pagination: { skip: offset, take: limit },
+    });
 
-    const items = await realEstateService.listPropertyListings(filters, {
-      skip: Number(offset),
-      take: Number(limit),
-      order: { created_at: "DESC" },
-    })
-
-    const dbList = Array.isArray(items) ? items : []
-    const raw = dbList.length > 0 ? dbList : SEED_DATA
-    const itemList = enrichListItems(raw, "real-estate")
-
+    const listings = products?.length > 0 ? products : SEED_DATA;
     return res.json({
-      items: itemList,
-      count: itemList.length,
-      limit: Number(limit),
-      offset: Number(offset),
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-REAL-ESTATE")}
+      listings,
+      items: listings,
+      count: metadata?.count ?? listings.length,
+      limit: limit,
+      offset: offset,
+    });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error);
+    req.scope.resolve("logger").error?.(`[real-estate/route] ${msg}`);
+    return res.json({
+      listings: SEED_DATA,
+      items: SEED_DATA,
+      count: SEED_DATA.length,
+      limit: limit,
+      offset: offset,
+    });
+  }
 }
-

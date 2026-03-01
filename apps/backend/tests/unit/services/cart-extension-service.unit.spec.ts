@@ -1,108 +1,183 @@
 jest.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
-    const chain: any = { primaryKey: () => chain, nullable: () => chain, default: () => chain, unique: () => chain }
-    return chain
-  }
+    const chain: any = {
+      primaryKey: () => chain,
+      nullable: () => chain,
+      default: () => chain,
+      unique: () => chain,
+    };
+    return chain;
+  };
   return {
-    MedusaService: () => class MockMedusaBase {
-      async listCartMetadatas(_f: any): Promise<any> { return [] }
-      async updateCartMetadatas(_data: any): Promise<any> { return null }
-      async retrieveCartMetadata(_id: string): Promise<any> { return null }
-      async createCartMetadatas(_data: any): Promise<any> { return null }
-    },
+    MedusaService: () =>
+      class MockMedusaBase {
+        async listCartMetadatas(_f: any): Promise<any> {
+          return [];
+        }
+        async updateCartMetadatas(_data: any): Promise<any> {
+          return null;
+        }
+        async retrieveCartMetadata(_id: string): Promise<any> {
+          return null;
+        }
+        async createCartMetadatas(_data: any): Promise<any> {
+          return null;
+        }
+      },
     model: {
       define: () => ({ indexes: () => ({}) }),
-      id: chainable, text: chainable, number: chainable, json: chainable,
-      enum: () => chainable(), boolean: chainable, dateTime: chainable,
-      bigNumber: chainable, float: chainable, array: chainable,
-      hasOne: () => chainable(), hasMany: () => chainable(),
-      belongsTo: () => chainable(), manyToMany: () => chainable(),
+      id: chainable,
+      text: chainable,
+      number: chainable,
+      json: chainable,
+      enum: () => chainable(),
+      boolean: chainable,
+      dateTime: chainable,
+      bigNumber: chainable,
+      float: chainable,
+      array: chainable,
+      hasOne: () => chainable(),
+      hasMany: () => chainable(),
+      belongsTo: () => chainable(),
+      manyToMany: () => chainable(),
     },
-  }
-})
+  };
+});
 
-import CartExtensionModuleService from "../../../src/modules/cart-extension/service"
+import CartExtensionModuleService from "../../../src/modules/cart-extension/service";
 
 describe("CartExtensionModuleService", () => {
-  let service: CartExtensionModuleService
+  let service: CartExtensionModuleService;
 
   beforeEach(() => {
-    service = new CartExtensionModuleService()
-  })
+    service = new CartExtensionModuleService();
+  });
 
   describe("getByCartId", () => {
     it("returns first matching cart metadata", async () => {
-      const meta = { id: "cm-1", cart_id: "cart-1", tenant_id: "t-1" }
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue([meta])
+      const meta = { id: "cm-1", cart_id: "cart-1", tenant_id: "t-1" };
+      jest.spyOn(service, "listCartMetadatas").mockResolvedValue([meta]);
 
-      const result = await service.getByCartId("cart-1", "t-1")
+      const result = await service.getByCartId("cart-1", "t-1");
 
-      expect(result).toEqual(meta)
-    })
+      expect(result).toEqual(meta);
+    });
 
     it("returns null when no metadata found", async () => {
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue([])
+      jest.spyOn(service, "listCartMetadatas").mockResolvedValue([]);
 
-      const result = await service.getByCartId("cart-1", "t-1")
+      const result = await service.getByCartId("cart-1", "t-1");
 
-      expect(result).toBeNull()
-    })
+      expect(result).toBeNull();
+    });
 
     it("handles non-array response", async () => {
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue({ id: "cm-1" })
+      jest
+        .spyOn(service, "listCartMetadatas")
+        .mockResolvedValue({ id: "cm-1", cart_id: "cart-1", tenant_id: "t-1" });
 
-      const result = await service.getByCartId("cart-1", "t-1")
+      const result = await service.getByCartId("cart-1", "t-1");
 
-      expect(result).toEqual({ id: "cm-1" })
-    })
-  })
+      expect(result).toEqual({
+        id: "cm-1",
+        cart_id: "cart-1",
+        tenant_id: "t-1",
+      });
+    });
+  });
 
   describe("setGiftWrap", () => {
     it("updates existing metadata with gift wrap", async () => {
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue([{ id: "cm-1" }])
-      jest.spyOn(service, "updateCartMetadatas" as any).mockResolvedValue({})
-      jest.spyOn(service, "retrieveCartMetadata" as any).mockResolvedValue({ id: "cm-1", gift_wrap: true, gift_message: "Happy Birthday" })
+      jest
+        .spyOn(service, "listCartMetadatas")
+        .mockResolvedValue([{ id: "cm-1" }]);
+      jest.spyOn(service, "updateCartMetadatas").mockResolvedValue({});
+      jest
+        .spyOn(service, "retrieveCartMetadata")
+        .mockResolvedValue({
+          id: "cm-1",
+          gift_wrap: true,
+          gift_message: "Happy Birthday",
+        });
 
-      const result = await service.setGiftWrap("cart-1", "t-1", { enabled: true, message: "Happy Birthday" })
+      const result = await service.setGiftWrap("cart-1", "t-1", {
+        enabled: true,
+        message: "Happy Birthday",
+      });
 
-      expect(result).toEqual(expect.objectContaining({ gift_wrap: true, gift_message: "Happy Birthday" }))
-    })
+      expect(result).toEqual(
+        expect.objectContaining({
+          gift_wrap: true,
+          gift_message: "Happy Birthday",
+        }),
+      );
+    });
 
     it("creates new metadata when none exists", async () => {
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue([])
-      const createSpy = jest.spyOn(service, "createCartMetadatas" as any).mockResolvedValue({ id: "cm-new", gift_wrap: true })
+      jest.spyOn(service, "listCartMetadatas").mockResolvedValue([]);
+      const createSpy = jest
+        .spyOn(service, "createCartMetadatas")
+        .mockResolvedValue({ id: "cm-new", gift_wrap: true });
 
-      const result = await service.setGiftWrap("cart-1", "t-1", { enabled: true })
+      const result = await service.setGiftWrap("cart-1", "t-1", {
+        enabled: true,
+      });
 
-      expect(result).toEqual(expect.objectContaining({ gift_wrap: true }))
-      expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({ cart_id: "cart-1", gift_wrap: true }))
-    })
-  })
+      expect(result).toEqual(expect.objectContaining({ gift_wrap: true }));
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ cart_id: "cart-1", gift_wrap: true }),
+      );
+    });
+  });
 
   describe("setDeliveryInstructions", () => {
     it("updates existing metadata with delivery instructions", async () => {
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue([{ id: "cm-1" }])
-      jest.spyOn(service, "updateCartMetadatas" as any).mockResolvedValue({})
-      jest.spyOn(service, "retrieveCartMetadata" as any).mockResolvedValue({ id: "cm-1", delivery_instructions: "Leave at door" })
+      jest
+        .spyOn(service, "listCartMetadatas")
+        .mockResolvedValue([{ id: "cm-1" }]);
+      jest.spyOn(service, "updateCartMetadatas").mockResolvedValue({});
+      jest
+        .spyOn(service, "retrieveCartMetadata")
+        .mockResolvedValue({
+          id: "cm-1",
+          delivery_instructions: "Leave at door",
+        });
 
-      const result = await service.setDeliveryInstructions("cart-1", "t-1", "Leave at door")
+      const result = await service.setDeliveryInstructions(
+        "cart-1",
+        "t-1",
+        "Leave at door",
+      );
 
-      expect(result).toEqual(expect.objectContaining({ delivery_instructions: "Leave at door" }))
-    })
+      expect(result).toEqual(
+        expect.objectContaining({ delivery_instructions: "Leave at door" }),
+      );
+    });
 
     it("creates new metadata when none exists", async () => {
-      jest.spyOn(service, "listCartMetadatas" as any).mockResolvedValue([])
-      jest.spyOn(service, "createCartMetadatas" as any).mockResolvedValue({ id: "cm-new", delivery_instructions: "Ring bell" })
+      jest.spyOn(service, "listCartMetadatas").mockResolvedValue([]);
+      jest
+        .spyOn(service, "createCartMetadatas")
+        .mockResolvedValue({
+          id: "cm-new",
+          delivery_instructions: "Ring bell",
+        });
 
-      const result = await service.setDeliveryInstructions("cart-1", "t-1", "Ring bell")
+      const result = await service.setDeliveryInstructions(
+        "cart-1",
+        "t-1",
+        "Ring bell",
+      );
 
-      expect(result).toEqual(expect.objectContaining({ delivery_instructions: "Ring bell" }))
-    })
-  })
+      expect(result).toEqual(
+        expect.objectContaining({ delivery_instructions: "Ring bell" }),
+      );
+    });
+  });
 
   describe("calculateCartTotals", () => {
     it("calculates subtotal, tax, and total", async () => {
-      ;(service as any).manager_ = {
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({
           id: "cart-1",
           items: [
@@ -110,43 +185,52 @@ describe("CartExtensionModuleService", () => {
             { unit_price: 500, quantity: 1 },
           ],
         }),
-      }
-      jest.spyOn(service, "getByCartId" as any).mockResolvedValue(null)
+      };
+      jest.spyOn(service, "getByCartId").mockResolvedValue(null);
 
-      const result = await service.calculateCartTotals("cart-1")
+      const result = await service.calculateCartTotals("cart-1");
 
       expect(result).toEqual({
-        cartId: "cart-1", subtotal: 2500, tax: 250, giftWrapCost: 0, total: 2750, itemCount: 2,
-      })
-    })
+        cartId: "cart-1",
+        subtotal: 2500,
+        tax: 250,
+        giftWrapCost: 0,
+        total: 2750,
+        itemCount: 2,
+      });
+    });
 
     it("adds gift wrap cost when enabled", async () => {
-      ;(service as any).manager_ = {
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({
           id: "cart-1",
           items: [{ unit_price: 1000, quantity: 1 }],
         }),
-      }
-      jest.spyOn(service, "getByCartId" as any).mockResolvedValue({ gift_wrap: true })
+      };
+      jest
+        .spyOn(service, "getByCartId")
+        .mockResolvedValue({ gift_wrap: true });
 
-      const result = await service.calculateCartTotals("cart-1")
+      const result = await service.calculateCartTotals("cart-1");
 
-      expect(result!.giftWrapCost).toBe(500)
-      expect(result!.total).toBe(1000 + 100 + 500)
-    })
+      expect(result!.giftWrapCost).toBe(500);
+      expect(result!.total).toBe(1000 + 100 + 500);
+    });
 
     it("returns null when cart not found", async () => {
-      ;(service as any).manager_ = { findOne: jest.fn().mockResolvedValue(null) }
+      (service).manager_ = {
+        findOne: jest.fn().mockResolvedValue(null),
+      };
 
-      const result = await service.calculateCartTotals("nonexistent")
+      const result = await service.calculateCartTotals("nonexistent");
 
-      expect(result).toBeNull()
-    })
-  })
+      expect(result).toBeNull();
+    });
+  });
 
   describe("applyBulkDiscount", () => {
     it("applies 5% discount for 3+ items", async () => {
-      ;(service as any).manager_ = {
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({
           id: "cart-1",
           items: [
@@ -155,76 +239,79 @@ describe("CartExtensionModuleService", () => {
             { unit_price: 1000, quantity: 1 },
           ],
         }),
-      }
+      };
 
-      const result = await service.applyBulkDiscount("cart-1")
+      const result = await service.applyBulkDiscount("cart-1");
 
-      expect(result!.discountApplied).toBe(true)
-      expect(result!.discountPercentage).toBe(5)
-      expect(result!.discountAmount).toBe(150)
-    })
+      expect(result!.discountApplied).toBe(true);
+      expect(result!.discountPercentage).toBe(5);
+      expect(result!.discountAmount).toBe(150);
+    });
 
     it("applies 10% discount for 5+ items", async () => {
-      const items = Array(5).fill({ unit_price: 1000, quantity: 1 })
-      ;(service as any).manager_ = {
+      const items = Array(5).fill({ unit_price: 1000, quantity: 1 });
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({ id: "cart-1", items }),
-      }
+      };
 
-      const result = await service.applyBulkDiscount("cart-1")
+      const result = await service.applyBulkDiscount("cart-1");
 
-      expect(result!.discountPercentage).toBe(10)
-    })
+      expect(result!.discountPercentage).toBe(10);
+    });
 
     it("applies 15% discount for 10+ items", async () => {
-      const items = Array(10).fill({ unit_price: 1000, quantity: 1 })
-      ;(service as any).manager_ = {
+      const items = Array(10).fill({ unit_price: 1000, quantity: 1 });
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({ id: "cart-1", items }),
-      }
+      };
 
-      const result = await service.applyBulkDiscount("cart-1")
+      const result = await service.applyBulkDiscount("cart-1");
 
-      expect(result!.discountPercentage).toBe(15)
-    })
+      expect(result!.discountPercentage).toBe(15);
+    });
 
     it("returns no discount for fewer than 3 items", async () => {
-      ;(service as any).manager_ = {
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({
           id: "cart-1",
-          items: [{ unit_price: 1000, quantity: 1 }, { unit_price: 2000, quantity: 1 }],
+          items: [
+            { unit_price: 1000, quantity: 1 },
+            { unit_price: 2000, quantity: 1 },
+          ],
         }),
-      }
+      };
 
-      const result = await service.applyBulkDiscount("cart-1")
+      const result = await service.applyBulkDiscount("cart-1");
 
-      expect(result!.discountApplied).toBe(false)
-      expect(result!.discountPercentage).toBe(0)
-    })
+      expect(result!.discountApplied).toBe(false);
+      expect(result!.discountPercentage).toBe(0);
+    });
 
     it("returns null for empty cart", async () => {
-      ;(service as any).manager_ = {
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({ id: "cart-1", items: [] }),
-      }
+      };
 
-      const result = await service.applyBulkDiscount("cart-1")
+      const result = await service.applyBulkDiscount("cart-1");
 
-      expect(result).toBeNull()
-    })
-  })
+      expect(result).toBeNull();
+    });
+  });
 
   describe("validateCartItems", () => {
     it("returns errors for invalid items", async () => {
-      ;(service as any).manager_ = {
+      (service).manager_ = {
         findOne: jest.fn().mockResolvedValue({
           id: "cart-1",
           items: [{ quantity: 0, unit_price: -5, product_id: null }],
         }),
-      }
+      };
 
-      const result = await service.validateCartItems("cart-1")
+      const result = await service.validateCartItems("cart-1");
 
-      expect(result.valid).toBe(false)
-      expect(result.errors.length).toBeGreaterThan(0)
-    })
+      expect(result.valid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
 
     it("returns valid for proper items", async () => {
       const mockManager = {
@@ -232,38 +319,40 @@ describe("CartExtensionModuleService", () => {
           id: "cart-1",
           items: [{ quantity: 2, unit_price: 1000, product_id: "p-1" }],
         }),
-      }
-      ;(service as any).manager_ = mockManager
+      };
+      (service).manager_ = mockManager;
 
-      const manager = (service as any).manager_
-      const cart = await manager.findOne("cart", { where: { id: "cart-1" } })
+      const manager = (service).manager_;
+      const cart = await manager.findOne("cart", { where: { id: "cart-1" } });
 
-      expect(cart).toBeDefined()
-      expect(cart.items).toHaveLength(1)
+      expect(cart).toBeDefined();
+      expect(cart.items).toHaveLength(1);
 
-      const errors: string[] = []
-      ;(cart.items || []).forEach((item: any, index: number) => {
+      const errors: string[] = [];
+      (cart.items || []).forEach((item: any, index: number) => {
         if (!item.quantity || item.quantity <= 0) {
-          errors.push(`Item ${index + 1}: Invalid quantity`)
+          errors.push(`Item ${index + 1}: Invalid quantity`);
         }
         if (!item.unit_price || item.unit_price <= 0) {
-          errors.push(`Item ${index + 1}: Invalid price`)
+          errors.push(`Item ${index + 1}: Invalid price`);
         }
         if (!item.product_id) {
-          errors.push(`Item ${index + 1}: Missing product reference`)
+          errors.push(`Item ${index + 1}: Missing product reference`);
         }
-      })
+      });
 
-      expect(errors).toHaveLength(0)
-    })
+      expect(errors).toHaveLength(0);
+    });
 
     it("returns error when cart not found", async () => {
-      ;(service as any).manager_ = { findOne: jest.fn().mockResolvedValue(null) }
+      (service).manager_ = {
+        findOne: jest.fn().mockResolvedValue(null),
+      };
 
-      const result = await service.validateCartItems("nonexistent")
+      const result = await service.validateCartItems("nonexistent");
 
-      expect(result.valid).toBe(false)
-      expect(result.errors).toContain("Cart not found or has no items")
-    })
-  })
-})
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain("Cart not found or has no items");
+    });
+  });
+});

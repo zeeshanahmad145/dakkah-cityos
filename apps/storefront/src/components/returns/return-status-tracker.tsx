@@ -98,7 +98,7 @@ export function ReturnStatusTracker({
                 <div>
                   <p className="text-sm text-ds-foreground">{event.description}</p>
                   <p className="text-xs text-ds-muted-foreground">
-                    {new Date(event.timestamp).toLocaleDateString(locale)}
+                    {new Date(event.timestamp!).toLocaleDateString(locale)}
                   </p>
                 </div>
               </div>
@@ -112,7 +112,7 @@ export function ReturnStatusTracker({
               {t(locale, "returns.refund_issued")}
             </p>
             <p className="text-lg font-bold text-ds-foreground mt-1">
-              {formatCurrency(refundAmount.amount, refundAmount.currency, locale as SupportedLocale)}
+              {formatCurrency((refundAmount.amount ?? 0), refundAmount.currency, locale as SupportedLocale)}
             </p>
             {refundMethod && (
               <p className="text-xs text-ds-muted-foreground mt-0.5">

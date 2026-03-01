@@ -1,18 +1,18 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-    const context = (req as any).cityosContext
-    const vendorId = context?.vendorId || (req as any).vendor_id
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
+    const context = req.cityosContext;
+    const vendorId = context?.vendorId || req.vendor_id;
 
     if (!vendorId) {
-      return res.status(403).json({ message: "Vendor context required" })
+      return res.status(403).json({ message: "Vendor context required" });
     }
 
-    const { limit = 50, offset = 0 } = req.query as any
+    const { limit = 50, offset = 0 } = req.query;
 
     // Get payouts
     const { data: payouts } = await query.graph({
@@ -33,7 +33,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         skip: Number(offset),
         take: Number(limit),
       },
-    })
+    });
 
     // Get unpaid commission totals for available balance
     const { data: unpaidCommissions } = await query.graph({
@@ -44,7 +44,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         payout_status: "unpaid",
         status: "approved",
       },
-    })
+    });
 
     // Get pending payout totals
     const { data: pendingPayouts } = await query.graph({
@@ -54,22 +54,22 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         vendor_id: vendorId,
         status: ["pending", "processing"],
       },
-    })
+    });
 
     // Calculate balances
     const availableBalance = unpaidCommissions.reduce(
       (sum: number, c: any) => sum + (Number(c.net_amount) || 0),
-      0
-    )
-  
+      0,
+    );
+
     const pendingBalance = pendingPayouts.reduce(
       (sum: number, p: any) => sum + (Number(p.amount) || 0),
-      0
-    )
+      0,
+    );
 
     const totalPaid = payouts
       .filter((p: any) => p.status === "completed")
-      .reduce((sum: number, p: any) => sum + (Number(p.amount) || 0), 0)
+      .reduce((sum: number, p: any) => sum + (Number(p.amount) || 0), 0);
 
     return res.json({
       payouts: payouts.map((p: any) => ({
@@ -86,9 +86,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         total_paid: totalPaid,
       },
       count: payouts.length,
-    })
-
-  } catch (error: any) {
-    handleApiError(res, error, "GET vendor payouts")}
+    });
+  } catch (error: unknown) {
+    handleApiError(res, error, "GET vendor payouts");
+  }
 }
-

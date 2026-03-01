@@ -1,10 +1,10 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
     const { id } = req.params
   
     // Get subscription
@@ -93,7 +93,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ events })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin subscriptions id events")}
 }
 

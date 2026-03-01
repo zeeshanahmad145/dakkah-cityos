@@ -30,7 +30,7 @@ function VendorParkingRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,9 +43,12 @@ function VendorParkingRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/parking${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: ParkingFacility[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: ParkingFacility[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -93,7 +96,9 @@ function VendorParkingRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -104,19 +109,29 @@ function VendorParkingRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No parking facilities yet</p>
-          <p className="text-sm">Add your first facility to start managing parking.</p>
+          <p className="text-sm">
+            Add your first facility to start managing parking.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((facility) => {
-            const occupancy = getOccupancyPercent(facility.total_spots, facility.available_spots)
+            const occupancy = getOccupancyPercent(
+              facility.total_spots,
+              facility.available_spots,
+            )
             return (
-              <div key={facility.id} className="border rounded-lg p-6 hover:shadow-md transition">
+              <div
+                key={facility.id}
+                className="border rounded-lg p-6 hover:shadow-md transition"
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-semibold">{facility.name}</h3>
-                      <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[facility.status] || "bg-ds-muted text-ds-foreground"}`}>
+                      <span
+                        className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[facility.status] || "bg-ds-muted text-ds-foreground"}`}
+                      >
                         {facility.status}
                       </span>
                       {facility.type && (
@@ -125,28 +140,53 @@ function VendorParkingRoute() {
                         </span>
                       )}
                     </div>
-                    <p className="text-ds-muted-foreground text-sm mb-3">{facility.location}{facility.address ? ` — ${facility.address}` : ""}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {facility.location}
+                      {facility.address ? ` — ${facility.address}` : ""}
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-3">
                       <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                        <p className="text-lg font-bold">{facility.total_spots}</p>
-                        <p className="text-xs text-ds-muted-foreground">Total Spots</p>
+                        <p className="text-lg font-bold">
+                          {facility.total_spots}
+                        </p>
+                        <p className="text-xs text-ds-muted-foreground">
+                          Total Spots
+                        </p>
                       </div>
                       <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                        <p className="text-lg font-bold">{facility.available_spots}</p>
-                        <p className="text-xs text-ds-muted-foreground">Available</p>
+                        <p className="text-lg font-bold">
+                          {facility.available_spots}
+                        </p>
+                        <p className="text-xs text-ds-muted-foreground">
+                          Available
+                        </p>
                       </div>
                       <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
                         <p className="text-lg font-bold">{occupancy}%</p>
-                        <p className="text-xs text-ds-muted-foreground">Occupancy</p>
+                        <p className="text-xs text-ds-muted-foreground">
+                          Occupancy
+                        </p>
                       </div>
                       <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                        <p className="text-lg font-bold">{facility.currency_code?.toUpperCase()} {(facility.hourly_rate / 100).toFixed(2)}</p>
-                        <p className="text-xs text-ds-muted-foreground">Hourly Rate</p>
+                        <p className="text-lg font-bold">
+                          {facility.currency_code?.toUpperCase()}{" "}
+                          {(facility.hourly_rate / 100).toFixed(2)}
+                        </p>
+                        <p className="text-xs text-ds-muted-foreground">
+                          Hourly Rate
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-ds-muted-foreground">
-                      {facility.daily_rate && <span>Daily: {facility.currency_code?.toUpperCase()} {(facility.daily_rate / 100).toFixed(2)}</span>}
-                      {facility.operating_hours && <span>Hours: {facility.operating_hours}</span>}
+                      {facility.daily_rate && (
+                        <span>
+                          Daily: {facility.currency_code?.toUpperCase()}{" "}
+                          {(facility.daily_rate / 100).toFixed(2)}
+                        </span>
+                      )}
+                      {facility.operating_hours && (
+                        <span>Hours: {facility.operating_hours}</span>
+                      )}
                     </div>
                   </div>
                   <button className="text-sm text-ds-primary hover:underline ms-4">

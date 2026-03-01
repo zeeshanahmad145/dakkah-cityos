@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { metrics } from "../../../lib/monitoring/metrics"
 import { handleApiError } from "../../../lib/api-error-handler"
 
@@ -20,7 +20,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     res.setHeader("Content-Type", "text/plain; charset=utf-8")
     return res.send(metrics.exportPrometheus())
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin metrics")}
 }
 

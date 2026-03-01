@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
@@ -27,7 +27,7 @@ export async function GET(
       limit?: number
     }
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const filters: Record<string, any> = {}
     if (status) filters.status = status
@@ -55,7 +55,7 @@ export async function GET(
 
     res.json({ discounts })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin subscriptions discounts")}
 }
 
@@ -81,8 +81,8 @@ export async function POST(
       duration_months
     } = parsed.data
 
-    const subscriptionService = req.scope.resolve("subscriptionModuleService")
-    const query = req.scope.resolve("query")
+    const subscriptionService = req.scope.resolve("subscriptionModuleService") as unknown as any
+    const query = req.scope.resolve("query") as unknown as any
 
     // Check if code already exists
     const { data: existing } = await query.graph({
@@ -120,7 +120,7 @@ export async function POST(
 
     res.status(201).json({ discount })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin subscriptions discounts")}
 }
 

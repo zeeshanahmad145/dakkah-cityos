@@ -69,7 +69,7 @@ export default function DisputeTimeline({
                     {t(locale, `disputes.events.${event.type}`)}
                   </span>
                   <span className="text-xs text-ds-muted-foreground">
-                    {new Date(event.timestamp).toLocaleString()}
+                    {new Date(event.timestamp!).toLocaleString()}
                   </span>
                 </div>
                 <p className="text-sm text-ds-muted-foreground mt-1">

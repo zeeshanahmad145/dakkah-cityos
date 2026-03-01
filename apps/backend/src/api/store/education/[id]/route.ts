@@ -1,13 +1,14 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
-import { enrichDetailItem } from "../../../../lib/detail-enricher"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
+import { enrichDetailItem } from "../../../../lib/detail-enricher";
 
 const SEED_DATA = [
   {
     id: "edu_seed_01",
     tenant_id: "tenant_seed",
     title: "Full-Stack Web Development Bootcamp",
-    description: "Master modern web development with React, Node.js, and cloud deployment. Build real-world projects and launch your tech career.",
+    description:
+      "Master modern web development with React, Node.js, and cloud deployment. Build real-world projects and launch your tech career.",
     short_description: "Master React, Node.js, and cloud deployment",
     category: "technology",
     subcategory: "web_development",
@@ -30,25 +31,88 @@ const SEED_DATA = [
       enrolled_count: 3450,
     },
     created_at: "2025-01-01T00:00:00Z",
-    what_you_learn: ["Build full-stack web applications with React and Node.js", "Deploy applications to cloud platforms like AWS and Vercel", "Implement authentication, databases, and REST APIs", "Write clean, maintainable, and testable code", "Use Git, CI/CD, and modern development workflows"],
+    what_you_learn: [
+      "Build full-stack web applications with React and Node.js",
+      "Deploy applications to cloud platforms like AWS and Vercel",
+      "Implement authentication, databases, and REST APIs",
+      "Write clean, maintainable, and testable code",
+      "Use Git, CI/CD, and modern development workflows",
+    ],
     curriculum: [
-      { title: "Frontend Fundamentals", duration: "4 weeks", lessons: [{ title: "HTML5 & CSS3 Essentials", duration: "2h" }, { title: "JavaScript ES6+ Deep Dive", duration: "3h" }, { title: "React Components & Hooks", duration: "4h" }, { title: "State Management with Context", duration: "2h" }] },
-      { title: "Backend Development", duration: "4 weeks", lessons: [{ title: "Node.js & Express Setup", duration: "2h" }, { title: "RESTful API Design", duration: "3h" }, { title: "Database Design with PostgreSQL", duration: "3h" }, { title: "Authentication & Authorization", duration: "2h" }] },
-      { title: "Deployment & DevOps", duration: "2 weeks", lessons: [{ title: "Docker Containerization", duration: "2h" }, { title: "CI/CD Pipelines", duration: "2h" }, { title: "Cloud Deployment (AWS)", duration: "3h" }] },
+      {
+        title: "Frontend Fundamentals",
+        duration: "4 weeks",
+        lessons: [
+          { title: "HTML5 & CSS3 Essentials", duration: "2h" },
+          { title: "JavaScript ES6+ Deep Dive", duration: "3h" },
+          { title: "React Components & Hooks", duration: "4h" },
+          { title: "State Management with Context", duration: "2h" },
+        ],
+      },
+      {
+        title: "Backend Development",
+        duration: "4 weeks",
+        lessons: [
+          { title: "Node.js & Express Setup", duration: "2h" },
+          { title: "RESTful API Design", duration: "3h" },
+          { title: "Database Design with PostgreSQL", duration: "3h" },
+          { title: "Authentication & Authorization", duration: "2h" },
+        ],
+      },
+      {
+        title: "Deployment & DevOps",
+        duration: "2 weeks",
+        lessons: [
+          { title: "Docker Containerization", duration: "2h" },
+          { title: "CI/CD Pipelines", duration: "2h" },
+          { title: "Cloud Deployment (AWS)", duration: "3h" },
+        ],
+      },
     ],
     reviews: [
-      { author: "Michael Torres", rating: 5, comment: "Best web development course I have ever taken. The projects are incredibly practical.", created_at: "2025-04-15T00:00:00Z" },
-      { author: "Aisha Patel", rating: 5, comment: "Sarah is an amazing instructor. She explains complex concepts in a very approachable way.", created_at: "2025-04-10T00:00:00Z" },
-      { author: "David Kim", rating: 4, comment: "Great content and well-structured. Would love more advanced topics on performance optimization.", created_at: "2025-04-05T00:00:00Z" },
-      { author: "Laura Garcia", rating: 5, comment: "Went from zero coding knowledge to landing a junior developer role. Highly recommended!", created_at: "2025-03-28T00:00:00Z" },
-      { author: "James Wilson", rating: 4, comment: "Solid course with real-world projects. The community support is also excellent.", created_at: "2025-03-20T00:00:00Z" },
+      {
+        author: "Michael Torres",
+        rating: 5,
+        comment:
+          "Best web development course I have ever taken. The projects are incredibly practical.",
+        created_at: "2025-04-15T00:00:00Z",
+      },
+      {
+        author: "Aisha Patel",
+        rating: 5,
+        comment:
+          "Sarah is an amazing instructor. She explains complex concepts in a very approachable way.",
+        created_at: "2025-04-10T00:00:00Z",
+      },
+      {
+        author: "David Kim",
+        rating: 4,
+        comment:
+          "Great content and well-structured. Would love more advanced topics on performance optimization.",
+        created_at: "2025-04-05T00:00:00Z",
+      },
+      {
+        author: "Laura Garcia",
+        rating: 5,
+        comment:
+          "Went from zero coding knowledge to landing a junior developer role. Highly recommended!",
+        created_at: "2025-03-28T00:00:00Z",
+      },
+      {
+        author: "James Wilson",
+        rating: 4,
+        comment:
+          "Solid course with real-world projects. The community support is also excellent.",
+        created_at: "2025-03-20T00:00:00Z",
+      },
     ],
   },
   {
     id: "edu_seed_02",
     tenant_id: "tenant_seed",
     title: "Business Strategy & Leadership",
-    description: "Learn strategic thinking, leadership skills, and business management from top MBA professors and industry executives.",
+    description:
+      "Learn strategic thinking, leadership skills, and business management from top MBA professors and industry executives.",
     short_description: "Strategic thinking and leadership essentials",
     category: "business",
     subcategory: "management",
@@ -71,25 +135,86 @@ const SEED_DATA = [
       enrolled_count: 1890,
     },
     created_at: "2025-01-05T00:00:00Z",
-    what_you_learn: ["Develop strategic thinking and analytical frameworks", "Lead teams effectively through change management", "Create and execute business growth strategies", "Understand financial analysis and decision-making", "Build influential communication and negotiation skills"],
+    what_you_learn: [
+      "Develop strategic thinking and analytical frameworks",
+      "Lead teams effectively through change management",
+      "Create and execute business growth strategies",
+      "Understand financial analysis and decision-making",
+      "Build influential communication and negotiation skills",
+    ],
     curriculum: [
-      { title: "Strategic Foundations", duration: "3 weeks", lessons: [{ title: "Strategic Analysis Frameworks", duration: "2h" }, { title: "Competitive Advantage", duration: "2h" }, { title: "Market Analysis & Positioning", duration: "3h" }] },
-      { title: "Leadership Excellence", duration: "3 weeks", lessons: [{ title: "Leadership Styles & Adaptability", duration: "2h" }, { title: "Change Management", duration: "2h" }, { title: "Building High-Performance Teams", duration: "3h" }] },
-      { title: "Business Growth", duration: "2 weeks", lessons: [{ title: "Financial Decision Making", duration: "3h" }, { title: "Innovation & Disruption", duration: "2h" }, { title: "Scaling Organizations", duration: "2h" }] },
+      {
+        title: "Strategic Foundations",
+        duration: "3 weeks",
+        lessons: [
+          { title: "Strategic Analysis Frameworks", duration: "2h" },
+          { title: "Competitive Advantage", duration: "2h" },
+          { title: "Market Analysis & Positioning", duration: "3h" },
+        ],
+      },
+      {
+        title: "Leadership Excellence",
+        duration: "3 weeks",
+        lessons: [
+          { title: "Leadership Styles & Adaptability", duration: "2h" },
+          { title: "Change Management", duration: "2h" },
+          { title: "Building High-Performance Teams", duration: "3h" },
+        ],
+      },
+      {
+        title: "Business Growth",
+        duration: "2 weeks",
+        lessons: [
+          { title: "Financial Decision Making", duration: "3h" },
+          { title: "Innovation & Disruption", duration: "2h" },
+          { title: "Scaling Organizations", duration: "2h" },
+        ],
+      },
     ],
     reviews: [
-      { author: "Samantha Lee", rating: 5, comment: "Transformed the way I think about business strategy. Professor Torres is brilliant.", created_at: "2025-04-12T00:00:00Z" },
-      { author: "Omar Hassan", rating: 4, comment: "Very practical and applicable content. Case studies are particularly valuable.", created_at: "2025-04-08T00:00:00Z" },
-      { author: "Rachel Green", rating: 5, comment: "The leadership module alone was worth the entire course price. Incredible insights.", created_at: "2025-04-01T00:00:00Z" },
-      { author: "Alex Chen", rating: 4, comment: "Great blend of theory and practice. Would benefit from more interactive sessions.", created_at: "2025-03-25T00:00:00Z" },
-      { author: "Priya Sharma", rating: 5, comment: "Applied what I learned immediately at work and saw tangible improvements in team performance.", created_at: "2025-03-18T00:00:00Z" },
+      {
+        author: "Samantha Lee",
+        rating: 5,
+        comment:
+          "Transformed the way I think about business strategy. Professor Torres is brilliant.",
+        created_at: "2025-04-12T00:00:00Z",
+      },
+      {
+        author: "Omar Hassan",
+        rating: 4,
+        comment:
+          "Very practical and applicable content. Case studies are particularly valuable.",
+        created_at: "2025-04-08T00:00:00Z",
+      },
+      {
+        author: "Rachel Green",
+        rating: 5,
+        comment:
+          "The leadership module alone was worth the entire course price. Incredible insights.",
+        created_at: "2025-04-01T00:00:00Z",
+      },
+      {
+        author: "Alex Chen",
+        rating: 4,
+        comment:
+          "Great blend of theory and practice. Would benefit from more interactive sessions.",
+        created_at: "2025-03-25T00:00:00Z",
+      },
+      {
+        author: "Priya Sharma",
+        rating: 5,
+        comment:
+          "Applied what I learned immediately at work and saw tangible improvements in team performance.",
+        created_at: "2025-03-18T00:00:00Z",
+      },
     ],
   },
   {
     id: "edu_seed_03",
     tenant_id: "tenant_seed",
     title: "Conversational Arabic for Beginners",
-    description: "Start speaking Arabic from day one with our immersive, conversation-focused approach. Includes cultural context and real-world dialogues.",
+    description:
+      "Start speaking Arabic from day one with our immersive, conversation-focused approach. Includes cultural context and real-world dialogues.",
     short_description: "Speak Arabic confidently from day one",
     category: "language",
     subcategory: "arabic",
@@ -112,25 +237,88 @@ const SEED_DATA = [
       enrolled_count: 2780,
     },
     created_at: "2025-01-10T00:00:00Z",
-    what_you_learn: ["Hold basic conversations in Modern Standard Arabic", "Read and write Arabic script fluently", "Understand cultural context and etiquette", "Navigate everyday situations like shopping and dining", "Build vocabulary for travel and business contexts"],
+    what_you_learn: [
+      "Hold basic conversations in Modern Standard Arabic",
+      "Read and write Arabic script fluently",
+      "Understand cultural context and etiquette",
+      "Navigate everyday situations like shopping and dining",
+      "Build vocabulary for travel and business contexts",
+    ],
     curriculum: [
-      { title: "Arabic Foundations", duration: "4 weeks", lessons: [{ title: "Arabic Alphabet & Pronunciation", duration: "2h" }, { title: "Greetings & Introductions", duration: "1.5h" }, { title: "Numbers & Basic Phrases", duration: "2h" }, { title: "Simple Sentence Structure", duration: "2h" }] },
-      { title: "Conversational Skills", duration: "4 weeks", lessons: [{ title: "Shopping & Bargaining", duration: "2h" }, { title: "Dining & Food Vocabulary", duration: "2h" }, { title: "Directions & Transportation", duration: "1.5h" }, { title: "Social Conversations", duration: "2h" }] },
-      { title: "Cultural Immersion", duration: "2 weeks", lessons: [{ title: "Arabic Business Etiquette", duration: "1.5h" }, { title: "Media & Entertainment Arabic", duration: "2h" }, { title: "Regional Dialects Overview", duration: "1.5h" }] },
+      {
+        title: "Arabic Foundations",
+        duration: "4 weeks",
+        lessons: [
+          { title: "Arabic Alphabet & Pronunciation", duration: "2h" },
+          { title: "Greetings & Introductions", duration: "1.5h" },
+          { title: "Numbers & Basic Phrases", duration: "2h" },
+          { title: "Simple Sentence Structure", duration: "2h" },
+        ],
+      },
+      {
+        title: "Conversational Skills",
+        duration: "4 weeks",
+        lessons: [
+          { title: "Shopping & Bargaining", duration: "2h" },
+          { title: "Dining & Food Vocabulary", duration: "2h" },
+          { title: "Directions & Transportation", duration: "1.5h" },
+          { title: "Social Conversations", duration: "2h" },
+        ],
+      },
+      {
+        title: "Cultural Immersion",
+        duration: "2 weeks",
+        lessons: [
+          { title: "Arabic Business Etiquette", duration: "1.5h" },
+          { title: "Media & Entertainment Arabic", duration: "2h" },
+          { title: "Regional Dialects Overview", duration: "1.5h" },
+        ],
+      },
     ],
     reviews: [
-      { author: "Tom Bradley", rating: 5, comment: "Dr. Fatima makes learning Arabic fun and accessible. Best language course online.", created_at: "2025-04-14T00:00:00Z" },
-      { author: "Yuki Tanaka", rating: 5, comment: "The cultural context is so helpful. I feel much more confident speaking Arabic now.", created_at: "2025-04-09T00:00:00Z" },
-      { author: "Maria Gonzalez", rating: 5, comment: "I can now have basic conversations after just 6 weeks. Amazing methodology!", created_at: "2025-04-03T00:00:00Z" },
-      { author: "John Smith", rating: 4, comment: "Well-structured and engaging. More practice exercises would make it perfect.", created_at: "2025-03-27T00:00:00Z" },
-      { author: "Sophie Martin", rating: 5, comment: "The immersive approach really works. I look forward to every lesson.", created_at: "2025-03-19T00:00:00Z" },
+      {
+        author: "Tom Bradley",
+        rating: 5,
+        comment:
+          "Dr. Fatima makes learning Arabic fun and accessible. Best language course online.",
+        created_at: "2025-04-14T00:00:00Z",
+      },
+      {
+        author: "Yuki Tanaka",
+        rating: 5,
+        comment:
+          "The cultural context is so helpful. I feel much more confident speaking Arabic now.",
+        created_at: "2025-04-09T00:00:00Z",
+      },
+      {
+        author: "Maria Gonzalez",
+        rating: 5,
+        comment:
+          "I can now have basic conversations after just 6 weeks. Amazing methodology!",
+        created_at: "2025-04-03T00:00:00Z",
+      },
+      {
+        author: "John Smith",
+        rating: 4,
+        comment:
+          "Well-structured and engaging. More practice exercises would make it perfect.",
+        created_at: "2025-03-27T00:00:00Z",
+      },
+      {
+        author: "Sophie Martin",
+        rating: 5,
+        comment:
+          "The immersive approach really works. I look forward to every lesson.",
+        created_at: "2025-03-19T00:00:00Z",
+      },
     ],
   },
   {
     id: "edu_seed_04",
     tenant_id: "tenant_seed",
     title: "Digital Photography Masterclass",
-    description: "From camera basics to advanced composition and post-processing. Learn to capture stunning photos in any environment.",
+    description:
+      "From camera basics to advanced composition and post-processing. Learn to capture stunning photos in any environment.",
     short_description: "Capture stunning photos like a professional",
     category: "arts",
     subcategory: "photography",
@@ -153,25 +341,87 @@ const SEED_DATA = [
       enrolled_count: 1560,
     },
     created_at: "2025-01-15T00:00:00Z",
-    what_you_learn: ["Master camera settings and manual exposure", "Compose visually striking photographs", "Edit photos professionally using Lightroom and Photoshop", "Shoot in various lighting conditions", "Build a professional photography portfolio"],
+    what_you_learn: [
+      "Master camera settings and manual exposure",
+      "Compose visually striking photographs",
+      "Edit photos professionally using Lightroom and Photoshop",
+      "Shoot in various lighting conditions",
+      "Build a professional photography portfolio",
+    ],
     curriculum: [
-      { title: "Camera Mastery", duration: "3 weeks", lessons: [{ title: "Understanding Your Camera", duration: "2h" }, { title: "Exposure Triangle", duration: "2h" }, { title: "Lenses & Focal Lengths", duration: "1.5h" }] },
-      { title: "Composition & Lighting", duration: "3 weeks", lessons: [{ title: "Rule of Thirds & Leading Lines", duration: "2h" }, { title: "Natural Light Photography", duration: "2h" }, { title: "Studio Lighting Setup", duration: "3h" }, { title: "Golden Hour & Blue Hour", duration: "1.5h" }] },
-      { title: "Post-Processing", duration: "2 weeks", lessons: [{ title: "Lightroom Essentials", duration: "3h" }, { title: "Photoshop for Photographers", duration: "3h" }, { title: "Portfolio Building", duration: "2h" }] },
+      {
+        title: "Camera Mastery",
+        duration: "3 weeks",
+        lessons: [
+          { title: "Understanding Your Camera", duration: "2h" },
+          { title: "Exposure Triangle", duration: "2h" },
+          { title: "Lenses & Focal Lengths", duration: "1.5h" },
+        ],
+      },
+      {
+        title: "Composition & Lighting",
+        duration: "3 weeks",
+        lessons: [
+          { title: "Rule of Thirds & Leading Lines", duration: "2h" },
+          { title: "Natural Light Photography", duration: "2h" },
+          { title: "Studio Lighting Setup", duration: "3h" },
+          { title: "Golden Hour & Blue Hour", duration: "1.5h" },
+        ],
+      },
+      {
+        title: "Post-Processing",
+        duration: "2 weeks",
+        lessons: [
+          { title: "Lightroom Essentials", duration: "3h" },
+          { title: "Photoshop for Photographers", duration: "3h" },
+          { title: "Portfolio Building", duration: "2h" },
+        ],
+      },
     ],
     reviews: [
-      { author: "Emily Watson", rating: 5, comment: "Alex is an incredible teacher. My photography has improved dramatically.", created_at: "2025-04-13T00:00:00Z" },
-      { author: "Hassan Ali", rating: 4, comment: "Great hands-on approach. The in-person workshops are the highlight.", created_at: "2025-04-07T00:00:00Z" },
-      { author: "Nicole Park", rating: 5, comment: "From smartphone photos to DSLR mastery. This course changed everything for me.", created_at: "2025-04-02T00:00:00Z" },
-      { author: "Robert Johnson", rating: 5, comment: "The editing modules are exceptional. Finally understand Lightroom properly.", created_at: "2025-03-26T00:00:00Z" },
-      { author: "Anna Petrov", rating: 4, comment: "Loved the course! Would appreciate more content on video photography.", created_at: "2025-03-17T00:00:00Z" },
+      {
+        author: "Emily Watson",
+        rating: 5,
+        comment:
+          "Alex is an incredible teacher. My photography has improved dramatically.",
+        created_at: "2025-04-13T00:00:00Z",
+      },
+      {
+        author: "Hassan Ali",
+        rating: 4,
+        comment:
+          "Great hands-on approach. The in-person workshops are the highlight.",
+        created_at: "2025-04-07T00:00:00Z",
+      },
+      {
+        author: "Nicole Park",
+        rating: 5,
+        comment:
+          "From smartphone photos to DSLR mastery. This course changed everything for me.",
+        created_at: "2025-04-02T00:00:00Z",
+      },
+      {
+        author: "Robert Johnson",
+        rating: 5,
+        comment:
+          "The editing modules are exceptional. Finally understand Lightroom properly.",
+        created_at: "2025-03-26T00:00:00Z",
+      },
+      {
+        author: "Anna Petrov",
+        rating: 4,
+        comment:
+          "Loved the course! Would appreciate more content on video photography.",
+        created_at: "2025-03-17T00:00:00Z",
+      },
     ],
   },
   {
     id: "edu_seed_05",
     tenant_id: "tenant_seed",
     title: "Data Science & Machine Learning",
-    description: "Comprehensive course covering Python, statistics, machine learning algorithms, and deep learning. Includes hands-on projects with real datasets.",
+    description:
+      "Comprehensive course covering Python, statistics, machine learning algorithms, and deep learning. Includes hands-on projects with real datasets.",
     short_description: "Master data science and ML with Python",
     category: "science",
     subcategory: "data_science",
@@ -194,36 +444,102 @@ const SEED_DATA = [
       enrolled_count: 4120,
     },
     created_at: "2025-01-20T00:00:00Z",
-    what_you_learn: ["Master Python for data analysis and machine learning", "Understand statistics and probability fundamentals", "Build and evaluate machine learning models", "Work with real-world datasets and APIs", "Implement deep learning with TensorFlow and PyTorch"],
+    what_you_learn: [
+      "Master Python for data analysis and machine learning",
+      "Understand statistics and probability fundamentals",
+      "Build and evaluate machine learning models",
+      "Work with real-world datasets and APIs",
+      "Implement deep learning with TensorFlow and PyTorch",
+    ],
     curriculum: [
-      { title: "Python & Statistics", duration: "4 weeks", lessons: [{ title: "Python for Data Science", duration: "3h" }, { title: "NumPy & Pandas Mastery", duration: "3h" }, { title: "Statistics & Probability", duration: "3h" }, { title: "Data Visualization with Matplotlib", duration: "2h" }] },
-      { title: "Machine Learning", duration: "4 weeks", lessons: [{ title: "Supervised Learning Algorithms", duration: "3h" }, { title: "Unsupervised Learning", duration: "3h" }, { title: "Model Evaluation & Tuning", duration: "2h" }, { title: "Feature Engineering", duration: "2h" }] },
-      { title: "Deep Learning & Projects", duration: "4 weeks", lessons: [{ title: "Neural Networks Fundamentals", duration: "3h" }, { title: "TensorFlow & Keras", duration: "3h" }, { title: "Natural Language Processing", duration: "3h" }, { title: "Capstone Project", duration: "5h" }] },
+      {
+        title: "Python & Statistics",
+        duration: "4 weeks",
+        lessons: [
+          { title: "Python for Data Science", duration: "3h" },
+          { title: "NumPy & Pandas Mastery", duration: "3h" },
+          { title: "Statistics & Probability", duration: "3h" },
+          { title: "Data Visualization with Matplotlib", duration: "2h" },
+        ],
+      },
+      {
+        title: "Machine Learning",
+        duration: "4 weeks",
+        lessons: [
+          { title: "Supervised Learning Algorithms", duration: "3h" },
+          { title: "Unsupervised Learning", duration: "3h" },
+          { title: "Model Evaluation & Tuning", duration: "2h" },
+          { title: "Feature Engineering", duration: "2h" },
+        ],
+      },
+      {
+        title: "Deep Learning & Projects",
+        duration: "4 weeks",
+        lessons: [
+          { title: "Neural Networks Fundamentals", duration: "3h" },
+          { title: "TensorFlow & Keras", duration: "3h" },
+          { title: "Natural Language Processing", duration: "3h" },
+          { title: "Capstone Project", duration: "5h" },
+        ],
+      },
     ],
     reviews: [
-      { author: "Kevin Chang", rating: 5, comment: "Dr. Park is the best ML instructor out there. Crystal clear explanations of complex topics.", created_at: "2025-04-16T00:00:00Z" },
-      { author: "Sarah Ahmed", rating: 5, comment: "The hands-on projects with real datasets made all the difference. Highly recommend!", created_at: "2025-04-11T00:00:00Z" },
-      { author: "Marcus Brown", rating: 5, comment: "Went from knowing nothing about ML to building production models. Incredible course.", created_at: "2025-04-06T00:00:00Z" },
-      { author: "Lisa Wang", rating: 4, comment: "Comprehensive and well-paced. The capstone project was challenging and rewarding.", created_at: "2025-03-29T00:00:00Z" },
-      { author: "Daniel Okafor", rating: 5, comment: "This course directly helped me transition into a data science career. Worth every penny.", created_at: "2025-03-21T00:00:00Z" },
+      {
+        author: "Kevin Chang",
+        rating: 5,
+        comment:
+          "Dr. Park is the best ML instructor out there. Crystal clear explanations of complex topics.",
+        created_at: "2025-04-16T00:00:00Z",
+      },
+      {
+        author: "Sarah Ahmed",
+        rating: 5,
+        comment:
+          "The hands-on projects with real datasets made all the difference. Highly recommend!",
+        created_at: "2025-04-11T00:00:00Z",
+      },
+      {
+        author: "Marcus Brown",
+        rating: 5,
+        comment:
+          "Went from knowing nothing about ML to building production models. Incredible course.",
+        created_at: "2025-04-06T00:00:00Z",
+      },
+      {
+        author: "Lisa Wang",
+        rating: 4,
+        comment:
+          "Comprehensive and well-paced. The capstone project was challenging and rewarding.",
+        created_at: "2025-03-29T00:00:00Z",
+      },
+      {
+        author: "Daniel Okafor",
+        rating: 5,
+        comment:
+          "This course directly helped me transition into a data science career. Worth every penny.",
+        created_at: "2025-03-21T00:00:00Z",
+      },
     ],
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const { id } = req.params
+  const { id } = req.params;
 
   try {
-    const mod = req.scope.resolve("education") as any
-    const item = await mod.retrieveCourse(id)
-    if (item) return res.json({ item: enrichDetailItem(item, "education") })
-  } catch (error: any) {
-    const isNotFound = error?.type === "not_found" || error?.message?.includes("not found")
+    const mod = req.scope.resolve("education") as unknown as any;
+    const item = await mod.retrieveCourse(id);
+    if (item) return res.json({ item: enrichDetailItem(item, "education") });
+  } catch (error: unknown) {
+    const e = error as Record<string, unknown>;
+    const isNotFound =
+      e?.["type"] === "not_found" ||
+      (error instanceof Error && error.message?.includes("not found"));
     if (!isNotFound) {
-      return handleApiError(res, error, "STORE-EDUCATION-ID")
+      return handleApiError(res, error, "STORE-EDUCATION-ID");
     }
   }
 
-  const seedMatch = SEED_DATA.find((c) => c.id === id) || SEED_DATA[0]
-  return res.json({ item: seedMatch })
+  const seedMatch = SEED_DATA.find((c) => c.id === id) || SEED_DATA[0];
+  return res.json({ item: seedMatch });
 }

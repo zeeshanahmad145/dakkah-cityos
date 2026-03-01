@@ -1,9 +1,9 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../lib/api-error-handler"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
   
     const { limit = 20, offset = 0, status, company_id } = req.query as {
       limit?: number
@@ -52,7 +52,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin purchase-orders")}
 }
 

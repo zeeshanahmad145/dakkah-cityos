@@ -7,17 +7,16 @@ import { handleApiError } from "../../../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const financialService = req.scope.resolve("financialProduct") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const financialService = req.scope.resolve("financialProduct") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
     const applicationId = req.params.id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const application = (await (
-      financialService as any
-    ).retrieveLoanApplication(applicationId)) as any;
+    const application =
+      await financialService.retrieveLoanApplication(applicationId);
     if (application.customer_id !== customerId) {
       return res.status(403).json({ error: "Not authorized" });
     }
@@ -32,7 +31,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     // KYC documents stub — in production this would forward to a KYC provider (Jumio, Onfido, etc.)
-    const updated = await (financialService as any).updateLoanApplications({
+    const updated = await financialService.updateLoanApplications({
       id: applicationId,
       kyc_status: "pending",
       kyc_document_type: document_type,
@@ -47,7 +46,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       application_id: applicationId,
       application: updated,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-FINANCIAL-APPLICATION-KYC");
   }
 }

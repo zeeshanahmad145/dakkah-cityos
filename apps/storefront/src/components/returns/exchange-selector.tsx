@@ -51,7 +51,7 @@ export function ExchangeSelector({
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-ds-foreground truncate">{originalItem.title}</p>
             <p className="text-xs text-ds-muted-foreground">
-              {formatCurrency(originalItem.price.amount, originalItem.price.currency, locale as SupportedLocale)}
+              {formatCurrency((originalItem.price.amount ?? 0), originalItem.price.currency, locale as SupportedLocale)}
             </p>
           </div>
         </div>
@@ -96,7 +96,7 @@ export function ExchangeSelector({
                       option.priceDifference.amount > 0 ? "text-ds-destructive" : "text-ds-success"
                     )}>
                       {option.priceDifference.amount > 0 ? "+" : ""}
-                      {formatCurrency(option.priceDifference.amount, option.priceDifference.currency, locale as SupportedLocale)}
+                      {formatCurrency((option.priceDifference.amount ?? 0), option.priceDifference.currency, locale as SupportedLocale)}
                     </span>
                   )}
                 </div>

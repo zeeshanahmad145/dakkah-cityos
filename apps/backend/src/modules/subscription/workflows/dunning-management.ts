@@ -18,7 +18,7 @@ const retryBillingStep = createStep(
     }: { billingCycleId: string; attemptNumber: number },
     { container },
   ) => {
-    const subscriptionService = container.resolve("subscription") as any;
+    const subscriptionService = container.resolve("subscription") as unknown as any;
 
     // Simulate payment retry (integrate with Stripe in real impl)
     const paymentSucceeded = false; // Placeholder — wire to actual payment provider
@@ -50,7 +50,7 @@ const cancelSubscriptionOnDunningExhausted = createStep(
     }: { subscriptionId: string; billingCycleId: string },
     { container },
   ) => {
-    const subscriptionService = container.resolve("subscription") as any;
+    const subscriptionService = container.resolve("subscription") as unknown as any;
 
     await subscriptionService.cancelSubscription(subscriptionId, {
       cancelImmediately: true,
@@ -91,6 +91,3 @@ export const dunningManagementWorkflow = createWorkflow(
     return { retryResult };
   },
 );
-
-
-

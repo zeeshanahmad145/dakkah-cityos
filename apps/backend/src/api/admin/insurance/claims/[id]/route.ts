@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
  */
 export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const insuranceService = req.scope.resolve("insurance") as any;
+    const insuranceService = req.scope.resolve("insurance") as unknown as any;
     const claimId = req.params.id;
     const { decision, notes } = req.body as {
       decision: "approved" | "rejected";
@@ -30,7 +30,7 @@ export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
       message: `Claim ${decision} successfully`,
       claim: updated,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-INSURANCE-CLAIMS-PROCESS");
   }
 }

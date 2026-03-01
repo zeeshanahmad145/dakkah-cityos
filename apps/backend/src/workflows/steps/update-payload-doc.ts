@@ -10,7 +10,7 @@ export type UpdatePayloadDocInput = {
 export const updatePayloadDocStep = createStep(
   "update-payload-doc",
   async (input: UpdatePayloadDocInput, { container }) => {
-    const logger = container.resolve("logger");
+    const logger = container.resolve("logger") as unknown as any;
 
     if (!input || !input.collection || !input.id) {
       logger.info(
@@ -19,7 +19,7 @@ export const updatePayloadDocStep = createStep(
       return new StepResponse(null, null);
     }
 
-    const payloadService = container.resolve(PAYLOAD_MODULE);
+    const payloadService = container.resolve(PAYLOAD_MODULE) as unknown as any;
     try {
       const result = await payloadService.updateDocument(
         input.collection,
@@ -27,19 +27,19 @@ export const updatePayloadDocStep = createStep(
         input.data,
       );
       return new StepResponse(result, input);
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error(
-        `[PayloadSync] Failed to update ${input.collection}/${input.id}: ${error.message}`,
+        `[PayloadSync] Failed to update ${input.collection}/${input.id}: ${(error instanceof Error ? error.message : String(error))}`,
       );
       throw new Error(
-        `[PayloadSync] Failed to update ${input.collection}/${input.id}: ${error.message}`,
+        `[PayloadSync] Failed to update ${input.collection}/${input.id}: ${(error instanceof Error ? error.message : String(error))}`,
       );
     }
   },
   async (input, { container }) => {
     // Compensation logic: Log failure. Full rollback of a 3rd party system is complex
     // without knowing prior state. Usually handled via dead-letter queue or retry mechanisms.
-    const logger = container.resolve("logger");
+    const logger = container.resolve("logger") as unknown as any;
     if (input && input.collection && input.id) {
       logger.warn(
         `[PayloadSync] Compensation triggered for ${input.collection}/${input.id}. Manual sync may be required.`,

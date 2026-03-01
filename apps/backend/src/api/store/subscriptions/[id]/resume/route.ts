@@ -17,8 +17,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res.status(401).json({ message: "Unauthorized" })
   }
   
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-  const subscriptionService = req.scope.resolve("subscription")
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
+  const subscriptionService = req.scope.resolve("subscription") as unknown as any
   
   const parsed = resumeSubscriptionSchema.safeParse(req.body)
   if (!parsed.success) {
@@ -60,7 +60,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       }
     })
     
-    const eventBus = req.scope.resolve("event_bus")
+    const eventBus = req.scope.resolve("event_bus") as unknown as any
     await eventBus.emit("subscription.resumed", { 
       id, 
       customer_id: customerId,
@@ -68,7 +68,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     })
     
     res.json({ subscription: updated })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "STORE-SUBSCRIPTIONS-ID-RESUME")}
 }
 

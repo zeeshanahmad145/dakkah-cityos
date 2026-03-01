@@ -7,8 +7,8 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const realEstateService = req.scope.resolve("realEstate") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const realEstateService = req.scope.resolve("realEstate") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
     const propertyId = req.params.id;
 
     if (!customerId) {
@@ -32,11 +32,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     // Verify property exists
-    await (realEstateService as any).retrievePropertyListing(propertyId);
+    await realEstateService.retrievePropertyListing(propertyId);
 
-    const appointment = await (
-      realEstateService as any
-    ).createViewingAppointments({
+    const appointment = await realEstateService.createViewingAppointments({
       property_id: propertyId,
       prospect_id: customerId,
       preferred_date: new Date(preferred_date),
@@ -51,24 +49,22 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       appointment,
       message: "Tour request submitted. An agent will confirm shortly.",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-REAL-ESTATE-TOUR-CREATE");
   }
 }
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const realEstateService = req.scope.resolve("realEstate") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const realEstateService = req.scope.resolve("realEstate") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
     const propertyId = req.params.id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const appointments = await (
-      realEstateService as any
-    ).listViewingAppointments({
+    const appointments = await realEstateService.listViewingAppointments({
       property_id: propertyId,
       prospect_id: customerId,
     });
@@ -77,7 +73,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       : [appointments].filter(Boolean);
 
     return res.json({ appointment: list[0] ?? null, appointments: list });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-REAL-ESTATE-TOUR-GET");
   }
 }

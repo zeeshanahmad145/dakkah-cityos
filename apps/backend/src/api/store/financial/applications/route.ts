@@ -7,14 +7,14 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const financialService = req.scope.resolve("financialProduct") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const financialService = req.scope.resolve("financialProduct") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const applications = await (financialService as any).listLoanApplications({
+    const applications = await financialService.listLoanApplications({
       customer_id: customerId,
     });
     const list = Array.isArray(applications)
@@ -22,15 +22,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       : [applications].filter(Boolean);
 
     return res.json({ applications: list, count: list.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-FINANCIAL-APPLICATIONS-LIST");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const financialService = req.scope.resolve("financialProduct") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const financialService = req.scope.resolve("financialProduct") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -56,7 +56,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     );
 
     return res.status(201).json({ application });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-FINANCIAL-APPLICATIONS-CREATE");
   }
 }

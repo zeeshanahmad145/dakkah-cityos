@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import { handleApiError } from "../../../../lib/api-error-handler";
@@ -15,7 +15,7 @@ const updateInvoiceSchema = z
 
 // GET /admin/invoices/:id - Get invoice detail
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY);
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
   const { id } = req.params;
 
   const { data: invoices } = await query.graph({
@@ -94,7 +94,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 // PUT /admin/invoices/:id - Update invoice
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
-  const invoiceModule = req.scope.resolve("invoice") as any;
+  const invoiceModule = req.scope.resolve("invoice") as unknown as any;
   const { id } = req.params;
 
   const { due_date, payment_terms, payment_terms_days, notes, internal_notes } =
@@ -121,7 +121,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 
 // DELETE /admin/invoices/:id - Delete draft invoice
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
-  const invoiceModule = req.scope.resolve("invoice") as any;
+  const invoiceModule = req.scope.resolve("invoice") as unknown as any;
   const { id } = req.params;
 
   // Check if invoice is draft

@@ -1,5 +1,5 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 const SEED_DATA = [
   {
@@ -9,7 +9,11 @@ const SEED_DATA = [
     name: "Elizabeth Warren-Clarke",
     bar_number: "CA-287451",
     specializations: ["corporate", "intellectual_property"],
-    practice_areas: ["Corporate Law", "IP Protection", "Mergers & Acquisitions"],
+    practice_areas: [
+      "Corporate Law",
+      "IP Protection",
+      "Mergers & Acquisitions",
+    ],
     bio: "Senior corporate attorney with extensive experience in M&A transactions, intellectual property protection, and business formation. Represented Fortune 500 companies in landmark cases.",
     education: "JD, Yale Law School",
     experience_years: 22,
@@ -84,7 +88,12 @@ const SEED_DATA = [
     name: "Richard Park",
     bar_number: "CA-618734",
     specializations: ["real_estate"],
-    practice_areas: ["Real Estate Law", "Property Disputes", "Commercial Leasing", "Zoning"],
+    practice_areas: [
+      "Real Estate Law",
+      "Property Disputes",
+      "Commercial Leasing",
+      "Zoning",
+    ],
     bio: "Expert real estate attorney handling residential and commercial property transactions, zoning disputes, and landlord-tenant matters. Trusted advisor for major development projects.",
     education: "JD, UC Berkeley School of Law",
     experience_years: 16,
@@ -109,7 +118,12 @@ const SEED_DATA = [
     name: "Aisha Patel",
     bar_number: "IL-729561",
     specializations: ["intellectual_property", "corporate"],
-    practice_areas: ["Patent Law", "Trademark Registration", "Tech Startup Law", "IP Litigation"],
+    practice_areas: [
+      "Patent Law",
+      "Trademark Registration",
+      "Tech Startup Law",
+      "IP Litigation",
+    ],
     bio: "Tech-savvy IP attorney specializing in patent prosecution, trademark protection, and startup legal strategy. Helped over 150 startups protect their innovations and scale their businesses.",
     education: "JD, Stanford Law School",
     experience_years: 11,
@@ -127,11 +141,11 @@ const SEED_DATA = [
     },
     created_at: "2025-01-20T00:00:00Z",
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const legalService = req.scope.resolve("legal") as any
+    const legalService = req.scope.resolve("legal") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -141,33 +155,34 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       consultation_available,
       is_active,
       search,
-    } = req.query as Record<string, string | undefined>
+    } = req.query as Record<string, string | undefined>;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (specialization) filters.specialization = specialization
-    if (practice_area) filters.practice_area = practice_area
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (specialization) filters.specialization = specialization;
+    if (practice_area) filters.practice_area = practice_area;
     if (consultation_available !== undefined) {
-      filters.consultation_available = consultation_available === "true"
+      filters.consultation_available = consultation_available === "true";
     }
-    if (is_active !== undefined) filters.is_active = is_active === "true"
-    if (search) filters.name = { $like: `%${search}%` }
+    if (is_active !== undefined) filters.is_active = is_active === "true";
+    if (search) filters.name = { $like: `%${search}%` };
 
     const items = await legalService.listAttorneyProfiles(filters, {
       skip: Number(offset),
       take: Number(limit),
       order: { created_at: "DESC" },
-    })
+    });
 
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const itemList =
+      Array.isArray(items) && items.length > 0 ? items : SEED_DATA;
 
     return res.json({
       items: itemList,
       count: itemList.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-LEGAL")}
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-LEGAL");
+  }
 }
-

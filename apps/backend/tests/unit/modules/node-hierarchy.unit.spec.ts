@@ -7,17 +7,25 @@ jest.mock("@medusajs/framework/utils", () => {
       unique: () => chain,
       searchable: () => chain,
       index: () => chain,
-    }
-    return chain
-  }
+    };
+    return chain;
+  };
 
   return {
     MedusaService: () =>
       class MockMedusaBase {
-        async listNodes(_filter: any, _options?: any): Promise<any> { return [] }
-        async retrieveNode(_id: string): Promise<any> { return null }
-        async createNodes(_data: any): Promise<any> { return {} }
-        async updateNodes(_data: any): Promise<any> { return {} }
+        async listNodes(_filter: any, _options?: any): Promise<any> {
+          return [];
+        }
+        async retrieveNode(_id: string): Promise<any> {
+          return null;
+        }
+        async createNodes(_data: any): Promise<any> {
+          return {};
+        }
+        async updateNodes(_data: any): Promise<any> {
+          return {};
+        }
       },
     model: {
       define: () => ({ indexes: () => ({}) }),
@@ -37,96 +45,127 @@ jest.mock("@medusajs/framework/utils", () => {
       manyToMany: () => chainable(),
     },
     Module: (_config: any) => ({}),
-  }
-})
+  };
+});
 
-import NodeModuleService from "../../../src/modules/node/service"
+import NodeModuleService from "../../../src/modules/node/service";
 
 describe("NodeModuleService – Hierarchy", () => {
-  let service: NodeModuleService
+  let service: NodeModuleService;
 
   beforeEach(() => {
-    service = new NodeModuleService()
-    jest.clearAllMocks()
-  })
+    service = new NodeModuleService();
+    jest.clearAllMocks();
+  });
 
   describe("getNodePath", () => {
     it("returns full path from root to node", async () => {
-      jest.spyOn(service, "retrieveNode" as any)
-        .mockResolvedValueOnce({ id: "n3", name: "Zone A", type: "ZONE", depth: 2, parent_id: "n2" })
-        .mockResolvedValueOnce({ id: "n2", name: "District 1", type: "DISTRICT", depth: 1, parent_id: "n1" })
-        .mockResolvedValueOnce({ id: "n1", name: "Metro City", type: "CITY", depth: 0, parent_id: null })
+      jest
+        .spyOn(service, "retrieveNode")
+        .mockResolvedValueOnce({
+          id: "n3",
+          name: "Zone A",
+          type: "ZONE",
+          depth: 2,
+          parent_id: "n2",
+        })
+        .mockResolvedValueOnce({
+          id: "n2",
+          name: "District 1",
+          type: "DISTRICT",
+          depth: 1,
+          parent_id: "n1",
+        })
+        .mockResolvedValueOnce({
+          id: "n1",
+          name: "Metro City",
+          type: "CITY",
+          depth: 0,
+          parent_id: null,
+        });
 
-      const result = await service.getNodePath("n3")
+      const result = await service.getNodePath("n3");
 
-      expect(result).toHaveLength(3)
-      expect(result[0].type).toBe("CITY")
-      expect(result[2].type).toBe("ZONE")
-    })
+      expect(result).toHaveLength(3);
+      expect(result[0].type).toBe("CITY");
+      expect(result[2].type).toBe("ZONE");
+    });
 
     it("returns single-element path for root node", async () => {
-      jest.spyOn(service, "retrieveNode" as any).mockResolvedValueOnce({
-        id: "n1", name: "Metro City", type: "CITY", depth: 0, parent_id: null,
-      })
+      jest.spyOn(service, "retrieveNode").mockResolvedValueOnce({
+        id: "n1",
+        name: "Metro City",
+        type: "CITY",
+        depth: 0,
+        parent_id: null,
+      });
 
-      const result = await service.getNodePath("n1")
-      expect(result).toHaveLength(1)
-      expect(result[0].name).toBe("Metro City")
-    })
+      const result = await service.getNodePath("n1");
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe("Metro City");
+    });
 
     it("returns empty path when node not found", async () => {
-      jest.spyOn(service, "retrieveNode" as any).mockResolvedValueOnce(null)
+      jest.spyOn(service, "retrieveNode").mockResolvedValueOnce(null);
 
-      const result = await service.getNodePath("nonexistent")
-      expect(result).toHaveLength(0)
-    })
-  })
+      const result = await service.getNodePath("nonexistent");
+      expect(result).toHaveLength(0);
+    });
+  });
 
   describe("getNodeDescendants", () => {
     it("returns all descendants recursively", async () => {
-      jest.spyOn(service, "listNodes" as any)
-        .mockResolvedValueOnce([{ id: "n2", name: "District", parent_id: "n1" }])
+      jest
+        .spyOn(service, "listNodes")
+        .mockResolvedValueOnce([
+          { id: "n2", name: "District", parent_id: "n1" },
+        ])
         .mockResolvedValueOnce([{ id: "n3", name: "Zone", parent_id: "n2" }])
-        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([]);
 
-      const result = await service.getNodeDescendants("n1")
-      expect(result).toHaveLength(2)
-    })
+      const result = await service.getNodeDescendants("n1");
+      expect(result).toHaveLength(2);
+    });
 
     it("respects maxDepth parameter", async () => {
-      jest.spyOn(service, "listNodes" as any)
-        .mockResolvedValueOnce([{ id: "n2", name: "District", parent_id: "n1" }])
+      jest
+        .spyOn(service, "listNodes")
+        .mockResolvedValueOnce([
+          { id: "n2", name: "District", parent_id: "n1" },
+        ]);
 
-      const result = await service.getNodeDescendants("n1", 1)
-      expect(result).toHaveLength(1)
-    })
+      const result = await service.getNodeDescendants("n1", 1);
+      expect(result).toHaveLength(1);
+    });
 
     it("returns empty array when node has no children", async () => {
-      jest.spyOn(service, "listNodes" as any).mockResolvedValue([])
+      jest.spyOn(service, "listNodes").mockResolvedValue([]);
 
-      const result = await service.getNodeDescendants("n1")
-      expect(result).toHaveLength(0)
-    })
-  })
+      const result = await service.getNodeDescendants("n1");
+      expect(result).toHaveLength(0);
+    });
+  });
 
   describe("validateNodePlacement", () => {
     it("returns valid for correct parent-child relationship", async () => {
-      jest.spyOn(service, "retrieveNode" as any).mockResolvedValue({
-        id: "n1", type: "CITY",
-      })
+      jest.spyOn(service, "retrieveNode").mockResolvedValue({
+        id: "n1",
+        type: "CITY",
+      });
 
-      const result = await service.validateNodePlacement("n1", "DISTRICT")
-      expect(result.valid).toBe(true)
-    })
+      const result = await service.validateNodePlacement("n1", "DISTRICT");
+      expect(result.valid).toBe(true);
+    });
 
     it("returns invalid for wrong parent type", async () => {
-      jest.spyOn(service, "retrieveNode" as any).mockResolvedValue({
-        id: "n1", type: "ZONE",
-      })
+      jest.spyOn(service, "retrieveNode").mockResolvedValue({
+        id: "n1",
+        type: "ZONE",
+      });
 
-      const result = await service.validateNodePlacement("n1", "DISTRICT")
-      expect(result.valid).toBe(false)
-      expect(result.reason).toContain("requires parent of type")
-    })
-  })
-})
+      const result = await service.validateNodePlacement("n1", "DISTRICT");
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain("requires parent of type");
+    });
+  });
+});

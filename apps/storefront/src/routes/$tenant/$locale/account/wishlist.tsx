@@ -17,7 +17,7 @@ const demoItems = [
 ]
 
 function WishlistPage() {
-  const { locale } = Route.useParams() as { tenant: string; locale: string }
+  const { locale, tenant } = Route.useParams() as { tenant: string; locale: string }
   const [items, setItems] = useState(demoItems)
   const [showShare, setShowShare] = useState(false)
 

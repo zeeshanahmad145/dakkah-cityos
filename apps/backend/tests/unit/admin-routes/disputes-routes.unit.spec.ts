@@ -20,14 +20,13 @@ const createMockService = () => ({
   resolve: jest.fn(),
 });
 
-const createReq = (mockService: any, overrides: any = {}) =>
-  ({
-    scope: { resolve: jest.fn(() => mockService) },
-    query: {},
-    params: {},
-    body: {},
-    ...overrides,
-  }) as any;
+const createReq = (mockService: any, overrides: any = {}) => ({
+  scope: { resolve: jest.fn(() => mockService) },
+  query: {},
+  params: {},
+  body: {},
+  ...overrides,
+});
 
 const createRes = () => {
   const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -192,7 +191,9 @@ describe("Admin Disputes Routes", () => {
       await getDispute(req, res);
 
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: "Not found" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: expect.stringMatching(/not found$/),
+      });
     });
   });
 

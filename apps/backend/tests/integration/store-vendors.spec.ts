@@ -1,7 +1,7 @@
-import { POST as registerVendor } from "../../src/api/store/vendors/register/route"
+import { POST as registerVendor } from "../../src/api/store/vendors/register/route";
 
-const mockJson = jest.fn()
-const mockStatus = jest.fn(() => ({ json: mockJson }))
+const mockJson = jest.fn();
+const mockStatus = jest.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
@@ -12,15 +12,15 @@ const createMockReq = (overrides: Record<string, any> = {}) => ({
     resolve: jest.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
-})
+});
 
 const createMockRes = () => {
-  const res: any = { json: mockJson, status: mockStatus }
-  mockJson.mockClear()
-  mockStatus.mockClear()
-  mockStatus.mockReturnValue({ json: mockJson })
-  return res
-}
+  const res: any = { json: mockJson, status: mockStatus };
+  mockJson.mockClear();
+  mockStatus.mockClear();
+  mockStatus.mockReturnValue({ json: mockJson });
+  return res;
+};
 
 describe("Store Vendors Endpoints", () => {
   describe("POST /store/vendors/register", () => {
@@ -31,10 +31,15 @@ describe("Store Vendors Endpoints", () => {
       description: "Electronics retailer",
       business_type: "retail",
       agree_to_terms: true as const,
-    }
+    };
 
     it("should register a new vendor successfully", async () => {
-      const mockVendor = { id: "vendor_01", name: "Acme Corp", handle: "acme-corp", status: "pending" }
+      const mockVendor = {
+        id: "vendor_01",
+        name: "Acme Corp",
+        handle: "acme-corp",
+        status: "pending",
+      };
       const req = createMockReq({
         body: validBody,
         vendor: {
@@ -42,18 +47,21 @@ describe("Store Vendors Endpoints", () => {
           createVendors: jest.fn().mockResolvedValue(mockVendor),
         },
         event_bus: { emit: jest.fn().mockResolvedValue(undefined) },
-      }) as any
-      const res = createMockRes()
+      });
+      const res = createMockRes();
 
-      await registerVendor(req, res)
-      expect(mockStatus).toHaveBeenCalledWith(201)
+      await registerVendor(req, res);
+      expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          vendor: expect.objectContaining({ id: "vendor_01", handle: "acme-corp" }),
-        })
-      )
-    })
+          vendor: expect.objectContaining({
+            id: "vendor_01",
+            handle: "acme-corp",
+          }),
+        }),
+      );
+    });
 
     it("should return 400 when vendor name already exists", async () => {
       const req = createMockReq({
@@ -61,40 +69,49 @@ describe("Store Vendors Endpoints", () => {
         vendor: {
           listVendors: jest.fn().mockResolvedValue([{ id: "existing_vendor" }]),
         },
-      }) as any
-      const res = createMockRes()
+      });
+      const res = createMockRes();
 
-      await registerVendor(req, res)
-      expect(mockStatus).toHaveBeenCalledWith(400)
+      await registerVendor(req, res);
+      expect(mockStatus).toHaveBeenCalledWith(400);
       expect(mockJson).toHaveBeenCalledWith(
-        expect.objectContaining({ message: "A vendor with this name already exists" })
-      )
-    })
+        expect.objectContaining({
+          message: "A vendor with this name already exists",
+        }),
+      );
+    });
 
     it("should return 400 for invalid body (missing agree_to_terms)", async () => {
       const req = createMockReq({
         body: { company_name: "Test", business_email: "t@t.com" },
-      }) as any
-      const res = createMockRes()
+      });
+      const res = createMockRes();
 
-      await registerVendor(req, res)
-      expect(mockStatus).toHaveBeenCalledWith(400)
-      expect(mockJson).toHaveBeenCalledWith(expect.objectContaining({ message: "Validation failed" }))
-    })
+      await registerVendor(req, res);
+      expect(mockStatus).toHaveBeenCalledWith(400);
+      expect(mockJson).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "Validation failed" }),
+      );
+    });
 
     it("should return 400 when company_name is empty", async () => {
       const req = createMockReq({
         body: { ...validBody, company_name: "" },
-      }) as any
-      const res = createMockRes()
+      });
+      const res = createMockRes();
 
-      await registerVendor(req, res)
-      expect(mockStatus).toHaveBeenCalledWith(400)
-    })
+      await registerVendor(req, res);
+      expect(mockStatus).toHaveBeenCalledWith(400);
+    });
 
     it("should emit vendor.application_submitted event on success", async () => {
-      const emit = jest.fn().mockResolvedValue(undefined)
-      const mockVendor = { id: "vendor_02", name: "Test Co", handle: "test-co", status: "pending" }
+      const emit = jest.fn().mockResolvedValue(undefined);
+      const mockVendor = {
+        id: "vendor_02",
+        name: "Test Co",
+        handle: "test-co",
+        status: "pending",
+      };
       const req = createMockReq({
         body: { ...validBody, company_name: "Test Co" },
         vendor: {
@@ -102,14 +119,14 @@ describe("Store Vendors Endpoints", () => {
           createVendors: jest.fn().mockResolvedValue(mockVendor),
         },
         event_bus: { emit },
-      }) as any
-      const res = createMockRes()
+      });
+      const res = createMockRes();
 
-      await registerVendor(req, res)
+      await registerVendor(req, res);
       expect(emit).toHaveBeenCalledWith(
         "vendor.application_submitted",
-        expect.objectContaining({ vendor_id: "vendor_02" })
-      )
-    })
-  })
-})
+        expect.objectContaining({ vendor_id: "vendor_02" }),
+      );
+    });
+  });
+});

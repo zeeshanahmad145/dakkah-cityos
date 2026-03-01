@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -18,7 +18,7 @@ const createProviderSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const bookingModuleService = req.scope.resolve("booking") as any;
+    const bookingModuleService = req.scope.resolve("booking") as unknown as any;
     const { limit = "20", offset = "0" } = req.query as Record<
       string,
       string | undefined
@@ -34,14 +34,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       providers,
       count: Array.isArray(providers) ? providers.length : 0,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin service-providers");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const bookingModuleService = req.scope.resolve("booking") as any;
+    const bookingModuleService = req.scope.resolve("booking") as unknown as any;
 
     const parsed = createProviderSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -54,7 +54,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     );
 
     res.status(201).json({ provider });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin service-providers");
   }
 }

@@ -90,8 +90,8 @@ const CmsPageComponent = () => {
       </div>
       <FormDrawer open={showDrawer && activeTab === "pages"} onOpenChange={(open) => { if (!open) setShowDrawer(false) }} title="New Page" onSubmit={handleSubmitPage} submitLabel="Create" loading={createPage.isPending}>
         <div className="space-y-4">
-          <div><Label htmlFor="title">Page Title</Label><Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="About Us" /></div>
-          <div><Label htmlFor="slug">Slug</Label><Input id="slug" value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} placeholder="/about-us" /></div>
+          <div><Label htmlFor="title">Page Title</Label><Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value as any })} placeholder="About Us" /></div>
+          <div><Label htmlFor="slug">Slug</Label><Input id="slug" value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value as any })} placeholder="/about-us" /></div>
           <div>
             <Label htmlFor="status">Status</Label>
             <select id="status" value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value as string })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">

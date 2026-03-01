@@ -51,7 +51,7 @@ export function PODProductCard({
 
         <p className="text-lg font-bold text-ds-foreground">
           {t(locale, "printOnDemand.from")}{" "}
-          {formatCurrency(product.basePrice.amount, product.basePrice.currencyCode, locale as SupportedLocale)}
+          {formatCurrency((product.basePrice.amount ?? 0), product.basePrice.currencyCode, locale as SupportedLocale)}
         </p>
 
         <div className="flex flex-wrap gap-2 text-xs text-ds-muted-foreground">

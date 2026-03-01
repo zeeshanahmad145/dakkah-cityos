@@ -26,7 +26,7 @@ function StoreCreditsPage() {
   }
 
   return (
-    <AccountLayout locale={locale} tenant={tenant}>
+    <AccountLayout>
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-ds-foreground">{t(locale, "storeCredits.title")}</h1>

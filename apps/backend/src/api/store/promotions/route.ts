@@ -1,11 +1,12 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 const SEED_PROMOTIONS = [
   {
     id: "promo_001",
     title: "Summer Sale - 30% Off Electronics",
-    description: "Get 30% off all electronics including smartphones, laptops, and accessories. Limited time offer.",
+    description:
+      "Get 30% off all electronics including smartphones, laptops, and accessories. Limited time offer.",
     code: "SUMMER30",
     discount_type: "percentage",
     discount_value: 30,
@@ -21,7 +22,8 @@ const SEED_PROMOTIONS = [
   {
     id: "promo_002",
     title: "New Member Welcome - 20% Off First Order",
-    description: "Welcome to Dakkah! Enjoy 20% off your first order. No minimum purchase required.",
+    description:
+      "Welcome to Dakkah! Enjoy 20% off your first order. No minimum purchase required.",
     code: "WELCOME20",
     discount_type: "percentage",
     discount_value: 20,
@@ -37,7 +39,8 @@ const SEED_PROMOTIONS = [
   {
     id: "promo_003",
     title: "Free Shipping on Orders Over 200 SAR",
-    description: "Enjoy free standard shipping on all orders over 200 SAR. Applies to all categories.",
+    description:
+      "Enjoy free standard shipping on all orders over 200 SAR. Applies to all categories.",
     code: "FREESHIP200",
     discount_type: "free_shipping",
     discount_value: 0,
@@ -53,7 +56,8 @@ const SEED_PROMOTIONS = [
   {
     id: "promo_004",
     title: "Buy 2 Get 1 Free - Fashion Collection",
-    description: "Purchase any 2 items from our fashion collection and get the 3rd item free. Lowest priced item is free.",
+    description:
+      "Purchase any 2 items from our fashion collection and get the 3rd item free. Lowest priced item is free.",
     code: "B2G1FASHION",
     discount_type: "buy_x_get_y",
     discount_value: 100,
@@ -69,7 +73,8 @@ const SEED_PROMOTIONS = [
   {
     id: "promo_005",
     title: "Ramadan Special - 50 SAR Off",
-    description: "Celebrate Ramadan with 50 SAR off orders over 300 SAR. Valid on all categories except gift cards.",
+    description:
+      "Celebrate Ramadan with 50 SAR off orders over 300 SAR. Valid on all categories except gift cards.",
     code: "RAMADAN50",
     discount_type: "fixed",
     discount_value: 5000,
@@ -82,35 +87,44 @@ const SEED_PROMOTIONS = [
     min_order_amount: 30000,
     thumbnail: "/seed-images/charity/1469854523086-cc02fe5d8800.jpg",
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const promotionExtService = req.scope.resolve("promotionExt") as any
-    const { limit = "20", offset = "0", category, tenant_id } = req.query as Record<string, string | undefined>
+    const promotionExtService = req.scope.resolve(
+      "promotionExt",
+    ) as unknown as any;
+    const {
+      limit = "20",
+      offset = "0",
+      category,
+      tenant_id,
+    } = req.query as Record<string, string | undefined>;
 
     const filters: Record<string, any> = {
       is_active: true,
-    }
+    };
 
     if (tenant_id) {
-      filters.tenant_id = tenant_id
+      filters.tenant_id = tenant_id;
     }
 
     if (category) {
-      filters.category = category
+      filters.category = category;
     }
 
-    const now = new Date()
-    filters.expires_at = { $gte: now }
+    const now = new Date();
+    filters.expires_at = { $gte: now };
 
     const promotions = await promotionExtService.listGiftCardExts(filters, {
       take: Number(limit),
       skip: Number(offset),
       order: { created_at: "DESC" },
-    })
+    });
 
-    const items = Array.isArray(promotions) ? promotions : [promotions].filter(Boolean)
+    const items = Array.isArray(promotions)
+      ? promotions
+      : [promotions].filter(Boolean);
 
     if (items.length === 0) {
       return res.json({
@@ -118,7 +132,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         count: SEED_PROMOTIONS.length,
         limit: Number(limit),
         offset: Number(offset),
-      })
+      });
     }
 
     return res.json({
@@ -126,15 +140,17 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       count: items.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
-    console.warn("STORE-PROMOTIONS: falling back to seed data:", error?.message || error)
+    });
+  } catch (error: unknown) {
+    console.warn(
+      "STORE-PROMOTIONS: falling back to seed data:",
+      error instanceof Error ? error.message : String(error),
+    );
     return res.json({
       items: SEED_PROMOTIONS,
       count: SEED_PROMOTIONS.length,
       limit: 20,
       offset: 0,
-    })
+    });
   }
 }
-

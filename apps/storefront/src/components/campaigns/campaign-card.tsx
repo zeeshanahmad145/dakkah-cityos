@@ -21,7 +21,7 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
   return (
     <Link
-      to={`${prefix}/campaigns/${campaign.id}` as any}
+      to={`${prefix}/campaigns/${campaign.id}` as never}
       className="group bg-ds-background rounded-lg border border-ds-border overflow-hidden hover:shadow-md transition-all"
     >
       <div className="aspect-video bg-ds-muted relative overflow-hidden">
@@ -33,13 +33,25 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <svg className="w-12 h-12 text-ds-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <svg
+              className="w-12 h-12 text-ds-muted-foreground"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
             </svg>
           </div>
         )}
         <div className="absolute top-2 end-2">
-          <span className={`inline-block px-2 py-1 text-xs font-medium rounded capitalize ${statusStyles[campaign.status] || "bg-ds-muted text-ds-muted-foreground"}`}>
+          <span
+            className={`inline-block px-2 py-1 text-xs font-medium rounded capitalize ${statusStyles[campaign.status] || "bg-ds-muted text-ds-muted-foreground"}`}
+          >
             {campaign.status}
           </span>
         </div>
@@ -51,7 +63,9 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
         </h3>
 
         {campaign.description && (
-          <p className="text-sm text-ds-muted-foreground mt-1 line-clamp-2">{campaign.description}</p>
+          <p className="text-sm text-ds-muted-foreground mt-1 line-clamp-2">
+            {campaign.description}
+          </p>
         )}
 
         <div className="mt-4">
@@ -65,10 +79,16 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-ds-border text-sm">
           <div className="text-ds-muted-foreground">
-            <span className="font-semibold text-ds-foreground">{campaign.backers_count}</span> backers
+            <span className="font-semibold text-ds-foreground">
+              {campaign.backers_count}
+            </span>{" "}
+            backers
           </div>
           <div className="text-ds-muted-foreground">
-            <span className="font-semibold text-ds-foreground">{campaign.days_remaining}</span> days left
+            <span className="font-semibold text-ds-foreground">
+              {campaign.days_remaining}
+            </span>{" "}
+            days left
           </div>
         </div>
 

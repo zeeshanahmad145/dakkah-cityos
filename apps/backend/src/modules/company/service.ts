@@ -5,11 +5,15 @@ import { PurchaseOrder } from "./models/purchase-order";
 import { PurchaseOrderItem } from "./models/purchase-order-item";
 import { PaymentTerms } from "./models/payment-terms";
 import { TaxExemption } from "./models/tax-exemption";
-import { ApprovalWorkflow, ApprovalRequest, ApprovalAction } from "./models/approval-workflow";
+import {
+  ApprovalWorkflow,
+  ApprovalRequest,
+  ApprovalAction,
+} from "./models/approval-workflow";
 
 /**
  * Company Service
- * 
+ *
  * Manages B2B company accounts, purchase orders, payment terms, tax exemptions, and approval workflows.
  */
 class CompanyModuleService extends MedusaService({
@@ -26,9 +30,13 @@ class CompanyModuleService extends MedusaService({
   /**
    * Check if company has available credit
    */
-  async hasAvailableCredit(companyId: string, amount: bigint): Promise<boolean> {
-    const company = await this.retrieveCompany(companyId);
-    const available = BigInt(company.credit_limit || 0) - BigInt(company.credit_used || 0);
+  async hasAvailableCredit(
+    companyId: string,
+    amount: bigint,
+  ): Promise<boolean> {
+    const company = (await this.retrieveCompany(companyId)) as any;
+    const available =
+      BigInt(company.credit_limit || 0) - BigInt(company.credit_used || 0);
     return available >= amount;
   }
 
@@ -36,38 +44,44 @@ class CompanyModuleService extends MedusaService({
    * Reserve credit for an order
    */
   async reserveCredit(companyId: string, amount: bigint): Promise<void> {
-    const company = await this.retrieveCompany(companyId);
-    const available = BigInt(company.credit_limit || 0) - BigInt(company.credit_used || 0);
-    
+    const company = (await this.retrieveCompany(companyId)) as any;
+    const available =
+      BigInt(company.credit_limit || 0) - BigInt(company.credit_used || 0);
+
     if (available < amount) {
-      throw new Error(`Insufficient credit. Available: ${available}, Required: ${amount}`);
+      throw new Error(
+        `Insufficient credit. Available: ${available}, Required: ${amount}`,
+      );
     }
 
-    await (this as any).updateCompanies({
+    await this.updateCompanies({
       id: companyId,
       credit_used: (BigInt(company.credit_used || 0) + amount).toString(),
-    });
+    } as any);
   }
 
   /**
    * Release reserved credit (order cancelled/refunded)
    */
   async releaseCredit(companyId: string, amount: bigint): Promise<void> {
-    const company = await this.retrieveCompany(companyId);
+    const company = (await this.retrieveCompany(companyId)) as any;
     const newUsed = BigInt(company.credit_used || 0) - amount;
-    
-    await (this as any).updateCompanies({
+
+    await this.updateCompanies({
       id: companyId,
       credit_used: (newUsed > 0n ? newUsed : 0n).toString(),
-    });
+    } as any);
   }
 
   /**
    * Check if user can approve an order amount
    */
-  async canUserApprove(companyUserId: string, amount: bigint): Promise<boolean> {
-    const companyUser = await this.retrieveCompanyUser(companyUserId);
-    
+  async canUserApprove(
+    companyUserId: string,
+    amount: bigint,
+  ): Promise<boolean> {
+    const companyUser = (await this.retrieveCompanyUser(companyUserId)) as any;
+
     // Admins and approvers can approve
     if (!["admin", "approver"].includes(companyUser.role)) {
       return false;
@@ -85,9 +99,12 @@ class CompanyModuleService extends MedusaService({
   /**
    * Check if user has spending limit available
    */
-  async hasSpendingLimitAvailable(companyUserId: string, amount: bigint): Promise<boolean> {
-    const companyUser = await this.retrieveCompanyUser(companyUserId);
-    
+  async hasSpendingLimitAvailable(
+    companyUserId: string,
+    amount: bigint,
+  ): Promise<boolean> {
+    const companyUser = (await this.retrieveCompanyUser(companyUserId)) as any;
+
     // No limit = always available
     if (!companyUser.spending_limit) {
       return true;
@@ -96,42 +113,44 @@ class CompanyModuleService extends MedusaService({
     // Check period spend
     const limit = BigInt(companyUser.spending_limit);
     const spent = BigInt(companyUser.current_period_spend || 0);
-    
-    return (limit - spent) >= amount;
+
+    return limit - spent >= amount;
   }
 
   /**
    * Record user spending
    */
   async recordSpending(companyUserId: string, amount: bigint): Promise<void> {
-    const companyUser = await this.retrieveCompanyUser(companyUserId);
-    
-    await (this as any).updateCompanyUsers({
+    const companyUser = (await this.retrieveCompanyUser(companyUserId)) as any;
+
+    await this.updateCompanyUsers({
       id: companyUserId,
-      current_period_spend: (BigInt(companyUser.current_period_spend || 0) + amount).toString(),
-    });
+      current_period_spend: (
+        BigInt(companyUser.current_period_spend || 0) + amount
+      ).toString(),
+    } as any);
   }
 
   /**
    * Get company users by role
    */
   async getCompanyUsersByRole(companyId: string, role: string) {
-    return await this.listCompanyUsers({
+    return (await this.listCompanyUsers({
       company_id: companyId,
       role,
       status: "active",
-    });
+    })) as any;
   }
 
   /**
    * Get potential approvers for an amount
    */
   async getPotentialApprovers(companyId: string, amount: bigint) {
-    const users = await this.listCompanyUsers({
+    const users = (await this.listCompanyUsers({
       company_id: companyId,
       role: ["admin", "approver"],
       status: "active",
-    }) as any[];
+    })) as unknown as Record<string, unknown>[];
 
     const usersArray = Array.isArray(users) ? users : [users].filter(Boolean);
 
@@ -147,7 +166,7 @@ class CompanyModuleService extends MedusaService({
    * Generate unique PO number
    */
   async generatePONumber(companyId: string): Promise<string> {
-    const company = await this.retrieveCompany(companyId);
+    const company = (await this.retrieveCompany(companyId)) as any;
     const prefix = company.name?.substring(0, 3).toUpperCase() || "PO";
     const timestamp = Date.now().toString(36).toUpperCase();
     const random = Math.random().toString(36).substring(2, 6).toUpperCase();
@@ -157,39 +176,42 @@ class CompanyModuleService extends MedusaService({
   /**
    * Create purchase order with items
    */
-  async createPurchaseOrderWithItems(
-    poData: any,
-    items: any[]
-  ): Promise<any> {
+  async createPurchaseOrderWithItems(poData: any, items: any[]): Promise<any> {
     const poNumber = await this.generatePONumber(poData.company_id);
-    
-    const purchaseOrder = await (this as any).createPurchaseOrders({
+
+    const purchaseOrder = await this.createPurchaseOrders({
       ...poData,
       po_number: poNumber,
       issue_date: new Date(),
-    });
+    } as any);
 
     const createdItems = await Promise.all(
-      items.map(item => 
-        (this as any).createPurchaseOrderItems({
+      items.map((item) =>
+        this.createPurchaseOrderItems({
           ...item,
           purchase_order_id: purchaseOrder.id,
           subtotal: item.unit_price * item.quantity,
           total: item.unit_price * item.quantity + (item.tax_amount || 0),
-        })
-      )
+        } as any),
+      ),
     );
 
     // Calculate totals
-    const subtotal = createdItems.reduce((sum: number, item: any) => sum + Number(item.subtotal), 0);
-    const taxTotal = createdItems.reduce((sum: number, item: any) => sum + Number(item.tax_amount || 0), 0);
-    
-    await (this as any).updatePurchaseOrders({
+    const subtotal = createdItems.reduce(
+      (sum: number, item: any) => sum + Number(item.subtotal),
+      0,
+    );
+    const taxTotal = createdItems.reduce(
+      (sum: number, item: any) => sum + Number(item.tax_amount || 0),
+      0,
+    );
+
+    await this.updatePurchaseOrders({
       id: purchaseOrder.id,
       subtotal,
       tax_total: taxTotal,
       total: subtotal + taxTotal + Number(poData.shipping_total || 0),
-    });
+    } as any);
 
     return { ...purchaseOrder, items: createdItems };
   }
@@ -198,33 +220,35 @@ class CompanyModuleService extends MedusaService({
    * Submit PO for approval
    */
   async submitPOForApproval(poId: string): Promise<any> {
-    const po = await (this as any).retrievePurchaseOrder(poId);
-    
+    const po = (await this.retrievePurchaseOrder(poId)) as any;
+
     if (po.status !== "draft") {
       throw new Error("Only draft POs can be submitted for approval");
     }
 
     // Find applicable workflow
-    const workflows = await this.listApprovalWorkflows({
+    const workflows = (await this.listApprovalWorkflows({
       company_id: po.company_id,
       workflow_type: "purchase_order",
       is_active: true,
-    }) as any;
+    })) as any;
 
-    const workflowList = Array.isArray(workflows) ? workflows : [workflows].filter(Boolean);
-    
+    const workflowList = Array.isArray(workflows)
+      ? workflows
+      : [workflows].filter(Boolean);
+
     if (workflowList.length === 0 || !po.requires_approval) {
       // No workflow, auto-approve
-      return await (this as any).updatePurchaseOrders({
+      return await this.updatePurchaseOrders({
         id: poId,
         status: "approved",
         approved_at: new Date(),
-      });
+      } as any);
     }
 
     // Create approval request
     const workflow = workflowList[0];
-    await (this as any).createApprovalRequests({
+    await this.createApprovalRequests({
       workflow_id: workflow.id,
       company_id: po.company_id,
       tenant_id: po.tenant_id,
@@ -235,12 +259,12 @@ class CompanyModuleService extends MedusaService({
       amount: po.total,
       currency_code: po.currency_code,
       request_data: po,
-    });
+    } as any);
 
-    return await (this as any).updatePurchaseOrders({
+    return await this.updatePurchaseOrders({
       id: poId,
       status: "pending_approval",
-    });
+    } as any);
   }
 
   // ============ Payment Terms Methods ============
@@ -250,23 +274,23 @@ class CompanyModuleService extends MedusaService({
    */
   calculateDueDate(terms: any, invoiceDate: Date = new Date()): Date {
     const date = new Date(invoiceDate);
-    
+
     switch (terms.terms_type) {
       case "due_on_receipt":
         return date;
-      
+
       case "net_days":
         date.setDate(date.getDate() + (terms.net_days || 30));
         return date;
-      
+
       case "end_of_month":
         date.setMonth(date.getMonth() + 1, 0);
         return date;
-      
+
       case "end_of_next_month":
         date.setMonth(date.getMonth() + 2, 0);
         return date;
-      
+
       default:
         date.setDate(date.getDate() + 30);
         return date;
@@ -276,13 +300,21 @@ class CompanyModuleService extends MedusaService({
   /**
    * Calculate early payment discount
    */
-  calculateEarlyPaymentDiscount(terms: any, amount: number, paymentDate: Date, invoiceDate: Date): number {
-    if (!terms.early_payment_discount_percent || !terms.early_payment_discount_days) {
+  calculateEarlyPaymentDiscount(
+    terms: any,
+    amount: number,
+    paymentDate: Date,
+    invoiceDate: Date,
+  ): number {
+    if (
+      !terms.early_payment_discount_percent ||
+      !terms.early_payment_discount_days
+    ) {
       return 0;
     }
 
     const daysSinceInvoice = Math.floor(
-      (paymentDate.getTime() - invoiceDate.getTime()) / (1000 * 60 * 60 * 24)
+      (paymentDate.getTime() - invoiceDate.getTime()) / (1000 * 60 * 60 * 24),
     );
 
     if (daysSinceInvoice <= terms.early_payment_discount_days) {
@@ -295,24 +327,27 @@ class CompanyModuleService extends MedusaService({
   /**
    * Get default payment terms for company
    */
-  async getCompanyPaymentTerms(companyId: string, tenantId?: string): Promise<any> {
-    const company = await this.retrieveCompany(companyId);
-    
+  async getCompanyPaymentTerms(
+    companyId: string,
+    tenantId?: string,
+  ): Promise<any> {
+    const company = (await this.retrieveCompany(companyId)) as any;
+
     // Find terms matching company tier
-    const terms = await this.listPaymentTerms({
+    const terms = (await this.listPaymentTerms({
       tenant_id: tenantId,
       is_active: true,
-    }) as any;
+    })) as any;
 
     const termsList = Array.isArray(terms) ? terms : [terms].filter(Boolean);
-    
+
     // Find tier-specific or default
-    const tierTerms = termsList.find((t: any) => 
-      t.company_tiers?.includes(company.tier)
+    const tierTerms = termsList.find((t: any) =>
+      t.company_tiers?.includes(company.tier),
     );
-    
+
     if (tierTerms) return tierTerms;
-    
+
     // Return default
     return termsList.find((t: any) => t.is_default);
   }
@@ -323,18 +358,21 @@ class CompanyModuleService extends MedusaService({
    * Validate tax exemption certificate
    */
   async validateTaxExemption(exemptionId: string): Promise<boolean> {
-    const exemption = await (this as any).retrieveTaxExemption(exemptionId);
-    
+    const exemption = (await this.retrieveTaxExemption(exemptionId)) as any;
+
     if (exemption.status !== "verified") {
       return false;
     }
 
-    if (exemption.expiration_date && new Date(exemption.expiration_date) < new Date()) {
+    if (
+      exemption.expiration_date &&
+      new Date(exemption.expiration_date) < new Date()
+    ) {
       // Mark as expired
-      await (this as any).updateTaxExemptions({
+      await this.updateTaxExemptions({
         id: exemptionId,
         status: "expired",
-      });
+      } as any);
       return false;
     }
 
@@ -345,20 +383,25 @@ class CompanyModuleService extends MedusaService({
    * Get applicable tax exemption for order
    */
   async getApplicableTaxExemption(
-    companyId: string, 
+    companyId: string,
     regionId?: string,
-    categoryIds?: string[]
+    categoryIds?: string[],
   ): Promise<any | null> {
-    const exemptions = await this.listTaxExemptions({
+    const exemptions = (await this.listTaxExemptions({
       company_id: companyId,
       status: "verified",
-    }) as any;
+    })) as any;
 
-    const exemptionList = Array.isArray(exemptions) ? exemptions : [exemptions].filter(Boolean);
+    const exemptionList = Array.isArray(exemptions)
+      ? exemptions
+      : [exemptions].filter(Boolean);
 
     for (const exemption of exemptionList) {
       // Check expiration
-      if (exemption.expiration_date && new Date(exemption.expiration_date) < new Date()) {
+      if (
+        exemption.expiration_date &&
+        new Date(exemption.expiration_date) < new Date()
+      ) {
         continue;
       }
 
@@ -371,18 +414,18 @@ class CompanyModuleService extends MedusaService({
 
       // Check category applicability
       if (exemption.applicable_categories?.length && categoryIds?.length) {
-        const hasMatch = categoryIds.some(id => 
-          exemption.applicable_categories.includes(id)
+        const hasMatch = categoryIds.some((id) =>
+          exemption.applicable_categories.includes(id),
         );
         if (!hasMatch) continue;
       }
 
       // Update usage
-      await (this as any).updateTaxExemptions({
+      await this.updateTaxExemptions({
         id: exemption.id,
         last_used_at: new Date(),
         usage_count: (exemption.usage_count || 0) + 1,
-      });
+      } as any);
 
       return exemption;
     }
@@ -399,16 +442,18 @@ class CompanyModuleService extends MedusaService({
     requestId: string,
     userId: string,
     action: "approve" | "reject" | "request_changes",
-    comments?: string
+    comments?: string,
   ): Promise<any> {
-    const request = await (this as any).retrieveApprovalRequest(requestId);
-    const workflow = await (this as any).retrieveApprovalWorkflow(request.workflow_id);
-    
+    const request = (await this.retrieveApprovalRequest(requestId)) as any;
+    const workflow = (await this.retrieveApprovalWorkflow(
+      request.workflow_id,
+    )) as any;
+
     const steps = workflow.steps || [];
     const currentStep = steps[request.current_step - 1];
 
     // Record action
-    await (this as any).createApprovalActions({
+    await this.createApprovalActions({
       approval_request_id: requestId,
       step_number: request.current_step,
       step_name: currentStep?.name,
@@ -416,26 +461,26 @@ class CompanyModuleService extends MedusaService({
       action_by_id: userId,
       action_at: new Date(),
       comments,
-    });
+    } as any);
 
     if (action === "reject") {
       // Update request status
-      await (this as any).updateApprovalRequests({
+      await this.updateApprovalRequests({
         id: requestId,
         status: "rejected",
         resolved_at: new Date(),
         resolution_notes: comments,
-      });
+      } as any);
 
       // Update entity
       if (request.entity_type === "purchase_order") {
-        await (this as any).updatePurchaseOrders({
+        await this.updatePurchaseOrders({
           id: request.entity_id,
           status: "rejected",
           rejected_by_id: userId,
           rejected_at: new Date(),
           rejection_reason: comments,
-        });
+        } as any);
       }
 
       return { status: "rejected" };
@@ -444,30 +489,30 @@ class CompanyModuleService extends MedusaService({
     if (action === "approve") {
       // Check if more steps
       if (request.current_step < steps.length) {
-        await (this as any).updateApprovalRequests({
+        await this.updateApprovalRequests({
           id: requestId,
           current_step: request.current_step + 1,
           status: "in_progress",
-        });
+        } as any);
         return { status: "in_progress", next_step: request.current_step + 1 };
       }
 
       // All steps complete
-      await (this as any).updateApprovalRequests({
+      await this.updateApprovalRequests({
         id: requestId,
         status: "approved",
         resolved_at: new Date(),
-      });
+      } as any);
 
       // Update entity
       if (request.entity_type === "purchase_order") {
-        await (this as any).updatePurchaseOrders({
+        await this.updatePurchaseOrders({
           id: request.entity_id,
           status: "approved",
           approved_by_id: userId,
           approved_at: new Date(),
           approval_notes: comments,
-        });
+        } as any);
       }
 
       return { status: "approved" };

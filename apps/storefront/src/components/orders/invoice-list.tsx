@@ -40,7 +40,7 @@ export function InvoiceList({ statusFilter }: InvoiceListProps) {
           <div>
             <p className="font-medium">{invoice.invoice_number}</p>
             <p className="text-sm text-muted-foreground">
-              {new Date(invoice.issued_at).toLocaleDateString()} - Due {new Date(invoice.due_date).toLocaleDateString()}
+              {new Date(invoice.issued_at!).toLocaleDateString()} - Due {new Date(invoice.due_date!).toLocaleDateString()}
             </p>
           </div>
           <div className="flex items-center gap-3">

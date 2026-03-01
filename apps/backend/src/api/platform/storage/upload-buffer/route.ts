@@ -27,7 +27,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         size: buffer.length,
       },
     })
-  } catch (error: any) {
-    return res.status(500).json({ success: false, error: error.message })
+  } catch (error: unknown) {
+    return res.status(500).json({ success: false, error: (error instanceof Error ? error.message : String(error)) })
   }
 }

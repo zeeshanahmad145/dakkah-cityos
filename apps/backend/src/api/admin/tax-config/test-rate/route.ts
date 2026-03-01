@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const taxConfigService = req.scope.resolve("tax-config") as any;
+    const taxConfigService = req.scope.resolve("tax-config") as unknown as any;
     const { country, region, postal_code, product_category, amount } =
       req.body as {
         country: string;
@@ -54,7 +54,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ result });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TAX-TEST-RATE");
   }
 }

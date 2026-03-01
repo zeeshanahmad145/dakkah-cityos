@@ -31,7 +31,7 @@ function VendorRentalsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -89,7 +89,9 @@ function VendorRentalsRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -100,37 +102,54 @@ function VendorRentalsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No rental items yet</p>
-          <p className="text-sm">Add your first rental item to start earning.</p>
+          <p className="text-sm">
+            Add your first rental item to start earning.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {items.map((rental) => (
-            <div key={rental.id} className="border rounded-lg p-5 hover:shadow-md transition">
+            <div
+              key={rental.id}
+              className="border rounded-lg p-5 hover:shadow-md transition"
+            >
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-sm truncate">{rental.title || rental.product_id}</h3>
-                <span className={`w-2.5 h-2.5 rounded-full ${rental.is_available !== false ? "bg-ds-success" : "bg-ds-destructive"}`} />
+                <h3 className="font-semibold text-sm truncate">
+                  {rental.title || rental.product_id}
+                </h3>
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${rental.is_available !== false ? "bg-ds-success" : "bg-ds-destructive"}`}
+                />
               </div>
               <div className="space-y-2 text-sm text-ds-muted-foreground">
                 <div className="flex justify-between">
                   <span>Type</span>
-                  <span className="font-medium text-ds-foreground">{rental.rental_type}</span>
+                  <span className="font-medium text-ds-foreground">
+                    {rental.rental_type}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Price</span>
                   <span className="font-medium text-ds-foreground">
-                    {rental.currency_code?.toUpperCase()} {(rental.base_price / 100).toFixed(2)}
+                    {rental.currency_code?.toUpperCase()}{" "}
+                    {(rental.base_price / 100).toFixed(2)}
                   </span>
                 </div>
                 {rental.deposit_amount != null && (
                   <div className="flex justify-between">
                     <span>Deposit</span>
-                    <span>{rental.currency_code?.toUpperCase()} {(rental.deposit_amount / 100).toFixed(2)}</span>
+                    <span>
+                      {rental.currency_code?.toUpperCase()}{" "}
+                      {(rental.deposit_amount / 100).toFixed(2)}
+                    </span>
                   </div>
                 )}
                 {rental.condition_on_listing && (
                   <div className="flex justify-between items-center">
                     <span>Condition</span>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${conditionColors[rental.condition_on_listing] || "bg-ds-muted"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${conditionColors[rental.condition_on_listing] || "bg-ds-muted"}`}
+                    >
                       {rental.condition_on_listing.replace("_", " ")}
                     </span>
                   </div>
@@ -138,7 +157,10 @@ function VendorRentalsRoute() {
                 {rental.min_duration && (
                   <div className="flex justify-between">
                     <span>Min duration</span>
-                    <span>{rental.min_duration} {rental.rental_type === "hourly" ? "hrs" : "days"}</span>
+                    <span>
+                      {rental.min_duration}{" "}
+                      {rental.rental_type === "hourly" ? "hrs" : "days"}
+                    </span>
                   </div>
                 )}
               </div>

@@ -46,7 +46,10 @@ export function BidPanel({
           {t(locale, "auction.current_bid")}
         </p>
         <p className="text-2xl font-bold text-ds-foreground">
-          {formatCurrency(currentPrice.amount, currentPrice.currencyCode, locale as any)}
+          {formatCurrency(
+            currentPrice.amount,
+            currentPrice.currencyCode, locale as any,
+          )}
         </p>
       </div>
 
@@ -85,12 +88,14 @@ export function BidPanel({
                 disabled={bidAmount < minBid || isSubmitting}
                 className="px-5 py-3 text-sm font-semibold bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isSubmitting ? t(locale, "common.loading") : t(locale, "auction.place_bid")}
+                {isSubmitting
+                  ? t(locale, "common.loading")
+                  : t(locale, "auction.place_bid")}
               </button>
             </div>
             <p className="text-xs text-ds-muted-foreground mt-1.5">
               {t(locale, "auction.bid_increment")}:{" "}
-              {formatCurrency(bidIncrement, currentPrice.currencyCode, locale as any)}
+              {formatCurrency(bidIncrement, currentPrice.currencyCode, locale as import("@/lib/i18n").SupportedLocale)}
             </p>
           </div>
 
@@ -140,7 +145,10 @@ export function BidPanel({
                 className="w-full px-4 py-3 text-sm font-semibold bg-ds-accent text-ds-accent-foreground rounded-lg hover:bg-ds-accent/90 transition-colors"
               >
                 {t(locale, "auction.buy_now")} —{" "}
-                {formatCurrency(buyNowPrice.amount, buyNowPrice.currencyCode, locale as any)}
+                {formatCurrency(
+                  buyNowPrice.amount,
+                  buyNowPrice.currencyCode, locale as any,
+                )}
               </button>
             </div>
           )}

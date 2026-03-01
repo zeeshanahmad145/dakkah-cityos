@@ -183,7 +183,7 @@ function GiftCardsPageClient({ locale }: { locale: string }) {
         {activeTab === "redeem" && (
           <div className="max-w-md mx-auto">
             <GiftCardRedeem
-              onRedeem={(code) => redeemMutation.mutate(code)}
+              onRedeem={(code: string) => redeemMutation.mutate(code)}
               loading={redeemMutation.isPending}
               error={redeemMutation.error?.message}
               success={redeemMutation.isSuccess}

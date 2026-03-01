@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
@@ -19,19 +19,19 @@ const createProgramSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("loyalty") as any;
+    const service = req.scope.resolve("loyalty") as unknown as any;
     const programs = await service.listLoyaltyPrograms({});
     res.json({
       programs: Array.isArray(programs) ? programs : [programs].filter(Boolean),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-LOYALTY-PROGRAMS");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("loyalty") as any;
+    const service = req.scope.resolve("loyalty") as unknown as any;
     const parsed = createProgramSchema.safeParse(req.body);
     if (!parsed.success) {
       return res
@@ -39,7 +39,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const cityosContext = (req as any).cityosContext as any;
+    const cityosContext = req.cityosContext;
     const tenant_id = cityosContext?.tenantId || "default";
 
     const program = await service.createLoyaltyPrograms({
@@ -47,7 +47,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       tenant_id,
     });
     res.status(201).json({ program });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-LOYALTY-PROGRAMS");
   }
 }

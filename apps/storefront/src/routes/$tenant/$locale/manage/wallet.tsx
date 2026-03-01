@@ -2,7 +2,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast, Tabs } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+  Tabs,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -26,14 +38,18 @@ function ManageWalletPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -47,7 +63,9 @@ function ManageWalletPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -76,28 +94,40 @@ function ManageWalletPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
-  const allItems = ((data as any)?.wallets || (data as any)?.wallet || []).map((item: any) => ({
+  const allItems = (data?.wallets || data?.wallet || []).map((item: any) => ({
     id: item.id,
-    user: item.user || item.user_name || item.customer_name || item.email || "—",
+    user:
+      item.user || item.user_name || item.customer_name || item.email || "—",
     balance: item.balance ? `$${(item.balance / 100).toFixed(2)}` : "$0.00",
     pending: item.pending ? `$${(item.pending / 100).toFixed(2)}` : "$0.00",
-    last_transaction: item.last_transaction || item.last_transaction_date ? new Date(item.last_transaction || item.last_transaction_date).toLocaleDateString() : "—",
+    last_transaction:
+      item.last_transaction || item.last_transaction_date
+        ? new Date(
+            item.last_transaction || item.last_transaction_date,
+          ).toLocaleDateString()
+        : "—",
     status: item.status || "active",
   }))
 
-  const items = statusFilter === "all"
-    ? allItems
-    : allItems.filter((i: any) => i.status === statusFilter)
+  const items =
+    statusFilter === "all"
+      ? allItems
+      : allItems.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "user",
       header: "User",
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "balance",
@@ -125,9 +155,16 @@ function ManageWalletPage() {
       render: (_: unknown, row: any) => (
         <DropdownMenu
           items={[
-            { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
             { type: "separator" as const },
-            { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -155,19 +192,30 @@ function ManageWalletPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No wallets found" countLabel="wallets" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No wallets found"
+          countLabel="wallets"
+        />
       </Container>
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
         title={`Edit ${config.singularLabel}`}
         fields={config.fields}
         values={formValues}

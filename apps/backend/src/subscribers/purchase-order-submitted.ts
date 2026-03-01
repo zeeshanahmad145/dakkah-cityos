@@ -10,8 +10,8 @@ export default async function purchaseOrderSubmittedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string; company_id?: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const purchaseOrderService = container.resolve("purchaseOrder")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const purchaseOrderService = container.resolve("purchaseOrder") as unknown as any
   
   try {
     const po = await purchaseOrderService.retrievePurchaseOrder(data.id)

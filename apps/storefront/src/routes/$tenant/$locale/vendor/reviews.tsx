@@ -143,7 +143,7 @@ function VendorReviewsRoute() {
                   </div>
                   {review.title && <h4 className="font-medium">{review.title}</h4>}
                 </div>
-                <span className="text-xs text-muted-foreground">{new Date(review.created_at).toLocaleDateString()}</span>
+                <span className="text-xs text-muted-foreground">{new Date(review.created_at!).toLocaleDateString()}</span>
               </div>
               <p className="text-sm mb-3">{review.content}</p>
               {review.product_name && <p className="text-xs text-muted-foreground mb-3">Product: {review.product_name}</p>}

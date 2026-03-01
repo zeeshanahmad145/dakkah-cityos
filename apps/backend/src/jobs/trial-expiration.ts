@@ -4,9 +4,9 @@ import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:trial-expiration")
 
 export default async function trialExpirationJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const subscriptionService = container.resolve("subscription")
-  const eventBus = container.resolve("event_bus")
+  const query = container.resolve("query") as unknown as any
+  const subscriptionService = container.resolve("subscription") as unknown as any
+  const eventBus = container.resolve("event_bus") as unknown as any
   
   logger.info("[Trial Expiration] Checking for expiring trials...")
   

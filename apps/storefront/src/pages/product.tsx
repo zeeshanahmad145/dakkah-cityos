@@ -19,11 +19,12 @@ const LOCALE_TO_COUNTRY: Record<string, string> = {
 }
 
 const ProductDetails = () => {
-  const loaderData = useLoaderData({ strict: false }) as any
-  const params = useParams({ strict: false }) as any
+  const loaderData = useLoaderData({ strict: false })
+  const params = useParams({ strict: false })
   const handle = params?.handle
   const locale = params?.locale || "en"
-  const countryCode = LOCALE_TO_COUNTRY[locale?.toLowerCase()] || locale?.toLowerCase() || "us"
+  const countryCode =
+    LOCALE_TO_COUNTRY[locale?.toLowerCase()] || locale?.toLowerCase() || "us"
 
   const { data: region } = useQuery({
     queryKey: ["region", locale],
@@ -36,7 +37,7 @@ const ProductDetails = () => {
     queryKey: ["product", handle, region?.id],
     queryFn: () =>
       retrieveProduct({
-        handle,
+        handle: handle!,
         region_id: region!.id,
       }),
     initialData: loaderData?.product || undefined,
@@ -44,16 +45,21 @@ const ProductDetails = () => {
     staleTime: 30000,
   })
 
-  const { data: reviewsData, isLoading: reviewsLoading } = useProductReviews(product?.id || "", { limit: 10 })
+  const { data: reviewsData, isLoading: reviewsLoading } = useProductReviews(
+    product?.id || "",
+    { limit: 10 },
+  )
 
-  const relatedProducts = loaderData?.relatedProducts || []
+  const relatedProducts = (loaderData as any)?.relatedProducts || []
 
   const cheapestPrice = product?.variants
     ?.map((v: any) => v.calculated_price?.calculated_amount)
     .filter(Boolean)
     .sort((a: number, b: number) => a - b)[0]
 
-  const priceCurrency = product?.variants?.[0]?.calculated_price?.currency_code?.toUpperCase() || "USD"
+  const priceCurrency =
+    product?.variants?.[0]?.calculated_price?.currency_code?.toUpperCase() ||
+    "USD"
 
   if (!product || isLoading) {
     return (
@@ -82,7 +88,10 @@ const ProductDetails = () => {
           <h1 className="text-2xl font-medium mb-2">{product.title}</h1>
           {cheapestPrice != null && (
             <div className="mb-4">
-              <BNPLEligibilityBadge price={cheapestPrice / 100} currency={priceCurrency} />
+              <BNPLEligibilityBadge
+                price={cheapestPrice / 100}
+                currency={priceCurrency}
+              />
             </div>
           )}
           {product.description && (
@@ -91,7 +100,10 @@ const ProductDetails = () => {
           {region && <ProductActions product={product} region={region} />}
           <div className="flex items-center gap-3 mt-4">
             <AddToWishlistButton productId={product.id} />
-            <CompareButton productId={product.id} productTitle={product.title || ""} />
+            <CompareButton
+              productId={product.id}
+              productTitle={product.title || ""}
+            />
           </div>
         </div>
       </div>

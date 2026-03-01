@@ -24,7 +24,7 @@ export function SearchSuggestions({
           {suggestions.map((product) => (
             <li key={product.id}>
               <Link
-                to={`${tenantPrefix}/products/${product.handle}` as any}
+                to={`${tenantPrefix}/products/${product.handle}` as never}
                 onClick={onSelect}
                 className="flex items-center gap-3 p-2 hover:bg-ui-bg-base-hover rounded-md transition-colors"
               >

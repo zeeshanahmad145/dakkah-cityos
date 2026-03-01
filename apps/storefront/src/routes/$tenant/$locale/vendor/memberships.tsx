@@ -33,7 +33,7 @@ function VendorMembershipsRoute() {
   const auth = useAuth()
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,9 +43,12 @@ function VendorMembershipsRoute() {
   const { data, isLoading } = useQuery({
     queryKey: ["vendor-memberships"],
     queryFn: async () => {
-      return sdk.client.fetch<{ items: MembershipTier[]; count: number }>("/vendor/memberships", {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: MembershipTier[]; count: number }>(
+        "/vendor/memberships",
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -78,7 +81,9 @@ function VendorMembershipsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No membership plans yet</p>
-          <p className="text-sm">Create membership tiers to build your community.</p>
+          <p className="text-sm">
+            Create membership tiers to build your community.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -95,14 +100,20 @@ function VendorMembershipsRoute() {
               )}
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-lg">{tier.name}</h3>
-                <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
-                  tier.is_active !== false ? "bg-ds-success/15 text-ds-success" : "bg-ds-muted text-ds-foreground"
-                }`}>
+                <span
+                  className={`px-2 py-0.5 text-xs rounded-full font-medium ${
+                    tier.is_active !== false
+                      ? "bg-ds-success/15 text-ds-success"
+                      : "bg-ds-muted text-ds-foreground"
+                  }`}
+                >
                   {tier.is_active !== false ? "Active" : "Inactive"}
                 </span>
               </div>
               {tier.description && (
-                <p className="text-sm text-ds-muted-foreground mb-4">{tier.description}</p>
+                <p className="text-sm text-ds-muted-foreground mb-4">
+                  {tier.description}
+                </p>
               )}
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
@@ -113,7 +124,8 @@ function VendorMembershipsRoute() {
                   <div className="flex justify-between">
                     <span className="text-ds-muted-foreground">Annual Fee</span>
                     <span className="font-medium">
-                      {tier.currency_code?.toUpperCase() || "USD"} {(tier.annual_fee / 100).toFixed(2)}
+                      {tier.currency_code?.toUpperCase() || "USD"}{" "}
+                      {(tier.annual_fee / 100).toFixed(2)}
                     </span>
                   </div>
                 )}
@@ -127,22 +139,30 @@ function VendorMembershipsRoute() {
                   <div className="flex justify-between">
                     <span className="text-ds-muted-foreground">Revenue</span>
                     <span className="font-medium text-ds-success">
-                      {tier.currency_code?.toUpperCase() || "USD"} {(tier.revenue / 100).toFixed(2)}
+                      {tier.currency_code?.toUpperCase() || "USD"}{" "}
+                      {(tier.revenue / 100).toFixed(2)}
                     </span>
                   </div>
                 )}
               </div>
               {tier.benefits && tier.benefits.length > 0 && (
                 <div className="mt-4 pt-3 border-t">
-                  <p className="text-xs text-ds-muted-foreground mb-2">Benefits</p>
+                  <p className="text-xs text-ds-muted-foreground mb-2">
+                    Benefits
+                  </p>
                   <ul className="space-y-1">
                     {tier.benefits.slice(0, 3).map((b, i) => (
-                      <li key={i} className="text-xs text-ds-foreground/80 flex items-center gap-1">
+                      <li
+                        key={i}
+                        className="text-xs text-ds-foreground/80 flex items-center gap-1"
+                      >
                         <span className="text-ds-success">✓</span> {b}
                       </li>
                     ))}
                     {tier.benefits.length > 3 && (
-                      <li className="text-xs text-ds-muted-foreground/70">+{tier.benefits.length - 3} more</li>
+                      <li className="text-xs text-ds-muted-foreground/70">
+                        +{tier.benefits.length - 3} more
+                      </li>
                     )}
                   </ul>
                 </div>

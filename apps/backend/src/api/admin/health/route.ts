@@ -10,17 +10,17 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   let overallStatus = "healthy"
 
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
     await query.graph({
       entity: "region",
       fields: ["id"],
       pagination: { take: 1 },
     })
     checks.database = { status: "healthy" }
-  } catch (error: any) {
+  } catch (error: unknown) {
     checks.database = {
       status: "unhealthy",
-      error: error instanceof Error ? error.message : "Connection failed",}
+      error: error instanceof Error ? (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) : "Connection failed",}
     overallStatus = "degraded"
   }
 

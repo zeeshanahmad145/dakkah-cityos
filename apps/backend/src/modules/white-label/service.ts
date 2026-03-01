@@ -9,10 +9,12 @@ class WhiteLabelModuleService extends MedusaService({
   /**
    * Get the white-label configuration for a tenant.
    */
-  async getConfigForTenant(tenantId: string): Promise<any> {
+  async getConfigForTenant(
+    tenantId: string,
+  ): Promise<Record<string, unknown> | null> {
     const configs = (await this.listWhiteLabelConfigs({
       tenant_id: tenantId,
-    })) as any[];
+    })) as unknown as Record<string, unknown>[];
     const list = Array.isArray(configs) ? configs : [];
     return list[0] ?? null;
   }
@@ -35,19 +37,28 @@ class WhiteLabelModuleService extends MedusaService({
     const existing = await this.getConfigForTenant(tenantId);
 
     if (existing) {
-      return await (this as any).updateWhiteLabelConfigs({
-        id: existing.id,
-        brand_name: data.brandName ?? existing.brand_name,
-        logo_url: data.logoUrl ?? existing.logo_url,
-        primary_color: data.primaryColor ?? existing.primary_color,
-        secondary_color: data.secondaryColor ?? existing.secondary_color,
-        custom_domain: data.customDomain ?? existing.custom_domain,
-        status: data.status ?? existing.status,
-        metadata: data.metadata ?? existing.metadata,
-      });
+      return await this.updateWhiteLabelConfigs({
+        id: (existing as Record<string, unknown>).id,
+        brand_name:
+          data.brandName ?? (existing as Record<string, unknown>).brand_name,
+        logo_url:
+          data.logoUrl ?? (existing as Record<string, unknown>).logo_url,
+        primary_color:
+          data.primaryColor ??
+          (existing as Record<string, unknown>).primary_color,
+        secondary_color:
+          data.secondaryColor ??
+          (existing as Record<string, unknown>).secondary_color,
+        custom_domain:
+          data.customDomain ??
+          (existing as Record<string, unknown>).custom_domain,
+        status: data.status ?? (existing as Record<string, unknown>).status,
+        metadata:
+          data.metadata ?? (existing as Record<string, unknown>).metadata,
+      } as unknown as any);
     }
 
-    return await (this as any).createWhiteLabelConfigs({
+    return await this.createWhiteLabelConfigs({
       tenant_id: tenantId,
       brand_name: data.brandName ?? "",
       logo_url: data.logoUrl ?? null,
@@ -56,30 +67,31 @@ class WhiteLabelModuleService extends MedusaService({
       custom_domain: data.customDomain ?? null,
       status: data.status ?? "pending",
       metadata: data.metadata ?? null,
-    });
+    } as unknown as any);
   }
 
   /**
    * Publish the active theme for a config, making it live.
    */
-  async publishTheme(themeId: string): Promise<any> {
-    const theme = await this.retrieveWhiteLabelTheme(themeId);
-    // Unpublish all other themes for this config first
+  async publishTheme(themeId: string): Promise<unknown> {
+    const theme = (await this.retrieveWhiteLabelTheme(
+      themeId,
+    )) as unknown as Record<string, unknown>;
     const existing = (await this.listWhiteLabelThemes({
-      white_label_id: (theme as any).white_label_id,
-    })) as any[];
+      white_label_id: theme.white_label_id,
+    })) as unknown as Record<string, unknown>[];
     for (const t of existing) {
       if (t.id !== themeId && t.is_published) {
-        await (this as any).updateWhiteLabelThemes({
-          id: t.id,
+        await this.updateWhiteLabelThemes({
+          id: t.id as string,
           is_published: false,
-        });
+        } as unknown as any);
       }
     }
-    return await (this as any).updateWhiteLabelThemes({
+    return this.updateWhiteLabelThemes({
       id: themeId,
       is_published: true,
-    });
+    } as unknown as any);
   }
 }
 

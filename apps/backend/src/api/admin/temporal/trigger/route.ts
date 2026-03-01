@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { startWorkflow } from "../../../../lib/temporal-client"
 import { getWorkflowForEvent } from "../../../../lib/event-dispatcher"
 import { z } from "zod"
@@ -34,7 +34,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       workflowId: resolvedWorkflowId,
       runId: result.runId,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-TRIGGER")
   }
 }

@@ -13,7 +13,7 @@ export async function GET(
       variant_id?: string
     }
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     // Get company with tier info
     const { data: companies } = await query.graph({
@@ -103,7 +103,7 @@ export async function GET(
       }
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET store companies id pricing")}
 }
 

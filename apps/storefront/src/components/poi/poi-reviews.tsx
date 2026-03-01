@@ -35,32 +35,53 @@ function StarRatingDisplay({ rating }: { rating: number }) {
   )
 }
 
-export function POIReviews({ reviews, averageRating, totalCount, locale: localeProp }: POIReviewsProps) {
+export function POIReviews({
+  reviews,
+  averageRating,
+  totalCount,
+  locale: localeProp,
+}: POIReviewsProps) {
   const { locale: ctxLocale } = useTenant()
   const locale = localeProp || ctxLocale || "en"
 
   return (
     <div className="bg-ds-background rounded-lg border border-ds-border p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-ds-foreground">{t(locale, "poi.reviews")}</h2>
+        <h2 className="text-lg font-semibold text-ds-foreground">
+          {t(locale, "poi.reviews")}
+        </h2>
         {averageRating !== undefined && totalCount !== undefined && (
           <div className="flex items-center gap-2">
             <StarRatingDisplay rating={averageRating} />
-            <span className="text-sm font-medium text-ds-foreground">{averageRating.toFixed(1)}</span>
-            <span className="text-sm text-ds-muted-foreground">({totalCount})</span>
+            <span className="text-sm font-medium text-ds-foreground">
+              {averageRating.toFixed(1)}
+            </span>
+            <span className="text-sm text-ds-muted-foreground">
+              ({totalCount})
+            </span>
           </div>
         )}
       </div>
 
       {reviews.length === 0 ? (
-        <p className="text-sm text-ds-muted-foreground">{t(locale, "blocks.no_reviews")}</p>
+        <p className="text-sm text-ds-muted-foreground">
+          {t(locale, "blocks.no_reviews")}
+        </p>
       ) : (
         <div className="space-y-4">
           {reviews.map((review) => (
-            <div key={review.id} className="pb-4 border-b border-ds-border last:border-0 last:pb-0">
+            <div
+              key={review.id}
+              className="pb-4 border-b border-ds-border last:border-0 last:pb-0"
+            >
               <div className="flex items-start gap-3">
                 {review.avatar ? (
-                  <img loading="lazy" src={review.avatar} alt={review.author} className="w-8 h-8 rounded-full flex-shrink-0" />
+                  <img
+                    loading="lazy"
+                    src={review.avatar}
+                    alt={review.author}
+                    className="w-8 h-8 rounded-full flex-shrink-0"
+                  />
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-ds-muted flex items-center justify-center flex-shrink-0">
                     <span className="text-xs font-medium text-ds-muted-foreground">
@@ -70,13 +91,17 @@ export function POIReviews({ reviews, averageRating, totalCount, locale: localeP
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-ds-foreground">{review.author}</span>
+                    <span className="text-sm font-medium text-ds-foreground">
+                      {review.author}
+                    </span>
                     <span className="text-xs text-ds-muted-foreground">
-                      {formatDate(review.createdAt, locale as any)}
+                      {formatDate(review.createdAt, locale as import("@/lib/i18n").SupportedLocale)}
                     </span>
                   </div>
                   <StarRatingDisplay rating={review.rating} />
-                  <p className="text-sm text-ds-muted-foreground mt-2">{review.content}</p>
+                  <p className="text-sm text-ds-muted-foreground mt-2">
+                    {review.content}
+                  </p>
                   {review.helpful !== undefined && review.helpful > 0 && (
                     <p className="text-xs text-ds-muted-foreground mt-2">
                       {review.helpful} {t(locale, "blocks.found_helpful")}

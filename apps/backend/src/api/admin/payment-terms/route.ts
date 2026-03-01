@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -17,7 +17,7 @@ const createPaymentTermSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("company") as any;
+    const moduleService = req.scope.resolve("company") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -36,14 +36,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       payment_terms: items,
       count: Array.isArray(items) ? items.length : 0,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin payment-terms");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const moduleService = req.scope.resolve("company") as any;
+    const moduleService = req.scope.resolve("company") as unknown as any;
     const parsed = createPaymentTermSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -54,7 +54,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const item = await moduleService.createPaymentTerms([parsed.data]);
     res.status(201).json({ payment_term: item[0] });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin payment-terms");
   }
 }

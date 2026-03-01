@@ -26,7 +26,7 @@ function VendorTransactionsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -93,7 +93,9 @@ function VendorTransactionsRoute() {
               key={t}
               onClick={() => setTypeFilter(t)}
               className={`px-3 py-1.5 text-sm rounded-full border transition ${
-                typeFilter === t ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+                typeFilter === t
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
               }`}
             >
               {t || "All"}
@@ -102,24 +104,31 @@ function VendorTransactionsRoute() {
         </div>
         <div className="flex gap-2 items-center">
           <span className="text-sm text-ds-muted-foreground">Status:</span>
-          {["", "completed", "pending", "processing", "failed", "refunded"].map((s) => (
-            <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              className={`px-3 py-1.5 text-sm rounded-full border transition ${
-                statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
-              }`}
-            >
-              {s || "All"}
-            </button>
-          ))}
+          {["", "completed", "pending", "processing", "failed", "refunded"].map(
+            (s) => (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                  statusFilter === s
+                    ? "bg-ds-primary text-white border-ds-primary"
+                    : "bg-ds-card hover:bg-ds-muted/50"
+                }`}
+              >
+                {s || "All"}
+              </button>
+            ),
+          )}
         </div>
       </div>
 
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No transactions yet</p>
-          <p className="text-sm">Your transaction history will appear here once you start receiving orders.</p>
+          <p className="text-sm">
+            Your transaction history will appear here once you start receiving
+            orders.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -136,24 +145,43 @@ function VendorTransactionsRoute() {
             </thead>
             <tbody>
               {items.map((txn) => (
-                <tr key={txn.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={txn.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 pe-4 text-sm text-ds-muted-foreground">
-                    {new Date(txn.created_at).toLocaleDateString()}
+                    {new Date(txn.created_at!).toLocaleDateString()}
                   </td>
                   <td className="py-4 pe-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${typeColors[txn.type] || "bg-ds-muted/50 text-ds-foreground/80"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${typeColors[txn.type] || "bg-ds-muted/50 text-ds-foreground/80"}`}
+                    >
                       {txn.type?.replace(/_/g, " ")}
                     </span>
                   </td>
-                  <td className="py-4 pe-4 text-sm font-mono text-ds-muted-foreground">{txn.reference || "—"}</td>
-                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground">{txn.description || "—"}</td>
+                  <td className="py-4 pe-4 text-sm font-mono text-ds-muted-foreground">
+                    {txn.reference || "—"}
+                  </td>
+                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground">
+                    {txn.description || "—"}
+                  </td>
                   <td className="py-4 pe-4 text-right font-medium">
-                    <span className={txn.type === "refund" || txn.type === "fee" ? "text-ds-destructive" : "text-ds-success"}>
-                      {txn.type === "refund" || txn.type === "fee" ? "−" : "+"}{txn.currency_code?.toUpperCase()} {(Math.abs(txn.amount) / 100).toFixed(2)}
+                    <span
+                      className={
+                        txn.type === "refund" || txn.type === "fee"
+                          ? "text-ds-destructive"
+                          : "text-ds-success"
+                      }
+                    >
+                      {txn.type === "refund" || txn.type === "fee" ? "−" : "+"}
+                      {txn.currency_code?.toUpperCase()}{" "}
+                      {(Math.abs(txn.amount) / 100).toFixed(2)}
                     </span>
                   </td>
                   <td className="py-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[txn.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[txn.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {txn.status?.replace(/_/g, " ")}
                     </span>
                   </td>

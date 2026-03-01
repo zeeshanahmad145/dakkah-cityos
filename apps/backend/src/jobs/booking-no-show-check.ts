@@ -4,9 +4,9 @@ import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:booking-no-show-check")
 
 export default async function bookingNoShowCheckJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const bookingService = container.resolve("booking")
-  const eventBus = container.resolve("event_bus")
+  const query = container.resolve("query") as unknown as any
+  const bookingService = container.resolve("booking") as unknown as any
+  const eventBus = container.resolve("event_bus") as unknown as any
   
   logger.info("[No-Show Check] Checking for no-shows...")
   

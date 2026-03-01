@@ -18,16 +18,18 @@ interface PODDesign {
   created_at: string
 }
 
-export const Route = createFileRoute("/$tenant/$locale/vendor/print-on-demand")({
-  component: VendorPrintOnDemandRoute,
-})
+export const Route = createFileRoute("/$tenant/$locale/vendor/print-on-demand")(
+  {
+    component: VendorPrintOnDemandRoute,
+  },
+)
 
 function VendorPrintOnDemandRoute() {
   const auth = useAuth()
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -85,10 +87,14 @@ function VendorPrintOnDemandRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
-            {s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "All"}
+            {s
+              ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+              : "All"}
           </button>
         ))}
       </div>
@@ -96,31 +102,51 @@ function VendorPrintOnDemandRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No designs yet</p>
-          <p className="text-sm">Upload your first design to start selling print-on-demand products.</p>
+          <p className="text-sm">
+            Upload your first design to start selling print-on-demand products.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {items.map((design) => (
-            <div key={design.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={design.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               {design.thumbnail_url && (
                 <div className="w-full h-40 bg-ds-muted rounded-lg mb-4 overflow-hidden">
-                  <img loading="lazy" src={design.thumbnail_url} alt={design.design_name} className="w-full h-full object-cover" />
+                  <img
+                    loading="lazy"
+                    src={design.thumbnail_url}
+                    alt={design.design_name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               )}
               <div className="flex items-center gap-3 mb-2">
                 <h3 className="text-lg font-semibold">{design.design_name}</h3>
-                <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[design.status] || "bg-ds-muted text-ds-foreground"}`}>
+                <span
+                  className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[design.status] || "bg-ds-muted text-ds-foreground"}`}
+                >
                   {design.status?.replace(/_/g, " ")}
                 </span>
               </div>
-              <p className="text-sm text-ds-muted-foreground mb-3">{design.product_type}</p>
+              <p className="text-sm text-ds-muted-foreground mb-3">
+                {design.product_type}
+              </p>
               <div className="grid grid-cols-3 gap-2 text-center mb-4">
                 <div className="bg-ds-muted/50 rounded p-2">
-                  <p className="text-sm font-bold">{design.currency_code?.toUpperCase()} {(design.base_cost / 100).toFixed(2)}</p>
+                  <p className="text-sm font-bold">
+                    {design.currency_code?.toUpperCase()}{" "}
+                    {(design.base_cost / 100).toFixed(2)}
+                  </p>
                   <p className="text-xs text-ds-muted-foreground">Base Cost</p>
                 </div>
                 <div className="bg-ds-muted/50 rounded p-2">
-                  <p className="text-sm font-bold">{design.currency_code?.toUpperCase()} {(design.retail_price / 100).toFixed(2)}</p>
+                  <p className="text-sm font-bold">
+                    {design.currency_code?.toUpperCase()}{" "}
+                    {(design.retail_price / 100).toFixed(2)}
+                  </p>
                   <p className="text-xs text-ds-muted-foreground">Retail</p>
                 </div>
                 <div className="bg-ds-muted/50 rounded p-2">
@@ -128,7 +154,9 @@ function VendorPrintOnDemandRoute() {
                   <p className="text-xs text-ds-muted-foreground">Sales</p>
                 </div>
               </div>
-              <button className="text-sm text-ds-primary hover:underline">View Sales</button>
+              <button className="text-sm text-ds-primary hover:underline">
+                View Sales
+              </button>
             </div>
           ))}
         </div>

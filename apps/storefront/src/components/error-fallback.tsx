@@ -112,7 +112,7 @@ const ErrorFallback = ({ error, reset }: ErrorFallbackProps) => {
                         Error Message
                       </p>
                       <code className="text-sm text-rose-900 break-all">
-                        {error.message}
+                        {(error instanceof Error ? error.message : String(error))}
                       </code>
                     </div>
 

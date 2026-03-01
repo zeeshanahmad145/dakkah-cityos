@@ -14,16 +14,20 @@ interface HelpCenterProps {
 
 const categoryIcons: Record<string, string> = {
   "getting-started": "🚀",
-  "orders": "📦",
-  "payments": "💳",
-  "shipping": "🚚",
-  "returns": "↩️",
-  "account": "👤",
-  "security": "🔒",
-  "general": "📋",
+  orders: "📦",
+  payments: "💳",
+  shipping: "🚚",
+  returns: "↩️",
+  account: "👤",
+  security: "🔒",
+  general: "📋",
 }
 
-export function HelpCenter({ categories, featuredArticles, onSearch }: HelpCenterProps) {
+export function HelpCenter({
+  categories,
+  featuredArticles,
+  onSearch,
+}: HelpCenterProps) {
   const prefix = useTenantPrefix()
   const { locale } = useParams({ strict: false }) as { locale: string }
   const [searchQuery, setSearchQuery] = useState("")
@@ -58,7 +62,7 @@ export function HelpCenter({ categories, featuredArticles, onSearch }: HelpCente
         {categories.map((category) => (
           <Link
             key={category.id}
-            to={`${prefix}/help?category=${category.slug}` as any}
+            to={`${prefix}/help?category=${category.slug}` as never}
             className="group flex flex-col items-center p-6 bg-ds-background rounded-lg border border-ds-border hover:border-ds-primary hover:shadow-sm transition-all text-center"
           >
             <span className="text-3xl mb-3">
@@ -88,7 +92,7 @@ export function HelpCenter({ categories, featuredArticles, onSearch }: HelpCente
             {featuredArticles.map((article) => (
               <Link
                 key={article.id}
-                to={`${prefix}/help/${article.slug}` as any}
+                to={`${prefix}/help/${article.slug}` as never}
                 className="flex items-center justify-between p-4 bg-ds-background rounded-lg border border-ds-border hover:border-ds-primary transition-colors"
               >
                 <div className="min-w-0 flex-1">

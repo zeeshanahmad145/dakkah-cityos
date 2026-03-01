@@ -21,12 +21,16 @@ interface VendorProductsProps {
   vendorHandle: string
 }
 
-export function VendorProducts({ products, tenantPrefix, vendorHandle }: VendorProductsProps) {
+export function VendorProducts({
+  products,
+  tenantPrefix,
+  vendorHandle,
+}: VendorProductsProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [sortBy, setSortBy] = useState("newest")
 
   const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchQuery.toLowerCase())
+    product.title.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -77,7 +81,7 @@ export function VendorProducts({ products, tenantPrefix, vendorHandle }: VendorP
           {sortedProducts.map((product) => (
             <Link
               key={product.id}
-              to={`${tenantPrefix}/products/${product.handle}` as any}
+              to={`${tenantPrefix}/products/${product.handle}` as never}
               className="group"
             >
               <div className="aspect-square rounded-xl bg-ds-muted overflow-hidden mb-3">

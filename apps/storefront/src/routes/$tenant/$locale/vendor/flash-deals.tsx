@@ -28,7 +28,7 @@ function VendorFlashDealsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -91,7 +91,9 @@ function VendorFlashDealsRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -102,17 +104,25 @@ function VendorFlashDealsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No flash deals yet</p>
-          <p className="text-sm">Create your first flash deal to boost sales with limited-time offers.</p>
+          <p className="text-sm">
+            Create your first flash deal to boost sales with limited-time
+            offers.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((deal) => (
-            <div key={deal.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={deal.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{deal.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[deal.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[deal.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {deal.status}
                     </span>
                     <span className="px-2 py-0.5 text-xs rounded-full bg-ds-warning/15 text-ds-warning font-medium">
@@ -120,24 +130,42 @@ function VendorFlashDealsRoute() {
                     </span>
                   </div>
                   {deal.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{deal.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {deal.description}
+                    </p>
                   )}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 mb-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{formatPrice(deal.original_price)}</p>
-                      <p className="text-xs text-ds-muted-foreground">Original</p>
+                      <p className="text-lg font-bold">
+                        {formatPrice(deal.original_price ?? 0)}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Original
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold text-ds-success">{formatPrice(deal.sale_price)}</p>
-                      <p className="text-xs text-ds-muted-foreground">Sale Price</p>
+                      <p className="text-lg font-bold text-ds-success">
+                        {formatPrice(deal.sale_price ?? 0)}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Sale Price
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{deal.stock_remaining}</p>
-                      <p className="text-xs text-ds-muted-foreground">Stock Left</p>
+                      <p className="text-lg font-bold">
+                        {deal.stock_remaining}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Stock Left
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-sm font-medium">{new Date(deal.end_time).toLocaleDateString()}</p>
-                      <p className="text-xs text-ds-muted-foreground">End Date</p>
+                      <p className="text-sm font-medium">
+                        {new Date(deal.end_time!).toLocaleDateString()}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        End Date
+                      </p>
                     </div>
                   </div>
                 </div>

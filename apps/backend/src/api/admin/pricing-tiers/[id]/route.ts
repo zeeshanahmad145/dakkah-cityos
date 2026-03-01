@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
@@ -18,7 +18,7 @@ export async function GET(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: tiers } = await query.graph({
       entity: "pricing_tier",
@@ -52,7 +52,7 @@ export async function GET(
       companies
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin pricing-tiers id")}
 }
 
@@ -76,7 +76,7 @@ export async function PUT(
       priority
     } = parsed.data
 
-    const companyService = req.scope.resolve("companyModuleService")
+    const companyService = req.scope.resolve("companyModuleService") as unknown as any
 
     await companyService.updatePricingTiers({
       selector: { id },
@@ -89,7 +89,7 @@ export async function PUT(
       }
     })
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
     const { data: tiers } = await query.graph({
       entity: "pricing_tier",
       fields: ["id", "name", "discount_percentage", "min_order_value", "priority"],
@@ -98,7 +98,7 @@ export async function PUT(
 
     res.json({ tier: tiers[0] })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin pricing-tiers id")}
 }
 
@@ -109,7 +109,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     // Check if any companies use this tier
     const { data: companies } = await query.graph({
@@ -125,12 +125,12 @@ export async function DELETE(
       })
     }
 
-    const companyService = req.scope.resolve("companyModuleService")
+    const companyService = req.scope.resolve("companyModuleService") as unknown as any
     await companyService.deletePricingTiers(id)
 
     res.json({ message: "Pricing tier deleted", id })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin pricing-tiers id")}
 }
 

@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -39,7 +39,7 @@ interface EarlyPaymentCalculation {
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
 
     // Fetch invoice
     const { data: invoices } = await query.graph({
@@ -130,7 +130,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     res.json({ early_payment: calculation })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-INVOICES-ID-EARLY-PAYMENT")}
 }
 
@@ -148,7 +148,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const { id } = req.params
     const { apply_discount } = parsed.data
     
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
 
     // Fetch invoice
     const { data: invoices } = await query.graph({
@@ -194,7 +194,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       success: true,
       early_payment_discount: result
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-INVOICES-ID-EARLY-PAYMENT")}
 }
 

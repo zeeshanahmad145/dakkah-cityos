@@ -37,7 +37,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       prevPage: result.hasPrevPage ? result.page - 1 : null,
       nextPage: result.hasNextPage ? result.page + 1 : null,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
 return handleApiError(res, error, "PLATFORM-CMS-PAGES")
   }
 }

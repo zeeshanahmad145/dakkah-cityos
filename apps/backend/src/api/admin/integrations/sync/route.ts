@@ -49,11 +49,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
       logger.info(`[IntegrationSync] Manual sync dispatched to Temporal: ${result.runId}`)
       return res.json({ triggered: true, system, entity_type, entity_id: entity_id || "all", workflow_run_id: result.runId })
-    } catch (error: any) {
-      logger.error(`[IntegrationSync] dispatching manual sync: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[IntegrationSync] dispatching manual sync: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
       return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC")}
-  } catch (error: any) {
-    logger.error(`[IntegrationSync] triggering sync: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[IntegrationSync] triggering sync: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC")}
 }
 
@@ -81,8 +81,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       total: recentSyncs.length,
       stats: dashboard.stats,
     })
-  } catch (error: any) {
-    logger.error(`[IntegrationSync] fetching sync operations: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[IntegrationSync] fetching sync operations: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC")}
 }
 

@@ -3,47 +3,55 @@ import {
   WorkflowResponse,
   createStep,
   StepResponse,
-} from "@medusajs/framework/workflows-sdk"
+} from "@medusajs/framework/workflows-sdk";
 
 type TenantProvisioningInput = {
-  name: string
-  domain: string
-  adminEmail: string
-  plan: string
-  region: string
-  features?: string[]
-  currency?: string
-}
+  name: string;
+  domain: string;
+  adminEmail: string;
+  plan: string;
+  region: string;
+  features?: string[];
+  currency?: string;
+};
 
 const createTenantStep = createStep(
   "create-tenant-record-step",
   async (input: TenantProvisioningInput, { container }) => {
-    const tenantModule = container.resolve("tenant") as any
+    const tenantModule = container.resolve("tenant") as unknown as any;
     const tenant = await tenantModule.createTenants({
       name: input.name,
       domain: input.domain,
       admin_email: input.adminEmail,
       plan: input.plan,
       status: "provisioning",
-    })
-    return new StepResponse({ tenant }, { tenantId: tenant.id })
+    });
+    return new StepResponse({ tenant }, { tenantId: tenant.id });
   },
   async (compensationData: { tenantId: string }, { container }) => {
-    if (!compensationData?.tenantId) return
+    if (!compensationData?.tenantId) return;
     try {
-      const tenantModule = container.resolve("tenant") as any
-      await tenantModule.deleteTenants(compensationData.tenantId)
-    } catch (error) {
-    }
-  }
-)
+      const tenantModule = container.resolve("tenant") as unknown as any;
+      await tenantModule.deleteTenants(compensationData.tenantId);
+    } catch (error) {}
+  },
+);
 
 const provisionResourcesStep = createStep(
   "provision-tenant-resources-step",
-  async (input: { tenantId: string; region: string; currency?: string; name: string; domain: string }, { container }) => {
-    const tenantModule = container.resolve("tenant") as any
+  async (
+    input: {
+      tenantId: string;
+      region: string;
+      currency?: string;
+      name: string;
+      domain: string;
+    },
+    { container },
+  ) => {
+    const tenantModule = container.resolve("tenant") as unknown as any;
 
-    let storeConfig = null
+    let storeConfig = null;
     try {
       if (tenantModule.createStoreConfig) {
         storeConfig = await tenantModule.createStoreConfig({
@@ -52,33 +60,55 @@ const provisionResourcesStep = createStep(
           domain: input.domain,
           default_currency: input.currency || "usd",
           default_region: input.region,
-        })
+        });
       }
-    } catch (error) {
-    }
+    } catch (error) {}
 
     const regionConfig = {
       tenant_id: input.tenantId,
       region: input.region,
       currency: input.currency || "usd",
-    }
+    };
 
     const defaultRoles = [
       { name: "owner", permissions: ["*"], tenant_id: input.tenantId },
-      { name: "admin", permissions: ["manage_products", "manage_orders", "manage_customers", "manage_settings", "view_analytics"], tenant_id: input.tenantId },
-      { name: "manager", permissions: ["manage_products", "manage_orders", "manage_customers", "view_analytics"], tenant_id: input.tenantId },
-      { name: "staff", permissions: ["manage_orders", "view_products", "view_customers"], tenant_id: input.tenantId },
-    ]
+      {
+        name: "admin",
+        permissions: [
+          "manage_products",
+          "manage_orders",
+          "manage_customers",
+          "manage_settings",
+          "view_analytics",
+        ],
+        tenant_id: input.tenantId,
+      },
+      {
+        name: "manager",
+        permissions: [
+          "manage_products",
+          "manage_orders",
+          "manage_customers",
+          "view_analytics",
+        ],
+        tenant_id: input.tenantId,
+      },
+      {
+        name: "staff",
+        permissions: ["manage_orders", "view_products", "view_customers"],
+        tenant_id: input.tenantId,
+      },
+    ];
 
-    let createdRoles: any[] = []
+    let createdRoles: any[] = [];
     try {
       if (tenantModule.createRoles) {
         createdRoles = await Promise.all(
-          defaultRoles.map((role) => tenantModule.createRoles(role))
-        )
+          defaultRoles.map((role) => tenantModule.createRoles(role)),
+        );
       }
     } catch (error) {
-      createdRoles = defaultRoles
+      createdRoles = defaultRoles;
     }
 
     const resources = {
@@ -90,15 +120,18 @@ const provisionResourcesStep = createStep(
       storage_provisioned: true,
       region: input.region,
       provisioned_at: new Date(),
-    }
-    return new StepResponse({ resources })
-  }
-)
+    };
+    return new StepResponse({ resources });
+  },
+);
 
 const seedTenantDataStep = createStep(
   "seed-tenant-data-step",
-  async (input: { tenantId: string; features?: string[]; plan: string }, { container }) => {
-    const tenantModule = container.resolve("tenant") as any
+  async (
+    input: { tenantId: string; features?: string[]; plan: string },
+    { container },
+  ) => {
+    const tenantModule = container.resolve("tenant") as unknown as any;
 
     const defaultSettings = {
       tenant_id: input.tenantId,
@@ -106,66 +139,84 @@ const seedTenantDataStep = createStep(
       auto_approve_orders: false,
       inventory_tracking: true,
       multi_currency: input.plan === "enterprise" || input.plan === "business",
-      max_products: input.plan === "enterprise" ? -1 : input.plan === "business" ? 10000 : 100,
-      max_staff: input.plan === "enterprise" ? -1 : input.plan === "business" ? 50 : 5,
+      max_products:
+        input.plan === "enterprise"
+          ? -1
+          : input.plan === "business"
+            ? 10000
+            : 100,
+      max_staff:
+        input.plan === "enterprise" ? -1 : input.plan === "business" ? 50 : 5,
       analytics_enabled: input.plan !== "free",
-    }
+    };
 
     try {
       if (tenantModule.createTenantSettings) {
-        await tenantModule.createTenantSettings(defaultSettings)
+        await tenantModule.createTenantSettings(defaultSettings);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
 
     const seeded = {
       tenant_id: input.tenantId,
       default_settings: defaultSettings,
       features_enabled: input.features || [],
       seeded_at: new Date(),
-    }
-    return new StepResponse({ seeded })
-  }
-)
+    };
+    return new StepResponse({ seeded });
+  },
+);
 
 const configureTenantStep = createStep(
   "configure-tenant-step",
-  async (input: { tenantId: string; domain: string; plan: string }, { container }) => {
-    const tenantModule = container.resolve("tenant") as any
+  async (
+    input: { tenantId: string; domain: string; plan: string },
+    { container },
+  ) => {
+    const tenantModule = container.resolve("tenant") as unknown as any;
     const configured = await tenantModule.updateTenants({
       id: input.tenantId,
       status: "active",
       configured_at: new Date(),
-    })
-    return new StepResponse({ tenant: configured }, { tenantId: input.tenantId })
+    });
+    return new StepResponse(
+      { tenant: configured },
+      { tenantId: input.tenantId },
+    );
   },
   async (compensationData: { tenantId: string }, { container }) => {
-    if (!compensationData?.tenantId) return
+    if (!compensationData?.tenantId) return;
     try {
-      const tenantModule = container.resolve("tenant") as any
+      const tenantModule = container.resolve("tenant") as unknown as any;
       await tenantModule.updateTenants({
         id: compensationData.tenantId,
         status: "provisioning",
         configured_at: null,
-      })
-    } catch (error) {
-    }
-  }
-)
+      });
+    } catch (error) {}
+  },
+);
 
 export const tenantProvisioningWorkflow = createWorkflow(
   "tenant-provisioning-workflow",
   (input: TenantProvisioningInput) => {
-    const { tenant } = createTenantStep(input)
+    const { tenant } = createTenantStep(input);
     const { resources } = provisionResourcesStep({
       tenantId: tenant.id,
       region: input.region,
       currency: input.currency,
       name: input.name,
       domain: input.domain,
-    })
-    const { seeded } = seedTenantDataStep({ tenantId: tenant.id, features: input.features, plan: input.plan })
-    const configured = configureTenantStep({ tenantId: tenant.id, domain: input.domain, plan: input.plan })
-    return new WorkflowResponse({ tenant: configured.tenant, resources })
-  }
-)
+    });
+    const { seeded } = seedTenantDataStep({
+      tenantId: tenant.id,
+      features: input.features,
+      plan: input.plan,
+    });
+    const configured = configureTenantStep({
+      tenantId: tenant.id,
+      domain: input.domain,
+      plan: input.plan,
+    });
+    return new WorkflowResponse({ tenant: configured.tenant, resources });
+  },
+);

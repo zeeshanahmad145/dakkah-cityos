@@ -75,7 +75,7 @@ export const Route = createFileRoute('/$tenant/$locale/$slug')({
   loader: async ({ params }) => {
     const { slug, locale, tenant } = params
     if (BUILT_IN_ROUTES.has(slug)) {
-      let storeData = { region: null, products: [] as any[], count: 0 }
+      let storeData = { region: null, products: [], count: 0 }
       try {
         storeData = await fetchStoreData(locale)
       } catch (e) { console.error("Failed to fetch store data:", e) }

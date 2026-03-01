@@ -92,10 +92,10 @@ const PromotionsPage = () => {
       </div>
       <FormDrawer open={showDrawer && activeTab === "flash"} onOpenChange={(open) => { if (!open) setShowDrawer(false) }} title="Create Flash Sale" onSubmit={handleSubmitFlash} submitLabel="Create" loading={createFlashSale.isPending}>
         <div className="space-y-4">
-          <div><Label htmlFor="title">Name</Label><Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="Summer Sale" /></div>
-          <div><Label htmlFor="discount">Discount %</Label><Input id="discount" type="number" value={formData.discount_percentage} onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })} /></div>
-          <div><Label htmlFor="start">Start Date</Label><Input id="start" type="date" value={formData.start_date} onChange={(e) => setFormData({ ...formData, start_date: e.target.value })} /></div>
-          <div><Label htmlFor="end">End Date</Label><Input id="end" type="date" value={formData.end_date} onChange={(e) => setFormData({ ...formData, end_date: e.target.value })} /></div>
+          <div><Label htmlFor="title">Name</Label><Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value as any })} placeholder="Summer Sale" /></div>
+          <div><Label htmlFor="discount">Discount %</Label><Input id="discount" type="number" value={formData.discount_percentage} onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value as any })} /></div>
+          <div><Label htmlFor="start">Start Date</Label><Input id="start" type="date" value={formData.start_date} onChange={(e) => setFormData({ ...formData, start_date: e.target.value as any })} /></div>
+          <div><Label htmlFor="end">End Date</Label><Input id="end" type="date" value={formData.end_date} onChange={(e) => setFormData({ ...formData, end_date: e.target.value as any })} /></div>
         </div>
       </FormDrawer>
       <FormDrawer open={showDrawer && activeTab === "bundles"} onOpenChange={(open) => { if (!open) setShowDrawer(false) }} title="Create Bundle" onSubmit={handleSubmitBundle} submitLabel="Create" loading={createBundle.isPending}>

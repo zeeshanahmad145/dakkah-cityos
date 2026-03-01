@@ -4,7 +4,7 @@ import VolumePricingTier from "./models/volume-pricing-tier";
 
 /**
  * Volume Pricing Service
- * 
+ *
  * Calculates quantity-based discounts for B2B orders.
  */
 class VolumePricingModuleService extends MedusaService({
@@ -25,21 +25,22 @@ class VolumePricingModuleService extends MedusaService({
     storeId?: string;
     tenantId: string;
   }) {
+    interface VPFilter {
+      status: string;
+      tenant_id: string;
+      $or?: Array<Record<string, unknown>>;
+      $and?: Array<Record<string, unknown>>;
+      [key: string]: unknown;
+    }
+
     const now = new Date();
-    
-    const filters: any = {
+    const filters: VPFilter = {
       status: "active",
       tenant_id: context.tenantId,
-      $or: [
-        { starts_at: null },
-        { starts_at: { $lte: now } },
-      ],
+      $or: [{ starts_at: null }, { starts_at: { $lte: now } }],
       $and: [
         {
-          $or: [
-            { ends_at: null },
-            { ends_at: { $gte: now } },
-          ],
+          $or: [{ ends_at: null }, { ends_at: { $gte: now } }],
         },
       ],
     };
@@ -47,10 +48,7 @@ class VolumePricingModuleService extends MedusaService({
     // Store/Region scope
     if (context.storeId) {
       filters.$or = filters.$or || [];
-      filters.$or.push(
-        { store_id: context.storeId },
-        { store_id: null }
-      );
+      filters.$or.push({ store_id: context.storeId }, { store_id: null });
     }
 
     // Company scope
@@ -66,29 +64,31 @@ class VolumePricingModuleService extends MedusaService({
     }
 
     // Product scope
-    const scopeConditions: any[] = [{ applies_to: "all" }];
-    
+    const scopeConditions: Array<Record<string, unknown>> = [
+      { applies_to: "all" },
+    ];
+
     if (context.variantId) {
       scopeConditions.push({
         applies_to: "variant",
         target_id: context.variantId,
       });
     }
-    
+
     if (context.productId) {
       scopeConditions.push({
         applies_to: "product",
         target_id: context.productId,
       });
     }
-    
+
     if (context.collectionId) {
       scopeConditions.push({
         applies_to: "collection",
         target_id: context.collectionId,
       });
     }
-    
+
     if (context.categoryId) {
       scopeConditions.push({
         applies_to: "category",
@@ -98,10 +98,12 @@ class VolumePricingModuleService extends MedusaService({
 
     filters.$or = [...(filters.$or || []), ...scopeConditions];
 
-    const rules = await this.listVolumePricings(filters);
-    
+    const rules = (await this.listVolumePricings(filters)) as any;
+
     // Sort by priority (highest first)
-    return (rules || []).sort((a: any, b: any) => (b.priority || 0) - (a.priority || 0));
+    return (rules || []).sort(
+      (a: any, b: any) => (b.priority || 0) - (a.priority || 0),
+    );
   }
 
   /**
@@ -111,7 +113,7 @@ class VolumePricingModuleService extends MedusaService({
     ruleId: string,
     quantity: number,
     unitPrice: bigint,
-    currencyCode: string = "usd"
+    currencyCode: string = "usd",
   ): Promise<{
     discountPerUnit: bigint;
     discountTotal: bigint;
@@ -119,17 +121,18 @@ class VolumePricingModuleService extends MedusaService({
     finalTotal: bigint;
     tier?: any;
   }> {
-    const rule = await this.retrieveVolumePricing(ruleId);
-    const tiers = await this.listVolumePricingTiers({
+    const rule = (await this.retrieveVolumePricing(ruleId)) as any;
+    const tiers = (await this.listVolumePricingTiers({
       volume_pricing_id: ruleId,
-    });
+    })) as any;
 
     // Find matching tier
     const matchingTier = (tiers || [])
       .sort((a: any, b: any) => a.min_quantity - b.min_quantity)
-      .find(tier => {
+      .find((tier) => {
         const inRange = quantity >= tier.min_quantity;
-        const belowMax = tier.max_quantity === null || quantity <= tier.max_quantity;
+        const belowMax =
+          tier.max_quantity === null || quantity <= tier.max_quantity;
         return inRange && belowMax;
       });
 
@@ -147,13 +150,22 @@ class VolumePricingModuleService extends MedusaService({
     let finalUnitPrice = unitPrice;
 
     // Calculate discount based on type
-    if (rule.pricing_type === "percentage" && matchingTier.discount_percentage) {
-      discountPerUnit = (unitPrice * BigInt(Math.floor(matchingTier.discount_percentage * 100))) / 10000n;
+    if (
+      rule.pricing_type === "percentage" &&
+      matchingTier.discount_percentage
+    ) {
+      discountPerUnit =
+        (unitPrice *
+          BigInt(Math.floor(matchingTier.discount_percentage * 100))) /
+        10000n;
       finalUnitPrice = unitPrice - discountPerUnit;
     } else if (rule.pricing_type === "fixed" && matchingTier.discount_amount) {
       discountPerUnit = BigInt(matchingTier.discount_amount);
       finalUnitPrice = unitPrice - discountPerUnit;
-    } else if (rule.pricing_type === "fixed_price" && matchingTier.fixed_price) {
+    } else if (
+      rule.pricing_type === "fixed_price" &&
+      matchingTier.fixed_price
+    ) {
       finalUnitPrice = BigInt(matchingTier.fixed_price);
       discountPerUnit = unitPrice - finalUnitPrice;
     }
@@ -201,7 +213,7 @@ class VolumePricingModuleService extends MedusaService({
         rule.id,
         context.quantity,
         context.unitPrice,
-        context.currencyCode
+        context.currencyCode,
       );
 
       if (discount.discountTotal > bestSavings) {
@@ -213,12 +225,14 @@ class VolumePricingModuleService extends MedusaService({
       }
     }
 
-    return bestDiscount || {
-      discountPerUnit: 0n,
-      discountTotal: 0n,
-      finalUnitPrice: context.unitPrice,
-      finalTotal: context.unitPrice * BigInt(context.quantity),
-    };
+    return (
+      bestDiscount || {
+        discountPerUnit: 0n,
+        discountTotal: 0n,
+        finalUnitPrice: context.unitPrice,
+        finalTotal: context.unitPrice * BigInt(context.quantity),
+      }
+    );
   }
 }
 

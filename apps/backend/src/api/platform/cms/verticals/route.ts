@@ -34,7 +34,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       prevPage: page > 1 ? page - 1 : null,
       nextPage: page < totalPages ? page + 1 : null,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
 return handleApiError(res, error, "PLATFORM-CMS-VERTICALS")
   }
 }

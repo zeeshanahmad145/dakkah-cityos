@@ -69,7 +69,7 @@ class Logger {
       error: error
         ? {
             name: error.name,
-            message: error.message,
+            message: (error instanceof Error ? error.message : String(error)),
             stack: error.stack,
           }
         : undefined,

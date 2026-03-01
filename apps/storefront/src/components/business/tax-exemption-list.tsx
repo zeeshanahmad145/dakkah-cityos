@@ -73,8 +73,8 @@ function ExemptionCard({ exemption, onDelete, isDeleting }: { exemption: TaxExem
       <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
         <p>Authority: {exemption.issuing_authority}</p>
         <p>Type: {exemption.exemption_type}</p>
-        <p>Valid from: {new Date(exemption.valid_from).toLocaleDateString()}</p>
-        <p>Valid until: {new Date(exemption.valid_until).toLocaleDateString()}</p>
+        <p>Valid from: {new Date(exemption.valid_from!).toLocaleDateString()}</p>
+        <p>Valid until: {new Date(exemption.valid_until!).toLocaleDateString()}</p>
         {exemption.exempt_percentage && <p>Exemption: {exemption.exempt_percentage}%</p>}
       </div>
       {exemption.status === "active" && (

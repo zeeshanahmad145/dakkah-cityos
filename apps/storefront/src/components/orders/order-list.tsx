@@ -14,7 +14,7 @@ interface OrderItem {
 
 interface Order {
   id: string
-  display_id: number
+  display_id: number | undefined
   created_at: string
   status: string
   fulfillment_status: string
@@ -57,10 +57,13 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
   const filteredOrders = orders?.filter((order) => {
     const matchesSearch =
       searchQuery === "" ||
-      order.display_id.toString().includes(searchQuery) ||
-      (order.items || []).some((item) => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      order.display_id?.toString().includes(searchQuery) ||
+      (order.items || []).some((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
 
-    const matchesStatus = statusFilter === "all" || order.fulfillment_status === statusFilter
+    const matchesStatus =
+      statusFilter === "all" || order.fulfillment_status === statusFilter
 
     return matchesSearch && matchesStatus
   })
@@ -107,11 +110,13 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
         <div className="bg-ds-background rounded-lg border border-ds-border p-12 text-center">
           <ShoppingBag className="h-12 w-12 text-ds-muted-foreground mx-auto mb-4" />
           <p className="text-ds-muted-foreground">
-            {searchQuery || statusFilter !== "all" ? "No orders match your filters" : "No orders yet"}
+            {searchQuery || statusFilter !== "all"
+              ? "No orders match your filters"
+              : "No orders yet"}
           </p>
           {!searchQuery && statusFilter === "all" && (
             <Link
-              to={`${prefix}/store` as any}
+              to={`${prefix}/store` as never}
               className="mt-4 inline-flex items-center text-sm font-medium text-ds-foreground hover:underline"
             >
               Start shopping
@@ -124,7 +129,7 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
           {filteredOrders.map((order) => (
             <Link
               key={order.id}
-              to={`${prefix}/account/orders/${order.id}` as any}
+              to={`${prefix}/account/orders/${order.id}` as never}
               className="flex items-center gap-4 p-4 bg-ds-background rounded-lg border border-ds-border hover:border-ds-border transition-colors"
             >
               {/* Thumbnails */}
@@ -158,24 +163,29 @@ export function OrderList({ orders, isLoading }: OrderListProps) {
               {/* Order Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-ds-foreground">Order #{order.display_id}</p>
+                  <p className="text-sm font-semibold text-ds-foreground">
+                    Order #{order.display_id}
+                  </p>
                   <span
                     className={`inline-block px-2 py-0.5 text-xs font-medium rounded ${
-                      statusColors[order.fulfillment_status] || "bg-ds-muted text-ds-foreground"
+                      statusColors[order.fulfillment_status] ||
+                      "bg-ds-muted text-ds-foreground"
                     }`}
                   >
-                    {fulfillmentStatusLabels[order.fulfillment_status] || order.fulfillment_status}
+                    {fulfillmentStatusLabels[order.fulfillment_status] ||
+                      order.fulfillment_status}
                   </span>
                 </div>
                 <p className="text-sm text-ds-muted-foreground mt-1">
-                  {new Date(order.created_at).toLocaleDateString("en-US", {
+                  {new Date(order.created_at!).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </p>
                 <p className="text-sm text-ds-muted-foreground">
-                  {order.items?.length ?? 0} {(order.items?.length ?? 0) === 1 ? "item" : "items"}
+                  {order.items?.length ?? 0}{" "}
+                  {(order.items?.length ?? 0) === 1 ? "item" : "items"}
                 </p>
               </div>
 

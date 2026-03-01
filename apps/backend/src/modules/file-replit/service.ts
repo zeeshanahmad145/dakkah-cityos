@@ -23,9 +23,7 @@ export class ReplitFileService extends AbstractFileProviderService {
   constructor(container: any, options: ReplitFileServiceOptions) {
     super();
     this.bucketId_ = options.bucket_id || appConfig.storage.replitBucketId;
-    this.backendUrl_ =
-      options.backend_url ||
-      appConfig.urls.backend;
+    this.backendUrl_ = options.backend_url || appConfig.urls.backend;
     this.client_ = new Client();
   }
 
@@ -40,12 +38,12 @@ export class ReplitFileService extends AbstractFileProviderService {
     if (Buffer.isBuffer(file.content)) {
       content = file.content;
     } else {
-      content = Buffer.from(file.content as any);
+      content = Buffer.from(file.content);
     }
 
     const key = file.filename;
 
-    const result = await this.client_.uploadFromBytes(key, content) as any;
+    const result = await this.client_.uploadFromBytes(key, content);
     const ok = result?.ok;
     const error = result?.error;
 
@@ -65,7 +63,7 @@ export class ReplitFileService extends AbstractFileProviderService {
   }
 
   async delete(file: ProviderDeleteFileDTO): Promise<void> {
-    const result = await this.client_.delete(file.fileKey) as any;
+    const result = await this.client_.delete(file.fileKey);
     if (!result?.ok) {
       console.error(
         `Failed to delete file ${file.fileKey} from Replit Storage: ${result?.error}`,

@@ -34,19 +34,21 @@ export function POCard({ purchaseOrder: po, compact = false }: POCardProps) {
   if (compact) {
     return (
       <Link
-        to={`${prefix}/account/purchase-orders/${po.id}` as any}
+        to={`${prefix}/account/purchase-orders/${po.id}` as never}
         className="flex items-center justify-between p-4 bg-ds-background rounded-lg border border-ds-border hover:border-ds-border transition-colors"
       >
         <div>
           <p className="font-medium text-ds-foreground">{po.po_number}</p>
           <p className="text-sm text-ds-muted-foreground">
-            {formatPrice(po.total, po.currency_code)}
+            {formatPrice(po.total ?? 0, po.currency_code)}
           </p>
         </div>
-        <span className={cn(
-          "px-2 py-0.5 rounded-full text-xs font-medium",
-          getStatusColor(po.status)
-        )}>
+        <span
+          className={cn(
+            "px-2 py-0.5 rounded-full text-xs font-medium",
+            getStatusColor(po.status),
+          )}
+        >
           {formatStatus(po.status)}
         </span>
       </Link>
@@ -58,19 +60,21 @@ export function POCard({ purchaseOrder: po, compact = false }: POCardProps) {
       <div className="flex items-start justify-between mb-4">
         <div>
           <Link
-            to={`${prefix}/account/purchase-orders/${po.id}` as any}
+            to={`${prefix}/account/purchase-orders/${po.id}` as never}
             className="font-semibold text-ds-foreground hover:text-ds-muted-foreground"
           >
             {po.po_number}
           </Link>
           <p className="text-sm text-ds-muted-foreground mt-0.5">
-            {new Date(po.created_at).toLocaleDateString()}
+            {new Date(po.created_at!).toLocaleDateString()}
           </p>
         </div>
-        <span className={cn(
-          "px-3 py-1 rounded-full text-xs font-medium",
-          getStatusColor(po.status)
-        )}>
+        <span
+          className={cn(
+            "px-3 py-1 rounded-full text-xs font-medium",
+            getStatusColor(po.status),
+          )}
+        >
           {formatStatus(po.status)}
         </span>
       </div>
@@ -78,16 +82,20 @@ export function POCard({ purchaseOrder: po, compact = false }: POCardProps) {
       <div className="grid grid-cols-3 gap-4 pt-4 border-t border-ds-border">
         <div>
           <p className="text-xs text-ds-muted-foreground">Items</p>
-          <p className="font-medium text-ds-foreground">{po.items?.length ?? 0}</p>
+          <p className="font-medium text-ds-foreground">
+            {po.items?.length ?? 0}
+          </p>
         </div>
         <div>
           <p className="text-xs text-ds-muted-foreground">Created By</p>
-          <p className="font-medium text-ds-foreground">{po.created_by_name || "You"}</p>
+          <p className="font-medium text-ds-foreground">
+            {po.created_by_name || "You"}
+          </p>
         </div>
         <div className="text-end">
           <p className="text-xs text-ds-muted-foreground">Total</p>
           <p className="font-semibold text-ds-foreground">
-            {formatPrice(po.total, po.currency_code)}
+            {formatPrice(po.total ?? 0, po.currency_code)}
           </p>
         </div>
       </div>

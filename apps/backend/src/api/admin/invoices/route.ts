@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import { handleApiError } from "../../../lib/api-error-handler";
@@ -29,7 +29,7 @@ interface CityOSContext {
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY);
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
 
     const { status, company_id, customer_id, date_from, date_to } = req.query;
 
@@ -104,14 +104,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     );
 
     res.json({ invoices: enrichedInvoices });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin invoices");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const invoiceModule = req.scope.resolve("invoice") as any;
+    const invoiceModule = req.scope.resolve("invoice") as unknown as any;
 
     const {
       company_id,
@@ -164,7 +164,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     });
 
     res.status(201).json({ invoice: result.invoice, items: result.items });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin invoices");
   }
 }

@@ -1,6 +1,6 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
-import { sanitizeList } from "../../../../lib/image-sanitizer"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
+import { sanitizeList } from "../../../../lib/image-sanitizer";
 
 const SEED_SERVICES = [
   {
@@ -13,8 +13,10 @@ const SEED_SERVICES = [
     location_type: "in_person",
     metadata: {
       name: "Deep Tissue Massage",
-      short_description: "Professional deep tissue massage therapy to relieve chronic muscle tension and improve circulation.",
-      description: "Experience a deeply relaxing and therapeutic deep tissue massage performed by certified therapists. This treatment targets chronic muscle tension, reduces stress, and promotes overall well-being.",
+      short_description:
+        "Professional deep tissue massage therapy to relieve chronic muscle tension and improve circulation.",
+      description:
+        "Experience a deeply relaxing and therapeutic deep tissue massage performed by certified therapists. This treatment targets chronic muscle tension, reduces stress, and promotes overall well-being.",
       thumbnail: "/seed-images/bookings/1544161515-4ab6ce6db874.jpg",
       images: ["/seed-images/bookings/1544161515-4ab6ce6db874.jpg"],
       price: 25000,
@@ -36,8 +38,10 @@ const SEED_SERVICES = [
     location_type: "virtual",
     metadata: {
       name: "Business Strategy Consultation",
-      short_description: "One-on-one consultation with a senior business strategist to accelerate your company growth.",
-      description: "Get expert guidance on business planning, market analysis, and growth strategies from experienced consultants with 15+ years in the field.",
+      short_description:
+        "One-on-one consultation with a senior business strategist to accelerate your company growth.",
+      description:
+        "Get expert guidance on business planning, market analysis, and growth strategies from experienced consultants with 15+ years in the field.",
       thumbnail: "/seed-images/bookings/1553877522-43269d4ea984.jpg",
       images: ["/seed-images/bookings/1553877522-43269d4ea984.jpg"],
       price: 35000,
@@ -59,8 +63,10 @@ const SEED_SERVICES = [
     location_type: "in_person",
     metadata: {
       name: "Yoga & Mindfulness Class",
-      short_description: "Beginner-friendly yoga class combining physical postures with guided mindfulness meditation.",
-      description: "Join our inclusive yoga sessions that blend Hatha and Vinyasa styles with breathwork and meditation. Suitable for all fitness levels.",
+      short_description:
+        "Beginner-friendly yoga class combining physical postures with guided mindfulness meditation.",
+      description:
+        "Join our inclusive yoga sessions that blend Hatha and Vinyasa styles with breathwork and meditation. Suitable for all fitness levels.",
       thumbnail: "/seed-images/bookings/1506126613408-eca07ce68773.jpg",
       images: ["/seed-images/bookings/1506126613408-eca07ce68773.jpg"],
       price: 8000,
@@ -82,8 +88,10 @@ const SEED_SERVICES = [
     location_type: "customer_location",
     metadata: {
       name: "Professional Photography Session",
-      short_description: "On-location professional photography for portraits, events, or product shoots.",
-      description: "Book a professional photographer for stunning portraits, family photos, corporate headshots, or product photography. Includes editing and digital delivery.",
+      short_description:
+        "On-location professional photography for portraits, events, or product shoots.",
+      description:
+        "Book a professional photographer for stunning portraits, family photos, corporate headshots, or product photography. Includes editing and digital delivery.",
       thumbnail: "/seed-images/bookings/1542038784456-1ea8e935640e.jpg",
       images: ["/seed-images/bookings/1542038784456-1ea8e935640e.jpg"],
       price: 45000,
@@ -105,8 +113,10 @@ const SEED_SERVICES = [
     location_type: "in_person",
     metadata: {
       name: "Premium Hair Styling",
-      short_description: "Expert hair styling, cutting, and treatment by award-winning stylists.",
-      description: "Transform your look with our premium hair styling services. Our experienced stylists provide personalized consultations, precision cuts, and luxury treatments.",
+      short_description:
+        "Expert hair styling, cutting, and treatment by award-winning stylists.",
+      description:
+        "Transform your look with our premium hair styling services. Our experienced stylists provide personalized consultations, precision cuts, and luxury treatments.",
       thumbnail: "/seed-images/bookings/1560066984-138dadb4c035.jpg",
       images: ["/seed-images/bookings/1560066984-138dadb4c035.jpg"],
       price: 18000,
@@ -128,8 +138,10 @@ const SEED_SERVICES = [
     location_type: "in_person",
     metadata: {
       name: "Arabic Calligraphy Workshop",
-      short_description: "Learn the beautiful art of Arabic calligraphy from master calligraphers.",
-      description: "Discover the centuries-old art of Arabic calligraphy. Our workshops cover Naskh and Thuluth scripts, tools, and techniques. All materials provided.",
+      short_description:
+        "Learn the beautiful art of Arabic calligraphy from master calligraphers.",
+      description:
+        "Discover the centuries-old art of Arabic calligraphy. Our workshops cover Naskh and Thuluth scripts, tools, and techniques. All materials provided.",
       thumbnail: "/seed-images/bookings/1596464716127-f2a82984de30.jpg",
       images: ["/seed-images/bookings/1596464716127-f2a82984de30.jpg"],
       price: 12000,
@@ -141,48 +153,47 @@ const SEED_SERVICES = [
       location: "Riyadh, Diriyah",
     },
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const bookingModule = req.scope.resolve("booking") as any
-  
-  const { 
-    offset = 0, 
-    limit = 50, 
-    category,
-    service_type,
-  } = req.query
-  
+  const bookingModule = req.scope.resolve("booking") as unknown as any;
+
+  const { offset = 0, limit = 50, category, service_type } = req.query;
+
   try {
-    let services: any[] = []
+    let services: any[] = [];
     try {
-      const result = await bookingModule.listServiceProducts({}, {
-        skip: Number(offset),
-        take: Number(limit),
-      })
-      services = Array.isArray(result) ? result : [result].filter(Boolean)
+      const result = await bookingModule.listServiceProducts(
+        {},
+        {
+          skip: Number(offset),
+          take: Number(limit),
+        },
+      );
+      services = Array.isArray(result) ? result : [result].filter(Boolean);
     } catch {
-      services = []
+      services = [];
     }
-    
-    const sanitized = services.length > 0 ? sanitizeList(services, "bookings") : SEED_SERVICES
+
+    const sanitized =
+      services.length > 0 ? sanitizeList(services, "bookings") : SEED_SERVICES;
     const serviceList = sanitized.map((s: any) => ({
       ...s,
-      thumbnail: s.thumbnail || s.metadata?.thumbnail || s.metadata?.images?.[0] || null,
-    }))
+      thumbnail:
+        s.thumbnail || s.metadata?.thumbnail || s.metadata?.images?.[0] || null,
+    }));
     res.json({
       services: serviceList,
       count: serviceList.length,
       offset: Number(offset),
       limit: Number(limit),
-    })
-  } catch (error: any) {
+    });
+  } catch (error: unknown) {
     res.json({
       services: SEED_SERVICES,
       count: SEED_SERVICES.length,
       offset: Number(offset),
       limit: Number(limit),
-    })
+    });
   }
 }
-

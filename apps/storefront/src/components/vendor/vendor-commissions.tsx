@@ -109,7 +109,7 @@ export function VendorCommissions() {
                   <tr key={commission.id}>
                     <td className="p-4">#{commission.order_display_id}</td>
                     <td className="p-4 text-muted-foreground">
-                      {new Date(commission.created_at).toLocaleDateString()}
+                      {new Date(commission.created_at!).toLocaleDateString()}
                     </td>
                     <td className="p-4 text-end">
                       ${Number(commission.gross_amount).toFixed(2)}

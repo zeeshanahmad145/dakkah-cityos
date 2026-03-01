@@ -5,7 +5,8 @@ const SEED_DATA = [
   {
     id: "campaign-seed-1",
     title: "Summer Clearance Sale",
-    description: "Massive discounts on summer collections. Up to 60% off on selected items across all categories.",
+    description:
+      "Massive discounts on summer collections. Up to 60% off on selected items across all categories.",
     type: "seasonal",
     status: "active",
     thumbnail: "/seed-images/affiliate/1483985988355-763728e1935b.jpg",
@@ -20,7 +21,8 @@ const SEED_DATA = [
   {
     id: "campaign-seed-2",
     title: "Flash Friday Deals",
-    description: "24-hour flash deals every Friday. Limited stock, unbeatable prices on top brands.",
+    description:
+      "24-hour flash deals every Friday. Limited stock, unbeatable prices on top brands.",
     type: "flash",
     status: "active",
     thumbnail: "/seed-images/campaigns/1556742049-0cfed4f6a45d.jpg",
@@ -35,7 +37,8 @@ const SEED_DATA = [
   {
     id: "campaign-seed-3",
     title: "End of Season Clearance",
-    description: "Final markdowns on winter inventory. Everything must go to make room for new arrivals.",
+    description:
+      "Final markdowns on winter inventory. Everything must go to make room for new arrivals.",
     type: "clearance",
     status: "active",
     thumbnail: "/seed-images/affiliate/1483985988355-763728e1935b.jpg",
@@ -50,7 +53,8 @@ const SEED_DATA = [
   {
     id: "campaign-seed-4",
     title: "Holiday Gift Guide",
-    description: "Curated gift collections for everyone on your list. Special bundles and free gift wrapping.",
+    description:
+      "Curated gift collections for everyone on your list. Special bundles and free gift wrapping.",
     type: "holiday",
     status: "active",
     thumbnail: "/seed-images/campaigns/1503676260728-1c00da094a0b.jpg",
@@ -65,7 +69,8 @@ const SEED_DATA = [
   {
     id: "campaign-seed-5",
     title: "Back to School Savings",
-    description: "Stock up on school supplies, electronics, and dorm essentials at discounted prices.",
+    description:
+      "Stock up on school supplies, electronics, and dorm essentials at discounted prices.",
     type: "seasonal",
     status: "active",
     thumbnail: "/seed-images/campaigns/1503676260728-1c00da094a0b.jpg",
@@ -81,14 +86,14 @@ const SEED_DATA = [
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const crowdfundingService = req.scope.resolve("crowdfunding") as any;
+    const crowdfundingService = req.scope.resolve("crowdfunding") as unknown as any;
     const {
       limit = "20",
       offset = "0",
       status = "active",
     } = req.query as Record<string, string | undefined>;
 
-    const campaigns = await (crowdfundingService as any).listCampaigns(
+    const campaigns = await crowdfundingService.listCampaigns(
       { status },
       {
         skip: Number(offset),
@@ -108,7 +113,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return res.json({
       campaigns: SEED_DATA,
       items: SEED_DATA,
@@ -121,8 +126,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const crowdfundingService = req.scope.resolve("crowdfunding") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const crowdfundingService = req.scope.resolve("crowdfunding") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -148,7 +153,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ error: "title and goal_amount > 0 are required" });
     }
 
-    const campaign = await (crowdfundingService as any).createCampaigns({
+    const campaign = await crowdfundingService.createCampaigns({
       title,
       description: description ?? null,
       goal_amount,
@@ -160,7 +165,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     });
 
     return res.status(201).json({ campaign });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-CAMPAIGNS-CREATE");
   }
 }

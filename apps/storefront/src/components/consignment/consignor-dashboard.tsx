@@ -40,13 +40,13 @@ export function ConsignorDashboard({
         ))}
         <div className="bg-ds-background border border-ds-border rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-ds-success">
-            {formatCurrency(totalEarnings.amount, totalEarnings.currencyCode, locale as SupportedLocale)}
+            {formatCurrency((totalEarnings.amount ?? 0), totalEarnings.currencyCode, locale as SupportedLocale)}
           </p>
           <p className="text-xs text-ds-muted-foreground mt-1">{t(locale, "consignment.total_earnings")}</p>
         </div>
         <div className="bg-ds-background border border-ds-border rounded-xl p-4 text-center">
           <p className="text-2xl font-bold text-ds-warning">
-            {formatCurrency(pendingPayout.amount, pendingPayout.currencyCode, locale as SupportedLocale)}
+            {formatCurrency((pendingPayout.amount ?? 0), pendingPayout.currencyCode, locale as SupportedLocale)}
           </p>
           <p className="text-xs text-ds-muted-foreground mt-1">{t(locale, "consignment.pending_payout")}</p>
         </div>

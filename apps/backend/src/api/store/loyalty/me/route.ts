@@ -7,8 +7,8 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const loyaltyService = req.scope.resolve("loyalty") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const loyaltyService = req.scope.resolve("loyalty") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -42,7 +42,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       },
       recent_transactions: history,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-LOYALTY-ME");
   }
 }

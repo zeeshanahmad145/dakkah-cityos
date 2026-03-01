@@ -18,7 +18,7 @@ const processRentalReturnStep = createStep(
     }: { rentalId: string; condition?: string; notes?: string },
     { container },
   ) => {
-    const rentalService = container.resolve("rental") as any;
+    const rentalService = container.resolve("rental") as unknown as any;
     const returnRecord = await rentalService.processReturn(
       rentalId,
       condition ?? "good",
@@ -27,8 +27,8 @@ const processRentalReturnStep = createStep(
     return new StepResponse({ returnRecord }, { rentalId });
   },
   async ({ rentalId }: { rentalId: string }, { container }) => {
-    const rentalService = container.resolve("rental") as any;
-    await (rentalService as any).updateRentalAgreements?.({
+    const rentalService = container.resolve("rental") as unknown as any;
+    await rentalService.updateRentalAgreements?.({
       id: rentalId,
       status: "active",
     });
@@ -41,7 +41,7 @@ const evaluateDamagesStep = createStep(
     { rentalId, condition }: { rentalId: string; condition?: string },
     { container },
   ) => {
-    const rentalService = container.resolve("rental") as any;
+    const rentalService = container.resolve("rental") as unknown as any;
     const damagedConditions = ["damaged", "poor", "missing"];
     const hasDamages = damagedConditions.includes(
       (condition ?? "good").toLowerCase(),
@@ -55,7 +55,7 @@ const evaluateDamagesStep = createStep(
           condition,
         );
       } else {
-        damageClaim = await (rentalService as any).createDamageClaims?.({
+        damageClaim = await rentalService.createDamageClaims?.({
           rental_agreement_id: rentalId,
           condition,
           status: "pending",
@@ -74,7 +74,7 @@ const releaseDepositStep = createStep(
     { rentalId, hasDamages }: { rentalId: string; hasDamages: boolean },
     { container },
   ) => {
-    const rentalService = container.resolve("rental") as any;
+    const rentalService = container.resolve("rental") as unknown as any;
 
     // Full release if no damages, partial/hold if damages
     const depositStatus = hasDamages ? "held_for_damages" : "released";
@@ -103,11 +103,8 @@ export const rentalReturnWorkflow = createWorkflow(
     });
     const deposit = releaseDepositStep({
       rentalId: input.rentalId,
-      hasDamages: damages.hasDamages as any,
+      hasDamages: damages.hasDamages,
     });
     return { returned, damages, deposit };
   },
 );
-
-
-

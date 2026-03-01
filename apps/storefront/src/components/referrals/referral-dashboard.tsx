@@ -65,12 +65,12 @@ export function ReferralDashboard({
             {t(locale, "referral.history")}
           </h3>
           <div className="divide-y divide-ds-border">
-            {history.map((item) => (
+            {history.map((item: any) => (
               <div key={item.id} className="flex items-center justify-between py-3">
                 <div>
                   <p className="text-sm text-ds-foreground">{item.referredEmail}</p>
                   <p className="text-xs text-ds-muted-foreground">
-                    {new Date(item.date).toLocaleDateString(locale)}
+                    {new Date(item.date!).toLocaleDateString(locale)}
                   </p>
                 </div>
                 <div className="text-end">

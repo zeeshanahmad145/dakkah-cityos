@@ -34,11 +34,14 @@ export const Route = createFileRoute("/$tenant/$locale/vendor/home")({
 })
 
 function VendorHomeRoute() {
-  const { tenant, locale } = Route.useParams() as { tenant: string; locale: string }
+  const { tenant, locale } = Route.useParams() as {
+    tenant: string
+    locale: string
+  }
   const auth = useAuth()
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -83,8 +86,14 @@ function VendorHomeRoute() {
   const stats = [
     { label: "Total Products", value: data?.total_products || 0 },
     { label: "Pending Orders", value: data?.pending_orders || 0 },
-    { label: "Revenue This Month", value: `${currency} ${((data?.revenue_this_month || 0) / 100).toFixed(2)}` },
-    { label: "Average Rating", value: `${(data?.average_rating || 0).toFixed(1)} / 5.0` },
+    {
+      label: "Revenue This Month",
+      value: `${currency} ${((data?.revenue_this_month || 0) / 100).toFixed(2)}`,
+    },
+    {
+      label: "Average Rating",
+      value: `${(data?.average_rating || 0).toFixed(1)} / 5.0`,
+    },
   ]
 
   const recentOrders = data?.recent_orders || []
@@ -111,15 +120,21 @@ function VendorHomeRoute() {
     <div className="container mx-auto py-12">
       <div className="mb-8">
         <h1 className="text-2xl font-bold">
-          {data?.vendor_name ? `Welcome back, ${data.vendor_name}` : "Vendor Dashboard"}
+          {data?.vendor_name
+            ? `Welcome back, ${data.vendor_name}`
+            : "Vendor Dashboard"}
         </h1>
-        <p className="text-ds-muted-foreground mt-1">Here's an overview of your store performance.</p>
+        <p className="text-ds-muted-foreground mt-1">
+          Here's an overview of your store performance.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map((stat) => (
           <div key={stat.label} className="border rounded-lg p-6">
-            <p className="text-sm text-ds-muted-foreground mb-1">{stat.label}</p>
+            <p className="text-sm text-ds-muted-foreground mb-1">
+              {stat.label}
+            </p>
             <p className="text-2xl font-bold">{stat.value}</p>
           </div>
         ))}
@@ -132,7 +147,9 @@ function VendorHomeRoute() {
             to={link.href}
             className="border rounded-lg p-4 text-center hover:shadow-md transition hover:border-ds-primary/40"
           >
-            <span className="text-sm font-medium text-ds-primary">{link.label}</span>
+            <span className="text-sm font-medium text-ds-primary">
+              {link.label}
+            </span>
           </Link>
         ))}
       </div>
@@ -147,14 +164,25 @@ function VendorHomeRoute() {
           ) : (
             <div className="space-y-3">
               {recentOrders.map((order) => (
-                <div key={order.id} className="flex items-center justify-between py-2 border-b last:border-0">
+                <div
+                  key={order.id}
+                  className="flex items-center justify-between py-2 border-b last:border-0"
+                >
                   <div>
-                    <span className="font-medium">#{order.display_id || order.id.slice(0, 8)}</span>
-                    <span className="text-sm text-ds-muted-foreground ms-3">{new Date(order.created_at).toLocaleDateString()}</span>
+                    <span className="font-medium">
+                      #{order.display_id || order.id.slice(0, 8)}
+                    </span>
+                    <span className="text-sm text-ds-muted-foreground ms-3">
+                      {new Date(order.created_at!).toLocaleDateString()}
+                    </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium">{currency} {(order.total / 100).toFixed(2)}</span>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[order.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span className="text-sm font-medium">
+                      {currency} {(order.total / 100).toFixed(2)}
+                    </span>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[order.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {order.status?.replace(/_/g, " ")}
                     </span>
                   </div>
@@ -178,17 +206,30 @@ function VendorHomeRoute() {
                     <div className="flex items-center gap-2">
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
-                          <span key={i} className={`text-sm ${i < review.rating ? "text-ds-warning" : "text-ds-border"}`}>
+                          <span
+                            key={i}
+                            className={`text-sm ${i < review.rating ? "text-ds-warning" : "text-ds-border"}`}
+                          >
                             ★
                           </span>
                         ))}
                       </div>
-                      <span className="text-sm font-medium">{review.customer_name}</span>
+                      <span className="text-sm font-medium">
+                        {review.customer_name}
+                      </span>
                     </div>
-                    <span className="text-xs text-ds-muted-foreground/70">{new Date(review.created_at).toLocaleDateString()}</span>
+                    <span className="text-xs text-ds-muted-foreground/70">
+                      {new Date(review.created_at!).toLocaleDateString()}
+                    </span>
                   </div>
-                  {review.title && <p className="text-sm font-medium">{review.title}</p>}
-                  {review.content && <p className="text-sm text-ds-muted-foreground line-clamp-2">{review.content}</p>}
+                  {review.title && (
+                    <p className="text-sm font-medium">{review.title}</p>
+                  )}
+                  {review.content && (
+                    <p className="text-sm text-ds-muted-foreground line-clamp-2">
+                      {review.content}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

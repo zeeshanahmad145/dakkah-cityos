@@ -26,7 +26,7 @@ function VendorGiftCardsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -39,9 +39,12 @@ function VendorGiftCardsRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/gift-cards${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: GiftCardTemplate[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: GiftCardTemplate[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -83,7 +86,9 @@ function VendorGiftCardsRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -94,39 +99,71 @@ function VendorGiftCardsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No gift card templates yet</p>
-          <p className="text-sm">Create gift card templates for customers to purchase.</p>
+          <p className="text-sm">
+            Create gift card templates for customers to purchase.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((card) => (
-            <div key={card.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={card.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold">{card.design_name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[card.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <h3 className="text-lg font-semibold">
+                      {card.design_name}
+                    </h3>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[card.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {card.status}
                     </span>
                   </div>
                   {card.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{card.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {card.description}
+                    </p>
                   )}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{card.currency_code?.toUpperCase()} {(card.denomination / 100).toFixed(2)}</p>
-                      <p className="text-xs text-ds-muted-foreground">Denomination</p>
+                      <p className="text-lg font-bold">
+                        {card.currency_code?.toUpperCase()}{" "}
+                        {(card.denomination / 100).toFixed(2)}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Denomination
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{card.sold_count.toLocaleString()}</p>
+                      <p className="text-lg font-bold">
+                        {card.sold_count.toLocaleString()}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Sold</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{card.redeemed_count.toLocaleString()}</p>
-                      <p className="text-xs text-ds-muted-foreground">Redeemed</p>
+                      <p className="text-lg font-bold">
+                        {card.redeemed_count.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Redeemed
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{card.sold_count > 0 ? ((card.redeemed_count / card.sold_count) * 100).toFixed(1) : 0}%</p>
-                      <p className="text-xs text-ds-muted-foreground">Redemption Rate</p>
+                      <p className="text-lg font-bold">
+                        {card.sold_count > 0
+                          ? (
+                              (card.redeemed_count / card.sold_count) *
+                              100
+                            ).toFixed(1)
+                          : 0}
+                        %
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Redemption Rate
+                      </p>
                     </div>
                   </div>
                 </div>

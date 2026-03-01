@@ -10,9 +10,9 @@ interface BookingListProps {
   emptyMessage?: string
 }
 
-export function BookingList({ 
-  bookings, 
-  emptyMessage = "No bookings found" 
+export function BookingList({
+  bookings,
+  emptyMessage = "No bookings found",
 }: BookingListProps) {
   const prefix = useTenantPrefix()
   const getStatusColor = (status: string) => {
@@ -46,7 +46,7 @@ export function BookingList({
         <Calendar className="w-12 h-12 text-ds-muted-foreground mx-auto mb-4" />
         <p className="text-ds-muted-foreground">{emptyMessage}</p>
         <Link
-          to={`${prefix}/bookings` as any}
+          to={`${prefix}/bookings` as never}
           className="inline-block mt-4 text-sm font-medium text-ds-foreground hover:underline"
         >
           Browse available services
@@ -60,20 +60,24 @@ export function BookingList({
       {bookings.map((booking) => (
         <Link
           key={booking.id}
-          to={`${prefix}/account/bookings/${booking.id}` as any}
+          to={`${prefix}/account/bookings/${booking.id}` as never}
           className="block bg-ds-background rounded-xl border border-ds-border p-6 hover:border-ds-border hover:shadow-sm transition-all"
         >
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="font-semibold text-ds-foreground">{booking.service?.name || "Booking"}</h3>
+              <h3 className="font-semibold text-ds-foreground">
+                {booking.service?.name || "Booking"}
+              </h3>
               <p className="text-sm text-ds-muted-foreground mt-0.5">
                 {formatDateTime(booking.scheduled_at)}
               </p>
             </div>
-            <span className={cn(
-              "px-3 py-1 rounded-full text-xs font-medium capitalize",
-              getStatusColor(booking.status)
-            )}>
+            <span
+              className={cn(
+                "px-3 py-1 rounded-full text-xs font-medium capitalize",
+                getStatusColor(booking.status),
+              )}
+            >
               {booking.status}
             </span>
           </div>
@@ -88,12 +92,17 @@ export function BookingList({
             <div className="flex items-center gap-4">
               <div>
                 <p className="text-xs text-ds-muted-foreground">Duration</p>
-                <p className="text-sm text-ds-foreground">{booking.service?.duration || 0} min</p>
+                <p className="text-sm text-ds-foreground">
+                  {booking.service?.duration || 0} min
+                </p>
               </div>
               <div>
                 <p className="text-xs text-ds-muted-foreground">Price</p>
                 <p className="font-semibold text-ds-foreground">
-                  {formatPrice(booking.service?.price ?? 0, booking.service?.currency_code || "usd")}
+                  {formatPrice(
+                    booking.service?.price ?? 0,
+                    booking.service?.currency_code || "usd",
+                  )}
                 </p>
               </div>
             </div>

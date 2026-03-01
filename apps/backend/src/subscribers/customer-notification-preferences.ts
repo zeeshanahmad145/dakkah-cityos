@@ -11,7 +11,7 @@ export default async function customerNotificationPreferencesHandler({
   try {
     const notificationPreferences = container.resolve(
       "notificationPreferences",
-    ) as any;
+    ) as unknown as any;
 
     const existing = await notificationPreferences.listNotificationPreferences({
       customer_id: data.id,

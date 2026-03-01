@@ -33,8 +33,7 @@ export async function fetchWithRetry(
         response.status,
         "SERVER_ERROR"
       )
-    } catch (error: any) {
-      lastError = error
+    } catch (err: unknown) { lastError = err instanceof Error ? err : new Error(String(err))
     }
 
     if (attempt < maxRetries) {
@@ -52,10 +51,10 @@ export function handleApiError(error: unknown): ApiError {
   }
 
   if (error instanceof Error) {
-    if (error.message.includes("fetch") || error.message.includes("network")) {
+    if ((error instanceof Error ? error.message : String(error)).includes("fetch") || (error instanceof Error ? error.message : String(error)).includes("network")) {
       return new ApiError("Network error. Please check your connection.", 0, "NETWORK_ERROR")
     }
-    return new ApiError(error.message, 500, "INTERNAL_ERROR")
+    return new ApiError((error instanceof Error ? error.message : String(error)), 500, "INTERNAL_ERROR")
   }
 
   return new ApiError("An unexpected error occurred", 500, "UNKNOWN_ERROR")

@@ -1,8 +1,8 @@
-import { PurchaseOrderLineItem } from "@/lib/hooks/use-purchase-orders"
+import { PurchaseOrderItem } from "@/lib/hooks/use-purchase-orders"
 import { formatPrice } from "@/lib/utils/price"
 
 interface POLineItemsProps {
-  items: PurchaseOrderLineItem[]
+  items: PurchaseOrderItem[]
   currencyCode: string
   editable?: boolean
   onUpdateQuantity?: (itemId: string, quantity: number) => void
@@ -36,12 +36,12 @@ export function POLineItems({
         {items.map((item) => (
           <div key={item.id} className="flex items-center justify-between p-6">
             <div className="flex-1 min-w-0">
-              <h4 className="font-medium text-ds-foreground">{item.product_title}</h4>
-              {item.variant_title && (
-                <p className="text-sm text-ds-muted-foreground">{item.variant_title}</p>
+              <h4 className="font-medium text-ds-foreground">{((item as any).product_title || item.title)}</h4>
+              {(item as any).variant_title && (
+                <p className="text-sm text-ds-muted-foreground">{(item as any).variant_title}</p>
               )}
               <p className="text-sm text-ds-muted-foreground mt-1">
-                {formatPrice(item.unit_price, currencyCode)} each
+                {formatPrice((item.unit_price ?? 0), currencyCode)} each
               </p>
             </div>
 
@@ -70,7 +70,7 @@ export function POLineItems({
 
               <div className="text-end min-w-[100px]">
                 <p className="font-semibold text-ds-foreground">
-                  {formatPrice(item.total, currencyCode)}
+                  {formatPrice(item.total ?? 0, currencyCode)}
                 </p>
               </div>
 
@@ -93,7 +93,7 @@ export function POLineItems({
           <span className="font-medium text-ds-foreground">Items Total</span>
           <span className="font-semibold text-ds-foreground">
             {formatPrice(
-              items.reduce((sum, item) => sum + item.total, 0),
+              items.reduce((sum, item) => (sum + (item.total ?? 0)), 0),
               currencyCode
             )}
           </span>

@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -19,7 +19,7 @@ const createTenantSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenant") as any;
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
 
     const {
       limit = 20,
@@ -48,14 +48,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset: Number(offset),
       limit: Number(limit),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin tenants");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const tenantModuleService = req.scope.resolve("tenant") as any;
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
     const parsed = createTenantSchema.safeParse(req.body);
     if (!parsed.success) {
       return res
@@ -66,7 +66,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const tenant = await tenantModuleService.createTenants(parsed.data);
 
     res.status(201).json({ tenant });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin tenants");
   }
 }

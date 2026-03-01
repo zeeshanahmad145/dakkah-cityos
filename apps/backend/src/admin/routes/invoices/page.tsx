@@ -183,28 +183,28 @@ const InvoicesPage = () => {
           {editing && <div><Text className="text-sm text-ui-fg-muted">Invoice: {editing.invoice_number}</Text></div>}
           {!editing && (
             <>
-              <div><Label htmlFor="company_id">Company ID</Label><Input id="company_id" value={formData.company_id} onChange={(e) => setFormData({ ...formData, company_id: e.target.value })} placeholder="Enter company ID" /></div>
-              <div><Label htmlFor="customer_id">Customer ID (optional)</Label><Input id="customer_id" value={formData.customer_id} onChange={(e) => setFormData({ ...formData, customer_id: e.target.value })} placeholder="Enter customer ID" /></div>
-              <div><Label htmlFor="issue_date">Issue Date</Label><Input id="issue_date" type="date" value={formData.issue_date} onChange={(e) => setFormData({ ...formData, issue_date: e.target.value })} /></div>
-              <div><Label htmlFor="currency_code">Currency Code</Label><Input id="currency_code" value={formData.currency_code} onChange={(e) => setFormData({ ...formData, currency_code: e.target.value })} placeholder="usd" /></div>
+              <div><Label htmlFor="company_id">Company ID</Label><Input id="company_id" value={formData.company_id} onChange={(e) => setFormData({ ...formData, company_id: e.target.value as any })} placeholder="Enter company ID" /></div>
+              <div><Label htmlFor="customer_id">Customer ID (optional)</Label><Input id="customer_id" value={formData.customer_id} onChange={(e) => setFormData({ ...formData, customer_id: e.target.value as any })} placeholder="Enter customer ID" /></div>
+              <div><Label htmlFor="issue_date">Issue Date</Label><Input id="issue_date" type="date" value={formData.issue_date} onChange={(e) => setFormData({ ...formData, issue_date: e.target.value as any })} /></div>
+              <div><Label htmlFor="currency_code">Currency Code</Label><Input id="currency_code" value={formData.currency_code} onChange={(e) => setFormData({ ...formData, currency_code: e.target.value as any })} placeholder="usd" /></div>
             </>
           )}
-          <div><Label htmlFor="due_date">Due Date</Label><Input id="due_date" type="date" value={formData.due_date} onChange={(e) => setFormData({ ...formData, due_date: e.target.value })} /></div>
+          <div><Label htmlFor="due_date">Due Date</Label><Input id="due_date" type="date" value={formData.due_date} onChange={(e) => setFormData({ ...formData, due_date: e.target.value as any })} /></div>
           <div>
             <Label htmlFor="payment_terms">Payment Terms</Label>
-            <select id="payment_terms" value={formData.payment_terms} onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
+            <select id="payment_terms" value={formData.payment_terms} onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value as any })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
               <option value="net_15">Net 15</option><option value="net_30">Net 30</option><option value="net_45">Net 45</option><option value="net_60">Net 60</option><option value="due_on_receipt">Due on Receipt</option>
             </select>
           </div>
-          <div><Label htmlFor="payment_terms_days">Payment Terms Days</Label><Input id="payment_terms_days" type="number" value={formData.payment_terms_days} onChange={(e) => setFormData({ ...formData, payment_terms_days: e.target.value })} /></div>
-          <div><Label htmlFor="notes">Notes</Label><Input id="notes" value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} placeholder="Add notes..." /></div>
+          <div><Label htmlFor="payment_terms_days">Payment Terms Days</Label><Input id="payment_terms_days" type="number" value={formData.payment_terms_days} onChange={(e) => setFormData({ ...formData, payment_terms_days: e.target.value as any })} /></div>
+          <div><Label htmlFor="notes">Notes</Label><Input id="notes" value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value as any })} placeholder="Add notes..." /></div>
           {!editing && (
             <>
               <Heading level="h3" className="pt-2">Line Item</Heading>
-              <div><Label htmlFor="item_title">Item Title</Label><Input id="item_title" value={formData.item_title} onChange={(e) => setFormData({ ...formData, item_title: e.target.value })} placeholder="Item name" /></div>
+              <div><Label htmlFor="item_title">Item Title</Label><Input id="item_title" value={formData.item_title} onChange={(e) => setFormData({ ...formData, item_title: e.target.value as any })} placeholder="Item name" /></div>
               <div className="grid grid-cols-2 gap-4">
-                <div><Label htmlFor="item_quantity">Quantity</Label><Input id="item_quantity" type="number" value={formData.item_quantity} onChange={(e) => setFormData({ ...formData, item_quantity: e.target.value })} /></div>
-                <div><Label htmlFor="item_unit_price">Unit Price (cents)</Label><Input id="item_unit_price" type="number" value={formData.item_unit_price} onChange={(e) => setFormData({ ...formData, item_unit_price: e.target.value })} /></div>
+                <div><Label htmlFor="item_quantity">Quantity</Label><Input id="item_quantity" type="number" value={formData.item_quantity} onChange={(e) => setFormData({ ...formData, item_quantity: e.target.value as any })} /></div>
+                <div><Label htmlFor="item_unit_price">Unit Price (cents)</Label><Input id="item_unit_price" type="number" value={formData.item_unit_price} onChange={(e) => setFormData({ ...formData, item_unit_price: e.target.value as any })} /></div>
               </div>
             </>
           )}

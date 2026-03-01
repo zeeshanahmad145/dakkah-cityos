@@ -102,7 +102,7 @@ export const MenuDisplayBlock: React.FC<MenuDisplayBlockProps> = ({
             )}
           </div>
           {showPrices && item.price !== undefined && (
-            <span className="font-semibold text-ds-foreground whitespace-nowrap">{formatPrice(item.price)}</span>
+            <span className="font-semibold text-ds-foreground whitespace-nowrap">{formatPrice(item.price ?? 0)}</span>
           )}
         </div>
         {item.description && (

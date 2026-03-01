@@ -44,10 +44,10 @@ export class WaltIdService {
         did: response.data.did,
         document: response.data.document || response.data,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[WaltId] Failed to create DID: ${error.response?.data?.message || error.message}`
+        `[WaltId] Failed to create DID: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -66,10 +66,10 @@ export class WaltIdService {
         did,
         document: response.data.document || response.data,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.NOT_FOUND,
-        `[WaltId] Failed to resolve DID: ${error.response?.data?.message || error.message}`
+        `[WaltId] Failed to resolve DID: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -112,10 +112,10 @@ export class WaltIdService {
         credential: response.data.credential || response.data,
         credentialId: response.data.id || response.data.credential?.id || "",
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[WaltId] Failed to issue credential: ${error.response?.data?.message || error.message}`
+        `[WaltId] Failed to issue credential: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -136,10 +136,10 @@ export class WaltIdService {
         checks: response.data.checks || [],
         errors: response.data.errors || [],
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[WaltId] Failed to verify credential: ${error.response?.data?.message || error.message}`
+        `[WaltId] Failed to verify credential: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -152,10 +152,10 @@ export class WaltIdService {
       });
 
       return response.data.credentials || response.data || [];
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[WaltId] Failed to list credentials: ${error.response?.data?.message || error.message}`
+        `[WaltId] Failed to list credentials: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -168,10 +168,10 @@ export class WaltIdService {
       });
 
       return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[WaltId] Failed to revoke credential: ${error.response?.data?.message || error.message}`
+        `[WaltId] Failed to revoke credential: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -399,14 +399,14 @@ export class WaltIdService {
 
       const resolved = await this.resolveDID(did);
       document = resolved.document;
-    } catch (error: any) {
-      errors.push(`DID resolution failed: ${error.message}`);
+    } catch (error: unknown) {
+      errors.push(`DID resolution failed: ${(error instanceof Error ? error.message : String(error))}`);
     }
 
     try {
       credentials = await this.listCredentials(did);
-    } catch (error: any) {
-      errors.push(`Credential listing failed: ${error.message}`);
+    } catch (error: unknown) {
+      errors.push(`Credential listing failed: ${(error instanceof Error ? error.message : String(error))}`);
     }
 
     return {

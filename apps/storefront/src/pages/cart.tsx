@@ -20,27 +20,33 @@ const LOCALE_TO_COUNTRY: Record<string, string> = {
 }
 
 const DEFAULT_CART_FIELDS =
-  "id, *items, total, currency_code, subtotal, shipping_total, discount_total, tax_total, *promotions";
+  "id, *items, total, currency_code, subtotal, shipping_total, discount_total, tax_total, *promotions"
 
 const Cart = () => {
   const { locale } = useParams({ strict: false }) as { locale: string }
   const countryCode = LOCALE_TO_COUNTRY[locale?.toLowerCase()] || "us"
   const { data: region } = useRegion({ country_code: countryCode })
-  const prefix = useTenantPrefix();
+  const prefix = useTenantPrefix()
   const { data: cart, isLoading: cartLoading } = useCart({
     fields: DEFAULT_CART_FIELDS,
-  });
-  const createCartMutation = useCreateCart();
-  const cartCreationAttempted = useRef(false);
+  })
+  const createCartMutation = useCreateCart()
+  const cartCreationAttempted = useRef(false)
 
   useEffect(() => {
-    if (!cart && !cartLoading && !createCartMutation.isPending && region?.id && !cartCreationAttempted.current) {
-      cartCreationAttempted.current = true;
-      createCartMutation.mutate({ region_id: region.id });
+    if (
+      !cart &&
+      !cartLoading &&
+      !createCartMutation.isPending &&
+      region?.id &&
+      !cartCreationAttempted.current
+    ) {
+      cartCreationAttempted.current = true
+      createCartMutation.mutate({ region_id: region.id })
     }
-  }, [cart, cartLoading, region?.id, createCartMutation.isPending]);
+  }, [cart, cartLoading, region?.id, createCartMutation.isPending])
 
-  const cartItems = sortCartItems(cart?.items || []);
+  const cartItems = sortCartItems(cart?.items || [])
 
   return (
     <div className="content-container py-12">
@@ -55,7 +61,7 @@ const Cart = () => {
               <h1 className="text-zinc-900 text-xl">Cart</h1>
               {cartItems.length > 0 && (
                 <Link
-                  to={`${prefix}/store` as any}
+                  to={`${prefix}/store` as never}
                   className="text-zinc-600 hover:text-zinc-500 text-sm underline"
                 >
                   Continue shopping
@@ -79,9 +85,7 @@ const Cart = () => {
           {cart && (
             <div className="flex flex-col gap-y-8 w-full md:w-1/3">
               <div>
-                <h2 className="text-zinc-900 text-xl">
-                  Cart Summary
-                </h2>
+                <h2 className="text-zinc-900 text-xl">Cart Summary</h2>
               </div>
 
               <div className="flex flex-col gap-y-4">
@@ -90,7 +94,7 @@ const Cart = () => {
                 <CartPromo cart={cart} />
               </div>
 
-              <Link to={`${prefix}/checkout` as any}>
+              <Link to={`${prefix}/checkout` as never}>
                 <Button className="w-full">Checkout</Button>
               </Link>
             </div>
@@ -98,7 +102,7 @@ const Cart = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart

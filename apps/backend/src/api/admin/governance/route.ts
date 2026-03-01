@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
 
@@ -19,7 +19,7 @@ const createSchema = z.object({
 }).passthrough()
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const moduleService = req.scope.resolve("governance") as any
+  const moduleService = req.scope.resolve("governance") as unknown as any
   const { limit = "20", offset = "0", tenant_id, type } = req.query as Record<string, string | undefined>
   const filters: Record<string, any> = {}
   if (tenant_id) filters.tenant_id = tenant_id
@@ -29,10 +29,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const moduleService = req.scope.resolve("governance") as any
+  const moduleService = req.scope.resolve("governance") as unknown as any
   const validation = createSchema.safeParse(req.body)
   if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-  const item = await moduleService.createGovernanceAuthoritys(validation.data)
+  const item = await moduleService.createGovernanceAuthorities(validation.data)
   return res.status(201).json({ item })
 }
 

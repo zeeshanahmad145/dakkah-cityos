@@ -48,19 +48,19 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
   let dbStatus = "healthy"
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
     await query.graph({
       entity: "region",
       fields: ["id"],
       pagination: { take: 1 },
     })
     services.database = { status: "healthy" }
-  } catch (error: any) {
+  } catch (error: unknown) {
     dbStatus = "unhealthy"
     overallStatus = "degraded"
     services.database = {
       status: "unhealthy",
-      error: error.message,
+      error: (error instanceof Error ? error.message : String(error)),
     }
   }
 
@@ -84,8 +84,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const temporalMod = require("../../lib/temporal-client")
     temporalStatus = await temporalMod.checkTemporalHealth()
-  } catch (error: any) {
-    temporalStatus = { connected: false, error: error.message }
+  } catch (error: unknown) {
+    temporalStatus = { connected: false, error: (error instanceof Error ? error.message : String(error)) }
   }
 
   if (!temporalStatus.connected && services.temporal?.configured) {

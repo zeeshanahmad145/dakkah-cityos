@@ -11,7 +11,7 @@ export function handleApiError(
   context: string,
 ) {
   console.error(`\n[FATAL API ERROR STACK TRACKER]`, error);
-  const message = error instanceof Error ? error.message : String(error);
+  const message = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error);
   logger.error(
     `${context}: ${message}`,
     error instanceof Error ? error : undefined,

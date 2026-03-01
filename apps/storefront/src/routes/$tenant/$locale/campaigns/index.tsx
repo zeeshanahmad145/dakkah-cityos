@@ -2,14 +2,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 
 export const Route = createFileRoute("/$tenant/$locale/campaigns/")({
   component: CampaignsPage,
   head: () => ({
     meta: [
       { title: "Crowdfunding Campaigns | Dakkah CityOS" },
-      { name: "description", content: "Discover and support innovative crowdfunding campaigns on Dakkah CityOS" },
+      {
+        name: "description",
+        content:
+          "Discover and support innovative crowdfunding campaigns on Dakkah CityOS",
+      },
     ],
   }),
   loader: async () => {
@@ -47,7 +55,13 @@ export const Route = createFileRoute("/$tenant/$locale/campaigns/")({
   },
 })
 
-const categoryOptions = ["all", "technology", "arts", "education", "sustainability"] as const
+const categoryOptions = [
+  "all",
+  "technology",
+  "arts",
+  "education",
+  "sustainability",
+] as const
 
 const categoryColors: Record<string, string> = {
   technology: "bg-ds-primary",
@@ -85,9 +99,12 @@ function CampaignsPage() {
   const filteredItems = items.filter((item: any) => {
     const matchesSearch = searchQuery
       ? (item.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.description || "").toLowerCase().includes(searchQuery.toLowerCase())
+        (item.description || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       : true
-    const matchesCategory = categoryFilter === "all" || item.category === categoryFilter
+    const matchesCategory =
+      categoryFilter === "all" || item.category === categoryFilter
     return matchesSearch && matchesCategory
   })
 
@@ -96,18 +113,29 @@ function CampaignsPage() {
       <div className="bg-gradient-to-r from-ds-primary to-ds-primary/80 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-white/70 mb-4">
-            <Link to={`${prefix}` as any} className="hover:text-white transition-colors">{t(locale, 'common.home')}</Link>
+            <Link
+              to={`${prefix}` as never}
+              className="hover:text-white transition-colors"
+            >
+              {t(locale, "common.home")}
+            </Link>
             <span>/</span>
-            <span className="text-white">{t(locale, 'crowdfunding.breadcrumb')}</span>
+            <span className="text-white">
+              {t(locale, "crowdfunding.breadcrumb")}
+            </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t(locale, 'crowdfunding.hero_title')}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            {t(locale, "crowdfunding.hero_title")}
+          </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            {t(locale, 'crowdfunding.description')}
+            {t(locale, "crowdfunding.description")}
           </p>
           <div className="mt-6 flex items-center justify-center gap-4 text-sm text-white/60">
-            <span>{items.length} {t(locale, 'crowdfunding.active_campaigns')}</span>
+            <span>
+              {items.length} {t(locale, "crowdfunding.active_campaigns")}
+            </span>
             <span>|</span>
-            <span>{t(locale, 'crowdfunding.back_project')}</span>
+            <span>{t(locale, "crowdfunding.back_project")}</span>
           </div>
         </div>
       </div>
@@ -117,18 +145,22 @@ function CampaignsPage() {
           <aside className="w-full lg:w-72 flex-shrink-0">
             <div className="bg-ds-background border border-ds-border rounded-xl p-4 space-y-6 sticky top-4">
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'crowdfunding.search_label')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "crowdfunding.search_label")}
+                </label>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t(locale, 'crowdfunding.search_placeholder')}
+                  placeholder={t(locale, "crowdfunding.search_placeholder")}
                   className="w-full px-3 py-2 text-sm rounded-lg border border-ds-border bg-ds-background text-ds-foreground placeholder:text-ds-muted-foreground focus:outline-none focus:ring-2 focus:ring-ds-ring"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'crowdfunding.filter_category')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "crowdfunding.filter_category")}
+                </label>
                 <div className="space-y-1">
                   {categoryOptions.map((opt) => (
                     <button
@@ -136,7 +168,9 @@ function CampaignsPage() {
                       onClick={() => setCategoryFilter(opt)}
                       className={`block w-full text-start px-3 py-2 text-sm rounded-lg transition-colors ${categoryFilter === opt ? "bg-ds-primary text-ds-primary-foreground" : "text-ds-foreground hover:bg-ds-muted"}`}
                     >
-                      {opt === "all" ? t(locale, 'verticals.all_categories') : opt.charAt(0).toUpperCase() + opt.slice(1)}
+                      {opt === "all"
+                        ? t(locale, "verticals.all_categories")
+                        : opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </button>
                   ))}
                 </div>
@@ -147,33 +181,68 @@ function CampaignsPage() {
           <main className="flex-1">
             {filteredItems.length === 0 ? (
               <div className="bg-ds-background border border-ds-border rounded-xl p-12 text-center">
-                <svg className="w-16 h-16 text-ds-muted-foreground/30 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-16 h-16 text-ds-muted-foreground/30 mx-auto mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                <h3 className="text-lg font-semibold text-ds-foreground mb-2">{t(locale, 'crowdfunding.no_results')}</h3>
-                <p className="text-ds-muted-foreground text-sm">{t(locale, 'crowdfunding.no_results_hint')}</p>
+                <h3 className="text-lg font-semibold text-ds-foreground mb-2">
+                  {t(locale, "crowdfunding.no_results")}
+                </h3>
+                <p className="text-ds-muted-foreground text-sm">
+                  {t(locale, "crowdfunding.no_results_hint")}
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredItems.map((item: any) => {
-                  const progressPercent = item.goal_amount > 0
-                    ? Math.min(Math.round((item.current_amount / item.goal_amount) * 100), 100)
-                    : 0
+                  const progressPercent =
+                    item.goal_amount > 0
+                      ? Math.min(
+                          Math.round(
+                            (item.current_amount / item.goal_amount) * 100,
+                          ),
+                          100,
+                        )
+                      : 0
                   const daysLeft = getDaysRemaining(item.ends_at)
 
                   return (
                     <Link
                       key={item.id}
-                      to={`${prefix}/campaigns/${item.id}` as any}
+                      to={`${prefix}/campaigns/${item.id}` as never}
                       className="group bg-ds-background border border-ds-border rounded-xl overflow-hidden hover:shadow-lg hover:border-ds-primary/40 transition-all duration-200"
                     >
                       <div className="aspect-[16/10] bg-gradient-to-br from-ds-primary/10 to-ds-muted relative overflow-hidden">
                         {item.thumbnail ? (
-                          <img loading="lazy" src={item.thumbnail} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <img
+                            loading="lazy"
+                            src={item.thumbnail}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <svg className="w-16 h-16 text-ds-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg
+                              className="w-16 h-16 text-ds-primary/40"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
                             </svg>
                           </div>
                         )}
@@ -183,21 +252,36 @@ function CampaignsPage() {
                           </span>
                         )}
                         {item.category && (
-                          <span className={`absolute top-2 end-2 px-2 py-1 text-xs font-medium text-white rounded-md capitalize ${categoryColors[item.category] || "bg-ds-muted-foreground"}`}>
+                          <span
+                            className={`absolute top-2 end-2 px-2 py-1 text-xs font-medium text-white rounded-md capitalize ${categoryColors[item.category] || "bg-ds-muted-foreground"}`}
+                          >
                             {item.category}
                           </span>
                         )}
                       </div>
                       <div className="p-4">
-                        <h3 className="font-semibold text-ds-foreground group-hover:text-ds-primary transition-colors line-clamp-1">{item.title}</h3>
+                        <h3 className="font-semibold text-ds-foreground group-hover:text-ds-primary transition-colors line-clamp-1">
+                          {item.title}
+                        </h3>
                         {(item.short_description || item.description) && (
-                          <p className="text-sm text-ds-muted-foreground mt-1.5 line-clamp-2">{item.short_description || item.description}</p>
+                          <p className="text-sm text-ds-muted-foreground mt-1.5 line-clamp-2">
+                            {item.short_description || item.description}
+                          </p>
                         )}
 
                         <div className="mt-3">
                           <div className="flex justify-between text-xs text-ds-muted-foreground mb-1">
-                            <span>{progressPercent}% {t(locale, 'crowdfunding.funded')}</span>
-                            <span>{t(locale, 'crowdfunding.goal')}: {formatAmount(item.goal_amount, item.currency_code)}</span>
+                            <span>
+                              {progressPercent}%{" "}
+                              {t(locale, "crowdfunding.funded")}
+                            </span>
+                            <span>
+                              {t(locale, "crowdfunding.goal")}:{" "}
+                              {formatAmount(
+                                item.goal_amount,
+                                item.currency_code,
+                              )}
+                            </span>
                           </div>
                           <div className="w-full bg-ds-border rounded-full h-2.5">
                             <div
@@ -208,22 +292,55 @@ function CampaignsPage() {
                         </div>
 
                         <div className="mt-3 text-lg font-bold text-ds-primary">
-                          {formatAmount(item.current_amount, item.currency_code)} <span className="text-sm font-normal text-ds-muted-foreground">{t(locale, 'crowdfunding.raised')}</span>
+                          {formatAmount(
+                            item.current_amount,
+                            item.currency_code,
+                          )}{" "}
+                          <span className="text-sm font-normal text-ds-muted-foreground">
+                            {t(locale, "crowdfunding.raised")}
+                          </span>
                         </div>
 
                         <div className="flex items-center gap-4 mt-3 pt-3 border-t border-ds-border text-xs text-ds-muted-foreground">
                           <span className="flex items-center gap-1">
-                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                            {item.backer_count} {t(locale, 'crowdfunding.backers')}
+                            <svg
+                              className="w-3.5 h-3.5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                              />
+                            </svg>
+                            {item.backer_count}{" "}
+                            {t(locale, "crowdfunding.backers")}
                           </span>
                           {daysLeft !== null && (
                             <span className="flex items-center gap-1">
-                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                              {daysLeft} {t(locale, 'crowdfunding.days_left')}
+                              <svg
+                                className="w-3.5 h-3.5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                              </svg>
+                              {daysLeft} {t(locale, "crowdfunding.days_left")}
                             </span>
                           )}
                           {item.is_flexible_funding && (
-                            <span className="text-ds-success font-medium">Flexible</span>
+                            <span className="text-ds-success font-medium">
+                              Flexible
+                            </span>
                           )}
                         </div>
                       </div>
@@ -238,22 +355,42 @@ function CampaignsPage() {
 
       <section className="py-16 bg-ds-card border-t border-ds-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-ds-foreground text-center mb-12">{t(locale, 'crowdfunding.how_it_works_title')}</h2>
+          <h2 className="text-2xl font-bold text-ds-foreground text-center mb-12">
+            {t(locale, "crowdfunding.how_it_works_title")}
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-primary text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">{t(locale, 'crowdfunding.step1_title')}</h3>
-              <p className="text-sm text-ds-muted-foreground">{t(locale, 'crowdfunding.step1_desc')}</p>
+              <div className="w-12 h-12 rounded-full bg-ds-primary text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                1
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                {t(locale, "crowdfunding.step1_title")}
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                {t(locale, "crowdfunding.step1_desc")}
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-primary text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">{t(locale, 'crowdfunding.step2_title')}</h3>
-              <p className="text-sm text-ds-muted-foreground">{t(locale, 'crowdfunding.step2_desc')}</p>
+              <div className="w-12 h-12 rounded-full bg-ds-primary text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                2
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                {t(locale, "crowdfunding.step2_title")}
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                {t(locale, "crowdfunding.step2_desc")}
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-primary text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">{t(locale, 'crowdfunding.step3_title')}</h3>
-              <p className="text-sm text-ds-muted-foreground">{t(locale, 'crowdfunding.step3_desc')}</p>
+              <div className="w-12 h-12 rounded-full bg-ds-primary text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                3
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                {t(locale, "crowdfunding.step3_title")}
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                {t(locale, "crowdfunding.step3_desc")}
+              </p>
             </div>
           </div>
         </div>

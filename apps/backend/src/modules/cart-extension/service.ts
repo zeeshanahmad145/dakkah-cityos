@@ -54,7 +54,8 @@ class CartExtensionModuleService extends MedusaService({
       cart_id: cartId,
       tenant_id: tenantId,
     });
-    return results.length > 0 ? results[0] : null;
+    const list = Array.isArray(results) ? results : [results].filter(Boolean);
+    return list.length > 0 ? list[0] : null;
   }
 
   async setGiftWrap(

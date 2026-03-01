@@ -13,10 +13,10 @@ class PrintOnDemandModuleService extends MedusaService({
     templateUrl: string;
     customizationOptions: Record<string, unknown> | null;
   }> {
-    const product = await this.retrievePodProduct(podProductId);
+    const product = await this.retrievePodProduct(podProductId) as any;
     return {
-      templateUrl: (product as any).template_url,
-      customizationOptions: (product as any).customization_options ?? null,
+      templateUrl: product.template_url,
+      customizationOptions: product.customization_options ?? null,
     };
   }
 
@@ -29,16 +29,16 @@ class PrintOnDemandModuleService extends MedusaService({
     customizationData?: Record<string, unknown>;
     quantity?: number;
   }): Promise<any> {
-    const product = await this.retrievePodProduct(data.podProductId);
+    const product = await this.retrievePodProduct(data.podProductId) as any;
 
-    const podOrder = await (this as any).createPodOrders({
+    const podOrder = await this.createPodOrders({
       order_id: data.orderId,
       pod_product_id: data.podProductId,
       customization_data: data.customizationData ?? null,
       quantity: data.quantity ?? 1,
-      unit_cost: (product as any).base_cost,
+      unit_cost: product.base_cost,
       print_status: "queued",
-    });
+    } as any);
 
     return podOrder;
   }
@@ -51,10 +51,10 @@ class PrintOnDemandModuleService extends MedusaService({
     trackingNumber: string | null;
     estimatedDelivery: string | null;
   }> {
-    const order = await this.retrievePodOrder(podOrderId);
+    const order = await this.retrievePodOrder(podOrderId) as any;
     return {
-      status: (order as any).print_status,
-      trackingNumber: (order as any).tracking_number ?? null,
+      status: order.print_status,
+      trackingNumber: order.tracking_number ?? null,
       estimatedDelivery: null, // Populate from shipping provider in production
     };
   }
@@ -63,16 +63,16 @@ class PrintOnDemandModuleService extends MedusaService({
    * Cancel a queued pod order (only possible before printing starts).
    */
   async cancelPodOrder(podOrderId: string): Promise<any> {
-    const order = await this.retrievePodOrder(podOrderId);
-    if ((order as any).print_status !== "queued") {
+    const order = await this.retrievePodOrder(podOrderId) as any;
+    if (order.print_status !== "queued") {
       throw new Error(
         "Cannot cancel a pod order that has already started printing",
       );
     }
-    return await (this as any).updatePodOrders({
+    return await this.updatePodOrders({
       id: podOrderId,
       print_status: "cancelled",
-    });
+    } as any);
   }
 }
 

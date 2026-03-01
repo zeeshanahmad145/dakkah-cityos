@@ -4,34 +4,34 @@ import {
   transform,
   createStep,
   StepResponse,
-} from "@medusajs/framework/workflows-sdk"
+} from "@medusajs/framework/workflows-sdk";
 
 // Step: Create vendor
 const createVendorStep = createStep(
   "create-vendor-step",
   async (
     input: {
-      tenantId: string
-      storeId?: string | null
-      handle: string
-      businessName: string
-      legalName: string
-      email: string
-      phone?: string
+      tenantId: string;
+      storeId?: string | null;
+      handle: string;
+      businessName: string;
+      legalName: string;
+      email: string;
+      phone?: string;
       address: {
-        line1: string
-        line2?: string
-        city: string
-        state?: string
-        postalCode: string
-        countryCode: string
-      }
-      commissionRate?: number
-      metadata?: Record<string, any>
+        line1: string;
+        line2?: string;
+        city: string;
+        state?: string;
+        postalCode: string;
+        countryCode: string;
+      };
+      commissionRate?: number;
+      metadata?: Record<string, any>;
     },
-    { container }
+    { container },
   ) => {
-    const vendorModule = container.resolve("vendor")
+    const vendorModule = container.resolve("vendor") as unknown as any;
 
     const vendor = await vendorModule.createVendors({
       tenant_id: input.tenantId,
@@ -52,35 +52,34 @@ const createVendorStep = createStep(
       verification_status: "pending",
       status: "onboarding",
       metadata: input.metadata,
-    })
+    });
 
-    return new StepResponse({ vendor }, { vendor })
+    return new StepResponse({ vendor }, { vendor });
   },
   async (compensationData: { vendor: any }, { container }) => {
-    if (!compensationData?.vendor?.id) return
+    if (!compensationData?.vendor?.id) return;
     try {
-      const vendorModule = container.resolve("vendor")
-      await vendorModule.deleteVendors(compensationData.vendor.id)
-    } catch (error) {
-    }
-  }
-)
+      const vendorModule = container.resolve("vendor") as unknown as any;
+      await vendorModule.deleteVendors(compensationData.vendor.id);
+    } catch (error) {}
+  },
+);
 
 // Step: Create default commission rule
 const createDefaultCommissionRuleStep = createStep(
   "create-default-commission-rule-step",
   async (
     input: {
-      vendorId: string
-      tenantId: string
-      storeId?: string | null
-      commissionRate: number
+      vendorId: string;
+      tenantId: string;
+      storeId?: string | null;
+      commissionRate: number;
     },
-    { container }
+    { container },
   ) => {
-    const commissionModule = container.resolve("commission")
+    const commissionModule = container.resolve("commission") as unknown as any;
 
-    const rule = await (commissionModule as any).createCommissions({
+    const rule = await commissionModule.createCommissions({
       tenant_id: input.tenantId,
       store_id: input.storeId,
       vendor_id: input.vendorId,
@@ -90,61 +89,58 @@ const createDefaultCommissionRuleStep = createStep(
       priority: 0,
       status: "active",
       applies_to: "all_products",
-    })
+    });
 
-    return new StepResponse({ rule }, { ruleId: rule.id })
+    return new StepResponse({ rule }, { ruleId: rule.id });
   },
   async (compensationData: { ruleId: string }, { container }) => {
-    if (!compensationData?.ruleId) return
+    if (!compensationData?.ruleId) return;
     try {
-      const commissionModule = container.resolve("commission")
-      await (commissionModule as any).deleteCommissions(compensationData.ruleId)
-    } catch (error) {
-    }
-  }
-)
+      const commissionModule = container.resolve("commission") as unknown as any;
+      await commissionModule.deleteCommissions(compensationData.ruleId);
+    } catch (error) {}
+  },
+);
 
 // Workflow
 export const createVendorWorkflow = createWorkflow(
   "create-vendor-workflow",
-  (
-    input: {
-      tenantId: string
-      storeId?: string | null
-      handle: string
-      businessName: string
-      legalName: string
-      email: string
-      phone?: string
-      address: {
-        line1: string
-        line2?: string
-        city: string
-        state?: string
-        postalCode: string
-        countryCode: string
-      }
-      commissionRate?: number
-      metadata?: Record<string, any>
-    }
-  ) => {
-    const vendorResult = createVendorStep(input)
+  (input: {
+    tenantId: string;
+    storeId?: string | null;
+    handle: string;
+    businessName: string;
+    legalName: string;
+    email: string;
+    phone?: string;
+    address: {
+      line1: string;
+      line2?: string;
+      city: string;
+      state?: string;
+      postalCode: string;
+      countryCode: string;
+    };
+    commissionRate?: number;
+    metadata?: Record<string, any>;
+  }) => {
+    const vendorResult = createVendorStep(input);
 
     const commissionRateTransformed = transform(
       { vendorResult, input },
       ({ vendorResult, input }) => ({
-        vendorId: (vendorResult as any).vendor.id,
+        vendorId: vendorResult.vendor.id,
         tenantId: input.tenantId,
         storeId: input.storeId,
         commissionRate: input.commissionRate || 15,
-      })
-    )
+      }),
+    );
 
-    const { rule } = createDefaultCommissionRuleStep(commissionRateTransformed)
+    const { rule } = createDefaultCommissionRuleStep(commissionRateTransformed);
 
     return new WorkflowResponse({
-      vendor: (vendorResult as any).vendor,
+      vendor: vendorResult.vendor,
       commissionRule: rule,
-    })
-  }
-)
+    });
+  },
+);

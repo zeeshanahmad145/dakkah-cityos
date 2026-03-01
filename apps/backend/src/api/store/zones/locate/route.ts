@@ -8,7 +8,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const regionZoneService = req.scope.resolve("region-zone") as any;
+    const regionZoneService = req.scope.resolve("region-zone") as unknown as any;
     const { lat, lng } = req.query as { lat?: string; lng?: string };
 
     if (!lat || !lng) {
@@ -31,8 +31,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       zone = await regionZoneService.getZoneForCoordinates(latitude, longitude);
     } else {
       // Fallback: list all zones and do simple bounding-box check
-      const zones =
-        (await (regionZoneService as any).listDeliveryZones?.({})) ?? [];
+      const zones = (await regionZoneService.listDeliveryZones?.({})) ?? [];
       const zoneList = Array.isArray(zones) ? zones : [zones].filter(Boolean);
 
       zone =
@@ -56,7 +55,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ zone });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-ZONES-LOCATE");
   }
 }

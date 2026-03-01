@@ -36,7 +36,7 @@ export function PointsHistory({
         </p>
       ) : (
         <div className="space-y-0 divide-y divide-ds-border">
-          {activities.map((activity) => (
+          {activities.map((activity: any) => (
             <div key={activity.id} className="flex items-center justify-between py-3">
               <div className="flex items-start gap-3">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${

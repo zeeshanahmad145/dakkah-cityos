@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 import {
@@ -32,7 +32,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       workflows,
       count: workflows.length,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-DYNAMIC")
   }
 }
@@ -59,7 +59,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     })
 
     return res.status(201).json(result)
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-TEMPORAL-DYNAMIC")
   }
 }

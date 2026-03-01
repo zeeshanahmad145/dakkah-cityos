@@ -83,7 +83,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
     expiresAt?: Date;
     metadata?: Record<string, unknown>;
   }) {
-    const account = await this.retrieveLoyaltyAccount(data.accountId);
+    const account = await this.retrieveLoyaltyAccount(data.accountId) as any;
 
     if (account.status !== "active") {
       throw new Error("Loyalty account is not active");
@@ -96,7 +96,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
       id: data.accountId,
       points_balance: newBalance,
       lifetime_points: newLifetime,
-    });
+    } as any);
 
     const transaction = await this.createPointTransactions({
       account_id: data.accountId,
@@ -109,7 +109,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
       description: data.description ?? null,
       expires_at: data.expiresAt ?? null,
       metadata: data.metadata ?? null,
-    });
+    } as any);
 
     await this.calculateTier(data.accountId);
 
@@ -124,7 +124,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
     description?: string;
     metadata?: Record<string, unknown>;
   }) {
-    const account = await this.retrieveLoyaltyAccount(data.accountId);
+    const account = await this.retrieveLoyaltyAccount(data.accountId) as any;
 
     if (account.status !== "active") {
       throw new Error("Loyalty account is not active");
@@ -139,7 +139,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
     await this.updateLoyaltyAccounts({
       id: data.accountId,
       points_balance: newBalance,
-    });
+    } as any);
 
     const transaction = await this.createPointTransactions({
       account_id: data.accountId,
@@ -151,7 +151,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
       reference_id: data.referenceId ?? null,
       description: data.description ?? null,
       metadata: data.metadata ?? null,
-    });
+    } as any);
 
     return transaction;
   }
@@ -163,7 +163,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
     tier_expires_at: Date | null;
     status: string;
   }> {
-    const account = await this.retrieveLoyaltyAccount(accountId);
+    const account = await this.retrieveLoyaltyAccount(accountId) as any;
     return {
       points_balance: Number(account.points_balance),
       lifetime_points: Number(account.lifetime_points),
@@ -189,8 +189,8 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
   }
 
   async calculateTier(accountId: string): Promise<string | null> {
-    const account = await this.retrieveLoyaltyAccount(accountId);
-    const program = await this.retrieveLoyaltyProgram(account.program_id);
+    const account = await this.retrieveLoyaltyAccount(accountId) as any;
+    const program = await this.retrieveLoyaltyProgram(account.program_id) as any;
 
     if (!program.tiers || !Array.isArray(program.tiers)) {
       return account.tier;
@@ -224,19 +224,19 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
         id: accountId,
         tier: newTier,
         tier_expires_at: tierExpiry,
-      });
+      } as any);
     }
 
     return newTier;
   }
 
   async expirePoints(beforeDate: Date): Promise<PointTransactionRecord[]> {
-    const transactions = await this.listPointTransactions({ type: "earn" });
+    const transactions = await this.listPointTransactions({ type: "earn" }) as any;
     const expired: PointTransactionRecord[] = [];
 
     for (const tx of transactions) {
       if (tx.expires_at && new Date(tx.expires_at) <= beforeDate) {
-        const account = await this.retrieveLoyaltyAccount(tx.account_id);
+        const account = await this.retrieveLoyaltyAccount(tx.account_id) as any;
         const pointsToExpire = Math.min(
           Number(tx.points),
           Number(account.points_balance),
@@ -248,7 +248,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
           await this.updateLoyaltyAccounts({
             id: tx.account_id,
             points_balance: newBalance,
-          });
+          } as any);
 
           const expireTx = await this.createPointTransactions({
             account_id: tx.account_id,
@@ -273,7 +273,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
     if (amount <= 0) {
       throw new Error("Amount must be greater than zero");
     }
-    const program = await this.retrieveLoyaltyProgram(programId);
+    const program = await this.retrieveLoyaltyProgram(programId) as any;
     const pointsPerUnit = Number(
       (program as Record<string, unknown>).points_per_currency_unit ?? 1,
     );
@@ -291,7 +291,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
     const existing = await this.listLoyaltyAccounts({
       program_id: programId,
       customer_id: customerId,
-    });
+    }) as any;
     if (existing.length > 0) {
       return existing[0];
     }
@@ -302,7 +302,7 @@ class LoyaltyModuleService extends Base implements LoyaltyModuleServiceBase {
       points_balance: 0,
       lifetime_points: 0,
       status: "active",
-    });
+    } as any);
   }
 }
 

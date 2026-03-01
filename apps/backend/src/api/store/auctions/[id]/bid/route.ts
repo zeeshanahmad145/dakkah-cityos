@@ -1,7 +1,7 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { handleApiError } from "../../../../../lib/api-error-handler";
 
-export const AUTHENTICATE = false
+export const AUTHENTICATE = false;
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const auctionId = req.params.id;
@@ -15,7 +15,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   }
 
   try {
-    const auctionService = req.scope.resolve("auction") as any;
+    const auctionService = req.scope.resolve("auction") as unknown as any;
     const bid = await auctionService.placeBid(
       auctionId,
       bidder_id,
@@ -23,7 +23,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     );
 
     return res.status(201).json({ bid });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Place bid");
   }
 }

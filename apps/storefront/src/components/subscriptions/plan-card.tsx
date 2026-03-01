@@ -65,7 +65,7 @@ export function PlanCard({ plan, isCurrentPlan }: PlanCardProps) {
         <div className="text-center mb-8">
           <div className="flex items-baseline justify-center gap-1">
             <span className="text-5xl font-bold text-ds-foreground">
-              {formatPrice(plan.price, plan.currency_code)}
+              {formatPrice((plan.price ?? 0), plan.currency_code)}
             </span>
             <span className="text-ds-muted-foreground text-lg">
               {intervalLabel[plan.billing_interval]}
@@ -84,7 +84,7 @@ export function PlanCard({ plan, isCurrentPlan }: PlanCardProps) {
         </div>
 
         <div className="space-y-3 mb-8">
-          {(plan.features || []).map((feature, index) => (
+          {((plan.features as string[]) || []).map((feature, index) => (
             <div key={index} className="flex items-start gap-3">
               <CheckCircleSolid className="w-5 h-5 text-ds-success flex-shrink-0 mt-0.5" />
               <span className="text-sm text-ds-muted-foreground">{feature}</span>
@@ -129,7 +129,7 @@ export function PlanComparisonTable({
   const prefix = useTenantPrefix()
 
   const allFeatures = Array.from(
-    new Set(plans.flatMap((plan) => plan.features || []))
+    new Set(plans.flatMap((plan) => (plan.features as string[]) || []))
   )
 
   const formatPrice = (amount: number, currency: string) => {
@@ -155,7 +155,7 @@ export function PlanComparisonTable({
               >
                 <div className="font-semibold text-ds-foreground">{plan.name}</div>
                 <div className="text-2xl font-bold text-ds-foreground mt-1">
-                  {formatPrice(plan.price, plan.currency_code)}
+                  {formatPrice((plan.price ?? 0), plan.currency_code)}
                   <span className="text-sm font-normal text-ds-muted-foreground">
                     /mo
                   </span>
@@ -173,7 +173,7 @@ export function PlanComparisonTable({
                   key={plan.id}
                   className={`py-3 px-4 text-center ${plan.is_popular ? "bg-ds-muted" : ""}`}
                 >
-                  {plan.features.includes(feature) ? (
+                  {((plan.features as string[]) as string[]).includes(feature) ? (
                     <CheckCircleSolid className="w-5 h-5 text-ds-success mx-auto" />
                   ) : (
                     <span className="text-ds-muted-foreground">-</span>

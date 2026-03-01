@@ -26,7 +26,7 @@ export function TradeInCalculator({
         <div className="flex items-center justify-between text-sm">
           <span className="text-ds-muted-foreground">{t(locale, "recommerce.base_value")}</span>
           <span className="text-ds-foreground">
-            {formatCurrency(baseValue.amount, baseValue.currencyCode, locale as SupportedLocale)}
+            {formatCurrency((baseValue.amount ?? 0), baseValue.currencyCode, locale as SupportedLocale)}
           </span>
         </div>
 

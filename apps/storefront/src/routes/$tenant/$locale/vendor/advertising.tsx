@@ -31,7 +31,7 @@ function VendorAdvertisingRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -95,7 +95,9 @@ function VendorAdvertisingRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -106,17 +108,24 @@ function VendorAdvertisingRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No ad campaigns yet</p>
-          <p className="text-sm">Create your first campaign to start advertising.</p>
+          <p className="text-sm">
+            Create your first campaign to start advertising.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((campaign) => (
-            <div key={campaign.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={campaign.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{campaign.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[campaign.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[campaign.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {campaign.status}
                     </span>
                     <span className="px-2 py-0.5 text-xs rounded-full bg-ds-muted text-ds-muted-foreground">
@@ -125,30 +134,55 @@ function VendorAdvertisingRoute() {
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-3 mb-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{campaign.currency_code?.toUpperCase()} {(campaign.budget / 100).toFixed(2)}</p>
+                      <p className="text-lg font-bold">
+                        {campaign.currency_code?.toUpperCase()}{" "}
+                        {(campaign.budget / 100).toFixed(2)}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Budget</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{campaign.currency_code?.toUpperCase()} {(campaign.spend / 100).toFixed(2)}</p>
+                      <p className="text-lg font-bold">
+                        {campaign.currency_code?.toUpperCase()}{" "}
+                        {(campaign.spend / 100).toFixed(2)}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Spend</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{campaign.impressions.toLocaleString()}</p>
-                      <p className="text-xs text-ds-muted-foreground">Impressions</p>
+                      <p className="text-lg font-bold">
+                        {campaign.impressions.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Impressions
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{campaign.clicks.toLocaleString()}</p>
+                      <p className="text-lg font-bold">
+                        {campaign.clicks.toLocaleString()}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Clicks</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{getCTR(campaign.clicks, campaign.impressions)}%</p>
+                      <p className="text-lg font-bold">
+                        {getCTR(campaign.clicks, campaign.impressions)}%
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">CTR</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-ds-muted-foreground">
-                    {campaign.start_date && <span>Started {new Date(campaign.start_date).toLocaleDateString()}</span>}
-                    {campaign.end_date && <span>Ends {new Date(campaign.end_date).toLocaleDateString()}</span>}
-                    {campaign.target_audience && <span>Audience: {campaign.target_audience}</span>}
+                    {campaign.start_date && (
+                      <span>
+                        Started{" "}
+                        {new Date(campaign.start_date!).toLocaleDateString()}
+                      </span>
+                    )}
+                    {campaign.end_date && (
+                      <span>
+                        Ends {new Date(campaign.end_date!).toLocaleDateString()}
+                      </span>
+                    )}
+                    {campaign.target_audience && (
+                      <span>Audience: {campaign.target_audience}</span>
+                    )}
                   </div>
                 </div>
                 <button className="text-sm text-ds-primary hover:underline ms-4">

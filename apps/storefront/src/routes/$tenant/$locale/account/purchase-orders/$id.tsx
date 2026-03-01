@@ -1,23 +1,41 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { getMedusaPublishableKey } from "@/lib/utils/env"
 import { AccountLayout } from "@/components/account"
-import { PODetail, POApprovalFlow, POTimeline, POLineItems } from "@/components/purchase-orders"
-import { usePurchaseOrder, useApprovePurchaseOrder, useRejectPurchaseOrder } from "@/lib/hooks/use-purchase-orders"
+import {
+  PODetail,
+  POApprovalFlow,
+  POTimeline,
+  POLineItems,
+} from "@/components/purchase-orders"
+import {
+  usePurchaseOrder,
+  useApprovePurchaseOrder,
+  useRejectPurchaseOrder,
+} from "@/lib/hooks/use-purchase-orders"
 import { useAuth } from "@/lib/context/auth-context"
 import { ArrowLeft } from "@medusajs/icons"
 
-export const Route = createFileRoute("/$tenant/$locale/account/purchase-orders/$id")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/account/purchase-orders/$id",
+)({
   loader: async ({ params }) => {
     try {
-      const { getServerBaseUrl, fetchWithTimeout } = await import("@/lib/utils/env")
+      const { getServerBaseUrl, fetchWithTimeout } = await import(
+        "@/lib/utils/env"
+      )
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/purchase-orders/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/purchase-orders/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: data.item || data.purchase_order || data }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
   component: PurchaseOrderDetailPage,
 })
@@ -34,7 +52,10 @@ function PurchaseOrderDetailPage() {
 
   const handleApprove = async () => {
     if (!purchaseOrder || !customer) return
-    await approveMutation.mutateAsync({ poId: purchaseOrder.id, approverId: customer.id })
+    await approveMutation.mutateAsync({
+      poId: purchaseOrder.id,
+      approverId: customer.id,
+    })
   }
 
   const handleReject = async (reason?: string) => {
@@ -58,7 +79,7 @@ function PurchaseOrderDetailPage() {
         <div className="text-center py-12">
           <p className="text-ds-muted-foreground">Purchase order not found</p>
           <Link
-            to={`/${tenant}/${locale}/account/purchase-orders` as any}
+            to={`/${tenant}/${locale}/account/purchase-orders` as never}
             className="text-ds-foreground hover:underline mt-2 inline-block"
           >
             Back to Purchase Orders
@@ -72,7 +93,7 @@ function PurchaseOrderDetailPage() {
     <AccountLayout>
       {/* Back Link */}
       <Link
-        to={`/${tenant}/${locale}/account/purchase-orders` as any}
+        to={`/${tenant}/${locale}/account/purchase-orders` as never}
         className="inline-flex items-center gap-2 text-sm text-ds-muted-foreground hover:text-ds-foreground mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -82,7 +103,10 @@ function PurchaseOrderDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <PODetail purchaseOrder={purchaseOrder} />
-          <POLineItems items={purchaseOrder.items || []} currencyCode={purchaseOrder.currency_code} />
+          <POLineItems
+            items={purchaseOrder.items || []}
+            currencyCode={purchaseOrder.currency_code}
+          />
         </div>
         <div className="space-y-6">
           <POApprovalFlow

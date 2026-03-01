@@ -150,7 +150,7 @@ function HealthcareDetailPage() {
               available.
             </p>
             <Link
-              to={`${prefix}/healthcare` as any}
+              to={`${prefix}/healthcare` as never}
               className="inline-flex items-center px-4 py-2 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 transition-colors"
             >
               Browse Healthcare
@@ -167,14 +167,14 @@ function HealthcareDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
             <Link
-              to={`${prefix}` as any}
+              to={`${prefix}` as never}
               className="hover:text-ds-foreground transition-colors"
             >
               {t(locale, "common.home")}
             </Link>
             <span>/</span>
             <Link
-              to={`${prefix}/healthcare` as any}
+              to={`${prefix}/healthcare` as never}
               className="hover:text-ds-foreground transition-colors"
             >
               Healthcare

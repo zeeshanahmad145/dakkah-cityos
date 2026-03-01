@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
@@ -27,12 +27,10 @@ interface CityOSContext {
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const auctionModule = req.scope.resolve("auction") as any;
-    const cityosContext = (req as any).cityosContext as
-      | CityOSContext
-      | undefined;
+    const auctionModule = req.scope.resolve("auction") as unknown as any;
+    const cityosContext = req.cityosContext as CityOSContext | undefined;
 
-    const filters: any = {};
+    const filters: Record<string, unknown> = {};
     if (cityosContext?.tenantId && cityosContext.tenantId !== "default") {
       filters.tenant_id = cityosContext.tenantId;
     }
@@ -73,10 +71,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const auctionModule = req.scope.resolve("auction") as any;
-    const cityosContext = (req as any).cityosContext as
-      | CityOSContext
-      | undefined;
+    const auctionModule = req.scope.resolve("auction") as unknown as any;
+    const cityosContext = req.cityosContext as CityOSContext | undefined;
 
     const auction = await auctionModule.createAuctionListings({
       ...parsed.data,

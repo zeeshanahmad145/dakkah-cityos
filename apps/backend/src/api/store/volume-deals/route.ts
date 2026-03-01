@@ -57,7 +57,7 @@ const SEED_DATA = [
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { product_id, limit = "20", offset = "0" } = req.query as Record<string, string | undefined>
     const filters: Record<string, any> = { status: "active" }
     if (product_id) {
@@ -79,7 +79,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }))
     const results = Array.isArray(enrichedRules) && enrichedRules.length > 0 ? enrichedRules : SEED_DATA
     res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-VOLUME-DEALS")
   }
 }

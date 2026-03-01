@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Tabs, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Tabs,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -15,7 +27,13 @@ export const Route = createFileRoute("/$tenant/$locale/manage/advertising")({
 })
 
 const config = crudConfigs["advertising"]
-const STATUS_FILTERS = ["all", "active", "paused", "completed", "draft"] as const
+const STATUS_FILTERS = [
+  "all",
+  "active",
+  "paused",
+  "completed",
+  "draft",
+] as const
 
 function ManageAdvertisingPage() {
   const { locale: routeLocale } = Route.useParams()
@@ -26,7 +44,9 @@ function ManageAdvertisingPage() {
   const { addToast } = useToast()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const { createMutation, updateMutation, deleteMutation } = useManageCrud({
@@ -43,7 +63,9 @@ function ManageAdvertisingPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -75,39 +97,49 @@ function ManageAdvertisingPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "advertising"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/advertising", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/advertising", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
   })
 
-  const allCampaigns = ((data as any)?.campaigns || (data as any)?.advertising || []).map((item: any) => ({
-    id: item.id,
-    name: item.name || item.title || "—",
-    type: item.type || "banner",
-    budget: item.budget ? `$${(item.budget / 100).toFixed(2)}` : "$0.00",
-    spent: item.spent ? `$${(item.spent / 100).toFixed(2)}` : "$0.00",
-    impressions: item.impressions ?? 0,
-    clicks: item.clicks ?? 0,
-    status: item.status || "draft",
-  }))
+  const allCampaigns = ((data as any)?.campaigns || (data as any)?.advertising || []).map(
+    (item: any) => ({
+      id: item.id,
+      name: item.name || item.title || "—",
+      type: item.type || "banner",
+      budget: item.budget ? `$${(item.budget / 100).toFixed(2)}` : "$0.00",
+      spent: item.spent ? `$${(item.spent / 100).toFixed(2)}` : "$0.00",
+      impressions: item.impressions ?? 0,
+      clicks: item.clicks ?? 0,
+      status: item.status || "draft",
+    }),
+  )
 
-  const campaigns = statusFilter === "all"
-    ? allCampaigns
-    : allCampaigns.filter((i: any) => i.status === statusFilter)
+  const campaigns =
+    statusFilter === "all"
+      ? allCampaigns
+      : allCampaigns.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "name",
       header: t(locale, "manage.name"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "type",
@@ -143,11 +175,20 @@ function ManageAdvertisingPage() {
       header: "Actions",
       align: "end" as const,
       render: (_: unknown, row: any) => (
-        <DropdownMenu items={[
-          { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
-          { type: "separator" as const },
-          { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
-        ]} />
+        <DropdownMenu
+          items={[
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
+            { type: "separator" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
+          ]}
+        />
       ),
     },
   ]
@@ -179,25 +220,44 @@ function ManageAdvertisingPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={campaigns} emptyTitle="No advertising campaigns found" countLabel="campaigns" />
+        <DataTable
+          columns={columns}
+          data={campaigns}
+          emptyTitle="No advertising campaigns found"
+          countLabel="campaigns"
+        />
       </Container>
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Create ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Create ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.saveChanges", "Save changes") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.saveChanges", "Save changes")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
       <ConfirmDialog
         open={!!deleteId}

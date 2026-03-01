@@ -9,7 +9,7 @@ export const Route = createFileRoute("/$tenant/$locale/account/downloads")({
 })
 
 function DownloadsPage() {
-  const { locale } = Route.useParams() as { locale: string }
+  const { locale, tenant } = Route.useParams()
   const { data: downloads, isLoading } = useMyDownloads()
 
   return (

@@ -1,7 +1,7 @@
 import { MedusaContainer } from "@medusajs/framework/types";
 import axios from "axios";
-import { createLogger } from "../../lib/logger"
-const logger = createLogger("integration:payload-sync")
+import { createLogger } from "../../lib/logger";
+const logger = createLogger("integration:payload-sync");
 
 export interface PayloadToMedusaSyncConfig {
   payloadUrl: string;
@@ -31,11 +31,11 @@ export class PayloadToMedusaSync {
   async syncProductContent(payloadContentId: string): Promise<void> {
     // Get content from Payload
     const response = await this.client.get(
-      `/api/product-content/${payloadContentId}`
+      `/api/product-content/${payloadContentId}`,
     );
     const content = response.data;
 
-    const query = this.container.resolve("query");
+    const query = this.container.resolve("query") as unknown as any;
 
     // Find Medusa product
     const { data: products } = await query.graph({
@@ -49,11 +49,10 @@ export class PayloadToMedusaSync {
     }
 
     // Update product metadata with enhanced content
-    const productModuleService = this.container.resolve(
-      "productModuleService"
-    ) as any;
+    const productModuleService = this.container.resolve("productModuleService") as unknown as any;
 
-    await productModuleService.updateProducts({ id: content.medusaProductId,
+    await productModuleService.updateProducts({
+      id: content.medusaProductId,
       metadata: {
         ...products[0].metadata,
         payload_content_id: content.id,
@@ -75,7 +74,7 @@ export class PayloadToMedusaSync {
     const page = response.data;
 
     // Store in custom page module or as store metadata
-    const storeModuleService = this.container.resolve("storeModuleService") as any;
+    const storeModuleService = this.container.resolve("storeModuleService") as unknown as any;
 
     // Find store associated with page tenant
     const stores = await storeModuleService.listStores({
@@ -86,7 +85,8 @@ export class PayloadToMedusaSync {
       const store = stores[0];
 
       // Update store metadata with page info
-      await storeModuleService.updateStores({ id: store.id,
+      await storeModuleService.updateStores({
+        id: store.id,
         metadata: {
           ...store.metadata,
           pages: {
@@ -108,7 +108,7 @@ export class PayloadToMedusaSync {
    */
   async processIntegrationEndpoint(endpointId: string): Promise<void> {
     const response = await this.client.get(
-      `/api/integration-endpoints/${endpointId}`
+      `/api/integration-endpoints/${endpointId}`,
     );
     const endpoint = response.data;
 
@@ -117,7 +117,7 @@ export class PayloadToMedusaSync {
     logger.info(`Processing integration endpoint: ${JSON.stringify(endpoint)}`);
 
     // Example: Store in a configuration service
-    // const configService = this.container.resolve("configService");
+    // const configService = this.container.resolve("configService") as unknown as any;
     // await configService.set(`integration.${endpoint.system}`, endpoint.config);
   }
 
@@ -137,11 +137,11 @@ export class PayloadToMedusaSync {
       `${this.config.payloadUrl}${media.url}`,
       {
         responseType: "arraybuffer",
-      }
+      },
     );
 
     // Upload to Medusa file service
-    const fileModuleService = this.container.resolve("fileModuleService") as any;
+    const fileModuleService = this.container.resolve("fileModuleService") as unknown as any;
 
     const file = await fileModuleService.createFiles({
       filename: media.filename,
@@ -171,10 +171,10 @@ export class PayloadToMedusaSync {
           status: "success",
           processedAt: new Date().toISOString(),
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         await this.client.patch(`/api/webhook-logs/${logId}`, {
           retryCount: log.retryCount + 1,
-          lastError: error.message,
+          lastError: (error instanceof Error ? error.message : String(error)),
         });
       }
     }
@@ -214,9 +214,9 @@ export class PayloadToMedusaSync {
         });
 
         success++;
-      } catch (error: any) {
+      } catch (error: unknown) {
         failed++;
-        errors.push(`${content.id}: ${error.message}`);
+        errors.push(`${content.id}: ${(error instanceof Error ? error.message : String(error))}`);
       }
     }
 

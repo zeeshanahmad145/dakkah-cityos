@@ -59,7 +59,7 @@ export function EventOutboxViewer() {
                   <EventStatusBadge status={event.status} />
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(event.created_at).toLocaleString()}
+                  {new Date(event.created_at!).toLocaleString()}
                 </span>
               </div>
               <div className="text-sm text-muted-foreground flex items-center gap-4">

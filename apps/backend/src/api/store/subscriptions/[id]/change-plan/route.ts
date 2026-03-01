@@ -30,8 +30,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   }
   
   const { plan_id, prorate } = parseResult.data
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-  const subscriptionService = req.scope.resolve("subscription")
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
+  const subscriptionService = req.scope.resolve("subscription") as unknown as any
   
   try {
     // Get current subscription
@@ -116,7 +116,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       }
     })
     
-    const eventBus = req.scope.resolve("event_bus")
+    const eventBus = req.scope.resolve("event_bus") as unknown as any
     await eventBus.emit("subscription.plan_changed", { 
       id, 
       customer_id: customerId,
@@ -141,7 +141,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         credit: proratedCredit,
       }
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error("Failed to change subscription plan", error, { subscriptionId: id })
     handleApiError(res, error, "STORE-SUBSCRIPTIONS-ID-CHANGE-PLAN")}
 }

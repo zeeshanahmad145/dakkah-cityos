@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../lib/api-error-handler"
@@ -17,7 +17,7 @@ export async function GET(
   res: MedusaResponse
 ) {
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     const { data: tiers } = await query.graph({
       entity: "pricing_tier",
@@ -53,7 +53,7 @@ export async function GET(
       tiers: tiersWithCounts.sort((a, b) => (a.priority || 0) - (b.priority || 0))
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin pricing-tiers")}
 }
 
@@ -76,7 +76,7 @@ export async function POST(
       priority
     } = parsed.data
 
-    const pricingService = req.scope.resolve("pricingModuleService")
+    const pricingService = req.scope.resolve("pricingModuleService") as unknown as any
 
     // Create a price list for this tier
     const priceList = await pricingService.createPriceLists({
@@ -86,7 +86,7 @@ export async function POST(
     })
 
     // Create the tier
-    const companyService = req.scope.resolve("companyModuleService")
+    const companyService = req.scope.resolve("companyModuleService") as unknown as any
     const tier = await companyService.createPricingTiers({
       name,
       description,
@@ -98,7 +98,7 @@ export async function POST(
 
     res.status(201).json({ tier })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin pricing-tiers")}
 }
 

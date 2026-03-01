@@ -91,8 +91,8 @@ const activityImplementations = {
       }
 
       return { success: true, payloadDocId: existing?.id || input.productId }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] syncProductToPayload failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] syncProductToPayload failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -110,8 +110,8 @@ const activityImplementations = {
       }
 
       return { success: true }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] deleteProductFromPayload failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] deleteProductFromPayload failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -138,8 +138,8 @@ const activityImplementations = {
       }
 
       return { success: true }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] syncGovernanceToPayload failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] syncGovernanceToPayload failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -161,8 +161,8 @@ const activityImplementations = {
         medusa_order_id: input.orderId,
       })
       return { success: true, invoiceName: result.name, status: result.status }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] createERPNextInvoice failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] createERPNextInvoice failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -180,8 +180,8 @@ const activityImplementations = {
         medusa_customer_id: input.customerId,
       })
       return { success: true, erpCustomerName: result.name }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] syncCustomerToERPNext failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] syncCustomerToERPNext failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -200,8 +200,8 @@ const activityImplementations = {
         medusa_product_id: input.productId,
       })
       return { success: true, erpItemName: result.name }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] syncProductToERPNext failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] syncProductToERPNext failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -219,8 +219,8 @@ const activityImplementations = {
         medusa_customer_id: input.vendorId,
       })
       return { success: true, supplierName: result.name }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] syncVendorAsSupplier failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] syncVendorAsSupplier failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -241,8 +241,8 @@ const activityImplementations = {
         medusa_order_id: input.orderId,
       })
       return { success: true, paymentEntryName: result.name }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] recordPaymentInERPNext failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] recordPaymentInERPNext failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -260,8 +260,8 @@ const activityImplementations = {
         instructions: input.instructions,
       })
       return { success: true, trackingNumber: result.tracking_number, shipmentId: result.id, trackingUrl: result.tracking_url }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] createFleetbaseShipment failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] createFleetbaseShipment failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -276,8 +276,8 @@ const activityImplementations = {
         scheduled_at: input.scheduledAt ? new Date(input.scheduledAt) : undefined,
       })
       return { success: true, fleetbasePlaceId: input.poiId, estimate: result }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] syncPOIToFleetbase failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] syncPOIToFleetbase failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -288,8 +288,8 @@ const activityImplementations = {
       const service = createWaltIdService()
       const result = await service.createDID(input.method || "key")
       return { success: true, did: result.did, document: result.document }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] createDID failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] createDID failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -305,8 +305,8 @@ const activityImplementations = {
         tenantId: input.tenantId,
       })
       return { success: true, credentialId: result.credentialId, credential: result.credential }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] issueVendorCredential failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] issueVendorCredential failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -324,8 +324,8 @@ const activityImplementations = {
         nodeId: input.nodeId,
       })
       return { success: true, credentialId: result.credentialId, credential: result.credential }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] issueKYCCredential failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] issueKYCCredential failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -343,8 +343,8 @@ const activityImplementations = {
         validUntil: input.validUntil || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
       })
       return { success: true, credentialId: result.credentialId, credential: result.credential }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] issueMembershipCredential failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] issueMembershipCredential failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -475,8 +475,8 @@ const activityImplementations = {
       }
 
       return { success: true, synced, failed, errors }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] scheduledProductSync failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] scheduledProductSync failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -504,8 +504,8 @@ const activityImplementations = {
       }
 
       return { success: true, retried, succeeded, failed, errors }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] retryFailedSyncs failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] retryFailedSyncs failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },
@@ -534,8 +534,8 @@ const activityImplementations = {
       }
 
       return { success: true, tenantsProcessed: tenants.length, nodesReconciled, errors }
-    } catch (error: any) {
-      logger.error(`[TemporalWorker] hierarchyReconciliation failed: ${error.message}`)
+    } catch (error: unknown) {
+      logger.error(`[TemporalWorker] hierarchyReconciliation failed: ${(error instanceof Error ? error.message : String(error))}`)
       throw error
     }
   },

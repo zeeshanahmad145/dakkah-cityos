@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -35,7 +35,7 @@ const createSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("crowdfunding") as any;
+    const mod = req.scope.resolve("crowdfunding") as unknown as any;
     const { limit = "20", offset = "0" } = req.query as Record<
       string,
       string | undefined
@@ -50,24 +50,22 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin crowdfunding");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("crowdfunding") as any;
+    const mod = req.scope.resolve("crowdfunding") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success)
-      return res
-        .status(400)
-        .json({
-          message: "Validation failed",
-          errors: validation.error.issues,
-        });
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: validation.error.issues,
+      });
 
-    const cityosContext = (req as any).cityosContext as any;
+    const cityosContext = req.cityosContext;
     const tenant_id = cityosContext?.tenantId || "default";
     const creator_id = validation.data.creator_id || "admin";
 
@@ -77,7 +75,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       creator_id,
     });
     return res.status(201).json({ item });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin crowdfunding");
   }
 }

@@ -1,14 +1,17 @@
-import { MedusaService } from "@medusajs/framework/utils"
-import Vendor from "./models/vendor"
-import VendorUser from "./models/vendor-user"
-import { VendorProduct } from "./models/vendor-product"
-import { VendorOrder, VendorOrderItem } from "./models/vendor-order"
-import { VendorAnalyticsSnapshot, VendorPerformanceMetric } from "./models/vendor-analytics"
-import MarketplaceListing from "./models/marketplace-listing"
+import { MedusaService } from "@medusajs/framework/utils";
+import Vendor from "./models/vendor";
+import VendorUser from "./models/vendor-user";
+import { VendorProduct } from "./models/vendor-product";
+import { VendorOrder, VendorOrderItem } from "./models/vendor-order";
+import {
+  VendorAnalyticsSnapshot,
+  VendorPerformanceMetric,
+} from "./models/vendor-analytics";
+import MarketplaceListing from "./models/marketplace-listing";
 
 /**
  * Vendor Module Service
- * 
+ *
  * Manages marketplace vendors, product attribution, orders, and analytics.
  */
 class VendorModuleService extends MedusaService({
@@ -27,7 +30,7 @@ class VendorModuleService extends MedusaService({
    * Generate vendor order number
    */
   async generateVendorOrderNumber(vendorId: string): Promise<string> {
-    const vendor = await this.retrieveVendor(vendorId);
+    const vendor = (await this.retrieveVendor(vendorId)) as any;
     const prefix = vendor.handle?.substring(0, 4).toUpperCase() || "VO";
     const timestamp = Date.now().toString(36).toUpperCase();
     return `${prefix}-${timestamp}`;
@@ -37,47 +40,55 @@ class VendorModuleService extends MedusaService({
    * Get vendors by status
    */
   async listVendorsByStatus(status: string, tenantId?: string) {
-    const filters: any = { status };
+    const filters: Record<string, unknown> = { status };
     if (tenantId) filters.tenant_id = tenantId;
-    return await this.listVendors(filters);
+    return (await this.listVendors(filters)) as any;
   }
 
   /**
    * Approve vendor
    */
-  async approveVendor(vendorId: string, approverId: string, notes?: string): Promise<any> {
-    return await (this as any).updateVendors({
+  async approveVendor(
+    vendorId: string,
+    approverId: string,
+    notes?: string,
+  ): Promise<any> {
+    return await this.updateVendors({
       id: vendorId,
       verification_status: "approved",
       verification_approved_by: approverId,
       verification_approved_at: new Date(),
       verification_notes: notes,
       status: "active",
-    });
+    } as any);
   }
 
   /**
    * Reject vendor
    */
-  async rejectVendor(vendorId: string, approverId: string, reason: string): Promise<any> {
-    return await (this as any).updateVendors({
+  async rejectVendor(
+    vendorId: string,
+    approverId: string,
+    reason: string,
+  ): Promise<any> {
+    return await this.updateVendors({
       id: vendorId,
       verification_status: "rejected",
       verification_approved_by: approverId,
       verification_approved_at: new Date(),
       verification_notes: reason,
-    });
+    } as any);
   }
 
   /**
    * Suspend vendor
    */
   async suspendVendor(vendorId: string, reason: string): Promise<any> {
-    return await (this as any).updateVendors({
+    return await this.updateVendors({
       id: vendorId,
       status: "suspended",
       verification_notes: reason,
-    });
+    } as any);
   }
 
   // ============ Product Attribution ============
@@ -93,20 +104,22 @@ class VendorModuleService extends MedusaService({
       commissionOverride?: number;
       vendorSku?: string;
       vendorCost?: number;
-    }
+    },
   ): Promise<any> {
-    const existing = await this.listVendorProducts({
+    const existing = (await this.listVendorProducts({
       vendor_id: vendorId,
       product_id: productId,
-    }) as any;
+    })) as any;
 
-    const existingList = Array.isArray(existing) ? existing : [existing].filter(Boolean);
-    
+    const existingList = Array.isArray(existing)
+      ? existing
+      : [existing].filter(Boolean);
+
     if (existingList.length > 0) {
       throw new Error("Product already assigned to this vendor");
     }
 
-    return await (this as any).createVendorProducts({
+    return await this.createVendorProducts({
       vendor_id: vendorId,
       product_id: productId,
       is_primary_vendor: options?.isPrimary ?? true,
@@ -116,34 +129,36 @@ class VendorModuleService extends MedusaService({
       commission_rate: options?.commissionOverride,
       commission_type: options?.commissionOverride ? "percentage" : null,
       status: "pending_approval",
-    });
+    } as any);
   }
 
   /**
    * Get vendor for product
    */
   async getVendorForProduct(productId: string): Promise<any | null> {
-    const vendorProducts = await this.listVendorProducts({
+    const vendorProducts = (await this.listVendorProducts({
       product_id: productId,
       is_primary_vendor: true,
       status: "approved",
-    }) as any;
+    })) as any;
 
-    const list = Array.isArray(vendorProducts) ? vendorProducts : [vendorProducts].filter(Boolean);
-    
+    const list = Array.isArray(vendorProducts)
+      ? vendorProducts
+      : [vendorProducts].filter(Boolean);
+
     if (list.length === 0) return null;
 
-    return await this.retrieveVendor(list[0].vendor_id);
+    return (await this.retrieveVendor(list[0].vendor_id)) as any;
   }
 
   /**
    * Get all products for vendor
    */
   async getVendorProducts(vendorId: string, status?: string): Promise<any[]> {
-    const filters: any = { vendor_id: vendorId };
+    const filters: Record<string, unknown> = { vendor_id: vendorId };
     if (status) filters.status = status;
-    
-    const products = await this.listVendorProducts(filters);
+
+    const products = (await this.listVendorProducts(filters)) as any;
     return Array.isArray(products) ? products : [products].filter(Boolean);
   }
 
@@ -167,10 +182,10 @@ class VendorModuleService extends MedusaService({
       vendorCost?: number;
     }>,
     shippingAddress: any,
-    commissionRate: number = 15
+    commissionRate: number = 15,
   ): Promise<any> {
     const orderNumber = await this.generateVendorOrderNumber(vendorId);
-    
+
     // Calculate totals
     let subtotal = 0;
     const orderItems: any[] = [];
@@ -203,7 +218,7 @@ class VendorModuleService extends MedusaService({
     const netAmount = subtotal - totalCommission;
 
     // Create vendor order
-    const vendorOrder = await (this as any).createVendorOrders({
+    const vendorOrder = await this.createVendorOrders({
       vendor_id: vendorId,
       order_id: orderId,
       vendor_order_number: orderNumber,
@@ -212,14 +227,14 @@ class VendorModuleService extends MedusaService({
       commission_amount: totalCommission,
       net_amount: netAmount,
       shipping_address: shippingAddress,
-    });
+    } as any);
 
     // Create order items
     for (const item of orderItems) {
-      await (this as any).createVendorOrderItems({
+      await this.createVendorOrderItems({
         ...item,
         vendor_order_id: vendorOrder.id,
-      });
+      } as any);
     }
 
     return vendorOrder;
@@ -231,7 +246,7 @@ class VendorModuleService extends MedusaService({
   async updateVendorOrderStatus(
     vendorOrderId: string,
     status: string,
-    trackingInfo?: { trackingNumber?: string; trackingUrl?: string }
+    trackingInfo?: { trackingNumber?: string; trackingUrl?: string },
   ): Promise<any> {
     const updateData: any = { id: vendorOrderId, status };
 
@@ -254,17 +269,17 @@ class VendorModuleService extends MedusaService({
       updateData.fulfillment_status = "fulfilled";
     }
 
-    return await (this as any).updateVendorOrders(updateData);
+    return await this.updateVendorOrders(updateData);
   }
 
   /**
    * Get pending vendor orders
    */
   async getPendingVendorOrders(vendorId: string): Promise<any[]> {
-    const orders = await this.listVendorOrders({
+    const orders = (await this.listVendorOrders({
       vendor_id: vendorId,
       status: ["pending", "acknowledged", "processing", "ready_to_ship"],
-    });
+    })) as any;
     return Array.isArray(orders) ? orders : [orders].filter(Boolean);
   }
 
@@ -272,11 +287,11 @@ class VendorModuleService extends MedusaService({
    * Get vendor orders awaiting payout
    */
   async getVendorOrdersAwaitingPayout(vendorId: string): Promise<any[]> {
-    const orders = await this.listVendorOrders({
+    const orders = (await this.listVendorOrders({
       vendor_id: vendorId,
       status: "completed",
       payout_status: "pending",
-    });
+    })) as any;
     return Array.isArray(orders) ? orders : [orders].filter(Boolean);
   }
 
@@ -289,41 +304,60 @@ class VendorModuleService extends MedusaService({
     vendorId: string,
     periodType: "daily" | "weekly" | "monthly",
     periodStart: Date,
-    periodEnd: Date
+    periodEnd: Date,
   ): Promise<any> {
     // Get orders in period
-    const orders = await this.listVendorOrders({
+    const orders = (await this.listVendorOrders({
       vendor_id: vendorId,
-    }) as any[];
+    })) as unknown as Record<string, unknown>[];
 
-    const orderList = (Array.isArray(orders) ? orders : [orders].filter(Boolean))
-      .filter((o: any) => {
-        const createdAt = new Date(o.created_at);
-        return createdAt >= periodStart && createdAt <= periodEnd;
-      });
+    const orderList = (
+      Array.isArray(orders) ? orders : [orders].filter(Boolean)
+    ).filter((o: any) => {
+      const createdAt = new Date(o.created_at);
+      return createdAt >= periodStart && createdAt <= periodEnd;
+    });
 
-    const completedOrders = orderList.filter((o: any) => o.status === "completed");
-    const cancelledOrders = orderList.filter((o: any) => o.status === "cancelled");
-    const returnedOrders = orderList.filter((o: any) => o.status === "returned");
+    const completedOrders = orderList.filter(
+      (o: any) => o.status === "completed",
+    );
+    const cancelledOrders = orderList.filter(
+      (o: any) => o.status === "cancelled",
+    );
+    const returnedOrders = orderList.filter(
+      (o: any) => o.status === "returned",
+    );
 
-    const grossRevenue = orderList.reduce((sum: number, o: any) => sum + Number(o.total || 0), 0);
-    const netRevenue = orderList.reduce((sum: number, o: any) => sum + Number(o.net_amount || 0), 0);
-    const totalCommission = orderList.reduce((sum: number, o: any) => sum + Number(o.commission_amount || 0), 0);
+    const grossRevenue = orderList.reduce(
+      (sum: number, o: any) => sum + Number(o.total || 0),
+      0,
+    );
+    const netRevenue = orderList.reduce(
+      (sum: number, o: any) => sum + Number(o.net_amount || 0),
+      0,
+    );
+    const totalCommission = orderList.reduce(
+      (sum: number, o: any) => sum + Number(o.commission_amount || 0),
+      0,
+    );
 
-    const avgOrderValue = orderList.length > 0 ? grossRevenue / orderList.length : 0;
+    const avgOrderValue =
+      orderList.length > 0 ? grossRevenue / orderList.length : 0;
 
     // Get products
     const products = await this.getVendorProducts(vendorId);
     const activeProducts = products.filter((p: any) => p.status === "approved");
 
     // Create or update snapshot
-    const existingSnapshots = await this.listVendorAnalyticsSnapshots({
+    const existingSnapshots = (await this.listVendorAnalyticsSnapshots({
       vendor_id: vendorId,
       period_type: periodType,
       period_start: periodStart,
-    }) as any;
+    })) as any;
 
-    const existingList = Array.isArray(existingSnapshots) ? existingSnapshots : [existingSnapshots].filter(Boolean);
+    const existingList = Array.isArray(existingSnapshots)
+      ? existingSnapshots
+      : [existingSnapshots].filter(Boolean);
 
     const snapshotData = {
       vendor_id: vendorId,
@@ -343,33 +377,43 @@ class VendorModuleService extends MedusaService({
     };
 
     if (existingList.length > 0) {
-      return await (this as any).updateVendorAnalyticsSnapshots({
+      return await this.updateVendorAnalyticsSnapshots({
         id: existingList[0].id,
         ...snapshotData,
-      });
+      } as any);
     }
 
-    return await (this as any).createVendorAnalyticsSnapshots(snapshotData);
+    return await this.createVendorAnalyticsSnapshots(snapshotData);
   }
 
   /**
    * Calculate vendor performance metrics
    */
-  async calculateVendorPerformanceMetrics(vendorId: string, periodDays: number = 30): Promise<any[]> {
+  async calculateVendorPerformanceMetrics(
+    vendorId: string,
+    periodDays: number = 30,
+  ): Promise<any[]> {
     const metrics: any[] = [];
     const now = new Date();
-    const periodStart = new Date(now.getTime() - periodDays * 24 * 60 * 60 * 1000);
+    const periodStart = new Date(
+      now.getTime() - periodDays * 24 * 60 * 60 * 1000,
+    );
 
     // Get orders in period
-    const orders = await this.listVendorOrders({ vendor_id: vendorId }) as any[];
-    const orderList = (Array.isArray(orders) ? orders : [orders].filter(Boolean))
-      .filter((o: any) => new Date(o.created_at) >= periodStart);
+    const orders = (await this.listVendorOrders({
+      vendor_id: vendorId,
+    })) as unknown as Record<string, unknown>[];
+    const orderList = (
+      Array.isArray(orders) ? orders : [orders].filter(Boolean)
+    ).filter((o: any) => new Date(o.created_at) >= periodStart);
 
     const totalOrders = orderList.length;
     if (totalOrders === 0) return metrics;
 
     // Cancellation Rate
-    const cancelledOrders = orderList.filter((o: any) => o.status === "cancelled").length;
+    const cancelledOrders = orderList.filter(
+      (o: any) => o.status === "cancelled",
+    ).length;
     const cancellationRate = (cancelledOrders / totalOrders) * 100;
     metrics.push({
       vendor_id: vendorId,
@@ -377,14 +421,21 @@ class VendorModuleService extends MedusaService({
       value: cancellationRate,
       threshold_warning: 5,
       threshold_critical: 10,
-      status: cancellationRate > 10 ? "critical" : cancellationRate > 5 ? "warning" : "good",
+      status:
+        cancellationRate > 10
+          ? "critical"
+          : cancellationRate > 5
+            ? "warning"
+            : "good",
       measured_at: now,
       period_days: periodDays,
       sample_count: totalOrders,
     });
 
     // Return Rate
-    const returnedOrders = orderList.filter((o: any) => o.status === "returned").length;
+    const returnedOrders = orderList.filter(
+      (o: any) => o.status === "returned",
+    ).length;
     const returnRate = (returnedOrders / totalOrders) * 100;
     metrics.push({
       vendor_id: vendorId,
@@ -392,7 +443,8 @@ class VendorModuleService extends MedusaService({
       value: returnRate,
       threshold_warning: 10,
       threshold_critical: 20,
-      status: returnRate > 20 ? "critical" : returnRate > 10 ? "warning" : "good",
+      status:
+        returnRate > 20 ? "critical" : returnRate > 10 ? "warning" : "good",
       measured_at: now,
       period_days: periodDays,
       sample_count: totalOrders,
@@ -402,14 +454,22 @@ class VendorModuleService extends MedusaService({
     const shippedOrders = orderList.filter((o: any) => o.shipped_at);
     // Simplified - would need expected ship date to calculate properly
     const lateShipments = 0; // Placeholder
-    const lateShipmentRate = shippedOrders.length > 0 ? (lateShipments / shippedOrders.length) * 100 : 0;
+    const lateShipmentRate =
+      shippedOrders.length > 0
+        ? (lateShipments / shippedOrders.length) * 100
+        : 0;
     metrics.push({
       vendor_id: vendorId,
       metric_type: "late_shipment_rate",
       value: lateShipmentRate,
       threshold_warning: 5,
       threshold_critical: 10,
-      status: lateShipmentRate > 10 ? "critical" : lateShipmentRate > 5 ? "warning" : "good",
+      status:
+        lateShipmentRate > 10
+          ? "critical"
+          : lateShipmentRate > 5
+            ? "warning"
+            : "good",
       measured_at: now,
       period_days: periodDays,
       sample_count: shippedOrders.length,
@@ -417,7 +477,7 @@ class VendorModuleService extends MedusaService({
 
     // Save metrics
     for (const metric of metrics) {
-      await (this as any).createVendorPerformanceMetrics(metric);
+      await this.createVendorPerformanceMetrics(metric);
     }
 
     return metrics;
@@ -427,14 +487,17 @@ class VendorModuleService extends MedusaService({
    * Get vendor dashboard data
    */
   async getVendorDashboard(vendorId: string): Promise<any> {
-    const vendor = await this.retrieveVendor(vendorId);
-    
+    const vendor = (await this.retrieveVendor(vendorId)) as any;
+
     // Get recent orders
-    const recentOrders = await this.listVendorOrders({
+    const recentOrders = (await this.listVendorOrders({
       vendor_id: vendorId,
-    }) as any;
-    const orderList = (Array.isArray(recentOrders) ? recentOrders : [recentOrders].filter(Boolean))
-      .slice(0, 10);
+    })) as any;
+    const orderList = (
+      Array.isArray(recentOrders)
+        ? recentOrders
+        : [recentOrders].filter(Boolean)
+    ).slice(0, 10);
 
     // Get pending orders
     const pendingOrders = await this.getPendingVendorOrders(vendorId);
@@ -443,17 +506,19 @@ class VendorModuleService extends MedusaService({
     const products = await this.getVendorProducts(vendorId);
 
     // Get latest analytics
-    const analytics = await this.listVendorAnalyticsSnapshots({
+    const analytics = (await this.listVendorAnalyticsSnapshots({
       vendor_id: vendorId,
       period_type: "monthly",
-    }) as any;
+    })) as any;
     const latestAnalytics = Array.isArray(analytics) ? analytics[0] : analytics;
 
     // Get performance metrics
-    const metrics = await this.listVendorPerformanceMetrics({
+    const metrics = (await this.listVendorPerformanceMetrics({
       vendor_id: vendorId,
-    }) as any;
-    const metricsList = Array.isArray(metrics) ? metrics : [metrics].filter(Boolean);
+    })) as any;
+    const metricsList = Array.isArray(metrics)
+      ? metrics
+      : [metrics].filter(Boolean);
 
     return {
       vendor,
@@ -461,7 +526,8 @@ class VendorModuleService extends MedusaService({
         totalOrders: vendor.total_orders || 0,
         totalSales: vendor.total_sales || 0,
         totalProducts: products.length,
-        activeProducts: products.filter((p: any) => p.status === "approved").length,
+        activeProducts: products.filter((p: any) => p.status === "approved")
+          .length,
         pendingOrders: pendingOrders.length,
       },
       recentOrders: orderList,
@@ -471,4 +537,4 @@ class VendorModuleService extends MedusaService({
   }
 }
 
-export default VendorModuleService
+export default VendorModuleService;

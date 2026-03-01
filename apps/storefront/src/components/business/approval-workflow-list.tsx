@@ -58,15 +58,15 @@ function WorkflowCard({ workflow }: { workflow: ApprovalWorkflow }) {
       )}
       <div className="flex items-center gap-4 text-sm">
         <span className="bg-muted px-2 py-1 rounded">
-          Trigger: {triggerLabels[workflow.trigger_type] || workflow.trigger_type}
+          Trigger: {(triggerLabels as any)[workflow?.trigger_type ?? ""] || workflow.trigger_type}
         </span>
         <span className="text-muted-foreground">
-          {workflow.steps?.length ?? 0} approval step{(workflow.steps?.length ?? 0) !== 1 ? "s" : ""}
+          {(workflow as any).steps?.length ?? 0} approval step{((workflow as any).steps?.length ?? 0) !== 1 ? "s" : ""}
         </span>
       </div>
-      {(workflow.conditions?.length ?? 0) > 0 && (
+      {((workflow as any).conditions?.length ?? 0) > 0 && (
         <div className="mt-3 text-xs text-muted-foreground">
-          {workflow.conditions?.length ?? 0} condition{(workflow.conditions?.length ?? 0) !== 1 ? "s" : ""} configured
+          {(workflow as any).conditions?.length ?? 0} condition{((workflow as any).conditions?.length ?? 0) !== 1 ? "s" : ""} configured
         </div>
       )}
     </div>

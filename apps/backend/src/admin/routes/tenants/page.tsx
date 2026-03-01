@@ -310,7 +310,7 @@ const TenantsPage = () => {
               id="name"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, name: e.target.value as any })
               }
               placeholder="Acme Inc."
             />
@@ -321,7 +321,7 @@ const TenantsPage = () => {
               id="slug"
               value={formData.slug}
               onChange={(e) =>
-                setFormData({ ...formData, slug: e.target.value })
+                setFormData({ ...formData, slug: e.target.value as any })
               }
               placeholder="acme-inc"
             />
@@ -332,7 +332,7 @@ const TenantsPage = () => {
               id="handle"
               value={formData.handle}
               onChange={(e) =>
-                setFormData({ ...formData, handle: e.target.value })
+                setFormData({ ...formData, handle: e.target.value as any })
               }
               placeholder="acm-inc-1"
             />
@@ -344,7 +344,7 @@ const TenantsPage = () => {
               type="email"
               value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setFormData({ ...formData, email: e.target.value as any })
               }
               placeholder="admin@acme.com"
             />
@@ -355,7 +355,7 @@ const TenantsPage = () => {
               id="phone"
               value={formData.phone}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
+                setFormData({ ...formData, phone: e.target.value as any })
               }
             />
           </div>
@@ -365,7 +365,7 @@ const TenantsPage = () => {
               id="domain"
               value={formData.domain}
               onChange={(e) =>
-                setFormData({ ...formData, domain: e.target.value })
+                setFormData({ ...formData, domain: e.target.value as any })
               }
               placeholder="store.acme.com"
             />

@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -19,7 +19,7 @@ const assignPaymentTermsSchema = z.object({
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
 
     const { data: companies } = await query.graph({
       entity: "company",
@@ -61,7 +61,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       payment_term: assignedTerm,
       is_custom: !!paymentTermId
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-COMPANIES-ID-PAYMENT-TERMS")}
 }
 
@@ -78,7 +78,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     }
     const { payment_term_id } = parsed.data
     
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
 
     // Verify company exists
     const { data: companies } = await query.graph({
@@ -102,7 +102,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
       payment_term_id,
       message: `Payment terms ${payment_term_id} assigned to ${company.name}`
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-COMPANIES-ID-PAYMENT-TERMS")}
 }
 
@@ -113,7 +113,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
     const { id } = req.params
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
 
     // Verify company exists
     const { data: companies } = await query.graph({
@@ -134,7 +134,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
       company_id: id,
       message: `${company.name} reverted to default payment terms`
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-COMPANIES-ID-PAYMENT-TERMS")}
 }
 

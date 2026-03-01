@@ -11,12 +11,9 @@ interface ManageRecentOrdersBlockProps {
   locale?: string
 }
 
-export const ManageRecentOrdersBlock: React.FC<ManageRecentOrdersBlockProps> = ({
-  heading,
-  limit = 5,
-  showStatus = true,
-  locale = "en",
-}) => {
+export const ManageRecentOrdersBlock: React.FC<
+  ManageRecentOrdersBlockProps
+> = ({ heading, limit = 5, showStatus = true, locale = "en" }) => {
   const { data, isLoading } = useManageOrders(limit, 0)
   const orders = (data as any)?.orders || []
 
@@ -71,7 +68,10 @@ export const ManageRecentOrdersBlock: React.FC<ManageRecentOrdersBlockProps> = (
               </thead>
               <tbody>
                 {orders.map((order: any) => (
-                  <tr key={order.id} className="border-b border-ds-border last:border-b-0">
+                  <tr
+                    key={order.id}
+                    className="border-b border-ds-border last:border-b-0"
+                  >
                     <td className="py-2.5 pe-4 text-ds-text font-medium">
                       #{order.display_id || order.id?.slice(-6)}
                     </td>
@@ -92,7 +92,7 @@ export const ManageRecentOrdersBlock: React.FC<ManageRecentOrdersBlockProps> = (
                     )}
                     <td className="py-2.5 text-ds-muted-foreground">
                       {order.created_at
-                        ? new Date(order.created_at).toLocaleDateString()
+                        ? new Date(order.created_at!).toLocaleDateString()
                         : "—"}
                     </td>
                   </tr>

@@ -11,8 +11,8 @@ import {
 const submitApplicationStep = createStep(
   "submit-permit-application",
   async ({ applicationId }: { applicationId: string }, { container }) => {
-    const governmentService = container.resolve("government") as any;
-    const app = await (governmentService as any).updatePermitApplications({
+    const governmentService = container.resolve("government") as unknown as any;
+    const app = await governmentService.updatePermitApplications({
       id: applicationId,
       status: "submitted",
       submitted_at: new Date(),
@@ -20,8 +20,8 @@ const submitApplicationStep = createStep(
     return new StepResponse({ application: app }, { applicationId });
   },
   async ({ applicationId }: { applicationId: string }, { container }) => {
-    const governmentService = container.resolve("government") as any;
-    await (governmentService as any).updatePermitApplications({
+    const governmentService = container.resolve("government") as unknown as any;
+    await governmentService.updatePermitApplications({
       id: applicationId,
       status: "draft",
     });
@@ -31,8 +31,8 @@ const submitApplicationStep = createStep(
 const reviewApplicationStep = createStep(
   "review-permit-application",
   async ({ applicationId }: { applicationId: string }, { container }) => {
-    const governmentService = container.resolve("government") as any;
-    const app = await (governmentService as any).updatePermitApplications({
+    const governmentService = container.resolve("government") as unknown as any;
+    const app = await governmentService.updatePermitApplications({
       id: applicationId,
       status: "under_review",
       review_started_at: new Date(),
@@ -40,8 +40,8 @@ const reviewApplicationStep = createStep(
     return new StepResponse({ application: app }, { applicationId });
   },
   async ({ applicationId }: { applicationId: string }, { container }) => {
-    const governmentService = container.resolve("government") as any;
-    await (governmentService as any).updatePermitApplications({
+    const governmentService = container.resolve("government") as unknown as any;
+    await governmentService.updatePermitApplications({
       id: applicationId,
       status: "submitted",
     });
@@ -58,9 +58,9 @@ const approveApplicationStep = createStep(
     }: { applicationId: string; approved: boolean; reason?: string },
     { container },
   ) => {
-    const governmentService = container.resolve("government") as any;
+    const governmentService = container.resolve("government") as unknown as any;
     const newStatus = approved ? "approved" : "rejected";
-    const app = await (governmentService as any).updatePermitApplications({
+    const app = await governmentService.updatePermitApplications({
       id: applicationId,
       status: newStatus,
       decision_reason: reason || null,
@@ -88,6 +88,3 @@ export const permitApprovalWorkflow = createWorkflow(
     return { submitted, reviewed, approved };
   },
 );
-
-
-

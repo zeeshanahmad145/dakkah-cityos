@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const cmsContentService = req.scope.resolve("cmsContent") as any;
+    const cmsContentService = req.scope.resolve("cmsContent") as unknown as any;
     const slug = req.params.slug;
     const { locale } = req.query as { locale?: string };
 
@@ -15,10 +15,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return res.status(400).json({ error: "slug is required" });
     }
 
-    const pages = await (cmsContentService as any).listCmsPages(
-      { slug },
-      { take: 1 },
-    );
+    const pages = await cmsContentService.listCmsPages({ slug }, { take: 1 });
     const list = Array.isArray(pages) ? pages : [pages].filter(Boolean);
     const page = list[0] ?? null;
 
@@ -28,7 +25,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         .json({ error: `No page found with slug '${slug}'` });
     }
 
-    if ((page as any).status !== "published") {
+    if (page.status !== "published") {
       return res
         .status(404)
         .json({ error: `No published page found with slug '${slug}'` });
@@ -36,25 +33,25 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     // Return localised content if available
     const content =
-      locale && (page as any).localizations?.[locale]
-        ? (page as any).localizations[locale]
+      locale && page.localizations?.[locale]
+        ? page.localizations[locale]
         : {
-            title: (page as any).title,
-            body: (page as any).body,
-            seo: (page as any).seo_metadata,
+            title: page.title,
+            body: page.body,
+            seo: page.seo_metadata,
           };
 
     return res.json({
       page: {
-        id: (page as any).id,
+        id: page.id,
         slug,
-        locale: locale ?? (page as any).default_locale ?? "en",
+        locale: locale ?? page.default_locale ?? "en",
         ...content,
-        published_at: (page as any).published_at,
-        updated_at: (page as any).updated_at,
+        published_at: page.published_at,
+        updated_at: page.updated_at,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-CONTENT-SLUG");
   }
 }

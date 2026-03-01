@@ -2,7 +2,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast, Tabs } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+  Tabs,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -21,16 +33,49 @@ const config = {
   label: "Webhooks",
   apiEndpoint: "/admin/webhooks",
   fields: [
-    { key: "url", label: "URL", type: "url" as const, required: true, placeholder: "https://example.com/webhook" },
-    { key: "events", label: "Events", type: "textarea" as const, placeholder: "order.created, order.updated (comma separated)" },
-    { key: "secret", label: "Secret", type: "text" as const, placeholder: "Webhook signing secret" },
-    { key: "status", label: "Status", type: "select" as const, options: [
-      { value: "active", label: "Active" },
-      { value: "inactive", label: "Inactive" },
-    ]},
-    { key: "last_triggered", label: "Last Triggered", type: "text" as const, placeholder: "Auto-populated", disabled: true },
+    {
+      key: "url",
+      label: "URL",
+      type: "url" as const,
+      required: true,
+      placeholder: "https://example.com/webhook",
+    },
+    {
+      key: "events",
+      label: "Events",
+      type: "textarea" as const,
+      placeholder: "order.created, order.updated (comma separated)",
+    },
+    {
+      key: "secret",
+      label: "Secret",
+      type: "text" as const,
+      placeholder: "Webhook signing secret",
+    },
+    {
+      key: "status",
+      label: "Status",
+      type: "select" as const,
+      options: [
+        { value: "active", label: "Active" },
+        { value: "inactive", label: "Inactive" },
+      ],
+    },
+    {
+      key: "last_triggered",
+      label: "Last Triggered",
+      type: "text" as const,
+      placeholder: "Auto-populated",
+      disabled: true,
+    },
   ],
-  defaultValues: { url: "", events: "", secret: "", status: "active", last_triggered: "" },
+  defaultValues: {
+    url: "",
+    events: "",
+    secret: "",
+    status: "active",
+    last_triggered: "",
+  },
 }
 
 const STATUS_FILTERS = ["all", "active", "inactive"] as const
@@ -43,14 +88,18 @@ function ManageWebhooksPage() {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
   const { data, isLoading } = useQuery({
     queryKey: ["manage", config.moduleKey],
     queryFn: async () => {
-      const response = await sdk.client.fetch(config.apiEndpoint, { method: "GET" })
+      const response = await sdk.client.fetch(config.apiEndpoint, {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -70,7 +119,9 @@ function ManageWebhooksPage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -102,11 +153,14 @@ function ManageWebhooksPage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
-  const allItems = ((data as any)?.items || (data as any)?.webhooks || []).map((item: any) => ({
+  const allItems = ((data as any)?.items || data?.webhooks || []).map((item: any) => ({
     id: item.id,
     url: item.url || "—",
     events: item.events || "—",
@@ -115,15 +169,18 @@ function ManageWebhooksPage() {
     last_triggered: item.last_triggered || item.last_triggered_at || "—",
   }))
 
-  const items = statusFilter === "all"
-    ? allItems
-    : allItems.filter((i: any) => i.status === statusFilter)
+  const items =
+    statusFilter === "all"
+      ? allItems
+      : allItems.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "url",
       header: "URL",
-      render: (val: unknown) => <span className="font-medium font-mono text-sm">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium font-mono text-sm">{val as string}</span>
+      ),
     },
     { key: "events", header: "Events" },
     { key: "last_triggered", header: "Last Triggered" },
@@ -139,9 +196,16 @@ function ManageWebhooksPage() {
       render: (_: unknown, row: any) => (
         <DropdownMenu
           items={[
-            { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
             { type: "separator" as const },
-            { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
           ]}
         />
       ),
@@ -175,26 +239,45 @@ function ManageWebhooksPage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No webhooks found" countLabel="webhooks" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No webhooks found"
+          countLabel="webhooks"
+        />
       </Container>
 
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Create ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Create ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.saveChanges", "Save changes") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.saveChanges", "Save changes")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
 
       <ConfirmDialog

@@ -1,11 +1,12 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 const SEED_DATA = [
   {
     id: "fit-seed-001",
     name: "Morning Vinyasa Yoga",
-    description: "Start your day with a flowing yoga practice that builds strength, flexibility, and mindfulness. Suitable for all levels.",
+    description:
+      "Start your day with a flowing yoga practice that builds strength, flexibility, and mindfulness. Suitable for all levels.",
     class_type: "yoga",
     instructor: "Sarah Chen",
     schedule: "Mon, Wed, Fri 7:00 AM",
@@ -24,7 +25,8 @@ const SEED_DATA = [
   {
     id: "fit-seed-002",
     name: "CrossFit WOD Challenge",
-    description: "High-intensity functional fitness workout combining weightlifting, cardio, and gymnastics movements.",
+    description:
+      "High-intensity functional fitness workout combining weightlifting, cardio, and gymnastics movements.",
     class_type: "crossfit",
     instructor: "Marcus Johnson",
     schedule: "Tue, Thu, Sat 6:00 AM",
@@ -43,7 +45,8 @@ const SEED_DATA = [
   {
     id: "fit-seed-003",
     name: "Personal Training Session",
-    description: "One-on-one customized training program designed to meet your specific fitness goals and needs.",
+    description:
+      "One-on-one customized training program designed to meet your specific fitness goals and needs.",
     class_type: "hiit",
     instructor: "Alex Rivera",
     schedule: "By Appointment",
@@ -62,7 +65,8 @@ const SEED_DATA = [
   {
     id: "fit-seed-004",
     name: "Lap Swimming & Aqua Fitness",
-    description: "Structured swimming sessions and water-based exercises for cardio, strength, and rehabilitation.",
+    description:
+      "Structured swimming sessions and water-based exercises for cardio, strength, and rehabilitation.",
     class_type: "swimming",
     instructor: "Diana Park",
     schedule: "Daily 6:00 AM - 9:00 PM",
@@ -81,7 +85,8 @@ const SEED_DATA = [
   {
     id: "fit-seed-005",
     name: "Kickboxing & Martial Arts",
-    description: "Learn striking techniques while getting an incredible full-body workout. Build confidence and self-defense skills.",
+    description:
+      "Learn striking techniques while getting an incredible full-body workout. Build confidence and self-defense skills.",
     class_type: "boxing",
     instructor: "Kenji Tanaka",
     schedule: "Mon, Wed, Fri 6:00 PM",
@@ -97,11 +102,11 @@ const SEED_DATA = [
     type: "class",
     is_active: true,
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const fitnessService = req.scope.resolve("fitness") as any
+    const fitnessService = req.scope.resolve("fitness") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -111,23 +116,24 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       class_type,
       is_active,
       search,
-    } = req.query as Record<string, string | undefined>
+    } = req.query as Record<string, string | undefined>;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (type) filters.type = type
-    if (level) filters.level = level
-    if (class_type) filters.class_type = class_type
-    if (is_active !== undefined) filters.is_active = is_active === "true"
-    if (search) filters.name = { $like: `%${search}%` }
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (type) filters.type = type;
+    if (level) filters.level = level;
+    if (class_type) filters.class_type = class_type;
+    if (is_active !== undefined) filters.is_active = is_active === "true";
+    if (search) filters.name = { $like: `%${search}%` };
 
     const items = await fitnessService.listClassSchedules(filters, {
       skip: Number(offset),
       take: Number(limit),
       order: { created_at: "DESC" },
-    })
+    });
 
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const itemList =
+      Array.isArray(items) && items.length > 0 ? items : SEED_DATA;
 
     return res.json({
       classes: itemList,
@@ -135,14 +141,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       count: itemList.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
+    });
+  } catch (error: unknown) {
     return res.json({
       classes: SEED_DATA,
       items: SEED_DATA,
       count: SEED_DATA.length,
       limit: 20,
       offset: 0,
-    })
+    });
   }
 }

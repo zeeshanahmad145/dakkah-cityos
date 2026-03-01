@@ -21,15 +21,18 @@ export function SubscriptionsSection({ config }: SubscriptionsSectionProps) {
               {config.title || "Never Run Out Again"}
             </h2>
             <p className="text-lg text-ds-primary-foreground/90 mb-8">
-              {config.subtitle || "Set up a subscription for your favorite products and enjoy automatic deliveries at a discounted price."}
+              {config.subtitle ||
+                "Set up a subscription for your favorite products and enjoy automatic deliveries at a discounted price."}
             </p>
             <ul className="space-y-3 mb-8">
-              {(config.benefits || [
-                "Save up to 15% on every order",
-                "Free shipping on all subscriptions",
-                "Pause or cancel anytime",
-                "Flexible delivery schedules"
-              ]).map((benefit: string, index: number) => (
+              {(
+                config.benefits || [
+                  "Save up to 15% on every order",
+                  "Free shipping on all subscriptions",
+                  "Pause or cancel anytime",
+                  "Flexible delivery schedules",
+                ]
+              ).map((benefit: string, index: number) => (
                 <li key={index} className="flex items-center gap-3">
                   <CheckCircleSolid className="h-5 w-5 text-ds-success" />
                   <span>{benefit}</span>
@@ -37,7 +40,7 @@ export function SubscriptionsSection({ config }: SubscriptionsSectionProps) {
               ))}
             </ul>
             <Link
-              to={`${prefix}/subscriptions` as any}
+              to={`${prefix}/subscriptions` as never}
               className="inline-flex items-center justify-center px-8 py-3 bg-ds-background text-ds-primary font-medium rounded-md hover:bg-ds-muted transition-colors"
             >
               Explore Subscriptions

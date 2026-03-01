@@ -15,19 +15,19 @@ export const Route = createFileRoute("/$tenant/$locale/register")({
 })
 
 function RegisterPage() {
-  const { tenant, locale } = Route.useParams() as { locale: string }
+  const { tenant, locale } = Route.useParams()
   const { isAuthenticated, isLoading } = useAuth()
   const navigate = useNavigate()
   const baseHref = `/${tenant}/${locale}`
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      navigate({ to: `${baseHref}/account` as any })
+      navigate({ to: `${baseHref}/account` })
     }
   }, [isAuthenticated, isLoading, navigate, baseHref])
 
   const handleSuccess = () => {
-    navigate({ to: `${baseHref}/account` as any })
+    navigate({ to: `${baseHref}/account` })
   }
 
   if (isLoading) {
@@ -46,14 +46,18 @@ function RegisterPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-ds-foreground">Create an account</h1>
-          <p className="mt-2 text-ds-muted-foreground">Get started with your free account today</p>
+          <h1 className="text-3xl font-bold text-ds-foreground">
+            Create an account
+          </h1>
+          <p className="mt-2 text-ds-muted-foreground">
+            Get started with your free account today
+          </p>
         </div>
 
         <div className="bg-ds-background border border-ds-border rounded-lg p-6 shadow-sm">
           <RegisterForm
             onSuccess={handleSuccess}
-            onLogin={() => navigate({ to: `${baseHref}/login` as any })}
+            onLogin={() => navigate({ to: `${baseHref}/login` })}
           />
         </div>
 
@@ -63,24 +67,34 @@ function RegisterPage() {
               <div className="w-full border-t border-ds-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-ds-muted text-ds-muted-foreground">Looking for something else?</span>
+              <span className="px-4 bg-ds-muted text-ds-muted-foreground">
+                Looking for something else?
+              </span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Link
-              to={`${baseHref}/b2b/register` as any}
+              to={`${baseHref}/b2b/register` as never}
               className="flex flex-col items-center justify-center px-4 py-4 border border-ds-border rounded-lg hover:bg-ds-muted transition-colors"
             >
-              <span className="text-sm font-medium text-ds-foreground">Business Account</span>
-              <span className="text-xs text-ds-muted-foreground mt-1">For companies</span>
+              <span className="text-sm font-medium text-ds-foreground">
+                Business Account
+              </span>
+              <span className="text-xs text-ds-muted-foreground mt-1">
+                For companies
+              </span>
             </Link>
             <Link
-              to={`${baseHref}/vendor/register` as any}
+              to={`${baseHref}/vendor/register` as never}
               className="flex flex-col items-center justify-center px-4 py-4 border border-ds-border rounded-lg hover:bg-ds-muted transition-colors"
             >
-              <span className="text-sm font-medium text-ds-foreground">Vendor Account</span>
-              <span className="text-xs text-ds-muted-foreground mt-1">Sell on our platform</span>
+              <span className="text-sm font-medium text-ds-foreground">
+                Vendor Account
+              </span>
+              <span className="text-xs text-ds-muted-foreground mt-1">
+                Sell on our platform
+              </span>
             </Link>
           </div>
         </div>

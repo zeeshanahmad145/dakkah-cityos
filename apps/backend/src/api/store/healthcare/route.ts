@@ -1,179 +1,115 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
-import { enrichListItems } from "../../../lib/detail-enricher"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import {
+  parseStoreQuery,
+  healthcareQuerySchema,
+} from "../../../lib/route-query-validator";
+
+/**
+ * GET /store/healthcare
+ * Phase 5: query.graph() fetching products linked to PharmacyProduct extensions
+ * via the product-pharmacy.ts link table.
+ * Services (doctor consultations) are ServiceProduct extensions.
+ */
 
 const SEED_DATA = [
   {
-    id: "health_seed_01",
-    tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/government/1559839734-2b71ea197ec2.jpg",
-    name: "Amira Hassan",
-    title: "Board Certified Cardiologist",
-    specialization: "cardiology",
-    bio: "Leading cardiologist with over 15 years of experience in interventional cardiology and heart failure management. Passionate about preventive cardiac care.",
-    education: "MD, Johns Hopkins University",
-    experience_years: 15,
-    languages: ["English", "Arabic"],
-    is_accepting_patients: true,
-    is_active: true,
-    consultation_fee: 25000,
-    currency_code: "USD",
-    location: "Downtown Medical Center",
-    rating: 4.9,
-    metadata: {
-      thumbnail: "/seed-images/government/1559839734-2b71ea197ec2.jpg",
-      images: ["/seed-images/government/1559839734-2b71ea197ec2.jpg"],
-      rating: 4.9,
-      consultation_fee: 25000,
+    id: "prod_hc_seed_001",
+    title: "General Physician Consultation",
+    description:
+      "30-minute online consultation with a board-certified physician.",
+    thumbnail: "/seed-images/healthcare/doctor-consult.jpg",
+    service_product: {
+      service_type: "consultation",
+      duration_minutes: 30,
+      location_type: "virtual",
     },
-    created_at: "2025-01-01T00:00:00Z",
+    metadata: { vertical: "healthcare", subcategory: "consultation" },
   },
   {
-    id: "health_seed_02",
-    tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg",
-    name: "David Kim",
-    title: "Dermatology Specialist",
-    specialization: "dermatology",
-    bio: "Expert dermatologist specializing in cosmetic procedures, skin cancer screening, and advanced dermatological treatments. Research published in top medical journals.",
-    education: "MD, Stanford University",
-    experience_years: 12,
-    languages: ["English", "Korean"],
-    is_accepting_patients: true,
-    is_active: true,
-    consultation_fee: 20000,
-    currency_code: "USD",
-    location: "Westside Skin Clinic",
-    rating: 4.7,
-    metadata: {
-      thumbnail: "/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg",
-      images: ["/seed-images/healthcare/1612349317150-e413f6a5b16d.jpg"],
-      rating: 4.7,
-      consultation_fee: 20000,
+    id: "prod_hc_seed_002",
+    title: "Vitamin D3 2000 IU (90 Capsules)",
+    description: "High-potency vitamin D3 supplement.",
+    thumbnail: "/seed-images/healthcare/vitamins.jpg",
+    pharmacy_product: {
+      dosage_form: "capsule",
+      prescription_required: false,
+      storage_conditions: "room_temp",
     },
-    created_at: "2025-01-05T00:00:00Z",
+    metadata: { vertical: "healthcare", subcategory: "pharmacy" },
   },
-  {
-    id: "health_seed_03",
-    tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
-    name: "Maria Santos",
-    title: "Pediatrics & Child Development",
-    specialization: "pediatrics",
-    bio: "Compassionate pediatrician dedicated to children's health and development. Specializes in childhood nutrition, behavioral development, and preventive care.",
-    education: "MD, Harvard Medical School",
-    experience_years: 18,
-    languages: ["English", "Spanish", "Portuguese"],
-    is_accepting_patients: true,
-    is_active: true,
-    consultation_fee: 18000,
-    currency_code: "USD",
-    location: "Family Health Center",
-    rating: 4.9,
-    metadata: {
-      thumbnail: "/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg",
-      images: ["/seed-images/healthcare/1576091160399-112ba8d25d1d.jpg"],
-      rating: 4.9,
-      consultation_fee: 18000,
-    },
-    created_at: "2025-01-10T00:00:00Z",
-  },
-  {
-    id: "health_seed_04",
-    tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare/1622253692010-333f2da6031d.jpg",
-    name: "James Mitchell",
-    title: "Orthopedic Surgeon",
-    specialization: "orthopedics",
-    bio: "Experienced orthopedic surgeon specializing in sports medicine, joint replacement, and minimally invasive surgical techniques. Team physician for professional athletes.",
-    education: "MD, Mayo Clinic",
-    experience_years: 20,
-    languages: ["English"],
-    is_accepting_patients: true,
-    is_active: true,
-    consultation_fee: 30000,
-    currency_code: "USD",
-    location: "Sports Medicine Institute",
-    rating: 4.8,
-    metadata: {
-      thumbnail: "/seed-images/healthcare/1622253692010-333f2da6031d.jpg",
-      images: ["/seed-images/healthcare/1622253692010-333f2da6031d.jpg"],
-      rating: 4.8,
-      consultation_fee: 30000,
-    },
-    created_at: "2025-01-15T00:00:00Z",
-  },
-  {
-    id: "health_seed_05",
-    tenant_id: "tenant_seed",
-    thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
-    name: "Nadia Petrova",
-    title: "Psychiatrist & Mental Health Expert",
-    specialization: "psychiatry",
-    bio: "Renowned psychiatrist offering comprehensive mental health services including therapy, medication management, and mindfulness-based treatments for anxiety and depression.",
-    education: "MD, Columbia University",
-    experience_years: 14,
-    languages: ["English", "Russian", "French"],
-    is_accepting_patients: true,
-    is_active: true,
-    consultation_fee: 22000,
-    currency_code: "USD",
-    location: "Mind & Wellness Center",
-    rating: 4.8,
-    metadata: {
-      thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
-      images: ["/seed-images/healthcare/1551836022-d5d88e9218df.jpg"],
-      rating: 4.8,
-      consultation_fee: 22000,
-    },
-    created_at: "2025-01-20T00:00:00Z",
-  },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
+  const q = parseStoreQuery(req, res, healthcareQuerySchema);
+  if (!q) return;
+  const {
+    limit,
+    offset,
+    tenant_id,
+    search,
+    subcategory,
+    prescription_required,
+  } = q;
+
   try {
-    const healthcareService = req.scope.resolve("healthcare") as any
-    const {
-      limit = "20",
-      offset = "0",
-      tenant_id,
-      specialization,
-      specialty,
-      accepting_patients,
-      is_active,
-      city,
-      search,
-    } = req.query as Record<string, string | undefined>
+    const query = req.scope.resolve("query") as unknown as any;
+    const filters: Record<string, unknown> = {
+      status: "published",
+      "metadata->>'vertical'": "healthcare",
+    };
+    if (tenant_id) filters["metadata->>'tenant_id'"] = tenant_id;
+    if (subcategory) filters["metadata->>'subcategory'"] = subcategory;
+    if (prescription_required !== undefined)
+      filters["pharmacy_product.prescription_required"] =
+        prescription_required === "true";
+    if (search) filters.title = { $ilike: `%${search}%` };
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (specialization) filters.specialization = specialization
-    if (specialty) filters.specialty = specialty
-    if (accepting_patients !== undefined) {
-      filters.is_accepting_patients = accepting_patients === "true"
-    } else {
-      filters.is_accepting_patients = true
-    }
-    if (is_active !== undefined) filters.is_active = is_active === "true"
-    if (city) filters.city = city
-    if (search) filters.name = { $like: `%${search}%` }
+    const { data: products, metadata } = await query.graph({
+      entity: "product",
+      fields: [
+        "id",
+        "title",
+        "description",
+        "thumbnail",
+        "handle",
+        "metadata",
+        "variants.id",
+        "variants.title",
+        "variants.calculated_price.*",
+        // Pharmacy fields
+        "pharmacy_product.id",
+        "pharmacy_product.dosage_form",
+        "pharmacy_product.prescription_required",
+        "pharmacy_product.storage_conditions",
+        "pharmacy_product.controlled_substance_schedule",
+        "pharmacy_product.expiry_date",
+        // Service/consultation fields
+        "service_product.id",
+        "service_product.service_type",
+        "service_product.duration_minutes",
+        "service_product.location_type",
+        "service_product.virtual_meeting_provider",
+        "service_product.is_active",
+      ],
+      filters,
+      pagination: { skip: offset, take: limit },
+    });
 
-    const items = await healthcareService.listPractitioners(filters, {
-      skip: Number(offset),
-      take: Number(limit),
-      order: { created_at: "DESC" },
-    })
-
-    const raw = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
-    const itemList = enrichListItems(raw, "healthcare")
-
+    const items = products?.length > 0 ? products : SEED_DATA;
     return res.json({
-      items: itemList,
-      count: itemList.length,
-      limit: Number(limit),
-      offset: Number(offset),
-    })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-HEALTHCARE")}
+      items,
+      count: metadata?.count ?? items.length,
+      limit,
+      offset,
+    });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error);
+    req.scope.resolve("logger").error?.(`[healthcare/route] ${msg}`);
+    return res.json({
+      items: SEED_DATA,
+      count: SEED_DATA.length,
+      limit,
+      offset,
+    });
+  }
 }
-

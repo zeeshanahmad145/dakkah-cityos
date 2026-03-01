@@ -29,61 +29,66 @@ interface CreateSubscriptionInput {
 const validateSubscriptionDataStep = createStep(
   "validate-subscription-data",
   async (input: CreateSubscriptionInput, { container }) => {
-    const query = container.resolve(ContainerRegistrationKeys.QUERY);
-    
+    const query = container.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
+
     // Validate customer exists and belongs to tenant
     const { data: customers } = await query.graph({
       entity: "customer",
       fields: ["id"],
       filters: { id: input.customer_id },
     });
-    
+
     if (!customers?.[0]) {
       throw new Error(`Customer ${input.customer_id} not found`);
     }
-    
+
     // Validate products exist and are subscription-enabled
-    const variantIds = input.items.map(item => item.variant_id);
+    const variantIds = input.items.map((item) => item.variant_id);
     const { data: variants } = await query.graph({
       entity: "product_variant",
       fields: ["id", "product_id", "title", "prices.*", "product.title"],
       filters: { id: variantIds },
     });
-    
+
     if (variants.length !== variantIds.length) {
       throw new Error("One or more product variants not found");
     }
-    
+
     return new StepResponse({ variants }, null);
-  }
+  },
 );
 
 // Step 2: Calculate subscription amounts
 const calculateSubscriptionAmountsStep = createStep(
   "calculate-subscription-amounts",
   async (
-    { input, variants }: { input: CreateSubscriptionInput; variants: Record<string, unknown>[] },
-    { container }
+    {
+      input,
+      variants,
+    }: { input: CreateSubscriptionInput; variants: Record<string, unknown>[] },
+    { container },
   ) => {
     const items = input.items.map((item) => {
-      const variant = variants.find((v: Record<string, unknown>) => v.id === item.variant_id) as Record<string, unknown>;
+      const variant = variants.find(
+        (v: Record<string, unknown>) => v.id === item.variant_id,
+      ) as Record<string, unknown>;
       const prices = variant?.prices as Array<Record<string, unknown>>;
       const price = prices?.[0];
-      
+
       if (!price) {
         throw new Error(`No price found for variant ${item.variant_id}`);
       }
-      
+
       const unit_price = price.amount as number;
       const subtotal = unit_price * item.quantity;
-      
+
       // Calculate tax based on region tax rate (default 0% if not configured)
       // Tax rates are typically configured per region in Medusa admin
       const taxRate = 0; // Will be overridden by region settings when cart is created
       const tax_total = Math.round(subtotal * taxRate);
       const total = subtotal + tax_total;
       const product = variant?.product as Record<string, unknown>;
-      
+
       return {
         product_id: item.product_id,
         variant_id: item.variant_id,
@@ -97,21 +102,24 @@ const calculateSubscriptionAmountsStep = createStep(
         tenant_id: input.tenant_id,
       };
     });
-    
+
     const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
     const tax_total = items.reduce((sum, item) => sum + item.tax_total, 0);
     const total = subtotal + tax_total;
-    
+
     // Get currency from first variant price
     const firstVariant = variants[0] as Record<string, unknown>;
     const firstPrices = firstVariant?.prices as Array<Record<string, unknown>>;
     const currency_code = firstPrices?.[0]?.currency_code as string;
-    
-    return new StepResponse({
-      items,
-      amounts: { subtotal, tax_total, total, currency_code },
-    }, null);
-  }
+
+    return new StepResponse(
+      {
+        items,
+        amounts: { subtotal, tax_total, total, currency_code },
+      },
+      null,
+    );
+  },
 );
 
 // Step 3: Create subscription
@@ -127,15 +135,15 @@ const createSubscriptionStep = createStep(
       items: Record<string, unknown>[];
       amounts: Record<string, unknown>;
     },
-    { container }
+    { container },
   ) => {
-    const subscriptionModule = container.resolve("subscription") as any;
-    
+    const subscriptionModule = container.resolve("subscription") as unknown as any;
+
     const now = new Date();
     const trial_end = input.trial_days
       ? new Date(now.getTime() + input.trial_days * 24 * 60 * 60 * 1000)
       : null;
-    
+
     // Create subscription
     const subscription = await subscriptionModule.createSubscriptions({
       customer_id: input.customer_id,
@@ -145,7 +153,8 @@ const createSubscriptionStep = createStep(
       billing_interval: input.billing_interval,
       billing_interval_count: input.billing_interval_count || 1,
       billing_anchor_day: input.billing_anchor_day,
-      payment_collection_method: input.payment_collection_method || "charge_automatically",
+      payment_collection_method:
+        input.payment_collection_method || "charge_automatically",
       payment_method_id: input.payment_method_id,
       trial_end,
       currency_code: amounts.currency_code,
@@ -154,42 +163,55 @@ const createSubscriptionStep = createStep(
       total: amounts.total,
       metadata: input.metadata,
     });
-    
+
     // Create subscription items
     const subscriptionItems = await subscriptionModule.createSubscriptionItems(
       items.map((item: Record<string, unknown>) => ({
         ...item,
         subscription_id: subscription.id,
-      }))
+      })),
     );
-    
-    return new StepResponse({ subscription, items: subscriptionItems }, { subscriptionId: subscription.id });
+
+    return new StepResponse(
+      { subscription, items: subscriptionItems },
+      { subscriptionId: subscription.id },
+    );
   },
   async (compensationData: { subscriptionId: string }, { container }) => {
-    if (!compensationData?.subscriptionId) return
+    if (!compensationData?.subscriptionId) return;
     try {
-      const subscriptionModule = container.resolve("subscription") as any;
-      await subscriptionModule.deleteSubscriptions(compensationData.subscriptionId);
-    } catch (error) {
-    }
-  }
+      const subscriptionModule = container.resolve("subscription") as unknown as any;
+      await subscriptionModule.deleteSubscriptions(
+        compensationData.subscriptionId,
+      );
+    } catch (error) {}
+  },
 );
 
 // Step 4: Activate subscription (if no trial)
 const activateSubscriptionStep = createStep(
   "activate-subscription",
-  async ({ subscription, skipActivation }: { subscription: Record<string, unknown>; skipActivation: boolean }, { container }) => {
+  async (
+    {
+      subscription,
+      skipActivation,
+    }: { subscription: Record<string, unknown>; skipActivation: boolean },
+    { container },
+  ) => {
     if (skipActivation) {
-      return new StepResponse({ subscription }, { subscriptionId: String(subscription.id), wasActivated: false });
+      return new StepResponse(
+        { subscription },
+        { subscriptionId: String(subscription.id), wasActivated: false },
+      );
     }
-    
-    const subscriptionModule = container.resolve("subscription") as any;
+
+    const subscriptionModule = container.resolve("subscription") as unknown as any;
     const now = new Date();
-    
+
     // Calculate first billing period
     const period_end = new Date(now);
-    const intervalCount = subscription.billing_interval_count as number || 1;
-    
+    const intervalCount = (subscription.billing_interval_count as number) || 1;
+
     switch (subscription.billing_interval) {
       case "daily":
         period_end.setDate(period_end.getDate() + intervalCount);
@@ -207,7 +229,7 @@ const activateSubscriptionStep = createStep(
         period_end.setFullYear(period_end.getFullYear() + intervalCount);
         break;
     }
-    
+
     // Update subscription to active
     const updated = await subscriptionModule.updateSubscriptions({
       id: subscription.id,
@@ -216,7 +238,7 @@ const activateSubscriptionStep = createStep(
       current_period_start: now,
       current_period_end: period_end,
     });
-    
+
     // Create first billing cycle
     await subscriptionModule.createBillingCycles({
       subscription_id: subscription.id,
@@ -229,13 +251,23 @@ const activateSubscriptionStep = createStep(
       tax_total: subscription.tax_total,
       total: subscription.total,
     });
-    
-    return new StepResponse({ subscription: updated }, { subscriptionId: String(subscription.id), wasActivated: !skipActivation });
+
+    return new StepResponse(
+      { subscription: updated },
+      {
+        subscriptionId: String(subscription.id),
+        wasActivated: !skipActivation,
+      },
+    );
   },
-  async (compensationData: { subscriptionId: string; wasActivated: boolean }, { container }) => {
-    if (!compensationData?.subscriptionId || !compensationData.wasActivated) return
+  async (
+    compensationData: { subscriptionId: string; wasActivated: boolean },
+    { container },
+  ) => {
+    if (!compensationData?.subscriptionId || !compensationData.wasActivated)
+      return;
     try {
-      const subscriptionModule = container.resolve("subscription") as any;
+      const subscriptionModule = container.resolve("subscription") as unknown as any;
       await subscriptionModule.updateSubscriptions({
         id: compensationData.subscriptionId,
         status: "draft",
@@ -243,9 +275,8 @@ const activateSubscriptionStep = createStep(
         current_period_start: null,
         current_period_end: null,
       });
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  },
 );
 
 export const createSubscriptionWorkflow = createWorkflow(
@@ -253,27 +284,33 @@ export const createSubscriptionWorkflow = createWorkflow(
   (input: CreateSubscriptionInput) => {
     // Step 1: Validate
     const { variants } = validateSubscriptionDataStep(input);
-    
+
     // Step 2: Calculate amounts
-    const { items, amounts } = calculateSubscriptionAmountsStep({ input, variants });
-    
+    const { items, amounts } = calculateSubscriptionAmountsStep({
+      input,
+      variants,
+    });
+
     // Step 3: Create subscription
     const { subscription, items: subscriptionItems } = createSubscriptionStep({
       input,
       items,
       amounts,
     });
-    
+
     // Step 4: Activate if no trial
-    const skipActivation = transform({ input }, ({ input }) => !!input.trial_days);
+    const skipActivation = transform(
+      { input },
+      ({ input }) => !!input.trial_days,
+    );
     const { subscription: finalSubscription } = activateSubscriptionStep({
       subscription,
       skipActivation,
     });
-    
+
     return new WorkflowResponse({
       subscription: finalSubscription,
       items: subscriptionItems,
     });
-  }
+  },
 );

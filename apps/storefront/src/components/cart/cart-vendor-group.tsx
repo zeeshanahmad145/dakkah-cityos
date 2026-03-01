@@ -31,7 +31,10 @@ export function CartVendorGroup({
   onRemoveItem,
 }: CartVendorGroupProps) {
   const prefix = useTenantPrefix()
-  const subtotal = items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.unit_price * item.quantity,
+    0,
+  )
 
   return (
     <div className="bg-ds-background rounded-xl border border-ds-border overflow-hidden">
@@ -39,12 +42,14 @@ export function CartVendorGroup({
       <div className="px-6 py-4 border-b border-ds-border bg-ds-muted">
         <div className="flex items-center justify-between">
           <Link
-            to={`${prefix}/vendors/${vendorHandle}` as any}
+            to={`${prefix}/vendors/${vendorHandle}` as never}
             className="font-semibold text-ds-foreground hover:text-ds-muted-foreground transition-colors"
           >
             {vendorName}
           </Link>
-          <span className="text-sm text-ds-muted-foreground">{items.length} items</span>
+          <span className="text-sm text-ds-muted-foreground">
+            {items.length} items
+          </span>
         </div>
       </div>
 
@@ -66,21 +71,32 @@ export function CartVendorGroup({
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="font-medium text-ds-foreground truncate">{item.title}</h4>
+              <h4 className="font-medium text-ds-foreground truncate">
+                {item.title}
+              </h4>
               {item.variant?.title && (
-                <p className="text-sm text-ds-muted-foreground">{item.variant.title}</p>
+                <p className="text-sm text-ds-muted-foreground">
+                  {item.variant.title}
+                </p>
               )}
               <div className="flex items-center gap-4 mt-2">
                 <div className="flex items-center border border-ds-border rounded-lg">
                   <button
-                    onClick={() => onUpdateQuantity?.(item.id, Math.max(1, item.quantity - 1))}
+                    onClick={() =>
+                      onUpdateQuantity?.(
+                        item.id,
+                        Math.max(1, item.quantity - 1),
+                      )
+                    }
                     className="px-3 py-1 text-ds-muted-foreground hover:bg-ds-muted"
                   >
                     -
                   </button>
                   <span className="px-3 py-1 text-sm">{item.quantity}</span>
                   <button
-                    onClick={() => onUpdateQuantity?.(item.id, item.quantity + 1)}
+                    onClick={() =>
+                      onUpdateQuantity?.(item.id, item.quantity + 1)
+                    }
                     className="px-3 py-1 text-ds-muted-foreground hover:bg-ds-muted"
                   >
                     +
@@ -104,7 +120,9 @@ export function CartVendorGroup({
       {/* Vendor Subtotal */}
       <div className="px-6 py-4 border-t border-ds-border bg-ds-muted">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-ds-muted-foreground">Subtotal from {vendorName}</span>
+          <span className="text-sm text-ds-muted-foreground">
+            Subtotal from {vendorName}
+          </span>
           <span className="font-semibold text-ds-foreground">
             {formatPrice(subtotal, currencyCode)}
           </span>

@@ -10,9 +10,9 @@ interface POListProps {
   emptyMessage?: string
 }
 
-export function POList({ 
-  purchaseOrders, 
-  emptyMessage = "No purchase orders found" 
+export function POList({
+  purchaseOrders,
+  emptyMessage = "No purchase orders found",
 }: POListProps) {
   const prefix = useTenantPrefix()
 
@@ -55,7 +55,7 @@ export function POList({
         <DocumentText className="w-12 h-12 text-ds-muted-foreground mx-auto mb-4" />
         <p className="text-ds-muted-foreground">{emptyMessage}</p>
         <Link
-          to={`${prefix}/account/purchase-orders/new` as any}
+          to={`${prefix}/account/purchase-orders/new` as never}
           className="inline-block mt-4 text-sm font-medium text-ds-foreground hover:underline"
         >
           Create your first purchase order
@@ -69,20 +69,24 @@ export function POList({
       {purchaseOrders.map((po) => (
         <Link
           key={po.id}
-          to={`${prefix}/account/purchase-orders/${po.id}` as any}
+          to={`${prefix}/account/purchase-orders/${po.id}` as never}
           className="block bg-ds-background rounded-xl border border-ds-border p-6 hover:border-ds-border hover:shadow-sm transition-all"
         >
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h3 className="font-semibold text-ds-foreground">{po.po_number}</h3>
+              <h3 className="font-semibold text-ds-foreground">
+                {po.po_number}
+              </h3>
               <p className="text-sm text-ds-muted-foreground mt-0.5">
                 Created {formatDate(po.created_at)}
               </p>
             </div>
-            <span className={cn(
-              "px-3 py-1 rounded-full text-xs font-medium",
-              getStatusColor(po.status)
-            )}>
+            <span
+              className={cn(
+                "px-3 py-1 rounded-full text-xs font-medium",
+                getStatusColor(po.status),
+              )}
+            >
               {formatStatus(po.status)}
             </span>
           </div>
@@ -91,7 +95,9 @@ export function POList({
             <div className="flex items-center gap-4">
               <div>
                 <p className="text-xs text-ds-muted-foreground">Items</p>
-                <p className="font-medium text-ds-foreground">{po.items?.length ?? 0}</p>
+                <p className="font-medium text-ds-foreground">
+                  {po.items?.length ?? 0}
+                </p>
               </div>
               <div>
                 <p className="text-xs text-ds-muted-foreground">Total</p>

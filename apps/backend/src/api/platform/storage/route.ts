@@ -30,8 +30,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         serveEndpoint: "/platform/storage/serve",
       },
     })
-  } catch (error: any) {
-    return res.status(500).json({ success: false, error: error.message })
+  } catch (error: unknown) {
+    return res.status(500).json({ success: false, error: (error instanceof Error ? error.message : String(error)) })
   }
 }
 
@@ -52,7 +52,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         objectPath,
       },
     })
-  } catch (error: any) {
-    return res.status(500).json({ success: false, error: error.message })
+  } catch (error: unknown) {
+    return res.status(500).json({ success: false, error: (error instanceof Error ? error.message : String(error)) })
   }
 }

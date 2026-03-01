@@ -1,17 +1,19 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 // GET /vendor/orders/:orderId - Get vendor order details
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const vendorId = (req as any).vendor_id
+    const vendorId = req.vendor_id;
     if (!vendorId) {
-      return res.status(401).json({ message: "Vendor authentication required" })
+      return res
+        .status(401)
+        .json({ message: "Vendor authentication required" });
     }
 
-    const { orderId } = req.params
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const { orderId } = req.params;
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
 
     const { data: vendorOrders } = await query.graph({
       entity: "vendor_order",
@@ -42,13 +44,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         id: orderId,
         vendor_id: vendorId,
       },
-    })
+    });
 
     if (!vendorOrders.length) {
-      return res.status(404).json({ message: "Order not found" })
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    const vo = vendorOrders[0]
+    const vo = vendorOrders[0];
     res.json({
       order: {
         id: vo.id,
@@ -69,10 +71,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         created_at: vo.created_at,
         shipped_at: vo.shipped_at,
         delivered_at: vo.delivered_at,
-      }
-    })
-
-  } catch (error: any) {
-    handleApiError(res, error, "GET vendor orders orderId")}
+      },
+    });
+  } catch (error: unknown) {
+    handleApiError(res, error, "GET vendor orders orderId");
+  }
 }
-

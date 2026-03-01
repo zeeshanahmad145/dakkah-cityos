@@ -92,7 +92,7 @@ function InvoicesPage() {
                       <p className="text-xs text-ds-muted-foreground mt-0.5">
                         Issued: {new Date(invoice.issue_date ?? invoice.created_at).toLocaleDateString()}
                         {invoice.due_date && (
-                          <span className="ml-2">· Due: {new Date(invoice.due_date).toLocaleDateString()}</span>
+                          <span className="ml-2">· Due: {new Date(invoice.due_date!).toLocaleDateString()}</span>
                         )}
                       </p>
                     </div>

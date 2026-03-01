@@ -5,8 +5,8 @@ import { MedusaContainer } from "@medusajs/framework/types"
  * Runs daily to remove carts older than 30 days
  */
 export default async function cleanupExpiredCartsJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const logger = container.resolve("logger")
+  const query = container.resolve("query") as unknown as any
+  const logger = container.resolve("logger") as unknown as any
 
   logger.info("[cleanup-carts] Starting cart cleanup job")
 

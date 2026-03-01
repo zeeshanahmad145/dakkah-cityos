@@ -85,7 +85,7 @@ const SEED_DATA = [
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { id } = req.params
 
     const { data: rules } = await query.graph({
@@ -107,7 +107,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     })
 
     return res.json({ item: enrichDetailItem({ ...rule, tiers }, "volume-deals") })
-  } catch (error: any) {
+  } catch (error: unknown) {
     const { id } = req.params
     const seed = SEED_DATA.find((s) => s.id === id) || SEED_DATA[0]
     return res.json({ item: { ...seed, id } })

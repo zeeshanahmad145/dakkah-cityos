@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const parkingService = req.scope.resolve("parking") as any;
+    const parkingService = req.scope.resolve("parking") as unknown as any;
     const { plate_number, zone_id, gate_id, customer_id } = req.body as {
       plate_number: string;
       zone_id: string;
@@ -32,7 +32,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       });
     } else {
       // Fallback: generic parking operation
-      session = await (parkingService as any).createParkingSessions({
+      session = await parkingService.createParkingSessions({
         plate_number,
         zone_id,
         gate_id: gate_id || null,
@@ -43,7 +43,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.status(201).json({ session, message: "Entry recorded" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-PARKING-ENTER");
   }
 }

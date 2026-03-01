@@ -45,7 +45,7 @@ export function ApprovalRequestDetail({ requestId }: ApprovalRequestDetailProps)
         </div>
         <div className="border rounded-lg p-4">
           <p className="text-sm text-muted-foreground mb-1">Created</p>
-          <p className="font-medium">{new Date(request.created_at).toLocaleDateString()}</p>
+          <p className="font-medium">{new Date(request.created_at!).toLocaleDateString()}</p>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export function ApprovalRequestDetail({ requestId }: ApprovalRequestDetailProps)
                     <span className="font-medium">{action.actor_name || action.actor_id}</span>
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {new Date(action.acted_at).toLocaleString()}
+                    {new Date(action.acted_at!).toLocaleString()}
                   </span>
                 </div>
                 {action.comment && (

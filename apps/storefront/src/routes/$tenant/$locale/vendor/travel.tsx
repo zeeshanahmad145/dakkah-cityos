@@ -32,7 +32,7 @@ function VendorTravelRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -86,56 +86,81 @@ function VendorTravelRoute() {
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {["", "active", "draft", "seasonal", "sold_out", "archived"].map((s) => (
-          <button
-            key={s}
-            onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
-            }`}
-          >
-            {(s || "All").replace(/_/g, " ")}
-          </button>
-        ))}
+        {["", "active", "draft", "seasonal", "sold_out", "archived"].map(
+          (s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                statusFilter === s
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
+              }`}
+            >
+              {(s || "All").replace(/_/g, " ")}
+            </button>
+          ),
+        )}
       </div>
 
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No travel packages yet</p>
-          <p className="text-sm">Create your first travel package to start accepting bookings.</p>
+          <p className="text-sm">
+            Create your first travel package to start accepting bookings.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((pkg) => (
-            <div key={pkg.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={pkg.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{pkg.title}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[pkg.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[pkg.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {pkg.status.replace(/_/g, " ")}
                     </span>
                   </div>
                   {pkg.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{pkg.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {pkg.description}
+                    </p>
                   )}
                   <div className="flex items-center gap-6 text-sm text-ds-muted-foreground">
                     <span className="font-medium text-ds-foreground">
-                      {pkg.currency_code?.toUpperCase()} {(pkg.price / 100).toFixed(2)}
+                      {pkg.currency_code?.toUpperCase()}{" "}
+                      {(pkg.price / 100).toFixed(2)}
                     </span>
                     <span>{pkg.destination}</span>
                     <span>{pkg.duration}</span>
                     <span>{pkg.bookings} bookings</span>
-                    <span className="text-ds-warning">★ {pkg.rating.toFixed(1)}</span>
-                    {pkg.max_travelers && <span>Max {pkg.max_travelers} travelers</span>}
+                    <span className="text-ds-warning">
+                      ★ {pkg.rating.toFixed(1)}
+                    </span>
+                    {pkg.max_travelers && (
+                      <span>Max {pkg.max_travelers} travelers</span>
+                    )}
                   </div>
                   {pkg.includes && pkg.includes.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-3">
                       {pkg.includes.slice(0, 4).map((item, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-ds-info/10 text-ds-info text-xs rounded">{item}</span>
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 bg-ds-info/10 text-ds-info text-xs rounded"
+                        >
+                          {item}
+                        </span>
                       ))}
                       {pkg.includes.length > 4 && (
-                        <span className="text-xs text-ds-muted-foreground/70">+{pkg.includes.length - 4} more</span>
+                        <span className="text-xs text-ds-muted-foreground/70">
+                          +{pkg.includes.length - 4} more
+                        </span>
                       )}
                     </div>
                   )}

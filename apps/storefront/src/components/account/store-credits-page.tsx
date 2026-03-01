@@ -193,12 +193,12 @@ export function StoreCreditsPage({
                 <div key={tx.id} className="px-4 py-3 flex flex-col md:grid md:grid-cols-[1fr_auto_auto_auto] gap-1 md:gap-4 md:items-center">
                   <p className="text-sm text-ds-foreground">{tx.description}</p>
                   <span className="text-sm text-ds-muted-foreground">
-                    {new Date(tx.date).toLocaleDateString()}
+                    {new Date(tx.date!).toLocaleDateString()}
                   </span>
                   <span className={`text-sm font-medium ${tx.type === "credit" ? "text-ds-success" : "text-ds-destructive"}`}>
-                    {tx.type === "credit" ? "+" : ""}{formatPrice(tx.amount)}
+                    {tx.type === "credit" ? "+" : ""}{formatPrice(tx.amount ?? 0)}
                   </span>
-                  <span className="text-sm text-ds-muted-foreground">{formatPrice(tx.balance)}</span>
+                  <span className="text-sm text-ds-muted-foreground">{formatPrice(tx.balance ?? 0)}</span>
                 </div>
               ))}
             </div>

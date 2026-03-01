@@ -93,20 +93,20 @@ class InventoryExtensionModuleService
       expires_at: data.expires_at ?? null,
       status: "active",
       metadata: data.metadata ?? null,
-    });
+    } as any);
   }
 
   async releaseReservation(
     reservationId: string,
   ): Promise<ReservationHoldRecord> {
-    const reservation = await this.retrieveReservationHold(reservationId);
+    const reservation = await this.retrieveReservationHold(reservationId) as any;
     if (reservation.status !== "active") {
       throw new Error("Reservation is not active");
     }
     await this.updateReservationHolds({
       id: reservationId,
       status: "released",
-    });
+    } as any);
     return this.retrieveReservationHold(reservationId);
   }
 
@@ -114,7 +114,7 @@ class InventoryExtensionModuleService
     expired_count: number;
     expired_ids: string[];
   }> {
-    const reservations = await this.listReservationHolds({ status: "active" });
+    const reservations = await this.listReservationHolds({ status: "active" }) as any;
     const now = new Date();
     const expiredIds: string[] = [];
 
@@ -123,7 +123,7 @@ class InventoryExtensionModuleService
         await this.updateReservationHolds({
           id: reservation.id,
           status: "expired",
-        });
+        } as any);
         expiredIds.push(reservation.id);
       }
     }
@@ -140,13 +140,13 @@ class InventoryExtensionModuleService
       tenant_id: tenantId,
       variant_id: variantId,
       is_resolved: false,
-    });
+    }) as any;
 
     for (const alert of existingAlerts) {
       await this.updateStockAlerts({
         id: alert.id,
         current_quantity: currentQty,
-      });
+      } as any);
     }
 
     const createdAlerts: StockAlertRecord[] = [];
@@ -164,7 +164,7 @@ class InventoryExtensionModuleService
           threshold: 0,
           current_quantity: currentQty,
           is_resolved: false,
-        });
+        } as any);
         createdAlerts.push(alert);
       }
     }
@@ -208,7 +208,7 @@ class InventoryExtensionModuleService
       notes: data.notes ?? null,
       initiated_by: data.initiated_by ?? null,
       metadata: data.metadata ?? null,
-    });
+    } as any);
   }
 
   async updateTransferStatus(

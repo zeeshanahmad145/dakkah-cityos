@@ -150,14 +150,14 @@ const QuotesPage = () => {
               <Text className="text-sm font-medium mt-1">Status: {editing.status}</Text>
             </div>
           )}
-          <div><Label htmlFor="custom_discount_percentage">Discount Percentage</Label><Input id="custom_discount_percentage" type="number" step="0.01" value={formData.custom_discount_percentage} onChange={(e) => setFormData({ ...formData, custom_discount_percentage: e.target.value })} placeholder="e.g. 10" /></div>
-          <div><Label htmlFor="custom_discount_amount">Discount Amount (cents)</Label><Input id="custom_discount_amount" type="number" value={formData.custom_discount_amount} onChange={(e) => setFormData({ ...formData, custom_discount_amount: e.target.value })} placeholder="e.g. 5000" /></div>
-          <div><Label htmlFor="discount_reason">Discount Reason</Label><Input id="discount_reason" value={formData.discount_reason} onChange={(e) => setFormData({ ...formData, discount_reason: e.target.value })} placeholder="Reason for discount..." /></div>
-          <div><Label htmlFor="valid_until">Valid Until</Label><Input id="valid_until" type="date" value={formData.valid_until} onChange={(e) => setFormData({ ...formData, valid_until: e.target.value })} /></div>
-          <div><Label htmlFor="internal_notes">Internal Notes</Label><Input id="internal_notes" value={formData.internal_notes} onChange={(e) => setFormData({ ...formData, internal_notes: e.target.value })} placeholder="Internal notes..." /></div>
+          <div><Label htmlFor="custom_discount_percentage">Discount Percentage</Label><Input id="custom_discount_percentage" type="number" step="0.01" value={formData.custom_discount_percentage} onChange={(e) => setFormData({ ...formData, custom_discount_percentage: e.target.value as any })} placeholder="e.g. 10" /></div>
+          <div><Label htmlFor="custom_discount_amount">Discount Amount (cents)</Label><Input id="custom_discount_amount" type="number" value={formData.custom_discount_amount} onChange={(e) => setFormData({ ...formData, custom_discount_amount: e.target.value as any })} placeholder="e.g. 5000" /></div>
+          <div><Label htmlFor="discount_reason">Discount Reason</Label><Input id="discount_reason" value={formData.discount_reason} onChange={(e) => setFormData({ ...formData, discount_reason: e.target.value as any })} placeholder="Reason for discount..." /></div>
+          <div><Label htmlFor="valid_until">Valid Until</Label><Input id="valid_until" type="date" value={formData.valid_until} onChange={(e) => setFormData({ ...formData, valid_until: e.target.value as any })} /></div>
+          <div><Label htmlFor="internal_notes">Internal Notes</Label><Input id="internal_notes" value={formData.internal_notes} onChange={(e) => setFormData({ ...formData, internal_notes: e.target.value as any })} placeholder="Internal notes..." /></div>
           {editing && (editing.status === "submitted" || editing.status === "under_review") && (
             <>
-              <div><Label htmlFor="rejection_reason">Rejection Reason (if rejecting)</Label><Input id="rejection_reason" value={formData.rejection_reason} onChange={(e) => setFormData({ ...formData, rejection_reason: e.target.value })} placeholder="Reason for rejection..." /></div>
+              <div><Label htmlFor="rejection_reason">Rejection Reason (if rejecting)</Label><Input id="rejection_reason" value={formData.rejection_reason} onChange={(e) => setFormData({ ...formData, rejection_reason: e.target.value as any })} placeholder="Reason for rejection..." /></div>
               <div className="flex gap-2 pt-2">
                 <Button variant="secondary" className="flex-1" onClick={() => editing && handleApprove(editing)} disabled={approveQuote.isPending}>
                   <CheckCircle className="w-4 h-4 mr-2" />Approve

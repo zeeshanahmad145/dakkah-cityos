@@ -26,7 +26,7 @@ function VendorVolumePricingRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -39,9 +39,12 @@ function VendorVolumePricingRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/volume-pricing${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: VolumePricingTier[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: VolumePricingTier[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -84,7 +87,9 @@ function VendorVolumePricingRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -95,7 +100,9 @@ function VendorVolumePricingRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No volume pricing tiers yet</p>
-          <p className="text-sm">Create pricing tiers to offer bulk discounts.</p>
+          <p className="text-sm">
+            Create pricing tiers to offer bulk discounts.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -113,23 +120,33 @@ function VendorVolumePricingRoute() {
             </thead>
             <tbody>
               {items.map((tier) => (
-                <tr key={tier.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={tier.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 pe-4 font-medium">{tier.product_name}</td>
                   <td className="py-4 pe-4 text-right">{tier.min_quantity}</td>
-                  <td className="py-4 pe-4 text-right">{tier.max_quantity ?? "∞"}</td>
                   <td className="py-4 pe-4 text-right">
-                    {tier.currency_code?.toUpperCase()} {(tier.unit_price / 100).toFixed(2)}
+                    {tier.max_quantity ?? "∞"}
+                  </td>
+                  <td className="py-4 pe-4 text-right">
+                    {tier.currency_code?.toUpperCase()}{" "}
+                    {(tier.unit_price / 100).toFixed(2)}
                   </td>
                   <td className="py-4 pe-4 text-right font-medium text-ds-success">
                     {tier.discount_percentage}%
                   </td>
                   <td className="py-4 pe-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[tier.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[tier.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {tier.status}
                     </span>
                   </td>
                   <td className="py-4">
-                    <button className="text-sm text-ds-primary hover:underline">Edit</button>
+                    <button className="text-sm text-ds-primary hover:underline">
+                      Edit
+                    </button>
                   </td>
                 </tr>
               ))}

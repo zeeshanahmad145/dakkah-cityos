@@ -21,7 +21,9 @@ interface ShippingExtensionRate {
   created_at: string
 }
 
-export const Route = createFileRoute("/$tenant/$locale/vendor/shipping-extension")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/vendor/shipping-extension",
+)({
   component: VendorShippingExtensionRoute,
 })
 
@@ -30,7 +32,7 @@ function VendorShippingExtensionRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,7 +45,10 @@ function VendorShippingExtensionRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/shipping-extension${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: ShippingExtensionRate[]; count: number }>(url, {
+      return sdk.client.fetch<{
+        items: ShippingExtensionRate[]
+        count: number
+      }>(url, {
         credentials: "include",
       })
     },
@@ -87,7 +92,9 @@ function VendorShippingExtensionRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -98,7 +105,9 @@ function VendorShippingExtensionRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No shipping rates configured</p>
-          <p className="text-sm">Add custom shipping rates, zones, and rules for your products.</p>
+          <p className="text-sm">
+            Add custom shipping rates, zones, and rules for your products.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -119,17 +128,25 @@ function VendorShippingExtensionRoute() {
             </thead>
             <tbody>
               {items.map((rate) => (
-                <tr key={rate.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={rate.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 px-4 font-medium">{rate.name}</td>
-                  <td className="py-4 px-4 text-ds-muted-foreground">{rate.zone}</td>
-                  <td className="py-4 px-4 text-ds-muted-foreground">{rate.region}</td>
+                  <td className="py-4 px-4 text-ds-muted-foreground">
+                    {rate.zone}
+                  </td>
+                  <td className="py-4 px-4 text-ds-muted-foreground">
+                    {rate.region}
+                  </td>
                   <td className="py-4 px-4">
                     <span className="px-2 py-0.5 text-xs rounded-full bg-ds-muted text-ds-muted-foreground">
                       {rate.method}
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    {rate.currency_code?.toUpperCase()} {(rate.rate / 100).toFixed(2)}
+                    {rate.currency_code?.toUpperCase()}{" "}
+                    {(rate.rate / 100).toFixed(2)}
                   </td>
                   <td className="py-4 px-4 text-sm text-ds-muted-foreground">
                     {rate.min_weight || rate.max_weight
@@ -141,14 +158,20 @@ function VendorShippingExtensionRoute() {
                       ? `${rate.currency_code?.toUpperCase()} ${(rate.free_above_threshold / 100).toFixed(2)}`
                       : "—"}
                   </td>
-                  <td className="py-4 px-4 text-sm text-ds-muted-foreground">{rate.estimated_days || "—"}</td>
+                  <td className="py-4 px-4 text-sm text-ds-muted-foreground">
+                    {rate.estimated_days || "—"}
+                  </td>
                   <td className="py-4 px-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[rate.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[rate.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {rate.status}
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    <button className="text-sm text-ds-primary hover:underline">Edit</button>
+                    <button className="text-sm text-ds-primary hover:underline">
+                      Edit
+                    </button>
                   </td>
                 </tr>
               ))}

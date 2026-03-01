@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
@@ -28,7 +28,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     res.json({ payment_term: term })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-PAYMENT-TERMS-ID")}
 }
 
@@ -86,7 +86,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     paymentTermsStore.set(id, updatedTerm)
 
     res.json({ payment_term: updatedTerm })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-PAYMENT-TERMS-ID")}
 }
 
@@ -110,7 +110,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
     paymentTermsStore.delete(id)
 
     res.json({ success: true, deleted_id: id })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-PAYMENT-TERMS-ID")}
 }
 

@@ -1,5 +1,9 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
@@ -7,14 +11,103 @@ import { t } from "@/lib/i18n"
 function getFallbackItems() {
   const now = Date.now()
   return [
-    { id: "fd-1", name: "Wireless Noise-Cancelling Headphones", category: "electronics", thumbnail: "/seed-images/auctions/1505740420928-5e560c06d30e.jpg", original_price: 29999, sale_price: 14999, discount_percentage: 50, end_date: new Date(now + 3 * 60 * 60 * 1000).toISOString(), stock_remaining: 12, description: "Premium ANC headphones with 30hr battery life" },
-    { id: "fd-2", name: "Smart Fitness Watch Pro", category: "electronics", thumbnail: "/seed-images/auctions/1523275335684-37898b6baf30.jpg", original_price: 19999, sale_price: 9999, discount_percentage: 50, end_date: new Date(now + 5 * 60 * 60 * 1000).toISOString(), stock_remaining: 8, description: "Heart rate, GPS, and sleep tracking" },
-    { id: "fd-3", name: "Designer Leather Handbag", category: "fashion", thumbnail: "/seed-images/flash-sales/1495474472287-4d71bcdd2085.jpg", original_price: 24999, sale_price: 12499, discount_percentage: 50, end_date: new Date(now + 2 * 60 * 60 * 1000).toISOString(), stock_remaining: 5, description: "Italian genuine leather, limited edition" },
-    { id: "fd-4", name: "Organic Skincare Bundle", category: "beauty", thumbnail: "/seed-images/content/1558171813-4c088753af8f.jpg", original_price: 8999, sale_price: 3599, discount_percentage: 60, end_date: new Date(now + 8 * 60 * 60 * 1000).toISOString(), stock_remaining: 23, description: "5-piece set with cleanser, toner, serum, moisturizer & mask" },
-    { id: "fd-5", name: "Premium Coffee Machine", category: "home", thumbnail: "/seed-images/flash-sales/1495474472287-4d71bcdd2085.jpg", original_price: 44999, sale_price: 22499, discount_percentage: 50, end_date: new Date(now + 1 * 60 * 60 * 1000).toISOString(), stock_remaining: 3, description: "Espresso, cappuccino & latte with built-in grinder" },
-    { id: "fd-6", name: "Running Shoes Ultra Boost", category: "sports", thumbnail: "/seed-images/trade-in/1542291026-7eec264c27ff.jpg", original_price: 17999, sale_price: 8999, discount_percentage: 50, end_date: new Date(now + 6 * 60 * 60 * 1000).toISOString(), stock_remaining: 15, description: "Lightweight with responsive cushioning" },
-    { id: "fd-7", name: "4K Ultra HD Smart TV 55\"", category: "electronics", thumbnail: "/seed-images/content/1573164713988-8665fc963095.jpg", original_price: 79999, sale_price: 47999, discount_percentage: 40, end_date: new Date(now + 4 * 60 * 60 * 1000).toISOString(), stock_remaining: 7, description: "HDR10+, Dolby Vision, built-in streaming" },
-    { id: "fd-8", name: "Luxury Perfume Gift Set", category: "beauty", thumbnail: "/seed-images/content/1454165804606-c3d57bc86b40.jpg", original_price: 15999, sale_price: 7999, discount_percentage: 50, end_date: new Date(now + 10 * 60 * 60 * 1000).toISOString(), stock_remaining: 18, description: "3 signature fragrances in premium packaging" },
+    {
+      id: "fd-1",
+      name: "Wireless Noise-Cancelling Headphones",
+      category: "electronics",
+      thumbnail: "/seed-images/auctions/1505740420928-5e560c06d30e.jpg",
+      original_price: 29999,
+      sale_price: 14999,
+      discount_percentage: 50,
+      end_date: new Date(now + 3 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 12,
+      description: "Premium ANC headphones with 30hr battery life",
+    },
+    {
+      id: "fd-2",
+      name: "Smart Fitness Watch Pro",
+      category: "electronics",
+      thumbnail: "/seed-images/auctions/1523275335684-37898b6baf30.jpg",
+      original_price: 19999,
+      sale_price: 9999,
+      discount_percentage: 50,
+      end_date: new Date(now + 5 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 8,
+      description: "Heart rate, GPS, and sleep tracking",
+    },
+    {
+      id: "fd-3",
+      name: "Designer Leather Handbag",
+      category: "fashion",
+      thumbnail: "/seed-images/flash-sales/1495474472287-4d71bcdd2085.jpg",
+      original_price: 24999,
+      sale_price: 12499,
+      discount_percentage: 50,
+      end_date: new Date(now + 2 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 5,
+      description: "Italian genuine leather, limited edition",
+    },
+    {
+      id: "fd-4",
+      name: "Organic Skincare Bundle",
+      category: "beauty",
+      thumbnail: "/seed-images/content/1558171813-4c088753af8f.jpg",
+      original_price: 8999,
+      sale_price: 3599,
+      discount_percentage: 60,
+      end_date: new Date(now + 8 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 23,
+      description:
+        "5-piece set with cleanser, toner, serum, moisturizer & mask",
+    },
+    {
+      id: "fd-5",
+      name: "Premium Coffee Machine",
+      category: "home",
+      thumbnail: "/seed-images/flash-sales/1495474472287-4d71bcdd2085.jpg",
+      original_price: 44999,
+      sale_price: 22499,
+      discount_percentage: 50,
+      end_date: new Date(now + 1 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 3,
+      description: "Espresso, cappuccino & latte with built-in grinder",
+    },
+    {
+      id: "fd-6",
+      name: "Running Shoes Ultra Boost",
+      category: "sports",
+      thumbnail: "/seed-images/trade-in/1542291026-7eec264c27ff.jpg",
+      original_price: 17999,
+      sale_price: 8999,
+      discount_percentage: 50,
+      end_date: new Date(now + 6 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 15,
+      description: "Lightweight with responsive cushioning",
+    },
+    {
+      id: "fd-7",
+      name: '4K Ultra HD Smart TV 55"',
+      category: "electronics",
+      thumbnail: "/seed-images/content/1573164713988-8665fc963095.jpg",
+      original_price: 79999,
+      sale_price: 47999,
+      discount_percentage: 40,
+      end_date: new Date(now + 4 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 7,
+      description: "HDR10+, Dolby Vision, built-in streaming",
+    },
+    {
+      id: "fd-8",
+      name: "Luxury Perfume Gift Set",
+      category: "beauty",
+      thumbnail: "/seed-images/content/1454165804606-c3d57bc86b40.jpg",
+      original_price: 15999,
+      sale_price: 7999,
+      discount_percentage: 50,
+      end_date: new Date(now + 10 * 60 * 60 * 1000).toISOString(),
+      stock_remaining: 18,
+      description: "3 signature fragrances in premium packaging",
+    },
   ]
 }
 
@@ -34,7 +127,10 @@ export const Route = createFileRoute("/$tenant/$locale/flash-deals/")({
           "x-publishable-api-key": getMedusaPublishableKey(),
         },
       })
-      if (!resp.ok) { const fb = getFallbackItems(); return { items: fb, count: fb.length } }
+      if (!resp.ok) {
+        const fb = getFallbackItems()
+        return { items: fb, count: fb.length }
+      }
       const data = await resp.json()
       const raw = data.items || data.listings || data.products || []
       if (raw.length > 0) return { items: raw, count: data.count || raw.length }
@@ -47,7 +143,14 @@ export const Route = createFileRoute("/$tenant/$locale/flash-deals/")({
   },
 })
 
-const categoryOptions = ["all", "electronics", "fashion", "home", "beauty", "sports"] as const
+const categoryOptions = [
+  "all",
+  "electronics",
+  "fashion",
+  "home",
+  "beauty",
+  "sports",
+] as const
 
 function FlashDealsPage() {
   const { tenant, locale } = Route.useParams()
@@ -61,9 +164,12 @@ function FlashDealsPage() {
   const filteredItems = items.filter((item: any) => {
     const matchesSearch = searchQuery
       ? (item.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.description || "").toLowerCase().includes(searchQuery.toLowerCase())
+        (item.description || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       : true
-    const matchesCategory = categoryFilter === "all" || item.category === categoryFilter
+    const matchesCategory =
+      categoryFilter === "all" || item.category === categoryFilter
     return matchesSearch && matchesCategory
   })
 
@@ -87,20 +193,31 @@ function FlashDealsPage() {
       <div className="bg-gradient-to-r from-ds-destructive to-ds-warning text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-white/70 mb-4">
-            <Link to={`${prefix}` as any} className="hover:text-white transition-colors">{t(locale, 'common.home')}</Link>
+            <Link
+              to={`${prefix}` as never}
+              className="hover:text-white transition-colors"
+            >
+              {t(locale, "common.home")}
+            </Link>
             <span>/</span>
-            <span className="text-white">{t(locale, 'flash_deals.breadcrumb')}</span>
+            <span className="text-white">
+              {t(locale, "flash_deals.breadcrumb")}
+            </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t(locale, 'flash_deals.hero_title')}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            {t(locale, "flash_deals.hero_title")}
+          </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            {t(locale, 'flash_deals.hero_subtitle')}
+            {t(locale, "flash_deals.hero_subtitle")}
           </p>
           <div className="mt-6 flex items-center justify-center gap-4 text-sm text-white/60">
-            <span>{items.length} {t(locale, 'flash_deals.deals_available')}</span>
+            <span>
+              {items.length} {t(locale, "flash_deals.deals_available")}
+            </span>
             <span>|</span>
-            <span>{t(locale, 'flash_deals.badge_discount')}</span>
+            <span>{t(locale, "flash_deals.badge_discount")}</span>
             <span>|</span>
-            <span>{t(locale, 'flash_deals.badge_limited_stock')}</span>
+            <span>{t(locale, "flash_deals.badge_limited_stock")}</span>
           </div>
         </div>
       </div>
@@ -110,18 +227,22 @@ function FlashDealsPage() {
           <aside className="w-full lg:w-72 flex-shrink-0">
             <div className="bg-ds-background border border-ds-border rounded-xl p-4 space-y-6 sticky top-4">
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'flash_deals.search_label')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "flash_deals.search_label")}
+                </label>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t(locale, 'flash_deals.search_placeholder')}
+                  placeholder={t(locale, "flash_deals.search_placeholder")}
                   className="w-full px-3 py-2 text-sm rounded-lg border border-ds-border bg-ds-background text-ds-foreground placeholder:text-ds-muted-foreground focus:outline-none focus:ring-2 focus:ring-ds-ring"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'flash_deals.category_label')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "flash_deals.category_label")}
+                </label>
                 <div className="space-y-1">
                   {categoryOptions.map((opt) => (
                     <button
@@ -129,7 +250,9 @@ function FlashDealsPage() {
                       onClick={() => setCategoryFilter(opt)}
                       className={`block w-full text-start px-3 py-2 text-sm rounded-lg transition-colors ${categoryFilter === opt ? "bg-ds-destructive text-white" : "text-ds-foreground hover:bg-ds-muted"}`}
                     >
-                      {opt === "all" ? t(locale, 'verticals.all_categories') : opt.charAt(0).toUpperCase() + opt.slice(1)}
+                      {opt === "all"
+                        ? t(locale, "verticals.all_categories")
+                        : opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </button>
                   ))}
                 </div>
@@ -140,11 +263,25 @@ function FlashDealsPage() {
           <main className="flex-1">
             {filteredItems.length === 0 ? (
               <div className="bg-ds-background border border-ds-border rounded-xl p-12 text-center">
-                <svg className="w-16 h-16 text-ds-muted-foreground/30 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg
+                  className="w-16 h-16 text-ds-muted-foreground/30 mx-auto mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
                 </svg>
-                <h3 className="text-lg font-semibold text-ds-foreground mb-2">{t(locale, 'verticals.no_results')}</h3>
-                <p className="text-ds-muted-foreground text-sm">{t(locale, 'flash_deals.no_results_hint')}</p>
+                <h3 className="text-lg font-semibold text-ds-foreground mb-2">
+                  {t(locale, "verticals.no_results")}
+                </h3>
+                <p className="text-ds-muted-foreground text-sm">
+                  {t(locale, "flash_deals.no_results_hint")}
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -152,7 +289,9 @@ function FlashDealsPage() {
                   const discount = item.discount_percentage || 0
                   const originalPrice = item.original_price || 0
                   const salePrice = item.sale_price || 0
-                  const timeLeft = item.end_date ? getTimeRemaining(item.end_date) : null
+                  const timeLeft = item.end_date
+                    ? getTimeRemaining(item.end_date)
+                    : null
                   const stockRemaining = item.stock_remaining || 0
                   return (
                     <div
@@ -161,40 +300,81 @@ function FlashDealsPage() {
                     >
                       <div className="aspect-[4/3] bg-gradient-to-br from-ds-destructive/10 to-ds-warning/10 relative overflow-hidden">
                         {item.thumbnail ? (
-                          <img loading="lazy" src={item.thumbnail} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <img
+                            loading="lazy"
+                            src={item.thumbnail}
+                            alt={item.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <svg className="w-16 h-16 text-ds-destructive/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            <svg
+                              className="w-16 h-16 text-ds-destructive/40"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                              />
                             </svg>
                           </div>
                         )}
                         {discount > 0 && (
-                          <span className="absolute top-2 start-2 px-2.5 py-1 text-xs font-bold bg-ds-destructive text-white rounded-md">SALE -{discount}%</span>
+                          <span className="absolute top-2 start-2 px-2.5 py-1 text-xs font-bold bg-ds-destructive text-white rounded-md">
+                            SALE -{discount}%
+                          </span>
                         )}
                         {timeLeft && (
                           <span className="absolute top-2 end-2 px-2 py-1 text-xs font-medium bg-black/70 text-white rounded-md flex items-center gap-1">
-                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
                             {timeLeft}
                           </span>
                         )}
                         {stockRemaining > 0 && stockRemaining <= 10 && (
-                          <span className="absolute bottom-2 start-2 px-2 py-1 text-xs font-medium bg-ds-warning text-white rounded-md">Only {stockRemaining} left!</span>
+                          <span className="absolute bottom-2 start-2 px-2 py-1 text-xs font-medium bg-ds-warning text-white rounded-md">
+                            Only {stockRemaining} left!
+                          </span>
                         )}
                       </div>
                       <div className="p-4">
-                        <h3 className="font-semibold text-ds-foreground group-hover:text-ds-destructive transition-colors line-clamp-1">{item.name}</h3>
+                        <h3 className="font-semibold text-ds-foreground group-hover:text-ds-destructive transition-colors line-clamp-1">
+                          {item.name}
+                        </h3>
                         {item.description && (
-                          <p className="text-sm text-ds-muted-foreground mt-1 line-clamp-2">{item.description}</p>
+                          <p className="text-sm text-ds-muted-foreground mt-1 line-clamp-2">
+                            {item.description}
+                          </p>
                         )}
                         {item.category && (
-                          <span className="inline-block mt-2 px-2 py-0.5 text-xs font-medium bg-ds-destructive/10 text-ds-destructive rounded capitalize">{item.category}</span>
+                          <span className="inline-block mt-2 px-2 py-0.5 text-xs font-medium bg-ds-destructive/10 text-ds-destructive rounded capitalize">
+                            {item.category}
+                          </span>
                         )}
 
                         <div className="flex items-center gap-2 mt-3">
-                          <span className="text-xl font-bold text-ds-destructive">{formatPrice(salePrice)}</span>
+                          <span className="text-xl font-bold text-ds-destructive">
+                            {formatPrice(salePrice)}
+                          </span>
                           {originalPrice > salePrice && (
-                            <span className="text-sm text-ds-muted-foreground line-through">{formatPrice(originalPrice)}</span>
+                            <span className="text-sm text-ds-muted-foreground line-through">
+                              {formatPrice(originalPrice)}
+                            </span>
                           )}
                         </div>
 
@@ -202,17 +382,32 @@ function FlashDealsPage() {
                           <div className="mt-3">
                             <div className="flex justify-between text-xs text-ds-muted-foreground mb-1">
                               <span>{stockRemaining} remaining</span>
-                              <span>{Math.min(Math.round((1 - stockRemaining / 30) * 100), 95)}% claimed</span>
+                              <span>
+                                {Math.min(
+                                  Math.round((1 - stockRemaining / 30) * 100),
+                                  95,
+                                )}
+                                % claimed
+                              </span>
                             </div>
                             <div className="w-full bg-ds-border rounded-full h-2">
-                              <div className="bg-gradient-to-r from-ds-destructive to-ds-warning h-2 rounded-full" style={{ width: `${Math.min(Math.round((1 - stockRemaining / 30) * 100), 95)}%` }} />
+                              <div
+                                className="bg-gradient-to-r from-ds-destructive to-ds-warning h-2 rounded-full"
+                                style={{
+                                  width: `${Math.min(Math.round((1 - stockRemaining / 30) * 100), 95)}%`,
+                                }}
+                              />
                             </div>
                           </div>
                         )}
 
                         <div className="flex justify-between items-center pt-3 mt-3 border-t border-ds-border">
-                          <span className="text-xs text-ds-success font-medium">Save {formatPrice(originalPrice - salePrice)}</span>
-                          <span className="px-4 py-1.5 text-xs font-semibold text-white bg-ds-destructive rounded-lg group-hover:bg-ds-destructive/90 transition-colors">{t(locale, 'flash_deals.grab_deal')}</span>
+                          <span className="text-xs text-ds-success font-medium">
+                            Save {formatPrice(originalPrice - salePrice)}
+                          </span>
+                          <span className="px-4 py-1.5 text-xs font-semibold text-white bg-ds-destructive rounded-lg group-hover:bg-ds-destructive/90 transition-colors">
+                            {t(locale, "flash_deals.grab_deal")}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -226,22 +421,42 @@ function FlashDealsPage() {
 
       <section className="py-16 bg-ds-card border-t border-ds-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-ds-foreground text-center mb-12">{t(locale, 'flash_deals.how_it_works_title')}</h2>
+          <h2 className="text-2xl font-bold text-ds-foreground text-center mb-12">
+            {t(locale, "flash_deals.how_it_works_title")}
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-destructive text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">{t(locale, 'flash_deals.step1_title')}</h3>
-              <p className="text-sm text-ds-muted-foreground">{t(locale, 'flash_deals.step1_desc')}</p>
+              <div className="w-12 h-12 rounded-full bg-ds-destructive text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                1
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                {t(locale, "flash_deals.step1_title")}
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                {t(locale, "flash_deals.step1_desc")}
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-destructive text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">{t(locale, 'flash_deals.step2_title')}</h3>
-              <p className="text-sm text-ds-muted-foreground">{t(locale, 'flash_deals.step2_desc')}</p>
+              <div className="w-12 h-12 rounded-full bg-ds-destructive text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                2
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                {t(locale, "flash_deals.step2_title")}
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                {t(locale, "flash_deals.step2_desc")}
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-destructive text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">{t(locale, 'flash_deals.step3_title')}</h3>
-              <p className="text-sm text-ds-muted-foreground">{t(locale, 'flash_deals.step3_desc')}</p>
+              <div className="w-12 h-12 rounded-full bg-ds-destructive text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                3
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                {t(locale, "flash_deals.step3_title")}
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                {t(locale, "flash_deals.step3_desc")}
+              </p>
             </div>
           </div>
         </div>

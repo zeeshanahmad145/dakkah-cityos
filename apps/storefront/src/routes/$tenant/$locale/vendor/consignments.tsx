@@ -26,7 +26,7 @@ function VendorConsignmentsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -39,9 +39,12 @@ function VendorConsignmentsRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/consignments${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: ConsignmentItem[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: ConsignmentItem[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -84,7 +87,9 @@ function VendorConsignmentsRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -95,7 +100,9 @@ function VendorConsignmentsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No consignment items yet</p>
-          <p className="text-sm">Add items to start managing consignment inventory.</p>
+          <p className="text-sm">
+            Add items to start managing consignment inventory.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -112,20 +119,30 @@ function VendorConsignmentsRoute() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={item.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 px-4 font-medium">{item.item_name}</td>
-                  <td className="py-4 px-4 text-ds-muted-foreground">{item.consignor}</td>
+                  <td className="py-4 px-4 text-ds-muted-foreground">
+                    {item.consignor}
+                  </td>
                   <td className="py-4 px-4">
-                    {item.currency_code?.toUpperCase()} {(item.price / 100).toFixed(2)}
+                    {item.currency_code?.toUpperCase()}{" "}
+                    {(item.price / 100).toFixed(2)}
                   </td>
                   <td className="py-4 px-4">{item.commission_percent}%</td>
                   <td className="py-4 px-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[item.sold_status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[item.sold_status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {item.sold_status}
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    <button className="text-sm text-ds-primary hover:underline">View Sales</button>
+                    <button className="text-sm text-ds-primary hover:underline">
+                      View Sales
+                    </button>
                   </td>
                 </tr>
               ))}

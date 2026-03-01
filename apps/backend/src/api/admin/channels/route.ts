@@ -1,39 +1,57 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { z } from "zod"
-import { handleApiError } from "../../../lib/api-error-handler"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { z } from "zod";
+import { handleApiError } from "../../../lib/api-error-handler";
 
-const createSchema = z.object({
-  tenant_id: z.string(),
-  channel_type: z.enum(["web", "mobile", "api", "kiosk", "internal"]),
-  medusa_sales_channel_id: z.string().optional(),
-  name: z.string(),
-  description: z.string().optional(),
-  node_id: z.string().optional(),
-  config: z.any().optional(),
-  is_active: z.boolean().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-}).passthrough()
+const createSchema = z
+  .object({
+    tenant_id: z.string(),
+    channel_type: z.enum(["web", "mobile", "api", "kiosk", "internal"]),
+    medusa_sales_channel_id: z.string().optional(),
+    name: z.string(),
+    description: z.string().optional(),
+    node_id: z.string().optional(),
+    config: z.any().optional(),
+    is_active: z.boolean().optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
+  })
+  .passthrough();
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("channel") as any
-    const { limit = "20", offset = "0" } = req.query as Record<string, string | undefined>
-    const items = await mod.listSalesChannelMappings({}, { skip: Number(offset), take: Number(limit) })
-    return res.json({ items, count: Array.isArray(items) ? items.length : 0, limit: Number(limit), offset: Number(offset) })
-
-  } catch (error: any) {
-    handleApiError(res, error, "GET admin channels")}
+    const mod = req.scope.resolve("channel") as unknown as any;
+    const { limit = "20", offset = "0" } = req.query as Record<
+      string,
+      string | undefined
+    >;
+    const items = await mod.listSalesChannelMappings(
+      {},
+      { skip: Number(offset), take: Number(limit) },
+    );
+    return res.json({
+      items,
+      count: Array.isArray(items) ? items.length : 0,
+      limit: Number(limit),
+      offset: Number(offset),
+    });
+  } catch (error: unknown) {
+    handleApiError(res, error, "GET admin channels");
+  }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("channel") as any
-    const validation = createSchema.safeParse(req.body)
-    if (!validation.success) return res.status(400).json({ message: "Validation failed", errors: validation.error.issues })
-    const item = await mod.createSalesChannelMappings(validation.data)
-    return res.status(201).json({ item })
-
-  } catch (error: any) {
-    handleApiError(res, error, "POST admin channels")}
+    const mod = req.scope.resolve("channel") as unknown as any;
+    const validation = createSchema.safeParse(req.body);
+    if (!validation.success)
+      return res
+        .status(400)
+        .json({
+          message: "Validation failed",
+          errors: validation.error.issues,
+        });
+    const item = await mod.createSalesChannelMappings(validation.data);
+    return res.status(201).json({ item });
+  } catch (error: unknown) {
+    handleApiError(res, error, "POST admin channels");
+  }
 }
-

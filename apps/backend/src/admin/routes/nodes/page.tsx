@@ -266,7 +266,7 @@ const NodesPage = () => {
               id="name"
               value={formData.name}
               onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
+                setFormData({ ...formData, name: e.target.value as any })
               }
               placeholder="Node name"
             />
@@ -322,7 +322,7 @@ const NodesPage = () => {
               id="parent_id"
               value={formData.parent_id}
               onChange={(e) =>
-                setFormData({ ...formData, parent_id: e.target.value })
+                setFormData({ ...formData, parent_id: e.target.value as any })
               }
               className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base"
             >
@@ -342,7 +342,7 @@ const NodesPage = () => {
               id="tenant_id"
               value={formData.tenant_id}
               onChange={(e) =>
-                setFormData({ ...formData, tenant_id: e.target.value })
+                setFormData({ ...formData, tenant_id: e.target.value as any })
               }
               placeholder="Tenant ID"
             />

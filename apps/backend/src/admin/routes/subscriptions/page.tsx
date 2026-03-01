@@ -49,12 +49,7 @@ const SubscriptionsPage = () => {
     name: "",
     handle: "",
     description: "",
-    billing_interval: "monthly" as
-      | "daily"
-      | "weekly"
-      | "monthly"
-      | "quarterly"
-      | "yearly",
+    billing_interval: "monthly" as any,
     billing_interval_count: 1,
     price: 0,
     currency_code: "usd",
@@ -173,7 +168,7 @@ const SubscriptionsPage = () => {
       name: "",
       handle: "",
       description: "",
-      billing_interval: "monthly",
+      billing_interval: "monthly" as any,
       billing_interval_count: 1,
       price: 0,
       currency_code: "usd",

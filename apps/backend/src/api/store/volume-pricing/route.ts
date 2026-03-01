@@ -76,7 +76,7 @@ const SEED_RULES = [
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { product_id } = req.query as Record<string, string | undefined>
     if (!product_id) {
       return res.json({ rules: SEED_RULES })
@@ -96,7 +96,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       return { ...rule, tiers }
     }))
     res.json({ rules: enrichedRules.length > 0 ? enrichedRules : SEED_RULES })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return res.json({ rules: SEED_RULES })
   }
 }

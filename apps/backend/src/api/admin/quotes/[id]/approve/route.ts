@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
@@ -14,7 +14,7 @@ const approveQuoteSchema = z.object({
 // POST /admin/quotes/:id/approve
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModule = req.scope.resolve("quote")
+    const quoteModule = req.scope.resolve("quote") as unknown as any
     const { id } = req.params
   
     const parsed = approveQuoteSchema.safeParse(req.body)
@@ -49,7 +49,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ quote })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin quotes id approve")}
 }
 

@@ -62,8 +62,12 @@ export function ApprovalQueue({
     return (
       <div className="bg-ds-background rounded-xl border border-ds-border p-12 text-center">
         <Check className="w-12 h-12 text-ds-success mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-ds-foreground mb-2">All Caught Up</h3>
-        <p className="text-ds-muted-foreground">No pending approvals at this time</p>
+        <h3 className="text-lg font-semibold text-ds-foreground mb-2">
+          All Caught Up
+        </h3>
+        <p className="text-ds-muted-foreground">
+          No pending approvals at this time
+        </p>
       </div>
     )
   }
@@ -71,7 +75,9 @@ export function ApprovalQueue({
   return (
     <div className="bg-ds-background rounded-xl border border-ds-border overflow-hidden">
       <div className="px-6 py-4 border-b border-ds-border flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-ds-foreground">Pending Approvals</h3>
+        <h3 className="text-lg font-semibold text-ds-foreground">
+          Pending Approvals
+        </h3>
         <span className="px-3 py-1 rounded-full text-xs font-medium bg-ds-warning text-ds-warning">
           {items.length} pending
         </span>
@@ -87,16 +93,23 @@ export function ApprovalQueue({
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="font-medium text-ds-foreground">{item.title}</h4>
-                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${getTypeColor(item.type)}`}>
+                    <h4 className="font-medium text-ds-foreground">
+                      {item.title}
+                    </h4>
+                    <span
+                      className={`px-2 py-0.5 rounded text-xs font-medium ${getTypeColor(item.type)}`}
+                    >
                       {getTypeLabel(item.type)}
                     </span>
                   </div>
                   <p className="text-sm text-ds-muted-foreground mt-1">
-                    Requested by {item.requestedBy} on {formatDate(item.requestedAt)}
+                    Requested by {item.requestedBy} on{" "}
+                    {formatDate(item.requestedAt)}
                   </p>
                   {item.details && (
-                    <p className="text-sm text-ds-muted-foreground mt-2">{item.details}</p>
+                    <p className="text-sm text-ds-muted-foreground mt-2">
+                      {item.details}
+                    </p>
                   )}
                 </div>
               </div>
@@ -111,7 +124,7 @@ export function ApprovalQueue({
             <div className="flex items-center justify-between pt-4 border-t border-ds-border">
               {item.type === "purchase_order" && (
                 <Link
-                  to={`${prefix}/account/purchase-orders/${item.id}` as any}
+                  to={`${prefix}/account/purchase-orders/${item.id}` as never}
                   className="text-sm text-ds-muted-foreground hover:text-ds-foreground"
                 >
                   View Details

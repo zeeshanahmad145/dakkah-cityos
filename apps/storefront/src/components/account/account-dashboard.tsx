@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 import { useFeatures } from "../../lib/context/feature-context"
 import { useTenantPrefix } from "@/lib/context/tenant-context"
-import { 
+import {
   ShoppingBag,
   User,
   CreditCard,
@@ -10,7 +10,7 @@ import {
   Calendar,
   MapPin,
   DocumentText,
-  ArrowRightMini
+  ArrowRightMini,
 } from "@medusajs/icons"
 
 interface AccountDashboardProps {
@@ -43,85 +43,85 @@ export function AccountDashboard({ customer, stats }: AccountDashboardProps) {
       label: "Orders",
       description: "View and track your orders",
       href: `${prefix}/account/orders`,
-      icon: ShoppingBag
+      icon: ShoppingBag,
     },
     {
       label: "Profile",
       description: "Manage your account details",
       href: `${prefix}/account/profile`,
-      icon: User
+      icon: User,
     },
     {
       label: "Addresses",
       description: "Manage shipping addresses",
       href: `${prefix}/account/addresses`,
-      icon: MapPin
+      icon: MapPin,
     },
     {
       label: "Payment Methods",
       description: "Manage saved payment methods",
       href: `${prefix}/account/payment-methods`,
-      icon: CreditCard
-    }
+      icon: CreditCard,
+    },
   ]
 
-  if (isEnabled('subscriptions')) {
+  if (isEnabled("subscriptions")) {
     dashboardLinks.push({
       label: "Subscriptions",
       description: "Manage your subscriptions",
       href: `${prefix}/account/subscriptions`,
       icon: ArrowRightMini,
-      feature: 'subscriptions'
+      feature: "subscriptions",
     })
   }
 
-  if (isEnabled('reviews')) {
+  if (isEnabled("reviews")) {
     dashboardLinks.push({
       label: "My Reviews",
       description: "View and manage your reviews",
       href: `${prefix}/account/reviews`,
       icon: Star,
-      feature: 'reviews'
+      feature: "reviews",
     })
   }
 
-  if (isEnabled('bookings')) {
+  if (isEnabled("bookings")) {
     dashboardLinks.push({
       label: "Bookings",
       description: "View your appointments",
       href: `${prefix}/account/bookings`,
       icon: Calendar,
-      feature: 'bookings'
+      feature: "bookings",
     })
   }
 
-  if (isEnabled('b2b')) {
+  if (isEnabled("b2b")) {
     dashboardLinks.push({
       label: "Business Portal",
       description: "Access B2B features",
       href: `${prefix}/b2b/dashboard`,
       icon: Buildings,
-      feature: 'b2b'
+      feature: "b2b",
     })
   }
 
-  if (isEnabled('quotes')) {
+  if (isEnabled("quotes")) {
     dashboardLinks.push({
       label: "Quotes",
       description: "View your quote requests",
       href: `${prefix}/account/quotes`,
       icon: DocumentText,
-      feature: 'quotes'
+      feature: "quotes",
     })
   }
 
-  if (isEnabled('invoices')) {
+  if (isEnabled("invoices")) {
     dashboardLinks.push({
       label: "Invoices",
       description: "View your invoices",
       href: `${prefix}/account/invoices`,
       icon: DocumentText,
-      feature: 'invoices'
+      feature: "invoices",
     })
   }
 
@@ -130,7 +130,7 @@ export function AccountDashboard({ customer, stats }: AccountDashboardProps) {
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-ds-foreground">
-          Welcome back, {customer.first_name || 'there'}!
+          Welcome back, {customer.first_name || "there"}!
         </h1>
         <p className="mt-1 text-ds-muted-foreground">{customer.email}</p>
       </div>
@@ -147,8 +147,8 @@ export function AccountDashboard({ customer, stats }: AccountDashboardProps) {
               </div>
             </div>
           </div>
-          
-          {isEnabled('reviews') && (
+
+          {isEnabled("reviews") && (
             <div className="bg-ds-background rounded-lg border border-ds-border p-4">
               <div className="flex items-center gap-3">
                 <Star className="h-8 w-8 text-ds-muted-foreground" />
@@ -169,7 +169,7 @@ export function AccountDashboard({ customer, stats }: AccountDashboardProps) {
           return (
             <Link
               key={index}
-              to={link.href as any}
+              to={link.href}
               className="group bg-ds-background rounded-lg border border-ds-border p-6 hover:border-ds-border hover:shadow-sm transition-all"
             >
               <div className="flex items-start gap-4">
@@ -195,25 +195,25 @@ export function AccountDashboard({ customer, stats }: AccountDashboardProps) {
         <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           <Link
-            to={`${prefix}/` as any}
+            to={`${prefix}/` as never}
             className="inline-flex items-center gap-2 px-4 py-2 bg-ds-primary text-ds-primary-foreground rounded-md hover:bg-ds-primary"
           >
             <ShoppingBag className="h-4 w-4" />
             Continue Shopping
           </Link>
-          
-          {isEnabled('subscriptions') && (
+
+          {isEnabled("subscriptions") && (
             <Link
-              to={`${prefix}/account/subscriptions` as any}
+              to={`${prefix}/account/subscriptions` as never}
               className="inline-flex items-center gap-2 px-4 py-2 border border-ds-border rounded-md hover:bg-ds-muted"
             >
               Start a Subscription
             </Link>
           )}
-          
-          {isEnabled('bookings') && (
+
+          {isEnabled("bookings") && (
             <Link
-              to={`${prefix}/account/bookings` as any}
+              to={`${prefix}/account/bookings` as never}
               className="inline-flex items-center gap-2 px-4 py-2 border border-ds-border rounded-md hover:bg-ds-muted"
             >
               <Calendar className="h-4 w-4" />

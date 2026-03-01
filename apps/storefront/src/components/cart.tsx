@@ -28,18 +28,22 @@ import { Link } from "@tanstack/react-router"
 import { clsx } from "clsx"
 import { useState } from "react"
 
-
 type LineItemPriceProps = {
   item: HttpTypes.StoreCartLineItem | HttpTypes.StoreOrderLineItem
   currencyCode: string
   className?: string
 }
 
-export const LineItemPrice = ({ item, currencyCode, className }: LineItemPriceProps) => {
+export const LineItemPrice = ({
+  item,
+  currencyCode,
+  className,
+}: LineItemPriceProps) => {
   const { total, original_total } = item
   const originalPrice = original_total
   const currentPrice = total
-  const hasReducedPrice = currentPrice && originalPrice && currentPrice < originalPrice
+  const hasReducedPrice =
+    currentPrice && originalPrice && currentPrice < originalPrice
 
   return (
     <Price
@@ -49,7 +53,10 @@ export const LineItemPrice = ({ item, currencyCode, className }: LineItemPricePr
         hasReducedPrice
           ? {
               price: originalPrice || 0,
-              percentage: getPricePercentageDiff(originalPrice || 0, currentPrice || 0),
+              percentage: getPricePercentageDiff(
+                originalPrice || 0,
+                currentPrice || 0,
+              ),
             }
           : undefined
       }
@@ -57,7 +64,6 @@ export const LineItemPrice = ({ item, currencyCode, className }: LineItemPricePr
     />
   )
 }
-
 
 type CartDeleteItemProps = {
   item: HttpTypes.StoreCartLineItem
@@ -78,7 +84,6 @@ export const CartDeleteItem = ({ item, fields }: CartDeleteItemProps) => {
     </Button>
   )
 }
-
 
 type CartItemQuantitySelectorProps = {
   item: HttpTypes.StoreCartLineItem
@@ -111,7 +116,7 @@ export const CartItemQuantitySelector = ({
         onClick={() => handleQuantityChange(item.quantity - 1)}
         className={clsx(
           type === "compact" &&
-            "text-ds-muted-foreground hover:text-ds-muted-foreground transition-colors p-1 ms-2"
+            "text-ds-muted-foreground hover:text-ds-muted-foreground transition-colors p-1 ms-2",
         )}
         variant="transparent"
         size="fit"
@@ -122,7 +127,7 @@ export const CartItemQuantitySelector = ({
         className={clsx(
           type === "compact"
             ? "text-sm text-ds-foreground text-center px-3"
-            : "text-center text-sm px-6"
+            : "text-center text-sm px-6",
         )}
       >
         {item.quantity}
@@ -131,7 +136,7 @@ export const CartItemQuantitySelector = ({
         onClick={() => handleQuantityChange(item.quantity + 1)}
         className={clsx(
           type === "compact" &&
-            "text-ds-muted-foreground hover:text-ds-muted-foreground transition-colors p-1 ms-2"
+            "text-ds-muted-foreground hover:text-ds-muted-foreground transition-colors p-1 ms-2",
         )}
         variant="transparent"
         size="fit"
@@ -141,7 +146,6 @@ export const CartItemQuantitySelector = ({
     </div>
   )
 }
-
 
 interface CartLineItemProps {
   item: HttpTypes.StoreCartLineItem
@@ -154,7 +158,10 @@ interface CartLineItemProps {
 const CompactCartLineItem = ({ item, cart, fields }: CartLineItemProps) => {
   return (
     <div className="flex items-start gap-x-4" data-testid="cart-item">
-      <Thumbnail thumbnail={item.thumbnail} alt={item.product_title || item.title} />
+      <Thumbnail
+        thumbnail={item.thumbnail}
+        alt={item.product_title || item.title}
+      />
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -162,9 +169,10 @@ const CompactCartLineItem = ({ item, cart, fields }: CartLineItemProps) => {
               {item.product_title}
             </h4>
             <div className="text-sm text-ds-muted-foreground">
-              {item.variant_title && item.variant_title !== "Default Variant" && (
-                <span>{item.variant_title}</span>
-              )}
+              {item.variant_title &&
+                item.variant_title !== "Default Variant" && (
+                  <span>{item.variant_title}</span>
+                )}
             </div>
           </div>
           <CartDeleteItem item={item} fields={fields} />
@@ -172,7 +180,11 @@ const CompactCartLineItem = ({ item, cart, fields }: CartLineItemProps) => {
 
         <div className="flex items-center justify-between mt-2">
           <CartItemQuantitySelector item={item} fields={fields} />
-          <Price price={item.total || 0} currencyCode={cart.currency_code} textSize="small" />
+          <Price
+            price={item.total || 0}
+            currencyCode={cart.currency_code}
+            textSize="small"
+          />
         </div>
       </div>
     </div>
@@ -184,7 +196,7 @@ const DisplayCartLineItem = ({ item, cart, className }: CartLineItemProps) => {
     <div
       className={clsx(
         "flex items-center gap-4 py-3 border-b border-ds-border last:border-b-0",
-        className
+        className,
       )}
     >
       <Thumbnail
@@ -193,14 +205,24 @@ const DisplayCartLineItem = ({ item, cart, className }: CartLineItemProps) => {
         className="w-16 h-16"
       />
       <div className="flex-1">
-        <p className="text-base font-semibold text-ds-foreground">{item.product_title}</p>
+        <p className="text-base font-semibold text-ds-foreground">
+          {item.product_title}
+        </p>
         {item.variant_title && item.variant_title !== "Default Variant" && (
-          <p className="text-sm text-ds-muted-foreground">{item.variant_title}</p>
+          <p className="text-sm text-ds-muted-foreground">
+            {item.variant_title}
+          </p>
         )}
-        <p className="text-sm text-ds-muted-foreground">Quantity: {item.quantity}</p>
+        <p className="text-sm text-ds-muted-foreground">
+          Quantity: {item.quantity}
+        </p>
       </div>
       <div className="text-end">
-        <Price price={item.total || 0} currencyCode={cart.currency_code} textWeight="plus" />
+        <Price
+          price={item.total || 0}
+          currencyCode={cart.currency_code}
+          textWeight="plus"
+        />
       </div>
     </div>
   )
@@ -214,7 +236,14 @@ export const CartLineItem = ({
   className,
 }: CartLineItemProps) => {
   if (type === "compact") {
-    return <CompactCartLineItem item={item} cart={cart} fields={fields} className={className} />
+    return (
+      <CompactCartLineItem
+        item={item}
+        cart={cart}
+        fields={fields}
+        className={className}
+      />
+    )
   }
 
   if (type === "display") {
@@ -224,13 +253,20 @@ export const CartLineItem = ({
   return (
     <div className="flex items-center gap-6 py-4">
       <div className="flex-shrink-0">
-        <Thumbnail thumbnail={item.thumbnail} alt={item.product_title || item.title} />
+        <Thumbnail
+          thumbnail={item.thumbnail}
+          alt={item.product_title || item.title}
+        />
       </div>
 
       <div className="flex-1 min-w-0 flex flex-col gap-y-1">
-        <span className="text-ds-foreground text-base font-semibold">{item.product_title}</span>
+        <span className="text-ds-foreground text-base font-semibold">
+          {item.product_title}
+        </span>
         {item.variant_title && item.variant_title !== "Default Variant" && (
-          <span className="text-ds-muted-foreground text-sm">{item.variant_title}</span>
+          <span className="text-ds-muted-foreground text-sm">
+            {item.variant_title}
+          </span>
         )}
       </div>
 
@@ -246,7 +282,6 @@ export const CartLineItem = ({
     </div>
   )
 }
-
 
 interface CartSummaryProps {
   cart: HttpTypes.StoreCart
@@ -301,12 +336,15 @@ export const CartSummary = ({ cart }: CartSummaryProps) => {
 
       <div className="flex justify-between text-sm">
         <span className="text-ds-foreground">Total</span>
-        <Price price={cart.total} currencyCode={cart.currency_code} className="text-ds-foreground" />
+        <Price
+          price={cart.total}
+          currencyCode={cart.currency_code}
+          className="text-ds-foreground"
+        />
       </div>
     </div>
   )
 }
-
 
 type CartPromoProps = {
   cart: HttpTypes.StoreCart
@@ -322,9 +360,8 @@ export const CartPromo = ({ cart }: CartPromoProps) => {
     removePromoCodeMutation.mutate(
       { code },
       {
-        onError: (_error) => {
-        },
-      }
+        onError: (_error) => {},
+      },
     )
   }
 
@@ -336,9 +373,8 @@ export const CartPromo = ({ cart }: CartPromoProps) => {
           setShowInput(false)
           setPromoCode("")
         },
-        onError: () => {
-        },
-      }
+        onError: () => {},
+      },
     )
   }
 
@@ -380,7 +416,11 @@ export const CartPromo = ({ cart }: CartPromoProps) => {
           <Button onClick={handleApply} variant="primary" size="fit">
             Apply
           </Button>
-          <Button onClick={() => setShowInput(false)} variant="secondary" size="fit">
+          <Button
+            onClick={() => setShowInput(false)}
+            variant="secondary"
+            size="fit"
+          >
             Cancel
           </Button>
         </div>
@@ -389,15 +429,18 @@ export const CartPromo = ({ cart }: CartPromoProps) => {
   )
 }
 
-
 export const CartEmpty = () => {
   const prefix = useTenantPrefix()
 
   return (
     <div className="text-center py-16 flex flex-col items-center justify-center gap-4">
-      <h2 className="text-lg font-bold text-ds-foreground">Your cart is empty</h2>
-      <p className="text-ds-muted-foreground text-base font-medium">Start by adding some products</p>
-      <Link to={`${prefix}/store` as any}>
+      <h2 className="text-lg font-bold text-ds-foreground">
+        Your cart is empty
+      </h2>
+      <p className="text-ds-muted-foreground text-base font-medium">
+        Start by adding some products
+      </p>
+      <Link to={`${prefix}/store` as never}>
         <Button variant="primary" size="fit">
           Continue shopping
         </Button>
@@ -405,7 +448,6 @@ export const CartEmpty = () => {
     </div>
   )
 }
-
 
 export const DEFAULT_CART_DROPDOWN_FIELDS = "id, *items, total, currency_code"
 
@@ -417,10 +459,14 @@ export const CartDropdown = () => {
   const prefix = useTenantPrefix()
 
   const sortedItems = sortCartItems(cart?.items || [])
-  const itemCount = sortedItems?.reduce((total, item) => total + item.quantity, 0) || 0
+  const itemCount =
+    sortedItems?.reduce((total, item) => total + item.quantity, 0) || 0
 
   return (
-    <Drawer open={isOpen} onOpenChange={(open) => (open ? openCart() : closeCart())}>
+    <Drawer
+      open={isOpen}
+      onOpenChange={(open) => (open ? openCart() : closeCart())}
+    >
       <DrawerTrigger asChild>
         <button className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full">
           Cart ({itemCount})
@@ -438,7 +484,7 @@ export const CartDropdown = () => {
             <span className="text-base font-medium text-ds-muted-foreground mb-4">
               Your cart is empty
             </span>
-            <Link to={`${prefix}/store` as any} onClick={closeCart}>
+            <Link to={`${prefix}/store` as never} onClick={closeCart}>
               <Button variant="secondary" size="fit">
                 Explore products
               </Button>
@@ -463,11 +509,13 @@ export const CartDropdown = () => {
 
             <DrawerFooter>
               <div className="flex items-center justify-between mb-4">
-                <span className="text-base font-medium text-ds-muted-foreground">Subtotal</span>
+                <span className="text-base font-medium text-ds-muted-foreground">
+                  Subtotal
+                </span>
                 <Price price={cart.total} currencyCode={cart.currency_code} />
               </div>
 
-              <Link to={`${prefix}/cart` as any} onClick={closeCart}>
+              <Link to={`${prefix}/cart` as never} onClick={closeCart}>
                 <Button className="w-full" variant="primary">
                   Go to cart
                 </Button>

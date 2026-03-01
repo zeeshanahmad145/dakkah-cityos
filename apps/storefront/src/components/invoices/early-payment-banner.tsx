@@ -128,7 +128,7 @@ export function EarlyPaymentBanner({
           </div>
 
           <p className="text-xs text-ds-success mt-3">
-            Offer expires: {new Date(data.deadline).toLocaleDateString()}
+            Offer expires: {new Date(data.deadline!).toLocaleDateString()}
           </p>
         </div>
       </div>

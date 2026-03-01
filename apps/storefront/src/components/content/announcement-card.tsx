@@ -9,7 +9,10 @@ interface AnnouncementCardProps {
   onDismiss?: (id: string) => void
 }
 
-const typeConfig: Record<Announcement["type"], { bg: string; border: string; icon: string; text: string }> = {
+const typeConfig: Record<
+  Announcement["type"],
+  { bg: string; border: string; icon: string; text: string }
+> = {
   info: {
     bg: "bg-ds-accent/10",
     border: "border-ds-accent/20",
@@ -36,7 +39,10 @@ const typeConfig: Record<Announcement["type"], { bg: string; border: string; ico
   },
 }
 
-export function AnnouncementCard({ announcement, onDismiss }: AnnouncementCardProps) {
+export function AnnouncementCard({
+  announcement,
+  onDismiss,
+}: AnnouncementCardProps) {
   const { locale } = useParams({ strict: false }) as { locale: string }
   const [dismissed, setDismissed] = useState(false)
   const config = typeConfig[announcement.type]
@@ -49,7 +55,9 @@ export function AnnouncementCard({ announcement, onDismiss }: AnnouncementCardPr
   }
 
   return (
-    <div className={`relative rounded-lg border p-4 ${config.bg} ${config.border}`}>
+    <div
+      className={`relative rounded-lg border p-4 ${config.bg} ${config.border}`}
+    >
       <div className="flex items-start gap-3">
         <span className="text-xl flex-shrink-0">{config.icon}</span>
         <div className="flex-1 min-w-0">
@@ -63,9 +71,11 @@ export function AnnouncementCard({ announcement, onDismiss }: AnnouncementCardPr
               </span>
             )}
           </div>
-          <p className="text-sm text-ds-foreground/80">{announcement.content}</p>
+          <p className="text-sm text-ds-foreground/80">
+            {announcement.content}
+          </p>
           <p className="text-xs text-ds-muted-foreground mt-2">
-            {formatDate(announcement.publishedAt, locale as any)}
+            {formatDate(announcement.publishedAt, locale as import("@/lib/i18n").SupportedLocale)}
           </p>
         </div>
         {onDismiss && (
@@ -74,8 +84,18 @@ export function AnnouncementCard({ announcement, onDismiss }: AnnouncementCardPr
             className="flex-shrink-0 p-1 rounded hover:bg-ds-muted transition-colors text-ds-muted-foreground hover:text-ds-foreground"
             aria-label={t(locale, "blocks.dismiss")}
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         )}

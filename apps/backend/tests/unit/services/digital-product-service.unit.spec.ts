@@ -7,19 +7,31 @@ jest.mock("@medusajs/framework/utils", () => {
       unique: () => chain,
       searchable: () => chain,
       index: () => chain,
-    }
-    return chain
-  }
+    };
+    return chain;
+  };
 
   return {
     MedusaService: () =>
       class MockMedusaBase {
-        async listDigitalAssets(_filter: any): Promise<any> { return [] }
-        async retrieveDigitalAsset(_id: string): Promise<any> { return null }
-        async createDigitalAssets(_data: any): Promise<any> { return {} }
-        async listDownloadLicenses(_filter: any): Promise<any> { return [] }
-        async createDownloadLicenses(_data: any): Promise<any> { return {} }
-        async updateDownloadLicenses(_data: any): Promise<any> { return {} }
+        async listDigitalAssets(_filter: any): Promise<any> {
+          return [];
+        }
+        async retrieveDigitalAsset(_id: string): Promise<any> {
+          return null;
+        }
+        async createDigitalAssets(_data: any): Promise<any> {
+          return {};
+        }
+        async listDownloadLicenses(_filter: any): Promise<any> {
+          return [];
+        }
+        async createDownloadLicenses(_data: any): Promise<any> {
+          return {};
+        }
+        async updateDownloadLicenses(_data: any): Promise<any> {
+          return {};
+        }
       },
     model: {
       define: () => ({ indexes: () => ({}) }),
@@ -38,84 +50,113 @@ jest.mock("@medusajs/framework/utils", () => {
       belongsTo: () => chainable(),
       manyToMany: () => chainable(),
     },
-  }
-})
+  };
+});
 
-import DigitalProductModuleService from "../../../src/modules/digital-product/service"
+import DigitalProductModuleService from "../../../src/modules/digital-product/service";
 
 describe("DigitalProductModuleService", () => {
-  let service: DigitalProductModuleService
+  let service: DigitalProductModuleService;
 
   beforeEach(() => {
-    service = new DigitalProductModuleService()
-    jest.clearAllMocks()
-  })
+    service = new DigitalProductModuleService();
+    jest.clearAllMocks();
+  });
 
   describe("purchaseLicense", () => {
     it("creates a single license", async () => {
-      jest.spyOn(service, "retrieveDigitalAsset" as any).mockResolvedValue({ id: "asset-1" })
-      const createSpy = jest.spyOn(service as any, "createDownloadLicenses").mockResolvedValue({ id: "lic-1" })
+      jest
+        .spyOn(service, "retrieveDigitalAsset")
+        .mockResolvedValue({ id: "asset-1" });
+      const createSpy = jest
+        .spyOn(service, "createDownloadLicenses")
+        .mockResolvedValue({ id: "lic-1" });
 
-      const result = await service.purchaseLicense("asset-1", "cust-1", "single")
+      const result = await service.purchaseLicense(
+        "asset-1",
+        "cust-1",
+        "single",
+      );
 
-      expect(result.id).toBe("lic-1")
-      expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({ max_activations: 1, license_type: "single" }))
-    })
+      expect(result.id).toBe("lic-1");
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ max_activations: 1, license_type: "single" }),
+      );
+    });
 
     it("creates a team license with 5 activations", async () => {
-      jest.spyOn(service, "retrieveDigitalAsset" as any).mockResolvedValue({ id: "asset-1" })
-      const createSpy = jest.spyOn(service as any, "createDownloadLicenses").mockResolvedValue({ id: "lic-1" })
+      jest
+        .spyOn(service, "retrieveDigitalAsset")
+        .mockResolvedValue({ id: "asset-1" });
+      const createSpy = jest
+        .spyOn(service, "createDownloadLicenses")
+        .mockResolvedValue({ id: "lic-1" });
 
-      await service.purchaseLicense("asset-1", "cust-1", "team")
+      await service.purchaseLicense("asset-1", "cust-1", "team");
 
-      expect(createSpy).toHaveBeenCalledWith(expect.objectContaining({ max_activations: 5 }))
-    })
+      expect(createSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ max_activations: 5 }),
+      );
+    });
 
     it("throws when license type is invalid", async () => {
-      await expect(service.purchaseLicense("asset-1", "cust-1", "invalid"))
-        .rejects.toThrow("License type must be one of")
-    })
+      await expect(
+        service.purchaseLicense("asset-1", "cust-1", "invalid"),
+      ).rejects.toThrow("License type must be one of");
+    });
 
     it("throws when product or customer ID is missing", async () => {
-      await expect(service.purchaseLicense("", "cust-1", "single"))
-        .rejects.toThrow("Product ID and customer ID are required")
-    })
-  })
+      await expect(
+        service.purchaseLicense("", "cust-1", "single"),
+      ).rejects.toThrow("Product ID and customer ID are required");
+    });
+  });
 
   describe("verifyLicense", () => {
     it("returns valid for active license with remaining activations", async () => {
-      jest.spyOn(service, "listDownloadLicenses" as any).mockResolvedValue([{
-        id: "lic-1", status: "active", max_activations: 5, activation_count: 2,
-        expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-      }])
+      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+        {
+          id: "lic-1",
+          status: "active",
+          max_activations: 5,
+          activation_count: 2,
+          expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+        },
+      ]);
 
-      const result = await service.verifyLicense("LIC-SINGLE-123")
+      const result = await service.verifyLicense("LIC-SINGLE-123");
 
-      expect(result.valid).toBe(true)
-      expect(result.remainingActivations).toBe(3)
-    })
+      expect(result.valid).toBe(true);
+      expect(result.remainingActivations).toBe(3);
+    });
 
     it("returns invalid for non-existent license", async () => {
-      jest.spyOn(service, "listDownloadLicenses" as any).mockResolvedValue([])
+      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
 
-      const result = await service.verifyLicense("LIC-INVALID")
+      const result = await service.verifyLicense("LIC-INVALID");
 
-      expect(result.valid).toBe(false)
-    })
+      expect(result.valid).toBe(false);
+    });
 
     it("returns invalid for expired license", async () => {
-      jest.spyOn(service, "listDownloadLicenses" as any).mockResolvedValue([{
-        id: "lic-1", status: "active", expires_at: new Date("2020-01-01"),
-      }])
-      jest.spyOn(service as any, "updateDownloadLicenses").mockResolvedValue({})
+      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+        {
+          id: "lic-1",
+          status: "active",
+          expires_at: new Date("2020-01-01"),
+        },
+      ]);
+      jest.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
 
-      const result = await service.verifyLicense("LIC-EXPIRED")
+      const result = await service.verifyLicense("LIC-EXPIRED");
 
-      expect(result.valid).toBe(false)
-    })
+      expect(result.valid).toBe(false);
+    });
 
     it("throws when license key is empty", async () => {
-      await expect(service.verifyLicense("")).rejects.toThrow("License key is required")
-    })
-  })
-})
+      await expect(service.verifyLicense("")).rejects.toThrow(
+        "License key is required",
+      );
+    });
+  });
+});

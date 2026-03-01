@@ -52,7 +52,11 @@ const navSections: { label: string; items: NavItem[] }[] = [
       { icon: Calendar, label: "Bookings", path: "/bookings" },
       { icon: Star, label: "Wishlist", path: "/wishlist" },
       { icon: ArrowDownTray, label: "Downloads", path: "/downloads" },
-      { icon: DocumentText, label: "Purchase Orders", path: "/purchase-orders" },
+      {
+        icon: DocumentText,
+        label: "Purchase Orders",
+        path: "/purchase-orders",
+      },
     ],
   },
   {
@@ -75,7 +79,11 @@ const navSections: { label: string; items: NavItem[] }[] = [
   },
 ]
 
-export function AccountLayout({ children, title, description }: AccountLayoutProps) {
+export function AccountLayout({
+  children,
+  title,
+  description,
+}: AccountLayoutProps) {
   const location = useLocation()
   const prefix = useTenantPrefix()
   const baseHref = `${prefix}/account`
@@ -84,7 +92,9 @@ export function AccountLayout({ children, title, description }: AccountLayoutPro
   const isActive = (path: string) => {
     const fullPath = `${baseHref}${path}`
     if (path === "") {
-      return location.pathname === baseHref || location.pathname === `${baseHref}/`
+      return (
+        location.pathname === baseHref || location.pathname === `${baseHref}/`
+      )
     }
     return location.pathname.startsWith(fullPath)
   }
@@ -99,11 +109,15 @@ export function AccountLayout({ children, title, description }: AccountLayoutPro
                 <h1 className="text-2xl font-bold text-ds-foreground">
                   {title || `Welcome back, ${customer?.first_name || "there"}`}
                 </h1>
-                {description && <p className="mt-1 text-ds-muted-foreground">{description}</p>}
+                {description && (
+                  <p className="mt-1 text-ds-muted-foreground">{description}</p>
+                )}
               </div>
               {isB2B && customer?.company && (
                 <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-ds-info rounded-lg">
-                  <span className="text-sm font-medium text-ds-info">{customer.company.name}</span>
+                  <span className="text-sm font-medium text-ds-info">
+                    {customer.company.name}
+                  </span>
                   <span className="text-xs text-ds-info bg-ds-info px-2 py-0.5 rounded">
                     Business
                   </span>
@@ -120,10 +134,12 @@ export function AccountLayout({ children, title, description }: AccountLayoutPro
                 {navSections.map((section, sectionIndex) => (
                   <div key={section.label || "main"}>
                     {section.label && (
-                      <div className={clsx(
-                        "px-4 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ds-muted-foreground",
-                        sectionIndex > 0 && "border-t border-ds-border"
-                      )}>
+                      <div
+                        className={clsx(
+                          "px-4 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ds-muted-foreground",
+                          sectionIndex > 0 && "border-t border-ds-border",
+                        )}
+                      >
                         {section.label}
                       </div>
                     )}
@@ -133,18 +149,23 @@ export function AccountLayout({ children, title, description }: AccountLayoutPro
                       return (
                         <Link
                           key={item.path}
-                          to={`${baseHref}${item.path}` as any}
+                          to={`${baseHref}${item.path}` as never}
                           className={clsx(
                             "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors border-b border-ds-border last:border-b-0",
                             active
                               ? "bg-ds-primary text-ds-primary-foreground"
-                              : "text-ds-muted-foreground hover:bg-ds-muted hover:text-ds-foreground"
+                              : "text-ds-muted-foreground hover:bg-ds-muted hover:text-ds-foreground",
                           )}
                         >
                           <Icon className="h-5 w-5" />
                           {item.label}
                           <ChevronRight
-                            className={clsx("ms-auto h-4 w-4", active ? "text-ds-primary-foreground" : "text-ds-muted-foreground")}
+                            className={clsx(
+                              "ms-auto h-4 w-4",
+                              active
+                                ? "text-ds-primary-foreground"
+                                : "text-ds-muted-foreground",
+                            )}
                           />
                         </Link>
                       )
@@ -155,17 +176,19 @@ export function AccountLayout({ children, title, description }: AccountLayoutPro
 
               {isB2B && (
                 <div className="mt-4 bg-ds-background rounded-lg border border-ds-border p-4">
-                  <h3 className="text-sm font-semibold text-ds-foreground mb-3">Business</h3>
+                  <h3 className="text-sm font-semibold text-ds-foreground mb-3">
+                    Business
+                  </h3>
                   <div className="space-y-2">
                     <Link
-                      to={`${prefix}/b2b/dashboard` as any}
+                      to={`${prefix}/b2b/dashboard` as never}
                       className="flex items-center gap-2 text-sm text-ds-muted-foreground hover:text-ds-foreground"
                     >
                       <ChevronRight className="h-4 w-4" />
                       Company Dashboard
                     </Link>
                     <Link
-                      to={`${prefix}/business/catalog` as any}
+                      to={`${prefix}/business/catalog` as never}
                       className="flex items-center gap-2 text-sm text-ds-muted-foreground hover:text-ds-foreground"
                     >
                       <ChevronRight className="h-4 w-4" />

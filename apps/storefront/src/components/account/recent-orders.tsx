@@ -5,7 +5,7 @@ import { ChevronRight, ShoppingBag } from "@medusajs/icons"
 
 interface Order {
   id: string
-  display_id: number
+  display_id: number | undefined
   created_at: string
   status: string
   total: number
@@ -38,7 +38,9 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
     return (
       <div className="bg-ds-background rounded-lg border border-ds-border">
         <div className="p-4 border-b border-ds-border">
-          <h2 className="text-lg font-semibold text-ds-foreground">Recent Orders</h2>
+          <h2 className="text-lg font-semibold text-ds-foreground">
+            Recent Orders
+          </h2>
         </div>
         <div className="p-8 text-center">
           <div className="animate-pulse space-y-4">
@@ -55,13 +57,15 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
     return (
       <div className="bg-ds-background rounded-lg border border-ds-border">
         <div className="p-4 border-b border-ds-border">
-          <h2 className="text-lg font-semibold text-ds-foreground">Recent Orders</h2>
+          <h2 className="text-lg font-semibold text-ds-foreground">
+            Recent Orders
+          </h2>
         </div>
         <div className="p-8 text-center">
           <ShoppingBag className="h-12 w-12 text-ds-muted-foreground mx-auto mb-4" />
           <p className="text-ds-muted-foreground">No orders yet</p>
           <Link
-            to={`${prefix}/` as any}
+            to={`${prefix}/` as never}
             className="mt-4 inline-flex items-center text-sm font-medium text-ds-foreground hover:underline"
           >
             Start shopping
@@ -75,9 +79,11 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
   return (
     <div className="bg-ds-background rounded-lg border border-ds-border">
       <div className="p-4 border-b border-ds-border flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-ds-foreground">Recent Orders</h2>
+        <h2 className="text-lg font-semibold text-ds-foreground">
+          Recent Orders
+        </h2>
         <Link
-          to={`${prefix}/account/orders` as any}
+          to={`${prefix}/account/orders` as never}
           className="text-sm font-medium text-ds-muted-foreground hover:text-ds-foreground"
         >
           View all
@@ -87,7 +93,7 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
         {orders.slice(0, 3).map((order) => (
           <Link
             key={order.id}
-            to={`${prefix}/account/orders/${order.id}` as any}
+            to={`${prefix}/account/orders/${order.id}` as never}
             className="flex items-center gap-4 p-4 hover:bg-ds-muted transition-colors"
           >
             {/* Thumbnails */}
@@ -120,9 +126,11 @@ export function RecentOrders({ orders, isLoading }: RecentOrdersProps) {
 
             {/* Order Info */}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-ds-foreground">Order #{order.display_id}</p>
+              <p className="text-sm font-medium text-ds-foreground">
+                Order #{order.display_id}
+              </p>
               <p className="text-sm text-ds-muted-foreground">
-                {new Date(order.created_at).toLocaleDateString()}
+                {new Date(order.created_at!).toLocaleDateString()}
               </p>
             </div>
 

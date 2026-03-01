@@ -28,12 +28,12 @@ export const syncCategoryToPayloadWorkflow = createWorkflow(
 
     // 2. Transform the data into the payload format
     const payloadDocInfo = transform({ categories }, (data) => {
-      const category = data.categories?.[0] as any;
+      const category = data.categories?.[0];
       if (!category) return null;
 
       // Note: If a 'payload_record' doesn't exist, you'd typically have a separate step to CREATE it first,
       // but following the existing pattern from sync-product-to-payload:
-      if (!category.payload_record) {
+      if (!(category as any).payload_record) {
         return {
           collection: "categories",
           id: category.id, // Or a matching ID if generating one
@@ -50,8 +50,8 @@ export const syncCategoryToPayloadWorkflow = createWorkflow(
       }
 
       return {
-        collection: category.payload_record.collection_slug || "categories",
-        id: category.payload_record.payload_id,
+        collection: (category as any).payload_record.collection_slug || "categories",
+        id: (category as any).payload_record.payload_id,
         data: {
           title: category.name,
           description: category.description,
@@ -68,3 +68,4 @@ export const syncCategoryToPayloadWorkflow = createWorkflow(
     return new WorkflowResponse(result);
   },
 );
+

@@ -71,7 +71,7 @@ export function BundleBuilder({ bundle, onAddToCart }: BundleBuilderProps) {
           <div className="flex items-center justify-between">
             <span className="font-semibold text-ds-foreground">Bundle Price</span>
             <span className="text-xl font-bold text-ds-foreground">
-              {formatCurrency(bundle.total_price, bundle.currency_code, locale as SupportedLocale)}
+              {formatCurrency((bundle.total_price ?? 0), bundle.currency_code, locale as SupportedLocale)}
             </span>
           </div>
           {savings > 0 && (
@@ -136,7 +136,7 @@ function BundleItemRow({
         </div>
       </div>
       <span className="text-sm font-medium text-ds-muted-foreground">
-        {formatCurrency(item.price, item.currency_code, locale as SupportedLocale)}
+        {formatCurrency((item.price ?? 0), item.currency_code, locale as SupportedLocale)}
       </span>
     </label>
   )

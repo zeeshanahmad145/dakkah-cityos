@@ -1,6 +1,6 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
-import { enrichDetailItem } from "../../../../lib/detail-enricher"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
+import { enrichDetailItem } from "../../../../lib/detail-enricher";
 
 const SEED_DATA = [
   {
@@ -10,7 +10,8 @@ const SEED_DATA = [
     title: "Board Certified Cardiologist",
     specialization: "cardiology",
     bio: "Leading cardiologist with over 15 years of experience in interventional cardiology and heart failure management. Passionate about preventive cardiac care.",
-    description: "Leading cardiologist with over 15 years of experience in interventional cardiology and heart failure management. Passionate about preventive cardiac care.",
+    description:
+      "Leading cardiologist with over 15 years of experience in interventional cardiology and heart failure management. Passionate about preventive cardiac care.",
     education: "MD, Johns Hopkins University",
     experience_years: 15,
     languages: ["English", "Arabic"],
@@ -28,19 +29,63 @@ const SEED_DATA = [
       consultation_fee: 25000,
     },
     created_at: "2025-01-01T00:00:00Z",
-    services: ["Interventional Cardiology", "Heart Failure Management", "Cardiac Catheterization", "Echocardiography", "Preventive Cardiac Care", "Stress Testing"],
-    insurance_accepted: ["Bupa", "Tawuniya", "Medgulf", "AXA", "Cigna", "United Healthcare"],
+    services: [
+      "Interventional Cardiology",
+      "Heart Failure Management",
+      "Cardiac Catheterization",
+      "Echocardiography",
+      "Preventive Cardiac Care",
+      "Stress Testing",
+    ],
+    insurance_accepted: [
+      "Bupa",
+      "Tawuniya",
+      "Medgulf",
+      "AXA",
+      "Cigna",
+      "United Healthcare",
+    ],
     availability: [
       { day: "Monday", time: "9:00 AM - 1:00 PM" },
       { day: "Wednesday", time: "2:00 PM - 6:00 PM" },
       { day: "Thursday", time: "9:00 AM - 12:00 PM" },
     ],
     reviews: [
-      { author: "Fatima K.", rating: 5, comment: "Dr. Hassan is incredibly thorough and caring. She took time to explain my condition and treatment options in detail.", created_at: "2025-04-10T10:00:00Z" },
-      { author: "George M.", rating: 5, comment: "Best cardiologist I've ever visited. Her preventive care approach helped me avoid a serious heart condition.", created_at: "2025-03-28T14:30:00Z" },
-      { author: "Nadia S.", rating: 4, comment: "Very knowledgeable and professional. Wait times can be a bit long but the quality of care is worth it.", created_at: "2025-03-15T09:00:00Z" },
-      { author: "Richard P.", rating: 5, comment: "Dr. Hassan's expertise in interventional cardiology is outstanding. She saved my life with a timely catheterization.", created_at: "2025-02-20T11:00:00Z" },
-      { author: "Salma A.", rating: 5, comment: "Compassionate doctor who truly listens. Her bilingual ability made it easy for my elderly mother to communicate.", created_at: "2025-02-05T08:30:00Z" },
+      {
+        author: "Fatima K.",
+        rating: 5,
+        comment:
+          "Dr. Hassan is incredibly thorough and caring. She took time to explain my condition and treatment options in detail.",
+        created_at: "2025-04-10T10:00:00Z",
+      },
+      {
+        author: "George M.",
+        rating: 5,
+        comment:
+          "Best cardiologist I've ever visited. Her preventive care approach helped me avoid a serious heart condition.",
+        created_at: "2025-03-28T14:30:00Z",
+      },
+      {
+        author: "Nadia S.",
+        rating: 4,
+        comment:
+          "Very knowledgeable and professional. Wait times can be a bit long but the quality of care is worth it.",
+        created_at: "2025-03-15T09:00:00Z",
+      },
+      {
+        author: "Richard P.",
+        rating: 5,
+        comment:
+          "Dr. Hassan's expertise in interventional cardiology is outstanding. She saved my life with a timely catheterization.",
+        created_at: "2025-02-20T11:00:00Z",
+      },
+      {
+        author: "Salma A.",
+        rating: 5,
+        comment:
+          "Compassionate doctor who truly listens. Her bilingual ability made it easy for my elderly mother to communicate.",
+        created_at: "2025-02-05T08:30:00Z",
+      },
     ],
   },
   {
@@ -50,7 +95,8 @@ const SEED_DATA = [
     title: "Dermatology Specialist",
     specialization: "dermatology",
     bio: "Expert dermatologist specializing in cosmetic procedures, skin cancer screening, and advanced dermatological treatments. Research published in top medical journals.",
-    description: "Expert dermatologist specializing in cosmetic procedures, skin cancer screening, and advanced dermatological treatments. Research published in top medical journals.",
+    description:
+      "Expert dermatologist specializing in cosmetic procedures, skin cancer screening, and advanced dermatological treatments. Research published in top medical journals.",
     education: "MD, Stanford University",
     experience_years: 12,
     languages: ["English", "Korean"],
@@ -68,7 +114,14 @@ const SEED_DATA = [
       consultation_fee: 20000,
     },
     created_at: "2025-01-05T00:00:00Z",
-    services: ["Cosmetic Dermatology", "Skin Cancer Screening", "Laser Treatments", "Acne Treatment", "Botox & Fillers", "Chemical Peels"],
+    services: [
+      "Cosmetic Dermatology",
+      "Skin Cancer Screening",
+      "Laser Treatments",
+      "Acne Treatment",
+      "Botox & Fillers",
+      "Chemical Peels",
+    ],
     insurance_accepted: ["Bupa", "Tawuniya", "AXA", "Allianz"],
     availability: [
       { day: "Tuesday", time: "10:00 AM - 4:00 PM" },
@@ -76,11 +129,41 @@ const SEED_DATA = [
       { day: "Saturday", time: "9:00 AM - 1:00 PM" },
     ],
     reviews: [
-      { author: "Michelle L.", rating: 5, comment: "Dr. Kim cleared my persistent acne that other dermatologists couldn't. His approach is scientific and effective.", created_at: "2025-04-08T11:00:00Z" },
-      { author: "Jennifer H.", rating: 4, comment: "Excellent skin cancer screening. Thorough examination and clear explanations. Modern equipment.", created_at: "2025-03-25T14:00:00Z" },
-      { author: "Kevin W.", rating: 5, comment: "The laser treatment results exceeded my expectations. Dr. Kim is meticulous and stays up-to-date with technology.", created_at: "2025-03-10T10:30:00Z" },
-      { author: "Anna T.", rating: 4, comment: "Professional and knowledgeable. The chemical peel treatment he recommended transformed my skin texture.", created_at: "2025-02-22T09:00:00Z" },
-      { author: "Brian C.", rating: 5, comment: "Published researcher who brings cutting-edge treatments to his practice. Highly recommend for any skin concern.", created_at: "2025-02-08T15:00:00Z" },
+      {
+        author: "Michelle L.",
+        rating: 5,
+        comment:
+          "Dr. Kim cleared my persistent acne that other dermatologists couldn't. His approach is scientific and effective.",
+        created_at: "2025-04-08T11:00:00Z",
+      },
+      {
+        author: "Jennifer H.",
+        rating: 4,
+        comment:
+          "Excellent skin cancer screening. Thorough examination and clear explanations. Modern equipment.",
+        created_at: "2025-03-25T14:00:00Z",
+      },
+      {
+        author: "Kevin W.",
+        rating: 5,
+        comment:
+          "The laser treatment results exceeded my expectations. Dr. Kim is meticulous and stays up-to-date with technology.",
+        created_at: "2025-03-10T10:30:00Z",
+      },
+      {
+        author: "Anna T.",
+        rating: 4,
+        comment:
+          "Professional and knowledgeable. The chemical peel treatment he recommended transformed my skin texture.",
+        created_at: "2025-02-22T09:00:00Z",
+      },
+      {
+        author: "Brian C.",
+        rating: 5,
+        comment:
+          "Published researcher who brings cutting-edge treatments to his practice. Highly recommend for any skin concern.",
+        created_at: "2025-02-08T15:00:00Z",
+      },
     ],
   },
   {
@@ -90,7 +173,8 @@ const SEED_DATA = [
     title: "Pediatrics & Child Development",
     specialization: "pediatrics",
     bio: "Compassionate pediatrician dedicated to children's health and development. Specializes in childhood nutrition, behavioral development, and preventive care.",
-    description: "Compassionate pediatrician dedicated to children's health and development. Specializes in childhood nutrition, behavioral development, and preventive care.",
+    description:
+      "Compassionate pediatrician dedicated to children's health and development. Specializes in childhood nutrition, behavioral development, and preventive care.",
     education: "MD, Harvard Medical School",
     experience_years: 18,
     languages: ["English", "Spanish", "Portuguese"],
@@ -108,7 +192,14 @@ const SEED_DATA = [
       consultation_fee: 18000,
     },
     created_at: "2025-01-10T00:00:00Z",
-    services: ["Well-child Visits", "Childhood Nutrition", "Behavioral Development", "Vaccinations", "Growth Monitoring", "Developmental Screening"],
+    services: [
+      "Well-child Visits",
+      "Childhood Nutrition",
+      "Behavioral Development",
+      "Vaccinations",
+      "Growth Monitoring",
+      "Developmental Screening",
+    ],
     insurance_accepted: ["Bupa", "Tawuniya", "Medgulf", "Cigna", "MetLife"],
     availability: [
       { day: "Monday", time: "8:00 AM - 3:00 PM" },
@@ -116,11 +207,41 @@ const SEED_DATA = [
       { day: "Friday", time: "9:00 AM - 12:00 PM" },
     ],
     reviews: [
-      { author: "Rosa G.", rating: 5, comment: "Dr. Santos is wonderful with children. My toddler actually looks forward to visits. She makes them fun and comfortable.", created_at: "2025-04-06T09:00:00Z" },
-      { author: "Carlos D.", rating: 5, comment: "Her expertise in childhood nutrition helped us address our son's feeding challenges. Patient and knowledgeable.", created_at: "2025-03-22T10:30:00Z" },
-      { author: "Amy J.", rating: 5, comment: "The best pediatrician we've ever had. She caught a developmental concern early that made a huge difference.", created_at: "2025-03-08T08:00:00Z" },
-      { author: "Pedro M.", rating: 4, comment: "Trilingual practice is a blessing for our family. Thorough well-child visits with clear guidance for parents.", created_at: "2025-02-20T11:00:00Z" },
-      { author: "Laura B.", rating: 5, comment: "18 years of experience shows. Dr. Santos has an intuitive understanding of children's health needs.", created_at: "2025-02-05T09:30:00Z" },
+      {
+        author: "Rosa G.",
+        rating: 5,
+        comment:
+          "Dr. Santos is wonderful with children. My toddler actually looks forward to visits. She makes them fun and comfortable.",
+        created_at: "2025-04-06T09:00:00Z",
+      },
+      {
+        author: "Carlos D.",
+        rating: 5,
+        comment:
+          "Her expertise in childhood nutrition helped us address our son's feeding challenges. Patient and knowledgeable.",
+        created_at: "2025-03-22T10:30:00Z",
+      },
+      {
+        author: "Amy J.",
+        rating: 5,
+        comment:
+          "The best pediatrician we've ever had. She caught a developmental concern early that made a huge difference.",
+        created_at: "2025-03-08T08:00:00Z",
+      },
+      {
+        author: "Pedro M.",
+        rating: 4,
+        comment:
+          "Trilingual practice is a blessing for our family. Thorough well-child visits with clear guidance for parents.",
+        created_at: "2025-02-20T11:00:00Z",
+      },
+      {
+        author: "Laura B.",
+        rating: 5,
+        comment:
+          "18 years of experience shows. Dr. Santos has an intuitive understanding of children's health needs.",
+        created_at: "2025-02-05T09:30:00Z",
+      },
     ],
   },
   {
@@ -130,7 +251,8 @@ const SEED_DATA = [
     title: "Orthopedic Surgeon",
     specialization: "orthopedics",
     bio: "Experienced orthopedic surgeon specializing in sports medicine, joint replacement, and minimally invasive surgical techniques. Team physician for professional athletes.",
-    description: "Experienced orthopedic surgeon specializing in sports medicine, joint replacement, and minimally invasive surgical techniques. Team physician for professional athletes.",
+    description:
+      "Experienced orthopedic surgeon specializing in sports medicine, joint replacement, and minimally invasive surgical techniques. Team physician for professional athletes.",
     education: "MD, Mayo Clinic",
     experience_years: 20,
     languages: ["English"],
@@ -148,7 +270,14 @@ const SEED_DATA = [
       consultation_fee: 30000,
     },
     created_at: "2025-01-15T00:00:00Z",
-    services: ["Sports Medicine", "Joint Replacement", "Arthroscopy", "Fracture Treatment", "Spine Surgery", "Physical Rehabilitation"],
+    services: [
+      "Sports Medicine",
+      "Joint Replacement",
+      "Arthroscopy",
+      "Fracture Treatment",
+      "Spine Surgery",
+      "Physical Rehabilitation",
+    ],
     insurance_accepted: ["Bupa", "Tawuniya", "AXA", "Cigna", "Aetna"],
     availability: [
       { day: "Monday", time: "7:00 AM - 2:00 PM" },
@@ -156,11 +285,41 @@ const SEED_DATA = [
       { day: "Saturday", time: "8:00 AM - 12:00 PM" },
     ],
     reviews: [
-      { author: "Jason R.", rating: 5, comment: "Dr. Mitchell performed my knee replacement and I'm back to hiking within 3 months. Incredible surgical skill.", created_at: "2025-04-09T08:00:00Z" },
-      { author: "Sarah L.", rating: 5, comment: "As a marathon runner, finding the right sports medicine doctor was crucial. Dr. Mitchell understands athletes.", created_at: "2025-03-26T10:00:00Z" },
-      { author: "Marcus W.", rating: 4, comment: "The arthroscopy was minimally invasive as promised. Recovery was quick. Professional and experienced surgeon.", created_at: "2025-03-12T14:00:00Z" },
-      { author: "Diana F.", rating: 5, comment: "20 years of experience is evident in his confident approach. He explained the procedure thoroughly and outcomes were excellent.", created_at: "2025-02-25T09:30:00Z" },
-      { author: "Ahmed K.", rating: 4, comment: "Top-notch orthopedic care. The rehabilitation plan was well-structured and my fracture healed perfectly.", created_at: "2025-02-10T11:00:00Z" },
+      {
+        author: "Jason R.",
+        rating: 5,
+        comment:
+          "Dr. Mitchell performed my knee replacement and I'm back to hiking within 3 months. Incredible surgical skill.",
+        created_at: "2025-04-09T08:00:00Z",
+      },
+      {
+        author: "Sarah L.",
+        rating: 5,
+        comment:
+          "As a marathon runner, finding the right sports medicine doctor was crucial. Dr. Mitchell understands athletes.",
+        created_at: "2025-03-26T10:00:00Z",
+      },
+      {
+        author: "Marcus W.",
+        rating: 4,
+        comment:
+          "The arthroscopy was minimally invasive as promised. Recovery was quick. Professional and experienced surgeon.",
+        created_at: "2025-03-12T14:00:00Z",
+      },
+      {
+        author: "Diana F.",
+        rating: 5,
+        comment:
+          "20 years of experience is evident in his confident approach. He explained the procedure thoroughly and outcomes were excellent.",
+        created_at: "2025-02-25T09:30:00Z",
+      },
+      {
+        author: "Ahmed K.",
+        rating: 4,
+        comment:
+          "Top-notch orthopedic care. The rehabilitation plan was well-structured and my fracture healed perfectly.",
+        created_at: "2025-02-10T11:00:00Z",
+      },
     ],
   },
   {
@@ -170,7 +329,8 @@ const SEED_DATA = [
     title: "Psychiatrist & Mental Health Expert",
     specialization: "psychiatry",
     bio: "Renowned psychiatrist offering comprehensive mental health services including therapy, medication management, and mindfulness-based treatments for anxiety and depression.",
-    description: "Renowned psychiatrist offering comprehensive mental health services including therapy, medication management, and mindfulness-based treatments for anxiety and depression.",
+    description:
+      "Renowned psychiatrist offering comprehensive mental health services including therapy, medication management, and mindfulness-based treatments for anxiety and depression.",
     education: "MD, Columbia University",
     experience_years: 14,
     languages: ["English", "Russian", "French"],
@@ -188,37 +348,83 @@ const SEED_DATA = [
       consultation_fee: 22000,
     },
     created_at: "2025-01-20T00:00:00Z",
-    services: ["Cognitive Behavioral Therapy", "Medication Management", "Anxiety Treatment", "Depression Treatment", "Mindfulness Therapy", "Couples Counseling"],
-    insurance_accepted: ["Bupa", "Tawuniya", "Cigna", "United Healthcare", "Aetna"],
+    services: [
+      "Cognitive Behavioral Therapy",
+      "Medication Management",
+      "Anxiety Treatment",
+      "Depression Treatment",
+      "Mindfulness Therapy",
+      "Couples Counseling",
+    ],
+    insurance_accepted: [
+      "Bupa",
+      "Tawuniya",
+      "Cigna",
+      "United Healthcare",
+      "Aetna",
+    ],
     availability: [
       { day: "Tuesday", time: "10:00 AM - 6:00 PM" },
       { day: "Wednesday", time: "10:00 AM - 6:00 PM" },
       { day: "Friday", time: "10:00 AM - 2:00 PM" },
     ],
     reviews: [
-      { author: "Anna M.", rating: 5, comment: "Dr. Petrova's mindfulness-based approach transformed my anxiety management. She creates a safe, non-judgmental space.", created_at: "2025-04-11T11:00:00Z" },
-      { author: "Thomas G.", rating: 5, comment: "After years of struggling with depression, Dr. Petrova found the right combination of therapy and medication.", created_at: "2025-03-29T14:00:00Z" },
-      { author: "Sophie R.", rating: 4, comment: "Insightful and empathetic psychiatrist. The CBT sessions have given me practical tools for daily challenges.", created_at: "2025-03-14T10:30:00Z" },
-      { author: "Michael B.", rating: 5, comment: "Her trilingual practice makes mental health care accessible. Remarkable ability to connect with patients.", created_at: "2025-02-28T15:00:00Z" },
-      { author: "Elena V.", rating: 4, comment: "Professional and compassionate. The couples counseling sessions helped my partner and me communicate better.", created_at: "2025-02-12T12:00:00Z" },
+      {
+        author: "Anna M.",
+        rating: 5,
+        comment:
+          "Dr. Petrova's mindfulness-based approach transformed my anxiety management. She creates a safe, non-judgmental space.",
+        created_at: "2025-04-11T11:00:00Z",
+      },
+      {
+        author: "Thomas G.",
+        rating: 5,
+        comment:
+          "After years of struggling with depression, Dr. Petrova found the right combination of therapy and medication.",
+        created_at: "2025-03-29T14:00:00Z",
+      },
+      {
+        author: "Sophie R.",
+        rating: 4,
+        comment:
+          "Insightful and empathetic psychiatrist. The CBT sessions have given me practical tools for daily challenges.",
+        created_at: "2025-03-14T10:30:00Z",
+      },
+      {
+        author: "Michael B.",
+        rating: 5,
+        comment:
+          "Her trilingual practice makes mental health care accessible. Remarkable ability to connect with patients.",
+        created_at: "2025-02-28T15:00:00Z",
+      },
+      {
+        author: "Elena V.",
+        rating: 4,
+        comment:
+          "Professional and compassionate. The couples counseling sessions helped my partner and me communicate better.",
+        created_at: "2025-02-12T12:00:00Z",
+      },
     ],
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const { id } = req.params
+  const { id } = req.params;
 
   try {
-    const mod = req.scope.resolve("healthcare") as any
-    const item = await mod.retrievePractitioner(id)
-    if (item) return res.json({ item: enrichDetailItem(item, "healthcare") })
-  } catch (error: any) {
-    const isNotFound = error?.type === "not_found" || error?.message?.includes("not found")
+    const mod = req.scope.resolve("healthcare") as unknown as any;
+    const item = await mod.retrievePractitioner(id);
+    if (item) return res.json({ item: enrichDetailItem(item, "healthcare") });
+  } catch (error: unknown) {
+    const e = error as Record<string, unknown>;
+    const isNotFound =
+      e?.["type"] === "not_found" ||
+      (error instanceof Error && error.message?.includes("not found"));
     if (!isNotFound) {
-      return handleApiError(res, error, "STORE-HEALTHCARE-ID")
+      return handleApiError(res, error, "STORE-HEALTHCARE-ID");
     }
   }
 
-  const seedMatch = SEED_DATA.find((c) => c.id === id) || SEED_DATA[0]
-  return res.json({ item: seedMatch })
+  const seedMatch = SEED_DATA.find((c) => c.id === id) || SEED_DATA[0];
+  return res.json({ item: seedMatch });
 }

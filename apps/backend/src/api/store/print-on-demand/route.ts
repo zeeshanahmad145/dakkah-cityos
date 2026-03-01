@@ -1,97 +1,102 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import {
+  parseStoreQuery,
+  podQuerySchema,
+} from "../../../lib/route-query-validator";
+
+/**
+ * GET /store/print-on-demand
+ * Phase 5: query.graph() fetching products linked to PodProduct extensions.
+ * POD items have virtual inventory; customization options stored in pod_product.
+ */
+
+const SEED_POD = [
+  {
+    id: "prod_pod_seed_001",
+    title: "Custom T-Shirt",
+    description: "High-quality cotton t-shirt with your custom design.",
+    thumbnail: "/seed-images/pod/tshirt.jpg",
+    pod_product: {
+      template_url: "/templates/tshirt-front.svg",
+      print_provider: "printful",
+      customization_options: {
+        colors: ["white", "black", "navy"],
+        sizes: ["S", "M", "L", "XL", "XXL"],
+      },
+      base_cost: 1200,
+    },
+    metadata: { vertical: "print-on-demand" },
+  },
+  {
+    id: "prod_pod_seed_002",
+    title: "Custom Mug",
+    description: "11oz ceramic mug with full-wrap print.",
+    thumbnail: "/seed-images/pod/mug.jpg",
+    pod_product: {
+      template_url: "/templates/mug-wrap.svg",
+      print_provider: "printify",
+      customization_options: {
+        wrap: "full",
+        materials: ["ceramic", "polymer"],
+      },
+      base_cost: 600,
+    },
+    metadata: { vertical: "print-on-demand" },
+  },
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
+  const q = parseStoreQuery(req, res, podQuerySchema);
+  if (!q) return;
+  const { limit, offset, tenant_id, search, print_provider } = q;
+
   try {
-    const { limit = "20", offset = "0", category, search } = req.query as Record<string, string | undefined>
+    const query = req.scope.resolve("query") as unknown as any;
+    const filters: Record<string, unknown> = {
+      status: "published",
+      "metadata->>'vertical'": "print-on-demand",
+    };
+    if (tenant_id) filters["pod_product.tenant_id"] = tenant_id;
+    if (print_provider) filters["pod_product.print_provider"] = print_provider;
+    if (search) filters.title = { $ilike: `%${search}%` };
 
-    let items = [
-      {
-        id: "pod_tshirt_01",
-        title: "Custom T-Shirt",
-        description: "Design your own custom t-shirt with high-quality print-on-demand production.",
-        category: "Apparel",
-        base_price: 1999,
-        currency_code: "usd",
-        thumbnail: "/seed-images/auctions/1523275335684-37898b6baf30.jpg",
-        image: "/seed-images/auctions/1523275335684-37898b6baf30.jpg",
-        status: "available",
-        options: ["S", "M", "L", "XL", "2XL"],
-        print_areas: ["front", "back"],
-        production_time: "3-5 business days",
-      },
-      {
-        id: "pod_mug_01",
-        title: "Custom Mug",
-        description: "Personalized ceramic mug with your design, perfect for gifts and branding.",
-        category: "Drinkware",
-        base_price: 1299,
-        currency_code: "usd",
-        thumbnail: "/seed-images/auctions/1526170375885-4d8ecf77b99f.jpg",
-        image: "/seed-images/auctions/1526170375885-4d8ecf77b99f.jpg",
-        status: "available",
-        options: ["11oz", "15oz"],
-        print_areas: ["wrap"],
-        production_time: "2-4 business days",
-      },
-      {
-        id: "pod_poster_01",
-        title: "Custom Poster",
-        description: "High-quality poster printing on premium paper stock.",
-        category: "Wall Art",
-        base_price: 2499,
-        currency_code: "usd",
-        thumbnail: "/seed-images/freelance/1461749280684-dccba630e2f6.jpg",
-        image: "/seed-images/freelance/1461749280684-dccba630e2f6.jpg",
-        status: "available",
-        options: ["12x18", "18x24", "24x36"],
-        print_areas: ["front"],
-        production_time: "2-3 business days",
-      },
-      {
-        id: "pod_hoodie_01",
-        title: "Custom Hoodie",
-        description: "Premium custom hoodie with your artwork or logo.",
-        category: "Apparel",
-        base_price: 3999,
-        currency_code: "usd",
-        thumbnail: "/seed-images/affiliate/1483985988355-763728e1935b.jpg",
-        image: "/seed-images/affiliate/1483985988355-763728e1935b.jpg",
-        status: "available",
-        options: ["S", "M", "L", "XL", "2XL"],
-        print_areas: ["front", "back"],
-        production_time: "5-7 business days",
-      },
-      {
-        id: "pod_phonecase_01",
-        title: "Custom Phone Case",
-        description: "Durable custom phone case with your unique design.",
-        category: "Accessories",
-        base_price: 1599,
-        currency_code: "usd",
-        thumbnail: "/seed-images/bundles/1519389950473-47ba0277781c.jpg",
-        image: "/seed-images/bundles/1519389950473-47ba0277781c.jpg",
-        status: "available",
-        options: ["iPhone 14", "iPhone 15", "Samsung S24"],
-        print_areas: ["back"],
-        production_time: "3-5 business days",
-      },
-    ]
+    const { data: products, metadata } = await query.graph({
+      entity: "product",
+      fields: [
+        "id",
+        "title",
+        "description",
+        "thumbnail",
+        "handle",
+        "metadata",
+        "variants.id",
+        "variants.title",
+        "variants.calculated_price.*",
+        "pod_product.id",
+        "pod_product.template_url",
+        "pod_product.print_provider",
+        "pod_product.customization_options",
+        "pod_product.base_cost",
+      ],
+      filters,
+      pagination: { skip: offset, take: limit },
+    });
 
-    if (category) {
-      items = items.filter((i) => i.category.toLowerCase() === category.toLowerCase())
-    }
-    if (search) {
-      const s = search.toLowerCase()
-      items = items.filter((i) => i.title.toLowerCase().includes(s) || i.description.toLowerCase().includes(s))
-    }
-
-    const start = Number(offset)
-    const end = start + Number(limit)
-    const paged = items.slice(start, end)
-
-    return res.json({ items: paged, count: items.length, limit: Number(limit), offset: Number(offset) })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-PRINT-ON-DEMAND")
+    const items = products?.length > 0 ? products : SEED_POD;
+    return res.json({
+      items,
+      count: metadata?.count ?? items.length,
+      limit,
+      offset,
+    });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error);
+    req.scope.resolve("logger").error?.(`[print-on-demand/route] ${msg}`);
+    return res.json({
+      items: SEED_POD,
+      count: SEED_POD.length,
+      limit,
+      offset,
+    });
   }
 }

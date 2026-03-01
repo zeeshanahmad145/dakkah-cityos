@@ -9,8 +9,8 @@ export default async function reviewCreatedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string; product_id?: string; rating?: number }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const query = container.resolve("query")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const query = container.resolve("query") as unknown as any
   
   try {
     let productName = "Product"

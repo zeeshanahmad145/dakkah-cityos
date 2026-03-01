@@ -1,13 +1,13 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { id } = req.params
-  const payoutService = req.scope.resolve("payout")
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-  const eventBus = req.scope.resolve("event_bus")
+  const payoutService = req.scope.resolve("payout") as unknown as any
+  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
+  const eventBus = req.scope.resolve("event_bus") as unknown as any
   
   try {
     // Get payout with vendor details
@@ -53,7 +53,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     })
     
     res.json({ payout: updatedPayout })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-PAYOUTS-ID-PROCESS")}
 }
 

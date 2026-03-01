@@ -202,7 +202,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const paged = items.slice(start, end).map(e => ({ ...e, thumbnail: e.thumbnail || e.image_url }))
 
     res.json({ items: paged, count: items.length, limit: Number(limit), offset: start })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-EVENTS")
   }
 }

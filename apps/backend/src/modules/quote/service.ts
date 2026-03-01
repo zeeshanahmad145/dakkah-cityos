@@ -4,7 +4,7 @@ import QuoteItem from "./models/quote-item";
 
 /**
  * Quote Service
- * 
+ *
  * Manages B2B quotes and RFQ workflow.
  */
 class QuoteModuleService extends MedusaService({
@@ -16,10 +16,9 @@ class QuoteModuleService extends MedusaService({
    */
   async generateQuoteNumber(): Promise<string> {
     const year = new Date().getFullYear();
-    const quotes = await this.listQuotes({
+    const quotes = (await this.listQuotes({
       quote_number: { $like: `Q-${year}-%` },
-    }) as any[];
-    
+    })) as unknown as unknown[];
     const count = Array.isArray(quotes) ? quotes.length : 0;
     const nextNum = count + 1;
     return `Q-${year}-${nextNum.toString().padStart(4, "0")}`;
@@ -29,55 +28,52 @@ class QuoteModuleService extends MedusaService({
    * Calculate quote totals
    */
   async calculateQuoteTotals(quoteId: string): Promise<void> {
-    const items = await this.listQuoteItems({ quote_id: quoteId }) as any[];
-    
+    const items = (await this.listQuoteItems({
+      quote_id: quoteId,
+    })) as unknown as Array<Record<string, unknown>>;
     let subtotal = 0n;
     let discountTotal = 0n;
     let taxTotal = 0n;
     let total = 0n;
-
-    const itemsArray = Array.isArray(items) ? items : [items].filter(Boolean);
-
+    const itemsArray = Array.isArray(items)
+      ? items
+      : [items as Record<string, unknown>].filter(Boolean);
     for (const item of itemsArray) {
-      const itemPrice = item.custom_unit_price 
-        ? BigInt(item.custom_unit_price)
-        : BigInt(item.unit_price);
-      
-      const itemSubtotal = itemPrice * BigInt(item.quantity);
-      const itemDiscount = BigInt(item.discount_total || 0);
-      const itemTax = BigInt(item.tax_total || 0);
+      const unitPrice = item.custom_unit_price ?? item.unit_price;
+      const itemPrice = BigInt(String(unitPrice));
+      const itemSubtotal = itemPrice * BigInt(String(item.quantity));
+      const itemDiscount = BigInt(String(item.discount_total || 0));
+      const itemTax = BigInt(String(item.tax_total || 0));
       const itemTotal = itemSubtotal - itemDiscount + itemTax;
-
-      await (this as any).updateQuoteItems({
-        id: item.id,
+      await this.updateQuoteItems({
+        id: item.id as string,
         subtotal: itemSubtotal.toString(),
         total: itemTotal.toString(),
-      });
-
+      } as unknown as any);
       subtotal += itemSubtotal;
       discountTotal += itemDiscount;
       taxTotal += itemTax;
       total += itemTotal;
     }
-
-    await (this as any).updateQuotes({
+    await this.updateQuotes({
       id: quoteId,
       subtotal: subtotal.toString(),
       discount_total: discountTotal.toString(),
       tax_total: taxTotal.toString(),
       total: total.toString(),
-    });
+    } as unknown as any);
   }
 
   /**
    * Check if quote is valid (not expired)
    */
   async isQuoteValid(quoteId: string): Promise<boolean> {
-    const quote = await this.retrieveQuote(quoteId);
-    
+    const quote = (await this.retrieveQuote(quoteId)) as unknown as Record<
+      string,
+      unknown
+    >;
     if (!quote.valid_until) return true;
-    
-    return new Date() <= new Date(quote.valid_until);
+    return new Date() <= new Date(String(quote.valid_until));
   }
 
   /**
@@ -87,26 +83,37 @@ class QuoteModuleService extends MedusaService({
     quoteId: string,
     discountType: "percentage" | "fixed",
     discountValue: number,
-    reason?: string
+    reason?: string,
   ): Promise<void> {
-    const quote = await this.retrieveQuote(quoteId);
+    const quote = (await this.retrieveQuote(quoteId)) as unknown as Record<
+      string,
+      unknown
+    >;
 
     let discountAmount: bigint;
 
     if (discountType === "percentage") {
-      discountAmount = (BigInt(quote.subtotal) * BigInt(Math.floor(discountValue * 100))) / 10000n;
+      discountAmount =
+        (BigInt(String(quote.subtotal)) *
+          BigInt(Math.floor(discountValue * 100))) /
+        10000n;
     } else {
       discountAmount = BigInt(discountValue);
     }
 
-    await (this as any).updateQuotes({
+    await this.updateQuotes({
       id: quoteId,
-      custom_discount_percentage: discountType === "percentage" ? discountValue : null,
+      custom_discount_percentage:
+        discountType === "percentage" ? discountValue : null,
       custom_discount_amount: discountAmount.toString(),
       discount_reason: reason || null,
       discount_total: discountAmount.toString(),
-      total: (BigInt(quote.subtotal) - discountAmount + BigInt(quote.tax_total || 0)).toString(),
-    });
+      total: (
+        BigInt(String(quote.subtotal)) -
+        discountAmount +
+        BigInt(String(quote.tax_total || 0))
+      ).toString(),
+    } as unknown as any);
   }
 
   /**
@@ -121,15 +128,21 @@ class QuoteModuleService extends MedusaService({
     }>;
     metadata: Record<string, unknown>;
   }> {
-    const quote = await this.retrieveQuote(quoteId);
-    const items = await this.listQuoteItems({ quote_id: quoteId }) as any[];
-    const itemsArray = Array.isArray(items) ? items : [items].filter(Boolean);
-
+    const quote = (await this.retrieveQuote(quoteId)) as unknown as Record<
+      string,
+      unknown
+    >;
+    const items = (await this.listQuoteItems({
+      quote_id: quoteId,
+    })) as unknown as Array<Record<string, unknown>>;
+    const itemsArray = Array.isArray(items)
+      ? items
+      : [items as Record<string, unknown>].filter(Boolean);
     return {
-      items: itemsArray.map((item: any) => ({
-        variant_id: item.variant_id,
-        quantity: item.quantity,
-        unit_price: item.custom_unit_price || item.unit_price,
+      items: itemsArray.map((item) => ({
+        variant_id: item.variant_id as string,
+        quantity: item.quantity as number,
+        unit_price: String(item.custom_unit_price ?? item.unit_price),
         metadata: {
           quote_id: quoteId,
           quote_item_id: item.id,

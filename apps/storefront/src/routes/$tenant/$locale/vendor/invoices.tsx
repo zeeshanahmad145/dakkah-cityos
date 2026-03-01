@@ -135,8 +135,8 @@ function VendorInvoicesRoute() {
               {items.map((invoice) => (
                 <tr key={invoice.id} className="border-t hover:bg-muted/30">
                   <td className="px-4 py-3 text-sm font-medium">{invoice.invoice_number || invoice.id.slice(0, 8)}</td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">{new Date(invoice.created_at).toLocaleDateString()}</td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">{invoice.due_date ? new Date(invoice.due_date).toLocaleDateString() : "—"}</td>
+                  <td className="px-4 py-3 text-sm text-muted-foreground">{new Date(invoice.created_at!).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-sm text-muted-foreground">{invoice.due_date ? new Date(invoice.due_date!).toLocaleDateString() : "—"}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[invoice.status] || "bg-ds-muted text-ds-foreground"}`}>
                       {invoice.status}

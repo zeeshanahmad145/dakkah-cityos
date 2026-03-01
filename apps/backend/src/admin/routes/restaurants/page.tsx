@@ -70,13 +70,13 @@ const RestaurantsPage = () => {
 
       <FormDrawer open={showCreate} onOpenChange={setShowCreate} title="Create Restaurant" description="Add a new restaurant" onSubmit={handleCreate} loading={createRestaurant.isPending}>
         <div className="flex flex-col gap-4">
-          <div><Label>Name</Label><Input value={formData.name || ""} onChange={(e) => setFormData({ ...formData, name: e.target.value })} /></div>
-          <div><Label>Tenant ID</Label><Input value={formData.tenant_id || ""} onChange={(e) => setFormData({ ...formData, tenant_id: e.target.value })} /></div>
-          <div><Label>Handle</Label><Input value={formData.handle || ""} onChange={(e) => setFormData({ ...formData, handle: e.target.value })} /></div>
-          <div><Label>Address</Label><Input value={formData.address_line1 || ""} onChange={(e) => setFormData({ ...formData, address_line1: e.target.value })} /></div>
-          <div><Label>City</Label><Input value={formData.city || ""} onChange={(e) => setFormData({ ...formData, city: e.target.value })} /></div>
-          <div><Label>Postal Code</Label><Input value={formData.postal_code || ""} onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })} /></div>
-          <div><Label>Country Code</Label><Input value={formData.country_code || ""} onChange={(e) => setFormData({ ...formData, country_code: e.target.value })} placeholder="us" /></div>
+          <div><Label>Name</Label><Input value={formData.name || ""} onChange={(e) => setFormData({ ...formData, name: e.target.value as any })} /></div>
+          <div><Label>Tenant ID</Label><Input value={formData.tenant_id || ""} onChange={(e) => setFormData({ ...formData, tenant_id: e.target.value as any })} /></div>
+          <div><Label>Handle</Label><Input value={formData.handle || ""} onChange={(e) => setFormData({ ...formData, handle: e.target.value as any })} /></div>
+          <div><Label>Address</Label><Input value={formData.address_line1 || ""} onChange={(e) => setFormData({ ...formData, address_line1: e.target.value as any })} /></div>
+          <div><Label>City</Label><Input value={formData.city || ""} onChange={(e) => setFormData({ ...formData, city: e.target.value as any })} /></div>
+          <div><Label>Postal Code</Label><Input value={formData.postal_code || ""} onChange={(e) => setFormData({ ...formData, postal_code: e.target.value as any })} /></div>
+          <div><Label>Country Code</Label><Input value={formData.country_code || ""} onChange={(e) => setFormData({ ...formData, country_code: e.target.value as any })} placeholder="us" /></div>
         </div>
       </FormDrawer>
     </Container>

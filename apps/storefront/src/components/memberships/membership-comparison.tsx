@@ -65,7 +65,7 @@ export function MembershipComparison({
                   <div className="space-y-1">
                     <p className="text-sm font-semibold text-ds-foreground">{tier.name}</p>
                     <p className="text-sm text-ds-muted-foreground">
-                      {formatCurrency(tier.price.amount, tier.price.currencyCode, loc)}
+                      {formatCurrency((tier.price.amount ?? 0), tier.price.currencyCode, loc)}
                       {t(locale, billingLabels[tier.billingPeriod] || "blocks.per_month")}
                     </p>
                     {tier.isPopular && (

@@ -17,14 +17,13 @@ export async function governancePermissionMiddleware(
   next: MedusaNextFunction,
 ) {
   try {
-    const governanceService = req.scope.resolve("governance") as any;
+    const governanceService = req.scope.resolve("governance") as unknown as any;
 
     // Skip if governance module not wired
     if (!governanceService) return next();
 
     const tenantId: string | undefined =
-      (req as any).auth_context?.app_metadata?.tenant_id ||
-      (req.query as any).tenant_id;
+      req.auth_context?.app_metadata?.tenant_id || req.query.tenant_id;
 
     if (!tenantId) return next(); // No tenant context → allow (handled by auth guard upstream)
 
@@ -49,7 +48,7 @@ export async function governancePermissionMiddleware(
     }
 
     // Attach effective policies to request for downstream handlers
-    (req as any).governance_policies =
+    req.governance_policies =
       await governanceService.resolveEffectivePolicies(tenantId);
 
     return next();

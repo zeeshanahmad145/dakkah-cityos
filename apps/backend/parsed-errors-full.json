@@ -1,0 +1,522 @@
+[
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\auction-service.unit.spec.ts",
+    "title": "AuctionModuleService > placeBid > places a valid bid on an active auction",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"amount\": 100, \"auction_id\": \"auc_1\", \"bidder_id\": \"user_1\", \"status\": \"active\"}\u001b[39m\nReceived: \u001b[31m{\"amount\": 100, \"auction_id\": \"auc_1\", \"customer_id\": \"user_1\", \"placed_at\": 2026-02-28T11:25:26.881Z, \"status\": \"active\", \"tenant_id\": \"default\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dak"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts",
+    "title": "LoyaltyModuleService > checkTierUpgrade > should upgrade tier when earned points in period exceed threshold",
+    "messages": "TypeError: service.checkTierUpgrade is not a function\n    at Object.checkTierUpgrade (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts:86:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_m"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts",
+    "title": "LoyaltyModuleService > checkTierUpgrade > should not upgrade when points below next tier threshold",
+    "messages": "TypeError: service.checkTierUpgrade is not a function\n    at Object.checkTierUpgrade (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts:109:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts",
+    "title": "LoyaltyModuleService > checkTierUpgrade > should throw when no loyalty accounts found",
+    "messages": "TypeError: service.checkTierUpgrade is not a function\n    at Object.checkTierUpgrade (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts:116:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts",
+    "title": "LoyaltyModuleService > processReferralBonus > should award bonus points to both referrer and referred",
+    "messages": "TypeError: service.processReferralBonus is not a function\n    at Object.processReferralBonus (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts:135:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medu"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts",
+    "title": "LoyaltyModuleService > processReferralBonus > should throw when referrer has no loyalty account",
+    "messages": "TypeError: service.processReferralBonus is not a function\n    at Object.processReferralBonus (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\loyalty.spec.ts:143:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medu"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\review-service.unit.spec.ts",
+    "title": "ReviewModuleService > approveReview > updates review to approved",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"id\": \"r1\",\u001b[22m\n\u001b[31m+   \"is_approved\": true,\u001b[39m\n\u001b[2m  }\u001b[22m,\n\u001b[32m- {\"is_approved\": true}\u001b[39m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\review-service.unit.spec.ts:130:25)\n    at processTicksAndRejec"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\review-service.unit.spec.ts",
+    "title": "ReviewModuleService > markHelpful > increments helpful count",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[31m+   \"helpful_count\": 4,\u001b[39m\n\u001b[2m    \"id\": \"r1\",\u001b[22m\n\u001b[2m  }\u001b[22m,\n\u001b[32m- {\"helpful_count\": 4}\u001b[39m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\review-service.unit.spec.ts:149:25)\n    at processTicksAndRejecti"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\review-service.unit.spec.ts",
+    "title": "ReviewModuleService > markHelpful > handles null helpful_count",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[31m+   \"helpful_count\": 1,\u001b[39m\n\u001b[2m    \"id\": \"r1\",\u001b[22m\n\u001b[2m  }\u001b[22m,\n\u001b[32m- {\"helpful_count\": 1}\u001b[39m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\review-service.unit.spec.ts:157:25)\n    at processTicksAndRejecti"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\tenant-service.unit.spec.ts",
+    "title": "TenantModuleService > retrieveTenantBySlug > returns tenant matching slug",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"t1\", \"slug\": \"my-store\"}\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n    at Object.toEqual (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\tenant-service.unit.spec.ts:69:22)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\tenant-service.unit.spec.ts",
+    "title": "TenantModuleService > retrieveTenantByDomain > returns tenant matching domain",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\nExpected: \u001b[32m{\"domain\": \"store.com\", \"id\": \"t1\"}\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n    at Object.toEqual (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\tenant-service.unit.spec.ts:85:22)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > createMembership > creates a membership with correct end date",
+    "messages": "Error: Membership type is required\n    at FitnessModuleService.createMembership (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\fitness\\service.ts:79:13)\n    at Object.createMembership (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts:65:21)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circ"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > createMembership > throws when plan type is missing",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Plan type is required\"\u001b[39m\nReceived message:   \u001b[31m\"Membership type is required\"\u001b[39m\n\n    \u001b[0m \u001b[90m 77 |\u001b[39m   })\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33many\u001b[39m\u001b[33m>\u001b[39m {\n     \u001b[90m 78 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mdata\u001b[33m.\u001b[39mmembershipType) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 79 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > createMembership > throws when duration is zero or negative",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Duration must be greater than zero\"\u001b[39m\nReceived message:   \u001b[31m\"Membership type is required\"\u001b[39m\n\n    \u001b[0m \u001b[90m 77 |\u001b[39m   })\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33many\u001b[39m\u001b[33m>\u001b[39m {\n     \u001b[90m 78 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mdata\u001b[33m.\u001b[39mmembershipType) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 79 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > createMembership > throws when price is negative",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Price must be a non-negative number\"\u001b[39m\nReceived message:   \u001b[31m\"Membership type is required\"\u001b[39m\n\n    \u001b[0m \u001b[90m 77 |\u001b[39m   })\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33many\u001b[39m\u001b[33m>\u001b[39m {\n     \u001b[90m 78 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mdata\u001b[33m.\u001b[39mmembershipType) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 79 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m "
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > getClassAvailability > returns correct availability counts",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts:165:29)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > getClassAvailability > reports full when at capacity",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m2\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts:182:32)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > recordWorkout > records a workout for an active member",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"calories_burned\": 300, \"duration_minutes\": 45, \"exercise_type\": \"cardio\", \"member_id\": \"member-1\", \"status\": \"completed\", \"type\": \"workout_log\"}\u001b[39m\nReceived: \u001b[31m{\"customer_id\": \"member-1\", \"description\": null, \"metadata\": {\"calories_burned\": 300, \"duration_minutes\": 45, \"exercise_type\": \"cardio\", \"recorded_at\": 2026-02-28T11:25:27.834Z}, \"plan_"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts",
+    "title": "FitnessModuleService > recordWorkout > throws when membership is not active",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m()\u001b[22m\n\nReceived promise resolved instead of rejected\nResolved to value: \u001b[31m{}\u001b[39m\n    at expect (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\expect@29.7.0\\node_modules\\expect\\build\\index.js:113:15)\n    at Object.expect (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness-service.unit.spec.ts:222:13)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakk"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > createPolicy > creates an insurance policy successfully",
+    "messages": "TypeError: this.createInsPolicys is not a function\n    at InsuranceModuleService.createInsPolicys [as createPolicy] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\insurance\\service.ts:70:54)\n    at Object.createPolicy (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts:62:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > fileInsuranceClaim > files a claim for an active policy",
+    "messages": "TypeError: svc.retrieveInsPolicy is not a function\n    at InsuranceModuleService.retrieveInsPolicy [as fileInsuranceClaim] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\insurance\\service.ts:96:30)\n    at Object.fileInsuranceClaim (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts:111:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-p"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > fileInsuranceClaim > throws when policy is not active",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Policy is not active\"\u001b[39m\nReceived message:   \u001b[31m\"svc.retrieveInsPolicy is not a function\"\u001b[39m\n\n    \u001b[0m \u001b[90m 94 |\u001b[39m\n     \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m svc \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m \u001b[36mas\u001b[39m unknown \u001b[36mas\u001b[39m \u001b[33mInsuranceServiceBase\u001b[39m\u001b[33m;\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 96 |\u001b[39m     \u001b[36mconst\u001b[39m policy \u001b[33m=\u001b[39m \u001b[36ma"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > fileInsuranceClaim > throws when claim amount exceeds coverage",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Claim amount exceeds coverage limit\"\u001b[39m\nReceived message:   \u001b[31m\"svc.retrieveInsPolicy is not a function\"\u001b[39m\n\n    \u001b[0m \u001b[90m 94 |\u001b[39m\n     \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m svc \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m \u001b[36mas\u001b[39m unknown \u001b[36mas\u001b[39m \u001b[33mInsuranceServiceBase\u001b[39m\u001b[33m;\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 96 |\u001b[39m     \u001b[36mconst\u001b[39m policy \u001b[3"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > processInsuranceClaim > approves a pending claim",
+    "messages": "TypeError: svc.retrieveInsClaim is not a function\n    at InsuranceModuleService.retrieveInsClaim [as processInsuranceClaim] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\insurance\\service.ts:122:29)\n    at Object.processInsuranceClaim (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts:159:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_ba"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > processInsuranceClaim > rejects a claim with zero payout",
+    "messages": "TypeError: svc.retrieveInsClaim is not a function\n    at InsuranceModuleService.retrieveInsClaim [as processInsuranceClaim] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\insurance\\service.ts:122:29)\n    at Object.processInsuranceClaim (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts:176:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_ba"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > processInsuranceClaim > throws when claim is not reviewable",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Claim is not in a reviewable state\"\u001b[39m\nReceived message:   \u001b[31m\"svc.retrieveInsClaim is not a function\"\u001b[39m\n\n    \u001b[0m \u001b[90m 120 |\u001b[39m   )\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33mClaimRecord\u001b[39m\u001b[33m>\u001b[39m {\n     \u001b[90m 121 |\u001b[39m     \u001b[36mconst\u001b[39m svc \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m \u001b[36mas\u001b[39m unknown \u001b[36mas\u001b[39m \u001b[33mInsuranceServiceBase\u001b[39m\u001b[33"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > cancelPolicy > cancels an active policy",
+    "messages": "TypeError: svc.retrieveInsPolicy is not a function\n    at InsuranceModuleService.retrieveInsPolicy [as cancelPolicy] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\insurance\\service.ts:139:30)\n    at Object.cancelPolicy (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts:204:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macro"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\insurance.unit.spec.ts",
+    "title": "InsuranceModuleService > cancelPolicy > throws when policy is already cancelled",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Policy is already cancelled\"\u001b[39m\nReceived message:   \u001b[31m\"svc.retrieveInsPolicy is not a function\"\u001b[39m\n\n    \u001b[0m \u001b[90m 137 |\u001b[39m   \u001b[36masync\u001b[39m cancelPolicy(policyId\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m reason\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m string)\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33mPolicyRecord\u001b[39m\u001b[33m>\u001b[39m {\n     \u001b[90m 138 |\u001b[39m     \u001b[36mconst\u001b[39m sv"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\engagement-workflows.unit.spec.ts",
+    "title": "Subscription Renewal Workflow > should update subscription period",
+    "messages": "TypeError: subscriptionModule.retrieveSubscription is not a function\n    at retrieveSubscription (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\subscription-renewal.ts:54:47)\n    at Object.updateSubscriptionStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\engagement-workflows.unit.spec.ts:89:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\invoice-enhanced.unit.spec.ts",
+    "title": "InvoiceModuleService – Enhanced Methods > generateInvoiceNumberByTenant > increments sequence based on existing invoices",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'startsWith')\n    at startsWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\invoice\\service.ts:201:26)\n    at Array.filter (<anonymous>)\n    at InvoiceModuleService.filter [as generateInvoiceNumberByTenant] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\invoice\\service.ts:200:31)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> ("
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\invoice-enhanced.unit.spec.ts",
+    "title": "InvoiceModuleService – Enhanced Methods > calculateInvoiceTotals > throws when invoice not found",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"not found\"\u001b[39m\nReceived message:   \u001b[31m\"Cannot read properties of null (reading 'amount_paid')\"\u001b[39m\n\n    \u001b[0m \u001b[90m 231 |\u001b[39m       tax_total\u001b[33m:\u001b[39m taxTotal\u001b[33m,\u001b[39m\n     \u001b[90m 232 |\u001b[39m       total\u001b[33m,\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 233 |\u001b[39m       amount_due\u001b[33m:\u001b[39m total \u001b[33m-\u001b[39m \u001b[33mNumber\u001b[39m(invoice\u001b[33m.\u001b[39mamount_paid)\u001b["
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\invoice-enhanced.unit.spec.ts",
+    "title": "InvoiceModuleService – Enhanced Methods > getPaymentSummary > throws when invoice not found",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"not found\"\u001b[39m\nReceived message:   \u001b[31m\"Cannot read properties of null (reading 'total')\"\u001b[39m\n\n    \u001b[0m \u001b[90m 266 |\u001b[39m   }\u001b[33m>\u001b[39m {\n     \u001b[90m 267 |\u001b[39m     \u001b[36mconst\u001b[39m invoice \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mretrieveInvoice(invoiceId)\u001b[33m;\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 268 |\u001b[39m     \u001b[36mconst\u001b[39m total \u001b[33m=\u001b[3"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-auctions.unit.spec.ts",
+    "title": "POST /admin/auctions > creates auction with 201",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m400\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-auctions.unit.spec.ts:109:28)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-auctions.unit.spec.ts",
+    "title": "POST /admin/auctions > maps start_time/end_time to starts_at/ends_at",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"ends_at\": \"2025-01-01T18:00:00Z\", \"starts_at\": \"2025-01-01T10:00:00Z\"}\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-auctions.unit.spec.ts:115:46)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-auctions.unit.spec.ts",
+    "title": "POST /admin/auctions > defaults tenant_id to 'default'",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"tenant_id\": \"default\"}\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-auctions.unit.spec.ts:150:46)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\auction.unit.spec.ts",
+    "title": "AuctionModuleService > placeBid > places a valid bid on an active auction",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"amount\": 150, \"auction_listing_id\": \"auc-1\", \"bidder_id\": \"user-1\", \"status\": \"active\"}\u001b[39m\nReceived: \u001b[31m{\"amount\": 150, \"auction_id\": \"auc-1\", \"customer_id\": \"user-1\", \"placed_at\": 2026-02-28T11:25:29.257Z, \"status\": \"active\", \"tenant_id\": \"default\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-Ci"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\payout-service.unit.spec.ts",
+    "title": "PayoutModuleService > retryFailedPayout > retries a failed payout",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'create')\n    at PayoutModuleService.create [as processStripeConnectPayout] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\payout\\service.ts:183:47)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\payout-service.unit.spec.ts:203:22)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\payout-service.unit.spec.ts",
+    "title": "PayoutModuleService > processStripeConnectPayout > processes payout via Stripe and updates status",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'create')\n    at PayoutModuleService.create [as processStripeConnectPayout] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\payout\\service.ts:183:47)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\payout-service.unit.spec.ts:331:7)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\payout-service.unit.spec.ts",
+    "title": "PayoutModuleService > processStripeConnectPayout > updates payout to failed on Stripe error",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Insufficient funds\"\u001b[39m\nReceived message:   \u001b[31m\"Cannot read properties of undefined (reading 'create')\"\u001b[39m\n\n    \u001b[0m \u001b[90m 181 |\u001b[39m       })\u001b[33m;\u001b[39m\n     \u001b[90m 182 |\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 183 |\u001b[39m       \u001b[36mconst\u001b[39m transfer \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m stripe\u001b[33m.\u001b[39mtransfers\u001b[33m.\u001b[39mcreate({\n     \u001b[90m     |\u001b[39m          "
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\cart-extension-service.unit.spec.ts",
+    "title": "CartExtensionModuleService > getByCartId > handles non-array response",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"cm-1\"}\u001b[39m\nReceived: \u001b[31mnull\u001b[39m\n    at Object.toEqual (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\cart-extension-service.unit.spec.ts:56:22)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > calculatePremium > should calculate premium for basic coverage",
+    "messages": "TypeError: service.calculatePremium is not a function\n    at Object.calculatePremium (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:43:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > calculatePremium > should calculate higher premium for comprehensive coverage",
+    "messages": "TypeError: service.calculatePremium is not a function\n    at Object.calculatePremium (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:54:35)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > calculatePremium > should scale premium with risk factors",
+    "messages": "TypeError: service.calculatePremium is not a function\n    at Object.calculatePremium (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:64:37)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > calculatePremium > should reject zero coverage amount",
+    "messages": "TypeError: service.calculatePremium is not a function\n    at Object.calculatePremium (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:76:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > calculatePremium > should reject zero duration",
+    "messages": "TypeError: service.calculatePremium is not a function\n    at Object.calculatePremium (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:82:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > processClaimAdjudication > should approve a valid claim on an active policy",
+    "messages": "TypeError: service.processClaimAdjudication is not a function\n    at Object.processClaimAdjudication (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:100:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-c"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > processClaimAdjudication > should deny claim on expired policy",
+    "messages": "TypeError: service.processClaimAdjudication is not a function\n    at Object.processClaimAdjudication (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:115:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-c"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts",
+    "title": "InsuranceModuleService > processClaimAdjudication > should reject claim not in reviewable state",
+    "messages": "TypeError: service.processClaimAdjudication is not a function\n    at Object.processClaimAdjudication (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\insurance.spec.ts:125:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-c"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api-governance\\route.unit.spec.ts",
+    "title": "GET /store/cityos/governance > returns 500 when resolveEffectivePolicies throws",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"message\": \"Internal server error\",\u001b[39m\n\u001b[31m+   \"error\": \"Fatal error\",\u001b[39m\n\u001b[31m+   \"message\": \"STORE-CITYOS-GOVERNANCE failed\",\u001b[39m\n\u001b[2m  }\u001b[22m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api-governance\\route"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-wallets.unit.spec.ts",
+    "title": "GET /admin/wallets > returns 500 on service error",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"message\": \"DB error\",\u001b[39m\n\u001b[31m+   \"error\": \"DB error\",\u001b[39m\n\u001b[31m+   \"message\": \"List wallets failed\",\u001b[39m\n\u001b[2m  }\u001b[22m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-wallets.unit.spec.ts:63:26)\n    at pr"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-wallets.unit.spec.ts",
+    "title": "POST /admin/wallets/:id (credit/debit) > returns 400 on service error (insufficient balance)",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m400\u001b[39m\nReceived: \u001b[31m500\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\api\\admin-wallets.unit.spec.ts:185:28)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\commerce-workflows.unit.spec.ts",
+    "title": "Payment Reconciliation Workflow > should match all transactions",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'find')\n    at find (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\payment-reconciliation.ts:45:34)\n    at Object.matchTransactionsStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\commerce-workflows.unit.spec.ts:139:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_mo"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\commerce-workflows.unit.spec.ts",
+    "title": "Payment Reconciliation Workflow > should reconcile matched payments",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"completed\"\u001b[39m\nReceived: \u001b[31m\"partial\"\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\commerce-workflows.unit.spec.ts:146:42)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\commerce-workflows.unit.spec.ts",
+    "title": "Payment Reconciliation Workflow > should generate reconciliation report",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m5\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\commerce-workflows.unit.spec.ts:154:33)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\logistics-workflows.unit.spec.ts",
+    "title": "Fleet Dispatch Workflow > should find an available driver",
+    "messages": "TypeError: Cannot destructure property 'container' of 'undefined' as it is undefined.\n    at container (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\fleet-dispatch.ts:46:87)\n    at Object.findAvailableDriverStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\logistics-workflows.unit.spec.ts:40:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\logistics-workflows.unit.spec.ts",
+    "title": "Fleet Dispatch Workflow > should assign driver to order",
+    "messages": "TypeError: Cannot destructure property 'container' of 'undefined' as it is undefined.\n    at container (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\fleet-dispatch.ts:82:75)\n    at Object.assignDriverStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\logistics-workflows.unit.spec.ts:46:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\shipping-ext-service.unit.spec.ts",
+    "title": "ShippingExtensionModuleService > validateShipmentCarrier > validates an active carrier successfully",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\shipping-ext-service.unit.spec.ts:177:33)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\platform-workflows.unit.spec.ts",
+    "title": "Tenant Provisioning Workflow > should provision resources for a region",
+    "messages": "TypeError: Cannot destructure property 'container' of 'undefined' as it is undefined.\n    at container (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\tenant-provisioning.ts:43:106)\n    at Object.provisionResourcesStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\platform-workflows.unit.spec.ts:38:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-pl"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\platform-workflows.unit.spec.ts",
+    "title": "Tenant Provisioning Workflow > should seed tenant data with features",
+    "messages": "TypeError: Cannot destructure property 'container' of 'undefined' as it is undefined.\n    at container (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\tenant-provisioning.ts:100:76)\n    at Object.seedTenantDataStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\platform-workflows.unit.spec.ts:45:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\platform-workflows.unit.spec.ts",
+    "title": "Tenant Provisioning Workflow > should seed with empty features when none provided",
+    "messages": "TypeError: Cannot destructure property 'container' of 'undefined' as it is undefined.\n    at container (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\tenant-provisioning.ts:100:76)\n    at Object.seedTenantDataStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\platform-workflows.unit.spec.ts:51:26)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\dispute.unit.spec.ts",
+    "title": "DisputeModuleService > escalateDispute > escalates a dispute to a valid escalation type",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"escalation_type\": \"manager\", \"priority\": \"urgent\", \"status\": \"escalated\"}\u001b[39m\nReceived: \u001b[31m{\"escalated_at\": 2026-02-28T11:25:31.790Z, \"id\": \"disp-1\", \"metadata\": {\"escalation_type\": \"manager\"}, \"priority\": \"urgent\", \"status\": \"escalated\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-c"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\dispute.unit.spec.ts",
+    "title": "DisputeModuleService > escalateDispute > throws when escalation type is missing",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Escalation type is required\"\u001b[39m\nReceived message:   \u001b[31m\"Escalation type must be one of: manager, legal, executive, external\"\u001b[39m\n\n    \u001b[0m \u001b[90m 245 |\u001b[39m     \u001b[36mconst\u001b[39m validTypes \u001b[33m=\u001b[39m [\u001b[32m\"manager\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"legal\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"executive\"\u001b[39m\u001b[33m,\u001b[39m \u001b[32m\"external\"\u001b[39m]\u001b[33m;\u001b[39m\n     \u001b[90m 246 |\u001b[39m     \u001b"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts",
+    "title": "Payment Reconciliation Workflow > matchTransactionsStep > should match all payments with confidence 1.0",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'find')\n    at find (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\payment-reconciliation.ts:45:34)\n    at Object.matchTransactionsStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts:66:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modu"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts",
+    "title": "Payment Reconciliation Workflow > matchTransactionsStep > should report zero unmatched when all match",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'find')\n    at find (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\workflows\\payment-reconciliation.ts:45:34)\n    at Object.matchTransactionsStep (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts:73:28)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modu"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts",
+    "title": "Payment Reconciliation Workflow > reconcileStep > should create a completed reconciliation record",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"completed\"\u001b[39m\nReceived: \u001b[31m\"partial\"\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts:88:44)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts",
+    "title": "Payment Reconciliation Workflow > generateReportStep > should generate a report with period and totals",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m5\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\payment-reconciliation.spec.ts:99:35)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts",
+    "title": "FitnessModuleService > bookClass > should reject booking with inactive membership",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m()\u001b[22m\n\nReceived promise resolved instead of rejected\nResolved to value: \u001b[31m{}\u001b[39m\n    at expect (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\expect@29.7.0\\node_modules\\expect\\build\\index.js:113:15)\n    at Object.expect (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts:86:13)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakk"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts",
+    "title": "FitnessModuleService > getClassAvailability > should return availability with remaining spots",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m15\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts:127:29)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts",
+    "title": "FitnessModuleService > getClassAvailability > should show zero availability when full",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m5\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts:140:32)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts",
+    "title": "FitnessModuleService > createMembership > should create a membership with valid data",
+    "messages": "Error: Membership type is required\n    at FitnessModuleService.createMembership (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\fitness\\service.ts:79:13)\n    at Object.createMembership (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts:151:36)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\node_modules\\jest-circus\\build\\uti"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\fitness.spec.ts",
+    "title": "FitnessModuleService > createMembership > should reject membership with zero duration",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected substring: \u001b[32m\"Duration must be greater than zero\"\u001b[39m\nReceived message:   \u001b[31m\"Membership type is required\"\u001b[39m\n\n    \u001b[0m \u001b[90m 77 |\u001b[39m   })\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[33many\u001b[39m\u001b[33m>\u001b[39m {\n     \u001b[90m 78 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mdata\u001b[33m.\u001b[39mmembershipType) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 79 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\invoice.unit.spec.ts",
+    "title": "InvoiceModuleService > generateInvoiceNumber > generates a unique invoice number with company prefix",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'startsWith')\n    at startsWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\invoice\\service.ts:72:26)\n    at Array.filter (<anonymous>)\n    at InvoiceModuleService.filter [as generateInvoiceNumber] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\invoice\\service.ts:71:28)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (C:\\Users\\a"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\modules\\invoice.unit.spec.ts",
+    "title": "InvoiceModuleService > generateInvoiceNumber > increments sequence number based on existing invoices",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'startsWith')\n    at startsWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\invoice\\service.ts:72:26)\n    at Array.filter (<anonymous>)\n    at InvoiceModuleService.filter [as generateInvoiceNumber] (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\modules\\invoice\\service.ts:71:28)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (C:\\Users\\a"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\invoice-service.unit.spec.ts",
+    "title": "InvoiceModuleService > generateInvoiceNumber > generates a properly formatted invoice number",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/^INV-COMP-\\d{6}-0004$/\u001b[39m\nReceived string:  \u001b[31m\"INV-COMP-202602-0001\"\u001b[39m\n    at Object.toMatch (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\invoice-service.unit.spec.ts:62:22)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\integration\\webhook-handlers.unit.spec.ts",
+    "title": "Webhook Handlers > Stripe Webhook Handler > should return 400 for invalid signature",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m500\u001b[39m\nReceived: \u001b[31m400\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\integration\\webhook-handlers.unit.spec.ts:173:26)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\integration\\webhook-handlers.unit.spec.ts",
+    "title": "Webhook Handlers > Stripe Webhook Handler > should handle malformed payload gracefully",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m500\u001b[39m\nReceived: \u001b[31m400\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\integration\\webhook-handlers.unit.spec.ts:191:26)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\integration\\webhook-handlers.unit.spec.ts",
+    "title": "Webhook Handlers > ERPNext Webhook Handler > should handle missing event type",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m500\u001b[39m\nReceived: \u001b[31m400\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\integration\\webhook-handlers.unit.spec.ts:245:26)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts",
+    "title": "KYC Verification Workflow > should verify documents as valid",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts:85:48)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts",
+    "title": "KYC Verification Workflow > should score applicant as low risk when docs valid",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m85\u001b[39m\nReceived: \u001b[31m65\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts:91:26)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts",
+    "title": "KYC Verification Workflow > should score applicant as high risk when docs invalid",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m30\u001b[39m\nReceived: \u001b[31m65\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts:97:26)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts",
+    "title": "KYC Verification Workflow > should approve KYC for score >= 60",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\workflows\\vendor-workflows.unit.spec.ts:103:38)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\payment-subscribers.unit.spec.ts",
+    "title": "payment-failed subscriber > sends email and admin notification on failure",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\payment-subscribers.unit.spec.ts:116:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts",
+    "title": "booking-cancelled subscriber > sends email and admin notification on cancellation",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts:65:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts",
+    "title": "booking-completed subscriber > sends email notification with review URL",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"data\": ObjectContaining {\"review_url\": StringContaining \"/review\"}, \"template\": \"booking-completed\", \"to\": \"test@test.com\"}\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts:105:37)\n    at processTicksAndReject"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts",
+    "title": "booking-confirmed subscriber > sends email and admin notification on confirmation",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts:129:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts",
+    "title": "booking-created subscriber > sends email and admin notification on creation",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\booking-subscribers.unit.spec.ts:148:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\vendor-subscribers.unit.spec.ts",
+    "title": "vendor-approved subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\vendor-subscribers.unit.spec.ts:56:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\vendor-subscribers.unit.spec.ts",
+    "title": "vendor-suspended subscriber > sends email and admin notification with reason",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\vendor-subscribers.unit.spec.ts:81:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts",
+    "title": "subscription-cancelled subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts:78:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts",
+    "title": "subscription-paused subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts:128:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts",
+    "title": "subscription-payment-failed subscriber > sends email with retry info and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts:147:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts",
+    "title": "subscription-renewal-upcoming subscriber > sends email reminder with days until renewal",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"data\": ObjectContaining {\"days_until_renewal\": 3}, \"template\": \"subscription-renewal-upcoming\"}\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts:202:37)\n    at processTicksAndRejections (node:internal/pro"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts",
+    "title": "subscription-renewal-upcoming subscriber > defaults to 7 days when not specified",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32mObjectContaining {\"data\": ObjectContaining {\"days_until_renewal\": 7}}\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledWith (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\subscription-subscribers.unit.spec.ts:212:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "company-created subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:98:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "customer-created subscriber > sends welcome email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:128:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "payout-failed subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:213:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "purchase-order-submitted subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:246:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "quote-approved subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:311:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "temporal-event-bridge subscriber > dispatches event to Temporal when workflow exists",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'isConfigured')\n    at isConfigured (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\subscribers\\temporal-event-bridge.ts:13:27)\n    at Object.<anonymous> (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:440:30)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "temporal-event-bridge subscriber > skips dispatch when TEMPORAL_API_KEY is not set",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'isConfigured')\n    at isConfigured (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\subscribers\\temporal-event-bridge.ts:13:27)\n    at Object.<anonymous> (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:454:30)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "temporal-event-bridge subscriber > skips dispatch when no workflow mapped for event",
+    "messages": "TypeError: Cannot read properties of undefined (reading 'isConfigured')\n    at isConfigured (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\src\\subscribers\\temporal-event-bridge.ts:13:27)\n    at Object.<anonymous> (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts:465:30)\n    at Promise.then.completed (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\jest-circus@29.7.0_babel-plugin-macros@3.1.0\\"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-subscribers.unit.spec.ts",
+    "title": "temporal-event-bridge subscriber > handles dispatch errors gracefully",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mresolves\u001b[2m.\u001b[22mtoBeUndefined\u001b[2m()\u001b[22m\n\nReceived promise rejected instead of resolved\nRejected to value: \u001b[31m[TypeError: Cannot read properties of undefined (reading 'isConfigured')]\u001b[39m\n    at expect (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\node_modules\\.pnpm\\expect@29.7.0\\node_modules\\expect\\build\\index.js:113:15)\n    at Object.expect (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\misc-s"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\order-subscribers.unit.spec.ts",
+    "title": "order-placed subscriber > sends email and admin notification",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledTimes\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected number of calls: \u001b[32m2\u001b[39m\nReceived number of calls: \u001b[31m0\u001b[39m\n    at Object.toHaveBeenCalledTimes (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\subscribers\\order-subscribers.unit.spec.ts:86:37)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  },
+  {
+    "file": "C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\parking-service.unit.spec.ts",
+    "title": "ParkingModuleService > checkOut > calculates fee based on duration",
+    "messages": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m4\u001b[39m\n    at Object.toBe (C:\\Users\\alqah\\Dakkah-CityOS\\dakkah-cityos-medusa\\apps\\backend\\tests\\unit\\services\\parking-service.unit.spec.ts:91:31)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  }
+]

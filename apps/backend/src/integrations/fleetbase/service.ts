@@ -99,7 +99,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to create shipment: ${error.response?.data?.message || error.message}`
+        `Failed to create shipment: ${error.response?.data?.message || (error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -129,7 +129,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.NOT_FOUND,
-        `Shipment not found: ${error.message}`
+        `Shipment not found: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -171,7 +171,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.NOT_FOUND,
-        `Tracking not found: ${error.message}`
+        `Tracking not found: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -187,7 +187,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to cancel shipment: ${error.message}`
+        `Failed to cancel shipment: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -203,7 +203,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to assign driver: ${error.message}`
+        `Failed to assign driver: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -243,7 +243,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to get drivers: ${error.message}`
+        `Failed to get drivers: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -281,7 +281,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to estimate delivery: ${error.message}`
+        `Failed to estimate delivery: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -310,7 +310,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to geocode address: ${error.message}`
+        `Failed to geocode address: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -359,7 +359,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to validate address: ${error.message}`
+        `Failed to validate address: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -400,7 +400,7 @@ export class FleetbaseService {
     } catch (error) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `Failed to get delivery zones: ${error.message}`
+        `Failed to get delivery zones: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }

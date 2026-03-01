@@ -1,25 +1,28 @@
-import { model } from "@medusajs/framework/utils"
+import { model } from "@medusajs/framework/utils";
 
+/**
+ * GigListing stores only freelance-domain metadata.
+ * Catalog fields (title, description, images, status, pricing) are owned by
+ * the Medusa Product module and linked via src/links/product-gig.ts
+ */
 const GigListing = model.define("gig_listing", {
   id: model.id().primaryKey(),
   tenant_id: model.text(),
   freelancer_id: model.text(),
-  title: model.text(),
-  description: model.text(),
+  // Freelance-specific classification
   category: model.text().nullable(),
   subcategory: model.text().nullable(),
   listing_type: model.enum(["fixed_price", "hourly", "milestone"]),
-  price: model.bigNumber().nullable(),
-  hourly_rate: model.bigNumber().nullable(),
-  currency_code: model.text(),
+  // Delivery & quality terms (domain-specific, not in Medusa product)
   delivery_time_days: model.number().nullable(),
   revisions_included: model.number().default(1),
-  status: model.enum(["draft", "active", "paused", "completed", "suspended"]).default("draft"),
-  skill_tags: model.json().nullable(),
-  portfolio_urls: model.json().nullable(),
+  // Performance metrics (domain-specific)
   total_orders: model.number().default(0),
   avg_rating: model.number().nullable(),
+  // Skills & portfolio (domain-specific)
+  skill_tags: model.json().nullable(),
+  portfolio_urls: model.json().nullable(),
   metadata: model.json().nullable(),
-})
+});
 
-export default GigListing
+export default GigListing;

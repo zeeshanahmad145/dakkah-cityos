@@ -69,7 +69,7 @@ export function ReferralReward({
             {t(locale, "referral.current_benefits")}
           </p>
           <ul className="space-y-1.5">
-            {currentTier.benefits.map((benefit, idx) => (
+            {currentTier.benefits.map((benefit: any, idx: number) => (
               <li key={idx} className="flex items-start gap-2 text-sm text-ds-muted-foreground">
                 <svg className="w-4 h-4 text-ds-success mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

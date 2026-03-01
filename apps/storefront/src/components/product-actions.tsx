@@ -201,7 +201,7 @@ const ProductActions = memo(function ProductActions({
       {/* B2B Quote Link */}
       <div className="text-sm text-muted-foreground">
         <Link
-          to={`${prefix}/quotes/request` as any}
+          to={`${prefix}/quotes/request` as never}
           className="text-primary hover:underline"
         >
           Need a custom quote for larger orders?

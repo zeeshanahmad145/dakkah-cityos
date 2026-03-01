@@ -8,24 +8,38 @@ import { sdk } from "@/lib/utils/sdk"
 import { useMutation } from "@tanstack/react-query"
 import { t } from "@/lib/i18n"
 import { useState } from "react"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 
-export const Route = createFileRoute("/$tenant/$locale/account/orders/$id/return")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/account/orders/$id/return",
+)({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/orders/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/orders/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: data.order || data }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
   head: () => ({
     meta: [
       { title: "Return Order" },
-      { name: "description", content: "Initiate a return or exchange for your order" },
+      {
+        name: "description",
+        content: "Initiate a return or exchange for your order",
+      },
     ],
   }),
   component: ReturnRequestPage,
@@ -86,7 +100,7 @@ function ReturnRequestPage() {
       return response
     },
     onSuccess: () => {
-      navigate({ to: `/${tenant}/${locale}/account/orders/${id}` as any })
+      navigate({ to: `/${tenant}/${locale}/account/orders/${id}` })
     },
   })
 
@@ -95,7 +109,7 @@ function ReturnRequestPage() {
   }
 
   const handleCancel = () => {
-    navigate({ to: `/${tenant}/${locale}/account/orders/${id}` as any })
+    navigate({ to: `/${tenant}/${locale}/account/orders/${id}` })
   }
 
   if (isLoading) {
@@ -118,7 +132,7 @@ function ReturnRequestPage() {
             {t(locale, "delivery.order_not_found")}
           </h1>
           <Link
-            to={`/${tenant}/${locale}/account/orders` as any}
+            to={`/${tenant}/${locale}/account/orders` as never}
             className="text-ds-info hover:underline"
           >
             {t(locale, "delivery.view_all_orders")}
@@ -132,11 +146,21 @@ function ReturnRequestPage() {
     <AccountLayout>
       <div className="max-w-2xl">
         <Link
-          to={`/${tenant}/${locale}/account/orders/${id}` as any}
+          to={`/${tenant}/${locale}/account/orders/${id}` as never}
           className="inline-flex items-center gap-2 text-sm text-ds-muted-foreground hover:text-ds-foreground mb-6"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+            />
           </svg>
           {t(locale, "delivery.back_to_order")}
         </Link>
@@ -173,7 +197,8 @@ function ReturnRequestPage() {
 
         {submitReturnMutation.error && (
           <div className="bg-ds-destructive/10 border border-ds-destructive/20 rounded-lg p-4 text-ds-destructive mb-4 text-sm">
-            {(submitReturnMutation.error as any)?.message || "Failed to submit return request"}
+            {submitReturnMutation.error?.message ||
+              "Failed to submit return request"}
           </div>
         )}
 

@@ -77,10 +77,10 @@ const MembershipsPage = () => {
       </div>
       <FormDrawer open={showDrawer} onOpenChange={(open) => { if (!open) { setShowDrawer(false); setEditing(null) } }} title={editing ? "Edit Plan" : "Create Plan"} onSubmit={handleSubmit} submitLabel={editing ? "Update" : "Create"} loading={createPlan.isPending || updatePlan.isPending}>
         <div className="space-y-4">
-          <div><Label htmlFor="name">Plan Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Pro Plan" /></div>
-          <div><Label htmlFor="price">Price</Label><Input id="price" type="number" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} /></div>
-          <div><Label htmlFor="duration">Duration (days)</Label><Input id="duration" type="number" value={formData.duration_days} onChange={(e) => setFormData({ ...formData, duration_days: e.target.value })} /></div>
-          <div><Label htmlFor="benefits">Benefits (comma-separated)</Label><Input id="benefits" value={formData.benefits} onChange={(e) => setFormData({ ...formData, benefits: e.target.value })} placeholder="Feature 1, Feature 2, ..." /></div>
+          <div><Label htmlFor="name">Plan Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value as any })} placeholder="Pro Plan" /></div>
+          <div><Label htmlFor="price">Price</Label><Input id="price" type="number" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value as any })} /></div>
+          <div><Label htmlFor="duration">Duration (days)</Label><Input id="duration" type="number" value={formData.duration_days} onChange={(e) => setFormData({ ...formData, duration_days: e.target.value as any })} /></div>
+          <div><Label htmlFor="benefits">Benefits (comma-separated)</Label><Input id="benefits" value={formData.benefits} onChange={(e) => setFormData({ ...formData, benefits: e.target.value as any })} placeholder="Feature 1, Feature 2, ..." /></div>
         </div>
       </FormDrawer>
     </Container>

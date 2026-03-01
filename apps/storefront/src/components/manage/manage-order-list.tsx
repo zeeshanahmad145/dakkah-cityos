@@ -95,7 +95,7 @@ export function ManageOrderList({ orders = [], locale: localeProp }: ManageOrder
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-ds-muted">
-                      {new Date(order.created_at).toLocaleDateString(locale)}
+                      {new Date(order.created_at!).toLocaleDateString(locale)}
                     </td>
                     <td className="px-4 py-3 text-end">
                       <button type="button" className="p-1.5 text-ds-muted hover:text-ds-text hover:bg-ds-accent rounded transition-colors" title={t(locale, "manage.view")}>

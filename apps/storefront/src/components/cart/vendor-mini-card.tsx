@@ -21,7 +21,7 @@ export function VendorMiniCard({
 
   return (
     <Link
-      to={`${prefix}/vendors/${vendorHandle}` as any}
+      to={`${prefix}/vendors/${vendorHandle}` as never}
       className="inline-flex items-center gap-3 px-3 py-2 bg-ds-muted rounded-lg hover:bg-ds-muted transition-colors"
     >
       <div className="w-8 h-8 rounded-full bg-ds-muted overflow-hidden flex-shrink-0">
@@ -38,11 +38,15 @@ export function VendorMiniCard({
         )}
       </div>
       <div className="min-w-0">
-        <p className="text-sm font-medium text-ds-foreground truncate">{vendorName}</p>
+        <p className="text-sm font-medium text-ds-foreground truncate">
+          {vendorName}
+        </p>
         {rating && (
           <div className="flex items-center gap-1">
             <Star className="w-3 h-3 text-ds-warning fill-ds-warning" />
-            <span className="text-xs text-ds-muted-foreground">{rating.toFixed(1)}</span>
+            <span className="text-xs text-ds-muted-foreground">
+              {rating.toFixed(1)}
+            </span>
           </div>
         )}
       </div>

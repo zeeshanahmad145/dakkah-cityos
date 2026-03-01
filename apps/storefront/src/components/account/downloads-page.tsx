@@ -28,7 +28,7 @@ export function DownloadsPage({ downloads = sampleDownloads, loading = false }: 
 
   const isExpired = (item: DownloadItem) => {
     if (!item.expiresAt) return false
-    return new Date(item.expiresAt) < new Date()
+    return new Date(item.expiresAt!) < new Date()
   }
 
   const isMaxedOut = (item: DownloadItem) => {
@@ -110,7 +110,7 @@ export function DownloadsPage({ downloads = sampleDownloads, loading = false }: 
                     <p className="text-xs text-ds-muted-foreground">{item.fileName}</p>
                   </div>
                   <span className="text-sm text-ds-muted-foreground">
-                    {new Date(item.purchaseDate).toLocaleDateString()}
+                    {new Date(item.purchaseDate!).toLocaleDateString()}
                   </span>
                   <span className="text-sm text-ds-muted-foreground">{item.fileSize}</span>
                   <div>

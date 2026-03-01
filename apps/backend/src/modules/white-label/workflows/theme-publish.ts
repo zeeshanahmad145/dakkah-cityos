@@ -19,7 +19,7 @@ const applyTenantBranding = createStep(
     },
     { container },
   ) => {
-    const whiteLabelService = container.resolve("white-label") as any;
+    const whiteLabelService = container.resolve("white-label") as unknown as any;
     const config = await whiteLabelService.upsertConfig(input.tenantId, {
       brandName: input.brandName,
       logoUrl: input.logoUrl,
@@ -34,12 +34,12 @@ const applyTenantBranding = createStep(
 const publishWhiteLabelTheme = createStep(
   "publish-white-label-theme",
   async (input: { themeId: string }, { container }) => {
-    const whiteLabelService = container.resolve("white-label") as any;
+    const whiteLabelService = container.resolve("white-label") as unknown as any;
     const theme = await whiteLabelService.publishTheme(input.themeId);
     return new StepResponse(theme, { themeId: input.themeId });
   },
   async ({ themeId }: { themeId: string }, { container }) => {
-    const whiteLabelService = container.resolve("white-label") as any;
+    const whiteLabelService = container.resolve("white-label") as unknown as any;
     await whiteLabelService
       .updateWhiteLabelThemes({ id: themeId, is_published: false })
       .catch(() => null);

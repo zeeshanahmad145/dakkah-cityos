@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../../../lib/api-error-handler";
  */
 export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const restaurantService = req.scope.resolve("restaurant") as any;
+    const restaurantService = req.scope.resolve("restaurant") as unknown as any;
     const orderId = req.params.id;
     const { status } = req.body as { status: string };
 
@@ -17,7 +17,7 @@ export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
 
     const updated = await restaurantService.updateOrderStatus(orderId, status);
     return res.json({ order: updated });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-KITCHEN-ORDER-STATUS");
   }
 }

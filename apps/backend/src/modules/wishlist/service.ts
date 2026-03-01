@@ -58,7 +58,7 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
       wishlist_id: data.wishlistId,
       product_id: data.productId,
       variant_id: data.variantId ?? null,
-    });
+    }) as any;
     if (existing.length > 0)
       throw new Error("Item already exists in this wishlist");
 
@@ -70,14 +70,14 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
       priority: data.priority ?? "medium",
       notes: data.notes ?? null,
       metadata: data.metadata ?? null,
-    });
+    } as any);
   }
 
   async removeItem(
     wishlistId: string,
     itemId: string,
   ): Promise<{ success: boolean }> {
-    const item = await this.retrieveWishlistItem(itemId);
+    const item = await this.retrieveWishlistItem(itemId) as any;
     if (item.wishlist_id !== wishlistId)
       throw new Error("Item does not belong to this wishlist");
     await this.deleteWishlistItems(itemId);
@@ -89,12 +89,12 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
     fromWishlistId: string,
     toWishlistId: string,
   ): Promise<WishlistItemRecord> {
-    const item = await this.retrieveWishlistItem(itemId);
+    const item = await this.retrieveWishlistItem(itemId) as any;
     if (item.wishlist_id !== fromWishlistId) {
       throw new Error("Item does not belong to the source wishlist");
     }
-    await this.retrieveWishlist(toWishlistId); // validates target exists
-    await this.updateWishlistItems({ id: itemId, wishlist_id: toWishlistId });
+    await this.retrieveWishlist(toWishlistId) as any; // validates target exists
+    await this.updateWishlistItems({ id: itemId, wishlist_id: toWishlistId } as any);
     return this.retrieveWishlistItem(itemId);
   }
 
@@ -102,7 +102,7 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
     wishlistId: string,
     visibility: "private" | "shared" | "public",
   ): Promise<WishlistRecord> {
-    const wishlist = await this.retrieveWishlist(wishlistId);
+    const wishlist = await this.retrieveWishlist(wishlistId) as any;
     let shareToken: string | null = wishlist.share_token;
     if (visibility !== "private" && !shareToken) {
       shareToken = crypto.randomBytes(16).toString("hex");
@@ -114,7 +114,7 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
       id: wishlistId,
       visibility,
       share_token: shareToken,
-    });
+    } as any);
     return this.retrieveWishlist(wishlistId);
   }
 
@@ -122,7 +122,7 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
     const wishlists = await this.listWishlists({
       share_token: shareToken,
       visibility: ["shared", "public"],
-    });
+    }) as any;
     if (wishlists.length === 0)
       throw new Error("Wishlist not found or not shared");
     return wishlists[0];
@@ -143,7 +143,7 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
       customer_id: customerId,
       tenant_id: tenantId,
       is_default: true,
-    });
+    }) as any;
     if (existing.length > 0) return existing[0];
 
     return this.createWishlists({
@@ -152,7 +152,7 @@ class WishlistModuleService extends Base implements WishlistServiceBase {
       title: "My Wishlist",
       is_default: true,
       visibility: "private",
-    });
+    } as any);
   }
 }
 

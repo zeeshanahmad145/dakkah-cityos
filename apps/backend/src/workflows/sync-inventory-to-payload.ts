@@ -26,15 +26,16 @@ export const syncInventoryToPayloadWorkflow = createWorkflow(
     });
 
     const payloadDocInfo = transform({ inventoryItems }, (data) => {
-      const item = data.inventoryItems?.[0] as any;
+      const item = data.inventoryItems?.[0];
       if (!item) return null;
 
       // Core calculation: Total stock minus reserved stock
       const availableUnits =
-        (item.stocked_quantity || 0) - (item.reserved_quantity || 0);
+        ((item as any).stocked_quantity || 0) -
+        ((item as any).reserved_quantity || 0);
 
       // Traverse through variant to product to link
-      const product = item?.variant?.product;
+      const product = (item as any)?.variant?.product;
       if (!product || !product.payload_record) {
         return null;
       }

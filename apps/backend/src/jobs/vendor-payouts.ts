@@ -3,10 +3,10 @@ import { MedusaContainer } from "@medusajs/framework/types"
 import { Modules } from "@medusajs/framework/utils"
 
 export default async function vendorPayoutsJob(container: MedusaContainer) {
-  const payoutService = container.resolve("payout")
-  const vendorService = container.resolve("vendor")
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const logger = container.resolve("logger")
+  const payoutService = container.resolve("payout") as unknown as any
+  const vendorService = container.resolve("vendor") as unknown as any
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const logger = container.resolve("logger") as unknown as any
 
   logger.info("[vendor-payouts] Starting vendor payouts job")
 
@@ -83,7 +83,7 @@ export default async function vendorPayoutsJob(container: MedusaContainer) {
         processedCount++
         totalPayout += payoutAmount
         logger.info(`[vendor-payouts] Processed payout for vendor ${vendor.id}: ${payoutAmount}`)
-      } catch (error: any) {
+      } catch (error: unknown) {
         logger.error(`[vendor-payouts] Failed to process payout for vendor ${vendor.id}:`, error)
       }
     }

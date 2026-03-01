@@ -211,7 +211,7 @@ const CommissionTiersPage = () => {
                 <Input
                   value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, name: e.target.value as any })
                   }
                   placeholder="e.g., Bronze, Silver, Gold"
                   required
@@ -259,7 +259,10 @@ const CommissionTiersPage = () => {
                   min="0"
                   value={formData.max_amount}
                   onChange={(e) =>
-                    setFormData({ ...formData, max_amount: e.target.value })
+                    setFormData({
+                      ...formData,
+                      max_amount: e.target.value as any,
+                    })
                   }
                   placeholder="Leave empty for unlimited"
                 />

@@ -70,7 +70,7 @@ const CountrySelect = ({ regions, className }: CountrySelectProps) => {
     setStoredCountryCode(option.country_code)
 
     const newPath = buildPathWithCountryCode(currentPath, option.country_code)
-    navigate({ to: newPath as any })
+    navigate({ to: newPath })
 
     if (currentCountry?.region_id !== option.region_id) {
       const cartId = getStoredCart()

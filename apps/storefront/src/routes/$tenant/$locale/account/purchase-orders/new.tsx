@@ -1,11 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { AccountLayout } from "@/components/account"
 import { POForm } from "@/components/purchase-orders"
-import { useCreatePurchaseOrder, useSubmitPurchaseOrder } from "@/lib/hooks/use-purchase-orders"
+import {
+  useCreatePurchaseOrder,
+  useSubmitPurchaseOrder,
+} from "@/lib/hooks/use-purchase-orders"
 import { useAuth } from "@/lib/context/auth-context"
 import { ArrowLeft } from "@medusajs/icons"
 
-export const Route = createFileRoute("/$tenant/$locale/account/purchase-orders/new")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/account/purchase-orders/new",
+)({
   component: NewPurchaseOrderPage,
 })
 
@@ -30,11 +35,17 @@ function NewPurchaseOrderPage() {
         quantity: item.quantity,
         unit_price: item.unit_price,
         total: item.quantity * item.unit_price,
-      })),
-      subtotal: data.items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0),
+      })) as any,
+      subtotal: data.items.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+      ),
       tax_total: 0,
       shipping_total: 0,
-      total: data.items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0),
+      total: data.items.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+      ),
       currency_code: "usd",
       notes: data.notes,
     })
@@ -59,11 +70,17 @@ function NewPurchaseOrderPage() {
         quantity: item.quantity,
         unit_price: item.unit_price,
         total: item.quantity * item.unit_price,
-      })),
-      subtotal: data.items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0),
+      })) as any,
+      subtotal: data.items.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+      ),
       tax_total: 0,
       shipping_total: 0,
-      total: data.items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0),
+      total: data.items.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+      ),
       currency_code: "usd",
       notes: data.notes,
     })
@@ -79,7 +96,7 @@ function NewPurchaseOrderPage() {
     <AccountLayout>
       {/* Back Link */}
       <Link
-        to={`/${tenant}/${locale}/account/purchase-orders` as any}
+        to={`/${tenant}/${locale}/account/purchase-orders` as never}
         className="inline-flex items-center gap-2 text-sm text-ds-muted-foreground hover:text-ds-foreground mb-6"
       >
         <ArrowLeft className="w-4 h-4" />

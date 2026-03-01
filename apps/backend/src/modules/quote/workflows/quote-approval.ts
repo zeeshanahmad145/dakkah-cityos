@@ -14,9 +14,9 @@ const requestApprovalStep = createStep(
     { quoteId, requestedBy }: { quoteId: string; requestedBy: string },
     { container },
   ) => {
-    const quoteService = container.resolve("quote") as any;
+    const quoteService = container.resolve("quote") as unknown as any;
 
-    await (quoteService as any).updateQuotes({
+    await quoteService.updateQuotes({
       id: quoteId,
       status: "pending_approval",
       submitted_by: requestedBy,
@@ -26,8 +26,8 @@ const requestApprovalStep = createStep(
     return new StepResponse({ quoteId, status: "pending_approval" });
   },
   async ({ quoteId }: { quoteId: string }, { container }) => {
-    const quoteService = container.resolve("quote") as any;
-    await (quoteService as any).updateQuotes({ id: quoteId, status: "draft" });
+    const quoteService = container.resolve("quote") as unknown as any;
+    await quoteService.updateQuotes({ id: quoteId, status: "draft" });
   },
 );
 
@@ -41,9 +41,9 @@ const approveQuoteStep = createStep(
     }: { quoteId: string; approvedBy: string; notes?: string },
     { container },
   ) => {
-    const quoteService = container.resolve("quote") as any;
+    const quoteService = container.resolve("quote") as unknown as any;
 
-    await (quoteService as any).updateQuotes({
+    await quoteService.updateQuotes({
       id: quoteId,
       status: "accepted",
       approved_by: approvedBy,
@@ -65,9 +65,9 @@ const rejectQuoteStep = createStep(
     }: { quoteId: string; rejectedBy: string; reason?: string },
     { container },
   ) => {
-    const quoteService = container.resolve("quote") as any;
+    const quoteService = container.resolve("quote") as unknown as any;
 
-    await (quoteService as any).updateQuotes({
+    await quoteService.updateQuotes({
       id: quoteId,
       status: "rejected",
       rejected_by: rejectedBy,
@@ -108,6 +108,3 @@ export const quoteApprovalWorkflow = createWorkflow(
     });
   },
 );
-
-
-

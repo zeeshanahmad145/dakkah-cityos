@@ -331,7 +331,7 @@ const TenantBillingPage = () => {
             <div className="flex gap-2">
               <Input
                 value={billingEmail || billing.billing_email || ""}
-                onChange={(e) => setBillingEmail(e.target.value)}
+                onChange={(e) => setBillingEmail(e.target.value as any)}
                 placeholder={tenant.contact_email}
               />
               <Button

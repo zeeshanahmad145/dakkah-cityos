@@ -30,7 +30,7 @@ function VendorSubscriptionsRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -43,9 +43,12 @@ function VendorSubscriptionsRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/subscriptions${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: SubscriptionPlan[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: SubscriptionPlan[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -87,7 +90,9 @@ function VendorSubscriptionsRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -98,27 +103,40 @@ function VendorSubscriptionsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No subscription plans yet</p>
-          <p className="text-sm">Create your first subscription plan to get started.</p>
+          <p className="text-sm">
+            Create your first subscription plan to get started.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((plan) => (
-            <div key={plan.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={plan.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{plan.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[plan.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[plan.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {plan.status}
                     </span>
                   </div>
                   {plan.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{plan.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {plan.description}
+                    </p>
                   )}
                   <div className="flex items-center gap-6 text-sm text-ds-muted-foreground">
                     <span className="font-medium text-ds-foreground">
-                      {plan.currency_code?.toUpperCase()} {(plan.price / 100).toFixed(2)}
-                      <span className="text-ds-muted-foreground font-normal"> / {plan.billing_interval}</span>
+                      {plan.currency_code?.toUpperCase()}{" "}
+                      {(plan.price / 100).toFixed(2)}
+                      <span className="text-ds-muted-foreground font-normal">
+                        {" "}
+                        / {plan.billing_interval}
+                      </span>
                     </span>
                     {plan.trial_period_days && (
                       <span>{plan.trial_period_days}-day trial</span>
@@ -127,13 +145,20 @@ function VendorSubscriptionsRoute() {
                       <span>{plan.subscriber_count} subscribers</span>
                     )}
                   </div>
-                  {plan.features && plan.features.length > 0 && (
+                  {plan.features && (plan.features as string[]).length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-3">
-                      {plan.features.slice(0, 3).map((f, i) => (
-                        <span key={i} className="px-2 py-0.5 bg-ds-muted text-xs rounded">{f}</span>
+                      {(plan.features as string[]).slice(0, 3).map((f, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 bg-ds-muted text-xs rounded"
+                        >
+                          {f}
+                        </span>
                       ))}
-                      {plan.features.length > 3 && (
-                        <span className="text-xs text-ds-muted-foreground/70">+{plan.features.length - 3} more</span>
+                      {(plan.features as string[]).length > 3 && (
+                        <span className="text-xs text-ds-muted-foreground/70">
+                          +{(plan.features as string[]).length - 3} more
+                        </span>
                       )}
                     </div>
                   )}

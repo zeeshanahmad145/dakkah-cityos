@@ -140,7 +140,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     } finally {
       await client.end();
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Storage migration");
   }
 }

@@ -43,7 +43,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         },
       },
     });
-  } catch (error: any) {
-    return res.status(500).json({ success: false, error: error.message });
+  } catch (error: unknown) {
+    return res.status(500).json({ success: false, error: (error instanceof Error ? error.message : String(error)) });
   }
 }

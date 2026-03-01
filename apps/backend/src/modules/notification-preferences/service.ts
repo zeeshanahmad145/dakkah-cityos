@@ -196,7 +196,7 @@ class NotificationPreferencesModuleService extends MedusaService({
         eventType: update.eventType,
         enabled: update.enabled,
         frequency: update.frequency,
-      });
+      } as any);
       results.push(result);
     }
     return results;

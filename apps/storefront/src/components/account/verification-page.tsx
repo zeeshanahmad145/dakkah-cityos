@@ -119,7 +119,7 @@ export function VerificationPage({
                       <p className="text-sm font-semibold text-ds-foreground">{v.label}</p>
                       {v.verifiedAt && v.status === "verified" && (
                         <p className="text-xs text-ds-muted-foreground">
-                          Verified on {new Date(v.verifiedAt).toLocaleDateString()}
+                          Verified on {new Date(v.verifiedAt!).toLocaleDateString()}
                         </p>
                       )}
                     </div>
@@ -187,7 +187,7 @@ export function VerificationPage({
                     <p className="text-sm font-medium text-ds-foreground">{cred.type}</p>
                     <p className="text-sm text-ds-muted-foreground">{cred.issuer}</p>
                     <span className="text-sm text-ds-muted-foreground">
-                      {new Date(cred.issuedDate).toLocaleDateString()}
+                      {new Date(cred.issuedDate!).toLocaleDateString()}
                     </span>
                     <span className={`px-2 py-0.5 text-xs font-medium rounded w-fit ${style.bg} ${style.text}`}>
                       {cred.status.charAt(0).toUpperCase() + cred.status.slice(1)}

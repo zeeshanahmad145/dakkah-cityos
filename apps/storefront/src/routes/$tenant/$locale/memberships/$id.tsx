@@ -1,6 +1,10 @@
 // @ts-nocheck
 import { useState } from "react"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t, formatCurrency } from "@/lib/i18n"
 import type { SupportedLocale } from "@/lib/i18n"
@@ -8,29 +12,68 @@ import { useToast } from "@/components/ui/toast"
 import { BenefitsList } from "@/components/memberships/benefits-list"
 import { MembershipTiersBlock } from "@/components/blocks/membership-tiers-block"
 import { FaqBlock } from "@/components/blocks/faq-block"
-import { ReviewListBlock } from '@/components/blocks/review-list-block'
+import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
 function normalizeDetail(item: any) {
   if (!item) return null
-  const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
+  const meta =
+    typeof item.metadata === "string"
+      ? JSON.parse(item.metadata)
+      : item.metadata || {}
   const rawPrice = item.price ?? meta.price ?? null
-  const currency = item.currency || item.currency_code || meta.currency || meta.currency_code || "USD"
-  const priceObj = rawPrice != null
-    ? (typeof rawPrice === 'object' && rawPrice.amount != null ? rawPrice : { amount: Number(rawPrice), currencyCode: currency })
-    : null
-  return { ...meta, ...item,
-    thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
-    images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
+  const currency =
+    item.currency ||
+    item.currency_code ||
+    meta.currency ||
+    meta.currency_code ||
+    "USD"
+  const priceObj =
+    rawPrice != null
+      ? typeof rawPrice === "object" && rawPrice.amount != null
+        ? rawPrice
+        : { amount: Number(rawPrice), currencyCode: currency }
+      : null
+  return {
+    ...meta,
+    ...item,
+    thumbnail:
+      item.thumbnail ||
+      item.image_url ||
+      item.photo_url ||
+      item.banner_url ||
+      item.logo_url ||
+      meta.thumbnail ||
+      (meta.images && meta.images[0]) ||
+      null,
+    images:
+      meta.images ||
+      [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
     price: priceObj,
     currency,
-    billingPeriod: item.billingPeriod || item.billing_period || meta.billingPeriod || meta.billing_period || "monthly",
-    trialDays: item.trialDays ?? item.trial_days ?? meta.trialDays ?? meta.trial_days ?? null,
-    isPopular: item.isPopular ?? item.is_popular ?? meta.isPopular ?? meta.is_popular ?? false,
+    billingPeriod:
+      item.billingPeriod ||
+      item.billing_period ||
+      meta.billingPeriod ||
+      meta.billing_period ||
+      "monthly",
+    trialDays:
+      item.trialDays ??
+      item.trial_days ??
+      meta.trialDays ??
+      meta.trial_days ??
+      null,
+    isPopular:
+      item.isPopular ??
+      item.is_popular ??
+      meta.isPopular ??
+      meta.is_popular ??
+      false,
     benefits: item.benefits || meta.benefits || [],
     rating: item.rating ?? item.avg_rating ?? meta.rating ?? null,
     review_count: item.review_count ?? meta.review_count ?? null,
-    location: item.location || item.city || item.address || meta.location || null,
+    location:
+      item.location || item.city || item.address || meta.location || null,
   }
 }
 
@@ -38,20 +81,30 @@ export const Route = createFileRoute("/$tenant/$locale/memberships/$id")({
   component: MembershipDetailPage,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Membership Details"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
+      {
+        title: `${loaderData?.title || loaderData?.name || "Membership Details"} | Dakkah CityOS`,
+      },
+      {
+        name: "description",
+        content: loaderData?.description || loaderData?.excerpt || "",
+      },
     ],
   }),
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/memberships/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/memberships/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: normalizeDetail(data.item || data) }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
 })
 
@@ -78,14 +131,20 @@ function MembershipDetailPage() {
       const publishableKey = getMedusaPublishableKey()
       const resp = await fetch(`${baseUrl}/store/memberships`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        headers: {
+          "Content-Type": "application/json",
+          "x-publishable-api-key": publishableKey,
+        },
         credentials: "include",
-        body: JSON.stringify({ membership_id: id })
+        body: JSON.stringify({ membership_id: id }),
       })
       if (resp.ok) toast.success("Membership activated successfully!")
       else toast.error("Something went wrong. Please try again.")
-    } catch { toast.error("Network error. Please try again.") }
-    finally { setJoining(false) }
+    } catch {
+      toast.error("Network error. Please try again.")
+    } finally {
+      setJoining(false)
+    }
   }
 
   if (!tier) {
@@ -113,7 +172,7 @@ function MembershipDetailPage() {
               {t(locale, "membership.title")}
             </p>
             <Link
-              to={`${prefix}/memberships` as any}
+              to={`${prefix}/memberships` as never}
               className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors"
             >
               {t(locale, "membership.browse_plans")}
@@ -128,11 +187,17 @@ function MembershipDetailPage() {
     <div className="min-h-screen bg-ds-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center gap-2 text-sm text-ds-muted-foreground mb-8">
-          <Link to={`${prefix}` as any} className="hover:text-ds-foreground transition-colors">
+          <Link
+            to={`${prefix}` as never}
+            className="hover:text-ds-foreground transition-colors"
+          >
             {t(locale, "common.home")}
           </Link>
           <span>/</span>
-          <Link to={`${prefix}/memberships` as any} className="hover:text-ds-foreground transition-colors">
+          <Link
+            to={`${prefix}/memberships` as never}
+            className="hover:text-ds-foreground transition-colors"
+          >
             {t(locale, "membership.title")}
           </Link>
           <span>/</span>
@@ -143,7 +208,9 @@ function MembershipDetailPage() {
           <div className="lg:col-span-3 space-y-8">
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-ds-foreground">{tier.name}</h1>
+                <h1 className="text-3xl font-bold text-ds-foreground">
+                  {tier.name}
+                </h1>
                 {tier.isPopular && (
                   <span className="px-3 py-1 text-xs font-semibold rounded-full bg-ds-primary/20 text-ds-primary">
                     {t(locale, "blocks.most_popular")}
@@ -164,8 +231,18 @@ function MembershipDetailPage() {
 
             {tier.trialDays && (
               <div className="bg-ds-primary/5 border border-ds-primary/20 rounded-xl p-4 flex items-center gap-3">
-                <svg className="w-6 h-6 text-ds-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-6 h-6 text-ds-primary flex-shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 <p className="text-sm text-ds-foreground">
                   Start with a {tier.trialDays}-day free trial. Cancel anytime.
@@ -178,19 +255,32 @@ function MembershipDetailPage() {
             <div className="bg-ds-background border border-ds-border rounded-xl p-6 sticky top-4 space-y-6">
               <div className="text-center">
                 <span className="text-4xl font-bold text-ds-foreground">
-                  {tier.price ? formatCurrency(tier.price.amount, tier.price.currencyCode, loc) : ""}
+                  {tier.price
+                    ? formatCurrency(
+                        tier.price.amount,
+                        tier.price.currencyCode,
+                        loc,
+                      )
+                    : ""}
                 </span>
                 <span className="text-ds-muted-foreground ms-1">
-                  {t(locale, billingLabels[tier.billingPeriod] || "blocks.per_month")}
+                  {t(
+                    locale,
+                    billingLabels[tier.billingPeriod] || "blocks.per_month",
+                  )}
                 </span>
               </div>
 
-              <button onClick={handleJoin} disabled={joining} className="w-full px-6 py-3 text-sm font-semibold rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors disabled:opacity-50">
+              <button
+                onClick={handleJoin}
+                disabled={joining}
+                className="w-full px-6 py-3 text-sm font-semibold rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors disabled:opacity-50"
+              >
                 {joining ? "Processing..." : t(locale, "blocks.get_started")}
               </button>
 
               <Link
-                to={`${prefix}/memberships` as any}
+                to={`${prefix}/memberships` as never}
                 className="block w-full text-center px-4 py-2 text-sm font-medium text-ds-muted-foreground hover:text-ds-foreground transition-colors"
               >
                 {t(locale, "membership.compare_plans")}
@@ -198,22 +288,70 @@ function MembershipDetailPage() {
 
               <div className="border-t border-ds-border pt-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
-                  <svg className="w-4 h-4 text-ds-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-4 h-4 text-ds-success flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
-                  <span>{t(locale, "memberships.badge_cancel_anytime", "Cancel anytime")}</span>
+                  <span>
+                    {t(
+                      locale,
+                      "memberships.badge_cancel_anytime",
+                      "Cancel anytime",
+                    )}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
-                  <svg className="w-4 h-4 text-ds-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-4 h-4 text-ds-success flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
-                  <span>{t(locale, "memberships.badge_secure_payment", "Secure payment")}</span>
+                  <span>
+                    {t(
+                      locale,
+                      "memberships.badge_secure_payment",
+                      "Secure payment",
+                    )}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
-                  <svg className="w-4 h-4 text-ds-success flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-4 h-4 text-ds-success flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
-                  <span>{t(locale, "memberships.badge_instant_access", "Instant access")}</span>
+                  <span>
+                    {t(
+                      locale,
+                      "memberships.badge_instant_access",
+                      "Instant access",
+                    )}
+                  </span>
                 </div>
               </div>
             </div>

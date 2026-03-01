@@ -37,10 +37,10 @@ export function FlashSaleCard({ sale }: FlashSaleCardProps) {
 
         <div className="flex items-center gap-2 mt-2">
           <span className="text-lg font-bold text-ds-destructive">
-            {formatCurrency(sale.sale_price, sale.currency_code, locale as SupportedLocale)}
+            {formatCurrency((sale.sale_price ?? 0), sale.currency_code, locale as SupportedLocale)}
           </span>
           <span className="text-sm text-ds-muted-foreground line-through">
-            {formatCurrency(sale.original_price, sale.currency_code, locale as SupportedLocale)}
+            {formatCurrency((sale.original_price ?? 0), sale.currency_code, locale as SupportedLocale)}
           </span>
         </div>
 

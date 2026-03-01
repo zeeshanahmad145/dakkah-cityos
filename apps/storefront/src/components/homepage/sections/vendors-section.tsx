@@ -32,7 +32,7 @@ export function VendorsSection({ vendors, config }: VendorsSectionProps) {
             </p>
           </div>
           <Link
-            to={`${prefix}/vendors` as any}
+            to={`${prefix}/vendors` as never}
             className="text-sm font-medium text-ds-muted-foreground hover:text-ds-foreground"
           >
             View All Vendors
@@ -40,10 +40,10 @@ export function VendorsSection({ vendors, config }: VendorsSectionProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {vendors.map(vendor => (
+          {vendors.map((vendor) => (
             <Link
               key={vendor.id}
-              to={`${prefix}/vendors/${vendor.handle}` as any}
+              to={`${prefix}/vendors/${vendor.handle}` as never}
               className="group border border-ds-border rounded-lg p-6 hover:border-ds-border hover:shadow-sm transition-all"
             >
               <div className="flex items-center gap-4 mb-4">

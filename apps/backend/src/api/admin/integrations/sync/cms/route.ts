@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { createLogger } from "../../../../../lib/logger"
@@ -88,7 +88,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       summary,
       results,
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC-CMS")}
 }
 
@@ -107,7 +107,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       schedule: "*/15 * * * *",
       job_name: "payload-cms-poll",
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-SYNC-CMS")}
 }
 

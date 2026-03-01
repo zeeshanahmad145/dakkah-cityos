@@ -62,7 +62,7 @@ export function DropshipOrderCard({
           {formatDate(order.createdAt, locale as SupportedLocale)}
         </div>
         <div className="font-semibold text-ds-foreground">
-          {formatCurrency(order.total.amount, order.total.currencyCode, locale as SupportedLocale)}
+          {formatCurrency((order.total.amount ?? 0), order.total.currencyCode, locale as SupportedLocale)}
         </div>
       </div>
 

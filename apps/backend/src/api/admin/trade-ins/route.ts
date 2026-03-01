@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -21,7 +21,7 @@ const createSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("tradeInModule") as any;
+    const mod = req.scope.resolve("tradeInModule") as unknown as any;
     const { limit = "20", offset = "0" } = req.query as Record<
       string,
       string | undefined
@@ -36,14 +36,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin trade-ins");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("tradeInModule") as any;
+    const mod = req.scope.resolve("tradeInModule") as unknown as any;
     const parsed = createSchema.safeParse(req.body);
     if (!parsed.success)
       return res
@@ -51,7 +51,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     const item = await mod.createTradeIns(parsed.data);
     return res.status(201).json({ item });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin trade-ins");
   }
 }

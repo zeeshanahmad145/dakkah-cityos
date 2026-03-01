@@ -82,8 +82,12 @@ export function CompanyOrders({ orders }: CompanyOrdersProps) {
             {orders.map((order) => (
               <tr key={order.id} className="hover:bg-ds-muted">
                 <td className="px-6 py-4">
-                  <p className="font-medium text-ds-foreground">#{order.display_id}</p>
-                  <p className="text-sm text-ds-muted-foreground">{order.item_count} items</p>
+                  <p className="font-medium text-ds-foreground">
+                    #{order.display_id}
+                  </p>
+                  <p className="text-sm text-ds-muted-foreground">
+                    {order.item_count} items
+                  </p>
                 </td>
                 <td className="px-6 py-4 text-sm text-ds-muted-foreground">
                   {order.ordered_by}
@@ -92,10 +96,12 @@ export function CompanyOrders({ orders }: CompanyOrdersProps) {
                   {formatDate(order.created_at)}
                 </td>
                 <td className="px-6 py-4">
-                  <span className={cn(
-                    "px-2 py-1 rounded-full text-xs font-medium capitalize",
-                    getStatusColor(order.status)
-                  )}>
+                  <span
+                    className={cn(
+                      "px-2 py-1 rounded-full text-xs font-medium capitalize",
+                      getStatusColor(order.status),
+                    )}
+                  >
                     {order.status}
                   </span>
                 </td>
@@ -104,7 +110,7 @@ export function CompanyOrders({ orders }: CompanyOrdersProps) {
                 </td>
                 <td className="px-6 py-4">
                   <Link
-                    to={`${prefix}/account/orders/${order.id}` as any}
+                    to={`${prefix}/account/orders/${order.id}` as never}
                     className="text-ds-muted-foreground hover:text-ds-muted-foreground"
                   >
                     <ChevronRight className="w-5 h-5" />

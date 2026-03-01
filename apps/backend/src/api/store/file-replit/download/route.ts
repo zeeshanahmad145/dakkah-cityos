@@ -8,12 +8,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const key = req.query.key as string;
 
   if (!key) {
-    return res.status(400).json({ message: "File key is missing. Use ?key=filename" });
+    return res
+      .status(400)
+      .json({ message: "File key is missing. Use ?key=filename" });
   }
 
   try {
-    const dlResult = await (client.downloadAsStream(key) as any);
-    const { ok, value: stream, error } = dlResult;
+    const dlResult = await client.downloadAsStream(key);
+    const { ok, value: stream, error } = dlResult as any;
 
     if (!ok) {
       if (error?.toString().includes("not found")) {
@@ -37,7 +39,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     // @ts-ignore
     stream.pipe(res);
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "File download");
   }
 }

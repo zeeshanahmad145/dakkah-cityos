@@ -41,9 +41,17 @@ const navSections: NavSection[] = [
     items: [
       { icon: ShoppingBag, label: "Products", path: "/products" },
       { icon: ShoppingBag, label: "Bundles", path: "/bundles" },
-      { icon: ShoppingBag, label: "Digital Products", path: "/digital-products" },
+      {
+        icon: ShoppingBag,
+        label: "Digital Products",
+        path: "/digital-products",
+      },
       { icon: ShoppingBag, label: "Inventory", path: "/inventory" },
-      { icon: ShoppingBag, label: "Inventory Extension", path: "/inventory-extension" },
+      {
+        icon: ShoppingBag,
+        label: "Inventory Extension",
+        path: "/inventory-extension",
+      },
       { icon: ShoppingBag, label: "Print on Demand", path: "/print-on-demand" },
     ],
   },
@@ -52,7 +60,11 @@ const navSections: NavSection[] = [
     items: [
       { icon: ShoppingBag, label: "Orders", path: "/orders" },
       { icon: CreditCard, label: "Payouts", path: "/payouts" },
-      { icon: CogSixTooth, label: "Shipping Extension", path: "/shipping-extension" },
+      {
+        icon: CogSixTooth,
+        label: "Shipping Extension",
+        path: "/shipping-extension",
+      },
       { icon: CogSixTooth, label: "Shipping Rules", path: "/shipping-rules" },
       { icon: CogSixTooth, label: "Cart Extension", path: "/cart-extension" },
       { icon: CogSixTooth, label: "Cart Rules", path: "/cart-rules" },
@@ -97,7 +109,11 @@ const navSections: NavSection[] = [
     label: "Finance",
     items: [
       { icon: CreditCard, label: "Credit", path: "/credit" },
-      { icon: CreditCard, label: "Financial Product", path: "/financial-product" },
+      {
+        icon: CreditCard,
+        label: "Financial Product",
+        path: "/financial-product",
+      },
       { icon: CreditCard, label: "Volume Pricing", path: "/volume-pricing" },
       { icon: CreditCard, label: "Volume Deals", path: "/volume-deals" },
       { icon: CreditCard, label: "Subscriptions", path: "/subscriptions" },
@@ -115,12 +131,20 @@ const navSections: NavSection[] = [
       { icon: ShoppingBag, label: "Consignments", path: "/consignments" },
       { icon: ShoppingBag, label: "Dropshipping", path: "/dropshipping" },
       { icon: ShoppingBag, label: "Trade-in", path: "/trade-in" },
-      { icon: ShoppingBag, label: "Try Before You Buy", path: "/try-before-you-buy" },
+      {
+        icon: ShoppingBag,
+        label: "Try Before You Buy",
+        path: "/try-before-you-buy",
+      },
       { icon: CogSixTooth, label: "Warranty", path: "/warranty" },
       { icon: ShoppingBag, label: "White Label", path: "/white-label" },
       { icon: Star, label: "Wishlists", path: "/wishlists" },
       { icon: Star, label: "Newsletter", path: "/newsletter" },
-      { icon: CogSixTooth, label: "Notification Preferences", path: "/notification-preferences" },
+      {
+        icon: CogSixTooth,
+        label: "Notification Preferences",
+        path: "/notification-preferences",
+      },
       { icon: Star, label: "Disputes", path: "/disputes" },
       { icon: CogSixTooth, label: "Legal", path: "/legal" },
       { icon: CreditCard, label: "Quotes", path: "/quotes" },
@@ -128,7 +152,11 @@ const navSections: NavSection[] = [
   },
 ]
 
-function sectionContainsActivePath(section: NavSection, baseHref: string, pathname: string): boolean {
+function sectionContainsActivePath(
+  section: NavSection,
+  baseHref: string,
+  pathname: string,
+): boolean {
   return section.items.some((item) => {
     if (item.path === "") {
       return pathname === baseHref || pathname === `${baseHref}/`
@@ -137,7 +165,11 @@ function sectionContainsActivePath(section: NavSection, baseHref: string, pathna
   })
 }
 
-export function VendorLayout({ children, title, description }: VendorLayoutProps) {
+export function VendorLayout({
+  children,
+  title,
+  description,
+}: VendorLayoutProps) {
   const location = useLocation()
   const prefix = useTenantPrefix()
   const baseHref = `${prefix}/vendor`
@@ -145,21 +177,31 @@ export function VendorLayout({ children, title, description }: VendorLayoutProps
   const isActive = (path: string) => {
     const fullPath = `${baseHref}${path}`
     if (path === "") {
-      return location.pathname === baseHref || location.pathname === `${baseHref}/`
+      return (
+        location.pathname === baseHref || location.pathname === `${baseHref}/`
+      )
     }
     return location.pathname.startsWith(fullPath)
   }
 
-  const initialOpen = navSections.reduce<Record<string, boolean>>((acc, section) => {
-    if (section.label === "Main") {
-      acc[section.label] = true
-    } else {
-      acc[section.label] = sectionContainsActivePath(section, baseHref, location.pathname)
-    }
-    return acc
-  }, {})
+  const initialOpen = navSections.reduce<Record<string, boolean>>(
+    (acc, section) => {
+      if (section.label === "Main") {
+        acc[section.label] = true
+      } else {
+        acc[section.label] = sectionContainsActivePath(
+          section,
+          baseHref,
+          location.pathname,
+        )
+      }
+      return acc
+    },
+    {},
+  )
 
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>(initialOpen)
+  const [openSections, setOpenSections] =
+    useState<Record<string, boolean>>(initialOpen)
 
   const toggleSection = (label: string) => {
     setOpenSections((prev) => ({ ...prev, [label]: !prev[label] }))
@@ -174,7 +216,9 @@ export function VendorLayout({ children, title, description }: VendorLayoutProps
               <h1 className="text-2xl font-bold text-ds-foreground">
                 {title || "Vendor Dashboard"}
               </h1>
-              {description && <p className="mt-1 text-ds-muted-foreground">{description}</p>}
+              {description && (
+                <p className="mt-1 text-ds-muted-foreground">{description}</p>
+              )}
             </div>
           </div>
         </div>
@@ -192,7 +236,7 @@ export function VendorLayout({ children, title, description }: VendorLayoutProps
                         onClick={() => toggleSection(section.label)}
                         className={clsx(
                           "w-full flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ds-muted-foreground hover:bg-ds-muted transition-colors",
-                          sectionIndex > 0 && "border-t border-ds-border"
+                          sectionIndex > 0 && "border-t border-ds-border",
                         )}
                       >
                         {section.label}
@@ -209,12 +253,12 @@ export function VendorLayout({ children, title, description }: VendorLayoutProps
                           return (
                             <Link
                               key={item.path}
-                              to={`${baseHref}${item.path}` as any}
+                              to={`${baseHref}${item.path}` as never}
                               className={clsx(
                                 "flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors border-b border-ds-border last:border-b-0",
                                 active
                                   ? "bg-ds-primary text-ds-primary-foreground"
-                                  : "text-ds-muted-foreground hover:bg-ds-muted hover:text-ds-foreground"
+                                  : "text-ds-muted-foreground hover:bg-ds-muted hover:text-ds-foreground",
                               )}
                             >
                               <Icon className="h-5 w-5" />
@@ -222,7 +266,9 @@ export function VendorLayout({ children, title, description }: VendorLayoutProps
                               <ChevronRight
                                 className={clsx(
                                   "ms-auto h-4 w-4",
-                                  active ? "text-ds-primary-foreground" : "text-ds-muted-foreground"
+                                  active
+                                    ? "text-ds-primary-foreground"
+                                    : "text-ds-muted-foreground",
                                 )}
                               />
                             </Link>

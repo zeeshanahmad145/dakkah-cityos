@@ -15,7 +15,7 @@ function VendorDashboardRoute() {
   const auth = useAuth()
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.customer || (auth as any)?.user
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id

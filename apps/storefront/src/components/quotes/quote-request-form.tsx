@@ -1,53 +1,57 @@
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
-import { sdk } from "@/lib/utils/sdk";
-import { Button } from "@/components/ui/button";
-import { useCart } from "@/lib/hooks/use-cart";
-import { useToast } from "@/components/ui/toast";
-import { useTenantPrefix } from "@/lib/context/tenant-context";
+import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { useMutation } from "@tanstack/react-query"
+import { sdk } from "@/lib/utils/sdk"
+import { Button } from "@/components/ui/button"
+import { useCart } from "@/lib/hooks/use-cart"
+import { useToast } from "@/components/ui/toast"
+import { useTenantPrefix } from "@/lib/context/tenant-context"
 
-const MAX_NOTES_LENGTH = 2000;
+const MAX_NOTES_LENGTH = 2000
 
 interface FormErrors {
-  notes?: string;
-  items?: string;
+  notes?: string
+  items?: string
 }
 
 export function QuoteRequestForm() {
-  const navigate = useNavigate();
-  const { data: cart } = useCart();
-  const [notes, setNotes] = useState("");
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const { addToast } = useToast();
-  const prefix = useTenantPrefix();
+  const navigate = useNavigate()
+  const { data: cart } = useCart()
+  const [notes, setNotes] = useState("")
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const { addToast } = useToast()
+  const prefix = useTenantPrefix()
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+    const newErrors: FormErrors = {}
 
     if (!cart?.items || cart.items.length === 0) {
-      newErrors.items = "Your cart is empty. Add items before requesting a quote.";
+      newErrors.items =
+        "Your cart is empty. Add items before requesting a quote."
     }
 
     if (notes.length > MAX_NOTES_LENGTH) {
-      newErrors.notes = `Notes must be less than ${MAX_NOTES_LENGTH} characters`;
+      newErrors.notes = `Notes must be less than ${MAX_NOTES_LENGTH} characters`
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleNotesChange = (value: string) => {
-    setNotes(value);
+    setNotes(value)
     if (touched.notes) {
       if (value.length > MAX_NOTES_LENGTH) {
-        setErrors(prev => ({ ...prev, notes: `Notes must be less than ${MAX_NOTES_LENGTH} characters` }));
+        setErrors((prev) => ({
+          ...prev,
+          notes: `Notes must be less than ${MAX_NOTES_LENGTH} characters`,
+        }))
       } else {
-        setErrors(prev => ({ ...prev, notes: undefined }));
+        setErrors((prev) => ({ ...prev, notes: undefined }))
       }
     }
-  };
+  }
 
   const createQuoteMutation = useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
@@ -55,28 +59,31 @@ export function QuoteRequestForm() {
         method: "POST",
         credentials: "include",
         body: data,
-      });
-      return response as { quote: { id: string } };
+      })
+      return response as { quote: { id: string } }
     },
     onSuccess: (data) => {
-      addToast("success", "Quote request submitted successfully!");
+      addToast("success", "Quote request submitted successfully!")
       navigate({
-        to: `${prefix}/quotes/${data.quote.id}` as any,
-      });
+        to: `${prefix}/quotes/${data.quote.id}`,
+      })
     },
     onError: (error: Error) => {
-      addToast("error", error.message || "Failed to submit quote request. Please try again.");
+      addToast(
+        "error",
+        (error instanceof Error ? error.message : String(error)) || "Failed to submit quote request. Please try again.",
+      )
     },
-  });
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!validateForm()) {
       if (errors.items) {
-        addToast("warning", errors.items);
+        addToast("warning", errors.items)
       }
-      return;
+      return
     }
 
     const items = cart!.items!.map((item) => ({
@@ -87,20 +94,25 @@ export function QuoteRequestForm() {
       thumbnail: item.thumbnail,
       quantity: item.quantity,
       unit_price: item.unit_price,
-    }));
+    }))
 
     createQuoteMutation.mutate({
       items,
       customer_notes: notes.trim(),
-      company_id: (cart!.metadata as Record<string, string>)?.company_id || null,
+      company_id:
+        (cart!.metadata as Record<string, string>)?.company_id || null,
       tenant_id: (cart!.metadata as Record<string, string>)?.tenant_id || null,
       region_id: cart!.region_id,
       store_id: (cart!.metadata as Record<string, string>)?.store_id || null,
-    });
-  };
+    })
+  }
 
   return (
-    <form aria-label="Quote request form" onSubmit={handleSubmit} className="space-y-6">
+    <form
+      aria-label="Quote request form"
+      onSubmit={handleSubmit}
+      className="space-y-6"
+    >
       <div className="border rounded-lg p-6 bg-muted/20">
         <h2 className="text-xl font-semibold mb-4">Cart Items</h2>
         {!cart?.items || cart.items.length === 0 ? (
@@ -119,7 +131,9 @@ export function QuoteRequestForm() {
                   )}
                   <div>
                     <p className="font-medium">{item.title}</p>
-                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Qty: {item.quantity}
+                    </p>
                   </div>
                 </div>
                 <p className="font-semibold">
@@ -143,7 +157,7 @@ export function QuoteRequestForm() {
           id="notes"
           value={notes}
           onChange={(e) => handleNotesChange(e.target.value)}
-          onBlur={() => setTouched(prev => ({ ...prev, notes: true }))}
+          onBlur={() => setTouched((prev) => ({ ...prev, notes: true }))}
           placeholder="Tell us about your needs, timeline, or any special requirements..."
           className={`w-full min-h-32 p-3 border rounded-lg resize-none ${
             errors.notes ? "border-ds-destructive" : ""
@@ -154,7 +168,9 @@ export function QuoteRequestForm() {
           {errors.notes && (
             <p className="text-sm text-ds-destructive">{errors.notes}</p>
           )}
-          <p className={`text-sm ms-auto ${notes.length > MAX_NOTES_LENGTH ? "text-ds-destructive" : "text-muted-foreground"}`}>
+          <p
+            className={`text-sm ms-auto ${notes.length > MAX_NOTES_LENGTH ? "text-ds-destructive" : "text-muted-foreground"}`}
+          >
             {notes.length}/{MAX_NOTES_LENGTH}
           </p>
         </div>
@@ -163,19 +179,25 @@ export function QuoteRequestForm() {
       <div className="flex gap-4">
         <Button
           type="submit"
-          disabled={!cart?.items || cart.items.length === 0 || createQuoteMutation.isPending}
+          disabled={
+            !cart?.items ||
+            cart.items.length === 0 ||
+            createQuoteMutation.isPending
+          }
           className="flex-1"
         >
-          {createQuoteMutation.isPending ? "Submitting..." : "Submit Quote Request"}
+          {createQuoteMutation.isPending
+            ? "Submitting..."
+            : "Submit Quote Request"}
         </Button>
         <Button
           type="button"
           variant="secondary"
-          onClick={() => navigate({ to: `${prefix}` as any })}
+          onClick={() => navigate({ to: `${prefix}` })}
         >
           Cancel
         </Button>
       </div>
     </form>
-  );
+  )
 }

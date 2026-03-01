@@ -9,8 +9,8 @@ export default async function quoteApprovedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const quoteService = container.resolve("quote")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const quoteService = container.resolve("quote") as unknown as any
 
   try {
     const quote = await quoteService.retrieveQuote(data.id)

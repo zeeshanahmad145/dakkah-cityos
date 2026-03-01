@@ -26,7 +26,12 @@ interface WishlistGridProps {
   onMoveToCart?: (itemId: string) => void
 }
 
-export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveToCart }: WishlistGridProps) {
+export function WishlistGrid({
+  locale: localeProp,
+  items,
+  onRemoveItem,
+  onMoveToCart,
+}: WishlistGridProps) {
   const { locale: ctxLocale } = useTenant()
   const locale = localeProp || ctxLocale || "en"
   const prefix = useTenantPrefix()
@@ -35,10 +40,14 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
 
   const sortedItems = [...items].sort((a, b) => {
     switch (sortBy) {
-      case "price_low": return a.price - b.price
-      case "price_high": return b.price - a.price
-      case "name": return a.name.localeCompare(b.name)
-      default: return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
+      case "price_low":
+        return a.price - b.price
+      case "price_high":
+        return b.price - a.price
+      case "name":
+        return a.name.localeCompare(b.name)
+      default:
+        return new Date(b.addedAt!).getTime() - new Date(a.addedAt!).getTime()
     }
   })
 
@@ -53,7 +62,7 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
           {t(locale, "wishlist.empty_wishlist_desc")}
         </p>
         <Link
-          to={`${prefix}/` as any}
+          to={`${prefix}/` as never}
           className="inline-block px-4 py-2 bg-ds-primary text-ds-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
         >
           {t(locale, "wishlist.browse_products")}
@@ -93,8 +102,18 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
               className={`p-1.5 rounded-md transition-colors ${viewMode === "grid" ? "bg-ds-card shadow-sm" : "text-ds-muted-foreground"}`}
               aria-label={t(locale, "wishlist.grid_view")}
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                />
               </svg>
             </button>
             <button
@@ -102,8 +121,18 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
               className={`p-1.5 rounded-md transition-colors ${viewMode === "list" ? "bg-ds-card shadow-sm" : "text-ds-muted-foreground"}`}
               aria-label={t(locale, "wishlist.list_view")}
             >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
@@ -113,10 +142,18 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
       {viewMode === "grid" ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {sortedItems.map((item) => (
-            <div key={item.id} className="bg-ds-card rounded-lg border border-ds-border overflow-hidden group">
+            <div
+              key={item.id}
+              className="bg-ds-card rounded-lg border border-ds-border overflow-hidden group"
+            >
               <div className="relative aspect-square bg-ds-muted">
                 {item.image && (
-                  <img loading="lazy" src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <img
+                    loading="lazy"
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
                 )}
                 <div className="absolute top-2 end-2">
                   <AddToWishlistButton
@@ -143,14 +180,24 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
                 )}
               </div>
               <div className="p-3">
-                <p className="text-sm font-medium text-ds-foreground line-clamp-2">{item.name}</p>
+                <p className="text-sm font-medium text-ds-foreground line-clamp-2">
+                  {item.name}
+                </p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-sm font-semibold text-ds-primary">
-                    {formatCurrency(item.price, item.currency, locale as SupportedLocale)}
+                    {formatCurrency(
+                      item.price,
+                      item.currency,
+                      locale as SupportedLocale,
+                    )}
                   </span>
                   {item.originalPrice && item.originalPrice > item.price && (
                     <span className="text-xs text-ds-muted-foreground line-through">
-                      {formatCurrency(item.originalPrice, item.currency, locale as SupportedLocale)}
+                      {formatCurrency(
+                        item.originalPrice,
+                        item.currency,
+                        locale as SupportedLocale,
+                      )}
                     </span>
                   )}
                 </div>
@@ -169,26 +216,48 @@ export function WishlistGrid({ locale: localeProp, items, onRemoveItem, onMoveTo
       ) : (
         <div className="space-y-2">
           {sortedItems.map((item) => (
-            <div key={item.id} className="flex items-center gap-4 bg-ds-card rounded-lg border border-ds-border p-3">
+            <div
+              key={item.id}
+              className="flex items-center gap-4 bg-ds-card rounded-lg border border-ds-border p-3"
+            >
               <div className="relative w-20 h-20 rounded-lg bg-ds-muted overflow-hidden flex-shrink-0">
                 {item.image && (
-                  <img loading="lazy" src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <img
+                    loading="lazy"
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-ds-foreground truncate">{item.name}</p>
+                <p className="text-sm font-medium text-ds-foreground truncate">
+                  {item.name}
+                </p>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-sm font-semibold text-ds-primary">
-                    {formatCurrency(item.price, item.currency, locale as SupportedLocale)}
+                    {formatCurrency(
+                      item.price,
+                      item.currency,
+                      locale as SupportedLocale,
+                    )}
                   </span>
                   {item.originalPrice && item.originalPrice > item.price && (
                     <span className="text-xs text-ds-muted-foreground line-through">
-                      {formatCurrency(item.originalPrice, item.currency, locale as SupportedLocale)}
+                      {formatCurrency(
+                        item.originalPrice,
+                        item.currency,
+                        locale as SupportedLocale,
+                      )}
                     </span>
                   )}
                 </div>
-                <span className={`text-xs mt-1 inline-block ${item.inStock ? "text-ds-success" : "text-ds-destructive"}`}>
-                  {item.inStock ? t(locale, "wishlist.in_stock") : t(locale, "wishlist.out_of_stock")}
+                <span
+                  className={`text-xs mt-1 inline-block ${item.inStock ? "text-ds-success" : "text-ds-destructive"}`}
+                >
+                  {item.inStock
+                    ? t(locale, "wishlist.in_stock")
+                    : t(locale, "wishlist.out_of_stock")}
                 </span>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">

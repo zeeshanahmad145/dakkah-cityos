@@ -7,8 +7,8 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const charityService = req.scope.resolve("charity") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const charityService = req.scope.resolve("charity") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     const {
       campaign_id,
@@ -30,11 +30,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
     const validFrequencies = ["weekly", "monthly", "quarterly", "annually"];
     if (!validFrequencies.includes(frequency)) {
-      return res
-        .status(400)
-        .json({
-          error: `frequency must be one of: ${validFrequencies.join(", ")}`,
-        });
+      return res.status(400).json({
+        error: `frequency must be one of: ${validFrequencies.join(", ")}`,
+      });
     }
 
     let donation: any;
@@ -55,7 +53,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         frequency,
       });
     } else {
-      donation = await (charityService as any).createDonationSchedules?.({
+      donation = await charityService.createDonationSchedules?.({
         campaign_id,
         customer_id: customerId,
         amount,
@@ -68,7 +66,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.status(201).json({ donation });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-DONATIONS-RECURRING");
   }
 }

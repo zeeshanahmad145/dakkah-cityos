@@ -6,7 +6,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const financialService = req.scope.resolve("financialProduct") as any;
+    const financialService = req.scope.resolve("financialProduct") as unknown as any;
     const {
       type,
       limit = "20",
@@ -15,7 +15,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     // Fetch both loan products and investment plans
     const [loanProducts, investmentPlans] = await Promise.all([
-      (financialService as any)
+      financialService
         .listLoanProducts(
           type === "loan" || !type ? {} : { status: "inactive" },
           {
@@ -24,7 +24,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
           },
         )
         .catch(() => []),
-      (financialService as any)
+      financialService
         .listInvestmentPlans(
           type === "investment" || !type ? {} : { status: "inactive" },
           {
@@ -55,7 +55,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-FINANCIAL-PRODUCTS-LIST");
   }
 }

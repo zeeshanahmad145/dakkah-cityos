@@ -3,18 +3,28 @@ import { CartEmpty } from "@/components/cart"
 import { Loading } from "@/components/ui/loading"
 import { useCart } from "@/lib/hooks/use-cart"
 import { type CheckoutStep, CheckoutStepKey } from "@/lib/types/global"
-import {
-  useLoaderData,
-  useLocation,
-  useNavigate,
-} from "@tanstack/react-router"
+import { useLoaderData, useLocation, useNavigate } from "@tanstack/react-router"
 import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 
 const BNPLOptions = lazy(() => import("@/components/checkout/bnpl-options"))
-const StoreCreditApply = lazy(() => import("@/components/checkout/store-credit-apply"))
-const CouponInput = lazy(() => import("@/components/promotions/coupon-input").then(m => ({ default: m.CouponInput })))
-const GiftWrapOptions = lazy(() => import("@/components/checkout/gift-wrap-options").then(m => ({ default: m.GiftWrapOptions })))
-const DeliveryInstructions = lazy(() => import("@/components/checkout/delivery-instructions").then(m => ({ default: m.DeliveryInstructions })))
+const StoreCreditApply = lazy(
+  () => import("@/components/checkout/store-credit-apply"),
+)
+const CouponInput = lazy(() =>
+  import("@/components/promotions/coupon-input").then((m) => ({
+    default: m.CouponInput,
+  })),
+)
+const GiftWrapOptions = lazy(() =>
+  import("@/components/checkout/gift-wrap-options").then((m) => ({
+    default: m.GiftWrapOptions,
+  })),
+)
+const DeliveryInstructions = lazy(() =>
+  import("@/components/checkout/delivery-instructions").then((m) => ({
+    default: m.DeliveryInstructions,
+  })),
+)
 
 const DeliveryStep = lazy(() => import("@/components/checkout-delivery-step"))
 const AddressStep = lazy(() => import("@/components/checkout-address-step"))
@@ -23,22 +33,24 @@ const ReviewStep = lazy(() => import("@/components/checkout-review-step"))
 const CheckoutSummary = lazy(() => import("@/components/checkout-summary"))
 
 const Checkout = () => {
-  const { step } = useLoaderData({
+  const { step } = (useLoaderData({ strict: false }) as any) || {}; void useLoaderData({
     strict: false,
-  }) as any;
-  const { data: cart, isLoading: cartLoading } = useCart();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [availableCredits, setAvailableCredits] = useState<number>(0);
+  })
+  const { data: cart, isLoading: cartLoading } = useCart()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [availableCredits, setAvailableCredits] = useState<number>(0)
 
   useEffect(() => {
-    const cartAny = cart as any;
+    const cartAny = cart as any
     if (cartAny?.customer?.metadata?.store_credit) {
-      setAvailableCredits(Number(cartAny.customer.metadata.store_credit) || 0);
+      setAvailableCredits(
+        Number(cartAny?.customer?.metadata?.store_credit) || 0,
+      )
     } else if (cartAny?.customer?.id) {
-      setAvailableCredits(0);
+      setAvailableCredits(0)
     }
-  }, [(cart as any)?.customer]);
+  }, [cart])
 
   const steps: CheckoutStep[] = useMemo(() => {
     return [
@@ -67,25 +79,25 @@ const Checkout = () => {
         description: "Review your order details before placing your order.",
         completed: false,
       },
-    ];
-  }, [cart]);
+    ]
+  }, [cart])
 
   const currentStepIndex = useMemo(
     () => steps.findIndex((s) => s.key === step),
-    [step, steps]
-  );
+    [step, steps],
+  )
 
   const goToStep = (step: CheckoutStepKey) => {
     navigate({
       to: `${location.pathname}?step=${step}`,
       replace: true,
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     // Determine which step to show based on cart state
     if (!cart) {
-      return;
+      return
     }
 
     if (
@@ -93,8 +105,8 @@ const Checkout = () => {
       currentStepIndex >= 0 &&
       !steps[0].completed
     ) {
-      goToStep(CheckoutStepKey.ADDRESSES);
-      return;
+      goToStep(CheckoutStepKey.ADDRESSES)
+      return
     }
 
     if (
@@ -102,8 +114,8 @@ const Checkout = () => {
       currentStepIndex >= 1 &&
       !steps[1].completed
     ) {
-      goToStep(CheckoutStepKey.DELIVERY);
-      return;
+      goToStep(CheckoutStepKey.DELIVERY)
+      return
     }
 
     if (
@@ -111,24 +123,24 @@ const Checkout = () => {
       currentStepIndex >= 2 &&
       !steps[2].completed
     ) {
-      goToStep(CheckoutStepKey.PAYMENT);
-      return;
+      goToStep(CheckoutStepKey.PAYMENT)
+      return
     }
-  }, [cart, steps, location]);
+  }, [cart, steps, location])
 
   const handleNext = () => {
-    const nextIndex = currentStepIndex + 1;
+    const nextIndex = currentStepIndex + 1
     if (nextIndex < steps.length) {
-      goToStep(steps[nextIndex].key);
+      goToStep(steps[nextIndex].key)
     }
-  };
+  }
 
   const handleBack = () => {
-    const prevIndex = currentStepIndex - 1;
+    const prevIndex = currentStepIndex - 1
     if (prevIndex >= 0) {
-      goToStep(steps[prevIndex].key);
+      goToStep(steps[prevIndex].key)
     }
-  };
+  }
 
   return (
     <div className="content-container py-8 flex flex-col gap-8">
@@ -178,7 +190,9 @@ const Checkout = () => {
                         title: item.title || item.product_title || "Item",
                         thumbnail: item.thumbnail,
                       }))}
-                      currency={cart.region?.currency_code?.toUpperCase() || "USD"}
+                      currency={
+                        cart.region?.currency_code?.toUpperCase() || "USD"
+                      }
                     />
                   </>
                 )}
@@ -188,7 +202,9 @@ const Checkout = () => {
                   <>
                     <BNPLOptions
                       cartTotal={cart.total || 0}
-                      currency={cart.region?.currency_code?.toUpperCase() || "USD"}
+                      currency={
+                        cart.region?.currency_code?.toUpperCase() || "USD"
+                      }
                     />
                     <PaymentStep
                       cart={cart}
@@ -228,7 +244,7 @@ const Checkout = () => {
         </Suspense>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Checkout;
+export default Checkout

@@ -3,9 +3,9 @@ import { MedusaContainer } from "@medusajs/framework/types"
 import { Modules } from "@medusajs/framework/utils"
 
 export default async function subscriptionExpiryWarningJob(container: MedusaContainer) {
-  const subscriptionService = container.resolve("subscription")
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const logger = container.resolve("logger")
+  const subscriptionService = container.resolve("subscription") as unknown as any
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const logger = container.resolve("logger") as unknown as any
 
   logger.info("[subscription-expiry] Starting subscription expiry warning job")
 
@@ -48,7 +48,7 @@ export default async function subscriptionExpiryWarningJob(container: MedusaCont
 
         sentCount++
         logger.info(`[subscription-expiry] Sent warning for subscription ${subscription.id}`)
-      } catch (error: any) {
+      } catch (error: unknown) {
         logger.error(`[subscription-expiry] Failed to send warning for ${subscription.id}:`, error)
       }
     }
@@ -85,7 +85,7 @@ export default async function subscriptionExpiryWarningJob(container: MedusaCont
         })
 
         sentCount++
-      } catch (error: any) {
+      } catch (error: unknown) {
         logger.error(`[subscription-expiry] Failed to send final warning for ${subscription.id}:`, error)
       }
     }

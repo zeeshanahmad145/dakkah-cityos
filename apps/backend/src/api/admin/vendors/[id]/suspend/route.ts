@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { z } from "zod"
 import { handleApiError } from "../../../../../lib/api-error-handler"
@@ -15,8 +15,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
 
   const { id } = req.params
   const { reason } = parsed.data
-  const vendorService = req.scope.resolve("vendor")
-  const eventBus = req.scope.resolve("event_bus")
+  const vendorService = req.scope.resolve("vendor") as unknown as any
+  const eventBus = req.scope.resolve("event_bus") as unknown as any
   
   try {
     const vendor = await vendorService.updateVendors({
@@ -34,7 +34,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     await eventBus.emit("vendor.suspended", { id, reason })
     
     res.json({ vendor })
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "ADMIN-VENDORS-ID-SUSPEND")}
 }
 

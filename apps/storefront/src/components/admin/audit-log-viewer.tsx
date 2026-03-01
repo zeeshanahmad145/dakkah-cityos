@@ -65,7 +65,7 @@ export function AuditLogViewer() {
                   <ClassificationBadge classification={log.data_classification} />
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(log.created_at).toLocaleString()}
+                  {new Date(log.created_at!).toLocaleString()}
                 </span>
               </div>
               <div className="text-sm text-muted-foreground">

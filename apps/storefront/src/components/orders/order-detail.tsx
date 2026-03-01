@@ -91,7 +91,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
             <h1 className="text-2xl font-bold text-ds-foreground">Order #{order.display_id}</h1>
             <p className="text-sm text-ds-muted-foreground mt-1">
               Placed on{" "}
-              {new Date(order.created_at).toLocaleDateString("en-US", {
+              {new Date(order.created_at!).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

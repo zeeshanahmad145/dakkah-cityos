@@ -10,14 +10,14 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const insuranceService = req.scope.resolve("insurance") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const insuranceService = req.scope.resolve("insurance") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const policies = await (insuranceService as any).listInsPolicys({
+    const policies = await insuranceService.listInsPolicys({
       customer_id: customerId,
     });
     const list = Array.isArray(policies)
@@ -25,15 +25,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       : [policies].filter(Boolean);
 
     return res.json({ policies: list, count: list.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-INSURANCE-POLICIES-LIST");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const insuranceService = req.scope.resolve("insurance") as any;
-    const customerId = (req as any).auth_context?.actor_id;
+    const insuranceService = req.scope.resolve("insurance") as unknown as any;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -65,7 +65,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     });
 
     return res.status(201).json({ policy });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-INSURANCE-POLICIES-CREATE");
   }
 }

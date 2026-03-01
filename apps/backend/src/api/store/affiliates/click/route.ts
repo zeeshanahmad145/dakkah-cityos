@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const affiliateService = req.scope.resolve("affiliate") as any;
+    const affiliateService = req.scope.resolve("affiliate") as unknown as any;
     const { referral_code, product_id, source_url, user_agent } = req.body as {
       referral_code: string;
       product_id?: string;
@@ -20,7 +20,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     // Look up the referral link by code
-    const links = await (affiliateService as any).listReferralLinks({
+    const links = await affiliateService.listReferralLinks({
       code: referral_code,
     });
     const linkList = Array.isArray(links) ? links : [links].filter(Boolean);
@@ -31,7 +31,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     }
 
     // Record the click
-    const click = await (affiliateService as any).createClickTrackings({
+    const click = await affiliateService.createClickTrackings({
       referral_link_id: link.id,
       affiliate_id: link.affiliate_id,
       product_id: product_id ?? null,
@@ -42,7 +42,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     });
 
     // Increment link click count
-    await (affiliateService as any)
+    await affiliateService
       .updateReferralLinks({
         id: link.id,
         click_count: Number(link.click_count || 0) + 1,
@@ -54,7 +54,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       click_id: click?.id,
       redirect_url: link.destination_url ?? null,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-AFFILIATE-CLICK");
   }
 }

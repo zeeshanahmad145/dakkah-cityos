@@ -147,18 +147,18 @@ const ChannelsPage = () => {
         loading={createChannel.isPending || updateChannel.isPending}
       >
         <div className="space-y-4">
-          <div><Label htmlFor="name">Channel Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Channel name" /></div>
+          <div><Label htmlFor="name">Channel Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value as any })} placeholder="Channel name" /></div>
           <div>
             <Label htmlFor="type">Type</Label>
             <select id="type" value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value as Channel["type"] })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
               {CHANNEL_TYPES.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
             </select>
           </div>
-          <div><Label htmlFor="tenant_id">Tenant ID</Label><Input id="tenant_id" value={formData.tenant_id} onChange={(e) => setFormData({ ...formData, tenant_id: e.target.value })} placeholder="Tenant ID" /></div>
-          <div><Label htmlFor="description">Description</Label><Input id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Description" /></div>
+          <div><Label htmlFor="tenant_id">Tenant ID</Label><Input id="tenant_id" value={formData.tenant_id} onChange={(e) => setFormData({ ...formData, tenant_id: e.target.value as any })} placeholder="Tenant ID" /></div>
+          <div><Label htmlFor="description">Description</Label><Input id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value as any })} placeholder="Description" /></div>
           <div>
             <Label htmlFor="configuration">Configuration (JSON)</Label>
-            <textarea id="configuration" value={formData.configuration} onChange={(e) => setFormData({ ...formData, configuration: e.target.value })} placeholder='{"theme": "dark", "features": []}' className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[100px] font-mono text-sm" />
+            <textarea id="configuration" value={formData.configuration} onChange={(e) => setFormData({ ...formData, configuration: e.target.value as any })} placeholder='{"theme": "dark", "features": []}' className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[100px] font-mono text-sm" />
           </div>
         </div>
       </FormDrawer>

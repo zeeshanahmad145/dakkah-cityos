@@ -1,5 +1,9 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
@@ -9,17 +13,23 @@ export const Route = createFileRoute("/$tenant/$locale/automotive/")({
   head: () => ({
     meta: [
       { title: "Automotive | Dakkah CityOS" },
-      { name: "description", content: "Browse automotive listings on Dakkah CityOS" },
+      {
+        name: "description",
+        content: "Browse automotive listings on Dakkah CityOS",
+      },
     ],
   }),
   loader: async () => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/automotive/listings`, {
-        headers: {
-          "x-publishable-api-key": getMedusaPublishableKey(),
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/automotive/listings`,
+        {
+          headers: {
+            "x-publishable-api-key": getMedusaPublishableKey(),
+          },
         },
-      })
+      )
       if (!resp.ok) return { items: [], count: 0 }
       const data = await resp.json()
       const raw = data.items || data.listings || data.products || []
@@ -27,7 +37,10 @@ export const Route = createFileRoute("/$tenant/$locale/automotive/")({
         const meta = s.metadata || {}
         return {
           id: s.id,
-          title: s.title || `${s.year || ""} ${s.make || ""} ${s.model_name || ""}`.trim() || "Vehicle Listing",
+          title:
+            s.title ||
+            `${s.year || ""} ${s.make || ""} ${s.model_name || ""}`.trim() ||
+            "Vehicle Listing",
           make: s.make || null,
           model_name: s.model_name || null,
           year: s.year || null,
@@ -50,8 +63,22 @@ export const Route = createFileRoute("/$tenant/$locale/automotive/")({
   },
 })
 
-const bodyTypeOptions = ["all", "sedan", "suv", "truck", "coupe", "hatchback", "van"] as const
-const fuelTypeOptions = ["all", "petrol", "diesel", "electric", "hybrid"] as const
+const bodyTypeOptions = [
+  "all",
+  "sedan",
+  "suv",
+  "truck",
+  "coupe",
+  "hatchback",
+  "van",
+] as const
+const fuelTypeOptions = [
+  "all",
+  "petrol",
+  "diesel",
+  "electric",
+  "hybrid",
+] as const
 
 function AutomotivePage() {
   const { tenant, locale } = Route.useParams()
@@ -67,15 +94,19 @@ function AutomotivePage() {
     const matchesSearch = searchQuery
       ? (item.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (item.make || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.model_name || "").toLowerCase().includes(searchQuery.toLowerCase())
+        (item.model_name || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       : true
-    const matchesBody = bodyTypeFilter === "all" || item.body_type === bodyTypeFilter
-    const matchesFuel = fuelTypeFilter === "all" || item.fuel_type === fuelTypeFilter
+    const matchesBody =
+      bodyTypeFilter === "all" || item.body_type === bodyTypeFilter
+    const matchesFuel =
+      fuelTypeFilter === "all" || item.fuel_type === fuelTypeFilter
     return matchesSearch && matchesBody && matchesFuel
   })
 
   const formatPrice = (price: number | null, currency: string) => {
-    if (!price) return t(locale, 'verticals.contact_pricing')
+    if (!price) return t(locale, "verticals.contact_pricing")
     const amount = price >= 100 ? price / 100 : price
     return `${amount.toLocaleString()} ${currency}`
   }
@@ -88,8 +119,15 @@ function AutomotivePage() {
   }
 
   const listingTypeBadge = (type: string | null) => {
-    if (type === "lease") return { label: t(locale, "automotive.label_lease", "Lease"), color: "bg-ds-primary text-white" }
-    return { label: t(locale, 'verticals.for_sale'), color: "bg-ds-primary text-ds-primary-foreground" }
+    if (type === "lease")
+      return {
+        label: t(locale, "automotive.label_lease", "Lease"),
+        color: "bg-ds-primary text-white",
+      }
+    return {
+      label: t(locale, "verticals.for_sale"),
+      color: "bg-ds-primary text-ds-primary-foreground",
+    }
   }
 
   return (
@@ -97,20 +135,28 @@ function AutomotivePage() {
       <div className="bg-gradient-to-r from-ds-primary to-ds-primary/80 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center gap-2 text-sm text-white/70 mb-4">
-            <Link to={`${prefix}` as any} className="hover:text-white transition-colors">{t(locale, 'common.home')}</Link>
+            <Link
+              to={`${prefix}` as never}
+              className="hover:text-white transition-colors"
+            >
+              {t(locale, "common.home")}
+            </Link>
             <span>/</span>
             <span className="text-white">Automotive</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t(locale, 'automotive.title')}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            {t(locale, "automotive.title")}
+          </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Browse sedans, SUVs, trucks, and more. Find your perfect vehicle for sale or lease.
+            Browse sedans, SUVs, trucks, and more. Find your perfect vehicle for
+            sale or lease.
           </p>
           <div className="mt-6 flex items-center justify-center gap-4 text-sm text-white/60">
             <span>{items.length} vehicles listed</span>
             <span>|</span>
-            <span>{t(locale, 'verticals.verified_providers')}</span>
+            <span>{t(locale, "verticals.verified_providers")}</span>
             <span>|</span>
-            <span>{t(locale, 'automotive.financing_available')}</span>
+            <span>{t(locale, "automotive.financing_available")}</span>
           </div>
         </div>
       </div>
@@ -120,18 +166,22 @@ function AutomotivePage() {
           <aside className="w-full lg:w-72 flex-shrink-0">
             <div className="bg-ds-background border border-ds-border rounded-xl p-4 space-y-6 sticky top-4">
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'verticals.search_label')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "verticals.search_label")}
+                </label>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t(locale, 'automotive.search_placeholder')}
+                  placeholder={t(locale, "automotive.search_placeholder")}
                   className="w-full px-3 py-2 text-sm rounded-lg border border-ds-border bg-ds-background text-ds-foreground placeholder:text-ds-muted-foreground focus:outline-none focus:ring-2 focus:ring-ds-ring"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'verticals.body_type_label')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "verticals.body_type_label")}
+                </label>
                 <div className="space-y-1">
                   {bodyTypeOptions.map((opt) => (
                     <button
@@ -139,14 +189,18 @@ function AutomotivePage() {
                       onClick={() => setBodyTypeFilter(opt)}
                       className={`block w-full text-start px-3 py-2 text-sm rounded-lg transition-colors ${bodyTypeFilter === opt ? "bg-ds-primary text-ds-primary-foreground" : "text-ds-foreground hover:bg-ds-muted"}`}
                     >
-                      {opt === "all" ? t(locale, 'verticals.all_body_types') : opt.charAt(0).toUpperCase() + opt.slice(1)}
+                      {opt === "all"
+                        ? t(locale, "verticals.all_body_types")
+                        : opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-ds-foreground mb-2">{t(locale, 'verticals.fuel_type_label')}</label>
+                <label className="block text-sm font-medium text-ds-foreground mb-2">
+                  {t(locale, "verticals.fuel_type_label")}
+                </label>
                 <div className="space-y-1">
                   {fuelTypeOptions.map((opt) => (
                     <button
@@ -154,7 +208,9 @@ function AutomotivePage() {
                       onClick={() => setFuelTypeFilter(opt)}
                       className={`block w-full text-start px-3 py-2 text-sm rounded-lg transition-colors ${fuelTypeFilter === opt ? "bg-ds-primary text-ds-primary-foreground" : "text-ds-foreground hover:bg-ds-muted"}`}
                     >
-                      {opt === "all" ? t(locale, 'verticals.all_fuel_types') : opt.charAt(0).toUpperCase() + opt.slice(1)}
+                      {opt === "all"
+                        ? t(locale, "verticals.all_fuel_types")
+                        : opt.charAt(0).toUpperCase() + opt.slice(1)}
                     </button>
                   ))}
                 </div>
@@ -165,11 +221,25 @@ function AutomotivePage() {
           <main className="flex-1">
             {filteredItems.length === 0 ? (
               <div className="bg-ds-background border border-ds-border rounded-xl p-12 text-center">
-                <svg className="w-16 h-16 text-ds-muted-foreground/30 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                <svg
+                  className="w-16 h-16 text-ds-muted-foreground/30 mx-auto mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  />
                 </svg>
-                <h3 className="text-lg font-semibold text-ds-foreground mb-2">{t(locale, 'automotive.no_results')}</h3>
-                <p className="text-ds-muted-foreground text-sm">{t(locale, 'verticals.try_adjusting')}</p>
+                <h3 className="text-lg font-semibold text-ds-foreground mb-2">
+                  {t(locale, "automotive.no_results")}
+                </h3>
+                <p className="text-ds-muted-foreground text-sm">
+                  {t(locale, "verticals.try_adjusting")}
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -183,18 +253,49 @@ function AutomotivePage() {
                     >
                       <div className="aspect-[4/3] bg-gradient-to-br from-ds-muted to-ds-muted/80 relative overflow-hidden">
                         {item.thumbnail ? (
-                          <img loading="lazy" src={item.thumbnail} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <img
+                            loading="lazy"
+                            src={item.thumbnail}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <svg className="w-16 h-16 text-ds-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            <svg
+                              className="w-16 h-16 text-ds-muted-foreground"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                              />
                             </svg>
                           </div>
                         )}
-                        <span className={`absolute top-2 start-2 px-2 py-1 text-xs font-medium rounded-md ${badge.color}`}>{badge.label}</span>
+                        <span
+                          className={`absolute top-2 start-2 px-2 py-1 text-xs font-medium rounded-md ${badge.color}`}
+                        >
+                          {badge.label}
+                        </span>
                         {item.images && item.images.length > 1 && (
                           <div className="absolute bottom-2 end-2 px-2 py-0.5 text-xs font-medium bg-black/50 text-white rounded-md flex items-center gap-1">
-                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                              />
+                            </svg>
                             {item.images.length}
                           </div>
                         )}
@@ -209,24 +310,74 @@ function AutomotivePage() {
                         <div className="flex items-center gap-3 mt-2 text-xs text-ds-muted-foreground">
                           {item.mileage_km != null && (
                             <span className="flex items-center gap-1">
-                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                              <svg
+                                className="w-3.5 h-3.5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                                />
+                              </svg>
                               {item.mileage_km.toLocaleString()} km
                             </span>
                           )}
                           {item.transmission && (
                             <span className="flex items-center gap-1">
-                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                              <svg
+                                className="w-3.5 h-3.5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                              </svg>
                               {item.transmission}
                             </span>
                           )}
                           {item.fuel_type && (
-                            <span>{fuelIcon(item.fuel_type)} {item.fuel_type}</span>
+                            <span>
+                              {fuelIcon(item.fuel_type)} {item.fuel_type}
+                            </span>
                           )}
                         </div>
 
                         {item.location && (
                           <div className="flex items-center gap-1 mt-2 text-xs text-ds-muted-foreground">
-                            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            <svg
+                              className="w-3.5 h-3.5 flex-shrink-0"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
                             <span className="truncate">{item.location}</span>
                           </div>
                         )}
@@ -235,7 +386,9 @@ function AutomotivePage() {
                           <span className="font-bold text-ds-foreground text-lg">
                             {formatPrice(item.price, item.currency)}
                           </span>
-                          <span className="px-3 py-1.5 text-xs font-semibold text-ds-primary-foreground bg-ds-primary rounded-lg group-hover:bg-ds-primary/80 transition-colors">{t(locale, 'automotive.view_details')}</span>
+                          <span className="px-3 py-1.5 text-xs font-semibold text-ds-primary-foreground bg-ds-primary rounded-lg group-hover:bg-ds-primary/80 transition-colors">
+                            {t(locale, "automotive.view_details")}
+                          </span>
                         </div>
                       </div>
                     </a>
@@ -249,22 +402,43 @@ function AutomotivePage() {
 
       <section className="py-16 bg-ds-card border-t border-ds-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-ds-foreground text-center mb-12">{t(locale, 'verticals.how_it_works')}</h2>
+          <h2 className="text-2xl font-bold text-ds-foreground text-center mb-12">
+            {t(locale, "verticals.how_it_works")}
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-primary text-ds-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">Wide Selection</h3>
-              <p className="text-sm text-ds-muted-foreground">Browse thousands of vehicles from trusted dealers and private sellers.</p>
+              <div className="w-12 h-12 rounded-full bg-ds-primary text-ds-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                1
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                Wide Selection
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                Browse thousands of vehicles from trusted dealers and private
+                sellers.
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-primary text-ds-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">Verified Listings</h3>
-              <p className="text-sm text-ds-muted-foreground">Every vehicle is inspected and verified for your peace of mind.</p>
+              <div className="w-12 h-12 rounded-full bg-ds-primary text-ds-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                2
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                Verified Listings
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                Every vehicle is inspected and verified for your peace of mind.
+              </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 rounded-full bg-ds-primary text-ds-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-              <h3 className="font-semibold text-ds-foreground mb-2">Easy Financing</h3>
-              <p className="text-sm text-ds-muted-foreground">Flexible financing options to make your dream car a reality.</p>
+              <div className="w-12 h-12 rounded-full bg-ds-primary text-ds-primary-foreground flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                3
+              </div>
+              <h3 className="font-semibold text-ds-foreground mb-2">
+                Easy Financing
+              </h3>
+              <p className="text-sm text-ds-muted-foreground">
+                Flexible financing options to make your dream car a reality.
+              </p>
             </div>
           </div>
         </div>

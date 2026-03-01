@@ -129,8 +129,8 @@ function VendorQuotesRoute() {
                   </div>
                   {quote.description && <p className="text-sm text-muted-foreground mb-2">{quote.description}</p>}
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <span>Created: {new Date(quote.created_at).toLocaleDateString()}</span>
-                    {quote.valid_until && <span>Valid until: {new Date(quote.valid_until).toLocaleDateString()}</span>}
+                    <span>Created: {new Date(quote.created_at!).toLocaleDateString()}</span>
+                    {quote.valid_until && <span>Valid until: {new Date(quote.valid_until!).toLocaleDateString()}</span>}
                     {quote.items && <span>{quote.items.length} line items</span>}
                   </div>
                 </div>

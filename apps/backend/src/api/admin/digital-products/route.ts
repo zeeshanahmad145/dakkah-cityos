@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { z } from "zod";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -33,7 +33,7 @@ const createSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("digitalProduct") as any;
+    const mod = req.scope.resolve("digitalProduct") as unknown as any;
     const { limit = "20", offset = "0" } = req.query as Record<
       string,
       string | undefined
@@ -48,24 +48,22 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin digital-products");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("digitalProduct") as any;
+    const mod = req.scope.resolve("digitalProduct") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success)
-      return res
-        .status(400)
-        .json({
-          message: "Validation failed",
-          errors: validation.error.issues,
-        });
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: validation.error.issues,
+      });
 
-    const cityosContext = (req as any).cityosContext as any;
+    const cityosContext = req.cityosContext;
     const tenant_id = cityosContext?.tenantId || "default";
 
     // Natively accept file_size mapping it to file_size_bytes for the DB if needed
@@ -78,7 +76,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       tenant_id,
     });
     return res.status(201).json({ item });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin digital-products");
   }
 }

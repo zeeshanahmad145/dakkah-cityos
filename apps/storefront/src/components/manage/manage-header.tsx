@@ -3,16 +3,17 @@ import { useTenant } from "@/lib/context/tenant-context"
 import { useAuth } from "@/lib/context/auth-context"
 import { t } from "@/lib/i18n"
 import { useManageRole } from "./role-guard"
-import {
-  BarsThree,
-} from "@medusajs/icons"
+import { BarsThree } from "@medusajs/icons"
 
 interface ManageHeaderProps {
   locale?: string
   onMenuToggle?: () => void
 }
 
-export function ManageHeader({ locale: localeProp, onMenuToggle }: ManageHeaderProps) {
+export function ManageHeader({
+  locale: localeProp,
+  onMenuToggle,
+}: ManageHeaderProps) {
   const { locale: ctxLocale, tenantSlug } = useTenant()
   const locale = localeProp || ctxLocale || "en"
   const { customer } = useAuth()
@@ -36,21 +37,31 @@ export function ManageHeader({ locale: localeProp, onMenuToggle }: ManageHeaderP
           <BarsThree className="w-4 h-4" />
         </button>
         <nav className="hidden md:flex items-center gap-1 text-[13px] text-ds-muted-foreground/70 min-w-0">
-          <Link to={`/${tenantSlug}/${locale}` as any} className="hover:text-ds-muted-foreground transition-colors flex-shrink-0">
+          <Link
+            to={`/${tenantSlug}/${locale}` as never}
+            className="hover:text-ds-muted-foreground transition-colors flex-shrink-0"
+          >
             {t(locale, "common.home")}
           </Link>
           <span className="text-ds-muted-foreground/50 flex-shrink-0">/</span>
-          <Link to={`/${tenantSlug}/${locale}/manage` as any} className="hover:text-ds-muted-foreground transition-colors flex-shrink-0">
+          <Link
+            to={`/${tenantSlug}/${locale}/manage` as never}
+            className="hover:text-ds-muted-foreground transition-colors flex-shrink-0"
+          >
             {t(locale, "manage.management")}
           </Link>
           {segments.map((seg, i) => (
             <span key={seg} className="flex items-center gap-1 min-w-0">
-              <span className="text-ds-muted-foreground/50 flex-shrink-0">/</span>
+              <span className="text-ds-muted-foreground/50 flex-shrink-0">
+                /
+              </span>
               {i === segments.length - 1 ? (
-                <span className="text-ds-muted-foreground capitalize truncate">{seg.replace(/-/g, " ")}</span>
+                <span className="text-ds-muted-foreground capitalize truncate">
+                  {seg.replace(/-/g, " ")}
+                </span>
               ) : (
                 <Link
-                  to={`/${tenantSlug}/${locale}/manage/${segments.slice(0, i + 1).join("/")}` as any}
+                  to={`/${tenantSlug}/${locale}/manage/${segments.slice(0, i + 1).join("/")}` as never}
                   className="hover:text-ds-muted-foreground transition-colors capitalize truncate"
                 >
                   {seg.replace(/-/g, " ")}

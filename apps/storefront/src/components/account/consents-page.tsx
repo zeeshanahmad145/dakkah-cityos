@@ -65,7 +65,7 @@ export function ConsentsPage({
     setTimeout(() => setDataRequested(false), 3000)
   }
 
-  const categories = [...new Set(consents.map((c) => c.category))]
+  const categories = Array.from(new Set(consents.map((c) => c.category)))
 
   if (loading) {
     return (
@@ -112,7 +112,7 @@ export function ConsentsPage({
                     <p className="text-xs text-ds-muted-foreground mt-0.5">{consent.description}</p>
                     {consent.lastUpdated && (
                       <p className="text-xs text-ds-muted-foreground mt-1">
-                        Last updated: {new Date(consent.lastUpdated).toLocaleDateString()}
+                        Last updated: {new Date(consent.lastUpdated!).toLocaleDateString()}
                       </p>
                     )}
                   </div>

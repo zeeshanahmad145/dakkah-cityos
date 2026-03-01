@@ -142,8 +142,8 @@ function VendorEventTicketingRoute() {
                   <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
                     <span>Sold: {ticket.quantity_sold || 0} / {ticket.quantity_available}</span>
                     {ticket.max_per_order && <span>Max per order: {ticket.max_per_order}</span>}
-                    {ticket.sale_starts_at && <span>Sale starts: {new Date(ticket.sale_starts_at).toLocaleDateString()}</span>}
-                    {ticket.sale_ends_at && <span>Sale ends: {new Date(ticket.sale_ends_at).toLocaleDateString()}</span>}
+                    {ticket.sale_starts_at && <span>Sale starts: {new Date(ticket.sale_starts_at!).toLocaleDateString()}</span>}
+                    {ticket.sale_ends_at && <span>Sale ends: {new Date(ticket.sale_ends_at!).toLocaleDateString()}</span>}
                   </div>
                   <div className="mt-3">
                     <div className="w-full bg-ds-muted rounded-full h-2">
@@ -152,7 +152,7 @@ function VendorEventTicketingRoute() {
                   </div>
                 </div>
                 <div className="text-right ms-4">
-                  <p className="text-lg font-bold">{formatCurrency(ticket.price, ticket.currency_code)}</p>
+                  <p className="text-lg font-bold">{formatCurrency((ticket.price ?? 0), ticket.currency_code)}</p>
                   <p className="text-xs text-muted-foreground">per ticket</p>
                 </div>
               </div>

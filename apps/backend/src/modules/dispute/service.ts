@@ -73,7 +73,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
         "awaiting_vendor",
         "escalated",
       ],
-    });
+    }) as any;
     if (existing.length > 0) {
       throw new Error("An active dispute already exists for this order");
     }
@@ -87,7 +87,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       status: "open",
       priority: data.priority ?? "medium",
       metadata: data.metadata ?? null,
-    });
+    } as any);
 
     await this.createDisputeMessages({
       dispute_id: dispute.id,
@@ -98,7 +98,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
         ? (data.attachments as unknown as Record<string, unknown>)
         : null,
       is_internal: false,
-    });
+    } as any);
 
     return dispute;
   }
@@ -112,7 +112,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
     isInternal?: boolean;
     metadata?: Record<string, unknown>;
   }): Promise<DisputeMessageRecord> {
-    const dispute = await this.retrieveDispute(data.disputeId);
+    const dispute = await this.retrieveDispute(data.disputeId) as any;
 
     if (["resolved", "closed"].includes(dispute.status)) {
       throw new Error("Cannot add messages to a resolved or closed dispute");
@@ -128,7 +128,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
         : null,
       is_internal: data.isInternal ?? false,
       metadata: data.metadata ?? null,
-    });
+    } as any);
 
     const statusTransition =
       (data.senderType === "admin" || data.senderType === "system") &&
@@ -145,14 +145,14 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       await this.updateDisputes({
         id: data.disputeId,
         status: statusTransition,
-      });
+      } as any);
     }
 
     return message;
   }
 
   async escalate(disputeId: string, reason?: string): Promise<DisputeRecord> {
-    const dispute = await this.retrieveDispute(disputeId);
+    const dispute = await this.retrieveDispute(disputeId) as any;
     if (["resolved", "closed", "escalated"].includes(dispute.status)) {
       throw new Error("Dispute cannot be escalated from current status");
     }
@@ -162,7 +162,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       status: "escalated",
       priority: "urgent",
       escalated_at: new Date(),
-    });
+    } as any);
 
     if (reason) {
       await this.createDisputeMessages({
@@ -184,7 +184,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
     resolvedBy: string;
     notes?: string;
   }): Promise<DisputeRecord> {
-    const dispute = await this.retrieveDispute(data.disputeId);
+    const dispute = await this.retrieveDispute(data.disputeId) as any;
     if (["resolved", "closed"].includes(dispute.status)) {
       throw new Error("Dispute is already resolved or closed");
     }
@@ -196,7 +196,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       resolution_amount: data.resolutionAmount ?? null,
       resolved_by: data.resolvedBy,
       resolved_at: new Date(),
-    });
+    } as any);
 
     if (data.notes) {
       await this.createDisputeMessages({
@@ -249,7 +249,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       );
     }
 
-    const dispute = await this.retrieveDispute(disputeId);
+    const dispute = await this.retrieveDispute(disputeId) as any;
     if (["resolved", "closed"].includes(dispute.status)) {
       throw new Error("Cannot escalate a resolved or closed dispute");
     }
@@ -260,7 +260,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       priority: "urgent",
       escalated_at: new Date(),
       metadata: {
-        ...(dispute.metadata ?? {}),
+        ...(dispute.metadata ?? {} as any),
         escalation_type: escalationType,
       },
     });
@@ -289,7 +289,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       throw new Error("Refund amount cannot be negative");
     }
 
-    const dispute = await this.retrieveDispute(disputeId);
+    const dispute = await this.retrieveDispute(disputeId) as any;
     if (["resolved", "closed"].includes(dispute.status)) {
       throw new Error("Dispute is already resolved or closed");
     }
@@ -301,7 +301,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       resolution_amount: refundAmount ?? null,
       resolved_by: "admin",
       resolved_at: new Date(),
-    });
+    } as any);
 
     await this.createDisputeMessages({
       dispute_id: disputeId,
@@ -321,7 +321,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
     messages: DisputeMessageRecord[];
     events: Array<{ type: string; timestamp: Date; detail: string }>;
   }> {
-    const dispute = await this.retrieveDispute(disputeId);
+    const dispute = await this.retrieveDispute(disputeId) as any;
     const messages = await this.getMessages(disputeId, true);
 
     const events: Array<{ type: string; timestamp: Date; detail: string }> = [
@@ -364,7 +364,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
     mediatorType: string;
     assignedAt: Date;
   }> {
-    const dispute = await this.retrieveDispute(disputeId);
+    const dispute = await this.retrieveDispute(disputeId) as any;
     if (["resolved", "closed"].includes(dispute.status)) {
       throw new Error("Cannot assign mediator to a resolved or closed dispute");
     }
@@ -385,7 +385,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
       id: disputeId,
       status: dispute.status === "open" ? "under_review" : dispute.status,
       metadata: {
-        ...(dispute.metadata ?? {}),
+        ...(dispute.metadata ?? {} as any),
         mediator_id: mediatorId,
         mediator_type: mediatorType,
         mediator_assigned_at: new Date().toISOString(),
@@ -411,7 +411,7 @@ class DisputeModuleService extends Base implements DisputeServiceBase {
     compensationAmount: number;
     recommendation: string;
   }> {
-    const dispute = await this.retrieveDispute(disputeId);
+    const dispute = await this.retrieveDispute(disputeId) as any;
 
     const compensationRates: Record<
       string,

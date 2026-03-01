@@ -19,7 +19,7 @@ interface ReviewCardProps {
 export function ReviewCard({ review }: ReviewCardProps) {
   const markHelpful = useMarkReviewHelpful()
 
-  const formattedDate = new Date(review.created_at).toLocaleDateString("en-US", {
+  const formattedDate = new Date(review.created_at!).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",

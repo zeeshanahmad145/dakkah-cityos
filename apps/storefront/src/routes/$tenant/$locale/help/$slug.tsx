@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { sanitizeHtml } from "@/lib/utils/sanitize-html"
 import { useState } from "react"
 import { useHelpArticle } from "@/lib/hooks/use-content"
@@ -9,22 +13,35 @@ import { t, formatDate } from "@/lib/i18n"
 
 export const Route = createFileRoute("/$tenant/$locale/help/$slug")({
   component: HelpArticlePage,
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Help Article"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
-    ],
-  }),
+  head: ({ loaderData: ld }) => {
+    const loaderData = ld as any
+    return {
+      meta: [
+        {
+          title: `${loaderData?.title || loaderData?.name || "Help Article"} | Dakkah CityOS`,
+        },
+        {
+          name: "description",
+          content: loaderData?.description || loaderData?.excerpt || "",
+        },
+      ],
+    }
+  },
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/platform/cms/help/${params.slug}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/platform/cms/help/${params.slug}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: data.item || data }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
 })
 
@@ -55,9 +72,11 @@ function HelpArticlePage() {
       <div className="min-h-screen bg-ds-muted flex items-center justify-center">
         <div className="text-center">
           <span className="text-4xl block mb-4">📄</span>
-          <p className="text-ds-muted-foreground mb-4">{t(locale, "common.not_found")}</p>
+          <p className="text-ds-muted-foreground mb-4">
+            {t(locale, "common.not_found")}
+          </p>
           <Link
-            to={`${prefix}/help` as any}
+            to={`${prefix}/help` as never}
             className="text-sm text-ds-primary hover:underline"
           >
             {t(locale, "common.back")}
@@ -70,11 +89,21 @@ function HelpArticlePage() {
   const sidebar = (
     <div className="space-y-4">
       <Link
-        to={`${prefix}/help` as any}
+        to={`${prefix}/help` as never}
         className="inline-flex items-center text-sm text-ds-muted-foreground hover:text-ds-foreground transition-colors"
       >
-        <svg className="h-4 w-4 me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <svg
+          className="h-4 w-4 me-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
         {t(locale, "faq.back_to_help")}
       </Link>
@@ -88,7 +117,7 @@ function HelpArticlePage() {
             {article.relatedArticles.map((related) => (
               <Link
                 key={related.id}
-                to={`${prefix}/help/${related.slug}` as any}
+                to={`${prefix}/help/${related.slug}` as never}
                 className="block text-sm text-ds-muted-foreground hover:text-ds-primary transition-colors py-1"
               >
                 {related.title}
@@ -106,26 +135,48 @@ function HelpArticlePage() {
         <HelpCenterLayout sidebar={sidebar} locale={locale}>
           <div className="max-w-3xl">
             <nav className="flex items-center gap-2 text-sm text-ds-muted-foreground mb-6">
-              <Link to={`${prefix}/help` as any} className="hover:text-ds-foreground transition-colors">
+              <Link
+                to={`${prefix}/help` as never}
+                className="hover:text-ds-foreground transition-colors"
+              >
                 {t(locale, "faq.help_center")}
               </Link>
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
               <span className="text-ds-foreground">{article.category}</span>
             </nav>
 
             <article className="bg-ds-background rounded-lg border border-ds-border p-6 md:p-8">
-              <h1 className="text-2xl font-bold text-ds-foreground mb-2">{article.title}</h1>
+              <h1 className="text-2xl font-bold text-ds-foreground mb-2">
+                {article.title}
+              </h1>
               {article.updatedAt && (
                 <p className="text-sm text-ds-muted-foreground mb-6">
-                  {formatDate(article.updatedAt, locale as any)}
+                  {formatDate(
+                    article.updatedAt,
+                    locale as import("@/lib/i18n").SupportedLocale,
+                  )}
                 </p>
               )}
 
               <div
                 className="prose prose-sm md:prose-base max-w-none text-ds-foreground [&_h2]:text-ds-foreground [&_h3]:text-ds-foreground [&_a]:text-ds-primary [&_ul]:list-disc [&_ol]:list-decimal"
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content || article.excerpt || "") }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(
+                    article.content || article.excerpt || "",
+                  ),
+                }}
               />
 
               <div className="mt-8 pt-6 border-t border-ds-border">
@@ -158,8 +209,7 @@ function HelpArticlePage() {
                   <p className="text-sm text-ds-muted-foreground mt-3">
                     {feedback === "yes"
                       ? t(locale, "faq.feedback_positive")
-                      : t(locale, "faq.feedback_negative")
-                    }
+                      : t(locale, "faq.feedback_negative")}
                   </p>
                 )}
               </div>

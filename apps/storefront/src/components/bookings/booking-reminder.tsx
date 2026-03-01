@@ -39,7 +39,7 @@ export function BookingReminder({ booking }: BookingReminderProps) {
     const now = new Date()
     const target = new Date(date)
     const diff = target.getTime() - now.getTime()
-    
+
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(hours / 24)
 
@@ -52,36 +52,45 @@ export function BookingReminder({ booking }: BookingReminderProps) {
     }
   }
 
-  const isToday = new Date(booking.scheduled_at).toDateString() === new Date().toDateString()
+  const isToday =
+    new Date(booking.scheduled_at!).toDateString() === new Date().toDateString()
 
   return (
     <Link
-      to={`${prefix}/account/bookings/${booking.id}` as any}
+      to={`${prefix}/account/bookings/${booking.id}` as never}
       className={`block rounded-xl border p-4 transition-all hover:shadow-sm ${
-        isToday 
-          ? "bg-ds-info border-ds-info hover:border-ds-info" 
+        isToday
+          ? "bg-ds-info border-ds-info hover:border-ds-info"
           : "bg-ds-background border-ds-border hover:border-ds-border"
       }`}
     >
       <div className="flex items-start gap-4">
-        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-          isToday ? "bg-ds-info" : "bg-ds-muted"
-        }`}>
-          <BellAlert className={`w-5 h-5 ${isToday ? "text-ds-info" : "text-ds-muted-foreground"}`} />
+        <div
+          className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+            isToday ? "bg-ds-info" : "bg-ds-muted"
+          }`}
+        >
+          <BellAlert
+            className={`w-5 h-5 ${isToday ? "text-ds-info" : "text-ds-muted-foreground"}`}
+          />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h4 className="font-semibold text-ds-foreground truncate">{booking.service?.name || "Booking"}</h4>
-            <span className={`text-xs px-2 py-0.5 rounded-full ${
-              isToday 
-                ? "bg-ds-info text-ds-info" 
-                : "bg-ds-muted text-ds-muted-foreground"
-            }`}>
+            <h4 className="font-semibold text-ds-foreground truncate">
+              {booking.service?.name || "Booking"}
+            </h4>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full ${
+                isToday
+                  ? "bg-ds-info text-ds-info"
+                  : "bg-ds-muted text-ds-muted-foreground"
+              }`}
+            >
               {getTimeUntil(booking.scheduled_at)}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-4 mt-2 text-sm text-ds-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />

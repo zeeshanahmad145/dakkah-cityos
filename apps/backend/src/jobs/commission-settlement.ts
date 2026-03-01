@@ -5,10 +5,10 @@ import { jobLogger } from "../lib/logger"
 const logger = jobLogger
 
 export default async function commissionSettlementJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const commissionService = container.resolve("commission")
-  const payoutService = container.resolve("payout")
-  const eventBus = container.resolve("event_bus")
+  const query = container.resolve("query") as unknown as any
+  const commissionService = container.resolve("commission") as unknown as any
+  const payoutService = container.resolve("payout") as unknown as any
+  const eventBus = container.resolve("event_bus") as unknown as any
   
   logger.info("Starting daily commission settlement")
   

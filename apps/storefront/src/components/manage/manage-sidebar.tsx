@@ -78,7 +78,13 @@ interface ManageSidebarProps {
   onNavigate?: () => void
 }
 
-function CollapsibleContent({ open, children }: { open: boolean; children: React.ReactNode }) {
+function CollapsibleContent({
+  open,
+  children,
+}: {
+  open: boolean
+  children: React.ReactNode
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const [height, setHeight] = useState<number | undefined>(open ? undefined : 0)
 
@@ -156,7 +162,7 @@ function SidebarSection({
         <ChevronDownMini
           className={clsx(
             "w-3 h-3 text-ds-muted-foreground/50 transition-transform duration-150",
-            open ? "rotate-0" : "-rotate-90"
+            open ? "rotate-0" : "-rotate-90",
           )}
         />
       </button>
@@ -195,13 +201,13 @@ function SidebarItem({
 
   return (
     <Link
-      to={`${baseHref}${mod.path}` as any}
+      to={`${baseHref}${mod.path}` as never}
       onClick={onNavigate}
       className={clsx(
         "flex items-center gap-2.5 px-2 py-1.5 rounded-md text-[13px] transition-all duration-150 relative group",
         active
           ? "text-ds-foreground font-medium bg-ds-muted/50"
-          : "text-ds-muted-foreground font-normal hover:text-ds-foreground hover:bg-ds-muted/30"
+          : "text-ds-muted-foreground font-normal hover:text-ds-foreground hover:bg-ds-muted/30",
       )}
     >
       {active && (
@@ -210,15 +216,20 @@ function SidebarItem({
       <IconComponent
         className={clsx(
           "w-4 h-4 flex-shrink-0",
-          active ? "text-ds-primary" : "text-ds-muted-foreground/70"
+          active ? "text-ds-primary" : "text-ds-muted-foreground/70",
         )}
       />
-      <span className="truncate">{t(locale, `manage.${mod.key.replace(/-/g, "_")}`)}</span>
+      <span className="truncate">
+        {t(locale, `manage.${mod.key.replace(/-/g, "_")}`)}
+      </span>
     </Link>
   )
 }
 
-export function ManageSidebar({ locale: localeProp, onNavigate }: ManageSidebarProps) {
+export function ManageSidebar({
+  locale: localeProp,
+  onNavigate,
+}: ManageSidebarProps) {
   const { locale: ctxLocale, tenantSlug } = useTenant()
   const locale = localeProp || ctxLocale || "en"
   const location = useLocation()
@@ -231,7 +242,9 @@ export function ManageSidebar({ locale: localeProp, onNavigate }: ManageSidebarP
   const isActive = (path: string) => {
     const fullPath = `${baseHref}${path}`
     if (path === "") {
-      return location.pathname === baseHref || location.pathname === `${baseHref}/`
+      return (
+        location.pathname === baseHref || location.pathname === `${baseHref}/`
+      )
     }
     return location.pathname.startsWith(fullPath)
   }

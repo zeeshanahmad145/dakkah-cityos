@@ -28,7 +28,7 @@ function VendorBundlesRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -85,7 +85,9 @@ function VendorBundlesRoute() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              statusFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
             {s || "All"}
@@ -96,17 +98,24 @@ function VendorBundlesRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No product bundles yet</p>
-          <p className="text-sm">Create bundles to offer product combinations at a discount.</p>
+          <p className="text-sm">
+            Create bundles to offer product combinations at a discount.
+          </p>
         </div>
       ) : (
         <div className="grid gap-4">
           {items.map((bundle) => (
-            <div key={bundle.id} className="border rounded-lg p-6 hover:shadow-md transition">
+            <div
+              key={bundle.id}
+              className="border rounded-lg p-6 hover:shadow-md transition"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg font-semibold">{bundle.name}</h3>
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[bundle.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[bundle.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {bundle.status}
                     </span>
                     {bundle.savings_percent > 0 && (
@@ -116,7 +125,9 @@ function VendorBundlesRoute() {
                     )}
                   </div>
                   {bundle.description && (
-                    <p className="text-ds-muted-foreground text-sm mb-3">{bundle.description}</p>
+                    <p className="text-ds-muted-foreground text-sm mb-3">
+                      {bundle.description}
+                    </p>
                   )}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
@@ -124,15 +135,24 @@ function VendorBundlesRoute() {
                       <p className="text-xs text-ds-muted-foreground">Items</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{bundle.currency_code?.toUpperCase()} {(bundle.price / 100).toFixed(2)}</p>
+                      <p className="text-lg font-bold">
+                        {bundle.currency_code?.toUpperCase()}{" "}
+                        {(bundle.price / 100).toFixed(2)}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Price</p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{bundle.savings_percent}%</p>
-                      <p className="text-xs text-ds-muted-foreground">Savings</p>
+                      <p className="text-lg font-bold">
+                        {bundle.savings_percent}%
+                      </p>
+                      <p className="text-xs text-ds-muted-foreground">
+                        Savings
+                      </p>
                     </div>
                     <div className="bg-ds-muted/50 rounded-lg p-3 text-center">
-                      <p className="text-lg font-bold">{bundle.sold_count.toLocaleString()}</p>
+                      <p className="text-lg font-bold">
+                        {bundle.sold_count.toLocaleString()}
+                      </p>
                       <p className="text-xs text-ds-muted-foreground">Sold</p>
                     </div>
                   </div>

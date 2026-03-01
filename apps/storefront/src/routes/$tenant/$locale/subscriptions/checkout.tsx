@@ -89,9 +89,9 @@ function SubscriptionCheckoutPage() {
     )
   }
 
-  const yearlyPrice = Math.round(plan.price * 10) // 2 months free
+  const yearlyPrice = Math.round(plan.price ?? 0 * 10) // 2 months free
   const selectedPrice =
-    billingInterval === "yearly" ? yearlyPrice : plan.price
+    billingInterval === "yearly" ? yearlyPrice : plan.price ?? 0
 
   return (
     <div className="min-h-screen bg-ds-muted py-12">
@@ -131,7 +131,7 @@ function SubscriptionCheckoutPage() {
                     >
                       <div className="font-medium text-ds-foreground">Monthly</div>
                       <div className="text-sm text-ds-muted-foreground">
-                        {formatPrice(plan.price, plan.currency_code)}/month
+                        {formatPrice(plan.price ?? 0, plan.currency_code)}/month
                       </div>
                     </button>
                     <button
@@ -242,7 +242,7 @@ function SubscriptionCheckoutPage() {
                     Included Features
                   </div>
                   <ul className="space-y-2">
-                    {plan.features.slice(0, 5).map((feature, index) => (
+                    {((plan.features as string[] | undefined) as string[]).slice(0, 5).map((feature, index) => (
                       <li
                         key={index}
                         className="flex items-start gap-2 text-sm text-ds-muted-foreground"
@@ -251,9 +251,9 @@ function SubscriptionCheckoutPage() {
                         {feature}
                       </li>
                     ))}
-                    {plan.features.length > 5 && (
+                    {((plan.features as string[] | undefined) as string[]).length > 5 && (
                       <li className="text-sm text-ds-muted-foreground">
-                        + {plan.features.length - 5} more features
+                        + {((plan.features as string[] | undefined) as string[]).length - 5} more features
                       </li>
                     )}
                   </ul>

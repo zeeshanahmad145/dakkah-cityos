@@ -1,6 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import { z } from "zod"
-import { handleApiError } from "../../../lib/api-error-handler"
+import { z } from "zod";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 const createCompanySchema = z.object({
   name: z.string().min(1),
@@ -14,7 +14,7 @@ const createCompanySchema = z.object({
   billing_address: z.record(z.string(), z.unknown()).optional(),
   tenant_id: z.string().min(1),
   store_id: z.string().optional(),
-})
+});
 
 const SEED_COMPANIES = [
   {
@@ -87,19 +87,21 @@ const SEED_COMPANIES = [
     credit_used: 22000000,
     thumbnail: "/seed-images/healthcare/1551836022-d5d88e9218df.jpg",
   },
-]
+];
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyService = req.scope.resolve("company") as any;
+    const companyService = req.scope.resolve("company") as unknown as any;
 
     if (!req.auth_context?.actor_id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const parsed = createCompanySchema.safeParse(req.body)
+    const parsed = createCompanySchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ message: "Validation failed", errors: parsed.error.issues })
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
     const {
@@ -144,14 +146,14 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     });
 
     res.json({ company });
-  } catch (error: any) {
-    handleApiError(res, error, "POST store companies")
+  } catch (error: unknown) {
+    handleApiError(res, error, "POST store companies");
   }
 }
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const companyService = req.scope.resolve("company") as any;
+    const companyService = req.scope.resolve("company") as unknown as any;
 
     if (!req.auth_context?.actor_id) {
       return res.json({ companies: SEED_COMPANIES });
@@ -169,7 +171,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     });
 
     res.json({ companies: companies.length > 0 ? companies : SEED_COMPANIES });
-  } catch (error: any) {
-    return res.json({ companies: SEED_COMPANIES })
+  } catch (error: unknown) {
+    return res.json({ companies: SEED_COMPANIES });
   }
 }

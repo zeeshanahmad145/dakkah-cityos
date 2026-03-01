@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from '@tanstack/react-router'
-import { t } from '@/lib/i18n'
+import React from "react"
+import { Link } from "@tanstack/react-router"
+import { t } from "@/lib/i18n"
 
 interface EventItem {
   id: string
@@ -22,34 +22,38 @@ interface EventListBlockProps {
   heading?: string
   description?: string
   events: EventItem[]
-  layout?: 'timeline' | 'grid' | 'list' | 'calendar'
+  layout?: "timeline" | "grid" | "list" | "calendar"
   showPastEvents?: boolean
   locale?: string
 }
 
-const localeMap: Record<string, string> = { en: 'en-US', fr: 'fr-FR', ar: 'ar-SA' }
+const localeMap: Record<string, string> = {
+  en: "en-US",
+  fr: "fr-FR",
+  ar: "ar-SA",
+}
 
-function formatDate(dateStr: string, locale: string = 'en'): string {
+function formatDate(dateStr: string, locale: string = "en"): string {
   try {
-    return new Date(dateStr).toLocaleDateString(localeMap[locale] || 'en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateStr).toLocaleDateString(localeMap[locale] || "en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     })
   } catch {
     return dateStr
   }
 }
 
-function formatTime(dateStr: string, locale: string = 'en'): string {
+function formatTime(dateStr: string, locale: string = "en"): string {
   try {
-    return new Date(dateStr).toLocaleTimeString(localeMap[locale] || 'en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateStr).toLocaleTimeString(localeMap[locale] || "en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
     })
   } catch {
-    return ''
+    return ""
   }
 }
 
@@ -65,9 +69,9 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
   heading,
   description,
   events,
-  layout = 'grid',
+  layout = "grid",
   showPastEvents = true,
-  locale = 'en',
+  locale = "en",
 }) => {
   if (!events || !events.length) return null
 
@@ -78,14 +82,14 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
   if (!filteredEvents || filteredEvents.length === 0) return null
 
   const EventCard = ({ event }: { event: EventItem }) => {
-    const Wrapper = event.url ? Link : 'div'
+    const Wrapper = event.url ? Link : "div"
     const wrapperProps = event.url
-      ? { to: event.url, className: 'block' }
-      : { className: 'block' }
+      ? { to: event.url, className: "block" }
+      : { className: "block" }
 
     return (
       <Wrapper
-        {...(wrapperProps as any)}
+        {...wrapperProps}
         className="bg-ds-card border border-ds-border rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
       >
         {event.image?.url && (
@@ -106,7 +110,7 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
             )}
             {isPast(event.endDate || event.date) && (
               <span className="text-xs font-medium px-2 py-1 rounded-full bg-ds-muted text-ds-muted-foreground">
-                {t(locale, 'blocks.past')}
+                {t(locale, "blocks.past")}
               </span>
             )}
           </div>
@@ -119,10 +123,15 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
             </p>
           )}
           <div className="flex flex-col gap-1 text-sm text-ds-muted-foreground">
-            <span>{formatDate(event.date, locale)}{event.endDate ? ` - ${formatDate(event.endDate, locale)}` : ''}</span>
+            <span>
+              {formatDate(event.date, locale as import("@/lib/i18n").SupportedLocale)}
+              {event.endDate ? ` - ${formatDate(event.endDate, locale as import("@/lib/i18n").SupportedLocale)}` : ""}
+            </span>
             {event.location && <span>{event.location}</span>}
             {event.price && (
-              <span className="font-semibold text-ds-foreground">{event.price}</span>
+              <span className="font-semibold text-ds-foreground">
+                {event.price}
+              </span>
             )}
           </div>
         </div>
@@ -138,7 +147,7 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
           <div key={event.id} className="relative ps-10 md:ps-20">
             <div className="absolute start-3 md:start-7 top-2 w-3 h-3 rounded-full bg-ds-primary border-2 border-ds-background" />
             <div className="text-sm font-medium text-ds-muted-foreground mb-2">
-              {formatDate(event.date, locale)} {formatTime(event.date, locale)}
+              {formatDate(event.date, locale as import("@/lib/i18n").SupportedLocale)} {formatTime(event.date, locale)}
             </div>
             <EventCard event={event} />
           </div>
@@ -150,7 +159,10 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
   const renderList = () => (
     <div className="flex flex-col gap-4">
       {filteredEvents.map((event) => (
-        <div key={event.id} className="flex gap-4 bg-ds-card border border-ds-border rounded-xl p-4 md:p-6">
+        <div
+          key={event.id}
+          className="flex gap-4 bg-ds-card border border-ds-border rounded-xl p-4 md:p-6"
+        >
           {event.image?.url && (
             <img
               src={event.image.url}
@@ -166,14 +178,22 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
                 </span>
               )}
             </div>
-            <h3 className="text-lg font-semibold text-ds-foreground mb-1">{event.title}</h3>
+            <h3 className="text-lg font-semibold text-ds-foreground mb-1">
+              {event.title}
+            </h3>
             {event.description && (
-              <p className="text-ds-muted-foreground text-sm mb-2 line-clamp-2">{event.description}</p>
+              <p className="text-ds-muted-foreground text-sm mb-2 line-clamp-2">
+                {event.description}
+              </p>
             )}
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-ds-muted-foreground">
-              <span>{formatDate(event.date, locale)}</span>
+              <span>{formatDate(event.date, locale as import("@/lib/i18n").SupportedLocale)}</span>
               {event.location && <span>{event.location}</span>}
-              {event.price && <span className="font-semibold text-ds-foreground">{event.price}</span>}
+              {event.price && (
+                <span className="font-semibold text-ds-foreground">
+                  {event.price}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -195,9 +215,9 @@ export const EventListBlock: React.FC<EventListBlockProps> = ({
           </p>
         )}
 
-        {layout === 'timeline' ? (
+        {layout === "timeline" ? (
           renderTimeline()
-        ) : layout === 'list' ? (
+        ) : layout === "list" ? (
           renderList()
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">

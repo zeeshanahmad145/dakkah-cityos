@@ -1,7 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Tabs, DropdownMenu, useToast } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Tabs,
+  DropdownMenu,
+  useToast,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -40,15 +49,18 @@ function ManageAuditPage() {
     status: item.action || item.status || "create",
   }))
 
-  const items = statusFilter === "all"
-    ? allItems
-    : allItems.filter((i: any) => i.status === statusFilter)
+  const items =
+    statusFilter === "all"
+      ? allItems
+      : allItems.filter((i: any) => i.status === statusFilter)
 
   const columns = [
     {
       key: "action",
       header: t(locale, "manage.action"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "entity",
@@ -86,22 +98,27 @@ function ManageAuditPage() {
   return (
     <ManageLayout locale={locale}>
       <Container>
-        <PageHeader
-          title={config.label}
-          subtitle="View audit log entries"
-        />
+        <PageHeader title={config.label} subtitle="View audit log entries" />
 
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? t(locale, "manage.all_statuses") : s.replace(/_/g, " "),
+            label:
+              s === "all"
+                ? t(locale, "manage.all_statuses")
+                : s.replace(/_/g, " "),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No audit entries found" countLabel="entries" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No audit entries found"
+          countLabel="entries"
+        />
       </Container>
     </ManageLayout>
   )

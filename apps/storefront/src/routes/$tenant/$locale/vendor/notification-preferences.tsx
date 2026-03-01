@@ -15,7 +15,9 @@ interface NotificationSetting {
   updated_at: string
 }
 
-export const Route = createFileRoute("/$tenant/$locale/vendor/notification-preferences")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/vendor/notification-preferences",
+)({
   component: VendorNotificationPreferencesRoute,
 })
 
@@ -25,7 +27,7 @@ function VendorNotificationPreferencesRoute() {
   const [channelFilter, setChannelFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -38,9 +40,12 @@ function VendorNotificationPreferencesRoute() {
       const params = new URLSearchParams()
       if (channelFilter) params.set("channel", channelFilter)
       const url = `/vendor/notification-preferences${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: NotificationSetting[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: NotificationSetting[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -82,10 +87,14 @@ function VendorNotificationPreferencesRoute() {
             key={s}
             onClick={() => setChannelFilter(s)}
             className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              channelFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+              channelFilter === s
+                ? "bg-ds-primary text-white border-ds-primary"
+                : "bg-ds-card hover:bg-ds-muted/50"
             }`}
           >
-            {s ? `${channelIcons[s] || ""} ${s.toUpperCase()}` : t(locale, 'verticals.all_channels')}
+            {s
+              ? `${channelIcons[s] || ""} ${s.toUpperCase()}`
+              : t(locale, "verticals.all_channels")}
           </button>
         ))}
       </div>
@@ -93,19 +102,28 @@ function VendorNotificationPreferencesRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No notification settings configured</p>
-          <p className="text-sm">Configure your notification preferences to stay informed.</p>
+          <p className="text-sm">
+            Configure your notification preferences to stay informed.
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
           {items.map((setting) => (
-            <div key={setting.id} className="border rounded-lg p-5 hover:shadow-md transition">
+            <div
+              key={setting.id}
+              className="border rounded-lg p-5 hover:shadow-md transition"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl">{channelIcons[setting.channel] || "📨"}</span>
+                  <span className="text-2xl">
+                    {channelIcons[setting.channel] || "📨"}
+                  </span>
                   <div>
                     <h3 className="font-semibold">{setting.event_type}</h3>
                     {setting.description && (
-                      <p className="text-ds-muted-foreground text-sm">{setting.description}</p>
+                      <p className="text-ds-muted-foreground text-sm">
+                        {setting.description}
+                      </p>
                     )}
                     <span className="text-xs text-ds-muted-foreground/70 mt-1 inline-block">
                       Channel: {setting.channel.toUpperCase()}
@@ -113,9 +131,13 @@ function VendorNotificationPreferencesRoute() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className={`px-3 py-1 text-sm rounded-full font-medium ${
-                    setting.enabled ? "bg-ds-success/15 text-ds-success" : "bg-ds-muted text-ds-muted-foreground"
-                  }`}>
+                  <span
+                    className={`px-3 py-1 text-sm rounded-full font-medium ${
+                      setting.enabled
+                        ? "bg-ds-success/15 text-ds-success"
+                        : "bg-ds-muted text-ds-muted-foreground"
+                    }`}
+                  >
                     {setting.enabled ? "Enabled" : "Disabled"}
                   </span>
                 </div>

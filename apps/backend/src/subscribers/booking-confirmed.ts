@@ -10,8 +10,8 @@ export default async function bookingConfirmedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const bookingService = container.resolve("booking")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const bookingService = container.resolve("booking") as unknown as any
   
   try {
     const booking = await bookingService.retrieveBooking(data.id)

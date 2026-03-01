@@ -1,11 +1,11 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../lib/api-error-handler"
 
 // GET /admin/reviews - List all reviews
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
   
     const { is_approved, product_id, vendor_id, rating, limit = "50", offset = "0" } = req.query
   
@@ -48,7 +48,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ reviews: enrichedReviews })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin reviews")}
 }
 

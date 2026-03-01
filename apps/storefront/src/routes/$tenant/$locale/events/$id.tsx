@@ -1,5 +1,9 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t } from "@/lib/i18n"
 import { formatCurrency } from "@/lib/i18n"
@@ -12,23 +16,56 @@ import { ReviewListBlock } from "@/components/blocks/review-list-block"
 
 function normalizeDetail(item: any) {
   if (!item) return null
-  const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
+  const meta =
+    typeof item.metadata === "string"
+      ? JSON.parse(item.metadata)
+      : item.metadata || {}
   const rawPrice = item.price ?? meta.price ?? null
-  const currency = item.currency || item.currency_code || meta.currency || meta.currency_code || "USD"
-  return { ...meta, ...item,
-    thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
-    images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
+  const currency =
+    item.currency ||
+    item.currency_code ||
+    meta.currency ||
+    meta.currency_code ||
+    "USD"
+  return {
+    ...meta,
+    ...item,
+    thumbnail:
+      item.thumbnail ||
+      item.image_url ||
+      item.photo_url ||
+      item.banner_url ||
+      item.logo_url ||
+      meta.thumbnail ||
+      (meta.images && meta.images[0]) ||
+      null,
+    images:
+      meta.images ||
+      [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
     price: rawPrice,
     currency,
-    date: item.start_date || item.event_date || item.date || meta.start_date || meta.event_date || meta.date || null,
+    date:
+      item.start_date ||
+      item.event_date ||
+      item.date ||
+      meta.start_date ||
+      meta.event_date ||
+      meta.date ||
+      null,
     end_date: item.end_date || meta.end_date || null,
     isFree: item.isFree ?? item.is_free ?? meta.isFree ?? meta.is_free ?? false,
     rating: item.rating ?? item.avg_rating ?? meta.rating ?? null,
     review_count: item.review_count ?? meta.review_count ?? null,
-    location: item.location || item.city || item.address || meta.location || null,
+    location:
+      item.location || item.city || item.address || meta.location || null,
     venue: item.venue || meta.venue || null,
-    ticketTypes: item.ticketTypes || item.ticket_types || meta.ticketTypes || meta.ticket_types || null,
+    ticketTypes:
+      item.ticketTypes ||
+      item.ticket_types ||
+      meta.ticketTypes ||
+      meta.ticket_types ||
+      null,
   }
 }
 
@@ -36,20 +73,30 @@ export const Route = createFileRoute("/$tenant/$locale/events/$id")({
   component: EventDetailPage,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Event Details"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
+      {
+        title: `${loaderData?.title || loaderData?.name || "Event Details"} | Dakkah CityOS`,
+      },
+      {
+        name: "description",
+        content: loaderData?.description || loaderData?.excerpt || "",
+      },
     ],
   }),
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/events/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/events/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: normalizeDetail(data.item || data) }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
 })
 
@@ -67,7 +114,9 @@ function EventDetailPage() {
 
   const loaderData = Route.useLoaderData()
   const event = loaderData?.item
-  const [selectedTickets, setSelectedTickets] = useState<Record<string, number>>({})
+  const [selectedTickets, setSelectedTickets] = useState<
+    Record<string, number>
+  >({})
   const [rsvpLoading, setRsvpLoading] = useState(false)
   const toast = useToast()
 
@@ -96,7 +145,7 @@ function EventDetailPage() {
               {t(locale, "events.no_events")}
             </p>
             <Link
-              to={`${prefix}/events` as any}
+              to={`${prefix}/events` as never}
               className="inline-flex items-center px-4 py-2 text-sm font-medium bg-ds-primary text-ds-primary-foreground rounded-lg hover:bg-ds-primary/90 transition-colors"
             >
               {t(locale, "events.browse_events")}
@@ -110,12 +159,21 @@ function EventDetailPage() {
   const eventDateRaw = event.date || event.start_date || event.event_date
   const eventDate = eventDateRaw ? new Date(eventDateRaw) : null
   const validDate = eventDate && !isNaN(eventDate.getTime())
-  const dateLocale = locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US"
+  const dateLocale =
+    locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US"
   const formattedDate = validDate
-    ? eventDate.toLocaleDateString(dateLocale, { weekday: "long", year: "numeric", month: "long", day: "numeric" })
+    ? eventDate.toLocaleDateString(dateLocale, {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
     : ""
   const formattedTime = validDate
-    ? eventDate.toLocaleTimeString(dateLocale, { hour: "numeric", minute: "2-digit" })
+    ? eventDate.toLocaleTimeString(dateLocale, {
+        hour: "numeric",
+        minute: "2-digit",
+      })
     : ""
 
   return (
@@ -123,12 +181,15 @@ function EventDetailPage() {
       <div className="bg-ds-card border-b border-ds-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm text-ds-muted-foreground">
-            <Link to={`${prefix}` as any} className="hover:text-ds-foreground transition-colors">
+            <Link
+              to={`${prefix}` as never}
+              className="hover:text-ds-foreground transition-colors"
+            >
               {t(locale, "common.home")}
             </Link>
             <span>/</span>
             <Link
-              to={`${prefix}/events` as any}
+              to={`${prefix}/events` as never}
               className="hover:text-ds-foreground transition-colors"
             >
               {t(locale, "events.title")}
@@ -192,12 +253,26 @@ function EventDetailPage() {
 
               <div className="flex flex-wrap items-center gap-4 mt-4">
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-ds-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  <svg
+                    className="w-5 h-5 text-ds-muted-foreground"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   </svg>
                   <div>
-                    <p className="text-sm font-medium text-ds-foreground">{formattedDate}</p>
-                    <p className="text-xs text-ds-muted-foreground">{formattedTime}</p>
+                    <p className="text-sm font-medium text-ds-foreground">
+                      {formattedDate}
+                    </p>
+                    <p className="text-xs text-ds-muted-foreground">
+                      {formattedTime}
+                    </p>
                   </div>
                 </div>
 
@@ -211,9 +286,17 @@ function EventDetailPage() {
                       {t(locale, "product.price")}:
                     </span>
                     <span className="text-sm font-medium text-ds-foreground">
-                      {typeof event.price === 'object' && event.price !== null
-                        ? formatCurrency(event.price.amount, event.price.currencyCode, locale as any)
-                        : formatCurrency(Number(event.price), event.currency || "USD", locale as any)}
+                      {typeof event.price === "object" && event.price !== null
+                        ? formatCurrency(
+                            event.price.amount,
+                            event.price.currencyCode,
+                            locale,
+                          )
+                        : formatCurrency(
+                            Number(event.price),
+                            event.currency || "USD",
+                            locale,
+                          )}
                     </span>
                   </div>
                 ) : null}
@@ -239,14 +322,33 @@ function EventDetailPage() {
                   {t(locale, "events.venue")}
                 </h2>
                 <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-ds-muted-foreground mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <svg
+                    className="w-5 h-5 text-ds-muted-foreground mt-0.5 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                   <div>
-                    <p className="font-medium text-ds-foreground">{event.venue.name}</p>
+                    <p className="font-medium text-ds-foreground">
+                      {event.venue.name}
+                    </p>
                     {event.venue.address && (
-                      <p className="text-sm text-ds-muted-foreground mt-0.5">{event.venue.address}</p>
+                      <p className="text-sm text-ds-muted-foreground mt-0.5">
+                        {event.venue.address}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -276,31 +378,46 @@ function EventDetailPage() {
             </div>
 
             <div className="bg-ds-background border border-ds-border rounded-xl p-6">
-              <h2 className="font-semibold text-ds-foreground mb-4">Get Tickets</h2>
+              <h2 className="font-semibold text-ds-foreground mb-4">
+                Get Tickets
+              </h2>
               <div className="flex gap-3">
                 <button
                   onClick={async () => {
                     setRsvpLoading(true)
                     try {
-                      const totalTickets = Object.values(selectedTickets).reduce((sum, n) => sum + n, 0)
+                      const totalTickets = Object.values(
+                        selectedTickets,
+                      ).reduce((sum, n) => sum + n, 0)
                       if (totalTickets > 0) {
-                        toast.success(`RSVP confirmed for ${totalTickets} ticket(s)!`)
+                        toast.success(
+                          `RSVP confirmed for ${totalTickets} ticket(s)!`,
+                        )
                       } else if (event.isFree) {
                         toast.success("RSVP confirmed! See you at the event!")
                       } else {
                         toast.success("RSVP confirmed!")
                       }
-                    } finally { setRsvpLoading(false) }
+                    } finally {
+                      setRsvpLoading(false)
+                    }
                   }}
                   disabled={rsvpLoading}
                   className="flex-1 py-3 px-4 bg-ds-primary text-ds-primary-foreground rounded-lg font-semibold hover:bg-ds-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {rsvpLoading ? "Processing..." : event.isFree ? "RSVP Now" : "Get Tickets"}
+                  {rsvpLoading
+                    ? "Processing..."
+                    : event.isFree
+                      ? "RSVP Now"
+                      : "Get Tickets"}
                 </button>
                 <button
                   onClick={() => {
                     if (event.venue?.address) {
-                      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.address)}`, "_blank")
+                      window.open(
+                        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.address)}`,
+                        "_blank",
+                      )
                     } else {
                       toast.info("Venue address not available.")
                     }
@@ -318,15 +435,28 @@ function EventDetailPage() {
                 <button
                   onClick={() => {
                     if (typeof navigator !== "undefined" && navigator.share) {
-                      navigator.share({ title: event.title, url: window.location.href })
+                      navigator.share({
+                        title: event.title,
+                        url: window.location.href,
+                      })
                     } else if (typeof navigator !== "undefined") {
                       navigator.clipboard.writeText(window.location.href)
                     }
                   }}
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-ds-muted text-ds-foreground rounded-lg hover:bg-ds-muted/80 transition-colors"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    />
                   </svg>
                   Share
                 </button>
@@ -363,9 +493,13 @@ function EventDetailPage() {
                   <h3 className="text-sm font-semibold text-ds-foreground mb-2">
                     {t(locale, "events.venue")}
                   </h3>
-                  <p className="text-sm text-ds-foreground">{event.venue.name}</p>
+                  <p className="text-sm text-ds-foreground">
+                    {event.venue.name}
+                  </p>
                   {event.venue.address && (
-                    <p className="text-xs text-ds-muted-foreground mt-0.5">{event.venue.address}</p>
+                    <p className="text-xs text-ds-muted-foreground mt-0.5">
+                      {event.venue.address}
+                    </p>
                   )}
                 </div>
               )}

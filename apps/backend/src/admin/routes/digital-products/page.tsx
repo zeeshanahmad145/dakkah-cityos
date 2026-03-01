@@ -91,15 +91,15 @@ const DigitalProductsPage = () => {
       </div>
       <FormDrawer open={showDrawer} onOpenChange={(open) => { if (!open) { setShowDrawer(false); setEditing(null) } }} title={editing ? "Edit Product" : "Add Digital Product"} onSubmit={handleSubmit} submitLabel={editing ? "Update" : "Create"} loading={createAsset.isPending || updateAsset.isPending}>
         <div className="space-y-4">
-          <div><Label htmlFor="title">Product Name</Label><Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="My Digital Product" /></div>
+          <div><Label htmlFor="title">Product Name</Label><Input id="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value as any })} placeholder="My Digital Product" /></div>
           <div>
             <Label htmlFor="file_type">Type</Label>
-            <select id="file_type" value={formData.file_type} onChange={(e) => setFormData({ ...formData, file_type: e.target.value })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
+            <select id="file_type" value={formData.file_type} onChange={(e) => setFormData({ ...formData, file_type: e.target.value as any })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
               <option value="software">Software</option><option value="design">Design Asset</option><option value="media">Media</option><option value="document">Document</option><option value="course">Course</option>
             </select>
           </div>
-          <div><Label htmlFor="file_name">File Name</Label><Input id="file_name" value={formData.file_name} onChange={(e) => setFormData({ ...formData, file_name: e.target.value })} placeholder="product.zip" /></div>
-          <div><Label htmlFor="file_url">File URL</Label><Input id="file_url" value={formData.file_url} onChange={(e) => setFormData({ ...formData, file_url: e.target.value })} placeholder="https://..." /></div>
+          <div><Label htmlFor="file_name">File Name</Label><Input id="file_name" value={formData.file_name} onChange={(e) => setFormData({ ...formData, file_name: e.target.value as any })} placeholder="product.zip" /></div>
+          <div><Label htmlFor="file_url">File URL</Label><Input id="file_url" value={formData.file_url} onChange={(e) => setFormData({ ...formData, file_url: e.target.value as any })} placeholder="https://..." /></div>
         </div>
       </FormDrawer>
     </Container>

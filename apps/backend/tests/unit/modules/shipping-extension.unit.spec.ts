@@ -65,7 +65,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("getRatesForShipment", () => {
     it("returns rates matching weight and zones", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           min_weight: 0,
@@ -94,7 +94,7 @@ describe("ShippingExtensionModuleService", () => {
 
     it("returns empty when no rates match weight", async () => {
       jest
-        .spyOn(service, "listShippingRates" as any)
+        .spyOn(service, "listShippingRates")
         .mockResolvedValue([{ id: "r1", min_weight: 0, max_weight: 5 }]);
 
       const result = await service.getRatesForShipment("tenant-1", {
@@ -107,7 +107,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("calculateShippingCost", () => {
     it("calculates cost from base rate and per-kg rate", async () => {
-      jest.spyOn(service, "retrieveShippingRate" as any).mockResolvedValue({
+      jest.spyOn(service, "retrieveShippingRate").mockResolvedValue({
         id: "r1",
         base_rate: "5.00",
         per_kg_rate: "2.50",
@@ -126,7 +126,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("getTrackingUrl", () => {
     it("returns tracking URL with tracking number substituted", async () => {
-      jest.spyOn(service, "listCarrierConfigs" as any).mockResolvedValue([
+      jest.spyOn(service, "listCarrierConfigs").mockResolvedValue([
         {
           carrier_code: "fedex",
           tracking_url_template: "https://track.fedex.com/{{tracking_number}}",
@@ -139,7 +139,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when carrier not found", async () => {
-      jest.spyOn(service, "listCarrierConfigs" as any).mockResolvedValue([]);
+      jest.spyOn(service, "listCarrierConfigs").mockResolvedValue([]);
 
       await expect(service.getTrackingUrl("unknown", "123")).rejects.toThrow(
         'Carrier with code "unknown" not found',
@@ -148,7 +148,7 @@ describe("ShippingExtensionModuleService", () => {
 
     it("returns null when no tracking URL template exists", async () => {
       jest
-        .spyOn(service, "listCarrierConfigs" as any)
+        .spyOn(service, "listCarrierConfigs")
         .mockResolvedValue([
           { carrier_code: "local", tracking_url_template: null },
         ]);
@@ -171,7 +171,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when no rates are available", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([]);
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([]);
 
       await expect(
         service.calculateShippingRate({
@@ -183,7 +183,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("uses volumetric weight when dimensions provided and larger", async () => {
-      jest.spyOn(service, "listShippingRates" as any).mockResolvedValue([
+      jest.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           min_weight: 0,
@@ -210,7 +210,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("validateShipmentCarrier", () => {
     it("validates an active carrier successfully", async () => {
-      jest.spyOn(service, "retrieveCarrierConfig" as any).mockResolvedValue({
+      jest.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
         id: "carrier-1",
         carrier_name: "UPS",
         is_active: true,
@@ -229,7 +229,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when carrier is inactive", async () => {
-      jest.spyOn(service, "retrieveCarrierConfig" as any).mockResolvedValue({
+      jest.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
         id: "carrier-1",
         carrier_name: "DHL",
         is_active: false,
@@ -245,7 +245,7 @@ describe("ShippingExtensionModuleService", () => {
 
     it("throws when carrier is not found", async () => {
       jest
-        .spyOn(service, "retrieveCarrierConfig" as any)
+        .spyOn(service, "retrieveCarrierConfig")
         .mockRejectedValue(new Error("Not found"));
 
       await expect(

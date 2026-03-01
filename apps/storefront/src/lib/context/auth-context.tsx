@@ -2,7 +2,14 @@ import { sdk } from "@/lib/utils/sdk"
 import { queryKeys } from "@/lib/utils/query-keys"
 import { getBackendUrl } from "@/lib/utils/env"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { createContext, useContext, useCallback, useState, useEffect, type ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react"
 
 // Types
 export interface Customer {
@@ -80,7 +87,9 @@ const defaultAuthValue: AuthContextType = {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isClient, setIsClient] = useState(false)
-  useEffect(() => { setIsClient(true) }, [])
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   if (!isClient) {
     return (
@@ -96,7 +105,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 function ClientAuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient()
   const [isMounted, setIsMounted] = useState(false)
-  useEffect(() => { setIsMounted(true) }, [])
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const {
     data: customer,
@@ -130,9 +141,9 @@ function ClientAuthProvider({ children }: { children: ReactNode }) {
           email: data.email,
           password: data.password,
         })
-      } catch (error: any) {
+      } catch (error: unknown) {
         // Handle "identity already exists" case - try to login instead
-        if (error?.message?.includes("Identity with email already exists")) {
+        if ((error instanceof Error && error.message?.includes("Identity with email already exists"))) {
           // Try to login with these credentials
           await sdk.auth.login("customer", "emailpass", {
             email: data.email,
@@ -173,7 +184,8 @@ function ClientAuthProvider({ children }: { children: ReactNode }) {
   // Update profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: async (data: Partial<Customer>) => {
-      const { customer } = await sdk.store.customer.update(data as any)
+      const sanitized = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== null)) as Parameters<typeof sdk.store.customer.update>[0]
+      const { customer } = await sdk.store.customer.update(sanitized)
       return customer
     },
     onSuccess: () => {
@@ -184,19 +196,27 @@ function ClientAuthProvider({ children }: { children: ReactNode }) {
   // Request password reset
   const requestPasswordResetMutation = useMutation({
     mutationFn: async (email: string) => {
-      await sdk.auth.resetPassword("customer", "emailpass", { identifier: email } as any)
+      await sdk.auth.resetPassword("customer", "emailpass", {
+        identifier: email,
+      })
     },
   })
 
   // Reset password with token
   const resetPasswordMutation = useMutation({
-    mutationFn: async ({ token, password }: { token: string; password: string }) => {
+    mutationFn: async ({
+      token,
+      password,
+    }: {
+      token: string
+      password: string
+    }) => {
       // Use fetch directly for password update since SDK method signature varies
       const backendUrl = getBackendUrl()
       await fetch(`${backendUrl}/auth/customer/emailpass/update`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ token, password }),
       })
     },
@@ -206,14 +226,14 @@ function ClientAuthProvider({ children }: { children: ReactNode }) {
     async (credentials: LoginCredentials) => {
       await loginMutation.mutateAsync(credentials)
     },
-    [loginMutation]
+    [loginMutation],
   )
 
   const register = useCallback(
     async (data: RegisterData) => {
       await registerMutation.mutateAsync(data)
     },
-    [registerMutation]
+    [registerMutation],
   )
 
   const logout = useCallback(async () => {
@@ -224,21 +244,21 @@ function ClientAuthProvider({ children }: { children: ReactNode }) {
     async (data: Partial<Customer>) => {
       await updateProfileMutation.mutateAsync(data)
     },
-    [updateProfileMutation]
+    [updateProfileMutation],
   )
 
   const requestPasswordReset = useCallback(
     async (email: string) => {
       await requestPasswordResetMutation.mutateAsync(email)
     },
-    [requestPasswordResetMutation]
+    [requestPasswordResetMutation],
   )
 
   const resetPassword = useCallback(
     async (token: string, password: string) => {
       await resetPasswordMutation.mutateAsync({ token, password })
     },
-    [resetPasswordMutation]
+    [resetPasswordMutation],
   )
 
   const value: AuthContextType = {

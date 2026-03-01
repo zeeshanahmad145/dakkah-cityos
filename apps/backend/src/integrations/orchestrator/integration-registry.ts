@@ -54,9 +54,9 @@ export class IntegrationRegistry {
         const health = await adapter.healthCheck()
         status.healthy = health.healthy
         status.message = health.message
-      } catch (error: any) {
+      } catch (error: unknown) {
         status.healthy = false
-        status.message = error.message
+        status.message = (error instanceof Error ? error.message : String(error))
       }
 
       results.push(status)

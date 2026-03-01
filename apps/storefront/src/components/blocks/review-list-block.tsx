@@ -108,7 +108,7 @@ export const ReviewListBlock: React.FC<ReviewListBlockProps> = ({
     const copy = [...allReviews]
     if (sortBy === 'rating') copy.sort((a, b) => b.rating - a.rating)
     else if (sortBy === 'helpful') copy.sort((a, b) => (b.helpful ?? 0) - (a.helpful ?? 0))
-    else copy.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    else copy.sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime())
     return limit ? copy.slice(0, limit) : copy
   }, [allReviews, sortBy, limit])
 
@@ -200,7 +200,7 @@ export const ReviewListBlock: React.FC<ReviewListBlockProps> = ({
                       </span>
                     )}
                     <span className="text-xs text-ds-muted-foreground">
-                      {formatDate(review.date, locale)}
+                      {formatDate(review.date, locale as import("@/lib/i18n").SupportedLocale)}
                     </span>
                   </div>
                   <div className="mt-1">

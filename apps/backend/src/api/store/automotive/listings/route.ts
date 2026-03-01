@@ -1,5 +1,5 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 const SEED_DATA = [
   {
@@ -19,12 +19,23 @@ const SEED_DATA = [
     condition: "new",
     price: 28500000,
     currency_code: "SAR",
-    description: "Brand new Toyota Land Cruiser with premium package, leather interior, and advanced safety features.",
-    features: ["Adaptive Cruise Control", "360 Camera", "Premium Audio", "Heated Seats"],
+    description:
+      "Brand new Toyota Land Cruiser with premium package, leather interior, and advanced safety features.",
+    features: [
+      "Adaptive Cruise Control",
+      "360 Camera",
+      "Premium Audio",
+      "Heated Seats",
+    ],
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg", price: 28500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    metadata: {
+      thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg",
+      price: 28500000,
+      currency: "SAR",
+      location: "Riyadh, Saudi Arabia",
+    },
     thumbnail: "/seed-images/automotive/1568605117036-5fe5e7bab0b7.jpg",
   },
   {
@@ -44,12 +55,23 @@ const SEED_DATA = [
     condition: "certified_pre_owned",
     price: 22000000,
     currency_code: "SAR",
-    description: "Certified pre-owned BMW X5 with M Sport package, panoramic sunroof, and Harman Kardon sound system.",
-    features: ["M Sport Package", "Panoramic Sunroof", "Harman Kardon", "Head-Up Display"],
+    description:
+      "Certified pre-owned BMW X5 with M Sport package, panoramic sunroof, and Harman Kardon sound system.",
+    features: [
+      "M Sport Package",
+      "Panoramic Sunroof",
+      "Harman Kardon",
+      "Head-Up Display",
+    ],
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg", price: 22000000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    metadata: {
+      thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg",
+      price: 22000000,
+      currency: "SAR",
+      location: "Jeddah, Saudi Arabia",
+    },
     thumbnail: "/seed-images/automotive/1556189250-72ba954cfc2b.jpg",
   },
   {
@@ -69,12 +91,18 @@ const SEED_DATA = [
     condition: "new",
     price: 32000000,
     currency_code: "SAR",
-    description: "New Mercedes-Benz GLE 450 4MATIC with AMG Line, MBUX infotainment, and EQ Boost mild hybrid system.",
+    description:
+      "New Mercedes-Benz GLE 450 4MATIC with AMG Line, MBUX infotainment, and EQ Boost mild hybrid system.",
     features: ["AMG Line", "MBUX", "Burmester Audio", "Air Suspension"],
     location_city: "Dammam",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg", price: 32000000, currency: "SAR", location: "Dammam, Saudi Arabia" },
+    metadata: {
+      thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
+      price: 32000000,
+      currency: "SAR",
+      location: "Dammam, Saudi Arabia",
+    },
     thumbnail: "/seed-images/automotive/1618843479313-40f8afb4b4d8.jpg",
   },
   {
@@ -94,12 +122,23 @@ const SEED_DATA = [
     condition: "certified_pre_owned",
     price: 16500000,
     currency_code: "SAR",
-    description: "Lexus ES 350 F Sport with Mark Levinson audio, navigation, and advanced safety package.",
-    features: ["F Sport Package", "Mark Levinson Audio", "Navigation", "Blind Spot Monitor"],
+    description:
+      "Lexus ES 350 F Sport with Mark Levinson audio, navigation, and advanced safety package.",
+    features: [
+      "F Sport Package",
+      "Mark Levinson Audio",
+      "Navigation",
+      "Blind Spot Monitor",
+    ],
     location_city: "Riyadh",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg", price: 16500000, currency: "SAR", location: "Riyadh, Saudi Arabia" },
+    metadata: {
+      thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg",
+      price: 16500000,
+      currency: "SAR",
+      location: "Riyadh, Saudi Arabia",
+    },
     thumbnail: "/seed-images/automotive/1621993202323-f438eec934ff.jpg",
   },
   {
@@ -119,29 +158,52 @@ const SEED_DATA = [
     condition: "new",
     price: 19500000,
     currency_code: "SAR",
-    description: "All-new Genesis G80 with 3.5L twin-turbo V6, Lexicon audio, and Genesis Connected Services.",
-    features: ["Twin-Turbo V6", "Lexicon Audio", "Remote Smart Parking", "Highway Driving Assist"],
+    description:
+      "All-new Genesis G80 with 3.5L twin-turbo V6, Lexicon audio, and Genesis Connected Services.",
+    features: [
+      "Twin-Turbo V6",
+      "Lexicon Audio",
+      "Remote Smart Parking",
+      "Highway Driving Assist",
+    ],
     location_city: "Jeddah",
     location_country: "SA",
     status: "active",
-    metadata: { thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg", price: 19500000, currency: "SAR", location: "Jeddah, Saudi Arabia" },
+    metadata: {
+      thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg",
+      price: 19500000,
+      currency: "SAR",
+      location: "Jeddah, Saudi Arabia",
+    },
     thumbnail: "/seed-images/automotive/1632245889029-e406faaa34cd.jpg",
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("automotive") as any
-    const { limit = "20", offset = "0" } = req.query as Record<string, string | undefined>
-    const filters: Record<string, any> = { status: "active" }
-    const dbItems = await mod.listVehicleListings(filters, { skip: Number(offset), take: Number(limit) })
-    const rawItems = Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA
+    const mod = req.scope.resolve("automotive") as unknown as any;
+    const { limit = "20", offset = "0" } = req.query as Record<
+      string,
+      string | undefined
+    >;
+    const filters: Record<string, any> = { status: "active" };
+    const dbItems = await mod.listVehicleListings(filters, {
+      skip: Number(offset),
+      take: Number(limit),
+    });
+    const rawItems =
+      Array.isArray(dbItems) && dbItems.length > 0 ? dbItems : SEED_DATA;
     const items = rawItems.map((item: any) => {
-      const thumb = item.thumbnail || item.metadata?.thumbnail || null
-      return { ...item, thumbnail: thumb ? thumb.replace(/%2F/gi, "/") : null }
-    })
-    return res.json({ items, count: items.length, limit: Number(limit), offset: Number(offset) })
-  } catch (error: any) {
-    return handleApiError(res, error, "STORE-AUTOMOTIVE-LISTINGS")
+      const thumb = item.thumbnail || item.metadata?.thumbnail || null;
+      return { ...item, thumbnail: thumb ? thumb.replace(/%2F/gi, "/") : null };
+    });
+    return res.json({
+      items,
+      count: items.length,
+      limit: Number(limit),
+      offset: Number(offset),
+    });
+  } catch (error: unknown) {
+    return handleApiError(res, error, "STORE-AUTOMOTIVE-LISTINGS");
   }
 }

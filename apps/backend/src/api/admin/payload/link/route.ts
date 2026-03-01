@@ -27,7 +27,7 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     // 1. Create the Payload Record locally via the module service directly
     // Since RemoteLink expects an existing record, we must insert it to `payload_record` first
-    const payloadModule = req.scope.resolve(PAYLOAD_MODULE);
+    const payloadModule = req.scope.resolve(PAYLOAD_MODULE) as unknown as any;
     const record = await payloadModule.createPayloadRecords({
       payload_id,
       collection_slug,
@@ -54,12 +54,12 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
       success: true,
       message: "Payload document successfully linked to Medusa Product",
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     req.scope
       .resolve("logger")
       .error(
-        `[PayloadLinkAPI] Failed to link product ${product_id}: ${error.message}`,
+        `[PayloadLinkAPI] Failed to link product ${product_id}: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`,
       );
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: (error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error)) });
   }
 };

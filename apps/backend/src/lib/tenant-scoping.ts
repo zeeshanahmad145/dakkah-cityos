@@ -10,7 +10,7 @@ import type { TenantContext } from "../api/middlewares/tenant-context"
  * Ensures products are filtered by tenant + sales channel
  */
 export function buildTenantProductFilter(tenantContext: TenantContext, additionalFilters: any = {}) {
-  const filters: any = {
+  const filters: Record<string, unknown> = {
     ...additionalFilters,
   }
 
@@ -38,7 +38,7 @@ export function buildTenantProductFilter(tenantContext: TenantContext, additiona
  * Build tenant filter for order queries
  */
 export function buildTenantOrderFilter(tenantContext: TenantContext, additionalFilters: any = {}) {
-  const filters: any = {
+  const filters: Record<string, unknown> = {
     ...additionalFilters,
   }
 
@@ -59,7 +59,7 @@ export function buildTenantOrderFilter(tenantContext: TenantContext, additionalF
  * Build tenant filter for cart queries
  */
 export function buildTenantCartFilter(tenantContext: TenantContext, additionalFilters: any = {}) {
-  const filters: any = {
+  const filters: Record<string, unknown> = {
     ...additionalFilters,
   }
 

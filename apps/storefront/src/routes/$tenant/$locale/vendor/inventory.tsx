@@ -26,7 +26,7 @@ function VendorInventoryRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -79,17 +79,23 @@ function VendorInventoryRoute() {
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {["", "in_stock", "low_stock", "out_of_stock", "discontinued"].map((s) => (
-          <button
-            key={s}
-            onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
-            }`}
-          >
-            {s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "All"}
-          </button>
-        ))}
+        {["", "in_stock", "low_stock", "out_of_stock", "discontinued"].map(
+          (s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                statusFilter === s
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
+              }`}
+            >
+              {s
+                ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+                : "All"}
+            </button>
+          ),
+        )}
       </div>
 
       {items.length === 0 ? (
@@ -114,22 +120,35 @@ function VendorInventoryRoute() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={item.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 pe-4 font-medium">{item.product_name}</td>
-                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground font-mono">{item.sku}</td>
+                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground font-mono">
+                    {item.sku}
+                  </td>
                   <td className="py-4 pe-4 text-right">{item.quantity}</td>
                   <td className="py-4 pe-4 text-right">{item.reserved}</td>
-                  <td className="py-4 pe-4 text-right font-medium">{item.available}</td>
+                  <td className="py-4 pe-4 text-right font-medium">
+                    {item.available}
+                  </td>
                   <td className="py-4 pe-4 text-right">{item.reorder_point}</td>
                   <td className="py-4 pe-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[item.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[item.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {item.status?.replace(/_/g, " ")}
                     </span>
                   </td>
                   <td className="py-4">
                     <div className="flex gap-2">
-                      <button className="text-sm text-ds-primary hover:underline">Update Stock</button>
-                      <button className="text-sm text-ds-muted-foreground hover:underline">View History</button>
+                      <button className="text-sm text-ds-primary hover:underline">
+                        Update Stock
+                      </button>
+                      <button className="text-sm text-ds-muted-foreground hover:underline">
+                        View History
+                      </button>
                     </div>
                   </td>
                 </tr>

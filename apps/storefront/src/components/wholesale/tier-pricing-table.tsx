@@ -87,7 +87,7 @@ export function TierPricingTable({
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-sm font-semibold text-ds-foreground">
-                      {formatCurrency(tier.unitPrice, currency, locale as SupportedLocale)}
+                      {formatCurrency((tier.unitPrice ?? 0), currency, locale as SupportedLocale)}
                     </span>
                     <span className="text-xs text-ds-muted-foreground ms-1">
                       {t(locale, "wholesale.price_per_unit")}

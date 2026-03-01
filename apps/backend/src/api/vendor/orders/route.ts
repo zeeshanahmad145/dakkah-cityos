@@ -1,22 +1,24 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { handleApiError } from "../../../lib/api-error-handler"
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 // GET /vendor/orders - List vendor's orders
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
-  
-    const vendorId = (req as any).vendor_id
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any;
+
+    const vendorId = req.vendor_id;
     if (!vendorId) {
-      return res.status(401).json({ message: "Vendor authentication required" })
+      return res
+        .status(401)
+        .json({ message: "Vendor authentication required" });
     }
 
-    const { status, limit = 50, offset = 0 } = req.query as any
+    const { status, limit = 50, offset = 0 } = req.query;
 
-    const filters: any = { vendor_id: vendorId }
+    const filters: Record<string, unknown> = { vendor_id: vendorId };
     if (status) {
-      filters.status = status
+      filters.status = status;
     }
 
     const { data: vendorOrders } = await query.graph({
@@ -47,7 +49,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         skip: Number(offset),
         take: Number(limit),
       },
-    })
+    });
 
     const orders = vendorOrders.map((vo: any) => ({
       id: vo.id,
@@ -67,11 +69,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       created_at: vo.created_at,
       shipped_at: vo.shipped_at,
       delivered_at: vo.delivered_at,
-    }))
+    }));
 
-    res.json({ orders, count: orders.length })
-
-  } catch (error: any) {
-    handleApiError(res, error, "GET vendor orders")}
+    res.json({ orders, count: orders.length });
+  } catch (error: unknown) {
+    handleApiError(res, error, "GET vendor orders");
+  }
 }
-

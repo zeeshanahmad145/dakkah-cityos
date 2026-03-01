@@ -4,8 +4,8 @@ import { createLogger } from "../lib/logger"
 const logger = createLogger("jobs:subscription-renewal-reminder")
 
 export default async function subscriptionRenewalReminderJob(container: MedusaContainer) {
-  const query = container.resolve("query")
-  const eventBus = container.resolve("event_bus")
+  const query = container.resolve("query") as unknown as any
+  const eventBus = container.resolve("event_bus") as unknown as any
   
   logger.info("[Renewal Reminder] Checking for upcoming renewals...")
   

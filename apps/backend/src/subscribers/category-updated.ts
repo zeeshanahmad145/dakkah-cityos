@@ -5,7 +5,7 @@ export default async function categoryUpdateHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const logger = container.resolve("logger");
+  const logger = container.resolve("logger") as unknown as any;
   logger.info(
     `[PayloadSync] product-category event received for ${data.id}. Syncing hierarchy to CMS...`,
   );
@@ -16,9 +16,9 @@ export default async function categoryUpdateHandler({
         categoryId: data.id,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error(
-      `[PayloadSync] Category hierarchy workflow failed for ${data.id}: ${error.message}`,
+      `[PayloadSync] Category hierarchy workflow failed for ${data.id}: ${(error instanceof Error ? error.message : String(error))}`,
     );
   }
 }

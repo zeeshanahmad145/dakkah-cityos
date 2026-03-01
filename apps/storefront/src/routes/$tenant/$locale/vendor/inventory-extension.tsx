@@ -19,7 +19,9 @@ interface InventoryExtensionItem {
   updated_at: string
 }
 
-export const Route = createFileRoute("/$tenant/$locale/vendor/inventory-extension")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/vendor/inventory-extension",
+)({
   component: VendorInventoryExtensionRoute,
 })
 
@@ -28,7 +30,7 @@ function VendorInventoryExtensionRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -41,7 +43,10 @@ function VendorInventoryExtensionRoute() {
       const params = new URLSearchParams()
       if (statusFilter) params.set("status", statusFilter)
       const url = `/vendor/inventory-extension${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: InventoryExtensionItem[]; count: number }>(url, {
+      return sdk.client.fetch<{
+        items: InventoryExtensionItem[]
+        count: number
+      }>(url, {
         credentials: "include",
       })
     },
@@ -81,23 +86,31 @@ function VendorInventoryExtensionRoute() {
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {["", "in_stock", "low_stock", "out_of_stock", "discontinued"].map((s) => (
-          <button
-            key={s}
-            onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
-            }`}
-          >
-            {s ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "All"}
-          </button>
-        ))}
+        {["", "in_stock", "low_stock", "out_of_stock", "discontinued"].map(
+          (s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                statusFilter === s
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
+              }`}
+            >
+              {s
+                ? s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+                : "All"}
+            </button>
+          ),
+        )}
       </div>
 
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No inventory extension items yet</p>
-          <p className="text-sm">Configure stock alerts, reorder points, and warehouse assignments.</p>
+          <p className="text-sm">
+            Configure stock alerts, reorder points, and warehouse assignments.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -118,30 +131,49 @@ function VendorInventoryExtensionRoute() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={item.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 pe-4 font-medium">{item.product_name}</td>
-                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground font-mono">{item.sku}</td>
-                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground">{item.warehouse || "—"}</td>
+                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground font-mono">
+                    {item.sku}
+                  </td>
+                  <td className="py-4 pe-4 text-sm text-ds-muted-foreground">
+                    {item.warehouse || "—"}
+                  </td>
                   <td className="py-4 pe-4 text-right">{item.quantity}</td>
                   <td className="py-4 pe-4 text-right">{item.reserved}</td>
-                  <td className="py-4 pe-4 text-right font-medium">{item.available}</td>
+                  <td className="py-4 pe-4 text-right font-medium">
+                    {item.available}
+                  </td>
                   <td className="py-4 pe-4 text-right">{item.reorder_point}</td>
                   <td className="py-4 pe-4">
                     {item.low_stock_alert ? (
-                      <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-ds-destructive/15 text-ds-destructive">Low Stock</span>
+                      <span className="px-2 py-0.5 text-xs rounded-full font-medium bg-ds-destructive/15 text-ds-destructive">
+                        Low Stock
+                      </span>
                     ) : (
-                      <span className="text-sm text-ds-muted-foreground/70">—</span>
+                      <span className="text-sm text-ds-muted-foreground/70">
+                        —
+                      </span>
                     )}
                   </td>
                   <td className="py-4 pe-4">
-                    <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[item.status] || "bg-ds-muted text-ds-foreground"}`}>
+                    <span
+                      className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[item.status] || "bg-ds-muted text-ds-foreground"}`}
+                    >
                       {item.status?.replace(/_/g, " ")}
                     </span>
                   </td>
                   <td className="py-4">
                     <div className="flex gap-2">
-                      <button className="text-sm text-ds-primary hover:underline">Update</button>
-                      <button className="text-sm text-ds-muted-foreground hover:underline">History</button>
+                      <button className="text-sm text-ds-primary hover:underline">
+                        Update
+                      </button>
+                      <button className="text-sm text-ds-muted-foreground hover:underline">
+                        History
+                      </button>
                     </div>
                   </td>
                 </tr>

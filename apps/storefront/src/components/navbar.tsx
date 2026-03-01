@@ -21,7 +21,9 @@ import { useState, useEffect } from "react"
 export const Navbar = () => {
   const location = useLocation()
   const baseHref = getTenantLocalePrefix(location.pathname)
-  const [openMobileSections, setOpenMobileSections] = useState<Record<string, boolean>>({})
+  const [openMobileSections, setOpenMobileSections] = useState<
+    Record<string, boolean>
+  >({})
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -36,17 +38,18 @@ export const Navbar = () => {
 
   const { data: headerNav } = useCMSNavigation("header")
 
-  const navGroups = headerNav?.items
-    ?.sort((a, b) => a.order - b.order)
-    .map((item) => ({
-      label: item.label,
-      items: (item.children ?? [])
-        .sort((a, b) => a.order - b.order)
-        .map((child) => ({
-          name: child.label,
-          href: child.url,
-        })),
-    })) ?? []
+  const navGroups =
+    headerNav?.items
+      ?.sort((a, b) => a.order - b.order)
+      .map((item) => ({
+        label: item.label,
+        items: (item.children ?? [])
+          .sort((a, b) => a.order - b.order)
+          .map((child) => ({
+            name: child.label,
+            href: child.url,
+          })),
+      })) ?? []
 
   const categoryLinks = [
     { id: "shop-all", name: "Shop all", to: `${baseHref}/store` },
@@ -84,7 +87,19 @@ export const Navbar = () => {
               <NavigationMenu.Item className="h-full flex items-center">
                 <NavigationMenu.Trigger className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full flex items-center gap-1 select-none">
                   Shop
-                  <svg className="w-3 h-3 ms-0.5 transition-transform duration-200 group-data-[state=open]:rotate-180" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <svg
+                    className="w-3 h-3 ms-0.5 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                  >
+                    <path
+                      d="M3 4.5L6 7.5L9 4.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className="content-container py-8">
                   <div className="flex flex-col gap-4">
@@ -108,12 +123,27 @@ export const Navbar = () => {
               </NavigationMenu.Item>
 
               {navGroups.length > 0 ? (
-                navGroups.map((group) => (
+                navGroups.map((group) =>
                   group.items.length > 0 ? (
-                    <NavigationMenu.Item key={group.label} className="h-full flex items-center">
+                    <NavigationMenu.Item
+                      key={group.label}
+                      className="h-full flex items-center"
+                    >
                       <NavigationMenu.Trigger className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full flex items-center gap-1 select-none">
                         {group.label}
-                        <svg className="w-3 h-3 ms-0.5 transition-transform duration-200 group-data-[state=open]:rotate-180" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        <svg
+                          className="w-3 h-3 ms-0.5 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                          viewBox="0 0 12 12"
+                          fill="none"
+                        >
+                          <path
+                            d="M3 4.5L6 7.5L9 4.5"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
                       </NavigationMenu.Trigger>
                       <NavigationMenu.Content className="content-container py-8">
                         <div className="grid grid-cols-5 gap-x-8 gap-y-6">
@@ -125,7 +155,7 @@ export const Navbar = () => {
                               {group.items.map((item) => (
                                 <NavigationMenu.Link key={item.href} asChild>
                                   <Link
-                                    to={`${baseHref}${item.href}` as any}
+                                    to={`${baseHref}${item.href}` as never}
                                     className="text-sm text-ds-muted-foreground hover:text-ds-foreground font-medium transition-colors py-1"
                                   >
                                     {item.name}
@@ -138,24 +168,27 @@ export const Navbar = () => {
                       </NavigationMenu.Content>
                     </NavigationMenu.Item>
                   ) : (
-                    <NavigationMenu.Item key={group.label} className="h-full flex items-center">
+                    <NavigationMenu.Item
+                      key={group.label}
+                      className="h-full flex items-center"
+                    >
                       <NavigationMenu.Link asChild>
                         <Link
-                          to={`${baseHref}/${group.label.toLowerCase()}` as any}
+                          to={`${baseHref}/${group.label.toLowerCase()}` as never}
                           className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full flex items-center"
                         >
                           {group.label}
                         </Link>
                       </NavigationMenu.Link>
                     </NavigationMenu.Item>
-                  )
-                ))
+                  ),
+                )
               ) : (
                 <>
                   <NavigationMenu.Item className="h-full flex items-center">
                     <NavigationMenu.Link asChild>
                       <Link
-                        to={`${baseHref}/store` as any}
+                        to={`${baseHref}/store` as never}
                         className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full flex items-center"
                       >
                         Store
@@ -165,7 +198,7 @@ export const Navbar = () => {
                   <NavigationMenu.Item className="h-full flex items-center">
                     <NavigationMenu.Link asChild>
                       <Link
-                        to={`${baseHref}/vendors` as any}
+                        to={`${baseHref}/vendors` as never}
                         className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full flex items-center"
                       >
                         Vendors
@@ -175,7 +208,7 @@ export const Navbar = () => {
                   <NavigationMenu.Item className="h-full flex items-center">
                     <NavigationMenu.Link asChild>
                       <Link
-                        to={`${baseHref}/bookings` as any}
+                        to={`${baseHref}/bookings` as never}
                         className="text-ds-muted-foreground hover:text-ds-muted-foreground h-full flex items-center"
                       >
                         Bookings
@@ -190,7 +223,11 @@ export const Navbar = () => {
               className="absolute top-full bg-ds-background border-b border-ds-border shadow-lg overflow-hidden
                 data-[state=open]:animate-[dropdown-open_300ms_ease-out]
                 data-[state=closed]:animate-[dropdown-close_300ms_ease-out]"
-              style={{ left: "50%", transform: "translateX(-50%)", width: "100vw" }}
+              style={{
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "100vw",
+              }}
             />
           </NavigationMenu.Root>
 
@@ -221,7 +258,19 @@ export const Navbar = () => {
                   className="px-6 py-4 text-ds-foreground text-lg font-medium flex items-center justify-between w-full text-start"
                 >
                   Shop
-                  <svg className={`w-4 h-4 transition-transform duration-200 ${openMobileSections["shop"] ? "rotate-180" : ""}`} viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${openMobileSections["shop"] ? "rotate-180" : ""}`}
+                    viewBox="0 0 12 12"
+                    fill="none"
+                  >
+                    <path
+                      d="M3 4.5L6 7.5L9 4.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </button>
                 {openMobileSections["shop"] && (
                   <div className="flex flex-col">
@@ -244,18 +293,32 @@ export const Navbar = () => {
                       {group.items.length > 0 ? (
                         <>
                           <button
-                            onClick={() => toggleMobileSection(`nav-${group.label}`)}
+                            onClick={() =>
+                              toggleMobileSection(`nav-${group.label}`)
+                            }
                             className="px-6 py-4 text-ds-foreground text-lg font-medium flex items-center justify-between w-full text-start"
                           >
                             {group.label}
-                            <svg className={`w-4 h-4 transition-transform duration-200 ${openMobileSections[`nav-${group.label}`] ? "rotate-180" : ""}`} viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            <svg
+                              className={`w-4 h-4 transition-transform duration-200 ${openMobileSections[`nav-${group.label}`] ? "rotate-180" : ""}`}
+                              viewBox="0 0 12 12"
+                              fill="none"
+                            >
+                              <path
+                                d="M3 4.5L6 7.5L9 4.5"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
                           </button>
                           {openMobileSections[`nav-${group.label}`] && (
                             <div className="flex flex-col">
                               {group.items.map((item) => (
                                 <DrawerClose key={item.href} asChild>
                                   <Link
-                                    to={`${baseHref}${item.href}` as any}
+                                    to={`${baseHref}${item.href}` as never}
                                     className="px-10 py-3 text-ds-muted-foreground hover:bg-ds-muted transition-colors text-sm"
                                   >
                                     {item.name}
@@ -268,7 +331,7 @@ export const Navbar = () => {
                       ) : (
                         <DrawerClose asChild>
                           <Link
-                            to={`${baseHref}/${group.label.toLowerCase()}` as any}
+                            to={`${baseHref}/${group.label.toLowerCase()}` as never}
                             className="px-6 py-4 text-ds-foreground text-lg font-medium block hover:bg-ds-muted transition-colors"
                           >
                             {group.label}
@@ -281,7 +344,7 @@ export const Navbar = () => {
                   <div className="border-t border-ds-border mt-2 pt-2">
                     <DrawerClose asChild>
                       <Link
-                        to={`${baseHref}/store` as any}
+                        to={`${baseHref}/store` as never}
                         className="px-6 py-4 text-ds-foreground text-lg font-medium block hover:bg-ds-muted transition-colors"
                       >
                         Store
@@ -289,7 +352,7 @@ export const Navbar = () => {
                     </DrawerClose>
                     <DrawerClose asChild>
                       <Link
-                        to={`${baseHref}/vendors` as any}
+                        to={`${baseHref}/vendors` as never}
                         className="px-6 py-4 text-ds-foreground text-lg font-medium block hover:bg-ds-muted transition-colors"
                       >
                         Vendors
@@ -297,7 +360,7 @@ export const Navbar = () => {
                     </DrawerClose>
                     <DrawerClose asChild>
                       <Link
-                        to={`${baseHref}/bookings` as any}
+                        to={`${baseHref}/bookings` as never}
                         className="px-6 py-4 text-ds-foreground text-lg font-medium block hover:bg-ds-muted transition-colors"
                       >
                         Bookings
@@ -348,7 +411,10 @@ export const Navbar = () => {
             <UserMenu />
             <CartDropdown />
           </div>
-          <SearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+          <SearchModal
+            open={isSearchOpen}
+            onClose={() => setIsSearchOpen(false)}
+          />
         </nav>
       </header>
     </div>

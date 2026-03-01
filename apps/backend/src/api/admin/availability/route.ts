@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../lib/api-error-handler";
 
@@ -18,7 +18,7 @@ const createAvailabilitySchema = z
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
-    const query = req.scope.resolve("query");
+    const query = req.scope.resolve("query") as unknown as any;
 
     const { owner_type, owner_id, is_active } = req.query as {
       owner_type?: string;
@@ -38,15 +38,15 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
     });
 
     res.json({ availabilities });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin availability");
   }
 };
 
 export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
-    const query = req.scope.resolve("query");
-    const bookingService = req.scope.resolve("booking") as any;
+    const query = req.scope.resolve("query") as unknown as any;
+    const bookingService = req.scope.resolve("booking") as unknown as any;
 
     const {
       owner_type,
@@ -86,7 +86,7 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
     ]);
 
     res.status(201).json({ availability: availability[0] });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin availability");
   }
 };

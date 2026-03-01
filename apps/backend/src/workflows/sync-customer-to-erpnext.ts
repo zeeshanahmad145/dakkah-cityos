@@ -13,7 +13,7 @@ type ERPNextCustomerSyncInput = {
 export const postCustomerToErpnextStep = createStep(
   "post-customer-to-erpnext",
   async (customerData: any, { container }) => {
-    const logger = container.resolve("logger");
+    const logger = container.resolve("logger") as unknown as any;
     const appConfigModule = await import("../lib/config.js");
     const appConfig = appConfigModule.appConfig;
 
@@ -80,14 +80,14 @@ export const postCustomerToErpnextStep = createStep(
         data: responseData.data,
         error: null,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error(
-        `[ERPNextSync] Failed to push customer ${customerData.id}: ${error.message}`,
+        `[ERPNextSync] Failed to push customer ${customerData.id}: ${(error instanceof Error ? error.message : String(error))}`,
       );
       return new StepResponse({
         success: false,
         data: null,
-        error: error.message,
+        error: (error instanceof Error ? error.message : String(error)),
       });
     }
   },

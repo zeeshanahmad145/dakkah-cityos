@@ -9,7 +9,7 @@ export default async function productUpdatedAnalyticsHandler({
   container,
 }: SubscriberArgs<{ id: string }>) {
   try {
-    const analytics = container.resolve("analytics") as any;
+    const analytics = container.resolve("analytics") as unknown as any;
 
     await analytics.createAnalyticsEvents({
       event_type: "product.updated",

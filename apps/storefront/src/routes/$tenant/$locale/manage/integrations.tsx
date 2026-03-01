@@ -1,7 +1,13 @@
 // @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -19,13 +25,15 @@ function ManageIntegrationsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "integrations"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/integrations", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/integrations", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
   })
 
-  const items = ((data as any)?.items || (data as any)?.integrations || []).map((item: any) => ({
+  const items = ((data as any)?.items || data?.integrations || []).map((item: any) => ({
     id: item.id,
     system: item.system || item.name || "—",
     status: item.status || "unknown",
@@ -37,7 +45,9 @@ function ManageIntegrationsPage() {
     {
       key: "system",
       header: "System",
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "status",
@@ -70,7 +80,12 @@ function ManageIntegrationsPage() {
           subtitle="Integration status and health dashboard"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No integrations found" countLabel="integrations" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No integrations found"
+          countLabel="integrations"
+        />
       </Container>
     </ManageLayout>
   )

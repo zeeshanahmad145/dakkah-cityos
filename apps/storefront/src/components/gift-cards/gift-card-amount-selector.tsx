@@ -45,7 +45,7 @@ export function GiftCardAmountSelector({
         {t(locale, "giftCards.select_amount")}
       </h3>
       <div className="grid grid-cols-3 gap-2 mb-3">
-        {presetAmounts.map((amount) => (
+        {presetAmounts.map((amount: any) => (
           <button
             key={amount}
             type="button"

@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { handleApiError } from "../../../../lib/api-error-handler"
@@ -14,7 +14,7 @@ const updateQuoteSchema = z.object({
 // GET /admin/quotes/:id
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { id } = req.params
   
     const { data: quotes } = await query.graph({
@@ -60,14 +60,14 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ quote: { ...quote, items, company, customer } })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin quotes id")}
 }
 
 // PUT /admin/quotes/:id - Update quote
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const quoteModule = req.scope.resolve("quote")
+    const quoteModule = req.scope.resolve("quote") as unknown as any
     const { id } = req.params
   
     const parsed = updateQuoteSchema.safeParse(req.body)
@@ -94,7 +94,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   
     res.json({ quote })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin quotes id")}
 }
 

@@ -41,14 +41,18 @@ export function TierCard({
           )}
         </div>
         <p className="text-lg font-bold text-ds-foreground">
-          {formatCurrency(tier.price.amount, tier.price.currencyCode, loc)}
+          {formatCurrency((tier.price.amount ?? 0), tier.price.currencyCode, loc)}
           <span className="text-sm font-normal text-ds-muted-foreground">
             {t(locale, billingLabels[tier.billingPeriod] || "blocks.per_month")}
           </span>
         </p>
-        <BenefitsList benefits={tier.benefits} variant="compact" maxVisible={3} />
+        <BenefitsList
+          benefits={tier.benefits}
+          variant="compact"
+          maxVisible={3}
+        />
         <Link
-          to={`${prefix}/memberships/${tier.id}` as any}
+          to={`${prefix}/memberships/${tier.id}` as never}
           className="block w-full text-center mt-3 px-4 py-2 text-sm font-medium rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors"
         >
           {t(locale, "blocks.view_details")}
@@ -75,13 +79,15 @@ export function TierCard({
         <div>
           <h3 className="text-xl font-bold text-ds-foreground">{tier.name}</h3>
           {tier.description && (
-            <p className="mt-1 text-sm text-ds-muted-foreground">{tier.description}</p>
+            <p className="mt-1 text-sm text-ds-muted-foreground">
+              {tier.description}
+            </p>
           )}
         </div>
 
         <div>
           <span className="text-3xl font-bold text-ds-foreground">
-            {formatCurrency(tier.price.amount, tier.price.currencyCode, loc)}
+            {formatCurrency((tier.price.amount ?? 0), tier.price.currencyCode, loc)}
           </span>
           <span className="text-sm text-ds-muted-foreground ms-1">
             {t(locale, billingLabels[tier.billingPeriod] || "blocks.per_month")}
@@ -111,7 +117,7 @@ export function TierCard({
 
         {tier.isCurrent ? (
           <Link
-            to={`${prefix}/memberships/${tier.id}` as any}
+            to={`${prefix}/memberships/${tier.id}` as never}
             className="block w-full text-center px-4 py-3 text-sm font-medium rounded-lg border border-ds-border text-ds-foreground hover:bg-ds-muted transition-colors"
           >
             {t(locale, "blocks.view_details")}

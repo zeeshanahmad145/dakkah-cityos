@@ -151,7 +151,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         correlationId,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Gateway download");
   }
 }

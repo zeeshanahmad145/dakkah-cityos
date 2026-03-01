@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const healthcareService = req.scope.resolve("healthcare") as any;
+    const healthcareService = req.scope.resolve("healthcare") as unknown as any;
     const { provider_id, patient_id, date } = req.body as {
       provider_id: string;
       patient_id: string;
@@ -26,7 +26,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       new Date(date),
     );
     return res.status(201).json({ appointment });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-HEALTHCARE-BOOK");
   }
 }
@@ -37,7 +37,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const healthcareService = req.scope.resolve("healthcare") as any;
+    const healthcareService = req.scope.resolve("healthcare") as unknown as any;
     const { patient_id } = req.query as { patient_id?: string };
 
     if (!patient_id) {
@@ -46,7 +46,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
     const history = await healthcareService.getPatientHistory(patient_id);
     return res.json({ history });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-HEALTHCARE-HISTORY");
   }
 }

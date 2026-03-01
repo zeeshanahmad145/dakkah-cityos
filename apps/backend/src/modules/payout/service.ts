@@ -78,7 +78,7 @@ interface PayoutServiceBase {
 
 const Base = MedusaService({ Payout, PayoutTransactionLink });
 
-// Lazy Stripe singleton — typed as any because Stripe SDK types require the specific
+// Lazy Stripe singleton — typed because Stripe SDK types require the specific
 // installed version; using a module-level singleton avoids class property any fields.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let stripeInstance: any = null;
@@ -150,7 +150,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
       payment_method: paymentMethod,
       status: scheduledFor ? "pending" : "processing",
       scheduled_for: scheduledFor,
-    });
+    } as any);
 
     const links = transactionIds.map((txId) => ({
       payout_id: payout.id,
@@ -167,7 +167,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
     stripeAccountId: string,
   ): Promise<PayoutRecord> {
     const stripe = getStripe();
-    const payout = await this.retrievePayout(payoutId);
+    const payout = await this.retrievePayout(payoutId) as any;
 
     if (!stripeAccountId) {
       throw new Error(`No Stripe account ID provided for payout ${payoutId}`);
@@ -178,7 +178,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
         id: payoutId,
         status: "processing",
         processing_started_at: new Date(),
-      });
+      } as any);
 
       const transfer = await stripe.transfers.create({
         amount: Math.round(Number(payout.net_amount) * 100),
@@ -197,7 +197,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
         status: "completed",
         stripe_transfer_id: transfer.id,
         processing_completed_at: new Date(),
-      });
+      } as any);
 
       logger.info(
         `[Payout] Completed transfer ${transfer.id} for payout ${payoutId}`,
@@ -216,7 +216,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
         failure_reason: e.message ?? null,
         retry_count: (payout.retry_count ?? 0) + 1,
         last_retry_at: new Date(),
-      });
+      } as any);
 
       throw error;
     }
@@ -316,7 +316,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
     pending_amount: number;
     last_payout: PayoutRecord | null;
   }> {
-    const all = await this.listPayouts({ vendor_id: vendorId });
+    const all = await this.listPayouts({ vendor_id: vendorId }) as any;
     const completed = all.filter((p) => p.status === "completed");
     const pending = all.filter(
       (p) => p.status === "pending" || p.status === "processing",
@@ -342,7 +342,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
     payoutId: string,
     stripeAccountId: string,
   ): Promise<PayoutRecord> {
-    const payout = await this.retrievePayout(payoutId);
+    const payout = await this.retrievePayout(payoutId) as any;
     if (payout.status !== "failed")
       throw new Error(`Payout ${payoutId} is not in failed status`);
     if ((payout.retry_count ?? 0) >= 3)
@@ -354,13 +354,13 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
       stripe_failure_code: null,
       stripe_failure_message: null,
       failure_reason: null,
-    });
+    } as any);
 
     return this.processStripeConnectPayout(payoutId, stripeAccountId);
   }
 
   async cancelPayout(payoutId: string, reason: string): Promise<PayoutRecord> {
-    const payout = await this.retrievePayout(payoutId);
+    const payout = await this.retrievePayout(payoutId) as any;
     if (!["pending", "on_hold"].includes(payout.status)) {
       throw new Error(`Cannot cancel payout in ${payout.status} status`);
     }
@@ -373,7 +373,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
   }
 
   async holdPayout(payoutId: string, reason: string): Promise<PayoutRecord> {
-    const payout = await this.retrievePayout(payoutId);
+    const payout = await this.retrievePayout(payoutId) as any;
     if (payout.status !== "pending")
       throw new Error("Can only hold pending payouts");
     return this.updatePayouts({

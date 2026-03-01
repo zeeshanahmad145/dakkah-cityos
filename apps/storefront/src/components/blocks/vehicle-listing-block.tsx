@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 
 interface VehicleListingBlockProps {
   heading?: string
   vehicleType?: string
-  layout?: 'grid' | 'list' | 'detailed'
+  layout?: "grid" | "list" | "detailed"
   showComparison?: boolean
 }
 
@@ -22,32 +22,110 @@ interface Vehicle {
 }
 
 const placeholderVehicles: Vehicle[] = [
-  { id: '1', title: '2024 Tesla Model 3', make: 'Tesla', model: 'Model 3', year: 2024, price: '$42,990', mileage: '1,200 mi', fuelType: 'Electric', transmission: 'Automatic', engine: 'Dual Motor', color: 'White' },
-  { id: '2', title: '2023 Toyota Camry', make: 'Toyota', model: 'Camry', year: 2023, price: '$28,500', mileage: '15,400 mi', fuelType: 'Hybrid', transmission: 'CVT', engine: '2.5L 4-Cyl', color: 'Silver' },
-  { id: '3', title: '2024 BMW X5', make: 'BMW', model: 'X5', year: 2024, price: '$65,900', mileage: '3,200 mi', fuelType: 'Gasoline', transmission: 'Automatic', engine: '3.0L Turbo I6', color: 'Black' },
-  { id: '4', title: '2023 Honda Civic', make: 'Honda', model: 'Civic', year: 2023, price: '$24,800', mileage: '22,100 mi', fuelType: 'Gasoline', transmission: 'CVT', engine: '1.5L Turbo', color: 'Blue' },
-  { id: '5', title: '2024 Ford F-150', make: 'Ford', model: 'F-150', year: 2024, price: '$55,200', mileage: '8,500 mi', fuelType: 'Gasoline', transmission: 'Automatic', engine: '3.5L EcoBoost V6', color: 'Red' },
-  { id: '6', title: '2023 Mercedes C-Class', make: 'Mercedes', model: 'C-Class', year: 2023, price: '$48,300', mileage: '11,800 mi', fuelType: 'Gasoline', transmission: 'Automatic', engine: '2.0L Turbo I4', color: 'Gray' },
+  {
+    id: "1",
+    title: "2024 Tesla Model 3",
+    make: "Tesla",
+    model: "Model 3",
+    year: 2024,
+    price: "$42,990",
+    mileage: "1,200 mi",
+    fuelType: "Electric",
+    transmission: "Automatic",
+    engine: "Dual Motor",
+    color: "White",
+  },
+  {
+    id: "2",
+    title: "2023 Toyota Camry",
+    make: "Toyota",
+    model: "Camry",
+    year: 2023,
+    price: "$28,500",
+    mileage: "15,400 mi",
+    fuelType: "Hybrid",
+    transmission: "CVT",
+    engine: "2.5L 4-Cyl",
+    color: "Silver",
+  },
+  {
+    id: "3",
+    title: "2024 BMW X5",
+    make: "BMW",
+    model: "X5",
+    year: 2024,
+    price: "$65,900",
+    mileage: "3,200 mi",
+    fuelType: "Gasoline",
+    transmission: "Automatic",
+    engine: "3.0L Turbo I6",
+    color: "Black",
+  },
+  {
+    id: "4",
+    title: "2023 Honda Civic",
+    make: "Honda",
+    model: "Civic",
+    year: 2023,
+    price: "$24,800",
+    mileage: "22,100 mi",
+    fuelType: "Gasoline",
+    transmission: "CVT",
+    engine: "1.5L Turbo",
+    color: "Blue",
+  },
+  {
+    id: "5",
+    title: "2024 Ford F-150",
+    make: "Ford",
+    model: "F-150",
+    year: 2024,
+    price: "$55,200",
+    mileage: "8,500 mi",
+    fuelType: "Gasoline",
+    transmission: "Automatic",
+    engine: "3.5L EcoBoost V6",
+    color: "Red",
+  },
+  {
+    id: "6",
+    title: "2023 Mercedes C-Class",
+    make: "Mercedes",
+    model: "C-Class",
+    year: 2023,
+    price: "$48,300",
+    mileage: "11,800 mi",
+    fuelType: "Gasoline",
+    transmission: "Automatic",
+    engine: "2.0L Turbo I4",
+    color: "Gray",
+  },
 ]
 
 export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
-  heading = 'Vehicle Listings',
+  heading = "Vehicle Listings",
   vehicleType,
-  layout: initialLayout = 'grid',
+  layout: initialLayout = "grid",
   showComparison = false,
 }) => {
   const [activeLayout, setActiveLayout] = useState(initialLayout)
-  const [selectedMake, setSelectedMake] = useState('All')
+  const [selectedMake, setSelectedMake] = useState("All")
   const [compareIds, setCompareIds] = useState<string[]>([])
 
-  const makes = ['All', ...Array.from(new Set(placeholderVehicles.map((v) => v.make)))]
+  const makes = [
+    "All",
+    ...Array.from(new Set(placeholderVehicles.map((v) => v.make))),
+  ]
 
-  const filteredVehicles = selectedMake === 'All'
-    ? placeholderVehicles
-    : placeholderVehicles.filter((v) => v.make === selectedMake)
+  const filteredVehicles =
+    selectedMake === "All"
+      ? placeholderVehicles
+      : placeholderVehicles.filter((v) => v.make === selectedMake)
 
   const toggleCompare = (id: string) => {
-    setCompareIds((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id])
+    setCompareIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    )
   }
 
   const VehicleCard = ({ vehicle }: { vehicle: Vehicle }) => (
@@ -67,10 +145,16 @@ export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
       </div>
       <div className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium px-2 py-1 rounded-full bg-ds-muted text-ds-muted-foreground">{vehicle.fuelType}</span>
-          <span className="text-lg font-bold text-ds-foreground">{vehicle.price}</span>
+          <span className="text-xs font-medium px-2 py-1 rounded-full bg-ds-muted text-ds-muted-foreground">
+            {vehicle.fuelType}
+          </span>
+          <span className="text-lg font-bold text-ds-foreground">
+            {vehicle.price}
+          </span>
         </div>
-        <h3 className="font-semibold text-ds-foreground mb-2">{vehicle.title}</h3>
+        <h3 className="font-semibold text-ds-foreground mb-2">
+          {vehicle.title}
+        </h3>
         <div className="flex flex-wrap items-center gap-2 text-sm text-ds-muted-foreground">
           <span>{vehicle.year}</span>
           <span>·</span>
@@ -99,8 +183,12 @@ export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
       </div>
       <div className="p-4 flex-1">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-semibold text-ds-foreground text-lg">{vehicle.title}</h3>
-          <span className="text-xl font-bold text-ds-foreground">{vehicle.price}</span>
+          <h3 className="font-semibold text-ds-foreground text-lg">
+            {vehicle.title}
+          </h3>
+          <span className="text-xl font-bold text-ds-foreground">
+            {vehicle.price}
+          </span>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-sm text-ds-muted-foreground">
           <span>{vehicle.year}</span>
@@ -117,25 +205,29 @@ export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
     </div>
   )
 
-  const compareVehicles = placeholderVehicles.filter((v) => compareIds.includes(v.id))
+  const compareVehicles = placeholderVehicles.filter((v) =>
+    compareIds.includes(v.id),
+  )
 
   return (
     <section className="py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-ds-foreground">{heading}</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-ds-foreground">
+            {heading}
+          </h2>
           <div className="flex items-center gap-2">
-            {(['grid', 'list'] as const).map((l) => (
+            {(["grid", "list"] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setActiveLayout(l)}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeLayout === l
-                    ? 'bg-ds-primary text-ds-primary-foreground'
-                    : 'bg-ds-muted text-ds-muted-foreground hover:text-ds-foreground'
+                    ? "bg-ds-primary text-ds-primary-foreground"
+                    : "bg-ds-muted text-ds-muted-foreground hover:text-ds-foreground"
                 }`}
               >
-                {l === 'grid' ? 'Grid' : 'List'}
+                {l === "grid" ? "Grid" : "List"}
               </button>
             ))}
           </div>
@@ -148,8 +240,8 @@ export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
               onClick={() => setSelectedMake(make)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 selectedMake === make
-                  ? 'bg-ds-primary text-ds-primary-foreground'
-                  : 'bg-ds-muted text-ds-muted-foreground hover:text-ds-foreground'
+                  ? "bg-ds-primary text-ds-primary-foreground"
+                  : "bg-ds-muted text-ds-muted-foreground hover:text-ds-foreground"
               }`}
             >
               {make}
@@ -157,7 +249,7 @@ export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
           ))}
         </div>
 
-        {activeLayout === 'list' ? (
+        {activeLayout === "list" ? (
           <div className="flex flex-col gap-4">
             {filteredVehicles.map((vehicle) => (
               <VehicleListItem key={vehicle.id} vehicle={vehicle} />
@@ -174,24 +266,51 @@ export const VehicleListingBlock: React.FC<VehicleListingBlockProps> = ({
         {showComparison && compareVehicles.length >= 2 && (
           <div className="mt-8 bg-ds-card border border-ds-border rounded-lg overflow-hidden">
             <div className="px-4 py-3 border-b border-ds-border">
-              <h3 className="font-semibold text-ds-foreground">Compare Vehicles ({compareVehicles.length})</h3>
+              <h3 className="font-semibold text-ds-foreground">
+                Compare Vehicles ({compareVehicles.length})
+              </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-ds-border">
-                    <th className="text-left px-4 py-2 text-ds-muted-foreground font-medium">Spec</th>
+                    <th className="text-left px-4 py-2 text-ds-muted-foreground font-medium">
+                      Spec
+                    </th>
                     {compareVehicles.map((v) => (
-                      <th key={v.id} className="text-center px-4 py-2 text-ds-foreground font-medium">{v.title}</th>
+                      <th
+                        key={v.id}
+                        className="text-center px-4 py-2 text-ds-foreground font-medium"
+                      >
+                        {v.title}
+                      </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {['price', 'year', 'mileage', 'fuelType', 'transmission', 'engine', 'color'].map((spec) => (
-                    <tr key={spec} className="border-b border-ds-border last:border-0">
-                      <td className="px-4 py-2 text-ds-muted-foreground capitalize">{spec.replace(/([A-Z])/g, ' $1')}</td>
+                  {[
+                    "price",
+                    "year",
+                    "mileage",
+                    "fuelType",
+                    "transmission",
+                    "engine",
+                    "color",
+                  ].map((spec) => (
+                    <tr
+                      key={spec}
+                      className="border-b border-ds-border last:border-0"
+                    >
+                      <td className="px-4 py-2 text-ds-muted-foreground capitalize">
+                        {spec.replace(/([A-Z])/g, " $1")}
+                      </td>
                       {compareVehicles.map((v) => (
-                        <td key={v.id} className="px-4 py-2 text-center text-ds-foreground">{String((v as any)[spec])}</td>
+                        <td
+                          key={v.id}
+                          className="px-4 py-2 text-center text-ds-foreground"
+                        >
+                          {String((v as any)[spec])}
+                        </td>
                       ))}
                     </tr>
                   ))}

@@ -146,7 +146,7 @@ export const listProducts = async ({
  * try {
  *   const product = await retrieveProduct({ handle: 'non-existent-product' });
  * } catch (error) {
- *   console.error('Product not found:', error.message);
+ *   console.error('Product not found:', (error instanceof Error ? error.message : String(error)));
  * }
  * ```
  */

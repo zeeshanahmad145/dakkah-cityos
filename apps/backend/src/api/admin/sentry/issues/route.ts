@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework"
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework"
 import { appConfig } from "../../../../lib/config"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
@@ -81,7 +81,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         query,
       },
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Sentry issues fetch")
   }
 }

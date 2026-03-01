@@ -46,8 +46,8 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset,
       has_more: offset + limit < total,
     })
-  } catch (error: any) {
-    logger.error(`[IntegrationLogs] fetching sync logs: ${error.message}`)
+  } catch (error: unknown) {
+    logger.error(`[IntegrationLogs] fetching sync logs: ${(error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error))}`)
     return handleApiError(res, error, "ADMIN-INTEGRATIONS-LOGS")}
 }
 

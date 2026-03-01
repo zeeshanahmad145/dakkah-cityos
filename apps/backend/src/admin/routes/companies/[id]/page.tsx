@@ -161,7 +161,7 @@ function CreditManagementSection({ companyId }: { companyId: string }) {
               <Input
                 type="number"
                 value={newLimit}
-                onChange={(e) => setNewLimit(e.target.value)}
+                onChange={(e) => setNewLimit(e.target.value as any)}
                 placeholder={credit.credit_limit.toString()}
               />
             </div>
@@ -170,7 +170,7 @@ function CreditManagementSection({ companyId }: { companyId: string }) {
               <Input
                 type="number"
                 value={newTerms}
-                onChange={(e) => setNewTerms(e.target.value)}
+                onChange={(e) => setNewTerms(e.target.value as any)}
                 placeholder={credit.payment_terms_days.toString()}
               />
             </div>
@@ -208,7 +208,7 @@ function CreditManagementSection({ companyId }: { companyId: string }) {
                 <Input
                   type="number"
                   value={adjustAmount}
-                  onChange={(e) => setAdjustAmount(e.target.value)}
+                  onChange={(e) => setAdjustAmount(e.target.value as any)}
                   placeholder="0.00"
                 />
               </div>
@@ -217,7 +217,7 @@ function CreditManagementSection({ companyId }: { companyId: string }) {
               <Label>Reason (required)</Label>
               <Input
                 value={adjustReason}
-                onChange={(e) => setAdjustReason(e.target.value)}
+                onChange={(e) => setAdjustReason(e.target.value as any)}
                 placeholder="e.g., Payment received - Invoice #1234"
               />
             </div>
@@ -306,7 +306,7 @@ function SpendingLimitsSection({ companyId }: { companyId: string }) {
                     <Input
                       type="number"
                       value={newLimit}
-                      onChange={(e) => setNewLimit(e.target.value)}
+                      onChange={(e) => setNewLimit(e.target.value as any)}
                       placeholder={user.spending_limit || "No limit"}
                       className="w-32"
                     />
@@ -370,7 +370,7 @@ function TaxExemptionsSection({ companyId }: { companyId: string }) {
 
   const [showForm, setShowForm] = useState(false);
   const [certNumber, setCertNumber] = useState("");
-  const [certType, setCertType] = useState("resale");
+  const [certType, setCertType] = useState("resale" as any);
   const [state, setState] = useState("");
   const [expiration, setExpiration] = useState("");
 
@@ -452,7 +452,7 @@ function TaxExemptionsSection({ companyId }: { companyId: string }) {
               <Label>Certificate Number</Label>
               <Input
                 value={certNumber}
-                onChange={(e) => setCertNumber(e.target.value)}
+                onChange={(e) => setCertNumber(e.target.value as any)}
                 placeholder="Enter certificate number"
               />
             </div>
@@ -460,7 +460,7 @@ function TaxExemptionsSection({ companyId }: { companyId: string }) {
               <Label>Certificate Type</Label>
               <select
                 value={certType}
-                onChange={(e) => setCertType(e.target.value)}
+                onChange={(e) => setCertType(e.target.value as any)}
                 className="w-full mt-1 px-3 py-2 border rounded-lg"
               >
                 <option value="resale">Resale Certificate</option>
@@ -474,7 +474,7 @@ function TaxExemptionsSection({ companyId }: { companyId: string }) {
               <Label>Issuing State</Label>
               <Input
                 value={state}
-                onChange={(e) => setState(e.target.value)}
+                onChange={(e) => setState(e.target.value as any)}
                 placeholder="e.g., CA, NY"
               />
             </div>
@@ -483,7 +483,7 @@ function TaxExemptionsSection({ companyId }: { companyId: string }) {
               <Input
                 type="date"
                 value={expiration}
-                onChange={(e) => setExpiration(e.target.value)}
+                onChange={(e) => setExpiration(e.target.value as any)}
               />
             </div>
           </div>

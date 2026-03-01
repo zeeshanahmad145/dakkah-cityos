@@ -70,7 +70,7 @@ export function TrialItemSelector({
               <div className="p-3 space-y-1">
                 <p className="text-sm font-medium text-ds-foreground truncate">{item.title}</p>
                 <p className="text-sm font-semibold text-ds-foreground">
-                  {formatCurrency(item.price.amount, item.price.currencyCode, locale as SupportedLocale)}
+                  {formatCurrency((item.price.amount ?? 0), item.price.currencyCode, locale as SupportedLocale)}
                 </p>
                 {item.sizes && item.sizes.length > 0 && (
                   <p className="text-xs text-ds-muted-foreground">

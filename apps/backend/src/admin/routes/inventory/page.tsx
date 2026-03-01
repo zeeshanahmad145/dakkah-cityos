@@ -75,8 +75,8 @@ const InventoryPage = () => {
       </div>
       <FormDrawer open={showDrawer} onOpenChange={(open) => { if (!open) setShowDrawer(false) }} title="Add Stock Alert" onSubmit={handleSubmit} submitLabel="Add">
         <div className="space-y-4">
-          <div><Label htmlFor="product_id">Product ID</Label><Input id="product_id" value={formData.product_id} onChange={(e) => setFormData({ ...formData, product_id: e.target.value })} placeholder="prod_xxx" /></div>
-          <div><Label htmlFor="threshold">Threshold</Label><Input id="threshold" type="number" value={formData.threshold} onChange={(e) => setFormData({ ...formData, threshold: e.target.value })} /></div>
+          <div><Label htmlFor="product_id">Product ID</Label><Input id="product_id" value={formData.product_id} onChange={(e) => setFormData({ ...formData, product_id: e.target.value as any })} placeholder="prod_xxx" /></div>
+          <div><Label htmlFor="threshold">Threshold</Label><Input id="threshold" type="number" value={formData.threshold} onChange={(e) => setFormData({ ...formData, threshold: e.target.value as any })} /></div>
         </div>
       </FormDrawer>
     </Container>

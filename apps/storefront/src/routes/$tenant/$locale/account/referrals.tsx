@@ -9,7 +9,7 @@ export const Route = createFileRoute("/$tenant/$locale/account/referrals")({
 })
 
 function ReferralsPage() {
-  const { locale } = Route.useParams() as { tenant: string; locale: string }
+  const { locale, tenant } = Route.useParams() as { tenant: string; locale: string }
   const { data: referral, isLoading } = useReferralInfo()
 
   return (

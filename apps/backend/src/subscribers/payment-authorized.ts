@@ -10,8 +10,8 @@ export default async function paymentAuthorizedHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string }>) {
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const query = container.resolve("query")
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const query = container.resolve("query") as unknown as any
   
   try {
     const { data: payments } = await query.graph({

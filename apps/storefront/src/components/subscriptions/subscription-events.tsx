@@ -48,7 +48,7 @@ export function SubscriptionEvents({ subscriptionId }: SubscriptionEventsProps) 
               <div className="flex-1">
                 <p className="text-sm font-medium">{event.description}</p>
                 <p className="text-xs text-muted-foreground">
-                  {new Date(event.created_at).toLocaleString()}
+                  {new Date(event.created_at!).toLocaleString()}
                 </p>
               </div>
             </div>

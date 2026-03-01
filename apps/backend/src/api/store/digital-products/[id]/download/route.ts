@@ -7,10 +7,10 @@ import { handleApiError } from "../../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const digitalProductService = req.scope.resolve("digital-product") as any;
-    const fileReplitService = req.scope.resolve("file-replit") as any;
+    const digitalProductService = req.scope.resolve("digital-product") as unknown as any;
+    const fileReplitService = req.scope.resolve("file-replit") as unknown as any;
     const productId = req.params.id;
-    const customerId = (req as any).auth_context?.actor_id;
+    const customerId = req.auth_context?.actor_id;
 
     if (!customerId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -21,9 +21,9 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     if (typeof digitalProductService.retrieveDigitalProduct === "function") {
       product = await digitalProductService.retrieveDigitalProduct(productId);
     } else {
-      const products = await (digitalProductService as any).listDigitalProducts(
-        { id: productId },
-      );
+      const products = await digitalProductService.listDigitalProducts({
+        id: productId,
+      });
       const list = Array.isArray(products)
         ? products
         : [products].filter(Boolean);
@@ -53,7 +53,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       expires_in_seconds: 3600,
       filename: product.filename || product.file_key,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-DIGITAL-DOWNLOAD");
   }
 }

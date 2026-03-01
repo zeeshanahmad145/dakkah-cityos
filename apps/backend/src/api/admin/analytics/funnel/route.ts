@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const analyticsService = req.scope.resolve("analytics") as any;
+    const analyticsService = req.scope.resolve("analytics") as unknown as any;
     const { tenant_id, days = "30" } = req.query as {
       tenant_id?: string;
       days?: string;
@@ -25,7 +25,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     });
 
     return res.json({ funnel, date_range: { start, end: now } });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-ANALYTICS-FUNNEL");
   }
 }

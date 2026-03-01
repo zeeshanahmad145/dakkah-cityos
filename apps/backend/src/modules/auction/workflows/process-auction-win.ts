@@ -36,7 +36,7 @@ const createAuctionOrder = createStep(
     { container },
   ) => {
     // Reserve escrow and create order reference
-    const auctionService = container.resolve("auction") as any;
+    const auctionService = container.resolve("auction") as unknown as any;
     const escrow = await auctionService.createAuctionEscrows({
       auction_id: auctionId,
       payer_id: winnerId,
@@ -52,7 +52,7 @@ const createAuctionOrder = createStep(
   },
   // Compensation: release escrow if order creation fails
   async ({ escrowId }: { escrowId: string }, { container }) => {
-    const auctionService = container.resolve("auction") as any;
+    const auctionService = container.resolve("auction") as unknown as any;
     await auctionService.updateAuctionEscrows({
       id: escrowId,
       status: "released",
@@ -69,6 +69,3 @@ export const processAuctionWinWorkflow = createWorkflow(
     return { notifyResult, orderResult };
   },
 );
-
-
-

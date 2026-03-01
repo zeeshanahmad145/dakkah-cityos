@@ -16,7 +16,11 @@ interface CategoriesSectionProps {
   config: Record<string, any>
 }
 
-export function CategoriesSection({ tenantPrefix, categories, config }: CategoriesSectionProps) {
+export function CategoriesSection({
+  tenantPrefix,
+  categories,
+  config,
+}: CategoriesSectionProps) {
   if (categories.length === 0) return null
 
   return (
@@ -32,10 +36,10 @@ export function CategoriesSection({ tenantPrefix, categories, config }: Categori
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map(category => (
+          {categories.map((category) => (
             <Link
               key={category.id}
-              to={`${tenantPrefix}/categories/${category.handle}` as any}
+              to={`${tenantPrefix}/categories/${category.handle}` as never}
               className="group"
             >
               <div className="aspect-square bg-ds-background rounded-lg shadow-sm overflow-hidden mb-3 group-hover:shadow-md transition-shadow">

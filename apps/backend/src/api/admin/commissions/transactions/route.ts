@@ -1,9 +1,9 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
   
     const { vendor_id, status, limit = "50", offset = "0" } = req.query as {
       vendor_id?: string
@@ -83,7 +83,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset: parseInt(offset),
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin commissions transactions")}
 }
 

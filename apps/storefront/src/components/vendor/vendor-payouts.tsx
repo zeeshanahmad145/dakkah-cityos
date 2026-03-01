@@ -125,9 +125,9 @@ export function VendorPayouts() {
                 <div>
                   <p className="font-semibold">${Number(payout.amount).toFixed(2)}</p>
                   <p className="text-sm text-muted-foreground">
-                    Requested: {new Date(payout.created_at).toLocaleDateString()}
+                    Requested: {new Date(payout.created_at!).toLocaleDateString()}
                     {payout.processed_at && (
-                      <> - Processed: {new Date(payout.processed_at).toLocaleDateString()}</>
+                      <> - Processed: {new Date(payout.processed_at!).toLocaleDateString()}</>
                     )}
                   </p>
                 </div>

@@ -46,7 +46,7 @@ const WorkflowsPage = () => {
       {isError && (
         <div className="text-red-500 mb-4">
           Error loading workflows:{" "}
-          {error instanceof Error ? error.message : "Unknown error"}
+          {error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "Unknown error"}
         </div>
       )}
 

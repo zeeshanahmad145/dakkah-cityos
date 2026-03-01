@@ -9,7 +9,7 @@ import {
 const getProductTemplate = createStep(
   "get-pod-product-template",
   async (input: { podProductId: string }, { container }) => {
-    const podService = container.resolve("print-on-demand") as any;
+    const podService = container.resolve("print-on-demand") as unknown as any;
     const template = await podService.getProductTemplate(input.podProductId);
     return new StepResponse(template);
   },
@@ -26,12 +26,12 @@ const submitPodOrder = createStep(
     },
     { container },
   ) => {
-    const podService = container.resolve("print-on-demand") as any;
+    const podService = container.resolve("print-on-demand") as unknown as any;
     const podOrder = await podService.submitPodOrder(input);
-    return new StepResponse(podOrder, { podOrderId: (podOrder as any).id });
+    return new StepResponse(podOrder, { podOrderId: podOrder.id });
   },
   async ({ podOrderId }: { podOrderId: string }, { container }) => {
-    const podService = container.resolve("print-on-demand") as any;
+    const podService = container.resolve("print-on-demand") as unknown as any;
     await podService.cancelPodOrder(podOrderId).catch(() => null);
   },
 );
@@ -39,7 +39,7 @@ const submitPodOrder = createStep(
 const trackPodOrder = createStep(
   "track-pod-order",
   async (input: { podOrderId: string }, { container }) => {
-    const podService = container.resolve("print-on-demand") as any;
+    const podService = container.resolve("print-on-demand") as unknown as any;
     const status = await podService.trackPodOrder(input.podOrderId);
     return new StepResponse(status);
   },

@@ -1,8 +1,8 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const walletService = req.scope.resolve("wallet") as any;
+  const walletService = req.scope.resolve("wallet") as unknown as any;
   const { id } = req.params;
 
   try {
@@ -11,13 +11,13 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: 50,
     });
     return res.json({ wallet, transactions });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Wallet retrieval");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const walletService = req.scope.resolve("wallet") as any;
+  const walletService = req.scope.resolve("wallet") as unknown as any;
   const { id } = req.params;
   const { type, amount, description, reference_id } = req.body as any;
 
@@ -48,7 +48,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       );
     }
     return res.json({ transaction });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "Wallet transaction");
   }
 }

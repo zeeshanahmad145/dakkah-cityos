@@ -194,7 +194,7 @@ const PaymentTermsPage = () => {
                   id="name"
                   value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, name: e.target.value as any })
                   }
                   placeholder="e.g., Standard Net 30"
                   required

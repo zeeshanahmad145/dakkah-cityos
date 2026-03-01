@@ -141,20 +141,20 @@ export function InstallmentsPage({ plans = samplePlans, currency = "USD", loadin
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
                       <p className="text-xs text-ds-muted-foreground">Total</p>
-                      <p className="text-sm font-semibold text-ds-foreground">{formatPrice(plan.totalAmount)}</p>
+                      <p className="text-sm font-semibold text-ds-foreground">{formatPrice(plan.totalAmount ?? 0)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-ds-muted-foreground">Paid</p>
-                      <p className="text-sm font-semibold text-ds-success">{formatPrice(plan.paidAmount)}</p>
+                      <p className="text-sm font-semibold text-ds-success">{formatPrice(plan.paidAmount ?? 0)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-ds-muted-foreground">Remaining</p>
-                      <p className="text-sm font-semibold text-ds-foreground">{formatPrice(plan.remainingAmount)}</p>
+                      <p className="text-sm font-semibold text-ds-foreground">{formatPrice(plan.remainingAmount ?? 0)}</p>
                     </div>
                     <div>
                       <p className="text-xs text-ds-muted-foreground">Next Payment</p>
                       <p className={`text-sm font-semibold ${plan.status === "overdue" ? "text-ds-destructive" : "text-ds-foreground"}`}>
-                        {new Date(plan.nextPaymentDate).toLocaleDateString()}
+                        {new Date(plan.nextPaymentDate!).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -196,18 +196,18 @@ export function InstallmentsPage({ plans = samplePlans, currency = "USD", loadin
                             />
                             <div>
                               <p className="text-sm text-ds-foreground">
-                                Due {new Date(payment.dueDate).toLocaleDateString()}
+                                Due {new Date(payment.dueDate!).toLocaleDateString()}
                               </p>
                               {payment.paidDate && (
                                 <p className="text-xs text-ds-muted-foreground">
-                                  Paid {new Date(payment.paidDate).toLocaleDateString()}
+                                  Paid {new Date(payment.paidDate!).toLocaleDateString()}
                                 </p>
                               )}
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-medium text-ds-foreground">
-                              {formatPrice(payment.amount)}
+                              {formatPrice(payment.amount ?? 0)}
                             </span>
                             <span
                               className={`px-1.5 py-0.5 text-xs rounded ${

@@ -161,7 +161,7 @@ export async function GET(
   
     res.json({ features: publicFeatures })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET store features")}
 }
 

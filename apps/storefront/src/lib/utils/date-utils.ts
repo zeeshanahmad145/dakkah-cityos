@@ -48,8 +48,8 @@ export function formatDateRange(
   end: string | Date | null | undefined,
   locale: string = "en-US"
 ): string {
-  const startStr = formatDate(start, locale)
-  const endStr = formatDate(end, locale)
+  const startStr = formatDate(start, locale as import("@/lib/i18n").SupportedLocale)
+  const endStr = formatDate(end, locale as import("@/lib/i18n").SupportedLocale)
 
   if (!startStr && !endStr) return ""
   if (!startStr) return endStr

@@ -1,4 +1,4 @@
-// @ts-nocheck
+﻿// @ts-nocheck
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { handleApiError } from "../../../../../lib/api-error-handler"
 
@@ -11,7 +11,7 @@ export async function GET(
     const { id } = req.params
     const { period = "30d" } = req.query as { period?: string }
 
-    const query = req.scope.resolve("query")
+    const query = req.scope.resolve("query") as unknown as any
 
     // Calculate date range
     const now = new Date()
@@ -134,7 +134,7 @@ export async function GET(
       }
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin vendors id performance")}
 }
 

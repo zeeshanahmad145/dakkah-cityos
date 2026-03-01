@@ -8,6 +8,8 @@ export interface Quote {
   subtotal: number
   tax_total: number
   discount_total: number
+  discount?: number
+  tax?: number
   total: number
   currency_code: string
   valid_until?: string
@@ -32,6 +34,7 @@ export interface QuoteItem {
   product_id?: string
   variant_id?: string
   title: string
+  name?: string
   description?: string
   quantity: number
   unit_price: number

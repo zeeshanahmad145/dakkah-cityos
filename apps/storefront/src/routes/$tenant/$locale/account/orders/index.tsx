@@ -9,14 +9,21 @@ export const Route = createFileRoute("/$tenant/$locale/account/orders/")({
 })
 
 function OrdersPage() {
-  const { locale } = Route.useParams() as { locale: string }
+  const { locale, tenant } = Route.useParams()
   const { data: orders, isLoading } = useCustomerOrders({
     fields: "*items,*items.thumbnail",
   })
 
   return (
-    <AccountLayout title={t(locale, "account.orders_title", "Orders")} description={t(locale, "account.orders_description", "View and track your orders")}>
-      <OrderList orders={orders as any || []} isLoading={isLoading} />
+    <AccountLayout
+      title={t(locale, "account.orders_title", "Orders")}
+      description={t(
+        locale,
+        "account.orders_description",
+        "View and track your orders",
+      )}
+    >
+      <OrderList orders={(orders || []) as any[]} isLoading={isLoading} />
     </AccountLayout>
   )
 }

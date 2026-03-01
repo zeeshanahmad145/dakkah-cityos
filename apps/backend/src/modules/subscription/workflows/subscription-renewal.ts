@@ -11,7 +11,7 @@ import {
 const renewPeriodStep = createStep(
   "renew-subscription-period",
   async ({ subscriptionId }: { subscriptionId: string }, { container }) => {
-    const subscriptionService = container.resolve("subscription") as any;
+    const subscriptionService = container.resolve("subscription") as unknown as any;
     const updated =
       await subscriptionService.renewSubscriptionPeriod(subscriptionId);
     return new StepResponse({
@@ -21,7 +21,7 @@ const renewPeriodStep = createStep(
   },
   // Compensation: log that renewal failed
   async ({ subscriptionId }: { subscriptionId: string }, { container }) => {
-    const subscriptionService = container.resolve("subscription") as any;
+    const subscriptionService = container.resolve("subscription") as unknown as any;
     await subscriptionService.logSubscriptionEvent(
       subscriptionId,
       "renewal_failed",
@@ -35,7 +35,7 @@ const renewPeriodStep = createStep(
 const chargeBillingCycleStep = createStep(
   "charge-billing-cycle",
   async ({ subscriptionId }: { subscriptionId: string }, { container }) => {
-    const subscriptionService = container.resolve("subscription") as any;
+    const subscriptionService = container.resolve("subscription") as unknown as any;
 
     // Create next billing cycle
     const cycle =
@@ -58,6 +58,3 @@ export const subscriptionRenewalWorkflow = createWorkflow(
     return { renewResult, chargeResult };
   },
 );
-
-
-

@@ -17,9 +17,9 @@ interface FeaturedVendorsProps {
   title?: string
 }
 
-export function FeaturedVendors({ 
-  vendors, 
-  title = "Featured Sellers" 
+export function FeaturedVendors({
+  vendors,
+  title = "Featured Sellers",
 }: FeaturedVendorsProps) {
   const prefix = useTenantPrefix()
   if (vendors.length === 0) return null
@@ -29,7 +29,7 @@ export function FeaturedVendors({
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-ds-foreground">{title}</h2>
         <Link
-          to={`${prefix}/vendors` as any}
+          to={`${prefix}/vendors` as never}
           className="text-sm font-medium text-ds-muted-foreground hover:text-ds-foreground flex items-center gap-1"
         >
           View All Sellers
@@ -41,7 +41,7 @@ export function FeaturedVendors({
         {vendors.slice(0, 4).map((vendor) => (
           <Link
             key={vendor.id}
-            to={`${prefix}/vendors/${vendor.handle}` as any}
+            to={`${prefix}/vendors/${vendor.handle}` as never}
             className="group bg-ds-background rounded-xl border border-ds-border p-6 text-center hover:border-ds-border hover:shadow-md transition-all"
           >
             {/* Logo */}
@@ -66,7 +66,9 @@ export function FeaturedVendors({
 
             {/* Tagline */}
             {vendor.tagline && (
-              <p className="text-sm text-ds-muted-foreground mt-1 line-clamp-1">{vendor.tagline}</p>
+              <p className="text-sm text-ds-muted-foreground mt-1 line-clamp-1">
+                {vendor.tagline}
+              </p>
             )}
 
             {/* Stats */}
@@ -78,7 +80,9 @@ export function FeaturedVendors({
                 </span>
               )}
               <span className="text-ds-muted-foreground">|</span>
-              <span className="text-ds-muted-foreground">{vendor.productCount} products</span>
+              <span className="text-ds-muted-foreground">
+                {vendor.productCount} products
+              </span>
             </div>
           </Link>
         ))}

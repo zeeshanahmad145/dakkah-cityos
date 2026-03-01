@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
@@ -17,7 +17,7 @@ const updateAvailabilitySchema = z
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { id } = req.params;
-    const query = req.scope.resolve("query");
+    const query = req.scope.resolve("query") as unknown as any;
 
     const {
       data: [availability],
@@ -39,7 +39,7 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
     });
 
     res.json({ availability, exceptions });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin availability id");
   }
 };
@@ -47,7 +47,7 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
 export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { id } = req.params;
-    const bookingService = req.scope.resolve("booking") as any;
+    const bookingService = req.scope.resolve("booking") as unknown as any;
 
     const {
       weekly_schedule,
@@ -91,7 +91,7 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
     ]);
 
     res.json({ availability: availability[0] });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin availability id");
   }
 };
@@ -99,12 +99,12 @@ export const PUT = async (req: MedusaRequest, res: MedusaResponse) => {
 export const DELETE = async (req: MedusaRequest, res: MedusaResponse) => {
   try {
     const { id } = req.params;
-    const bookingService = req.scope.resolve("booking") as any;
+    const bookingService = req.scope.resolve("booking") as unknown as any;
 
     await bookingService.deleteAvailabilities([id]);
 
     res.status(200).json({ id, deleted: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin availability id");
   }
 };

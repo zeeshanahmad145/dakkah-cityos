@@ -67,7 +67,7 @@ class ShippingExtensionModuleService
     const rates = await this.listShippingRates({
       tenant_id: tenantId,
       is_active: true,
-    });
+    }) as any;
     return rates.filter((rate) => {
       if (data.weight < rate.min_weight || data.weight > rate.max_weight)
         return false;
@@ -105,7 +105,7 @@ class ShippingExtensionModuleService
     estimated_days_min: number;
     estimated_days_max: number;
   }> {
-    const rate = await this.retrieveShippingRate(rateId);
+    const rate = await this.retrieveShippingRate(rateId) as any;
     const baseRate = Number(rate.base_rate);
     const perKgRate = Number(rate.per_kg_rate);
     return {
@@ -127,7 +127,7 @@ class ShippingExtensionModuleService
   ): Promise<string | null> {
     const carriers = await this.listCarrierConfigs({
       carrier_code: carrierCode,
-    });
+    }) as any;
     if (carriers.length === 0)
       throw new Error(`Carrier with code "${carrierCode}" not found`);
     const carrier = carriers[0];
@@ -160,7 +160,7 @@ class ShippingExtensionModuleService
       origin_zone: data.originZone,
       destination_zone: data.destinationZone,
       is_active: true,
-    });
+    }) as any;
 
     const applicable = rates.filter((rate) => {
       if (data.weight < rate.min_weight || data.weight > rate.max_weight)
@@ -213,7 +213,7 @@ class ShippingExtensionModuleService
     if (!items?.length)
       throw new Error("At least one item is required for a shipment");
 
-    const carrier = await this.retrieveCarrierConfig(carrierId);
+    const carrier = await this.retrieveCarrierConfig(carrierId) as any;
     if (!carrier.is_active)
       throw new Error("Selected carrier is not currently active");
 
@@ -244,7 +244,7 @@ class ShippingExtensionModuleService
       destination_zone: destinationZone,
       service_type: method,
       is_active: true,
-    });
+    }) as any;
     if (rates.length === 0)
       throw new Error("No shipping rates found for the given route and method");
 

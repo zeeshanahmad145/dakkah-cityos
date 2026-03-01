@@ -31,7 +31,7 @@ export default function BNPLEligibilityBadge({ price, currency = "USD", locale: 
           : "Pay in 4"}
       </span>
       <span className="text-xs text-ds-muted">
-        {formatCurrency(installmentAmount, currency, locale)}
+        {formatCurrency(installmentAmount, currency, locale as import("@/lib/i18n").SupportedLocale)}
       </span>
     </div>
   )

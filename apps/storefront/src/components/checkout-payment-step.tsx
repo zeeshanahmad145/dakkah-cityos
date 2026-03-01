@@ -47,7 +47,7 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
         {
           onError: (error) => {
             setError(
-              error instanceof Error ? error.message : "An error occurred"
+              error instanceof Error ? (error instanceof Error ? error.message : String(error)) : "An error occurred"
             );
           },
         }

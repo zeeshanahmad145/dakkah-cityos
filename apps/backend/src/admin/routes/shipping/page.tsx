@@ -71,8 +71,8 @@ const ShippingPage = () => {
       </div>
       <FormDrawer open={showDrawer} onOpenChange={(open) => { if (!open) setShowDrawer(false) }} title="Add Carrier" onSubmit={handleSubmit} submitLabel="Add" loading={createCarrier.isPending}>
         <div className="space-y-4">
-          <div><Label htmlFor="name">Carrier Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="FedEx Express" /></div>
-          <div><Label htmlFor="code">Carrier Code</Label><Input id="code" value={formData.carrier_code} onChange={(e) => setFormData({ ...formData, carrier_code: e.target.value })} placeholder="FEDEX" /></div>
+          <div><Label htmlFor="name">Carrier Name</Label><Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value as any })} placeholder="FedEx Express" /></div>
+          <div><Label htmlFor="code">Carrier Code</Label><Input id="code" value={formData.carrier_code} onChange={(e) => setFormData({ ...formData, carrier_code: e.target.value as any })} placeholder="FEDEX" /></div>
           <div>
             <Label htmlFor="weight_unit">Weight Unit</Label>
             <select id="weight_unit" value={formData.weight_unit} onChange={(e) => setFormData({ ...formData, weight_unit: e.target.value as string })} className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base">
@@ -85,7 +85,7 @@ const ShippingPage = () => {
               <option value="cm">Centimeters (cm)</option><option value="in">Inches (in)</option>
             </select>
           </div>
-          <div><Label htmlFor="services">Supported Services (comma-separated)</Label><Input id="services" value={formData.supported_services} onChange={(e) => setFormData({ ...formData, supported_services: e.target.value })} placeholder="express, ground, overnight" /></div>
+          <div><Label htmlFor="services">Supported Services (comma-separated)</Label><Input id="services" value={formData.supported_services} onChange={(e) => setFormData({ ...formData, supported_services: e.target.value as any })} placeholder="express, ground, overnight" /></div>
         </div>
       </FormDrawer>
     </Container>

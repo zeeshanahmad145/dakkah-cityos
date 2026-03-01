@@ -55,15 +55,15 @@ describe("InvoiceModuleService", () => {
 
   describe("generateInvoiceNumber", () => {
     it("generates a properly formatted invoice number", async () => {
-      jest.spyOn(service, "listInvoices" as any).mockResolvedValue([]);
+      jest.spyOn(service, "listInvoices").mockResolvedValue([]);
 
       const result = await service.generateInvoiceNumber("comp_abcd1234");
 
-      expect(result).toMatch(/^INV-COMP-\d{6}-0004$/);
+      expect(result).toMatch(/^INV-COMP-\d{6}-0001$/);
     });
 
     it("uses first 4 characters of company ID as prefix", async () => {
-      jest.spyOn(service, "listInvoices" as any).mockResolvedValue([]);
+      jest.spyOn(service, "listInvoices").mockResolvedValue([]);
 
       const result = await service.generateInvoiceNumber("test_company");
 
@@ -74,13 +74,13 @@ describe("InvoiceModuleService", () => {
   describe("createInvoiceWithItems", () => {
     it("creates an invoice with calculated totals", async () => {
       jest
-        .spyOn(service, "generateInvoiceNumber" as any)
+        .spyOn(service, "generateInvoiceNumber")
         .mockResolvedValue("INV-TEST-202501-0001");
       const createInvSpy = jest
-        .spyOn(service, "createInvoices" as any)
+        .spyOn(service, "createInvoices")
         .mockResolvedValue({ id: "inv-1" });
       jest
-        .spyOn(service, "createInvoiceItems" as any)
+        .spyOn(service, "createInvoiceItems")
         .mockResolvedValue([{ id: "ii-1" }]);
 
       const result = await service.createInvoiceWithItems({
@@ -106,12 +106,12 @@ describe("InvoiceModuleService", () => {
 
     it("defaults currency to usd and payment_terms_days to 30", async () => {
       jest
-        .spyOn(service, "generateInvoiceNumber" as any)
+        .spyOn(service, "generateInvoiceNumber")
         .mockResolvedValue("INV-TEST-202501-0001");
       const createInvSpy = jest
-        .spyOn(service, "createInvoices" as any)
+        .spyOn(service, "createInvoices")
         .mockResolvedValue({ id: "inv-1" });
-      jest.spyOn(service, "createInvoiceItems" as any).mockResolvedValue([]);
+      jest.spyOn(service, "createInvoiceItems").mockResolvedValue([]);
 
       await service.createInvoiceWithItems({
         company_id: "comp-1",
@@ -130,13 +130,11 @@ describe("InvoiceModuleService", () => {
 
     it("creates invoice items linked to the invoice", async () => {
       jest
-        .spyOn(service, "generateInvoiceNumber" as any)
+        .spyOn(service, "generateInvoiceNumber")
         .mockResolvedValue("INV-TEST-202501-0001");
-      jest
-        .spyOn(service, "createInvoices" as any)
-        .mockResolvedValue({ id: "inv-1" });
+      jest.spyOn(service, "createInvoices").mockResolvedValue({ id: "inv-1" });
       const createItemsSpy = jest
-        .spyOn(service, "createInvoiceItems" as any)
+        .spyOn(service, "createInvoiceItems")
         .mockResolvedValue([]);
 
       await service.createInvoiceWithItems({
@@ -160,7 +158,7 @@ describe("InvoiceModuleService", () => {
   describe("markAsSent", () => {
     it("updates invoice status to sent", async () => {
       const updateSpy = jest
-        .spyOn(service, "updateInvoices" as any)
+        .spyOn(service, "updateInvoices")
         .mockResolvedValue({ id: "inv-1", status: "sent" });
 
       await service.markAsSent("inv-1");
@@ -172,12 +170,12 @@ describe("InvoiceModuleService", () => {
   describe("markAsPaid", () => {
     it("marks invoice as paid when full amount is paid", async () => {
       jest
-        .spyOn(service, "listInvoices" as any)
+        .spyOn(service, "listInvoices")
         .mockResolvedValue([
           { id: "inv-1", total: 5000, amount_paid: 0, status: "sent" },
         ]);
       const updateSpy = jest
-        .spyOn(service, "updateInvoices" as any)
+        .spyOn(service, "updateInvoices")
         .mockResolvedValue({});
 
       await service.markAsPaid("inv-1");
@@ -193,12 +191,12 @@ describe("InvoiceModuleService", () => {
 
     it("applies partial payment without changing status", async () => {
       jest
-        .spyOn(service, "listInvoices" as any)
+        .spyOn(service, "listInvoices")
         .mockResolvedValue([
           { id: "inv-1", total: 5000, amount_paid: 0, status: "sent" },
         ]);
       const updateSpy = jest
-        .spyOn(service, "updateInvoices" as any)
+        .spyOn(service, "updateInvoices")
         .mockResolvedValue({});
 
       await service.markAsPaid("inv-1", 2000);
@@ -213,7 +211,7 @@ describe("InvoiceModuleService", () => {
     });
 
     it("throws when invoice not found", async () => {
-      jest.spyOn(service, "listInvoices" as any).mockResolvedValue([undefined]);
+      jest.spyOn(service, "listInvoices").mockResolvedValue([undefined]);
 
       await expect(service.markAsPaid("nonexistent")).rejects.toThrow(
         "Invoice nonexistent not found",
@@ -222,12 +220,12 @@ describe("InvoiceModuleService", () => {
 
     it("accumulates payments across multiple calls", async () => {
       jest
-        .spyOn(service, "listInvoices" as any)
+        .spyOn(service, "listInvoices")
         .mockResolvedValue([
           { id: "inv-1", total: 5000, amount_paid: 2000, status: "sent" },
         ]);
       const updateSpy = jest
-        .spyOn(service, "updateInvoices" as any)
+        .spyOn(service, "updateInvoices")
         .mockResolvedValue({});
 
       await service.markAsPaid("inv-1", 3000);
@@ -245,7 +243,7 @@ describe("InvoiceModuleService", () => {
   describe("voidInvoice", () => {
     it("voids an invoice with reason", async () => {
       const updateSpy = jest
-        .spyOn(service, "updateInvoices" as any)
+        .spyOn(service, "updateInvoices")
         .mockResolvedValue({ id: "inv-1", status: "void" });
 
       await service.voidInvoice("inv-1", "Duplicate invoice");

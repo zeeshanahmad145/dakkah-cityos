@@ -1,22 +1,34 @@
+import { getBackendUrl } from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useQuery } from "@tanstack/react-query"
 import { AccountLayout } from "@/components/account"
 import { TrackingTimeline } from "@/components/delivery/tracking-timeline"
 import { TrackingMap } from "@/components/delivery/tracking-map"
 import { t } from "@/lib/i18n"
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 
-export const Route = createFileRoute("/$tenant/$locale/account/orders/$id/track")({
+export const Route = createFileRoute(
+  "/$tenant/$locale/account/orders/$id/track",
+)({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/orders/${params.id}?fields=*fulfillments,*fulfillments.labels,*fulfillments.items`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/orders/${params.id}?fields=*fulfillments,*fulfillments.labels,*fulfillments.items`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
       return { item: data.order || data }
-    } catch { return { item: null } }
+    } catch {
+      return { item: null }
+    }
   },
   head: () => ({
     meta: [
@@ -31,12 +43,16 @@ function TrackOrderPage() {
   const { tenant, locale, id } = Route.useParams()
   const backendUrl = getBackendUrl()
 
-  const { data: order, isLoading, error } = useQuery({
+  const {
+    data: order,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["order-tracking", id],
     queryFn: async () => {
       const response = await fetchWithTimeout(
         `${backendUrl}/store/orders/${id}?fields=*fulfillments,*fulfillments.labels,*fulfillments.items`,
-        { credentials: "include" }
+        { credentials: "include" },
       )
       if (!response.ok) throw new Error("Failed to fetch order")
       const data = await response.json()
@@ -120,17 +136,31 @@ function TrackOrderPage() {
 
   const trackingData = getTrackingData()
   const mapStatus = (trackingData?.currentStatus || "preparing") as
-    "preparing" | "picked-up" | "in-transit" | "nearby" | "delivered"
+    | "preparing"
+    | "picked-up"
+    | "in-transit"
+    | "nearby"
+    | "delivered"
 
   return (
     <AccountLayout>
       <div className="max-w-2xl">
         <Link
-          to={`/${tenant}/${locale}/account/orders/${id}` as any}
+          to={`/${tenant}/${locale}/account/orders/${id}` as never}
           className="inline-flex items-center gap-2 text-sm text-ds-muted-foreground hover:text-ds-foreground mb-6"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+            />
           </svg>
           {t(locale, "delivery.back_to_order")}
         </Link>
@@ -161,7 +191,11 @@ function TrackOrderPage() {
               stroke="currentColor"
               strokeWidth={1.5}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+              />
             </svg>
             <p className="text-ds-muted-foreground mb-2">
               {t(locale, "delivery.no_tracking")}

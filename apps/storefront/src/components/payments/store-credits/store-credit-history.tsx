@@ -88,7 +88,7 @@ export function StoreCreditHistory({
               <p className="text-sm font-medium text-ds-foreground truncate">{tx.description}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-xs text-ds-muted-foreground">
-                  {new Date(tx.timestamp).toLocaleDateString()}
+                  {new Date(tx.timestamp!).toLocaleDateString()}
                 </span>
                 {tx.orderId && (
                   <>
@@ -104,7 +104,7 @@ export function StoreCreditHistory({
                 {isPositive ? "+" : "-"}{formatCurrency(Math.abs(tx.amount), currency, loc)}
               </span>
               <span className="text-xs text-ds-muted-foreground">
-                {t(locale, "storeCredits.balance")}: {formatCurrency(tx.balance, currency, loc)}
+                {t(locale, "storeCredits.balance")}: {formatCurrency((tx.balance ?? 0), currency, loc)}
               </span>
             </div>
           </div>

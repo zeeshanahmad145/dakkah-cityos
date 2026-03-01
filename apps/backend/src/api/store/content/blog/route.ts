@@ -59,7 +59,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       posts: SEED_DATA,
       count: SEED_DATA.length,
     })
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || "Internal server error" })
+  } catch (error: unknown) {
+    return res.status(500).json({ message: (error instanceof Error ? error.message : String(error)) || "Internal server error" })
   }
 }

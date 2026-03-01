@@ -61,11 +61,11 @@ export function DisputeCard({
           <div>
             <span className="text-ds-muted-foreground">{t(locale, "disputes.amount")}: </span>
             <span className="font-semibold text-ds-foreground">
-              {formatCurrency(dispute.amount, dispute.currency, loc)}
+              {formatCurrency((dispute.amount ?? 0), dispute.currency, loc)}
             </span>
           </div>
           <span className="text-xs text-ds-muted-foreground">
-            {new Date(dispute.createdAt).toLocaleDateString()}
+            {new Date(dispute.createdAt!).toLocaleDateString()}
           </span>
         </div>
         {onViewDetails && (

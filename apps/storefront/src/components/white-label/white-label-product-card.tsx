@@ -58,7 +58,7 @@ export function WhiteLabelProductCard({
         <div className="flex items-baseline gap-2">
           <p className="text-xs text-ds-muted-foreground">{t(locale, "whiteLabel.base_price")}</p>
           <p className="text-lg font-bold text-ds-foreground">
-            {formatCurrency(product.basePrice.amount, product.basePrice.currencyCode, locale as SupportedLocale)}
+            {formatCurrency((product.basePrice.amount ?? 0), product.basePrice.currencyCode, locale as SupportedLocale)}
           </p>
         </div>
 

@@ -23,7 +23,7 @@ function VendorWishlistsRoute() {
   const [sortBy, setSortBy] = useState<string>("most_wishlisted")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -36,9 +36,12 @@ function VendorWishlistsRoute() {
       const params = new URLSearchParams()
       if (sortBy) params.set("sort", sortBy)
       const url = `/vendor/wishlists${params.toString() ? `?${params}` : ""}`
-      return sdk.client.fetch<{ items: WishlistProduct[]; count: number }>(url, {
-        credentials: "include",
-      })
+      return sdk.client.fetch<{ items: WishlistProduct[]; count: number }>(
+        url,
+        {
+          credentials: "include",
+        },
+      )
     },
   })
 
@@ -69,7 +72,9 @@ function VendorWishlistsRoute() {
               key={s}
               onClick={() => setSortBy(s)}
               className={`px-3 py-1.5 text-sm rounded-full border transition ${
-                sortBy === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
+                sortBy === s
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
               }`}
             >
               {s === "most_wishlisted" ? "Most Wishlisted" : "Recently Added"}
@@ -81,7 +86,9 @@ function VendorWishlistsRoute() {
       {items.length === 0 ? (
         <div className="text-center py-16 text-ds-muted-foreground">
           <p className="text-lg mb-2">No wishlist data yet</p>
-          <p className="text-sm">Products will appear here when customers add them to wishlists.</p>
+          <p className="text-sm">
+            Products will appear here when customers add them to wishlists.
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -95,11 +102,19 @@ function VendorWishlistsRoute() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-b hover:bg-ds-muted/50 transition">
+                <tr
+                  key={item.id}
+                  className="border-b hover:bg-ds-muted/50 transition"
+                >
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-3">
                       {item.thumbnail && (
-                        <img loading="lazy" src={item.thumbnail} alt={item.product_name} className="w-10 h-10 rounded object-cover" />
+                        <img
+                          loading="lazy"
+                          src={item.thumbnail}
+                          alt={item.product_name}
+                          className="w-10 h-10 rounded object-cover"
+                        />
                       )}
                       <span className="font-medium">{item.product_name}</span>
                     </div>
@@ -107,11 +122,13 @@ function VendorWishlistsRoute() {
                   <td className="py-4 px-4">
                     <span className="inline-flex items-center gap-1">
                       <span className="text-ds-destructive">♥</span>
-                      <span className="font-semibold">{item.wishlist_count.toLocaleString()}</span>
+                      <span className="font-semibold">
+                        {item.wishlist_count.toLocaleString()}
+                      </span>
                     </span>
                   </td>
                   <td className="py-4 px-4 text-ds-muted-foreground text-sm">
-                    {new Date(item.added_date).toLocaleDateString()}
+                    {new Date(item.added_date!).toLocaleDateString()}
                   </td>
                 </tr>
               ))}

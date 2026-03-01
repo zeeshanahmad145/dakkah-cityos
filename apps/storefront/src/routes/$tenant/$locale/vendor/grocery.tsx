@@ -31,7 +31,7 @@ function VendorGroceryRoute() {
   const [statusFilter, setStatusFilter] = useState<string>("")
 
   const vendorId = useMemo(() => {
-    const user = (auth as any)?.user || (auth as any)?.customer
+    const user = auth?.user || auth?.customer
     if (user?.vendor_id) return user.vendor_id
     if (user?.metadata?.vendor_id) return user.metadata.vendor_id
     if (user?.id) return user.id
@@ -98,17 +98,21 @@ function VendorGroceryRoute() {
       </div>
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {["", "available", "low_stock", "out_of_stock", "draft", "expired"].map((s) => (
-          <button
-            key={s}
-            onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-full border transition ${
-              statusFilter === s ? "bg-ds-primary text-white border-ds-primary" : "bg-ds-card hover:bg-ds-muted/50"
-            }`}
-          >
-            {(s || "All").replace(/_/g, " ")}
-          </button>
-        ))}
+        {["", "available", "low_stock", "out_of_stock", "draft", "expired"].map(
+          (s) => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                statusFilter === s
+                  ? "bg-ds-primary text-white border-ds-primary"
+                  : "bg-ds-card hover:bg-ds-muted/50"
+              }`}
+            >
+              {(s || "All").replace(/_/g, " ")}
+            </button>
+          ),
+        )}
       </div>
 
       {items.length === 0 ? (
@@ -121,12 +125,17 @@ function VendorGroceryRoute() {
           {items.map((product) => {
             const freshness = getFreshnessIndicator(product.freshness_date)
             return (
-              <div key={product.id} className="border rounded-lg p-6 hover:shadow-md transition">
+              <div
+                key={product.id}
+                className="border rounded-lg p-6 hover:shadow-md transition"
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-semibold">{product.name}</h3>
-                      <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[product.status] || "bg-ds-muted text-ds-foreground"}`}>
+                      <span
+                        className={`px-2 py-0.5 text-xs rounded-full font-medium ${statusColors[product.status] || "bg-ds-muted text-ds-foreground"}`}
+                      >
                         {product.status.replace(/_/g, " ")}
                       </span>
                       <span className="px-2 py-0.5 text-xs rounded-full bg-ds-muted text-ds-muted-foreground">
@@ -140,11 +149,19 @@ function VendorGroceryRoute() {
                     </div>
                     <div className="flex items-center gap-6 text-sm text-ds-muted-foreground">
                       <span className="font-medium text-ds-foreground">
-                        {product.currency_code?.toUpperCase()} {(product.price / 100).toFixed(2)}
-                        {product.unit && <span className="text-ds-muted-foreground font-normal"> / {product.unit}</span>}
+                        {product.currency_code?.toUpperCase()}{" "}
+                        {(product.price / 100).toFixed(2)}
+                        {product.unit && (
+                          <span className="text-ds-muted-foreground font-normal">
+                            {" "}
+                            / {product.unit}
+                          </span>
+                        )}
                       </span>
                       <span>Stock: {product.stock}</span>
-                      <span className={freshness.color}>Freshness: {freshness.label}</span>
+                      <span className={freshness.color}>
+                        Freshness: {freshness.label}
+                      </span>
                       {product.weight && <span>{product.weight}</span>}
                     </div>
                   </div>

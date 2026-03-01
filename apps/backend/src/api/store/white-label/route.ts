@@ -86,7 +86,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const paged = items.slice(start, end)
 
     return res.json({ items: paged, count: items.length, limit: Number(limit), offset: Number(offset) })
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "STORE-WHITE-LABEL")
   }
 }

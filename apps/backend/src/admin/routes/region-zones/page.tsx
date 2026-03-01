@@ -322,7 +322,7 @@ const RegionZonesPage = () => {
               id="medusa_region_id"
               value={formData.medusa_region_id}
               onChange={(e) =>
-                setFormData({ ...formData, medusa_region_id: e.target.value })
+                setFormData({ ...formData, medusa_region_id: e.target.value as any })
               }
               placeholder="reg_01..."
             />
@@ -333,7 +333,7 @@ const RegionZonesPage = () => {
               id="country_codes"
               value={formData.country_codes}
               onChange={(e) =>
-                setFormData({ ...formData, country_codes: e.target.value })
+                setFormData({ ...formData, country_codes: e.target.value as any })
               }
               placeholder="AE, SA, QA, KW, BH, OM"
             />
@@ -344,7 +344,7 @@ const RegionZonesPage = () => {
               id="policies_override"
               value={formData.policies_override}
               onChange={(e) =>
-                setFormData({ ...formData, policies_override: e.target.value })
+                setFormData({ ...formData, policies_override: e.target.value as any })
               }
               placeholder='{"storage": "local", "encryption": "AES-256"}'
               className="w-full border border-ui-border-base rounded-md px-3 py-2 bg-ui-bg-base min-h-[100px] font-mono text-sm"

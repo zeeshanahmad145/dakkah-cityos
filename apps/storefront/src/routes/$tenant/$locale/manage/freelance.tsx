@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useCallback } from "react"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, StatusBadge, SkeletonTable, Button, DropdownMenu, FormDrawer, ConfirmDialog, useToast, Tabs } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  SkeletonTable,
+  Button,
+  DropdownMenu,
+  FormDrawer,
+  ConfirmDialog,
+  useToast,
+  Tabs,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -14,7 +26,13 @@ export const Route = createFileRoute("/$tenant/$locale/manage/freelance")({
   component: ManageFreelancePage,
 })
 
-const STATUS_FILTERS = ["all", "open", "in_progress", "completed", "cancelled"] as const
+const STATUS_FILTERS = [
+  "all",
+  "open",
+  "in_progress",
+  "completed",
+  "cancelled",
+] as const
 const config = crudConfigs["freelance"]
 
 function ManageFreelancePage() {
@@ -26,7 +44,9 @@ function ManageFreelancePage() {
   const { addToast } = useToast()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
-  const [formValues, setFormValues] = useState<Record<string, any>>(config.defaultValues)
+  const [formValues, setFormValues] = useState<Record<string, any>>(
+    config.defaultValues,
+  )
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const { createMutation, updateMutation, deleteMutation } = useManageCrud({
@@ -37,7 +57,9 @@ function ManageFreelancePage() {
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "freelance"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/freelance", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/freelance", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
@@ -53,9 +75,10 @@ function ManageFreelancePage() {
     proposals: item.proposals ?? item.proposals_count ?? 0,
   }))
 
-  const gigs = statusFilter === "all"
-    ? allGigs
-    : allGigs.filter((i: any) => i.status === statusFilter)
+  const gigs =
+    statusFilter === "all"
+      ? allGigs
+      : allGigs.filter((i: any) => i.status === statusFilter)
 
   const handleCreate = useCallback(() => {
     setEditingItem(null)
@@ -66,7 +89,9 @@ function ManageFreelancePage() {
   const handleEdit = useCallback((row: any) => {
     setEditingItem(row)
     const values: Record<string, any> = {}
-    config.fields.forEach((f) => { values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? "" })
+    config.fields.forEach((f) => {
+      values[f.key] = row[f.key] ?? config.defaultValues[f.key] ?? ""
+    })
     setFormValues(values)
     setDrawerOpen(true)
   }, [])
@@ -98,7 +123,10 @@ function ManageFreelancePage() {
       addToast("success", `${config.singularLabel} deleted successfully`)
       setDeleteId(null)
     } catch (e) {
-      addToast("error", `Failed to delete ${config.singularLabel.toLowerCase()}`)
+      addToast(
+        "error",
+        `Failed to delete ${config.singularLabel.toLowerCase()}`,
+      )
     }
   }, [deleteId, deleteMutation, addToast])
 
@@ -106,7 +134,9 @@ function ManageFreelancePage() {
     {
       key: "title",
       header: t(locale, "manage.title"),
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     {
       key: "category",
@@ -136,11 +166,20 @@ function ManageFreelancePage() {
       header: "Actions",
       align: "end" as const,
       render: (_: unknown, row: any) => (
-        <DropdownMenu items={[
-          { label: t(locale, "common.actions.edit", "Edit"), onClick: () => handleEdit(row) },
-          { type: "separator" as const },
-          { label: t(locale, "common.actions.delete", "Delete"), onClick: () => setDeleteId(row.id), variant: "danger" as const },
-        ]} />
+        <DropdownMenu
+          items={[
+            {
+              label: t(locale, "common.actions.edit", "Edit"),
+              onClick: () => handleEdit(row),
+            },
+            { type: "separator" as const },
+            {
+              label: t(locale, "common.actions.delete", "Delete"),
+              onClick: () => setDeleteId(row.id),
+              variant: "danger" as const,
+            },
+          ]}
+        />
       ),
     },
   ]
@@ -172,25 +211,44 @@ function ManageFreelancePage() {
         <Tabs
           tabs={STATUS_FILTERS.map((s) => ({
             id: s,
-            label: s === "all" ? "All" : s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+            label:
+              s === "all"
+                ? "All"
+                : s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
           }))}
           activeTab={statusFilter}
           onTabChange={setStatusFilter}
           className="mb-4"
         />
 
-        <DataTable columns={columns} data={gigs} emptyTitle="No freelance gigs found" countLabel="gigs" />
+        <DataTable
+          columns={columns}
+          data={gigs}
+          emptyTitle="No freelance gigs found"
+          countLabel="gigs"
+        />
       </Container>
       <FormDrawer
         open={drawerOpen}
-        onClose={() => { setDrawerOpen(false); setEditingItem(null) }}
-        title={editingItem ? `Edit ${config.singularLabel}` : `Create ${config.singularLabel}`}
+        onClose={() => {
+          setDrawerOpen(false)
+          setEditingItem(null)
+        }}
+        title={
+          editingItem
+            ? `Edit ${config.singularLabel}`
+            : `Create ${config.singularLabel}`
+        }
         fields={config.fields}
         values={formValues}
         onChange={handleFormChange}
         onSubmit={handleSubmit}
         loading={createMutation.isPending || updateMutation.isPending}
-        submitLabel={editingItem ? t(locale, "common.actions.saveChanges", "Save changes") : t(locale, "common.actions.create", "Create")}
+        submitLabel={
+          editingItem
+            ? t(locale, "common.actions.saveChanges", "Save changes")
+            : t(locale, "common.actions.create", "Create")
+        }
       />
       <ConfirmDialog
         open={!!deleteId}

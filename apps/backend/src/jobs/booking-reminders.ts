@@ -7,9 +7,9 @@ import { Modules } from "@medusajs/framework/utils"
  * Runs every hour to check for bookings happening in the next 24 hours
  */
 export default async function bookingRemindersJob(container: MedusaContainer) {
-  const bookingService = container.resolve("booking")
-  const notificationService = container.resolve(Modules.NOTIFICATION)
-  const logger = container.resolve("logger")
+  const bookingService = container.resolve("booking") as unknown as any
+  const notificationService = container.resolve(Modules.NOTIFICATION) as unknown as any
+  const logger = container.resolve("logger") as unknown as any
 
   logger.info("[booking-reminders] Starting booking reminders job")
 
@@ -83,7 +83,7 @@ export default async function bookingRemindersJob(container: MedusaContainer) {
           sentCount++
           logger.info(`[booking-reminders] Sent reminder for booking ${booking.id}`)
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         logger.error(`[booking-reminders] Failed to process reminder for ${booking.id}:`, error)
       }
     }

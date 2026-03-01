@@ -89,7 +89,7 @@ export function TenantUserManagement() {
                 )}
                 {user.last_login_at && (
                   <span className="text-xs text-muted-foreground">
-                    Last login: {new Date(user.last_login_at).toLocaleDateString()}
+                    Last login: {new Date(user.last_login_at!).toLocaleDateString()}
                   </span>
                 )}
               </div>

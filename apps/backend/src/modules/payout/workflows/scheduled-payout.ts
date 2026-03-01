@@ -14,9 +14,9 @@ const aggregatePendingPayoutsStep = createStep(
     { vendorId, tenantId }: { vendorId?: string; tenantId: string },
     { container },
   ) => {
-    const payoutService = container.resolve("payout") as any;
+    const payoutService = container.resolve("payout") as unknown as any;
 
-    const filters: any = { status: "pending", tenant_id: tenantId };
+    const filters: Record<string, unknown> = { status: "pending", tenant_id: tenantId };
     if (vendorId) filters.vendor_id = vendorId;
 
     const payouts = await payoutService.listPayouts(filters);
@@ -36,7 +36,7 @@ const processPayoutBatchStep = createStep(
     }: { payouts: Array<{ id: string; vendor_id: string; metadata?: any }> },
     { container },
   ) => {
-    const payoutService = container.resolve("payout") as any;
+    const payoutService = container.resolve("payout") as unknown as any;
     const results: Array<{ payoutId: string; status: string }> = [];
 
     for (const payout of payouts) {
@@ -70,11 +70,8 @@ export const scheduledPayoutWorkflow = createWorkflow(
   (input: { tenantId: string; vendorId?: string }) => {
     const aggregated = aggregatePendingPayoutsStep(input);
     const processed = processPayoutBatchStep({
-      payouts: aggregated.payouts as any,
+      payouts: aggregated.payouts,
     });
     return { aggregated, processed };
   },
 );
-
-
-

@@ -69,10 +69,10 @@ export class StripeGatewayService {
         clientSecret: paymentIntent.client_secret,
         status: paymentIntent.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create payment intent: ${error.message}`
+        `[StripeGateway] Failed to create payment intent: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -91,10 +91,10 @@ export class StripeGatewayService {
         id: paymentIntent.id,
         status: paymentIntent.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to confirm payment intent: ${error.message}`
+        `[StripeGateway] Failed to confirm payment intent: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -130,10 +130,10 @@ export class StripeGatewayService {
         status: refund.status,
         amount: refund.amount,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create refund: ${error.message}`
+        `[StripeGateway] Failed to create refund: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -162,10 +162,10 @@ export class StripeGatewayService {
         email: customer.email,
         name: customer.name,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create customer: ${error.message}`
+        `[StripeGateway] Failed to create customer: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -206,10 +206,10 @@ export class StripeGatewayService {
         accountId: account.id,
         onboardingUrl: accountLink.url,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create Connect account: ${error.message}`
+        `[StripeGateway] Failed to create Connect account: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -245,10 +245,10 @@ export class StripeGatewayService {
         amount: transfer.amount,
         status: "completed",
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create transfer: ${error.message}`
+        `[StripeGateway] Failed to create transfer: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -281,10 +281,10 @@ export class StripeGatewayService {
         amount: payout.amount,
         status: payout.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create payout: ${error.message}`
+        `[StripeGateway] Failed to create payout: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -301,10 +301,10 @@ export class StripeGatewayService {
       );
 
       return event;
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Webhook signature verification failed: ${error.message}`
+        `[StripeGateway] Webhook signature verification failed: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -342,10 +342,10 @@ export class StripeGatewayService {
             }
           : undefined,
       }));
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to get payment methods: ${error.message}`
+        `[StripeGateway] Failed to get payment methods: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -375,10 +375,10 @@ export class StripeGatewayService {
           currency: b.currency,
         })),
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to get account balance: ${error.message}`
+        `[StripeGateway] Failed to get account balance: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -407,10 +407,10 @@ export class StripeGatewayService {
         status: subscription.status,
         currentPeriodEnd: subscription.current_period_end,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to create subscription: ${error.message}`
+        `[StripeGateway] Failed to create subscription: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }
@@ -429,10 +429,10 @@ export class StripeGatewayService {
         id: subscription.id,
         status: subscription.status,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
-        `[StripeGateway] Failed to cancel subscription: ${error.message}`
+        `[StripeGateway] Failed to cancel subscription: ${(error instanceof Error ? error.message : String(error))}`
       );
     }
   }

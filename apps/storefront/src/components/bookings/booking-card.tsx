@@ -61,7 +61,7 @@ export function BookingCard({
 
   const status = statusConfig[booking.status]
   const isPast =
-    new Date(booking.end_time) < new Date() || booking.status === "completed"
+    new Date(booking.end_time!) < new Date() || booking.status === "completed"
   const canModify =
     booking.status === "confirmed" || booking.status === "pending"
 

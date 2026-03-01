@@ -68,7 +68,7 @@ export function SubscriptionCard({
             </h3>
             <p className="text-sm text-ds-muted-foreground">
               {subscription.plan
-                ? `${formatPrice(subscription.plan.price, subscription.plan.currency_code || "usd")}/${subscription.plan.billing_interval || "month"}`
+                ? `${formatPrice((subscription.plan?.price ?? 0), subscription.plan.currency_code || "usd")}/${subscription.plan.billing_interval || "month"}`
                 : ""}
             </p>
           </div>
@@ -83,7 +83,7 @@ export function SubscriptionCard({
             <div>
               <span className="text-ds-muted-foreground">Started: </span>
               <span className="text-ds-foreground">
-                {formatDate(subscription.current_period_start)}
+                {formatDate(subscription.current_period_start || "")}
               </span>
             </div>
           </div>
@@ -92,7 +92,7 @@ export function SubscriptionCard({
             <div>
               <span className="text-ds-muted-foreground">Renews: </span>
               <span className="text-ds-foreground">
-                {formatDate(subscription.next_billing_date)}
+                {formatDate(subscription.next_billing_date || "")}
               </span>
             </div>
           </div>

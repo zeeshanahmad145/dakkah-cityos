@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { Link } from "@tanstack/react-router"
 import { ManageLayout, ManageActivityFeed } from "@/components/manage"
-import { Container, PageHeader, SectionCard, StatsGrid, SkeletonCard } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  SectionCard,
+  StatsGrid,
+  SkeletonCard,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useManageStats } from "@/lib/hooks/use-manage-data"
@@ -91,7 +97,7 @@ function ManageDashboard() {
               {quickActions.map((action) => (
                 <Link
                   key={action.to}
-                  to={action.to as any}
+                  to={action.to}
                   className="flex items-center gap-3 px-3 py-2 text-[13px] text-ds-muted-foreground hover:text-ds-foreground hover:bg-ds-muted/50 rounded-lg transition-colors"
                 >
                   <span className="flex-1">{action.label}</span>

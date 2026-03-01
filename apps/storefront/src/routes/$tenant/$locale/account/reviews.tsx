@@ -47,7 +47,7 @@ function ReviewsPage() {
           <p className="text-ds-muted-foreground">No reviews yet</p>
           <p className="text-xs text-ds-muted-foreground mt-2">Share your thoughts on products you've purchased.</p>
           <Link
-            to={`${prefix}/`}
+            to={`${prefix}/` as never}
             className="inline-block mt-4 px-4 py-2 text-sm font-medium text-white bg-ds-primary rounded-lg hover:opacity-90 transition-opacity"
           >
             Browse Products

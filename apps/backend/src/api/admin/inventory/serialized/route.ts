@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 /**
@@ -7,7 +7,7 @@ import { handleApiError } from "../../../../lib/api-error-handler";
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const inventoryExtService = req.scope.resolve("inventory-extension") as any;
+    const inventoryExtService = req.scope.resolve("inventory-extension") as unknown as any;
     const {
       status,
       condition,
@@ -20,7 +20,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       offset?: string;
     };
 
-    const filters: any = {};
+    const filters: Record<string, unknown> = {};
     if (status) filters.status = status;
     if (condition) filters.condition = condition;
 
@@ -32,9 +32,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       });
     } else {
       const all =
-        (await (inventoryExtService as any).listSerializedInventories?.(
-          filters,
-        )) ?? [];
+        (await inventoryExtService.listSerializedInventories?.(filters)) ?? [];
       items = Array.isArray(all) ? all : [all].filter(Boolean);
     }
 
@@ -44,7 +42,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       limit: Number(limit),
       offset: Number(offset),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-INVENTORY-SERIALIZED");
   }
 }

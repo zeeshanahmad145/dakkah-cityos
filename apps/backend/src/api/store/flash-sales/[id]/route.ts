@@ -60,7 +60,7 @@ function getFlashSalesSeedData() {
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY) as unknown as any
     const { id } = req.params
 
     const { data: promos } = await query.graph({
@@ -89,7 +89,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     }
 
     return res.json({ item: enrichDetailItem(item, "flash-sales") })
-  } catch (error: any) {
+  } catch (error: unknown) {
     const { id } = req.params
     const seed = getFlashSalesSeedData()
     const seedItem = seed.find(i => i.id === id) || seed[0]

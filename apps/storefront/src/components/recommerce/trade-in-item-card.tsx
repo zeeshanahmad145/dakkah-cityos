@@ -63,7 +63,7 @@ export function TradeInItemCard({
               {t(locale, `recommerce.${item.condition}`)}
             </span>
             <span className="text-sm font-semibold text-ds-foreground">
-              {formatCurrency(item.estimatedValue.amount, item.estimatedValue.currencyCode, locale as SupportedLocale)}
+              {formatCurrency((item.estimatedValue.amount ?? 0), item.estimatedValue.currencyCode, locale as SupportedLocale)}
             </span>
           </div>
 

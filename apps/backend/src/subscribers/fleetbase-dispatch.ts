@@ -5,7 +5,7 @@ export default async function fleetbaseDispatchHandler({
   event: { data },
   container,
 }: SubscriberArgs<{ id: string; order_id: string }>) {
-  const logger = container.resolve("logger");
+  const logger = container.resolve("logger") as unknown as any;
   const orderId = data.order_id;
   const fulfillmentId = data.id;
 
@@ -14,7 +14,7 @@ export default async function fleetbaseDispatchHandler({
   );
 
   try {
-    const query = container.resolve("query");
+    const query = container.resolve("query") as unknown as any;
 
     // 1. Fetch the order details, focusing on shipping address
     const { data: fulfillments } = await query.graph({
@@ -61,9 +61,9 @@ export default async function fleetbaseDispatchHandler({
         vehicle_type: packageWeight > 50 ? "truck" : "motorcycle",
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error(
-      `[FleetbaseDispatch] Fleetbase dispatch workflow failed for Fulfillment ${data.id}: ${error.message}`,
+      `[FleetbaseDispatch] Fleetbase dispatch workflow failed for Fulfillment ${data.id}: ${(error instanceof Error ? error.message : String(error))}`,
     );
   }
 }

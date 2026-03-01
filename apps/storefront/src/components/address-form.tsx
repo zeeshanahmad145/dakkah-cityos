@@ -15,23 +15,23 @@ import { useEffect, useMemo, useState } from "react"
 interface AddressFormProps {
   addressFormData:
     | HttpTypes.StoreCreateCustomerAddress
-    | HttpTypes.StoreAddAddress;
+    | HttpTypes.StoreAddAddress
   setAddressFormData: React.Dispatch<
     React.SetStateAction<
       | HttpTypes.StoreCreateCustomerAddress
       | HttpTypes.StoreAddAddress
       | Record<string, any>
     >
-  >;
-  shouldHandleSubmit?: boolean;
-  setIsFormValid?: (isValid: boolean) => void;
+  >
+  shouldHandleSubmit?: boolean
+  setIsFormValid?: (isValid: boolean) => void
   onSubmit?:
     | ((address: HttpTypes.StoreCreateCustomerAddress) => void)
-    | ((address: HttpTypes.StoreAddAddress) => void);
-  onCancel?: () => void;
-  countries?: HttpTypes.StoreRegion["countries"];
-  isLoading?: boolean;
-  className?: string;
+    | ((address: HttpTypes.StoreAddAddress) => void)
+  onCancel?: () => void
+  countries?: HttpTypes.StoreRegion["countries"]
+  isLoading?: boolean
+  className?: string
 }
 
 const AddressForm = ({
@@ -45,65 +45,65 @@ const AddressForm = ({
   countries: customCountries,
   className,
 }: AddressFormProps) => {
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
-    {}
-  );
+    {},
+  )
 
   const handleChange = (field: string, value: string) => {
-    setAddressFormData((prev) => ({ ...prev, [field]: value }));
+    setAddressFormData((prev) => ({ ...prev, [field]: value }))
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
+      setErrors((prev) => ({ ...prev, [field]: "" }))
     }
-    setTouchedFields((prev) => ({ ...prev, [field]: true }));
-  };
+    setTouchedFields((prev) => ({ ...prev, [field]: true }))
+  }
 
   useEffect(() => {
-    validateForm();
-  }, [addressFormData]);
+    validateForm()
+  }, [addressFormData])
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors: Record<string, string> = {}
 
     if (!addressFormData.first_name?.trim())
-      newErrors.first_name = "First name is required";
+      newErrors.first_name = "First name is required"
     if (!addressFormData.last_name?.trim())
-      newErrors.last_name = "Last name is required";
+      newErrors.last_name = "Last name is required"
     if (!addressFormData.address_1?.trim())
-      newErrors.address_1 = "Address is required";
-    if (!addressFormData.city?.trim()) newErrors.city = "City is required";
+      newErrors.address_1 = "Address is required"
+    if (!addressFormData.city?.trim()) newErrors.city = "City is required"
     if (!addressFormData.postal_code?.trim())
-      newErrors.postal_code = "Postal code is required";
+      newErrors.postal_code = "Postal code is required"
     if (!addressFormData.country_code?.trim())
-      newErrors.country_code = "Country is required";
+      newErrors.country_code = "Country is required"
     const countryCodeExists = countriesInput.some(
-      (country) => country.code === addressFormData.country_code
-    );
-    if (!countryCodeExists) newErrors.country_code = "Country is invalid";
+      (country) => country.code === addressFormData.country_code,
+    )
+    if (!countryCodeExists) newErrors.country_code = "Country is invalid"
 
-    setErrors(newErrors);
-    const isValid = Object.keys(newErrors).length === 0;
-    setIsFormValid?.(isValid);
-    return isValid;
-  };
+    setErrors(newErrors)
+    const isValid = Object.keys(newErrors).length === 0
+    setIsFormValid?.(isValid)
+    return isValid
+  }
 
   const handleSubmit = () => {
-    if (!validateForm() || !shouldHandleSubmit) return;
+    if (!validateForm() || !shouldHandleSubmit) return
 
-    onSubmit?.(addressFormData as any);
-  };
+    onSubmit?.(addressFormData as any)
+  }
 
   const countriesInput = useMemo(() => {
     if (!customCountries) {
-      return countries;
+      return countries
     }
 
     return customCountries.map((country) => ({
       code: country.iso_2 || "",
       name: country.display_name || "",
-    }));
-  }, [customCountries]);
+    }))
+  }, [customCountries])
 
   return (
     <div className={clsx("space-y-4", className)}>
@@ -142,9 +142,7 @@ const AddressForm = ({
             placeholder="Last name"
           />
           {errors.last_name && touchedFields.last_name && (
-            <div className="text-rose-900 text-sm mt-1">
-              {errors.last_name}
-            </div>
+            <div className="text-rose-900 text-sm mt-1">{errors.last_name}</div>
           )}
         </div>
       </div>
@@ -316,7 +314,7 @@ const AddressForm = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default AddressForm;
+export default AddressForm

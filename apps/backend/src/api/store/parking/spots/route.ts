@@ -1,11 +1,12 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../../lib/api-error-handler";
 
 const SEED_DATA = [
   {
     id: "park-seed-001",
     name: "Downtown Central Parking",
-    description: "Premium covered parking in the heart of downtown with 24/7 security and EV charging stations.",
+    description:
+      "Premium covered parking in the heart of downtown with 24/7 security and EV charging stations.",
     zone_type: "covered",
     metadata: {
       thumbnail: "/seed-images/parking/1506521781263-d8422e82f27a.jpg",
@@ -23,7 +24,8 @@ const SEED_DATA = [
   {
     id: "park-seed-002",
     name: "Mall Underground Garage",
-    description: "Spacious underground parking with direct mall access, CCTV monitoring, and valet service available.",
+    description:
+      "Spacious underground parking with direct mall access, CCTV monitoring, and valet service available.",
     zone_type: "underground",
     metadata: {
       thumbnail: "/seed-images/parking/1573348722427-f1d6819fdf98.jpg",
@@ -41,7 +43,8 @@ const SEED_DATA = [
   {
     id: "park-seed-003",
     name: "Airport Long-Term Parking",
-    description: "Affordable long-term parking with complimentary shuttle service to all terminals.",
+    description:
+      "Affordable long-term parking with complimentary shuttle service to all terminals.",
     zone_type: "open",
     metadata: {
       thumbnail: "/seed-images/parking/1568605117036-5fe5e7bab0b7.jpg",
@@ -59,7 +62,8 @@ const SEED_DATA = [
   {
     id: "park-seed-004",
     name: "Business District Tower Parking",
-    description: "Multi-story automated parking facility with reserved spots for premium members.",
+    description:
+      "Multi-story automated parking facility with reserved spots for premium members.",
     zone_type: "multi_story",
     metadata: {
       thumbnail: "/seed-images/parking/1590674899484-d5640e854abe.jpg",
@@ -77,7 +81,8 @@ const SEED_DATA = [
   {
     id: "park-seed-005",
     name: "Luxury Hotel Valet Parking",
-    description: "White-glove valet service at the finest hotel, with car wash and detailing options.",
+    description:
+      "White-glove valet service at the finest hotel, with car wash and detailing options.",
     zone_type: "valet",
     metadata: {
       thumbnail: "/seed-images/parking/1486006920555-c77dcf18193c.jpg",
@@ -92,11 +97,11 @@ const SEED_DATA = [
     operating_hours: "24/7",
     is_available: true,
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const parkingService = req.scope.resolve("parking") as any
+    const parkingService = req.scope.resolve("parking") as unknown as any;
     const {
       limit = "20",
       offset = "0",
@@ -107,37 +112,39 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       city,
       is_available,
       search,
-    } = req.query as Record<string, string | undefined>
+    } = req.query as Record<string, string | undefined>;
 
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (status) filters.status = status
-    if (zone_type) filters.zone_type = zone_type
-    if (location) filters.location = location
-    if (city) filters.city = city
-    if (is_available !== undefined) filters.is_available = is_available === "true"
-    if (search) filters.name = { $like: `%${search}%` }
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (status) filters.status = status;
+    if (zone_type) filters.zone_type = zone_type;
+    if (location) filters.location = location;
+    if (city) filters.city = city;
+    if (is_available !== undefined)
+      filters.is_available = is_available === "true";
+    if (search) filters.name = { $like: `%${search}%` };
 
     const items = await parkingService.listParkingZones(filters, {
       skip: Number(offset),
       take: Number(limit),
       order: { created_at: "DESC" },
-    })
+    });
 
-    const itemList = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
+    const itemList =
+      Array.isArray(items) && items.length > 0 ? items : SEED_DATA;
 
     return res.json({
       items: itemList,
       count: itemList.length,
       limit: Number(limit),
       offset: Number(offset),
-    })
-  } catch (error: any) {
+    });
+  } catch (error: unknown) {
     return res.json({
       items: SEED_DATA,
       count: SEED_DATA.length,
       limit: 20,
       offset: 0,
-    })
+    });
   }
 }

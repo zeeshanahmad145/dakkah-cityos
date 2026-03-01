@@ -69,7 +69,7 @@ export function ExchangeSelector({
           <div className="flex-1 min-w-0">
             <p className="font-medium text-ds-foreground truncate">{originalItem.title}</p>
             <p className="text-sm text-ds-muted-foreground">
-              {formatCurrency(originalItem.price.amount, originalItem.price.currency, locale as SupportedLocale)}
+              {formatCurrency((originalItem.price.amount ?? 0), originalItem.price.currency, locale as SupportedLocale)}
             </p>
           </div>
         </div>

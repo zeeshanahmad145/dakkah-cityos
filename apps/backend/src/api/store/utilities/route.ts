@@ -1,5 +1,5 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { handleApiError } from "../../../lib/api-error-handler"
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+import { handleApiError } from "../../../lib/api-error-handler";
 
 const SEED_DATA = [
   {
@@ -52,21 +52,40 @@ const SEED_DATA = [
     status: "active",
     thumbnail: "/seed-images/utilities/1564013799919-ab600027ffc6.jpg",
   },
-]
+];
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const mod = req.scope.resolve("utilities") as any
-    const { limit = "20", offset = "0", tenant_id, status, utility_type } = req.query as Record<string, string | undefined>
-    const filters: Record<string, any> = {}
-    if (tenant_id) filters.tenant_id = tenant_id
-    if (status) filters.status = status
-    if (utility_type) filters.utility_type = utility_type
-    const items = await mod.listUtilityAccounts(filters, { skip: Number(offset), take: Number(limit) })
-    const results = Array.isArray(items) && items.length > 0 ? items : SEED_DATA
-    return res.json({ items: results, count: results.length, limit: Number(limit), offset: Number(offset) })
-  } catch (error: any) {
-    return res.json({ items: SEED_DATA, count: SEED_DATA.length, limit: 20, offset: 0 })
+    const mod = req.scope.resolve("utilities") as unknown as any;
+    const {
+      limit = "20",
+      offset = "0",
+      tenant_id,
+      status,
+      utility_type,
+    } = req.query as Record<string, string | undefined>;
+    const filters: Record<string, any> = {};
+    if (tenant_id) filters.tenant_id = tenant_id;
+    if (status) filters.status = status;
+    if (utility_type) filters.utility_type = utility_type;
+    const items = await mod.listUtilityAccounts(filters, {
+      skip: Number(offset),
+      take: Number(limit),
+    });
+    const results =
+      Array.isArray(items) && items.length > 0 ? items : SEED_DATA;
+    return res.json({
+      items: results,
+      count: results.length,
+      limit: Number(limit),
+      offset: Number(offset),
+    });
+  } catch (error: unknown) {
+    return res.json({
+      items: SEED_DATA,
+      count: SEED_DATA.length,
+      limit: 20,
+      offset: 0,
+    });
   }
 }
-

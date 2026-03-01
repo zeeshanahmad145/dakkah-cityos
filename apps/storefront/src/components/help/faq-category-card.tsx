@@ -14,13 +14,13 @@ interface FAQCategoryCardProps {
 
 const defaultIcons: Record<string, string> = {
   "getting-started": "🚀",
-  "orders": "📦",
-  "payments": "💳",
-  "shipping": "🚚",
-  "returns": "↩️",
-  "account": "👤",
-  "security": "🔒",
-  "general": "📋",
+  orders: "📦",
+  payments: "💳",
+  shipping: "🚚",
+  returns: "↩️",
+  account: "👤",
+  security: "🔒",
+  general: "📋",
 }
 
 export function FAQCategoryCard({
@@ -38,7 +38,7 @@ export function FAQCategoryCard({
 
   return (
     <Link
-      to={`${prefix}/help?category=${slug}` as any}
+      to={`${prefix}/help?category=${slug}` as never}
       className="group flex flex-col items-center p-6 bg-ds-background rounded-lg border border-ds-border hover:border-ds-primary hover:shadow-sm transition-all text-center"
     >
       <span className="text-3xl mb-3">
@@ -48,7 +48,9 @@ export function FAQCategoryCard({
         {title}
       </h3>
       {description && (
-        <p className="text-sm text-ds-muted-foreground mb-2 line-clamp-2">{description}</p>
+        <p className="text-sm text-ds-muted-foreground mb-2 line-clamp-2">
+          {description}
+        </p>
       )}
       <span className="text-xs text-ds-muted-foreground">
         {articleCount} {t(locale, "blocks.items")}

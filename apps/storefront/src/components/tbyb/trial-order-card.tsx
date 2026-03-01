@@ -30,7 +30,7 @@ export function TrialOrderCard({
   onReturnAll?: () => void
 }) {
   const daysRemaining = Math.max(0, Math.ceil(
-    (new Date(order.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+    (new Date(order.trialEndsAt!).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
   ))
 
   return (
@@ -68,7 +68,7 @@ export function TrialOrderCard({
             <div className="flex-1 min-w-0">
               <p className="text-sm text-ds-foreground truncate">{item.title}</p>
               <p className="text-xs text-ds-muted-foreground">
-                {formatCurrency(item.price.amount, item.price.currencyCode, locale as SupportedLocale)}
+                {formatCurrency((item.price.amount ?? 0), item.price.currencyCode, locale as SupportedLocale)}
               </p>
             </div>
             {item.kept != null && (

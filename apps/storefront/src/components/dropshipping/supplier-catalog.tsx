@@ -61,13 +61,13 @@ export function SupplierCatalog({
               <div>
                 <p className="text-xs text-ds-muted-foreground">{t(locale, "dropshipping.wholesale")}</p>
                 <p className="text-lg font-bold text-ds-foreground">
-                  {formatCurrency(product.wholesalePrice.amount, product.wholesalePrice.currencyCode, locale as SupportedLocale)}
+                  {formatCurrency((product.wholesalePrice.amount ?? 0), product.wholesalePrice.currencyCode, locale as SupportedLocale)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-ds-muted-foreground">{t(locale, "dropshipping.retail")}</p>
                 <p className="text-sm text-ds-muted-foreground">
-                  {formatCurrency(product.retailPrice.amount, product.retailPrice.currencyCode, locale as SupportedLocale)}
+                  {formatCurrency((product.retailPrice.amount ?? 0), product.retailPrice.currencyCode, locale as SupportedLocale)}
                 </p>
               </div>
             </div>

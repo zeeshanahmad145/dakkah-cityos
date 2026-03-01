@@ -1,26 +1,46 @@
 // @ts-nocheck
-import { getServerBaseUrl, fetchWithTimeout, getMedusaPublishableKey } from "@/lib/utils/env"
+import {
+  getServerBaseUrl,
+  fetchWithTimeout,
+  getMedusaPublishableKey,
+} from "@/lib/utils/env"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { t, formatCurrency, formatDate, type SupportedLocale } from "@/lib/i18n"
 import { CampaignProgressBar } from "@/components/campaigns/campaign-progress-bar"
 import { RewardTier } from "@/components/campaigns/reward-tier"
 import { CountdownTimer } from "@/components/campaigns/countdown-timer"
 import { CrowdfundingProgressBlock } from "@/components/blocks/crowdfunding-progress-block"
-import { ReviewListBlock } from '@/components/blocks/review-list-block'
+import { ReviewListBlock } from "@/components/blocks/review-list-block"
 import { useState } from "react"
 import { useToast } from "@/components/ui/toast"
 
 function normalizeDetail(item: any) {
   if (!item) return null
-  const meta = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : (item.metadata || {})
-  return { ...meta, ...item,
-    thumbnail: item.thumbnail || item.image_url || item.photo_url || item.banner_url || item.logo_url || meta.thumbnail || (meta.images && meta.images[0]) || null,
-    images: meta.images || [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
+  const meta =
+    typeof item.metadata === "string"
+      ? JSON.parse(item.metadata)
+      : item.metadata || {}
+  return {
+    ...meta,
+    ...item,
+    thumbnail:
+      item.thumbnail ||
+      item.image_url ||
+      item.photo_url ||
+      item.banner_url ||
+      item.logo_url ||
+      meta.thumbnail ||
+      (meta.images && meta.images[0]) ||
+      null,
+    images:
+      meta.images ||
+      [item.photo_url || item.banner_url || item.logo_url].filter(Boolean),
     description: item.description || meta.description || "",
     price: item.price ?? meta.price ?? null,
     rating: item.rating ?? item.avg_rating ?? meta.rating ?? null,
     review_count: item.review_count ?? meta.review_count ?? null,
-    location: item.location || item.city || item.address || meta.location || null,
+    location:
+      item.location || item.city || item.address || meta.location || null,
   }
 }
 
@@ -28,19 +48,33 @@ export const Route = createFileRoute("/$tenant/$locale/campaigns/$id")({
   loader: async ({ params }) => {
     try {
       const baseUrl = getServerBaseUrl()
-      const resp = await fetchWithTimeout(`${baseUrl}/store/crowdfunding/${params.id}`, {
-        headers: { "x-publishable-api-key": getMedusaPublishableKey() },
-      })
+      const resp = await fetchWithTimeout(
+        `${baseUrl}/store/crowdfunding/${params.id}`,
+        {
+          headers: { "x-publishable-api-key": getMedusaPublishableKey() },
+        },
+      )
       if (!resp.ok) return { item: null }
       const data = await resp.json()
-      return { item: normalizeDetail(data.item || data.booking || data.event || data.auction || data) }
-    } catch { return { item: null } }
+      return {
+        item: normalizeDetail(
+          data.item || data.booking || data.event || data.auction || data,
+        ),
+      }
+    } catch {
+      return { item: null }
+    }
   },
   component: CampaignDetailPage,
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title || loaderData?.name || "Campaign Details"} | Dakkah CityOS` },
-      { name: "description", content: loaderData?.description || loaderData?.excerpt || "" },
+      {
+        title: `${loaderData?.title || loaderData?.name || "Campaign Details"} | Dakkah CityOS`,
+      },
+      {
+        name: "description",
+        content: loaderData?.description || loaderData?.excerpt || "",
+      },
     ],
   }),
 })
@@ -67,14 +101,23 @@ function CampaignDetailPage() {
     try {
       const resp = await fetch(`${baseUrl}/store/campaigns/${id}/pledge`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-publishable-api-key": publishableKey },
+        headers: {
+          "Content-Type": "application/json",
+          "x-publishable-api-key": publishableKey,
+        },
         credentials: "include",
-        body: JSON.stringify({ amount: finalAmount })
+        body: JSON.stringify({ amount: finalAmount }),
       })
-      if (resp.ok) toast.success("Pledge submitted successfully! Thank you for your support!")
+      if (resp.ok)
+        toast.success(
+          "Pledge submitted successfully! Thank you for your support!",
+        )
       else toast.error("Something went wrong. Please try again.")
-    } catch { toast.error("Network error. Please try again.") }
-    finally { setPledgeLoading(false) }
+    } catch {
+      toast.error("Network error. Please try again.")
+    } finally {
+      setPledgeLoading(false)
+    }
   }
 
   if (!campaign) {
@@ -82,7 +125,10 @@ function CampaignDetailPage() {
       <div className="min-h-screen bg-ds-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-ds-destructive mb-4">Campaign not found</p>
-          <Link to={`${prefix}/campaigns` as any} className="text-ds-primary hover:underline">
+          <Link
+            to={`${prefix}/campaigns` as never}
+            className="text-ds-primary hover:underline"
+          >
             Back to Campaigns
           </Link>
         </div>
@@ -94,11 +140,26 @@ function CampaignDetailPage() {
     <div className="min-h-screen bg-ds-background">
       <div className="relative h-64 md:h-80 bg-ds-muted overflow-hidden">
         {campaign.thumbnail ? (
-          <img loading="lazy" src={campaign.thumbnail} alt={campaign.title} className="w-full h-full object-cover" />
+          <img
+            loading="lazy"
+            src={campaign.thumbnail}
+            alt={campaign.title}
+            className="w-full h-full object-cover"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-ds-primary/20 to-ds-muted">
-            <svg className="w-24 h-24 text-ds-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <svg
+              className="w-24 h-24 text-ds-muted-foreground"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
             </svg>
           </div>
         )}
@@ -106,15 +167,23 @@ function CampaignDetailPage() {
         <div className="absolute bottom-0 start-0 end-0 p-6 md:p-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center gap-2 text-sm text-white/80 mb-2">
-              <Link to={`${prefix}` as any} className="hover:text-white transition-colors">
+              <Link
+                to={`${prefix}` as never}
+                className="hover:text-white transition-colors"
+              >
                 {t(locale, "common.home")}
               </Link>
               <span>/</span>
-              <Link to={`${prefix}/campaigns` as any} className="hover:text-white transition-colors">
+              <Link
+                to={`${prefix}/campaigns` as never}
+                className="hover:text-white transition-colors"
+              >
                 Campaigns
               </Link>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">{campaign.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
+              {campaign.title}
+            </h1>
             {campaign.creator_name && (
               <p className="text-white/80 mt-2">by {campaign.creator_name}</p>
             )}
@@ -136,30 +205,43 @@ function CampaignDetailPage() {
               <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-ds-border">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-ds-foreground">
-                    {formatCurrency(campaign.raised_amount, campaign.currency_code, locale as SupportedLocale)}
+                    {formatCurrency(
+                      campaign.raised_amount,
+                      campaign.currency_code,
+                      locale as SupportedLocale,
+                    )}
                   </p>
                   <p className="text-sm text-ds-muted-foreground">raised</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-ds-foreground">{campaign.backers_count}</p>
+                  <p className="text-2xl font-bold text-ds-foreground">
+                    {campaign.backers_count}
+                  </p>
                   <p className="text-sm text-ds-muted-foreground">backers</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-ds-foreground">{campaign.days_remaining}</p>
+                  <p className="text-2xl font-bold text-ds-foreground">
+                    {campaign.days_remaining}
+                  </p>
                   <p className="text-sm text-ds-muted-foreground">days left</p>
                 </div>
               </div>
 
               {campaign.status === "active" && campaign.ends_at && (
                 <div className="mt-6 pt-6 border-t border-ds-border flex justify-center">
-                  <CountdownTimer endsAt={campaign.ends_at} variant="segmented" />
+                  <CountdownTimer
+                    endsAt={campaign.ends_at}
+                    variant="segmented"
+                  />
                 </div>
               )}
             </div>
 
             {campaign.description && (
               <div className="bg-ds-background rounded-lg border border-ds-border p-6 mb-8">
-                <h2 className="text-xl font-bold text-ds-foreground mb-4">About this project</h2>
+                <h2 className="text-xl font-bold text-ds-foreground mb-4">
+                  About this project
+                </h2>
                 <div className="text-ds-muted-foreground leading-relaxed whitespace-pre-wrap">
                   {campaign.description}
                 </div>
@@ -168,16 +250,28 @@ function CampaignDetailPage() {
 
             {campaign.updates && campaign.updates.length > 0 && (
               <div className="bg-ds-background rounded-lg border border-ds-border p-6">
-                <h2 className="text-xl font-bold text-ds-foreground mb-6">Updates</h2>
+                <h2 className="text-xl font-bold text-ds-foreground mb-6">
+                  Updates
+                </h2>
                 <div className="space-y-6">
                   {campaign.updates.map((update) => (
-                    <div key={update.id} className="relative ps-6 border-s-2 border-ds-border">
+                    <div
+                      key={update.id}
+                      className="relative ps-6 border-s-2 border-ds-border"
+                    >
                       <div className="absolute -start-[5px] top-0 w-2 h-2 rounded-full bg-ds-primary" />
                       <p className="text-xs text-ds-muted-foreground mb-1">
-                        {formatDate(update.created_at, locale as SupportedLocale)}
+                        {formatDate(
+                          update.created_at,
+                          locale as SupportedLocale,
+                        )}
                       </p>
-                      <h3 className="font-semibold text-ds-foreground">{update.title}</h3>
-                      <p className="text-sm text-ds-muted-foreground mt-1">{update.content}</p>
+                      <h3 className="font-semibold text-ds-foreground">
+                        {update.title}
+                      </h3>
+                      <p className="text-sm text-ds-muted-foreground mt-1">
+                        {update.content}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -187,10 +281,14 @@ function CampaignDetailPage() {
 
           <div className="space-y-6">
             <div className="bg-ds-background rounded-lg border border-ds-border p-6">
-              <h2 className="text-xl font-bold text-ds-foreground mb-4">Back This Project</h2>
+              <h2 className="text-xl font-bold text-ds-foreground mb-4">
+                Back This Project
+              </h2>
               <div className="space-y-3">
                 <div className="relative">
-                  <span className="absolute start-3 top-1/2 -translate-y-1/2 text-ds-muted-foreground text-sm">{campaign.currency_code || "USD"}</span>
+                  <span className="absolute start-3 top-1/2 -translate-y-1/2 text-ds-muted-foreground text-sm">
+                    {campaign.currency_code || "USD"}
+                  </span>
                   <input
                     type="number"
                     min={1}
@@ -212,7 +310,9 @@ function CampaignDetailPage() {
 
             {campaign.reward_tiers && campaign.reward_tiers.length > 0 && (
               <div>
-                <h2 className="text-xl font-bold text-ds-foreground mb-4">Reward Tiers</h2>
+                <h2 className="text-xl font-bold text-ds-foreground mb-4">
+                  Reward Tiers
+                </h2>
                 <div className="space-y-4">
                   {campaign.reward_tiers.map((tier) => (
                     <RewardTier

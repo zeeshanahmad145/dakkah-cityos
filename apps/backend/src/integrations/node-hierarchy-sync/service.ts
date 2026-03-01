@@ -1,8 +1,8 @@
 import { MedusaContainer } from "@medusajs/framework/types";
 import axios from "axios";
-import { appConfig } from "../../lib/config"
-import { createLogger } from "../../lib/logger"
-const logger = createLogger("integration:node-hierarchy-sync")
+import { appConfig } from "../../lib/config";
+import { createLogger } from "../../lib/logger";
+const logger = createLogger("integration:node-hierarchy-sync");
 
 interface SyncStats {
   synced: number;
@@ -53,7 +53,7 @@ export class NodeHierarchySyncService {
   }
 
   private getNodeService(): any {
-    return this.container.resolve("nodeModuleService") as any;
+    return this.container.resolve("nodeModuleService") as unknown as any;
   }
 
   private async buildHierarchyTree(tenantId: string): Promise<TreeNode[]> {
@@ -93,7 +93,9 @@ export class NodeHierarchySyncService {
     const payloadKey = appConfig.payloadCms.apiKey;
 
     if (!payloadUrl || !payloadKey) {
-      logger.info("[NodeHierarchySync] Payload CMS not configured, skipping sync");
+      logger.info(
+        "[NodeHierarchySync] Payload CMS not configured, skipping sync",
+      );
       return;
     }
 
@@ -131,13 +133,19 @@ export class NodeHierarchySyncService {
 
       if (existing.data.docs?.[0]) {
         await client.patch(`/api/nodes/${existing.data.docs[0].id}`, nodeData);
-        logger.info(`[NodeHierarchySync] Updated node ${node.id} in Payload CMS`);
+        logger.info(
+          `[NodeHierarchySync] Updated node ${node.id} in Payload CMS`,
+        );
       } else {
         await client.post("/api/nodes", nodeData);
-        logger.info(`[NodeHierarchySync] Created node ${node.id} in Payload CMS`);
+        logger.info(
+          `[NodeHierarchySync] Created node ${node.id} in Payload CMS`,
+        );
       }
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] Failed to sync node ${node.id} to Payload: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] Failed to sync node ${node.id} to Payload: ${err.message}`,
+      );
       throw err;
     }
   }
@@ -162,15 +170,19 @@ export class NodeHierarchySyncService {
 
     const doctype = ERPNEXT_TYPE_MAP[node.type];
     if (!doctype) {
-      logger.info(`[NodeHierarchySync] No ERPNext mapping for node type: ${node.type}`);
+      logger.info(
+        `[NodeHierarchySync] No ERPNext mapping for node type: ${node.type}`,
+      );
       return;
     }
 
     try {
       const filters = JSON.stringify([["custom_medusa_node_id", "=", node.id]]);
-      const existing = await client.get(`/resource/${doctype}`, {
-        params: { filters, limit_page_length: 1 },
-      }).catch(() => ({ data: { data: [] } }));
+      const existing = await client
+        .get(`/resource/${doctype}`, {
+          params: { filters, limit_page_length: 1 },
+        })
+        .catch(() => ({ data: { data: [] } }));
 
       const resourceData: Record<string, any> = {
         custom_medusa_node_id: node.id,
@@ -180,7 +192,8 @@ export class NodeHierarchySyncService {
       switch (node.type) {
         case "CITY":
           resourceData.company_name = node.name;
-          resourceData.abbr = node.code || node.slug.substring(0, 5).toUpperCase();
+          resourceData.abbr =
+            node.code || node.slug.substring(0, 5).toUpperCase();
           resourceData.default_currency = "SAR";
           resourceData.country = "Saudi Arabia";
           break;
@@ -205,13 +218,19 @@ export class NodeHierarchySyncService {
       if (existing.data.data?.length > 0) {
         const existingName = existing.data.data[0].name;
         await client.put(`/resource/${doctype}/${existingName}`, resourceData);
-        logger.info(`[NodeHierarchySync] Updated node ${node.id} as ${doctype} in ERPNext`);
+        logger.info(
+          `[NodeHierarchySync] Updated node ${node.id} as ${doctype} in ERPNext`,
+        );
       } else {
         await client.post(`/resource/${doctype}`, resourceData);
-        logger.info(`[NodeHierarchySync] Created node ${node.id} as ${doctype} in ERPNext`);
+        logger.info(
+          `[NodeHierarchySync] Created node ${node.id} as ${doctype} in ERPNext`,
+        );
       }
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] Failed to sync node ${node.id} to ERPNext: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] Failed to sync node ${node.id} to ERPNext: ${err.message}`,
+      );
       throw err;
     }
   }
@@ -222,7 +241,9 @@ export class NodeHierarchySyncService {
     const orgId = appConfig.fleetbase.orgId;
 
     if (!apiUrl || !apiKey || !orgId) {
-      logger.info("[NodeHierarchySync] Fleetbase not configured, skipping sync");
+      logger.info(
+        "[NodeHierarchySync] Fleetbase not configured, skipping sync",
+      );
       return;
     }
 
@@ -237,7 +258,9 @@ export class NodeHierarchySyncService {
 
     const fleetbaseType = FLEETBASE_TYPE_MAP[node.type];
     if (!fleetbaseType) {
-      logger.info(`[NodeHierarchySync] No Fleetbase mapping for node type: ${node.type}`);
+      logger.info(
+        `[NodeHierarchySync] No Fleetbase mapping for node type: ${node.type}`,
+      );
       return;
     }
 
@@ -280,21 +303,30 @@ export class NodeHierarchySyncService {
           endpoint = "/places";
       }
 
-      const searchResponse = await client.get(endpoint, {
-        params: { "meta.medusa_node_id": node.id, limit: 1 },
-      }).catch(() => ({ data: { data: [] } }));
+      const searchResponse = await client
+        .get(endpoint, {
+          params: { "meta.medusa_node_id": node.id, limit: 1 },
+        })
+        .catch(() => ({ data: { data: [] } }));
 
-      const existingItems = searchResponse.data.data || searchResponse.data || [];
+      const existingItems =
+        searchResponse.data.data || searchResponse.data || [];
 
       if (Array.isArray(existingItems) && existingItems.length > 0) {
         await client.put(`${endpoint}/${existingItems[0].id}`, resourceData);
-        logger.info(`[NodeHierarchySync] Updated node ${node.id} as ${fleetbaseType} in Fleetbase`);
+        logger.info(
+          `[NodeHierarchySync] Updated node ${node.id} as ${fleetbaseType} in Fleetbase`,
+        );
       } else {
         await client.post(endpoint, resourceData);
-        logger.info(`[NodeHierarchySync] Created node ${node.id} as ${fleetbaseType} in Fleetbase`);
+        logger.info(
+          `[NodeHierarchySync] Created node ${node.id} as ${fleetbaseType} in Fleetbase`,
+        );
       }
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] Failed to sync node ${node.id} to Fleetbase: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] Failed to sync node ${node.id} to Fleetbase: ${err.message}`,
+      );
       throw err;
     }
   }
@@ -322,7 +354,9 @@ export class NodeHierarchySyncService {
       });
 
       const did = didResponse.data.did;
-      logger.info(`[NodeHierarchySync] Created DID for node ${node.id}: ${did}`);
+      logger.info(
+        `[NodeHierarchySync] Created DID for node ${node.id}: ${did}`,
+      );
 
       const credentialPayload = {
         issuerDid: did,
@@ -345,16 +379,25 @@ export class NodeHierarchySyncService {
         },
       };
 
-      const credResponse = await client.post("/v1/credentials/issue", credentialPayload);
-      logger.info(`[NodeHierarchySync] Issued NodeCredential for node ${node.id}: ${credResponse.data.id || "issued"}`);
+      const credResponse = await client.post(
+        "/v1/credentials/issue",
+        credentialPayload,
+      );
+      logger.info(
+        `[NodeHierarchySync] Issued NodeCredential for node ${node.id}: ${credResponse.data.id || "issued"}`,
+      );
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] Failed to sync node ${node.id} to WaltId: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] Failed to sync node ${node.id} to WaltId: ${err.message}`,
+      );
       throw err;
     }
   }
 
   async syncFullHierarchy(tenantId: string): Promise<HierarchySyncResult> {
-    logger.info(`[NodeHierarchySync] Starting full hierarchy sync for tenant ${tenantId}`);
+    logger.info(
+      `[NodeHierarchySync] Starting full hierarchy sync for tenant ${tenantId}`,
+    );
 
     const nodeService = this.getNodeService();
     const nodes = await nodeService.listNodesByTenant(tenantId);
@@ -402,7 +445,9 @@ export class NodeHierarchySyncService {
       }
     }
 
-    logger.info(`[NodeHierarchySync] Full hierarchy sync completed for tenant ${tenantId} - totalNodes: ${nodes.length}, payload: ${stats.payload.synced}/${nodes.length}, erpnext: ${stats.erpnext.synced}/${nodes.length}, fleetbase: ${stats.fleetbase.synced}/${nodes.length}, waltid: ${stats.waltid.synced}/${nodes.length}`);
+    logger.info(
+      `[NodeHierarchySync] Full hierarchy sync completed for tenant ${tenantId} - totalNodes: ${nodes.length}, payload: ${stats.payload.synced}/${nodes.length}, erpnext: ${stats.erpnext.synced}/${nodes.length}, fleetbase: ${stats.fleetbase.synced}/${nodes.length}, waltid: ${stats.waltid.synced}/${nodes.length}`,
+    );
 
     return stats;
   }
@@ -426,31 +471,41 @@ export class NodeHierarchySyncService {
       await this.syncNodeToPayload(node, tenantId);
       results.push("payload");
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] Payload sync failed for node ${nodeId}: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] Payload sync failed for node ${nodeId}: ${err.message}`,
+      );
     }
 
     try {
       await this.syncNodeToERPNext(node, tenantId);
       results.push("erpnext");
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] ERPNext sync failed for node ${nodeId}: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] ERPNext sync failed for node ${nodeId}: ${err.message}`,
+      );
     }
 
     try {
       await this.syncNodeToFleetbase(node, tenantId);
       results.push("fleetbase");
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] Fleetbase sync failed for node ${nodeId}: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] Fleetbase sync failed for node ${nodeId}: ${err.message}`,
+      );
     }
 
     try {
       await this.syncNodeToWaltId(node, tenantId);
       results.push("waltid");
     } catch (err: any) {
-      logger.info(`[NodeHierarchySync] WaltId sync failed for node ${nodeId}: ${err.message}`);
+      logger.info(
+        `[NodeHierarchySync] WaltId sync failed for node ${nodeId}: ${err.message}`,
+      );
     }
 
-    logger.info(`[NodeHierarchySync] Single node ${nodeId} synced to: ${results.join(", ") || "none"}`);
+    logger.info(
+      `[NodeHierarchySync] Single node ${nodeId} synced to: ${results.join(", ") || "none"}`,
+    );
   }
 
   async deleteNodeFromSystems(nodeId: string, tenantId: string): Promise<void> {
@@ -472,10 +527,14 @@ export class NodeHierarchySyncService {
         });
         if (existing.data.docs?.[0]) {
           await client.delete(`/api/nodes/${existing.data.docs[0].id}`);
-          logger.info(`[NodeHierarchySync] Deleted node ${nodeId} from Payload CMS`);
+          logger.info(
+            `[NodeHierarchySync] Deleted node ${nodeId} from Payload CMS`,
+          );
         }
       } catch (err: any) {
-        logger.info(`[NodeHierarchySync] Failed to delete node ${nodeId} from Payload: ${err.message}`);
+        logger.info(
+          `[NodeHierarchySync] Failed to delete node ${nodeId} from Payload: ${err.message}`,
+        );
       }
     }
 
@@ -493,20 +552,27 @@ export class NodeHierarchySyncService {
         });
         for (const doctype of Object.values(ERPNEXT_TYPE_MAP)) {
           try {
-            const filters = JSON.stringify([["custom_medusa_node_id", "=", nodeId]]);
+            const filters = JSON.stringify([
+              ["custom_medusa_node_id", "=", nodeId],
+            ]);
             const existing = await client.get(`/resource/${doctype}`, {
               params: { filters, limit_page_length: 1 },
             });
             if (existing.data.data?.length > 0) {
-              await client.delete(`/resource/${doctype}/${existing.data.data[0].name}`);
-              logger.info(`[NodeHierarchySync] Deleted node ${nodeId} (${doctype}) from ERPNext`);
+              await client.delete(
+                `/resource/${doctype}/${existing.data.data[0].name}`,
+              );
+              logger.info(
+                `[NodeHierarchySync] Deleted node ${nodeId} (${doctype}) from ERPNext`,
+              );
               break;
             }
-          } catch {
-          }
+          } catch {}
         }
       } catch (err: any) {
-        logger.info(`[NodeHierarchySync] Failed to delete node ${nodeId} from ERPNext: ${err.message}`);
+        logger.info(
+          `[NodeHierarchySync] Failed to delete node ${nodeId} from ERPNext: ${err.message}`,
+        );
       }
     }
 
@@ -532,22 +598,29 @@ export class NodeHierarchySyncService {
             const items = searchResponse.data.data || searchResponse.data || [];
             if (Array.isArray(items) && items.length > 0) {
               await client.delete(`${endpoint}/${items[0].id}`);
-              logger.info(`[NodeHierarchySync] Deleted node ${nodeId} from Fleetbase (${endpoint})`);
+              logger.info(
+                `[NodeHierarchySync] Deleted node ${nodeId} from Fleetbase (${endpoint})`,
+              );
               break;
             }
-          } catch {
-          }
+          } catch {}
         }
       } catch (err: any) {
-        logger.info(`[NodeHierarchySync] Failed to delete node ${nodeId} from Fleetbase: ${err.message}`);
+        logger.info(
+          `[NodeHierarchySync] Failed to delete node ${nodeId} from Fleetbase: ${err.message}`,
+        );
       }
     }
 
-    logger.info(`[NodeHierarchySync] Completed deletion of node ${nodeId} from all systems`);
+    logger.info(
+      `[NodeHierarchySync] Completed deletion of node ${nodeId} from all systems`,
+    );
   }
 
   async getHierarchyTree(tenantId: string): Promise<TreeNode[]> {
-    logger.info(`[NodeHierarchySync] Building hierarchy tree for tenant ${tenantId}`);
+    logger.info(
+      `[NodeHierarchySync] Building hierarchy tree for tenant ${tenantId}`,
+    );
     return this.buildHierarchyTree(tenantId);
   }
 }

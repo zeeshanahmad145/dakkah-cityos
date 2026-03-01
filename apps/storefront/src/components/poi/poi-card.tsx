@@ -30,25 +30,35 @@ function StarRating({ average, count }: { average: number; count: number }) {
   )
 }
 
-export function POICardComponent({ poi, variant = "default", locale: localeProp }: POICardComponentProps) {
+export function POICardComponent({
+  poi,
+  variant = "default",
+  locale: localeProp,
+}: POICardComponentProps) {
   const prefix = useTenantPrefix()
   const { locale: ctxLocale } = useTenant()
-  const { locale: paramLocale } = useParams({ strict: false }) as { locale: string }
+  const { locale: paramLocale } = useParams({ strict: false }) as {
+    locale: string
+  }
   const locale = localeProp || paramLocale || ctxLocale || "en"
 
   if (variant === "map-popup") {
     return (
       <div className="p-3 bg-ds-background rounded-lg min-w-[200px]">
-        <h4 className="text-sm font-semibold text-ds-foreground mb-1">{poi.name}</h4>
+        <h4 className="text-sm font-semibold text-ds-foreground mb-1">
+          {poi.name}
+        </h4>
         {poi.category && (
           <span className="inline-block px-1.5 py-0.5 text-[10px] font-medium bg-ds-muted text-ds-muted-foreground rounded mb-1">
             {poi.category}
           </span>
         )}
         <p className="text-xs text-ds-muted-foreground mb-1">{poi.address}</p>
-        {poi.rating && <StarRating average={poi.rating.average} count={poi.rating.count} />}
+        {poi.rating && (
+          <StarRating average={poi.rating.average} count={poi.rating.count} />
+        )}
         <Link
-          to={`${prefix}/places/${poi.id}` as any}
+          to={`${prefix}/places/${poi.id}` as never}
           className="text-xs text-ds-primary mt-1 block hover:underline"
         >
           {t(locale, "blocks.view_details")}
@@ -60,21 +70,32 @@ export function POICardComponent({ poi, variant = "default", locale: localeProp 
   if (variant === "compact") {
     return (
       <Link
-        to={`${prefix}/places/${poi.id}` as any}
+        to={`${prefix}/places/${poi.id}` as never}
         className="flex items-center gap-3 p-3 bg-ds-background rounded-lg border border-ds-border hover:border-ds-primary transition-colors"
       >
         {poi.thumbnail && (
           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-ds-muted">
-            <img loading="lazy" src={poi.thumbnail} alt={poi.name} className="w-full h-full object-cover" />
+            <img
+              loading="lazy"
+              src={poi.thumbnail}
+              alt={poi.name}
+              className="w-full h-full object-cover"
+            />
           </div>
         )}
         <div className="min-w-0 flex-1">
           <h4 className="text-sm font-medium text-ds-foreground">{poi.name}</h4>
-          <p className="text-xs text-ds-muted-foreground truncate">{poi.address}</p>
+          <p className="text-xs text-ds-muted-foreground truncate">
+            {poi.address}
+          </p>
         </div>
-        {poi.rating && <StarRating average={poi.rating.average} count={poi.rating.count} />}
+        {poi.rating && (
+          <StarRating average={poi.rating.average} count={poi.rating.count} />
+        )}
         {poi.distance && (
-          <span className="text-xs text-ds-muted-foreground flex-shrink-0">{poi.distance}</span>
+          <span className="text-xs text-ds-muted-foreground flex-shrink-0">
+            {poi.distance}
+          </span>
         )}
       </Link>
     )
@@ -82,7 +103,7 @@ export function POICardComponent({ poi, variant = "default", locale: localeProp 
 
   return (
     <Link
-      to={`${prefix}/places/${poi.id}` as any}
+      to={`${prefix}/places/${poi.id}` as never}
       className="group flex flex-col bg-ds-background rounded-lg border border-ds-border overflow-hidden hover:border-ds-primary transition-colors"
     >
       {poi.thumbnail && (
@@ -100,27 +121,61 @@ export function POICardComponent({ poi, variant = "default", locale: localeProp 
         </div>
       )}
       <div className="p-4">
-        <h3 className="text-base font-semibold text-ds-foreground mb-1">{poi.name}</h3>
+        <h3 className="text-base font-semibold text-ds-foreground mb-1">
+          {poi.name}
+        </h3>
         <p className="text-sm text-ds-muted-foreground mb-2 flex items-start gap-1">
-          <svg className="h-4 w-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          <svg
+            className="h-4 w-4 flex-shrink-0 mt-0.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
           </svg>
           <span className="line-clamp-1">{poi.address}</span>
         </p>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {poi.rating && <StarRating average={poi.rating.average} count={poi.rating.count} />}
+            {poi.rating && (
+              <StarRating
+                average={poi.rating.average}
+                count={poi.rating.count}
+              />
+            )}
             {poi.distance && (
-              <span className="text-xs text-ds-muted-foreground">{poi.distance}</span>
+              <span className="text-xs text-ds-muted-foreground">
+                {poi.distance}
+              </span>
             )}
           </div>
         </div>
         {poi.phone && (
           <div className="mt-3 pt-3 border-t border-ds-border">
             <span className="text-sm text-ds-primary flex items-center gap-1">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
               </svg>
               {poi.phone}
             </span>

@@ -18,7 +18,7 @@ const fileClaimStep = createStep(
     }: { policyId: string; description: string; claimAmount: number },
     { container },
   ) => {
-    const insuranceService = container.resolve("insurance") as any;
+    const insuranceService = container.resolve("insurance") as unknown as any;
     const claim = await insuranceService.fileInsuranceClaim(
       policyId,
       description,
@@ -27,8 +27,8 @@ const fileClaimStep = createStep(
     return new StepResponse({ claim }, { claimId: claim.id });
   },
   async ({ claimId }: { claimId: string }, { container }) => {
-    const insuranceService = container.resolve("insurance") as any;
-    await (insuranceService as any).updateInsClaims?.({
+    const insuranceService = container.resolve("insurance") as unknown as any;
+    await insuranceService.updateInsClaims?.({
       id: claimId,
       status: "withdrawn",
     });
@@ -38,18 +38,18 @@ const fileClaimStep = createStep(
 const assessClaimStep = createStep(
   "assess-insurance-claim",
   async ({ claimId }: { claimId: string }, { container }) => {
-    const insuranceService = container.resolve("insurance") as any;
+    const insuranceService = container.resolve("insurance") as unknown as any;
 
     // Auto-assess: fetch claim and run simple fraud check
     const claims =
-      (await (insuranceService as any).listInsClaims?.({ id: claimId })) ?? [];
+      (await insuranceService.listInsClaims?.({ id: claimId })) ?? [];
     const list = Array.isArray(claims) ? claims : [claims].filter(Boolean);
     const claim = list[0];
 
     const isAutoApprovable = claim && Number(claim.claim_amount || 0) <= 1000;
     const status = isAutoApprovable ? "approved" : "under_review";
 
-    const updated = await (insuranceService as any).updateInsClaims?.({
+    const updated = await insuranceService.updateInsClaims?.({
       id: claimId,
       status,
       assessed_at: new Date(),
@@ -65,13 +65,13 @@ const assessClaimStep = createStep(
 const processClaimPayoutStep = createStep(
   "process-claim-payout",
   async ({ claimId }: { claimId: string }, { container }) => {
-    const insuranceService = container.resolve("insurance") as any;
+    const insuranceService = container.resolve("insurance") as unknown as any;
     let result: any = { paid: false };
 
     if (typeof insuranceService.processPayout === "function") {
       result = await insuranceService.processPayout(claimId);
     } else {
-      result = await (insuranceService as any).updateInsClaims?.({
+      result = await insuranceService.updateInsClaims?.({
         id: claimId,
         status: "paid",
         paid_at: new Date(),
@@ -91,11 +91,8 @@ export const insuranceClaimWorkflow = createWorkflow(
       description: input.description,
       claimAmount: input.claimAmount,
     });
-    const assessed = assessClaimStep({ claimId: filed.claim.id as any });
-    const payout = processClaimPayoutStep({ claimId: filed.claim.id as any });
+    const assessed = assessClaimStep({ claimId: filed.claim.id });
+    const payout = processClaimPayoutStep({ claimId: filed.claim.id });
     return { filed, assessed, payout };
   },
 );
-
-
-

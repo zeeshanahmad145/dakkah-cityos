@@ -40,7 +40,7 @@ async function gracefulShutdown(signal: string) {
           timestamp: new Date().toISOString(),
           level: "error",
           message: "Shutdown handler failed",
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? (error instanceof Error ? error.message : String(error)) : String(error),
           type: "lifecycle",
         })
       )
@@ -70,7 +70,7 @@ export function initGracefulShutdown() {
         timestamp: new Date().toISOString(),
         level: "error",
         message: "Uncaught exception",
-        error: { name: error.name, message: error.message, stack: error.stack },
+        error: { name: error.name, message: (error instanceof Error ? error.message : String(error)), stack: error.stack },
         type: "lifecycle",
       })
     )

@@ -104,7 +104,7 @@ export function WholesaleCatalog({ locale: localeProp, products, onAddToOrder }:
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-sm font-semibold text-ds-foreground">
-                        {formatCurrency(product.basePrice, product.currency, locale as SupportedLocale)}
+                        {formatCurrency((product.basePrice ?? 0), product.currency, locale as SupportedLocale)}
                       </span>
                     </td>
                     <td className="px-4 py-3">

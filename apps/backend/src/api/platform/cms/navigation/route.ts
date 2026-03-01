@@ -127,7 +127,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
         nextPage: null,
       })
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
 return handleApiError(res, error, "PLATFORM-CMS-NAVIGATION")
   }
 }

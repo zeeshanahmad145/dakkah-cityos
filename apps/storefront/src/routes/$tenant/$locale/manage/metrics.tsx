@@ -1,7 +1,12 @@
 // @ts-nocheck
 import { createFileRoute } from "@tanstack/react-router"
 import { ManageLayout } from "@/components/manage"
-import { Container, PageHeader, DataTable, SkeletonTable } from "@/components/manage/ui"
+import {
+  Container,
+  PageHeader,
+  DataTable,
+  SkeletonTable,
+} from "@/components/manage/ui"
 import { t } from "@/lib/i18n"
 import { useTenant } from "@/lib/context/tenant-context"
 import { useQuery } from "@tanstack/react-query"
@@ -19,13 +24,15 @@ function ManageMetricsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["manage", "metrics"],
     queryFn: async () => {
-      const response = await sdk.client.fetch("/admin/metrics", { method: "GET" })
+      const response = await sdk.client.fetch("/admin/metrics", {
+        method: "GET",
+      })
       return response
     },
     enabled: typeof window !== "undefined",
   })
 
-  const items = ((data as any)?.items || (data as any)?.metrics || []).map((item: any) => ({
+  const items = ((data as any)?.items || data?.metrics || []).map((item: any) => ({
     id: item.id || item.key || item.metric,
     metric: item.metric || item.name || item.key || "—",
     value: item.value ?? "—",
@@ -38,7 +45,9 @@ function ManageMetricsPage() {
     {
       key: "metric",
       header: "Metric",
-      render: (val: unknown) => <span className="font-medium">{val as string}</span>,
+      render: (val: unknown) => (
+        <span className="font-medium">{val as string}</span>
+      ),
     },
     { key: "value", header: "Value" },
     { key: "change", header: "Change" },
@@ -64,7 +73,12 @@ function ManageMetricsPage() {
           subtitle="Key performance metrics and analytics"
         />
 
-        <DataTable columns={columns} data={items} emptyTitle="No metrics available" countLabel="metrics" />
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyTitle="No metrics available"
+          countLabel="metrics"
+        />
       </Container>
     </ManageLayout>
   )

@@ -105,7 +105,7 @@ function VendorOrderDetail({ orderId, locale }: VendorOrderDetailProps) {
             {t(locale, "vendor.orders.placed") !== "vendor.orders.placed"
               ? t(locale, "vendor.orders.placed")
               : "Placed on"}{" "}
-            {new Date(order.created_at).toLocaleDateString()}
+            {new Date(order.created_at!).toLocaleDateString()}
           </p>
         </div>
         <span

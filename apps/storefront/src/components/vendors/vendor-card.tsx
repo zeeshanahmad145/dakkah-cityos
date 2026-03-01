@@ -12,7 +12,7 @@ export function VendorCard({ vendor }: VendorCardProps) {
 
   return (
     <Link
-      to={`${prefix}/vendors/${vendor.handle}` as any}
+      to={`${prefix}/vendors/${vendor.handle}` as never}
       className="group bg-ds-background rounded-lg border border-ds-border overflow-hidden hover:border-ds-border hover:shadow-md transition-all"
     >
       {/* Banner */}
@@ -61,21 +61,29 @@ export function VendorCard({ vendor }: VendorCardProps) {
         )}
 
         {vendor.description && (
-          <p className="text-sm text-ds-muted-foreground mt-2 line-clamp-2">{vendor.description}</p>
+          <p className="text-sm text-ds-muted-foreground mt-2 line-clamp-2">
+            {vendor.description}
+          </p>
         )}
 
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-ds-border">
           {vendor.rating !== undefined && (
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 text-ds-warning" />
-              <span className="text-sm font-medium text-ds-foreground">{vendor.rating.toFixed(1)}</span>
+              <span className="text-sm font-medium text-ds-foreground">
+                {vendor.rating.toFixed(1)}
+              </span>
               {vendor.review_count !== undefined && (
-                <span className="text-sm text-ds-muted-foreground">({vendor.review_count})</span>
+                <span className="text-sm text-ds-muted-foreground">
+                  ({vendor.review_count})
+                </span>
               )}
             </div>
           )}
           {vendor.product_count !== undefined && (
-            <span className="text-sm text-ds-muted-foreground">{vendor.product_count} products</span>
+            <span className="text-sm text-ds-muted-foreground">
+              {vendor.product_count} products
+            </span>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+﻿import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import { handleApiError } from "../../../../lib/api-error-handler"
 
@@ -289,7 +289,7 @@ export async function GET(
       features: storeFeatures
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "GET admin settings features")}
 }
 
@@ -340,7 +340,7 @@ export async function PUT(
       message: "Features updated successfully"
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "PUT admin settings features")}
 }
 
@@ -360,7 +360,7 @@ export async function POST(
       message: "Features reset to defaults"
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleApiError(res, error, "POST admin settings features")}
 }
 

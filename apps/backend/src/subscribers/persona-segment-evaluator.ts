@@ -14,7 +14,7 @@ export default async function personaSegmentSubscriber({
   if (!customerId) return;
 
   try {
-    const personaService = container.resolve("persona") as any;
+    const personaService = container.resolve("persona") as unknown as any;
 
     // Check if the service has evaluateSegment; if not, skip gracefully
     if (typeof personaService.evaluateSegmentsForCustomer !== "function") {

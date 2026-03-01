@@ -46,7 +46,7 @@ export function RentalCard({
 }) {
   return (
     <div className="group bg-ds-background border border-ds-border rounded-xl overflow-hidden hover:border-ds-ring transition-colors">
-      <Link to={`${prefix}/rentals/${rental.id}` as any} className="block">
+      <Link to={`${prefix}/rentals/${rental.id}` as never} className="block">
         <div className="relative aspect-[4/3] bg-ds-muted overflow-hidden">
           {rental.thumbnail ? (
             <img
@@ -85,7 +85,7 @@ export function RentalCard({
       </Link>
 
       <div className="p-4 space-y-3">
-        <Link to={`${prefix}/rentals/${rental.id}` as any} className="block">
+        <Link to={`${prefix}/rentals/${rental.id}` as never} className="block">
           <h3 className="font-semibold text-ds-foreground line-clamp-2 group-hover:text-ds-primary transition-colors">
             {rental.title}
           </h3>
@@ -93,12 +93,22 @@ export function RentalCard({
 
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className="text-lg font-bold text-ds-foreground">
-            {formatCurrency(rental.pricePerDay.amount, rental.pricePerDay.currencyCode, locale as SupportedLocale)}
+            {formatCurrency(
+              rental.pricePerDay.amount,
+              rental.pricePerDay.currencyCode,
+              locale as SupportedLocale,
+            )}
           </span>
-          <span className="text-sm text-ds-muted-foreground">{t(locale, "rental.per_day")}</span>
+          <span className="text-sm text-ds-muted-foreground">
+            {t(locale, "rental.per_day")}
+          </span>
           {rental.pricePerWeek && (
             <span className="text-sm text-ds-muted-foreground">
-              {formatCurrency(rental.pricePerWeek.amount, rental.pricePerWeek.currencyCode, locale as SupportedLocale)}
+              {formatCurrency(
+                rental.pricePerWeek.amount,
+                rental.pricePerWeek.currencyCode,
+                locale as SupportedLocale,
+              )}
               {t(locale, "rental.per_week")}
             </span>
           )}
@@ -108,7 +118,10 @@ export function RentalCard({
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (
-                <StarIcon key={star} filled={star <= Math.round(rental.rating!.average)} />
+                <StarIcon
+                  key={star}
+                  filled={star <= Math.round(rental.rating!.average)}
+                />
               ))}
             </div>
             <span className="text-xs text-ds-muted-foreground">
@@ -119,9 +132,23 @@ export function RentalCard({
 
         {rental.location && (
           <div className="flex items-center gap-1.5 text-sm text-ds-muted-foreground">
-            <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            <svg
+              className="w-4 h-4 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+              />
             </svg>
             <span className="truncate">{rental.location}</span>
           </div>
@@ -130,12 +157,16 @@ export function RentalCard({
         {rental.deposit && (
           <p className="text-xs text-ds-muted-foreground">
             {t(locale, "rental.deposit")}:{" "}
-            {formatCurrency(rental.deposit.amount, rental.deposit.currencyCode, locale as SupportedLocale)}
+            {formatCurrency(
+              rental.deposit.amount,
+              rental.deposit.currencyCode,
+              locale as SupportedLocale,
+            )}
           </p>
         )}
 
         <Link
-          to={`${prefix}/rentals/${rental.id}` as any}
+          to={`${prefix}/rentals/${rental.id}` as never}
           className="block w-full text-center px-4 py-2.5 text-sm font-medium rounded-lg bg-ds-primary text-ds-primary-foreground hover:bg-ds-primary/90 transition-colors"
         >
           {t(locale, "rental.rent_now")}

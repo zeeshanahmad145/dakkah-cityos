@@ -73,16 +73,16 @@ export function InstallmentSchedule({
                   {t(locale, "installments.payment_number")} #{entry.number}
                 </p>
                 <p className="text-xs text-ds-muted-foreground">
-                  {t(locale, "installments.due_date")}: {new Date(entry.dueDate).toLocaleDateString()}
+                  {t(locale, "installments.due_date")}: {new Date(entry.dueDate!).toLocaleDateString()}
                   {entry.paidDate && (
-                    <span className="ms-2">· {t(locale, "installments.paid_on")}: {new Date(entry.paidDate).toLocaleDateString()}</span>
+                    <span className="ms-2">· {t(locale, "installments.paid_on")}: {new Date(entry.paidDate!).toLocaleDateString()}</span>
                   )}
                 </p>
               </div>
 
               <div className="flex flex-col items-end flex-shrink-0">
                 <span className="text-sm font-semibold text-ds-foreground">
-                  {formatCurrency(entry.amount, currency, loc)}
+                  {formatCurrency((entry.amount ?? 0), currency, loc)}
                 </span>
                 <span className={clsx("text-xs font-medium px-2 py-0.5 rounded-full", config.color)}>
                   {t(locale, `installments.${entry.status}`)}

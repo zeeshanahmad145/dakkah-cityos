@@ -11,8 +11,8 @@ export default async function commissionCalculatorSubscriber({
   const orderId = data.id;
 
   try {
-    const query = container.resolve("query") as any;
-    const commissionService = container.resolve("commission") as any;
+    const query = container.resolve("query") as unknown as any;
+    const commissionService = container.resolve("commission") as unknown as any;
 
     // Fetch the order with items
     const {
