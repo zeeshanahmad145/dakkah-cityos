@@ -9,7 +9,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const reconciliationService: ReconciliationModuleService = req.scope.resolve(
     RECONCILIATION_MODULE,
   );
-  const eventBus = req.scope.resolve("eventBusService") as any;
+  const eventBus = req.scope.resolve("event_bus") as any;
 
   try {
     const payload = req.body as any;

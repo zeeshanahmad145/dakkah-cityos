@@ -5,7 +5,7 @@ const logger = createLogger("job:dunning-cycle");
 
 export default async function dunningCycle(container: MedusaContainer) {
   const companyService = container.resolve("company") as any;
-  const eventBus = container.resolve("eventBusService") as any;
+  const eventBus = container.resolve("event_bus") as any;
 
   try {
     // Find companies with overdue invoices

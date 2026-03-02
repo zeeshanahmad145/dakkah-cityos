@@ -41,7 +41,7 @@ export default async function rmaDisposition({
       }
       case "vendor_return": {
         // Emit event for payout/settlement deduction
-        const eventBus = container.resolve("eventBusService") as any;
+        const eventBus = container.resolve("event_bus") as any;
         await eventBus.emit?.("rma.vendor_return_confirmed", {
           return_request_id: d.return_request_id,
           vendor_id: d.vendor_id,

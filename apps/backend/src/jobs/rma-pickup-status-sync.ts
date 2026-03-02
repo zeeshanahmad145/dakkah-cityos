@@ -15,7 +15,7 @@ export default async function rmaPickupStatusSync(container: MedusaContainer) {
   }
 
   const rmaService = container.resolve("rma") as any;
-  const eventBus = container.resolve("eventBusService") as any;
+  const eventBus = container.resolve("event_bus") as any;
 
   try {
     // Find open return requests with a pickup ID

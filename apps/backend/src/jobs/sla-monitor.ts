@@ -9,7 +9,7 @@ const FULFILLMENT_DELAY_HOURS = 48;
 const PAYOUT_PENDING_DAYS = 7;
 
 export default async function slaMonitor(container: MedusaContainer) {
-  const eventBus = container.resolve("eventBusService") as any;
+  const eventBus = container.resolve("event_bus") as any;
   const auditService = container.resolve("audit") as any;
 
   try {

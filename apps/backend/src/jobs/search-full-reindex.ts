@@ -9,11 +9,11 @@ export default async function searchFullReindex(container: MedusaContainer) {
   const searchService: SearchModuleService = container.resolve(SEARCH_MODULE);
 
   try {
-    const productService = container.resolve("productService") as any;
+    const productModule = container.resolve("product") as any;
 
-    // List all publishable products
-    const [products] = (await productService.listAndCount?.(
-      { status: "published" },
+    // List all publishable products (Medusa v2 product module)
+    const [products] = (await productModule.listAndCountProducts?.(
+      { status: ["published"] },
       { take: 5000 },
     )) ?? [[], 0];
 

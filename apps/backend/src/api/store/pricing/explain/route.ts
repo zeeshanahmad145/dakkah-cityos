@@ -20,10 +20,10 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   );
 
   try {
-    // Resolve base price from Medusa pricing
-    const productService = req.scope.resolve("productService") as any;
-    const product = await productService
-      .retrieveProduct?.(product_id, { relations: ["variants"] })
+    // Resolve base price from Medusa product module (v2)
+    const productModule = req.scope.resolve("product") as any;
+    const product = await productModule
+      .retrieve?.(product_id, { relations: ["variants"] })
       .catch(() => null);
     const basePrice =
       product?.variants?.[0]?.calculated_price?.calculated_amount ?? 0;

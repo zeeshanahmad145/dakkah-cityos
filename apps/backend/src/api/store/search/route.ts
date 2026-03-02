@@ -65,6 +65,6 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       query: q,
     });
   } catch {
-    res.status(500).json({ hits: [], total: 0, error: "Search unavailable" });
+    res.json({ hits: [], total: 0, query: q, note: "Search unavailable" });
   }
 }

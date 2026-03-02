@@ -50,7 +50,7 @@ export default async function entitlementCheckoutGuard({
           `Customer ${customer_id} attempted to add gated product ${item.product_id} without entitlement`,
         );
         // Emit event for downstream monitoring
-        const eventBus = container.resolve("eventBusService") as any;
+        const eventBus = container.resolve("event_bus") as any;
         await eventBus.emit?.("entitlement.access_denied", {
           customer_id,
           product_id: item.product_id,

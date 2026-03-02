@@ -9,7 +9,7 @@ export default async function reconciliationSweep(container: MedusaContainer) {
   const reconciliationService: ReconciliationModuleService = container.resolve(
     RECONCILIATION_MODULE,
   );
-  const eventBus = container.resolve("eventBusService") as any;
+  const eventBus = container.resolve("event_bus") as any;
 
   try {
     const staleBatches = await reconciliationService.getStaleUnmatched(24);
