@@ -745,5 +745,70 @@ module.exports = defineConfig({
         },
       },
     },
+    // ── Horizontal Engine Modules ─────────────────────────────────────────
+    {
+      resolve: "./src/modules/order-orchestration",
+      key: "orderOrchestration",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/rma",
+      key: "rma",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/settlement",
+      key: "settlement",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/entitlements",
+      key: "entitlements",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/fraud",
+      key: "fraud",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/approval-workflow",
+      key: "approvalWorkflow",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/attribution",
+      key: "attribution",
+      options: {},
+    },
+    // ── Wave 2 — Enterprise Engine Modules ────────────────────────────────
+    {
+      resolve: "./src/modules/chargeback",
+      key: "chargeback",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/reconciliation",
+      key: "reconciliation",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/search",
+      key: "search",
+      options: {
+        meilisearchUrl: process.env.MEILISEARCH_URL ?? "http://localhost:7700",
+        meilisearchKey: process.env.MEILISEARCH_MASTER_KEY ?? "",
+      },
+    },
+    {
+      resolve: "./src/modules/tax-artifact",
+      key: "taxArtifact",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/pricing-resolver",
+      key: "pricingResolver",
+      options: {},
+    },
   ],
 });

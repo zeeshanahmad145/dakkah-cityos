@@ -8,6 +8,7 @@ import {
   VendorPerformanceMetric,
 } from "./models/vendor-analytics";
 import MarketplaceListing from "./models/marketplace-listing";
+import VendorSlaRecord from "./models/vendor-sla-record";
 
 /**
  * Vendor Module Service
@@ -23,6 +24,7 @@ class VendorModuleService extends MedusaService({
   VendorAnalyticsSnapshot,
   VendorPerformanceMetric,
   MarketplaceListing,
+  VendorSlaRecord,
 }) {
   // ============ Vendor Management ============
 
