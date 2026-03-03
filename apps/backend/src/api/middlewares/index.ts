@@ -1,25 +1,26 @@
-import { defineMiddlewares } from "@medusajs/framework/http"
+import { defineMiddlewares } from "@medusajs/framework/http";
 import {
   detectTenantMiddleware,
   requireTenantMiddleware,
   injectTenantContextMiddleware,
-} from "./tenant-context"
+} from "./tenant-context";
 import {
   scopeToTenantMiddleware,
   scopeToVendorMiddleware,
   scopeToCompanyMiddleware,
-} from "./scope-guards"
-import { nodeContextMiddleware } from "./node-context"
-import { platformContextMiddleware } from "./platform-context"
-import { securityHeadersMiddleware } from "../../lib/middleware/security-headers"
-import { requestLoggerMiddleware } from "../../lib/middleware/request-logger"
+} from "./scope-guards";
+import { nodeContextMiddleware } from "./node-context";
+import { platformContextMiddleware } from "./platform-context";
+import { abacVcMiddleware, buildPolicyContextMiddleware } from "./abac-vc";
+import { securityHeadersMiddleware } from "../../lib/middleware/security-headers";
+import { requestLoggerMiddleware } from "../../lib/middleware/request-logger";
 import {
   storeApiRateLimiter,
   adminApiRateLimiter,
   authRateLimiter,
   webhookRateLimiter,
   healthCheckRateLimiter,
-} from "../../lib/middleware/rate-limiter"
+} from "../../lib/middleware/rate-limiter";
 
 export default defineMiddlewares({
   routes: [
@@ -62,6 +63,8 @@ export default defineMiddlewares({
       matcher: "/store/*",
       middlewares: [
         storeApiRateLimiter,
+        buildPolicyContextMiddleware,
+        abacVcMiddleware,
         detectTenantMiddleware,
         requireTenantMiddleware,
         injectTenantContextMiddleware,
@@ -70,7 +73,11 @@ export default defineMiddlewares({
 
     {
       matcher: "/admin/*",
-      middlewares: [adminApiRateLimiter],
+      middlewares: [
+        adminApiRateLimiter,
+        buildPolicyContextMiddleware,
+        abacVcMiddleware,
+      ],
     },
 
     {
@@ -104,9 +111,10 @@ export default defineMiddlewares({
       ],
     },
   ],
-})
+});
 
-export * from "./tenant-context"
-export * from "./scope-guards"
-export * from "./node-context"
-export * from "./platform-context"
+export * from "./tenant-context";
+export * from "./scope-guards";
+export * from "./node-context";
+export * from "./platform-context";
+export * from "./abac-vc";

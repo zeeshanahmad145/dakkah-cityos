@@ -4,11 +4,13 @@ import { PricingDecision } from "./models/pricing-decision";
 // Priority order (lower number = higher priority = wins)
 const RULE_PRIORITY: Record<string, number> = {
   b2b_price_list: 1,
-  subscription_tier: 2,
-  volume_pricing: 3,
-  node_override: 4,
-  flash_deal: 5,
-  promotion: 6,
+  credential_tier: 2, // student | gov | professional
+  subscription_benefit: 3, // cross-product plan benefit
+  subscription_tier: 4,
+  volume_pricing: 5,
+  node_override: 6,
+  flash_deal: 7,
+  promotion: 8,
   base_price: 99,
 };
 
@@ -32,6 +34,9 @@ class PricingResolverModuleService extends MedusaService({ PricingDecision }) {
     activePromotionDelta?: number | null;
     b2bPriceListPrice?: number | null;
     flashDealPrice?: number | null;
+    // New in Wave-3 P2
+    credentialTierPrice?: number | null; // student | gov | professional discount price
+    subscriptionBenefitPrice?: number | null; // cross-product plan benefit price
     cartId?: string;
   }): Promise<{
     finalPrice: number;
@@ -55,6 +60,22 @@ class PricingResolverModuleService extends MedusaService({ PricingDecision }) {
         ruleType: "b2b_price_list",
         price: params.b2bPriceListPrice,
         reason: "B2B company price list",
+      });
+    }
+    if (params.credentialTierPrice != null) {
+      candidates.push({
+        priority: RULE_PRIORITY.credential_tier,
+        ruleType: "credential_tier",
+        price: params.credentialTierPrice,
+        reason: "Credential-based pricing (student/gov/professional)",
+      });
+    }
+    if (params.subscriptionBenefitPrice != null) {
+      candidates.push({
+        priority: RULE_PRIORITY.subscription_benefit,
+        ruleType: "subscription_benefit",
+        price: params.subscriptionBenefitPrice,
+        reason: "Cross-product subscription plan benefit",
       });
     }
     if (params.subscriptionTierPrice != null) {

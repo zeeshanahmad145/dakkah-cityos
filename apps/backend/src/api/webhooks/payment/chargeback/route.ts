@@ -1,6 +1,8 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { CHARGEBACK_MODULE } from "../../../../modules/chargeback";
 import type ChargebackModuleService from "../../../../modules/chargeback/service";
+import { EVENT_OUTBOX_MODULE } from "../../../../modules/event-outbox";
+import type { EventOutboxModuleService } from "../../../../modules/event-outbox";
 import { createLogger } from "../../../../lib/logger";
 
 const logger = createLogger("webhook:payment-chargeback");
@@ -17,10 +19,24 @@ const STATUS_MAP: Record<string, string> = {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const chargebackService: ChargebackModuleService =
     req.scope.resolve(CHARGEBACK_MODULE);
+  const outboxService = req.scope.resolve(
+    EVENT_OUTBOX_MODULE,
+  ) as unknown as EventOutboxModuleService;
   const eventBus = req.scope.resolve("event_bus") as any;
 
   try {
     const payload = req.body as any;
+    const stripeEventId: string = payload.id ?? "";
+
+    // Idempotency guard — skip if already processed (Stripe retries)
+    if (stripeEventId) {
+      const alreadyProcessed = await outboxService.markProcessed(
+        stripeEventId,
+        "chargeback_webhook",
+      );
+      if (alreadyProcessed)
+        return res.json({ received: true, skipped: true, reason: "duplicate" });
+    }
     const eventType: string = payload.type ?? "";
     const dispute = payload.data?.object ?? {};
 

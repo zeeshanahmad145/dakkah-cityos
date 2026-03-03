@@ -17,6 +17,10 @@ const ReturnRequest = model.define("return_request", {
   rejected_at: model.dateTime().nullable(),
   rejected_reason: model.text().nullable(),
   refund_amount: model.number().nullable(),
+  // disposition: set by applyInspectionOutcome() to final routing decision
+  // restocked | partial_refund | scrap | trade_in_accepted | warranty_repair | warranty_replace
+  disposition: model.text().nullable(),
+  restocking_fee_amount: model.number().nullable(),
   metadata: model.json().nullable(),
 });
 

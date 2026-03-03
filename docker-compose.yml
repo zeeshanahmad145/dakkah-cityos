@@ -1,0 +1,60 @@
+version: "3.9"
+
+# ──────────────────────────────────────────────────────────────────
+# Dakkah CityOS — Local Development docker-compose
+#
+# NOTE: Temporal Cloud is used for orchestration — no self-hosted
+# Temporal here. Configure via env vars:
+#   TEMPORAL_ADDRESS=<namespace>.tmprl.cloud:7233
+#   TEMPORAL_NAMESPACE=<your-namespace>
+#   TEMPORAL_TASK_QUEUE=uce-commerce
+#   TEMPORAL_TLS_CERT=<path-to-cert>   (if using mTLS)
+#   TEMPORAL_TLS_KEY=<path-to-key>
+#
+# Services here: Postgres, Redis, Meilisearch (local dev only)
+# ──────────────────────────────────────────────────────────────────
+
+services:
+  # ── PostgreSQL (local dev DB) ──────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: dakkah-postgres
+    environment:
+      - POSTGRES_DB=dakkah_cityos
+      - POSTGRES_USER=medusa
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-medusa_local_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medusa -d dakkah_cityos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis (event bus + cache) ──────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: dakkah-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # ── Meilisearch ────────────────────────────────────────────────
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    container_name: dakkah-meilisearch
+    environment:
+      - MEILI_MASTER_KEY=${MEILISEARCH_MASTER_KEY:-masterKey}
+      - MEILI_ENV=development
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch-data:/meili_data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  meilisearch-data:

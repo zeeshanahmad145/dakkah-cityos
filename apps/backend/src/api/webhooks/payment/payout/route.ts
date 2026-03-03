@@ -1,6 +1,8 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import { RECONCILIATION_MODULE } from "../../../../modules/reconciliation";
 import type ReconciliationModuleService from "../../../../modules/reconciliation/service";
+import { EVENT_OUTBOX_MODULE } from "../../../../modules/event-outbox";
+import type { EventOutboxModuleService } from "../../../../modules/event-outbox";
 import { createLogger } from "../../../../lib/logger";
 
 const logger = createLogger("webhook:payment-payout");
@@ -9,10 +11,20 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const reconciliationService: ReconciliationModuleService = req.scope.resolve(
     RECONCILIATION_MODULE,
   );
+  const outboxService = req.scope.resolve(
+    EVENT_OUTBOX_MODULE,
+  ) as unknown as EventOutboxModuleService;
   const eventBus = req.scope.resolve("event_bus") as any;
 
   try {
     const payload = req.body as any;
+    const stripeEventId: string = payload.id ?? "";
+    if (
+      stripeEventId &&
+      (await outboxService.markProcessed(stripeEventId, "payout_webhook"))
+    ) {
+      return res.json({ received: true, skipped: true, reason: "duplicate" });
+    }
     const eventType: string = payload.type ?? "";
     const payout = payload.data?.object ?? {};
 

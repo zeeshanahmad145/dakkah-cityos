@@ -5,7 +5,9 @@ const FraudSignal = model.define("fraud_signal", {
   customer_id: model.text().nullable(),
   vendor_id: model.text().nullable(),
   order_id: model.text().nullable(),
-  // signal_type: velocity|high_value|geo_mismatch|coupon_abuse|card_test|vendor_cancel_spike
+  // promotion_id: set when signal relates to promotion/coupon abuse
+  promotion_id: model.text().nullable(),
+  // signal_type: velocity|high_value|geo_mismatch|coupon_abuse|card_test|vendor_cancel_spike|promotion_abuse|review_velocity|return_abuse|price_manipulation|refund_cycle|chargeback_farm|address_cycle|buyer_anomaly
   signal_type: model.text(),
   score_contribution: model.number().default(0),
   metadata: model.json().nullable(),
@@ -29,7 +31,9 @@ const FraudCase = model.define("fraud_case", {
   composite_score: model.number().default(0),
   // status: open|reviewing|resolved_safe|resolved_fraud
   status: model.text().default("open"),
-  action_taken: model.text().nullable(), // blocked|flagged|none
+  action_taken: model.text().nullable(), // blocked|flagged|suspended|none
+  // case_type: standard | vendor_behavior | promotion_abuse | buyer_anomaly
+  case_type: model.text().default("standard"),
   // JSON array of fraud_signal ids
   signal_ids: model.json(),
   resolved_at: model.dateTime().nullable(),

@@ -4,11 +4,13 @@ import {
   SettlementLine,
   SettlementReversal,
 } from "./models/settlement-ledger";
+import { SettlementPayoutLine } from "./models/settlement-payout-line";
 
 class SettlementModuleService extends MedusaService({
   SettlementLedger,
   SettlementLine,
   SettlementReversal,
+  SettlementPayoutLine,
 }) {
   /**
    * Create a settlement ledger for a completed order with multi-party lines.

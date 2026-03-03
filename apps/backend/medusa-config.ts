@@ -810,5 +810,113 @@ module.exports = defineConfig({
       key: "pricingResolver",
       options: {},
     },
+    // ── Wave 3 — P0 Financial Integrity Modules ───────────────────────────
+    {
+      resolve: "./src/modules/saga",
+      key: "saga",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/event-outbox",
+      key: "eventOutbox",
+      options: {},
+    },
+    // ── Wave 3 — P1 Revenue Protection Modules ────────────────────────────
+    {
+      resolve: "./src/modules/cart-rules",
+      key: "cartRules",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/identity-gate",
+      key: "identityGate",
+      options: {
+        waltIdVerifierUrl: process.env.WALT_ID_VERIFIER_URL ?? "",
+      },
+    },
+    {
+      resolve: "./src/modules/ledger-snapshot",
+      key: "ledgerSnapshot",
+      options: {
+        driftThresholdPercent: parseFloat(
+          process.env.LEDGER_DRIFT_THRESHOLD_PERCENT ?? "0.5",
+        ),
+      },
+    },
+    // ── Wave 3 — P2 Operational Completeness Modules ──────────────────────
+    {
+      resolve: "./src/modules/fulfillment-legs",
+      key: "fulfillmentLegs",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/subscription-benefits",
+      key: "subscriptionBenefits",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/metering",
+      key: "metering",
+      options: {},
+    },
+    // ── Wave 3 — P3 Scale & Intelligence Modules ──────────────────────────
+    {
+      resolve: "./src/modules/projections",
+      key: "projections",
+      options: {},
+    },
+    // ── Layer 0 — Universal Commerce Kernel ───────────────────────────────
+    {
+      resolve: "./src/modules/kernel",
+      key: "kernel",
+      options: {},
+    },
+    // ── Layer 0 Phase B — Unified Ledger + Policy Engine + Commerce Contract ──
+    {
+      resolve: "./src/modules/ledger",
+      key: "ledger",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/policy-engine",
+      key: "policyEngine",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/commerce-contract",
+      key: "commerceContract",
+      options: {},
+    },
+    // ── Layer 0 Phase C — Resource + Simulation + Revenue Topology ────────────
+    {
+      resolve: "./src/modules/resource",
+      key: "resource",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/simulation",
+      key: "simulation",
+      options: {},
+    },
+    {
+      resolve: "./src/modules/revenue-topology",
+      key: "revenueTopology",
+      options: {},
+    },
+    // ── Layer 0 Phase D — Economic Health + Observability ─────────────────
+    {
+      resolve: "./src/modules/economic-health",
+      key: "economicHealth",
+      options: {},
+    },
+    // ── UCE Kernel Hardening — Reconciliation Truth Hierarchy ─────────────
+    // ReconciliationConfigModuleService: data-backed service for the
+    // truth hierarchy + per-account drift thresholds.
+    // Separate key so it gets its own MedusaService DI binding.
+    {
+      resolve: "./src/modules/economic-health/reconciliation-config-service",
+      key: "reconciliationConfig",
+      options: {},
+    },
   ],
 });

@@ -64,20 +64,120 @@ class RmaModuleService extends MedusaService({
   }
 
   /**
-   * Approve a return request after inspection.
+   * Apply the outcome of a physical inspection to a return request.
+   * Disposition routing:
+   *   "good"             → restock (no fee), full refund
+   *   "damaged"          → apply restocking fee, partial refund
+   *   "unsellable"       → vendor return or scrap, no refund
+   *   "trade_in_accept"  → update trade-in offer, partial credit
+   *   "warranty_repair"  → route to repair workflow
+   *   "warranty_replace" → issue replacement order
    */
-  async approveReturn(
+  async applyInspectionOutcome(
     returnRequestId: string,
-    refundAmount: number,
-    restockingFee: number = 0,
+    outcome:
+      | "good"
+      | "damaged"
+      | "unsellable"
+      | "trade_in_accept"
+      | "warranty_repair"
+      | "warranty_replace",
+    details: {
+      adjustedValue?: number; // for trade_in_accept
+      restockingFeePercent?: number; // for damaged
+      eventBus?: any;
+    } = {},
   ): Promise<any> {
-    const finalRefund = Math.max(0, refundAmount - restockingFee);
-    return this.updateReturnRequests({
-      id: returnRequestId,
-      status: "approved",
-      refund_amount: finalRefund,
-      approved_at: new Date(),
-    } as any);
+    const returnRequest = (await this.retrieveReturnRequest(
+      returnRequestId,
+    )) as any;
+
+    switch (outcome) {
+      case "good": {
+        // Full restock — no fee, full refund approved
+        await this.updateReturnRequests({
+          id: returnRequestId,
+          disposition: "restocked",
+          restocking_fee_amount: 0,
+          status: "approved",
+          approved_at: new Date(),
+        } as any);
+        await details.eventBus?.emit?.("rma.disposition.restock", {
+          return_request_id: returnRequestId,
+        });
+        break;
+      }
+      case "damaged": {
+        const fee =
+          returnRequest.refund_amount *
+          ((details.restockingFeePercent ?? 20) / 100);
+        const netRefund = Math.max(0, returnRequest.refund_amount - fee);
+        await this.updateReturnRequests({
+          id: returnRequestId,
+          disposition: "partial_refund",
+          restocking_fee_amount: fee,
+          refund_amount: netRefund,
+          status: "approved",
+          approved_at: new Date(),
+        } as any);
+        await details.eventBus?.emit?.("rma.disposition.partial_refund", {
+          return_request_id: returnRequestId,
+          net_refund: netRefund,
+          fee,
+        });
+        break;
+      }
+      case "unsellable": {
+        await this.updateReturnRequests({
+          id: returnRequestId,
+          disposition: "scrap",
+          refund_amount: 0,
+          status: "closed",
+        } as any);
+        await details.eventBus?.emit?.("rma.disposition.scrap", {
+          return_request_id: returnRequestId,
+        });
+        break;
+      }
+      case "trade_in_accept": {
+        await this.updateReturnRequests({
+          id: returnRequestId,
+          disposition: "trade_in",
+          refund_amount: details.adjustedValue ?? 0,
+          status: "approved",
+          approved_at: new Date(),
+        } as any);
+        await details.eventBus?.emit?.("rma.disposition.trade_in", {
+          return_request_id: returnRequestId,
+          adjusted_value: details.adjustedValue,
+        });
+        break;
+      }
+      case "warranty_repair": {
+        await this.updateReturnRequests({
+          id: returnRequestId,
+          disposition: "repair",
+          status: "in_progress",
+        } as any);
+        await details.eventBus?.emit?.("rma.disposition.warranty_repair", {
+          return_request_id: returnRequestId,
+        });
+        break;
+      }
+      case "warranty_replace": {
+        await this.updateReturnRequests({
+          id: returnRequestId,
+          disposition: "replace",
+          status: "in_progress",
+        } as any);
+        await details.eventBus?.emit?.("rma.disposition.warranty_replace", {
+          return_request_id: returnRequestId,
+        });
+        break;
+      }
+    }
+
+    return this.retrieveReturnRequest(returnRequestId);
   }
 }
 
