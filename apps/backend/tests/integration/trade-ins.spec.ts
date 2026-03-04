@@ -6,8 +6,8 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "customer_id": "cust-1772652757882",
-    "title": "Trade 1772652757882",
+    "customer_id": "cust-1772654359049",
+    "title": "Trade 1772654359049",
     "condition": "good",
     "estimated_value": 200,
     "currency_code": "SAR",

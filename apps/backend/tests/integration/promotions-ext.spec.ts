@@ -6,7 +6,7 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "code": "GIFT-1772652757882",
+    "code": "GIFT-1772654359049",
     "amount": 50,
     "currency_code": "SAR",
     "tenant_id": "test-tenant-1",

@@ -1,19 +1,17 @@
 import { generateCrudTests } from "./utils/crud-test-generator";
 
+const TS = Date.now();
 generateCrudTests({
-  "moduleName": "Subscriptions",
-  "basePath": "/admin/subscriptions",
-  "entityKey": "item",
-  "listKey": "items",
-  "createPayload": {
-    "name": "Sub 1772652757882",
-    "description": "Monthly subscription",
-    "currency_code": "SAR",
-    "tenant_id": "test-tenant-1",
-    "billing_interval": "monthly",
-    "price": 99
+  moduleName: "Subscriptions",
+  basePath: "/admin/subscriptions",
+  entityKey: "subscription",
+  listKey: "subscriptions",
+  createPayload: {
+    customer_id: `cust-${TS}`,
+    plan_id: `plan-${TS}`,
+    billing_interval: "monthly",
+    currency_code: "SAR",
+    status: "active",
   },
-  "updatePayload": {
-    "name": "Updated Subscription"
-  }
+  updatePayload: { status: "paused" },
 });

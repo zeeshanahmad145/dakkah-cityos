@@ -6,7 +6,9 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Bundle 1772652757882",
+    "name": "Bundle 1772654359049",
+    "title": "Bundle 1772654359049",
+    "handle": "bundle-1772654359049",
     "bundle_type": "fixed",
     "discount_type": "percentage",
     "discount_value": 10,

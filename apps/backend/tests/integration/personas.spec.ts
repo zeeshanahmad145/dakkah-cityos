@@ -6,8 +6,8 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Persona 1772652757882",
-    "handle": "persona-1772652757882",
+    "name": "Persona 1772654359049",
+    "handle": "persona-1772654359049",
     "type": "buyer",
     "tenant_id": "test-tenant-1"
   },

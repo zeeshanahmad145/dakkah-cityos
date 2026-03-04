@@ -6,7 +6,7 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "PetSvc 1772652757882",
+    "name": "PetSvc 1772654359049",
     "service_type": "grooming",
     "price": 50,
     "currency_code": "SAR",

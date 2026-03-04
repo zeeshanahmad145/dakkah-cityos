@@ -5,10 +5,12 @@ import { handleApiError } from "../../../lib/api-error-handler";
 const createSchema = z
   .object({
     tenant_id: z.string(),
-    is_active: z.boolean().optional(),
-    expires_at: z.string().optional(),
+    code: z.string().optional(), // GiftCardExt.code NOT NULL unique
     initial_value: z.number(),
     remaining_value: z.number().optional(),
+    currency_code: z.string(), // GiftCardExt.currency_code NOT NULL
+    is_active: z.boolean().optional(),
+    expires_at: z.string().optional(),
     metadata: z.record(z.string(), z.unknown()).optional(),
   })
   .passthrough();
