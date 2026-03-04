@@ -1,12 +1,13 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Order Fulfillment Workflow – Integration", () => {
@@ -16,7 +17,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/order-fulfillment.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     validateOrderStep = calls.find((c: any) => c[0] === "validate-order-step")?.[1]
     allocateInventoryStep = calls.find((c: any) => c[0] === "allocate-inventory-step")?.[1]
@@ -32,9 +33,9 @@ describe("Order Fulfillment Workflow – Integration", () => {
 
   describe("end-to-end workflow execution", () => {
     it("should execute all steps in sequence for a valid order", async () => {
-      const retrieveOrder = jest.fn().mockResolvedValue({ id: "order_01", status: "pending" })
-      const createReservationItems = jest.fn().mockResolvedValue([{ id: "alloc_01" }, { id: "alloc_02" }])
-      const createFulfillment = jest.fn().mockResolvedValue({ id: "ship_01", status: "created" })
+      const retrieveOrder = vi.fn().mockResolvedValue({ id: "order_01", status: "pending" })
+      const createReservationItems = vi.fn().mockResolvedValue([{ id: "alloc_01" }, { id: "alloc_02" }])
+      const createFulfillment = vi.fn().mockResolvedValue({ id: "ship_01", status: "created" })
 
       const container = mockContainer({
         order: { retrieveOrder },
@@ -65,7 +66,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should stop workflow when order validation fails", async () => {
-      const retrieveOrder = jest.fn().mockResolvedValue(null)
+      const retrieveOrder = vi.fn().mockResolvedValue(null)
       const container = mockContainer({
         order: { retrieveOrder },
       })
@@ -75,9 +76,9 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should resolve the correct modules from the container", async () => {
-      const retrieveOrder = jest.fn().mockResolvedValue({ id: "order_01", status: "pending" })
-      const createReservationItems = jest.fn().mockResolvedValue([])
-      const createFulfillment = jest.fn().mockResolvedValue({ id: "ship_01" })
+      const retrieveOrder = vi.fn().mockResolvedValue({ id: "order_01", status: "pending" })
+      const createReservationItems = vi.fn().mockResolvedValue([])
+      const createFulfillment = vi.fn().mockResolvedValue({ id: "ship_01" })
 
       const container = mockContainer({
         order: { retrieveOrder },
@@ -96,7 +97,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should transform line items into reservation format for inventory", async () => {
-      const createReservationItems = jest.fn().mockResolvedValue([{ id: "alloc_01" }])
+      const createReservationItems = vi.fn().mockResolvedValue([{ id: "alloc_01" }])
       const container = mockContainer({
         inventory: { createReservationItems },
       })
@@ -116,14 +117,14 @@ describe("Order Fulfillment Workflow – Integration", () => {
 
   describe("step failure with compensation", () => {
     it("should compensate inventory allocation when shipment creation fails", async () => {
-      const deleteReservationItems = jest.fn().mockResolvedValue(undefined)
+      const deleteReservationItems = vi.fn().mockResolvedValue(undefined)
       const allocations = [{ id: "alloc_01" }, { id: "alloc_02" }]
       const container = mockContainer({
         inventory: {
-          createReservationItems: jest.fn().mockResolvedValue(allocations),
+          createReservationItems: vi.fn().mockResolvedValue(allocations),
           deleteReservationItems,
         },
-        fulfillment: { createFulfillment: jest.fn().mockRejectedValue(new Error("Carrier unavailable")) },
+        fulfillment: { createFulfillment: vi.fn().mockRejectedValue(new Error("Carrier unavailable")) },
       })
 
       const allocResult = await allocateInventoryStep(validInput, { container })
@@ -139,10 +140,10 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should compensate shipment when a later error occurs", async () => {
-      const cancelFulfillment = jest.fn().mockResolvedValue(undefined)
+      const cancelFulfillment = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         fulfillment: {
-          createFulfillment: jest.fn().mockResolvedValue({ id: "ship_01" }),
+          createFulfillment: vi.fn().mockResolvedValue({ id: "ship_01" }),
           cancelFulfillment,
         },
       })
@@ -157,7 +158,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should handle compensation gracefully when compensationData is undefined", async () => {
-      const deleteReservationItems = jest.fn()
+      const deleteReservationItems = vi.fn()
       const container = mockContainer({
         inventory: { deleteReservationItems },
       })
@@ -168,7 +169,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should handle compensation gracefully when allocations array is empty", async () => {
-      const deleteReservationItems = jest.fn()
+      const deleteReservationItems = vi.fn()
       const container = mockContainer({
         inventory: { deleteReservationItems },
       })
@@ -181,7 +182,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
 
   describe("state verification after compensation", () => {
     it("should leave no orphaned reservations after full compensation", async () => {
-      const deleteReservationItems = jest.fn().mockResolvedValue(undefined)
+      const deleteReservationItems = vi.fn().mockResolvedValue(undefined)
       const allocations = [{ id: "alloc_01" }]
       const container = mockContainer({
         inventory: { deleteReservationItems },
@@ -193,7 +194,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should leave no orphaned fulfillments after shipment compensation", async () => {
-      const cancelFulfillment = jest.fn().mockResolvedValue(undefined)
+      const cancelFulfillment = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         fulfillment: { cancelFulfillment },
       })
@@ -205,7 +206,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
 
     it("should not throw when compensation service call fails", async () => {
       const container = mockContainer({
-        inventory: { deleteReservationItems: jest.fn().mockRejectedValue(new Error("Already deleted")) },
+        inventory: { deleteReservationItems: vi.fn().mockRejectedValue(new Error("Already deleted")) },
       })
 
       await expect(
@@ -219,7 +220,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should run allocate-inventory compensation idempotently", async () => {
-      const deleteReservationItems = jest.fn().mockResolvedValue(undefined)
+      const deleteReservationItems = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         inventory: { deleteReservationItems },
       })
@@ -236,7 +237,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should run create-shipment compensation idempotently", async () => {
-      const cancelFulfillment = jest.fn().mockResolvedValue(undefined)
+      const cancelFulfillment = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         fulfillment: { cancelFulfillment },
       })
@@ -252,7 +253,7 @@ describe("Order Fulfillment Workflow – Integration", () => {
     })
 
     it("should compensate each allocation individually for partial failure resilience", async () => {
-      const deleteReservationItems = jest.fn()
+      const deleteReservationItems = vi.fn()
         .mockResolvedValueOnce(undefined)
         .mockRejectedValueOnce(new Error("Not found"))
         .mockResolvedValueOnce(undefined)

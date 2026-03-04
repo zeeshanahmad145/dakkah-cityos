@@ -53,6 +53,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res
       .status(400)
       .json({ message: "Validation failed", errors: parsed.error.issues });
-  const item = await moduleService.createRestaurants(parsed.data);
+  const raw = await moduleService.createRestaurants(parsed.data);
+    const item = Array.isArray(raw) ? raw[0] : raw;
   return res.status(201).json({ item });
 }

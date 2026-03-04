@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -77,13 +78,13 @@ describe("GovernmentModuleService", () => {
   let service: GovernmentModuleService;
 
   beforeEach(() => {
-    service = new GovernmentModuleService();
-    jest.clearAllMocks();
+    service = new GovernmentModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("issuePermit", () => {
     it("issues a permit for an approved application", async () => {
-      jest.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
         id: "app-1",
         status: "resolved",
         citizen_id: "citizen-1",
@@ -108,7 +109,7 @@ describe("GovernmentModuleService", () => {
     });
 
     it("throws when application is not approved", async () => {
-      jest.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
         id: "app-1",
         status: "submitted",
       });
@@ -123,7 +124,7 @@ describe("GovernmentModuleService", () => {
     });
 
     it("throws when validFrom is after validUntil", async () => {
-      jest.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
         id: "app-1",
         status: "resolved",
       });
@@ -140,7 +141,7 @@ describe("GovernmentModuleService", () => {
 
   describe("renewPermit", () => {
     it("renews an active permit extending by one year", async () => {
-      jest.spyOn(service, "retrievePermit").mockResolvedValue({
+      vi.spyOn(service, "retrievePermit").mockResolvedValue({
         id: "permit-1",
         status: "active",
         valid_until: new Date("2026-06-01"),
@@ -160,7 +161,7 @@ describe("GovernmentModuleService", () => {
     });
 
     it("renews an expired permit", async () => {
-      jest.spyOn(service, "retrievePermit").mockResolvedValue({
+      vi.spyOn(service, "retrievePermit").mockResolvedValue({
         id: "permit-1",
         status: "expired",
         valid_until: new Date("2024-01-01"),
@@ -177,7 +178,7 @@ describe("GovernmentModuleService", () => {
     });
 
     it("throws when permit status is not active or expired", async () => {
-      jest.spyOn(service, "retrievePermit").mockResolvedValue({
+      vi.spyOn(service, "retrievePermit").mockResolvedValue({
         id: "permit-1",
         status: "revoked",
       });
@@ -190,7 +191,7 @@ describe("GovernmentModuleService", () => {
 
   describe("getApplicationStatus", () => {
     it("builds timeline for a resolved application with permits", async () => {
-      jest.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
         id: "app-1",
         status: "resolved",
         created_at: new Date("2025-01-01"),
@@ -214,12 +215,12 @@ describe("GovernmentModuleService", () => {
     });
 
     it("builds timeline for a submitted application with no permits", async () => {
-      jest.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceRequest").mockResolvedValue({
         id: "app-2",
         status: "submitted",
         created_at: new Date("2025-02-01"),
       });
-      jest.spyOn(service, "listPermits").mockResolvedValue([]);
+      vi.spyOn(service, "listPermits").mockResolvedValue([]);
 
       const result = await service.getApplicationStatus("app-2");
 

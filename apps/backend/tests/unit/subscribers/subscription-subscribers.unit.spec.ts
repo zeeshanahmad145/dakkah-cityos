@@ -1,7 +1,8 @@
-jest.mock("../../../src/lib/logger", () => ({
-  subscriberLogger: { info: jest.fn(), error: jest.fn(), warn: jest.fn() },
+import { vi } from "vitest";
+vi.mock("../../../src/lib/logger", () => ({
+  subscriberLogger: { info: vi.fn(), error: vi.fn(), warn: vi.fn() },
 }));
-jest.mock("../../../src/lib/config", () => ({
+vi.mock("../../../src/lib/config", () => ({
   appConfig: {
     storefrontUrl: "https://store.test",
     urls: { storefront: "https://store.test" },
@@ -31,13 +32,13 @@ import { config as renewalConfig } from "../../../src/subscribers/subscription-r
 import subscriptionResumedHandler from "../../../src/subscribers/subscription-resumed";
 import { config as resumedConfig } from "../../../src/subscribers/subscription-resumed";
 
-const mockCreateNotifications = jest.fn();
-const mockRetrieveSubscription = jest.fn();
-const mockRetrieveSubscriptionPlan = jest.fn();
+const mockCreateNotifications = vi.fn();
+const mockRetrieveSubscription = vi.fn();
+const mockRetrieveSubscriptionPlan = vi.fn();
 
 function makeContainer() {
   return {
-    resolve: jest.fn((dep: string) => {
+    resolve: vi.fn((dep: string) => {
       if (dep === "notification")
         return { createNotifications: mockCreateNotifications };
       if (dep === "subscription")
@@ -65,7 +66,7 @@ const fullSubscription = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockRetrieveSubscription.mockResolvedValue(fullSubscription);
   mockRetrieveSubscriptionPlan.mockResolvedValue({ name: "Basic Plan" });
 });

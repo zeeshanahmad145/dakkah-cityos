@@ -1,17 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) =>
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) =>
     Object.assign(fn, { compensate }),
   ),
-  StepResponse: jest.fn((data, compensationData) => ({
-    ...data,
-    __compensation: compensationData,
-  })),
-  WorkflowResponse: jest.fn((data) => data),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 describe("Payment Reconciliation Workflow", () => {
@@ -22,7 +20,7 @@ describe("Payment Reconciliation Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/payment-reconciliation.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     fetchPaymentRecordsStep = calls.find(
       (c: any) => c[0] === "fetch-payment-records-step",
@@ -53,7 +51,7 @@ describe("Payment Reconciliation Workflow", () => {
         { id: "pay_03" },
       ];
       const container = mockContainer({
-        payment: { listPayments: jest.fn().mockResolvedValue(mockPayments) },
+        payment: { listPayments: vi.fn().mockResolvedValue(mockPayments) },
       });
       const result = await fetchPaymentRecordsStep(validInput, { container });
       expect(result.payments).toEqual(mockPayments);
@@ -62,7 +60,7 @@ describe("Payment Reconciliation Workflow", () => {
 
     it("should handle empty payment results", async () => {
       const container = mockContainer({
-        payment: { listPayments: jest.fn().mockResolvedValue([]) },
+        payment: { listPayments: vi.fn().mockResolvedValue([]) },
       });
       const result = await fetchPaymentRecordsStep(validInput, { container });
       expect(result.payments).toEqual([]);

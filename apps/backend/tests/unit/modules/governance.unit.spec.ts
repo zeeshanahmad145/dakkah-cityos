@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -57,13 +58,13 @@ describe("GovernanceModuleService", () => {
   let service: GovernanceModuleService;
 
   beforeEach(() => {
-    service = new GovernanceModuleService();
-    jest.clearAllMocks();
+    service = new GovernanceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("evaluatePolicyChain", () => {
     it("returns effective policy merged from authority chain", async () => {
-      jest.spyOn(service, "retrieveGovernanceAuthority").mockResolvedValueOnce({
+      vi.spyOn(service, "retrieveGovernanceAuthority").mockResolvedValueOnce({
         id: "auth-1",
         type: "region",
         parent_authority_id: null,
@@ -78,7 +79,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("returns empty policy when no policies match type", async () => {
-      jest.spyOn(service, "retrieveGovernanceAuthority").mockResolvedValueOnce({
+      vi.spyOn(service, "retrieveGovernanceAuthority").mockResolvedValueOnce({
         id: "auth-1",
         type: "region",
         parent_authority_id: null,
@@ -119,7 +120,7 @@ describe("GovernanceModuleService", () => {
 
   describe("checkComplianceStatus", () => {
     it("returns compliant when all policies are satisfied", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "auth-1",
           type: "region",
@@ -137,7 +138,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("returns violations for non-compliant policies", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "auth-1",
           type: "region",
@@ -158,7 +159,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("returns compliant when no authorities exist", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
 
       const result = await service.checkComplianceStatus("t-1");
       expect(result.compliant).toBe(true);
@@ -168,7 +169,7 @@ describe("GovernanceModuleService", () => {
 
   describe("getPolicyAuditTrail", () => {
     it("returns audit trail for existing policy", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "auth-1",
           type: "region",
@@ -192,7 +193,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("throws when policy is not found", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
 
       await expect(service.getPolicyAuditTrail("nonexistent")).rejects.toThrow(
         "No audit trail found",

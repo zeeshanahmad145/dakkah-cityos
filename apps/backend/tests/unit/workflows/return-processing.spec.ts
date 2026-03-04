@@ -1,12 +1,13 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Return Processing Workflow", () => {
@@ -17,7 +18,7 @@ describe("Return Processing Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/return-processing.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     requestReturnStep = calls.find((c: any) => c[0] === "request-return-step")?.[1]
     inspectReturnStep = calls.find((c: any) => c[0] === "inspect-return-items-step")?.[1]

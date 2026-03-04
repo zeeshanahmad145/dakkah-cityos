@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -49,8 +50,8 @@ describe("RegionZoneModuleService", () => {
   let service: RegionZoneModuleService;
 
   beforeEach(() => {
-    service = new RegionZoneModuleService();
-    jest.clearAllMocks();
+    service = new RegionZoneModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getRegionsForZone", () => {
@@ -59,7 +60,7 @@ describe("RegionZoneModuleService", () => {
         { id: "1", residency_zone: "GCC", medusa_region_id: "reg_1" },
         { id: "2", residency_zone: "GCC", medusa_region_id: "reg_2" },
       ];
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
 
       const result = await service.getRegionsForZone("GCC");
       expect(result).toEqual(mappings);
@@ -71,7 +72,7 @@ describe("RegionZoneModuleService", () => {
         residency_zone: "GCC",
         medusa_region_id: "reg_1",
       };
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mapping);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mapping);
 
       const result = await service.getRegionsForZone("GCC");
       expect(result).toEqual([mapping]);
@@ -94,7 +95,7 @@ describe("RegionZoneModuleService", () => {
     });
 
     it("returns null when no mappings found", async () => {
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
 
       const result = await service.getZoneForRegion("nonexistent");
       expect(result).toBeNull();
@@ -123,7 +124,7 @@ describe("RegionZoneModuleService", () => {
     });
 
     it("returns null when no mapping found", async () => {
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
 
       const result = await service.getZonesByRegion("nonexistent");
       expect(result).toBeNull();
@@ -165,7 +166,7 @@ describe("RegionZoneModuleService", () => {
           country_codes: ["DE", "FR"],
         },
       ];
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
 
       const result = await service.getActiveZones();
       expect(result).toHaveLength(2);
@@ -189,7 +190,7 @@ describe("RegionZoneModuleService", () => {
           country_codes: null,
         },
       ];
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
 
       const result = await service.getActiveZones();
       expect(result[0].totalCountries).toBe(0);
@@ -207,7 +208,7 @@ describe("RegionZoneModuleService", () => {
     });
 
     it("returns false when no mappings", async () => {
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
 
       const result = await service.validateZoneAccess("tenant-1", "GCC");
       expect(result).toBe(false);
@@ -241,7 +242,7 @@ describe("RegionZoneModuleService", () => {
           policies_override: { vat: true },
         },
       ];
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
 
       const result = await service.getResidencyRequirements("GCC");
       expect(result).toMatchObject({
@@ -258,7 +259,7 @@ describe("RegionZoneModuleService", () => {
     });
 
     it("returns null when no mappings", async () => {
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue([]);
 
       const result = await service.getResidencyRequirements("UNKNOWN");
       expect(result).toBeNull();
@@ -275,7 +276,7 @@ describe("RegionZoneModuleService", () => {
           policies_override: null,
         },
       ];
-      jest.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
+      vi.spyOn(service, "listRegionZoneMappings").mockResolvedValue(mappings);
 
       const result = await service.resolveZoneForCountry("sa");
       expect(result).toEqual({

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,8 +60,8 @@ describe("TradeInService", () => {
   let service: TradeInService;
 
   beforeEach(() => {
-    service = new TradeInService();
-    jest.clearAllMocks();
+    service = new TradeInService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createTradeInRequests", () => {
@@ -111,7 +112,7 @@ describe("TradeInService", () => {
 
   describe("item evaluation scoring", () => {
     it("updates request with evaluation data for excellent condition", async () => {
-      jest.spyOn(service, "retrieveTradeInRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveTradeInRequest").mockResolvedValue({
         id: "tir_1",
         condition: "excellent",
         status: "pending_evaluation",
@@ -156,7 +157,7 @@ describe("TradeInService", () => {
     });
 
     it("calculates lower value for poor condition items", async () => {
-      jest.spyOn(service, "retrieveTradeInRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveTradeInRequest").mockResolvedValue({
         id: "tir_2",
         condition: "poor",
         status: "pending_evaluation",
@@ -180,7 +181,7 @@ describe("TradeInService", () => {
 
   describe("offer creation", () => {
     it("creates an offer for an evaluated request", async () => {
-      jest.spyOn(service, "retrieveTradeInRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveTradeInRequest").mockResolvedValue({
         id: "tir_1",
         status: "evaluated",
         estimated_value: 300,
@@ -215,7 +216,7 @@ describe("TradeInService", () => {
 
   describe("offer acceptance", () => {
     it("accepts an offer and updates request to approved", async () => {
-      jest.spyOn(service, "retrieveTradeInOffer").mockResolvedValue({
+      vi.spyOn(service, "retrieveTradeInOffer").mockResolvedValue({
         id: "tio_1",
         request_id: "tir_1",
         status: "pending",
@@ -264,7 +265,7 @@ describe("TradeInService", () => {
 
   describe("offer rejection", () => {
     it("rejects an offer with a reason", async () => {
-      jest.spyOn(service, "retrieveTradeInOffer").mockResolvedValue({
+      vi.spyOn(service, "retrieveTradeInOffer").mockResolvedValue({
         id: "tio_1",
         request_id: "tir_1",
         status: "pending",
@@ -291,7 +292,7 @@ describe("TradeInService", () => {
     });
 
     it("cannot accept an already rejected offer", async () => {
-      jest.spyOn(service, "retrieveTradeInOffer").mockResolvedValue({
+      vi.spyOn(service, "retrieveTradeInOffer").mockResolvedValue({
         id: "tio_1",
         status: "rejected",
       });
@@ -304,7 +305,7 @@ describe("TradeInService", () => {
 
   describe("listing and filtering", () => {
     it("lists trade-in requests by customer", async () => {
-      jest.spyOn(service, "listTradeInRequests").mockResolvedValue([
+      vi.spyOn(service, "listTradeInRequests").mockResolvedValue([
         { id: "tir_1", customer_id: "cust_1", status: "pending_evaluation" },
         { id: "tir_2", customer_id: "cust_1", status: "evaluated" },
       ]);
@@ -317,7 +318,7 @@ describe("TradeInService", () => {
     });
 
     it("returns empty list when no requests found", async () => {
-      jest.spyOn(service, "listTradeInRequests").mockResolvedValue([]);
+      vi.spyOn(service, "listTradeInRequests").mockResolvedValue([]);
 
       const results = await service.listTradeInRequests({
         customer_id: "nonexistent",

@@ -1,12 +1,13 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Commission Calculation Workflow – Integration", () => {
@@ -16,7 +17,7 @@ describe("Commission Calculation Workflow – Integration", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/commission-calculation.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     calculateCommissionStep = calls.find((c: any) => c[0] === "calculate-vendor-commission-step")?.[1]
     deductCommissionStep = calls.find((c: any) => c[0] === "deduct-commission-step")?.[1]
@@ -34,9 +35,9 @@ describe("Commission Calculation Workflow – Integration", () => {
 
   describe("end-to-end workflow execution", () => {
     it("should calculate commission, deduct, and record payout in sequence", async () => {
-      const listCommissionRules = jest.fn().mockResolvedValue([{ rate: 0.15 }])
-      const createCommissionTransaction = jest.fn().mockResolvedValue({ id: "txn_01", amount: 1200 })
-      const createPayouts = jest.fn().mockResolvedValue({ id: "payout_01", amount: 6800, status: "pending" })
+      const listCommissionRules = vi.fn().mockResolvedValue([{ rate: 0.15 }])
+      const createCommissionTransaction = vi.fn().mockResolvedValue({ id: "txn_01", amount: 1200 })
+      const createPayouts = vi.fn().mockResolvedValue({ id: "payout_01", amount: 6800, status: "pending" })
 
       const container = mockContainer({
         commission: { listCommissionRules, createCommissionTransaction },
@@ -78,10 +79,10 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should use default 10% rate when no commission rules exist", async () => {
-      const listCommissionRules = jest.fn().mockResolvedValue([])
+      const listCommissionRules = vi.fn().mockResolvedValue([])
       const container = mockContainer({
         commission: { listCommissionRules },
-        payout: { createPayouts: jest.fn().mockResolvedValue({ id: "payout_02" }) },
+        payout: { createPayouts: vi.fn().mockResolvedValue({ id: "payout_02" }) },
       })
 
       const calcResult = await calculateCommissionStep(validInput, { container })
@@ -94,10 +95,10 @@ describe("Commission Calculation Workflow – Integration", () => {
     it("should resolve correct modules from the container for each step", async () => {
       const container = mockContainer({
         commission: {
-          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.1 }]),
-          createCommissionTransaction: jest.fn().mockResolvedValue({ id: "txn_01" }),
+          listCommissionRules: vi.fn().mockResolvedValue([{ rate: 0.1 }]),
+          createCommissionTransaction: vi.fn().mockResolvedValue({ id: "txn_01" }),
         },
-        payout: { createPayouts: jest.fn().mockResolvedValue({ id: "payout_01" }) },
+        payout: { createPayouts: vi.fn().mockResolvedValue({ id: "payout_01" }) },
       })
 
       await calculateCommissionStep(validInput, { container })
@@ -113,16 +114,16 @@ describe("Commission Calculation Workflow – Integration", () => {
 
   describe("step failure with compensation", () => {
     it("should compensate commission transaction when payout recording fails", async () => {
-      const deleteCommissionTransactions = jest.fn().mockResolvedValue(undefined)
+      const deleteCommissionTransactions = vi.fn().mockResolvedValue(undefined)
       const transaction = { id: "txn_01", amount: 1200 }
       const container = mockContainer({
         commission: {
-          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.15 }]),
-          createCommissionTransaction: jest.fn().mockResolvedValue(transaction),
+          listCommissionRules: vi.fn().mockResolvedValue([{ rate: 0.15 }]),
+          createCommissionTransaction: vi.fn().mockResolvedValue(transaction),
           deleteCommissionTransactions,
         },
         payout: {
-          createPayouts: jest.fn().mockRejectedValue(new Error("Payout service unavailable")),
+          createPayouts: vi.fn().mockRejectedValue(new Error("Payout service unavailable")),
         },
       })
 
@@ -142,10 +143,10 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should compensate payout when a downstream error occurs", async () => {
-      const deletePayouts = jest.fn().mockResolvedValue(undefined)
+      const deletePayouts = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         payout: {
-          createPayouts: jest.fn().mockResolvedValue({ id: "payout_01" }),
+          createPayouts: vi.fn().mockResolvedValue({ id: "payout_01" }),
           deletePayouts,
         },
       })
@@ -162,7 +163,7 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should handle compensation gracefully when compensationData is undefined", async () => {
-      const deleteCommissionTransactions = jest.fn()
+      const deleteCommissionTransactions = vi.fn()
       const container = mockContainer({
         commission: { deleteCommissionTransactions },
       })
@@ -172,7 +173,7 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should handle compensation gracefully when transaction id is missing", async () => {
-      const deleteCommissionTransactions = jest.fn()
+      const deleteCommissionTransactions = vi.fn()
       const container = mockContainer({
         commission: { deleteCommissionTransactions },
       })
@@ -184,7 +185,7 @@ describe("Commission Calculation Workflow – Integration", () => {
 
   describe("state verification after compensation", () => {
     it("should leave no orphaned transactions after deduct compensation", async () => {
-      const deleteCommissionTransactions = jest.fn().mockResolvedValue(undefined)
+      const deleteCommissionTransactions = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         commission: { deleteCommissionTransactions },
       })
@@ -195,7 +196,7 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should leave no orphaned payouts after payout compensation", async () => {
-      const deletePayouts = jest.fn().mockResolvedValue(undefined)
+      const deletePayouts = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         payout: { deletePayouts },
       })
@@ -207,7 +208,7 @@ describe("Commission Calculation Workflow – Integration", () => {
 
     it("should not throw when compensation delete call fails", async () => {
       const container = mockContainer({
-        commission: { deleteCommissionTransactions: jest.fn().mockRejectedValue(new Error("Already deleted")) },
+        commission: { deleteCommissionTransactions: vi.fn().mockRejectedValue(new Error("Already deleted")) },
       })
 
       await expect(
@@ -221,7 +222,7 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should run deduct-commission compensation idempotently", async () => {
-      const deleteCommissionTransactions = jest.fn().mockResolvedValue(undefined)
+      const deleteCommissionTransactions = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         commission: { deleteCommissionTransactions },
       })
@@ -237,7 +238,7 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should run record-payout compensation idempotently", async () => {
-      const deletePayouts = jest.fn().mockResolvedValue(undefined)
+      const deletePayouts = vi.fn().mockResolvedValue(undefined)
       const container = mockContainer({
         payout: { deletePayouts },
       })
@@ -253,7 +254,7 @@ describe("Commission Calculation Workflow – Integration", () => {
     })
 
     it("should skip payout compensation when payoutId is missing", async () => {
-      const deletePayouts = jest.fn()
+      const deletePayouts = vi.fn()
       const container = mockContainer({
         payout: { deletePayouts },
       })

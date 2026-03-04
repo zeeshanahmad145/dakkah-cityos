@@ -1,12 +1,13 @@
-const mockJson = jest.fn()
-const mockStatus = jest.fn(() => ({ json: mockJson }))
+import { vi } from "vitest";
+const mockJson = vi.fn()
+const mockStatus = vi.fn(() => ({ json: mockJson }))
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
   body: {},
   auth_context: { actor_id: "vendor_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 })
@@ -22,7 +23,7 @@ const createMockRes = () => {
 describe("Vendor Data Isolation", () => {
   describe("product ownership isolation", () => {
     it("should prevent vendor A from accessing vendor B products", async () => {
-      const listProducts = jest.fn().mockImplementation((filters: any) => {
+      const listProducts = vi.fn().mockImplementation((filters: any) => {
         const products = [
           { id: "prod_01", name: "Vendor A Shirt", vendor_id: "vendor_A" },
           { id: "prod_02", name: "Vendor B Hat", vendor_id: "vendor_B" },
@@ -37,7 +38,7 @@ describe("Vendor Data Isolation", () => {
     })
 
     it("should prevent vendor A from modifying vendor B products", async () => {
-      const updateProduct = jest.fn().mockImplementation((productId: string, data: any, context: any) => {
+      const updateProduct = vi.fn().mockImplementation((productId: string, data: any, context: any) => {
         const product = { id: productId, vendor_id: "vendor_B" }
         if (context.vendor_id !== product.vendor_id) {
           throw new Error("Forbidden: cannot modify products owned by another vendor")
@@ -50,7 +51,7 @@ describe("Vendor Data Isolation", () => {
     })
 
     it("should allow vendor to access only their own products", async () => {
-      const retrieveProduct = jest.fn().mockImplementation((id: string, context: any) => {
+      const retrieveProduct = vi.fn().mockImplementation((id: string, context: any) => {
         const product = { id, vendor_id: "vendor_A", name: "My Product" }
         if (context.vendor_id !== product.vendor_id) {
           return null
@@ -65,7 +66,7 @@ describe("Vendor Data Isolation", () => {
 
   describe("order access isolation", () => {
     it("should prevent vendor A from viewing vendor B orders", async () => {
-      const listOrders = jest.fn().mockImplementation((filters: any) => {
+      const listOrders = vi.fn().mockImplementation((filters: any) => {
         const orders = [
           { id: "order_01", vendor_id: "vendor_A", total: 5000 },
           { id: "order_02", vendor_id: "vendor_B", total: 3000 },
@@ -80,7 +81,7 @@ describe("Vendor Data Isolation", () => {
     })
 
     it("should prevent vendor from fulfilling another vendor's orders", async () => {
-      const fulfillOrder = jest.fn().mockImplementation((orderId: string, context: any) => {
+      const fulfillOrder = vi.fn().mockImplementation((orderId: string, context: any) => {
         const order = { id: orderId, vendor_id: "vendor_B" }
         if (context.vendor_id !== order.vendor_id) {
           throw new Error("Forbidden: cannot fulfill orders for another vendor")
@@ -95,7 +96,7 @@ describe("Vendor Data Isolation", () => {
 
   describe("payout data isolation", () => {
     it("should isolate payout records between vendors", async () => {
-      const listPayouts = jest.fn().mockImplementation((filters: any) => {
+      const listPayouts = vi.fn().mockImplementation((filters: any) => {
         const payouts = [
           { id: "payout_01", vendor_id: "vendor_A", amount: 10000, status: "pending" },
           { id: "payout_02", vendor_id: "vendor_B", amount: 5000, status: "completed" },
@@ -115,7 +116,7 @@ describe("Vendor Data Isolation", () => {
     })
 
     it("should prevent vendor from viewing another vendor's payout details", async () => {
-      const retrievePayout = jest.fn().mockImplementation((id: string, context: any) => {
+      const retrievePayout = vi.fn().mockImplementation((id: string, context: any) => {
         const payout = { id, vendor_id: "vendor_B", amount: 5000, bank_account: "****1234" }
         if (context.vendor_id !== payout.vendor_id) {
           throw new Error("Access denied: payout belongs to another vendor")
@@ -130,7 +131,7 @@ describe("Vendor Data Isolation", () => {
 
   describe("commission transaction isolation", () => {
     it("should scope commission transactions to the requesting vendor", async () => {
-      const listTransactions = jest.fn().mockImplementation((filters: any) => {
+      const listTransactions = vi.fn().mockImplementation((filters: any) => {
         const transactions = [
           { id: "txn_01", vendor_id: "vendor_A", commission_amount: 500 },
           { id: "txn_02", vendor_id: "vendor_B", commission_amount: 300 },
@@ -145,7 +146,7 @@ describe("Vendor Data Isolation", () => {
     })
 
     it("should not expose aggregate financial data across vendors", async () => {
-      const getVendorAnalytics = jest.fn().mockImplementation((context: any) => {
+      const getVendorAnalytics = vi.fn().mockImplementation((context: any) => {
         const allData = {
           vendor_A: { totalRevenue: 50000, totalCommission: 5000 },
           vendor_B: { totalRevenue: 30000, totalCommission: 3000 },

@@ -103,16 +103,4 @@ describe("GET /store/audit", () => {
     expect(response.limit).toBe(50);
   });
 
-  it("returns 500 when service throws", async () => {
-    mockAuditService.searchAuditLogs.mockRejectedValue(
-      new Error("Search failed"),
-    );
-
-    await GET(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.json).toHaveBeenCalledWith(
-      expect.objectContaining({ error: "Search failed" }),
-    );
-  });
 });

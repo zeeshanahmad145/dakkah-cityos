@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -101,25 +102,25 @@ describe("FreelanceModuleService", () => {
   let service: FreelanceModuleService;
 
   beforeEach(() => {
-    service = new FreelanceModuleService();
-    jest.clearAllMocks();
+    service = new FreelanceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("completeContract", () => {
     it("completes a contract when all milestones are approved", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "active",
         gig_listing_id: "gig-1",
       });
-      jest.spyOn(service, "listMilestones").mockResolvedValue([
+      vi.spyOn(service, "listMilestones").mockResolvedValue([
         { id: "m1", status: "approved" },
         { id: "m2", status: "paid" },
       ]);
       const updateContractSpy = jest
         .spyOn(service, "updateFreelanceContracts")
         .mockResolvedValue({ id: "contract-1", status: "completed" });
-      jest.spyOn(service, "updateGigListings").mockResolvedValue({});
+      vi.spyOn(service, "updateGigListings").mockResolvedValue({});
 
       const result = await service.completeContract("contract-1");
 
@@ -129,7 +130,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("throws when contract is not active", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "completed",
       });
@@ -140,12 +141,12 @@ describe("FreelanceModuleService", () => {
     });
 
     it("throws when milestones are incomplete", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "active",
         gig_listing_id: "gig-1",
       });
-      jest.spyOn(service, "listMilestones").mockResolvedValue([
+      vi.spyOn(service, "listMilestones").mockResolvedValue([
         { id: "m1", status: "approved" },
         { id: "m2", status: "submitted" },
       ]);
@@ -158,14 +159,14 @@ describe("FreelanceModuleService", () => {
 
   describe("raiseDispute", () => {
     it("raises a dispute on an active contract", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "active",
       });
       const createDisputeSpy = jest
         .spyOn(service, "createFreelanceDisputes")
         .mockResolvedValue({ id: "dispute-1", status: "open" });
-      jest.spyOn(service, "updateFreelanceContracts").mockResolvedValue({});
+      vi.spyOn(service, "updateFreelanceContracts").mockResolvedValue({});
 
       const result = await service.raiseDispute("contract-1", {
         raisedBy: "user-1",
@@ -183,7 +184,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("throws when contract is not active or completed", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "disputed",
       });
@@ -207,7 +208,7 @@ describe("FreelanceModuleService", () => {
 
   describe("logTime", () => {
     it("logs time on an active contract for the assigned freelancer", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "active",
         freelancer_id: "freelancer-1",
@@ -241,7 +242,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("throws when contract is not active", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "completed",
         freelancer_id: "freelancer-1",
@@ -257,7 +258,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("throws when freelancer is not assigned to contract", async () => {
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "contract-1",
         status: "active",
         freelancer_id: "freelancer-1",
@@ -277,12 +278,12 @@ describe("FreelanceModuleService", () => {
 
   describe("getFreelancerStats", () => {
     it("aggregates freelancer statistics correctly", async () => {
-      jest.spyOn(service, "listFreelanceContracts").mockResolvedValue([
+      vi.spyOn(service, "listFreelanceContracts").mockResolvedValue([
         { id: "c1", status: "completed", rate: 1000, rating: 4.5 },
         { id: "c2", status: "completed", rate: 2000, rating: 5 },
         { id: "c3", status: "active", rate: 1500 },
       ]);
-      jest.spyOn(service, "listTimeLogs").mockResolvedValue([
+      vi.spyOn(service, "listTimeLogs").mockResolvedValue([
         { id: "tl1", hours: 10 },
         { id: "tl2", hours: 20 },
       ]);
@@ -300,7 +301,7 @@ describe("FreelanceModuleService", () => {
       jest
         .spyOn(service, "listFreelanceContracts")
         .mockResolvedValue([{ id: "c1", status: "completed", rate: 500 }]);
-      jest.spyOn(service, "listTimeLogs").mockResolvedValue([]);
+      vi.spyOn(service, "listTimeLogs").mockResolvedValue([]);
 
       const stats = await service.getFreelancerStats("freelancer-1");
 

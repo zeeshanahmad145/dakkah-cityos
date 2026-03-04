@@ -1,12 +1,13 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Booking Confirmation Workflow", () => {
@@ -16,7 +17,7 @@ describe("Booking Confirmation Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/booking-confirmation.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     reserveSlotStep = calls.find((c: any) => c[0] === "reserve-booking-slot-step")?.[1]
     confirmBookingStep = calls.find((c: any) => c[0] === "confirm-booking-step")?.[1]
@@ -35,16 +36,20 @@ describe("Booking Confirmation Workflow", () => {
 
   describe("reserveSlotStep", () => {
     it("should create a booking with reserved status", async () => {
-      const mockBooking = { id: "book_01", status: "reserved" }
+      const mockBooking = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ id: "book_01", status: "reserved" }
       const container = mockContainer({
-        booking: { createBookings: jest.fn().mockResolvedValue(mockBooking) },
+        booking: { createBookings: vi.fn().mockResolvedValue(mockBooking) },
       })
       const result = await reserveSlotStep(validInput, { container })
       expect(result.booking).toEqual(mockBooking)
     })
 
     it("should pass all booking fields correctly", async () => {
-      const createBookings = jest.fn().mockResolvedValue({ id: "book_01" })
+      const createBookings = vi.fn().mockResolvedValue({ id: "book_01" })
       const container = mockContainer({ booking: { createBookings } })
       await reserveSlotStep(validInput, { container })
       expect(createBookings).toHaveBeenCalledWith(
@@ -60,7 +65,7 @@ describe("Booking Confirmation Workflow", () => {
 
     it("should propagate booking creation errors", async () => {
       const container = mockContainer({
-        booking: { createBookings: jest.fn().mockRejectedValue(new Error("Slot unavailable")) },
+        booking: { createBookings: vi.fn().mockRejectedValue(new Error("Slot unavailable")) },
       })
       await expect(reserveSlotStep(validInput, { container })).rejects.toThrow("Slot unavailable")
     })
@@ -68,16 +73,20 @@ describe("Booking Confirmation Workflow", () => {
 
   describe("confirmBookingStep", () => {
     it("should update booking status to confirmed", async () => {
-      const mockConfirmed = { id: "book_01", status: "confirmed" }
+      const mockConfirmed = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ id: "book_01", status: "confirmed" }
       const container = mockContainer({
-        booking: { updateBookings: jest.fn().mockResolvedValue(mockConfirmed) },
+        booking: { updateBookings: vi.fn().mockResolvedValue(mockConfirmed) },
       })
       const result = await confirmBookingStep({ bookingId: "book_01" }, { container })
       expect(result.booking).toEqual(mockConfirmed)
     })
 
     it("should set confirmed_at timestamp", async () => {
-      const updateBookings = jest.fn().mockResolvedValue({ id: "book_01" })
+      const updateBookings = vi.fn().mockResolvedValue({ id: "book_01" })
       const container = mockContainer({ booking: { updateBookings } })
       await confirmBookingStep({ bookingId: "book_01" }, { container })
       expect(updateBookings).toHaveBeenCalledWith(

@@ -63,7 +63,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const tenant = await tenantModuleService.createTenants(parsed.data);
+    const raw = await tenantModuleService.createTenants(parsed.data);
+    const tenant = Array.isArray(raw) ? raw[0] : raw;
 
     res.status(201).json({ tenant });
   } catch (error: unknown) {

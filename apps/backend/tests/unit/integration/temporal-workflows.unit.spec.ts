@@ -1,15 +1,20 @@
+import { vi } from "vitest";
 const mockWorkflowClient = {
-  start: jest.fn().mockResolvedValue({ workflowId: "wf_mock", runId: "run_mock" }),
-  getHandle: jest.fn().mockReturnValue({
-    signal: jest.fn().mockResolvedValue(undefined),
-    query: jest.fn().mockResolvedValue({}),
-    cancel: jest.fn().mockResolvedValue(undefined),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+  start: vi.fn().mockResolvedValue({ workflowId: "wf_mock", runId: "run_mock" }),
+  getHandle: vi.fn().mockReturnValue({
+    signal: vi.fn().mockResolvedValue(undefined),
+    query: vi.fn().mockResolvedValue({}),
+    cancel: vi.fn().mockResolvedValue(undefined),
   }),
 }
 
-jest.mock("@temporalio/client", () => ({
-  WorkflowClient: jest.fn(() => mockWorkflowClient),
-  Connection: { connect: jest.fn().mockResolvedValue({}) },
+vi.mock("@temporalio/client", () => ({
+  WorkflowClient: vi.fn(() => mockWorkflowClient),
+  Connection: { connect: vi.fn().mockResolvedValue({}) },
 }))
 
 const TASK_QUEUES = {
@@ -124,7 +129,7 @@ describe("Temporal Workflow Dispatch", () => {
   let dispatcher: WorkflowDispatcher
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockWorkflowClient.start.mockResolvedValue({ workflowId: "wf_mock", runId: "run_mock" })
     dispatcher = createDispatcher(mockWorkflowClient)
   })

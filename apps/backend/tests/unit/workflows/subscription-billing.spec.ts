@@ -1,22 +1,23 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
-  transform: jest.fn((_deps, fn) => fn(_deps)),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
+  transform: vi.fn((_deps, fn) => fn(_deps)),
 }))
 
-jest.mock("@medusajs/framework/utils", () => ({
+vi.mock("@medusajs/framework/utils", () => ({
   ContainerRegistrationKeys: { QUERY: "query", LOGGER: "logger" },
   Modules: { EVENT_BUS: "event_bus" },
 }))
 
-jest.mock("@medusajs/medusa/core-flows", () => ({
-  createCartWorkflow: jest.fn(),
+vi.mock("@medusajs/medusa/core-flows", () => ({
+  createCartWorkflow: vi.fn(),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Subscription Billing Workflow", () => {
@@ -25,7 +26,7 @@ describe("Subscription Billing Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/subscription/process-billing-cycle-workflow.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     loadBillingCycleStep = calls.find((c: any) => c[0] === "load-billing-cycle")?.[1]
     markCycleProcessingStep = calls.find((c: any) => c[0] === "mark-cycle-processing")?.[1]
@@ -34,6 +35,10 @@ describe("Subscription Billing Workflow", () => {
   describe("loadBillingCycleStep", () => {
     it("should load billing cycle and subscription data", async () => {
       const mockCycle = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
         id: "cycle_01",
         status: "upcoming",
         subscription_id: "sub_01",
@@ -41,10 +46,10 @@ describe("Subscription Billing Workflow", () => {
       }
       const container = mockContainer({
         subscription: {
-          listBillingCycles: jest.fn().mockResolvedValue([[mockCycle]]),
+          listBillingCycles: vi.fn().mockResolvedValue([[mockCycle]]),
         },
         query: {
-          graph: jest.fn()
+          graph: vi.fn()
             .mockResolvedValueOnce({ data: [{ id: "item_01", variant_id: "var_01", quantity: 1 }] })
             .mockResolvedValueOnce({ data: [{ id: "cust_01", email: "test@example.com" }] }),
         },
@@ -57,9 +62,9 @@ describe("Subscription Billing Workflow", () => {
     it("should throw when billing cycle is not found", async () => {
       const container = mockContainer({
         subscription: {
-          listBillingCycles: jest.fn().mockResolvedValue([[]]),
+          listBillingCycles: vi.fn().mockResolvedValue([[]]),
         },
-        query: { graph: jest.fn() },
+        query: { graph: vi.fn() },
       })
       await expect(
         loadBillingCycleStep({ billing_cycle_id: "nonexistent" }, { container })
@@ -67,12 +72,16 @@ describe("Subscription Billing Workflow", () => {
     })
 
     it("should throw when billing cycle is not in upcoming status", async () => {
-      const mockCycle = { id: "cycle_01", status: "completed" }
+      const mockCycle = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ id: "cycle_01", status: "completed" }
       const container = mockContainer({
         subscription: {
-          listBillingCycles: jest.fn().mockResolvedValue([[mockCycle]]),
+          listBillingCycles: vi.fn().mockResolvedValue([[mockCycle]]),
         },
-        query: { graph: jest.fn() },
+        query: { graph: vi.fn() },
       })
       await expect(
         loadBillingCycleStep({ billing_cycle_id: "cycle_01" }, { container })
@@ -82,10 +91,14 @@ describe("Subscription Billing Workflow", () => {
 
   describe("markCycleProcessingStep", () => {
     it("should update billing cycle status to processing", async () => {
-      const mockUpdated = { id: "cycle_01", status: "processing", attempt_count: 1 }
+      const mockUpdated = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ id: "cycle_01", status: "processing", attempt_count: 1 }
       const container = mockContainer({
         subscription: {
-          updateBillingCycles: jest.fn().mockResolvedValue(mockUpdated),
+          updateBillingCycles: vi.fn().mockResolvedValue(mockUpdated),
         },
       })
       const result = await markCycleProcessingStep(
@@ -96,7 +109,7 @@ describe("Subscription Billing Workflow", () => {
     })
 
     it("should increment attempt count", async () => {
-      const updateBillingCycles = jest.fn().mockResolvedValue({})
+      const updateBillingCycles = vi.fn().mockResolvedValue({})
       const container = mockContainer({ subscription: { updateBillingCycles } })
       await markCycleProcessingStep(
         { cycle: { id: "cycle_01", status: "upcoming", attempt_count: 2 } },
@@ -108,7 +121,7 @@ describe("Subscription Billing Workflow", () => {
     })
 
     it("should set last_attempt_at to current time", async () => {
-      const updateBillingCycles = jest.fn().mockResolvedValue({})
+      const updateBillingCycles = vi.fn().mockResolvedValue({})
       const container = mockContainer({ subscription: { updateBillingCycles } })
       await markCycleProcessingStep(
         { cycle: { id: "cycle_01", status: "upcoming", attempt_count: 0 } },

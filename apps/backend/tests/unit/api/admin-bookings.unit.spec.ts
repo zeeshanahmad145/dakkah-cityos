@@ -1,5 +1,6 @@
-jest.mock("../../../src/lib/api-error-handler", () => ({
-  handleApiError: jest.fn((res, error, context) => {
+import { vi } from "vitest";
+vi.mock("../../../src/lib/api-error-handler", () => ({
+  handleApiError: vi.fn((res, error, context) => {
     const message = error instanceof Error ? error.message : String(error)
     if (message.includes("not found") || message.includes("Not found")) {
       return res.status(404).json({ message: `${context}: not found` })
@@ -19,9 +20,9 @@ import {
 
 function makeMockRes() {
   const res: any = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    send: vi.fn().mockReturnThis(),
   }
   return res
 }
@@ -32,13 +33,13 @@ describe("GET /admin/bookings", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockBookingModule = {
-      listBookings: jest.fn().mockResolvedValue([]),
+      listBookings: vi.fn().mockResolvedValue([]),
     }
     mockReq = {
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockBookingModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockBookingModule) },
       cityosContext: undefined,
     }
     mockRes = makeMockRes()
@@ -123,9 +124,9 @@ describe("POST /admin/bookings", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockBookingModule = {
-      createBookings: jest.fn().mockResolvedValue({ id: "book_new" }),
+      createBookings: vi.fn().mockResolvedValue({ id: "book_new" }),
     }
     mockReq = {
       body: {
@@ -135,7 +136,7 @@ describe("POST /admin/bookings", () => {
         end_time: "2025-01-01T11:00:00Z",
       },
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockBookingModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockBookingModule) },
       cityosContext: undefined,
     }
     mockRes = makeMockRes()
@@ -206,13 +207,13 @@ describe("GET /admin/bookings/:id", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockQuery = {
-      graph: jest.fn().mockResolvedValue({ data: [{ id: "book_1", status: "confirmed" }] }),
+      graph: vi.fn().mockResolvedValue({ data: [{ id: "book_1", status: "confirmed" }] }),
     }
     mockReq = {
       params: { id: "book_1" },
-      scope: { resolve: jest.fn().mockReturnValue(mockQuery) },
+      scope: { resolve: vi.fn().mockReturnValue(mockQuery) },
     }
     mockRes = makeMockRes()
   })
@@ -259,14 +260,14 @@ describe("PUT /admin/bookings/:id", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockBookingService = {
-      updateBookings: jest.fn().mockResolvedValue({ id: "book_1", status: "confirmed" }),
+      updateBookings: vi.fn().mockResolvedValue({ id: "book_1", status: "confirmed" }),
     }
     mockReq = {
       params: { id: "book_1" },
       body: { status: "confirmed" },
-      scope: { resolve: jest.fn().mockReturnValue(mockBookingService) },
+      scope: { resolve: vi.fn().mockReturnValue(mockBookingService) },
     }
     mockRes = makeMockRes()
   })

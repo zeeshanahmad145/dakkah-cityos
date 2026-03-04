@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -68,13 +69,13 @@ describe("WishlistModuleService", () => {
   let service: WishlistModuleService;
 
   beforeEach(() => {
-    service = new WishlistModuleService();
-    jest.clearAllMocks();
+    service = new WishlistModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("addItem", () => {
     it("adds an item to a wishlist", async () => {
-      jest.spyOn(service, "listWishlistItems").mockResolvedValue([]);
+      vi.spyOn(service, "listWishlistItems").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createWishlistItems")
         .mockResolvedValue({
@@ -114,7 +115,7 @@ describe("WishlistModuleService", () => {
 
   describe("removeItem", () => {
     it("removes an item from a wishlist", async () => {
-      jest.spyOn(service, "retrieveWishlistItem").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlistItem").mockResolvedValue({
         id: "item-1",
         wishlist_id: "wl-1",
       });
@@ -129,7 +130,7 @@ describe("WishlistModuleService", () => {
     });
 
     it("throws when item does not belong to the wishlist", async () => {
-      jest.spyOn(service, "retrieveWishlistItem").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlistItem").mockResolvedValue({
         id: "item-1",
         wishlist_id: "wl-other",
       });
@@ -142,7 +143,7 @@ describe("WishlistModuleService", () => {
 
   describe("shareWishlist", () => {
     it("shares a wishlist and generates a token", async () => {
-      jest.spyOn(service, "retrieveWishlist").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlist").mockResolvedValue({
         id: "wl-1",
         share_token: null,
         visibility: "private",
@@ -150,7 +151,7 @@ describe("WishlistModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateWishlists")
         .mockResolvedValue({});
-      jest.spyOn(service, "retrieveWishlist").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlist").mockResolvedValue({
         id: "wl-1",
         visibility: "shared",
         share_token: "abc123",
@@ -168,7 +169,7 @@ describe("WishlistModuleService", () => {
     });
 
     it("makes a wishlist private and clears the token", async () => {
-      jest.spyOn(service, "retrieveWishlist").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlist").mockResolvedValue({
         id: "wl-1",
         share_token: "abc123",
         visibility: "shared",
@@ -176,7 +177,7 @@ describe("WishlistModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateWishlists")
         .mockResolvedValue({});
-      jest.spyOn(service, "retrieveWishlist").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlist").mockResolvedValue({
         id: "wl-1",
         visibility: "private",
         share_token: null,
@@ -208,7 +209,7 @@ describe("WishlistModuleService", () => {
     });
 
     it("throws when wishlist not found", async () => {
-      jest.spyOn(service, "listWishlists").mockResolvedValue([]);
+      vi.spyOn(service, "listWishlists").mockResolvedValue([]);
 
       await expect(service.getByShareToken("invalid-token")).rejects.toThrow(
         "Wishlist not found or not shared",
@@ -228,7 +229,7 @@ describe("WishlistModuleService", () => {
     });
 
     it("creates default wishlist when none exists", async () => {
-      jest.spyOn(service, "listWishlists").mockResolvedValue([]);
+      vi.spyOn(service, "listWishlists").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createWishlists")
         .mockResolvedValue({
@@ -257,7 +258,7 @@ describe("WishlistModuleService", () => {
         .spyOn(service, "retrieveWishlistItem")
         .mockResolvedValueOnce({ id: "item-1", wishlist_id: "wl-1" })
         .mockResolvedValueOnce({ id: "item-1", wishlist_id: "wl-2" });
-      jest.spyOn(service, "retrieveWishlist").mockResolvedValue({ id: "wl-2" });
+      vi.spyOn(service, "retrieveWishlist").mockResolvedValue({ id: "wl-2" });
       const updateSpy = jest
         .spyOn(service, "updateWishlistItems")
         .mockResolvedValue({});
@@ -273,7 +274,7 @@ describe("WishlistModuleService", () => {
     });
 
     it("throws when item does not belong to source wishlist", async () => {
-      jest.spyOn(service, "retrieveWishlistItem").mockResolvedValue({
+      vi.spyOn(service, "retrieveWishlistItem").mockResolvedValue({
         id: "item-1",
         wishlist_id: "wl-other",
       });

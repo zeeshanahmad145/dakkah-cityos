@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,8 +57,8 @@ describe("AnalyticsModuleService", () => {
   let service: AnalyticsModuleService;
 
   beforeEach(() => {
-    service = new AnalyticsModuleService();
-    jest.clearAllMocks();
+    service = new AnalyticsModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("trackEvent", () => {
@@ -87,7 +88,7 @@ describe("AnalyticsModuleService", () => {
 
   describe("getEventCounts", () => {
     it("counts events within date range", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
         { event_type: "page_view", created_at: "2025-01-15T00:00:00Z" },
         { event_type: "page_view", created_at: "2025-01-20T00:00:00Z" },
         { event_type: "page_view", created_at: "2025-02-15T00:00:00Z" },
@@ -103,7 +104,7 @@ describe("AnalyticsModuleService", () => {
     });
 
     it("returns zero count when no events match", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
 
       const result = await service.getEventCounts("t1", "page_view", {
         start: new Date("2025-01-01"),
@@ -116,7 +117,7 @@ describe("AnalyticsModuleService", () => {
 
   describe("getSalesMetrics", () => {
     it("calculates revenue and average order value", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
         {
           event_type: "purchase",
           revenue: 100,
@@ -140,7 +141,7 @@ describe("AnalyticsModuleService", () => {
     });
 
     it("returns zero metrics when no purchases", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
 
       const result = await service.getSalesMetrics("t1", {
         start: new Date("2025-01-01"),
@@ -155,7 +156,7 @@ describe("AnalyticsModuleService", () => {
 
   describe("getTopProducts", () => {
     it("returns products sorted by revenue", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
         {
           entity_type: "product",
           entity_id: "p1",
@@ -252,7 +253,7 @@ describe("AnalyticsModuleService", () => {
     });
 
     it("throws when dashboard not found", async () => {
-      jest.spyOn(service, "listDashboards").mockResolvedValue([]);
+      vi.spyOn(service, "listDashboards").mockResolvedValue([]);
 
       await expect(service.getDashboard("t1", "nonexistent")).rejects.toThrow(
         'Dashboard "nonexistent" not found',

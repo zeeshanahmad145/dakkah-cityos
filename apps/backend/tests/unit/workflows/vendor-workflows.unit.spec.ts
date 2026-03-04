@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn };
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn };
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 describe("Vendor Onboarding Workflow", () => {
@@ -18,7 +19,7 @@ describe("Vendor Onboarding Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/vendor-onboarding.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     submitApplicationStep = calls.find(
       (c: any) => c[0] === "submit-vendor-application-step",
@@ -43,7 +44,7 @@ describe("Vendor Onboarding Workflow", () => {
   it("should submit vendor application with onboarding status", async () => {
     const vendor = { id: "vendor_1", status: "onboarding" };
     const container = mockContainer({
-      vendor: { createVendors: jest.fn().mockResolvedValue(vendor) },
+      vendor: { createVendors: vi.fn().mockResolvedValue(vendor) },
     });
     const result = await submitApplicationStep(validInput, { container });
     expect(result.vendor.status).toBe("onboarding");
@@ -55,7 +56,7 @@ describe("Vendor Onboarding Workflow", () => {
       verification_status: "documents_verified",
     };
     const container = mockContainer({
-      vendor: { updateVendors: jest.fn().mockResolvedValue(verified) },
+      vendor: { updateVendors: vi.fn().mockResolvedValue(verified) },
     });
     const result = await verifyDocumentsStep(
       { vendorId: "vendor_1" },
@@ -67,7 +68,7 @@ describe("Vendor Onboarding Workflow", () => {
   it("should setup vendor store", async () => {
     const store = { id: "store_1", vendor_id: "vendor_1" };
     const container = mockContainer({
-      store: { createStores: jest.fn().mockResolvedValue(store) },
+      store: { createStores: vi.fn().mockResolvedValue(store) },
     });
     const result = await setupVendorStoreStep(
       { vendorId: "vendor_1", tenantId: "tenant_1" },
@@ -85,7 +86,7 @@ describe("KYC Verification Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/kyc-verification.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     submitDocumentsStep = calls.find(
       (c: any) => c[0] === "submit-kyc-documents-step",
@@ -190,7 +191,7 @@ describe("Product Sync Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/product-sync.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     fetchProductsStep = calls.find(
       (c: any) => c[0] === "fetch-source-products-step",
@@ -209,7 +210,7 @@ describe("Product Sync Workflow", () => {
   it("should fetch products from source", async () => {
     const products = [{ id: "p1", title: "Product 1" }];
     const container = mockContainer({
-      product: { listProducts: jest.fn().mockResolvedValue(products) },
+      product: { listProducts: vi.fn().mockResolvedValue(products) },
     });
     const result = await fetchProductsStep(
       { sourceSystem: "medusa", targetSystem: "erp", tenantId: "t1" },

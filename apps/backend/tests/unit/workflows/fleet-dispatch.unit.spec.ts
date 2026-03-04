@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn }
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn }
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Fleet Dispatch Workflow", () => {
@@ -19,7 +20,7 @@ describe("Fleet Dispatch Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/fleet-dispatch.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     prepareOrderForDispatchStep = calls.find((c: any) => c[0] === "prepare-order-dispatch-step")?.[1]
     findAvailableDriverStep = calls.find((c: any) => c[0] === "find-available-driver-step")?.[1]
@@ -65,7 +66,7 @@ describe("Fleet Dispatch Workflow", () => {
         { id: "driver_1", name: "Alice", phone: "555-0001", vehicle_type: "van", current_location: "Zone A" },
       ]
       const container = mockContainer({
-        fleetbaseService: { getAvailableDrivers: jest.fn().mockResolvedValue(drivers) },
+        fleetbaseService: { getAvailableDrivers: vi.fn().mockResolvedValue(drivers) },
       })
       const result = await findAvailableDriverStep(
         { pickupAddress: "123 Main St", priority: "standard" },
@@ -78,7 +79,7 @@ describe("Fleet Dispatch Workflow", () => {
 
     it("should fall back to manual queue when no drivers available", async () => {
       const container = mockContainer({
-        fleetbaseService: { getAvailableDrivers: jest.fn().mockResolvedValue([]) },
+        fleetbaseService: { getAvailableDrivers: vi.fn().mockResolvedValue([]) },
       })
       const result = await findAvailableDriverStep(
         { pickupAddress: "123 Main St", priority: "standard" },
@@ -90,7 +91,7 @@ describe("Fleet Dispatch Workflow", () => {
 
     it("should fall back to manual queue when fleetbase errors", async () => {
       const container = mockContainer({
-        fleetbaseService: { getAvailableDrivers: jest.fn().mockRejectedValue(new Error("Service down")) },
+        fleetbaseService: { getAvailableDrivers: vi.fn().mockRejectedValue(new Error("Service down")) },
       })
       const result = await findAvailableDriverStep(
         { pickupAddress: "123 Main St", priority: "express" },
@@ -100,7 +101,7 @@ describe("Fleet Dispatch Workflow", () => {
     })
 
     it("should pass vehicle_type to fleetbase service", async () => {
-      const getAvailableDrivers = jest.fn().mockResolvedValue([
+      const getAvailableDrivers = vi.fn().mockResolvedValue([
         { id: "d1", name: "Bob", phone: "555", vehicle_type: "truck", current_location: "Z" },
       ])
       const container = mockContainer({ fleetbaseService: { getAvailableDrivers } })
@@ -126,7 +127,7 @@ describe("Fleet Dispatch Workflow", () => {
     })
 
     it("should assign via fleetbase when source is not manual_queue", async () => {
-      const assignDriver = jest.fn()
+      const assignDriver = vi.fn()
       const container = mockContainer({ fleetbaseService: { assignDriver } })
       const result = await assignDriverStep(
         { orderId: "order_1", driverId: "driver_1", source: "fleetbase" },
@@ -138,7 +139,7 @@ describe("Fleet Dispatch Workflow", () => {
 
     it("should fall back to manual queue on assignment error", async () => {
       const container = mockContainer({
-        fleetbaseService: { assignDriver: jest.fn().mockRejectedValue(new Error("Network error")) },
+        fleetbaseService: { assignDriver: vi.fn().mockRejectedValue(new Error("Network error")) },
       })
       const result = await assignDriverStep(
         { orderId: "order_1", driverId: "driver_1", source: "fleetbase" },

@@ -15,11 +15,11 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const service = req.scope.resolve("wishlist") as unknown as any;
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;
-    const [items, count] = await service.listAndCountWishlists(
+    const [wishlists, count] = await service.listAndCountWishlists(
       {},
       { take: limit, skip: offset },
     );
-    res.json({ items, count, limit, offset });
+    res.json({ wishlists, count, limit, offset });
   } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-WISHLISTS");
   }
@@ -34,8 +34,9 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
-    const item = await service.createWishlists(parsed.data);
-    res.status(201).json({ item });
+    const raw = await service.createWishlists(parsed.data);
+    const wishlist = Array.isArray(raw) ? raw[0] : raw;
+    res.status(201).json({ wishlist });
   } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-WISHLISTS");
   }

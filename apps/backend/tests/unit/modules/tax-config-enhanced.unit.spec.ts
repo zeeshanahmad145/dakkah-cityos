@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -63,13 +64,13 @@ describe("TaxConfigModuleService – Enhanced", () => {
   let service: TaxConfigModuleService;
 
   beforeEach(() => {
-    service = new TaxConfigModuleService();
-    jest.clearAllMocks();
+    service = new TaxConfigModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getEffectiveTaxRate", () => {
     it("returns combined tax rate from applicable rules", async () => {
-      jest.spyOn(service, "listTaxRules").mockResolvedValue([
+      vi.spyOn(service, "listTaxRules").mockResolvedValue([
         {
           id: "r1",
           tax_rate: 10,
@@ -112,7 +113,7 @@ describe("TaxConfigModuleService – Enhanced", () => {
     });
 
     it("filters by product category", async () => {
-      jest.spyOn(service, "listTaxRules").mockResolvedValue([
+      vi.spyOn(service, "listTaxRules").mockResolvedValue([
         {
           id: "r1",
           tax_rate: 8,
@@ -140,7 +141,7 @@ describe("TaxConfigModuleService – Enhanced", () => {
   describe("validateTaxExemption", () => {
     it("returns valid exemption for active customer exemption", async () => {
       const now = new Date();
-      jest.spyOn(service, "listTaxExemptions").mockResolvedValue([
+      vi.spyOn(service, "listTaxExemptions").mockResolvedValue([
         {
           id: "e1",
           status: "active",
@@ -156,7 +157,7 @@ describe("TaxConfigModuleService – Enhanced", () => {
 
     it("identifies expiring-soon exemptions", async () => {
       const now = new Date();
-      jest.spyOn(service, "listTaxExemptions").mockResolvedValue([
+      vi.spyOn(service, "listTaxExemptions").mockResolvedValue([
         {
           id: "e1",
           status: "active",
@@ -170,7 +171,7 @@ describe("TaxConfigModuleService – Enhanced", () => {
     });
 
     it("returns no valid exemption when all expired", async () => {
-      jest.spyOn(service, "listTaxExemptions").mockResolvedValue([
+      vi.spyOn(service, "listTaxExemptions").mockResolvedValue([
         {
           id: "e1",
           status: "active",
@@ -186,7 +187,7 @@ describe("TaxConfigModuleService – Enhanced", () => {
 
   describe("generateTaxReport", () => {
     it("generates report with rules grouped by region", async () => {
-      jest.spyOn(service, "listTaxRules").mockResolvedValue([
+      vi.spyOn(service, "listTaxRules").mockResolvedValue([
         { id: "r1", tax_rate: 10, region_code: "CA", status: "active" },
         { id: "r2", tax_rate: 8, region_code: "NY", status: "active" },
         { id: "r3", tax_rate: 12, region_code: "CA", status: "active" },
@@ -204,7 +205,7 @@ describe("TaxConfigModuleService – Enhanced", () => {
     });
 
     it("returns empty report when no rules exist", async () => {
-      jest.spyOn(service, "listTaxRules").mockResolvedValue([]);
+      vi.spyOn(service, "listTaxRules").mockResolvedValue([]);
 
       const result = await service.generateTaxReport("t-1", {
         start: new Date("2025-01-01"),

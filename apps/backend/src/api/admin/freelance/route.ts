@@ -52,13 +52,21 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const mod = req.scope.resolve("freelance") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success)
-      return res
-        .status(400)
-        .json({
-          message: "Validation failed",
-          errors: validation.error.issues,
-        });
-    const item = await mod.createGigListings(validation.data);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: validation.error.issues,
+      });
+    const {
+      title,
+      description,
+      price,
+      hourly_rate,
+      currency_code,
+      status,
+      ...domainData
+    } = validation.data;
+    const raw = await mod.createGigListings(domainData as any);
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin freelance");

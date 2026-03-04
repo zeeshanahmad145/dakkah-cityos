@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -57,13 +58,13 @@ describe("ChannelModuleService", () => {
   let service: ChannelModuleService;
 
   beforeEach(() => {
-    service = new ChannelModuleService();
-    jest.clearAllMocks();
+    service = new ChannelModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getChannelForRequest", () => {
     it("returns matching channel for tenant and type", async () => {
-      jest.spyOn(service, "listSalesChannelMappings").mockResolvedValue([
+      vi.spyOn(service, "listSalesChannelMappings").mockResolvedValue([
         {
           id: "ch-1",
           tenant_id: "t-1",
@@ -77,7 +78,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns null when no channel matches", async () => {
-      jest.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
 
       const result = await service.getChannelForRequest("t-1", "mobile");
       expect(result).toBeNull();
@@ -103,7 +104,7 @@ describe("ChannelModuleService", () => {
 
   describe("listChannels", () => {
     it("returns all channels for a tenant", async () => {
-      jest.spyOn(service, "listSalesChannelMappings").mockResolvedValue([
+      vi.spyOn(service, "listSalesChannelMappings").mockResolvedValue([
         { id: "ch-1", channel_type: "web" },
         { id: "ch-2", channel_type: "mobile" },
       ]);
@@ -113,7 +114,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns empty array when tenant has no channels", async () => {
-      jest.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
 
       const result = await service.listChannels("t-1");
       expect(result).toHaveLength(0);
@@ -122,7 +123,7 @@ describe("ChannelModuleService", () => {
 
   describe("getChannelAnalytics", () => {
     it("returns analytics for a valid channel", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch-1",
         name: "Web Store",
         channel_type: "web",
@@ -152,12 +153,12 @@ describe("ChannelModuleService", () => {
 
   describe("syncChannelInventory", () => {
     it("syncs new products to channel", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch-1",
         is_active: true,
         config: { synced_products: ["p-1"] },
       });
-      jest.spyOn(service, "updateSalesChannelMappings").mockResolvedValue({});
+      vi.spyOn(service, "updateSalesChannelMappings").mockResolvedValue({});
 
       const result = await service.syncChannelInventory("ch-1", [
         "p-1",
@@ -170,7 +171,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("throws when channel is not active", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch-1",
         is_active: false,
         config: {},
@@ -184,7 +185,7 @@ describe("ChannelModuleService", () => {
 
   describe("validateChannelConfig", () => {
     it("returns valid true when channel has all required fields", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch-1",
         name: "Web Store",
         channel_type: "web",
@@ -199,7 +200,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns errors when name is missing", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch-1",
         name: "",
         channel_type: "web",

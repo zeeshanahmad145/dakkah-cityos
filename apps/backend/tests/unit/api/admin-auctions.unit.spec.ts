@@ -1,5 +1,6 @@
-jest.mock("../../../src/lib/api-error-handler", () => ({
-  handleApiError: jest.fn((res, error, context) => {
+import { vi } from "vitest";
+vi.mock("../../../src/lib/api-error-handler", () => ({
+  handleApiError: vi.fn((res, error, context) => {
     const message = error instanceof Error ? error.message : String(error);
     if (message.includes("not found") || message.includes("Not found")) {
       return res.status(404).json({ message: `${context}: not found` });
@@ -17,9 +18,9 @@ import {
 
 function makeMockRes() {
   const res: any = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    send: vi.fn().mockReturnThis(),
   };
   return res;
 }
@@ -30,11 +31,15 @@ describe("GET /admin/auctions", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockModule = { listAuctionListings: jest.fn().mockResolvedValue([]) };
+    vi.clearAllMocks();
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ listAuctionListings: vi.fn().mockResolvedValue([]) };
     mockReq = {
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
       cityosContext: undefined,
     };
     mockRes = makeMockRes();
@@ -96,9 +101,13 @@ describe("POST /admin/auctions", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockModule = {
-      createAuctionListings: jest.fn().mockResolvedValue({ id: "auc_new" }),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      createAuctionListings: vi.fn().mockResolvedValue({ id: "auc_new" }),
     };
     mockReq = {
       body: {
@@ -112,7 +121,7 @@ describe("POST /admin/auctions", () => {
         seller_id: "seller_1",
       },
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
       cityosContext: undefined,
     };
     mockRes = makeMockRes();
@@ -186,11 +195,15 @@ describe("GET /admin/auctions/:id", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockModule = { listAuctionListings: jest.fn() };
+    vi.clearAllMocks();
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ listAuctionListings: vi.fn() };
     mockReq = {
       params: { id: "auc_1" },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     };
     mockRes = makeMockRes();
   });
@@ -234,8 +247,12 @@ describe("POST /admin/auctions/:id (update)", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       updateAuctionListings: jest
         .fn()
         .mockResolvedValue({ id: "auc_1", title: "Updated" }),
@@ -243,7 +260,7 @@ describe("POST /admin/auctions/:id (update)", () => {
     mockReq = {
       params: { id: "auc_1" },
       body: { title: "Updated" },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     };
     mockRes = makeMockRes();
   });
@@ -285,13 +302,17 @@ describe("DELETE /admin/auctions/:id", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockModule = {
-      deleteAuctionListings: jest.fn().mockResolvedValue(undefined),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      deleteAuctionListings: vi.fn().mockResolvedValue(undefined),
     };
     mockReq = {
       params: { id: "auc_1" },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     };
     mockRes = makeMockRes();
   });

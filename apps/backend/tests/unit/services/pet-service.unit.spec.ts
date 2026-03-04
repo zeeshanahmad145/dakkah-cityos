@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -68,8 +69,8 @@ describe("PetServiceModuleService", () => {
   let service: PetServiceModuleService;
 
   beforeEach(() => {
-    service = new PetServiceModuleService();
-    jest.clearAllMocks();
+    service = new PetServiceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("addPetProfile", () => {
@@ -108,7 +109,7 @@ describe("PetServiceModuleService", () => {
       jest
         .spyOn(service, "retrievePetProfile")
         .mockResolvedValue({ id: "pet-1" });
-      jest.spyOn(service, "listGroomingBookings").mockResolvedValue([
+      vi.spyOn(service, "listGroomingBookings").mockResolvedValue([
         { id: "g1", scheduled_date: "2025-01-01" },
         { id: "g2", scheduled_date: "2025-02-01" },
       ]);

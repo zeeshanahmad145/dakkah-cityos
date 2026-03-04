@@ -49,10 +49,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
-    const provider = await bookingModuleService.createServiceProviders(
-      parsed.data,
-    );
-
+    const raw = await bookingModuleService.createServiceProviders(parsed.data);
+    const provider = Array.isArray(raw) ? raw[0] : raw;
     res.status(201).json({ provider });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin service-providers");

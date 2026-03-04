@@ -70,11 +70,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const file_size_bytes =
       validation.data.file_size_bytes || validation.data.file_size || 0;
 
-    const item = await mod.createDigitalAssets({
+    const raw = await mod.createDigitalAssets({
       ...validation.data,
       file_size_bytes,
       tenant_id,
     });
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin digital-products");

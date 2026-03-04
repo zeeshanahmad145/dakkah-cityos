@@ -1,7 +1,8 @@
-jest.mock("../../../src/lib/logger", () => ({
-  subscriberLogger: { info: jest.fn(), error: jest.fn(), warn: jest.fn() },
+import { vi } from "vitest";
+vi.mock("../../../src/lib/logger", () => ({
+  subscriberLogger: { info: vi.fn(), error: vi.fn(), warn: vi.fn() },
 }));
-jest.mock("../../../src/lib/config", () => ({
+vi.mock("../../../src/lib/config", () => ({
   appConfig: {
     storefrontUrl: "https://store.test",
     urls: { storefront: "https://store.test" },
@@ -23,12 +24,12 @@ import { config as confirmedConfig } from "../../../src/subscribers/booking-conf
 import bookingCreatedHandler from "../../../src/subscribers/booking-created";
 import { config as createdConfig } from "../../../src/subscribers/booking-created";
 
-const mockCreateNotifications = jest.fn();
-const mockRetrieveBooking = jest.fn();
+const mockCreateNotifications = vi.fn();
+const mockRetrieveBooking = vi.fn();
 
 function makeContainer() {
   return {
-    resolve: jest.fn((dep: string) => {
+    resolve: vi.fn((dep: string) => {
       if (dep === "notification")
         return { createNotifications: mockCreateNotifications };
       if (dep === "booking") return { retrieveBooking: mockRetrieveBooking };
@@ -51,7 +52,7 @@ const fullBooking = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockRetrieveBooking.mockResolvedValue(fullBooking);
 });
 

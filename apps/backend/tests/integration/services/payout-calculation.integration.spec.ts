@@ -1,13 +1,14 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
-  transform: jest.fn((_deps, fn) => fn(_deps)),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
+  transform: vi.fn((_deps, fn) => fn(_deps)),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Payout Calculation Accuracy", () => {
@@ -16,7 +17,7 @@ describe("Payout Calculation Accuracy", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/vendor/process-payout-workflow.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     getUnpaidTransactionsStep = calls.find((c: any) => c[0] === "get-unpaid-transactions-step")?.[1]
     createPayoutStep = calls.find((c: any) => c[0] === "create-payout-step")?.[1]
@@ -33,7 +34,7 @@ describe("Payout Calculation Accuracy", () => {
     it("should sum order totals for single transaction", async () => {
       const transactions = [{ id: "txn_01", order_total: 15000, commission_amount: 1500, platform_fee_amount: 300 }]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -47,7 +48,7 @@ describe("Payout Calculation Accuracy", () => {
         { id: "txn_03", order_total: 7500, commission_amount: 750, platform_fee_amount: 150 },
       ]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -56,7 +57,7 @@ describe("Payout Calculation Accuracy", () => {
 
     it("should return zero gross amount for no transactions", async () => {
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue([]) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue([]) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -71,7 +72,7 @@ describe("Payout Calculation Accuracy", () => {
         { id: "txn_02", order_total: 20000, commission_amount: 3000, platform_fee_amount: 0 },
       ]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -85,7 +86,7 @@ describe("Payout Calculation Accuracy", () => {
         { id: "txn_03", order_total: 10000, commission_amount: 2000, platform_fee_amount: 200 },
       ]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -101,7 +102,7 @@ describe("Payout Calculation Accuracy", () => {
         { id: "txn_02", order_total: 5000, commission_amount: 500, platform_fee_amount: 125 },
       ]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -114,7 +115,7 @@ describe("Payout Calculation Accuracy", () => {
         { id: "txn_02", order_total: 5000, commission_amount: 500 },
       ]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -128,7 +129,7 @@ describe("Payout Calculation Accuracy", () => {
         { id: "txn_01", order_total: 50000, commission_amount: 5000, platform_fee_amount: 1000 },
       ]
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })
@@ -144,7 +145,7 @@ describe("Payout Calculation Accuracy", () => {
         platform_fee_amount: 20,
       }))
       const container = mockContainer({
-        commission: { listCommissionTransactions: jest.fn().mockResolvedValue(transactions) },
+        commission: { listCommissionTransactions: vi.fn().mockResolvedValue(transactions) },
       })
 
       const result = await getUnpaidTransactionsStep(baseInput, { container })

@@ -52,7 +52,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
 
-    const item = await moduleService.createPaymentTerms([parsed.data]);
+    const raw = await moduleService.createPaymentTerms([parsed.data]);
+    const item = Array.isArray(raw) ? raw[0] : raw;
     res.status(201).json({ payment_term: item[0] });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin payment-terms");

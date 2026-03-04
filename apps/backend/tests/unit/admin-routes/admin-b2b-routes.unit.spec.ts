@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { GET as listCompanies } from "../../../src/api/admin/companies/route";
 import { POST as approveCompany } from "../../../src/api/admin/companies/[id]/approve/route";
 import { GET as getCompanyCredit } from "../../../src/api/admin/companies/[id]/credit/route";
@@ -15,7 +16,7 @@ import { GET as listExpiringQuotes } from "../../../src/api/admin/quotes/expirin
 import { GET as listPricingTiers } from "../../../src/api/admin/pricing-tiers/route";
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
@@ -24,11 +25,15 @@ describe("Admin Companies Routes", () => {
     it("should list companies with pagination", async () => {
       const companies = [{ id: "comp_1", name: "Acme Corp" }];
       const mockService = {
-        listCompanies: jest.fn().mockResolvedValue([companies, 1]),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+        listCompanies: vi.fn().mockResolvedValue([companies, 1]),
       };
       const req = {
         scope: {
-          resolve: jest.fn((name: string) =>
+          resolve: vi.fn((name: string) =>
             name === "tenantId" ? "ten_1" : mockService,
           ),
         },
@@ -46,11 +51,15 @@ describe("Admin Companies Routes", () => {
   describe("GET /admin/companies (with filters)", () => {
     it("should apply status and tier filters", async () => {
       const mockService = {
-        listCompanies: jest.fn().mockResolvedValue([[{ id: "comp_1" }], 1]),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+        listCompanies: vi.fn().mockResolvedValue([[{ id: "comp_1" }], 1]),
       };
       const req = {
         scope: {
-          resolve: jest.fn((name: string) =>
+          resolve: vi.fn((name: string) =>
             name === "tenantId" ? "ten_1" : mockService,
           ),
         },
@@ -71,6 +80,10 @@ describe("Admin Companies Routes", () => {
 describe("Admin Company Approve Route", () => {
   it("should approve a pending company", async () => {
     const mockService = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       retrieveCompany: jest
         .fn()
         .mockResolvedValue({ id: "comp_1", status: "pending" }),
@@ -79,7 +92,7 @@ describe("Admin Company Approve Route", () => {
         .mockResolvedValue({ id: "comp_1", status: "approved" }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -92,12 +105,16 @@ describe("Admin Company Approve Route", () => {
 
   it("should reject approving non-pending company", async () => {
     const mockService = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       retrieveCompany: jest
         .fn()
         .mockResolvedValue({ id: "comp_1", status: "approved" }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -112,12 +129,16 @@ describe("Admin Company Approve Route", () => {
 describe("Admin Company Credit Route", () => {
   it("should return company credit details", async () => {
     const mockQuery = {
-      graph: jest.fn().mockResolvedValue({
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      graph: vi.fn().mockResolvedValue({
         data: [{ id: "comp_1", credit_limit: "5000", credit_used: "1000" }],
       }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -129,10 +150,14 @@ describe("Admin Company Credit Route", () => {
 
   it("should return 404 for non-existent company", async () => {
     const mockQuery = {
-      graph: jest.fn().mockResolvedValue({ data: [undefined] }),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      graph: vi.fn().mockResolvedValue({ data: [undefined] }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_missing" },
       body: {},
@@ -146,6 +171,10 @@ describe("Admin Company Credit Route", () => {
 describe("Admin Company Roles Route", () => {
   it("should return company roles and users", async () => {
     const mockQuery = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       graph: jest
         .fn()
         .mockResolvedValueOnce({
@@ -154,7 +183,7 @@ describe("Admin Company Roles Route", () => {
         .mockResolvedValueOnce({ data: [{ id: "cu_1", role: "admin" }] }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -168,6 +197,10 @@ describe("Admin Company Roles Route", () => {
 describe("Admin Company Spending Limits Route", () => {
   it("should return spending limits", async () => {
     const mockQuery = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       graph: jest
         .fn()
         .mockResolvedValueOnce({
@@ -178,7 +211,7 @@ describe("Admin Company Spending Limits Route", () => {
         }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -190,10 +223,14 @@ describe("Admin Company Spending Limits Route", () => {
 
   it("should return 404 for non-existent company", async () => {
     const mockQuery = {
-      graph: jest.fn().mockResolvedValue({ data: [undefined] }),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      graph: vi.fn().mockResolvedValue({ data: [undefined] }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_missing" },
       body: {},
@@ -207,12 +244,16 @@ describe("Admin Company Spending Limits Route", () => {
 describe("Admin Company Tax Exemptions Route", () => {
   it("should return tax exemptions", async () => {
     const mockQuery = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       graph: jest
         .fn()
         .mockResolvedValue({ data: [{ id: "ex_1", company_id: "comp_1" }] }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -226,7 +267,11 @@ describe("Admin Company Tax Exemptions Route", () => {
 describe("Admin Company Workflow Route", () => {
   it("should return approval workflow config", async () => {
     const mockQuery = {
-      graph: jest.fn().mockResolvedValue({
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      graph: vi.fn().mockResolvedValue({
         data: [
           {
             id: "comp_1",
@@ -238,7 +283,7 @@ describe("Admin Company Workflow Route", () => {
       }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_1" },
       body: {},
@@ -250,10 +295,14 @@ describe("Admin Company Workflow Route", () => {
 
   it("should return 404 for non-existent company", async () => {
     const mockQuery = {
-      graph: jest.fn().mockResolvedValue({ data: [undefined] }),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      graph: vi.fn().mockResolvedValue({ data: [undefined] }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: { id: "comp_missing" },
       body: {},
@@ -267,12 +316,16 @@ describe("Admin Company Workflow Route", () => {
 describe("Admin Purchase Orders Routes", () => {
   it("should list purchase orders", async () => {
     const mockQuery = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       graph: jest
         .fn()
         .mockResolvedValue({ data: [{ id: "po_1" }], metadata: { count: 1 } }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: { limit: 20, offset: 0 },
       params: {},
       body: {},
@@ -287,12 +340,16 @@ describe("Admin Quotes Routes", () => {
   describe("POST /admin/quotes/:id/reject", () => {
     it("should reject a quote", async () => {
       const mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
         updateQuotes: jest
           .fn()
           .mockResolvedValue({ id: "q_1", status: "rejected" }),
       };
       const req = {
-        scope: { resolve: jest.fn(() => mockModule) },
+        scope: { resolve: vi.fn(() => mockModule) },
         query: {},
         params: { id: "q_1" },
         body: { rejection_reason: "Too expensive" },
@@ -311,7 +368,11 @@ describe("Admin Quotes Routes", () => {
   describe("GET /admin/quotes/expiring", () => {
     it("should list expiring quotes", async () => {
       const mockQuery = {
-        graph: jest.fn().mockResolvedValue({
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+        graph: vi.fn().mockResolvedValue({
           data: [
             {
               id: "q_1",
@@ -322,7 +383,7 @@ describe("Admin Quotes Routes", () => {
         }),
       };
       const req = {
-        scope: { resolve: jest.fn(() => mockQuery) },
+        scope: { resolve: vi.fn(() => mockQuery) },
         query: { days_until_expiry: 7 },
         params: {},
         body: {},
@@ -338,13 +399,17 @@ describe("Admin Pricing Tiers Route", () => {
   it("should list pricing tiers", async () => {
     const tiers = [{ id: "tier_1", name: "Gold", discount_percentage: 10 }];
     const mockQuery = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
       graph: jest
         .fn()
         .mockResolvedValueOnce({ data: tiers })
         .mockResolvedValueOnce({ data: [{ id: "comp_1" }] }),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockQuery) },
+      scope: { resolve: vi.fn(() => mockQuery) },
       query: {},
       params: {},
       body: {},

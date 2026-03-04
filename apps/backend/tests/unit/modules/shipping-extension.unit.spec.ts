@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,13 +60,13 @@ describe("ShippingExtensionModuleService", () => {
   let service: ShippingExtensionModuleService;
 
   beforeEach(() => {
-    service = new ShippingExtensionModuleService();
-    jest.clearAllMocks();
+    service = new ShippingExtensionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getRatesForShipment", () => {
     it("returns rates matching weight and zones", async () => {
-      jest.spyOn(service, "listShippingRates").mockResolvedValue([
+      vi.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           min_weight: 0,
@@ -107,7 +108,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("calculateShippingCost", () => {
     it("calculates cost from base rate and per-kg rate", async () => {
-      jest.spyOn(service, "retrieveShippingRate").mockResolvedValue({
+      vi.spyOn(service, "retrieveShippingRate").mockResolvedValue({
         id: "r1",
         base_rate: "5.00",
         per_kg_rate: "2.50",
@@ -126,7 +127,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("getTrackingUrl", () => {
     it("returns tracking URL with tracking number substituted", async () => {
-      jest.spyOn(service, "listCarrierConfigs").mockResolvedValue([
+      vi.spyOn(service, "listCarrierConfigs").mockResolvedValue([
         {
           carrier_code: "fedex",
           tracking_url_template: "https://track.fedex.com/{{tracking_number}}",
@@ -139,7 +140,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when carrier not found", async () => {
-      jest.spyOn(service, "listCarrierConfigs").mockResolvedValue([]);
+      vi.spyOn(service, "listCarrierConfigs").mockResolvedValue([]);
 
       await expect(service.getTrackingUrl("unknown", "123")).rejects.toThrow(
         'Carrier with code "unknown" not found',
@@ -171,7 +172,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when no rates are available", async () => {
-      jest.spyOn(service, "listShippingRates").mockResolvedValue([]);
+      vi.spyOn(service, "listShippingRates").mockResolvedValue([]);
 
       await expect(
         service.calculateShippingRate({
@@ -183,7 +184,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("uses volumetric weight when dimensions provided and larger", async () => {
-      jest.spyOn(service, "listShippingRates").mockResolvedValue([
+      vi.spyOn(service, "listShippingRates").mockResolvedValue([
         {
           id: "r1",
           min_weight: 0,
@@ -210,7 +211,7 @@ describe("ShippingExtensionModuleService", () => {
 
   describe("validateShipmentCarrier", () => {
     it("validates an active carrier successfully", async () => {
-      jest.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
+      vi.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
         id: "carrier-1",
         carrier_name: "UPS",
         is_active: true,
@@ -229,7 +230,7 @@ describe("ShippingExtensionModuleService", () => {
     });
 
     it("throws when carrier is inactive", async () => {
-      jest.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
+      vi.spyOn(service, "retrieveCarrierConfig").mockResolvedValue({
         id: "carrier-1",
         carrier_name: "DHL",
         is_active: false,

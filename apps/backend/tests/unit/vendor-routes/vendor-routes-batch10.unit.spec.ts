@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   GET as advertisingGET,
   POST as advertisingPOST,
@@ -28,13 +29,13 @@ import {
 } from "../../../src/api/vendor/social-commerce/route";
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
 const createReq = (overrides: Record<string, any> = {}) => ({
   vendor_id: "vendor-123",
-  scope: { resolve: jest.fn(() => ({})) },
+  scope: { resolve: vi.fn(() => ({})) },
   query: {},
   params: {},
   body: {},
@@ -42,18 +43,22 @@ const createReq = (overrides: Record<string, any> = {}) => ({
 });
 
 describe("Vendor Routes Batch 10", () => {
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => vi.clearAllMocks());
 
   describe("Advertising /vendor/advertising", () => {
     const mockService = {
-      listAdCampaigns: jest.fn(),
-      createAdCampaigns: jest.fn(),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listAdCampaigns: vi.fn(),
+      createAdCampaigns: vi.fn(),
     };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "ad_1", name: "Summer Campaign" }];
       mockService.listAdCampaigns.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await advertisingGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -67,7 +72,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await advertisingGET(req, res);
@@ -76,7 +81,7 @@ describe("Vendor Routes Batch 10", () => {
 
     it("POST returns 400 for invalid data", async () => {
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {},
       });
       const res = createRes();
@@ -87,14 +92,18 @@ describe("Vendor Routes Batch 10", () => {
 
   describe("Affiliate /vendor/affiliate", () => {
     const mockService = {
-      listAffiliates: jest.fn(),
-      createAffiliates: jest.fn(),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listAffiliates: vi.fn(),
+      createAffiliates: vi.fn(),
     };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "aff_1", name: "Partner Program" }];
       mockService.listAffiliates.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await affiliateGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -108,7 +117,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await affiliateGET(req, res);
@@ -117,7 +126,7 @@ describe("Vendor Routes Batch 10", () => {
 
     it("POST returns 400 for invalid data", async () => {
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {},
       });
       const res = createRes();
@@ -128,14 +137,18 @@ describe("Vendor Routes Batch 10", () => {
 
   describe("Auctions /vendor/auctions", () => {
     const mockService = {
-      listAuctionListings: jest.fn(),
-      createAuctionListings: jest.fn(),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listAuctionListings: vi.fn(),
+      createAuctionListings: vi.fn(),
     };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "auc_1", title: "Vintage Watch" }];
       mockService.listAuctionListings.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await auctionsGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -149,7 +162,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await auctionsGET(req, res);
@@ -160,7 +173,7 @@ describe("Vendor Routes Batch 10", () => {
       const item = { id: "auc_2" };
       mockService.createAuctionListings.mockResolvedValue(item);
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {
           product_id: "prod_1",
           title: "Art Piece",
@@ -180,12 +193,16 @@ describe("Vendor Routes Batch 10", () => {
   });
 
   describe("B2B /vendor/b2b", () => {
-    const mockService = { listQuotes: jest.fn(), createQuotes: jest.fn() };
+    const mockService = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ listQuotes: vi.fn(), createQuotes: vi.fn() };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "b2b_1", company: "Acme Corp" }];
       mockService.listQuotes.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await b2bGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -199,7 +216,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await b2bGET(req, res);
@@ -208,7 +225,7 @@ describe("Vendor Routes Batch 10", () => {
 
     it("POST returns 400 for invalid data", async () => {
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {},
       });
       const res = createRes();
@@ -219,14 +236,18 @@ describe("Vendor Routes Batch 10", () => {
 
   describe("Classified /vendor/classified", () => {
     const mockService = {
-      listClassifiedListings: jest.fn(),
-      createClassifiedListings: jest.fn(),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listClassifiedListings: vi.fn(),
+      createClassifiedListings: vi.fn(),
     };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "cls_1", title: "Used Laptop" }];
       mockService.listClassifiedListings.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await classifiedGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -240,7 +261,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await classifiedGET(req, res);
@@ -249,7 +270,7 @@ describe("Vendor Routes Batch 10", () => {
 
     it("POST returns 400 for invalid data", async () => {
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {},
       });
       const res = createRes();
@@ -260,14 +281,18 @@ describe("Vendor Routes Batch 10", () => {
 
   describe("Crowdfunding /vendor/crowdfunding", () => {
     const mockService = {
-      listCrowdfundCampaigns: jest.fn(),
-      createCrowdfundCampaigns: jest.fn(),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listCrowdfundCampaigns: vi.fn(),
+      createCrowdfundCampaigns: vi.fn(),
     };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "cf_1", title: "Innovative Product" }];
       mockService.listCrowdfundCampaigns.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await crowdfundingGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -281,7 +306,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await crowdfundingGET(req, res);
@@ -290,7 +315,7 @@ describe("Vendor Routes Batch 10", () => {
 
     it("POST returns 400 for invalid data", async () => {
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {},
       });
       const res = createRes();
@@ -301,14 +326,18 @@ describe("Vendor Routes Batch 10", () => {
 
   describe("Social Commerce /vendor/social-commerce", () => {
     const mockService = {
-      listLiveStreams: jest.fn(),
-      createLiveStreams: jest.fn(),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listLiveStreams: vi.fn(),
+      createLiveStreams: vi.fn(),
     };
 
     it("GET returns items with pagination when vendor_id present", async () => {
       const items = [{ id: "sc_1", title: "Live Shopping Event" }];
       mockService.listLiveStreams.mockResolvedValue(items);
-      const req = createReq({ scope: { resolve: jest.fn(() => mockService) } });
+      const req = createReq({ scope: { resolve: vi.fn(() => mockService) } });
       const res = createRes();
       await socialCommerceGET(req, res);
       expect(res.json).toHaveBeenCalledWith({
@@ -322,7 +351,7 @@ describe("Vendor Routes Batch 10", () => {
     it("GET returns 401 when vendor_id missing", async () => {
       const req = createReq({
         vendor_id: undefined,
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
       });
       const res = createRes();
       await socialCommerceGET(req, res);
@@ -331,7 +360,7 @@ describe("Vendor Routes Batch 10", () => {
 
     it("POST returns 400 for invalid data", async () => {
       const req = createReq({
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         body: {},
       });
       const res = createRes();

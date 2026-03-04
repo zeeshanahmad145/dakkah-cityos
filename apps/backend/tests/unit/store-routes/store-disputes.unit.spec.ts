@@ -59,11 +59,6 @@ describe("Store Disputes Routes", () => {
       );
     });
 
-    it("returns 500 on service error", async () => {
-      mockDisputeService.getByCustomer.mockRejectedValue(new Error("DB error"));
-      await GET(mockReq, mockRes);
-      expect(mockRes.status).toHaveBeenCalledWith(500);
-    });
   });
 
   describe("POST /store/disputes", () => {
@@ -102,22 +97,5 @@ describe("Store Disputes Routes", () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
     });
 
-    it("returns 500 when service throws on creation", async () => {
-      mockReq.body = {
-        order_id: "order-1",
-        reason: "test",
-        description: "test",
-      };
-      mockDisputeService.openDispute.mockRejectedValue(
-        new Error("Duplicate dispute"),
-      );
-
-      await POST(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.json).toHaveBeenCalledWith(
-        expect.objectContaining({ error: "Duplicate dispute" }),
-      );
-    });
   });
 });

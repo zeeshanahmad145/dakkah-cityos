@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -83,8 +84,8 @@ describe("VendorModuleService", () => {
   let service: VendorModuleService;
 
   beforeEach(() => {
-    service = new VendorModuleService();
-    jest.clearAllMocks();
+    service = new VendorModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("generateVendorOrderNumber", () => {
@@ -118,7 +119,7 @@ describe("VendorModuleService", () => {
     });
 
     it("includes tenant filter when provided", async () => {
-      const spy = jest.spyOn(service, "listVendors").mockResolvedValue([]);
+      const spy = vi.spyOn(service, "listVendors").mockResolvedValue([]);
 
       await service.listVendorsByStatus("active", "tenant-1");
       expect(spy).toHaveBeenCalledWith({
@@ -130,7 +131,7 @@ describe("VendorModuleService", () => {
 
   describe("approveVendor", () => {
     it("sets vendor as approved and active", async () => {
-      const spy = jest.spyOn(service, "updateVendors").mockResolvedValue({});
+      const spy = vi.spyOn(service, "updateVendors").mockResolvedValue({});
 
       await service.approveVendor("v1", "admin-1", "Looks good");
 
@@ -147,7 +148,7 @@ describe("VendorModuleService", () => {
 
   describe("rejectVendor", () => {
     it("sets vendor as rejected", async () => {
-      const spy = jest.spyOn(service, "updateVendors").mockResolvedValue({});
+      const spy = vi.spyOn(service, "updateVendors").mockResolvedValue({});
 
       await service.rejectVendor("v1", "admin-1", "Incomplete docs");
 
@@ -162,7 +163,7 @@ describe("VendorModuleService", () => {
 
   describe("suspendVendor", () => {
     it("suspends vendor with reason", async () => {
-      const spy = jest.spyOn(service, "updateVendors").mockResolvedValue({});
+      const spy = vi.spyOn(service, "updateVendors").mockResolvedValue({});
 
       await service.suspendVendor("v1", "Policy violation");
 
@@ -177,7 +178,7 @@ describe("VendorModuleService", () => {
 
   describe("assignProductToVendor", () => {
     it("assigns product to vendor", async () => {
-      jest.spyOn(service, "listVendorProducts").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorProducts").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createVendorProducts")
         .mockResolvedValue({ id: "vp-1" });
@@ -205,7 +206,7 @@ describe("VendorModuleService", () => {
     });
 
     it("sets commission override when provided", async () => {
-      jest.spyOn(service, "listVendorProducts").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorProducts").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createVendorProducts")
         .mockResolvedValue({});
@@ -238,7 +239,7 @@ describe("VendorModuleService", () => {
     });
 
     it("returns null when no primary vendor", async () => {
-      jest.spyOn(service, "listVendorProducts").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorProducts").mockResolvedValue([]);
 
       const result = await service.getVendorForProduct("prod-1");
       expect(result).toBeNull();
@@ -273,7 +274,7 @@ describe("VendorModuleService", () => {
       const createOrderSpy = jest
         .spyOn(service, "createVendorOrders")
         .mockResolvedValue({ id: "vo-1" });
-      jest.spyOn(service, "createVendorOrderItems").mockResolvedValue({});
+      vi.spyOn(service, "createVendorOrderItems").mockResolvedValue({});
 
       const items = [
         {
@@ -381,7 +382,7 @@ describe("VendorModuleService", () => {
 
   describe("calculateVendorAnalytics", () => {
     it("creates analytics snapshot when none exists", async () => {
-      jest.spyOn(service, "listVendorOrders").mockResolvedValue([
+      vi.spyOn(service, "listVendorOrders").mockResolvedValue([
         {
           id: "vo-1",
           status: "completed",
@@ -399,11 +400,11 @@ describe("VendorModuleService", () => {
           created_at: "2025-01-20",
         },
       ]);
-      jest.spyOn(service, "getVendorProducts").mockResolvedValue([
+      vi.spyOn(service, "getVendorProducts").mockResolvedValue([
         { id: "vp-1", status: "approved" },
         { id: "vp-2", status: "pending" },
       ]);
-      jest.spyOn(service, "listVendorAnalyticsSnapshots").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorAnalyticsSnapshots").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createVendorAnalyticsSnapshots")
         .mockResolvedValue({});
@@ -427,8 +428,8 @@ describe("VendorModuleService", () => {
     });
 
     it("updates existing analytics snapshot", async () => {
-      jest.spyOn(service, "listVendorOrders").mockResolvedValue([]);
-      jest.spyOn(service, "getVendorProducts").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorOrders").mockResolvedValue([]);
+      vi.spyOn(service, "getVendorProducts").mockResolvedValue([]);
       jest
         .spyOn(service, "listVendorAnalyticsSnapshots")
         .mockResolvedValue([{ id: "snap-1" }]);
@@ -449,7 +450,7 @@ describe("VendorModuleService", () => {
 
   describe("calculateVendorPerformanceMetrics", () => {
     it("returns empty when no orders", async () => {
-      jest.spyOn(service, "listVendorOrders").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorOrders").mockResolvedValue([]);
 
       const result = await service.calculateVendorPerformanceMetrics("v1", 30);
       expect(result).toEqual([]);
@@ -457,7 +458,7 @@ describe("VendorModuleService", () => {
 
     it("calculates cancellation and return rates", async () => {
       const recentDate = new Date().toISOString();
-      jest.spyOn(service, "listVendorOrders").mockResolvedValue([
+      vi.spyOn(service, "listVendorOrders").mockResolvedValue([
         { id: "vo-1", status: "completed", created_at: recentDate },
         { id: "vo-2", status: "cancelled", created_at: recentDate },
         { id: "vo-3", status: "returned", created_at: recentDate },
@@ -483,7 +484,7 @@ describe("VendorModuleService", () => {
 
   describe("getVendorDashboard", () => {
     it("returns comprehensive dashboard data", async () => {
-      jest.spyOn(service, "retrieveVendor").mockResolvedValue({
+      vi.spyOn(service, "retrieveVendor").mockResolvedValue({
         id: "v1",
         total_orders: 50,
         total_sales: 100000,
@@ -500,7 +501,7 @@ describe("VendorModuleService", () => {
       jest
         .spyOn(service, "listVendorAnalyticsSnapshots")
         .mockResolvedValue([{ id: "snap-1" }]);
-      jest.spyOn(service, "listVendorPerformanceMetrics").mockResolvedValue([]);
+      vi.spyOn(service, "listVendorPerformanceMetrics").mockResolvedValue([]);
 
       const result = await service.getVendorDashboard("v1");
 

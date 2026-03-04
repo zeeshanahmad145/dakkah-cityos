@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,13 +60,13 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
   let service: InvoiceModuleService;
 
   beforeEach(() => {
-    service = new InvoiceModuleService();
-    jest.clearAllMocks();
+    service = new InvoiceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("generateInvoiceNumberByTenant", () => {
     it("generates invoice number with year and sequence", async () => {
-      jest.spyOn(service, "listInvoices").mockResolvedValue([]);
+      vi.spyOn(service, "listInvoices").mockResolvedValue([]);
       const result = await service.generateInvoiceNumberByTenant("tenant-1");
       const year = new Date().getFullYear();
       expect(result).toMatch(new RegExp(`^INV-${year}-00001$`));
@@ -73,7 +74,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
 
     it("increments sequence based on existing invoices", async () => {
       const yr = new Date().getFullYear();
-      jest.spyOn(service, "listInvoices").mockResolvedValue([
+      vi.spyOn(service, "listInvoices").mockResolvedValue([
         { id: "inv-1", invoice_number: `INV-${yr}-00001` },
         { id: "inv-2", invoice_number: `INV-${yr}-00002` },
         { id: "inv-3", invoice_number: `INV-${yr}-00003` },
@@ -86,11 +87,11 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
 
   describe("calculateInvoiceTotals", () => {
     it("calculates totals from invoice items", async () => {
-      jest.spyOn(service, "retrieveInvoice").mockResolvedValue({
+      vi.spyOn(service, "retrieveInvoice").mockResolvedValue({
         id: "inv-1",
         amount_paid: 0,
       });
-      jest.spyOn(service, "listInvoiceItems").mockResolvedValue([
+      vi.spyOn(service, "listInvoiceItems").mockResolvedValue([
         { quantity: 2, unit_price: 1000, tax_total: 200 },
         { quantity: 1, unit_price: 500, tax_total: 50 },
       ]);
@@ -108,7 +109,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
     });
 
     it("throws when invoice not found", async () => {
-      jest.spyOn(service, "retrieveInvoice").mockResolvedValue(null);
+      vi.spyOn(service, "retrieveInvoice").mockResolvedValue(null);
       await expect(service.calculateInvoiceTotals("inv-bad")).rejects.toThrow(
         "Invoice not found",
       );
@@ -120,7 +121,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
       jest
         .spyOn(service, "listInvoices")
         .mockResolvedValue([{ id: "inv-1" }, { id: "inv-2" }]);
-      jest.spyOn(service, "updateInvoices").mockResolvedValue({});
+      vi.spyOn(service, "updateInvoices").mockResolvedValue({});
 
       const result = await service.markOverdue("tenant-1");
 
@@ -129,7 +130,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
     });
 
     it("returns zero when no overdue invoices exist", async () => {
-      jest.spyOn(service, "listInvoices").mockResolvedValue([]);
+      vi.spyOn(service, "listInvoices").mockResolvedValue([]);
 
       const result = await service.markOverdue("tenant-1");
 
@@ -140,7 +141,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
 
   describe("getPaymentSummary", () => {
     it("returns fully paid summary", async () => {
-      jest.spyOn(service, "retrieveInvoice").mockResolvedValue({
+      vi.spyOn(service, "retrieveInvoice").mockResolvedValue({
         id: "inv-1",
         status: "paid",
         total: 1000,
@@ -157,7 +158,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
     });
 
     it("returns partially paid summary with balance", async () => {
-      jest.spyOn(service, "retrieveInvoice").mockResolvedValue({
+      vi.spyOn(service, "retrieveInvoice").mockResolvedValue({
         id: "inv-1",
         status: "sent",
         total: 1000,
@@ -174,7 +175,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
     });
 
     it("detects overdue invoices", async () => {
-      jest.spyOn(service, "retrieveInvoice").mockResolvedValue({
+      vi.spyOn(service, "retrieveInvoice").mockResolvedValue({
         id: "inv-1",
         status: "sent",
         total: 500,
@@ -190,7 +191,7 @@ describe("InvoiceModuleService – Enhanced Methods", () => {
     });
 
     it("throws when invoice not found", async () => {
-      jest.spyOn(service, "retrieveInvoice").mockResolvedValue(null);
+      vi.spyOn(service, "retrieveInvoice").mockResolvedValue(null);
       await expect(service.getPaymentSummary("inv-bad")).rejects.toThrow(
         "Invoice not found",
       );

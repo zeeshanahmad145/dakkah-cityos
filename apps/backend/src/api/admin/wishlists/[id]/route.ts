@@ -12,8 +12,8 @@ const updateWishlistSchema = z
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const service = req.scope.resolve("wishlist") as unknown as any;
-    const item = await service.retrieveWishlist(req.params.id);
-    res.json({ item });
+    const wishlist = await service.retrieveWishlist(req.params.id);
+    res.json({ wishlist });
   } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-WISHLISTS-ID");
   }
@@ -28,8 +28,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
     }
-    const item = await service.updateWishlists(req.params.id, parsed.data);
-    res.json({ item });
+    const wishlist = await service.updateWishlists([
+      { id: req.params.id, ...parsed.data },
+    ]);
+    const result = Array.isArray(wishlist) ? wishlist[0] : wishlist;
+    res.json({ wishlist: result });
   } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-WISHLISTS-ID");
   }

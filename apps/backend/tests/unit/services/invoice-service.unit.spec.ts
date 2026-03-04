@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -50,12 +51,12 @@ describe("InvoiceModuleService", () => {
   let service: InvoiceModuleService;
 
   beforeEach(() => {
-    service = new InvoiceModuleService();
+    service = new InvoiceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
   });
 
   describe("generateInvoiceNumber", () => {
     it("generates a properly formatted invoice number", async () => {
-      jest.spyOn(service, "listInvoices").mockResolvedValue([]);
+      vi.spyOn(service, "listInvoices").mockResolvedValue([]);
 
       const result = await service.generateInvoiceNumber("comp_abcd1234");
 
@@ -63,7 +64,7 @@ describe("InvoiceModuleService", () => {
     });
 
     it("uses first 4 characters of company ID as prefix", async () => {
-      jest.spyOn(service, "listInvoices").mockResolvedValue([]);
+      vi.spyOn(service, "listInvoices").mockResolvedValue([]);
 
       const result = await service.generateInvoiceNumber("test_company");
 
@@ -111,7 +112,7 @@ describe("InvoiceModuleService", () => {
       const createInvSpy = jest
         .spyOn(service, "createInvoices")
         .mockResolvedValue({ id: "inv-1" });
-      jest.spyOn(service, "createInvoiceItems").mockResolvedValue([]);
+      vi.spyOn(service, "createInvoiceItems").mockResolvedValue([]);
 
       await service.createInvoiceWithItems({
         company_id: "comp-1",
@@ -132,7 +133,7 @@ describe("InvoiceModuleService", () => {
       jest
         .spyOn(service, "generateInvoiceNumber")
         .mockResolvedValue("INV-TEST-202501-0001");
-      jest.spyOn(service, "createInvoices").mockResolvedValue({ id: "inv-1" });
+      vi.spyOn(service, "createInvoices").mockResolvedValue({ id: "inv-1" });
       const createItemsSpy = jest
         .spyOn(service, "createInvoiceItems")
         .mockResolvedValue([]);
@@ -211,7 +212,7 @@ describe("InvoiceModuleService", () => {
     });
 
     it("throws when invoice not found", async () => {
-      jest.spyOn(service, "listInvoices").mockResolvedValue([undefined]);
+      vi.spyOn(service, "listInvoices").mockResolvedValue([undefined]);
 
       await expect(service.markAsPaid("nonexistent")).rejects.toThrow(
         "Invoice nonexistent not found",

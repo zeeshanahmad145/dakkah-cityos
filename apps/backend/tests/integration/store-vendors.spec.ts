@@ -1,7 +1,8 @@
+import { vi } from "vitest";
 import { POST as registerVendor } from "../../src/api/store/vendors/register/route";
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
@@ -9,7 +10,7 @@ const createMockReq = (overrides: Record<string, any> = {}) => ({
   params: {},
   auth_context: { actor_id: "cust_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -35,6 +36,10 @@ describe("Store Vendors Endpoints", () => {
 
     it("should register a new vendor successfully", async () => {
       const mockVendor = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
         id: "vendor_01",
         name: "Acme Corp",
         handle: "acme-corp",
@@ -43,10 +48,10 @@ describe("Store Vendors Endpoints", () => {
       const req = createMockReq({
         body: validBody,
         vendor: {
-          listVendors: jest.fn().mockResolvedValue([]),
-          createVendors: jest.fn().mockResolvedValue(mockVendor),
+          listVendors: vi.fn().mockResolvedValue([]),
+          createVendors: vi.fn().mockResolvedValue(mockVendor),
         },
-        event_bus: { emit: jest.fn().mockResolvedValue(undefined) },
+        event_bus: { emit: vi.fn().mockResolvedValue(undefined) },
       });
       const res = createMockRes();
 
@@ -67,7 +72,7 @@ describe("Store Vendors Endpoints", () => {
       const req = createMockReq({
         body: validBody,
         vendor: {
-          listVendors: jest.fn().mockResolvedValue([{ id: "existing_vendor" }]),
+          listVendors: vi.fn().mockResolvedValue([{ id: "existing_vendor" }]),
         },
       });
       const res = createMockRes();
@@ -105,8 +110,12 @@ describe("Store Vendors Endpoints", () => {
     });
 
     it("should emit vendor.application_submitted event on success", async () => {
-      const emit = jest.fn().mockResolvedValue(undefined);
+      const emit = vi.fn().mockResolvedValue(undefined);
       const mockVendor = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
         id: "vendor_02",
         name: "Test Co",
         handle: "test-co",
@@ -115,8 +124,8 @@ describe("Store Vendors Endpoints", () => {
       const req = createMockReq({
         body: { ...validBody, company_name: "Test Co" },
         vendor: {
-          listVendors: jest.fn().mockResolvedValue([]),
-          createVendors: jest.fn().mockResolvedValue(mockVendor),
+          listVendors: vi.fn().mockResolvedValue([]),
+          createVendors: vi.fn().mockResolvedValue(mockVendor),
         },
         event_bus: { emit },
       });

@@ -1,5 +1,6 @@
-jest.mock("../../../src/lib/api-error-handler", () => ({
-  handleApiError: jest.fn((res, error, context) => {
+import { vi } from "vitest";
+vi.mock("../../../src/lib/api-error-handler", () => ({
+  handleApiError: vi.fn((res, error, context) => {
     const msg = error.message || String(error);
     if (msg.includes("Not found")) {
       return res.status(404).json({ message: msg });
@@ -19,9 +20,9 @@ import {
 
 function makeMockRes() {
   const res: any = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    send: vi.fn().mockReturnThis(),
   };
   return res;
 }
@@ -32,14 +33,14 @@ describe("GET /admin/wallets", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockWalletService = {
-      listWallets: jest.fn().mockResolvedValue([]),
-      countWallets: jest.fn().mockResolvedValue(0),
+      listWallets: vi.fn().mockResolvedValue([]),
+      countWallets: vi.fn().mockResolvedValue(0),
     };
     mockReq = {
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockWalletService) },
+      scope: { resolve: vi.fn().mockReturnValue(mockWalletService) },
     };
     mockRes = makeMockRes();
   });
@@ -90,14 +91,14 @@ describe("GET /admin/wallets/:id", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockWalletService = {
-      retrieveWallet: jest.fn().mockResolvedValue({ id: "w1", balance: 500 }),
-      getTransactionHistory: jest.fn().mockResolvedValue([]),
+      retrieveWallet: vi.fn().mockResolvedValue({ id: "w1", balance: 500 }),
+      getTransactionHistory: vi.fn().mockResolvedValue([]),
     };
     mockReq = {
       params: { id: "w1" },
-      scope: { resolve: jest.fn().mockReturnValue(mockWalletService) },
+      scope: { resolve: vi.fn().mockReturnValue(mockWalletService) },
     };
     mockRes = makeMockRes();
   });
@@ -137,7 +138,7 @@ describe("POST /admin/wallets/:id (credit/debit)", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockWalletService = {
       creditWallet: jest
         .fn()
@@ -149,7 +150,7 @@ describe("POST /admin/wallets/:id (credit/debit)", () => {
     mockReq = {
       params: { id: "w1" },
       body: { type: "credit", amount: 50, description: "Top up" },
-      scope: { resolve: jest.fn().mockReturnValue(mockWalletService) },
+      scope: { resolve: vi.fn().mockReturnValue(mockWalletService) },
     };
     mockRes = makeMockRes();
   });

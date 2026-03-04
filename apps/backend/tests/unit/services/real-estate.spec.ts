@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -55,18 +56,18 @@ describe("RealEstateModuleService", () => {
   let service: RealEstateModuleService;
 
   beforeEach(() => {
-    service = new RealEstateModuleService();
-    jest.clearAllMocks();
+    service = new RealEstateModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("publishProperty", () => {
     it("should publish a property with a price", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "draft",
         price: 250000,
       });
-      jest.spyOn(service, "updatePropertyListings").mockResolvedValue({
+      vi.spyOn(service, "updatePropertyListings").mockResolvedValue({
         id: "prop_01",
         status: "published",
       });
@@ -76,7 +77,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("should reject publishing without a price", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "draft",
         price: null,
@@ -89,7 +90,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("should reject publishing an already published property", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "published",
         price: 250000,
@@ -106,12 +107,12 @@ describe("RealEstateModuleService", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 7);
 
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "published",
       });
-      jest.spyOn(service, "listViewingAppointments").mockResolvedValue([]);
-      jest.spyOn(service, "createViewingAppointments").mockResolvedValue({
+      vi.spyOn(service, "listViewingAppointments").mockResolvedValue([]);
+      vi.spyOn(service, "createViewingAppointments").mockResolvedValue({
         id: "view_01",
         property_listing_id: "prop_01",
         status: "scheduled",
@@ -126,7 +127,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("should reject viewing for non-published property", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "draft",
       });
@@ -143,7 +144,7 @@ describe("RealEstateModuleService", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 7);
 
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "published",
       });
@@ -172,12 +173,12 @@ describe("RealEstateModuleService", () => {
 
   describe("makeOffer", () => {
     it("should create an offer on a published property", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "published",
         price: 250000,
       });
-      jest.spyOn(service, "createPropertyValuations").mockResolvedValue({
+      vi.spyOn(service, "createPropertyValuations").mockResolvedValue({
         id: "offer_01",
         offered_amount: 240000,
       });
@@ -193,7 +194,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("should reject offer on non-published property", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop_01",
         status: "draft",
       });

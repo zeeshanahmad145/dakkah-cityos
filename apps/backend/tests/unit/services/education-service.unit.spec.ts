@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -80,23 +81,23 @@ describe("EducationModuleService", () => {
   let service: EducationModuleService;
 
   beforeEach(() => {
-    service = new EducationModuleService();
-    jest.clearAllMocks();
+    service = new EducationModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("enrollStudent", () => {
     it("enrolls a student successfully", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({
         id: "c1",
         status: "published",
         max_students: 30,
         enrolled_count: 5,
       });
-      jest.spyOn(service, "listEnrollments").mockResolvedValue([]);
+      vi.spyOn(service, "listEnrollments").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createEnrollments")
         .mockResolvedValue({ id: "e1" });
-      jest.spyOn(service, "updateCourses").mockResolvedValue({});
+      vi.spyOn(service, "updateCourses").mockResolvedValue({});
 
       const result = await service.enrollStudent("c1", "s1");
 
@@ -111,13 +112,13 @@ describe("EducationModuleService", () => {
     });
 
     it("throws when course is at full capacity", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({
         id: "c1",
         status: "active",
         max_students: 2,
         enrolled_count: 2,
       });
-      jest.spyOn(service, "listEnrollments").mockResolvedValue([]);
+      vi.spyOn(service, "listEnrollments").mockResolvedValue([]);
 
       await expect(service.enrollStudent("c1", "s1")).rejects.toThrow(
         "Course is at full capacity",
@@ -128,7 +129,7 @@ describe("EducationModuleService", () => {
       jest
         .spyOn(service, "retrieveCourse")
         .mockResolvedValue({ id: "c1", status: "published" });
-      jest.spyOn(service, "listEnrollments").mockResolvedValue([{ id: "e1" }]);
+      vi.spyOn(service, "listEnrollments").mockResolvedValue([{ id: "e1" }]);
 
       await expect(service.enrollStudent("c1", "s1")).rejects.toThrow(
         "Student is already enrolled in this course",
@@ -148,8 +149,8 @@ describe("EducationModuleService", () => {
 
   describe("getCourseAnalytics", () => {
     it("returns correct analytics metrics", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({ id: "c1" });
-      jest.spyOn(service, "listEnrollments").mockResolvedValue([
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({ id: "c1" });
+      vi.spyOn(service, "listEnrollments").mockResolvedValue([
         { status: "completed", progress: 100 },
         { status: "active", progress: 50 },
         { status: "dropped", progress: 10 },
@@ -168,7 +169,7 @@ describe("EducationModuleService", () => {
 
   describe("trackProgress", () => {
     it("updates progress when completing a lesson", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "e1",
         status: "active",
         completed_lessons: ["l1"],
@@ -201,17 +202,17 @@ describe("EducationModuleService", () => {
 
   describe("issueCertificate", () => {
     it("issues certificate for completed course", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "e1",
         progress: 100,
         student_id: "s1",
         course_id: "c1",
       });
-      jest.spyOn(service, "listCertificates").mockResolvedValue([]);
+      vi.spyOn(service, "listCertificates").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createCertificates")
         .mockResolvedValue({ id: "cert-1" });
-      jest.spyOn(service, "updateEnrollments").mockResolvedValue({});
+      vi.spyOn(service, "updateEnrollments").mockResolvedValue({});
 
       const result = await service.issueCertificate("e1");
 

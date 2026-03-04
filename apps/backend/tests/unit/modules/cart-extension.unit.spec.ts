@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -15,7 +16,7 @@ jest.mock("@medusajs/framework/utils", () => {
     MedusaService: () =>
       class MockMedusaBase {
         manager_: any = {
-          findOne: jest.fn().mockResolvedValue(null),
+          findOne: vi.fn().mockResolvedValue(null),
         };
         async listCartMetadatas(_filter: any, _options?: any): Promise<any> {
           return [];
@@ -57,14 +58,14 @@ describe("CartExtensionModuleService", () => {
   let service: CartExtensionModuleService;
 
   beforeEach(() => {
-    service = new CartExtensionModuleService();
-    jest.clearAllMocks();
+    service = new CartExtensionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("calculateCartInsights", () => {
     it("returns insights with savings and recommendations", async () => {
       service.manager_ = {
-        findOne: jest.fn().mockResolvedValue({
+        findOne: vi.fn().mockResolvedValue({
           id: "cart-1",
           items: [
             {
@@ -84,7 +85,7 @@ describe("CartExtensionModuleService", () => {
     });
 
     it("returns empty insights for missing cart", async () => {
-      service.manager_ = { findOne: jest.fn().mockResolvedValue(null) };
+      service.manager_ = { findOne: vi.fn().mockResolvedValue(null) };
 
       const result = await service.calculateCartInsights("cart-1");
       expect(result.savings.originalTotal).toBe(0);
@@ -93,7 +94,7 @@ describe("CartExtensionModuleService", () => {
 
     it("suggests bundle discount when 2 items present", async () => {
       service.manager_ = {
-        findOne: jest.fn().mockResolvedValue({
+        findOne: vi.fn().mockResolvedValue({
           id: "cart-1",
           items: [
             { id: "i1", unit_price: 1000, quantity: 1 },
@@ -113,7 +114,7 @@ describe("CartExtensionModuleService", () => {
   describe("applyBundleDiscounts", () => {
     it("detects category bundles and applies discount", async () => {
       service.manager_ = {
-        findOne: jest.fn().mockResolvedValue({
+        findOne: vi.fn().mockResolvedValue({
           id: "cart-1",
           items: [
             {
@@ -145,7 +146,7 @@ describe("CartExtensionModuleService", () => {
     });
 
     it("returns no bundles for empty cart", async () => {
-      service.manager_ = { findOne: jest.fn().mockResolvedValue(null) };
+      service.manager_ = { findOne: vi.fn().mockResolvedValue(null) };
 
       const result = await service.applyBundleDiscounts("cart-1");
       expect(result.applied).toBe(false);
@@ -154,7 +155,7 @@ describe("CartExtensionModuleService", () => {
 
     it("applies mix-and-match discount for 3+ items", async () => {
       service.manager_ = {
-        findOne: jest.fn().mockResolvedValue({
+        findOne: vi.fn().mockResolvedValue({
           id: "cart-1",
           items: [
             {
@@ -190,7 +191,7 @@ describe("CartExtensionModuleService", () => {
   describe("validateCartLimits", () => {
     it("returns valid when cart is within all limits", async () => {
       service.manager_ = {
-        findOne: jest.fn().mockResolvedValue({
+        findOne: vi.fn().mockResolvedValue({
           id: "cart-1",
           items: [{ id: "i1", unit_price: 1000, quantity: 2, weight: 500 }],
         }),
@@ -203,7 +204,7 @@ describe("CartExtensionModuleService", () => {
 
     it("returns invalid when item count exceeds limit", async () => {
       service.manager_ = {
-        findOne: jest.fn().mockResolvedValue({
+        findOne: vi.fn().mockResolvedValue({
           id: "cart-1",
           items: [{ id: "i1", unit_price: 100, quantity: 60, weight: 10 }],
         }),

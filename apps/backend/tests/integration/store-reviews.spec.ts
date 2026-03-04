@@ -1,8 +1,9 @@
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { POST } from "../../src/api/store/reviews/route";
 import { POST as markHelpful } from "../../src/api/store/reviews/[id]/helpful/route";
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
@@ -10,7 +11,7 @@ const createMockReq = (overrides: Record<string, any> = {}) => ({
   params: {},
   auth_context: { actor_id: "cust_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -40,9 +41,9 @@ describe("Store Reviews Endpoints", () => {
       };
       const req = createMockReq({
         body: validBody,
-        review: { createReview: jest.fn().mockResolvedValue(mockReview) },
+        review: { createReview: vi.fn().mockResolvedValue(mockReview) },
         query: {
-          graph: jest
+          graph: vi
             .fn()
             .mockResolvedValueOnce({ data: [] })
             .mockResolvedValueOnce({
@@ -58,7 +59,7 @@ describe("Store Reviews Endpoints", () => {
       });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({ review: mockReview }),
@@ -69,7 +70,7 @@ describe("Store Reviews Endpoints", () => {
       const req = createMockReq({ body: validBody, auth_context: {} });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(401);
     });
 
@@ -79,7 +80,7 @@ describe("Store Reviews Endpoints", () => {
       });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(400);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -94,10 +95,10 @@ describe("Store Reviews Endpoints", () => {
       });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(400);
       expect(mockJson).toHaveBeenCalledWith(
-        expect.objectContaining({ message: "Validation failed" }),
+        expect.objectContaining({ message: "Rating and content are required" }),
       );
     });
 
@@ -107,7 +108,7 @@ describe("Store Reviews Endpoints", () => {
       });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(400);
     });
   });
@@ -117,11 +118,12 @@ describe("Store Reviews Endpoints", () => {
       const req = createMockReq({
         params: { id: "rev_01" },
         body: {},
-        review: { markHelpful: jest.fn().mockResolvedValue(undefined) },
+        auth_context: { actor_id: "cust_01" },
+        review: { markHelpful: vi.fn().mockResolvedValue(undefined) },
       });
       const res = createMockRes();
 
-      await markHelpful(req, res);
+      await markHelpful(req as any, res);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({ success: true }),
       );
@@ -135,7 +137,7 @@ describe("Store Reviews Endpoints", () => {
       });
       const res = createMockRes();
 
-      await markHelpful(req, res);
+      await markHelpful(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(401);
     });
 
@@ -143,16 +145,15 @@ describe("Store Reviews Endpoints", () => {
       const req = createMockReq({
         params: { id: "rev_01" },
         body: {},
+        auth_context: { actor_id: "cust_01" },
         review: {
-          markHelpful: jest
-            .fn()
-            .mockRejectedValue(new Error("Review not found")),
+          markHelpful: vi.fn().mockRejectedValue(new Error("Review not found")),
         },
       });
       const res = createMockRes();
 
-      await markHelpful(req, res);
-      expect(mockStatus).toHaveBeenCalledWith(500);
+      await markHelpful(req as any, res);
+      expect(mockStatus).toHaveBeenCalledWith(404);
     });
   });
 });

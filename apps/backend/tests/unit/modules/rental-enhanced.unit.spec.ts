@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -65,8 +66,8 @@ describe("RentalModuleService – Enhanced", () => {
   let service: RentalModuleService;
 
   beforeEach(() => {
-    service = new RentalModuleService();
-    jest.clearAllMocks();
+    service = new RentalModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("checkAvailability", () => {
@@ -74,7 +75,7 @@ describe("RentalModuleService – Enhanced", () => {
       jest
         .spyOn(service, "retrieveRentalProduct")
         .mockResolvedValue({ id: "rp-1", status: "available" });
-      jest.spyOn(service, "listRentalAgreements").mockResolvedValue([]);
+      vi.spyOn(service, "listRentalAgreements").mockResolvedValue([]);
 
       const start = new Date("2025-06-01");
       const end = new Date("2025-06-07");
@@ -147,7 +148,7 @@ describe("RentalModuleService – Enhanced", () => {
 
   describe("processReturn", () => {
     it("processes a return for an active rental", async () => {
-      jest.spyOn(service, "retrieveRentalAgreement").mockResolvedValue({
+      vi.spyOn(service, "retrieveRentalAgreement").mockResolvedValue({
         id: "ra-1",
         status: "active",
         rental_product_id: "rp-1",
@@ -155,8 +156,8 @@ describe("RentalModuleService – Enhanced", () => {
       const returnSpy = jest
         .spyOn(service, "createRentalReturns")
         .mockResolvedValue({ id: "ret-1" });
-      jest.spyOn(service, "updateRentalAgreements").mockResolvedValue({});
-      jest.spyOn(service, "updateRentalProducts").mockResolvedValue({});
+      vi.spyOn(service, "updateRentalAgreements").mockResolvedValue({});
+      vi.spyOn(service, "updateRentalProducts").mockResolvedValue({});
 
       const result = await service.processReturn("ra-1", "good", "No damage");
 

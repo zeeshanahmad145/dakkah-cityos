@@ -1,12 +1,13 @@
-const mockJson = jest.fn()
-const mockStatus = jest.fn(() => ({ json: mockJson }))
+import { vi } from "vitest";
+const mockJson = vi.fn()
+const mockStatus = vi.fn(() => ({ json: mockJson }))
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
   body: {},
   auth_context: { actor_id: "admin_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 })
@@ -22,7 +23,7 @@ const createMockRes = () => {
 describe("Store Scope Isolation", () => {
   describe("product visibility per store", () => {
     it("should only show products assigned to the requesting store", async () => {
-      const listProducts = jest.fn().mockImplementation((filters: any) => {
+      const listProducts = vi.fn().mockImplementation((filters: any) => {
         const products = [
           { id: "prod_01", name: "Store A Product", store_id: "store_A" },
           { id: "prod_02", name: "Store B Product", store_id: "store_B" },
@@ -37,7 +38,7 @@ describe("Store Scope Isolation", () => {
     })
 
     it("should not leak products from store B to store A", async () => {
-      const listProducts = jest.fn().mockImplementation((filters: any) => {
+      const listProducts = vi.fn().mockImplementation((filters: any) => {
         const products = [
           { id: "prod_01", store_id: "store_A" },
           { id: "prod_02", store_id: "store_B" },
@@ -53,7 +54,7 @@ describe("Store Scope Isolation", () => {
 
   describe("order scoping per store", () => {
     it("should scope orders to the originating store", async () => {
-      const listOrders = jest.fn().mockImplementation((filters: any) => {
+      const listOrders = vi.fn().mockImplementation((filters: any) => {
         const orders = [
           { id: "order_01", store_id: "store_A", total: 5000 },
           { id: "order_02", store_id: "store_B", total: 3000 },
@@ -68,7 +69,7 @@ describe("Store Scope Isolation", () => {
     })
 
     it("should prevent cross-store order modification", async () => {
-      const updateOrder = jest.fn().mockImplementation((orderId: string, data: any, context: any) => {
+      const updateOrder = vi.fn().mockImplementation((orderId: string, data: any, context: any) => {
         const order = { id: orderId, store_id: "store_A" }
         if (context.store_id !== order.store_id) {
           throw new Error("Forbidden: order belongs to a different store")
@@ -83,7 +84,7 @@ describe("Store Scope Isolation", () => {
 
   describe("booking scoping per store", () => {
     it("should scope bookings to the correct store", async () => {
-      const listBookings = jest.fn().mockImplementation((filters: any) => {
+      const listBookings = vi.fn().mockImplementation((filters: any) => {
         const bookings = [
           { id: "book_01", store_id: "store_A", service: "Haircut" },
           { id: "book_02", store_id: "store_B", service: "Massage" },
@@ -97,7 +98,7 @@ describe("Store Scope Isolation", () => {
     })
 
     it("should prevent cross-store booking cancellation", async () => {
-      const cancelBooking = jest.fn().mockImplementation((bookingId: string, context: any) => {
+      const cancelBooking = vi.fn().mockImplementation((bookingId: string, context: any) => {
         const booking = { id: bookingId, store_id: "store_A" }
         if (context.store_id !== booking.store_id) {
           throw new Error("Forbidden: cannot cancel bookings from another store")
@@ -112,7 +113,7 @@ describe("Store Scope Isolation", () => {
 
   describe("subscription scoping per store", () => {
     it("should isolate subscription plans between stores", async () => {
-      const listPlans = jest.fn().mockImplementation((filters: any) => {
+      const listPlans = vi.fn().mockImplementation((filters: any) => {
         const plans = [
           { id: "plan_01", store_id: "store_A", name: "Basic A", price: 999 },
           { id: "plan_02", store_id: "store_B", name: "Basic B", price: 1499 },
@@ -127,7 +128,7 @@ describe("Store Scope Isolation", () => {
     })
 
     it("should prevent cross-store subscription creation", async () => {
-      const createSubscription = jest.fn().mockImplementation((data: any, context: any) => {
+      const createSubscription = vi.fn().mockImplementation((data: any, context: any) => {
         if (data.plan_store_id !== context.store_id) {
           throw new Error("Forbidden: cannot subscribe to plans from another store")
         }
@@ -143,7 +144,7 @@ describe("Store Scope Isolation", () => {
 
   describe("analytics scoping per store", () => {
     it("should scope revenue metrics to the requesting store", async () => {
-      const getStoreMetrics = jest.fn().mockImplementation((context: any) => {
+      const getStoreMetrics = vi.fn().mockImplementation((context: any) => {
         const metrics: Record<string, any> = {
           store_A: { revenue: 150000, orders: 45, customers: 30 },
           store_B: { revenue: 80000, orders: 25, customers: 18 },

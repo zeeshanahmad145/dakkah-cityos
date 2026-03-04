@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -66,14 +67,14 @@ describe("AnalyticsModuleService – Enhanced", () => {
   let service: AnalyticsModuleService;
 
   beforeEach(() => {
-    service = new AnalyticsModuleService();
-    jest.clearAllMocks();
+    service = new AnalyticsModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getSalesMetrics", () => {
     it("returns revenue, orderCount and avgOrderValue for matching events", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
         {
           event_type: "purchase",
           revenue: 1000,
@@ -96,7 +97,7 @@ describe("AnalyticsModuleService – Enhanced", () => {
     });
 
     it("returns zero metrics when no purchase events exist", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
 
       const result = await service.getSalesMetrics("tenant-1", {
         start: new Date(),
@@ -132,7 +133,7 @@ describe("AnalyticsModuleService – Enhanced", () => {
   describe("getEventCounts", () => {
     it("counts events of a specific type within date range", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
         { event_type: "page_view", created_at: now.toISOString() },
         { event_type: "page_view", created_at: now.toISOString() },
         { event_type: "page_view", created_at: now.toISOString() },
@@ -150,7 +151,7 @@ describe("AnalyticsModuleService – Enhanced", () => {
     });
 
     it("returns zero when no events match", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
 
       const result = await service.getEventCounts("tenant-1", "click", {
         start: new Date(),
@@ -196,7 +197,7 @@ describe("AnalyticsModuleService – Enhanced", () => {
     });
 
     it("handles zero page views gracefully", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([]);
 
       const result = await service.getConversionFunnel("tenant-1", {
         start: new Date(),

@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn };
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn };
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 describe("Order Fulfillment Workflow", () => {
@@ -18,7 +19,7 @@ describe("Order Fulfillment Workflow", () => {
 
   beforeAll(async () => {
     const mod = await import("../../../src/workflows/order-fulfillment.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     validateOrderStep = calls.find(
       (c: any) => c[0] === "validate-order-step",
@@ -40,7 +41,7 @@ describe("Order Fulfillment Workflow", () => {
 
   it("should validate an existing order", async () => {
     const container = mockContainer({
-      order: { retrieveOrder: jest.fn().mockResolvedValue({ id: "order_1" }) },
+      order: { retrieveOrder: vi.fn().mockResolvedValue({ id: "order_1" }) },
     });
     const result = await validateOrderStep(validInput, { container });
     expect(result).toEqual({ order: { id: "order_1" } });
@@ -48,7 +49,7 @@ describe("Order Fulfillment Workflow", () => {
 
   it("should throw if order not found", async () => {
     const container = mockContainer({
-      order: { retrieveOrder: jest.fn().mockResolvedValue(null) },
+      order: { retrieveOrder: vi.fn().mockResolvedValue(null) },
     });
     await expect(validateOrderStep(validInput, { container })).rejects.toThrow(
       "Order order_1 not found",
@@ -59,7 +60,7 @@ describe("Order Fulfillment Workflow", () => {
     const allocs = [{ id: "alloc_1" }];
     const container = mockContainer({
       inventory: {
-        createReservationItems: jest.fn().mockResolvedValue(allocs),
+        createReservationItems: vi.fn().mockResolvedValue(allocs),
       },
     });
     const result = await allocateInventoryStep(validInput, { container });
@@ -69,7 +70,7 @@ describe("Order Fulfillment Workflow", () => {
   it("should create a shipment", async () => {
     const shipment = { id: "ship_1" };
     const container = mockContainer({
-      fulfillment: { createFulfillment: jest.fn().mockResolvedValue(shipment) },
+      fulfillment: { createFulfillment: vi.fn().mockResolvedValue(shipment) },
     });
     const result = await createShipmentStep(validInput, { container });
     expect(result).toEqual({ shipment });
@@ -85,7 +86,7 @@ describe("Commission Calculation Workflow", () => {
     const mod = await import(
       "../../../src/workflows/commission-calculation.js"
     );
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     calculateCommissionStep = calls.find(
       (c: any) => c[0] === "calculate-vendor-commission-step",
@@ -110,7 +111,7 @@ describe("Commission Calculation Workflow", () => {
   it("should calculate commission with custom rate", async () => {
     const container = mockContainer({
       commission: {
-        listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.15 }]),
+        listCommissionRules: vi.fn().mockResolvedValue([{ rate: 0.15 }]),
       },
     });
     const result = await calculateCommissionStep(validInput, { container });
@@ -121,7 +122,7 @@ describe("Commission Calculation Workflow", () => {
 
   it("should use default rate 0.1 when no rules", async () => {
     const container = mockContainer({
-      commission: { listCommissionRules: jest.fn().mockResolvedValue([]) },
+      commission: { listCommissionRules: vi.fn().mockResolvedValue([]) },
     });
     const result = await calculateCommissionStep(validInput, { container });
     expect(result.rate).toBe(0.1);
@@ -132,7 +133,7 @@ describe("Commission Calculation Workflow", () => {
     const tx = { id: "tx_1" };
     const container = mockContainer({
       commission: {
-        createCommissionTransaction: jest.fn().mockResolvedValue(tx),
+        createCommissionTransaction: vi.fn().mockResolvedValue(tx),
       },
     });
     const result = await deductCommissionStep(
@@ -145,7 +146,7 @@ describe("Commission Calculation Workflow", () => {
   it("should record payout for vendor", async () => {
     const payout = { id: "payout_1" };
     const container = mockContainer({
-      payout: { createPayouts: jest.fn().mockResolvedValue(payout) },
+      payout: { createPayouts: vi.fn().mockResolvedValue(payout) },
     });
     const result = await recordPayoutStep(
       { vendorId: "v1", netAmount: 700, orderId: "o1" },
@@ -165,7 +166,7 @@ describe("Payment Reconciliation Workflow", () => {
     const mod = await import(
       "../../../src/workflows/payment-reconciliation.js"
     );
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     fetchPaymentRecordsStep = calls.find(
       (c: any) => c[0] === "fetch-payment-records-step",
@@ -184,7 +185,7 @@ describe("Payment Reconciliation Workflow", () => {
   it("should fetch payment records", async () => {
     const payments = [{ id: "p1" }, { id: "p2" }];
     const container = mockContainer({
-      payment: { listPayments: jest.fn().mockResolvedValue(payments) },
+      payment: { listPayments: vi.fn().mockResolvedValue(payments) },
     });
     const result = await fetchPaymentRecordsStep(
       {
@@ -256,7 +257,7 @@ describe("Return Processing Workflow", () => {
 
   beforeAll(async () => {
     const mod = await import("../../../src/workflows/return-processing.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     requestReturnStep = calls.find(
       (c: any) => c[0] === "request-return-step",

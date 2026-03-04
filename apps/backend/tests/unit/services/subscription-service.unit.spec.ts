@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -101,13 +102,13 @@ describe("SubscriptionModuleService", () => {
   let service: SubscriptionModuleService;
 
   beforeEach(() => {
-    service = new SubscriptionModuleService();
-    jest.clearAllMocks();
+    service = new SubscriptionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getActivePlans", () => {
     it("returns active plans sorted by sort_order", async () => {
-      jest.spyOn(service, "listSubscriptionPlans").mockResolvedValue([
+      vi.spyOn(service, "listSubscriptionPlans").mockResolvedValue([
         { id: "p2", status: "active", sort_order: 2 },
         { id: "p1", status: "active", sort_order: 1 },
       ]);
@@ -150,7 +151,7 @@ describe("SubscriptionModuleService", () => {
     });
 
     it("returns null when no plan found", async () => {
-      jest.spyOn(service, "listSubscriptionPlans").mockResolvedValue([]);
+      vi.spyOn(service, "listSubscriptionPlans").mockResolvedValue([]);
 
       const result = await service.getPlanByHandle("nonexistent");
       expect(result).toBeNull();
@@ -200,12 +201,12 @@ describe("SubscriptionModuleService", () => {
         billing_interval_count: 1,
         currency_code: "usd",
       };
-      jest.spyOn(service, "retrieveSubscriptionPlan").mockResolvedValue(plan);
+      vi.spyOn(service, "retrieveSubscriptionPlan").mockResolvedValue(plan);
       const createSpy = jest
         .spyOn(service, "createSubscriptions")
         .mockResolvedValue({ id: "sub-1" });
-      jest.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.createSubscriptionFromPlan(
         "cust-1",
@@ -229,12 +230,12 @@ describe("SubscriptionModuleService", () => {
         billing_interval_count: 1,
         currency_code: "usd",
       };
-      jest.spyOn(service, "retrieveSubscriptionPlan").mockResolvedValue(plan);
+      vi.spyOn(service, "retrieveSubscriptionPlan").mockResolvedValue(plan);
       const createSpy = jest
         .spyOn(service, "createSubscriptions")
         .mockResolvedValue({ id: "sub-1" });
-      jest.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       await service.createSubscriptionFromPlan("cust-1", "plan-1");
 
@@ -253,12 +254,12 @@ describe("SubscriptionModuleService", () => {
         billing_interval_count: 1,
         currency_code: "usd",
       };
-      jest.spyOn(service, "retrieveSubscriptionPlan").mockResolvedValue(plan);
+      vi.spyOn(service, "retrieveSubscriptionPlan").mockResolvedValue(plan);
       jest
         .spyOn(service, "createSubscriptions")
         .mockResolvedValue({ id: "sub-1" });
-      jest.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
       const discountSpy = jest
         .spyOn(service, "applyDiscountToSubscription")
         .mockResolvedValue({});
@@ -273,7 +274,7 @@ describe("SubscriptionModuleService", () => {
 
   describe("activateSubscription", () => {
     it("activates a draft subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         status: "draft",
         billing_interval: "monthly",
@@ -282,7 +283,7 @@ describe("SubscriptionModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({ id: "sub-1", status: "active" });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
       jest
         .spyOn(service, "createBillingCycleForSubscription")
         .mockResolvedValue({});
@@ -311,11 +312,11 @@ describe("SubscriptionModuleService", () => {
       jest
         .spyOn(service, "retrieveSubscription")
         .mockResolvedValue({ id: "sub-1", status: "active" });
-      jest.spyOn(service, "createSubscriptionPauses").mockResolvedValue({});
+      vi.spyOn(service, "createSubscriptionPauses").mockResolvedValue({});
       const updateSpy = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({ id: "sub-1", status: "paused" });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       await service.pauseSubscription("sub-1", "vacation");
 
@@ -340,11 +341,11 @@ describe("SubscriptionModuleService", () => {
       jest
         .spyOn(service, "retrieveSubscription")
         .mockResolvedValue({ id: "sub-1", status: "paused" });
-      jest.spyOn(service, "listSubscriptionPauses").mockResolvedValue([]);
+      vi.spyOn(service, "listSubscriptionPauses").mockResolvedValue([]);
       const updateSpy = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({ id: "sub-1", status: "active" });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       await service.resumeSubscription("sub-1");
 
@@ -366,7 +367,7 @@ describe("SubscriptionModuleService", () => {
 
   describe("cancelSubscription", () => {
     it("cancels immediately when cancelImmediately is true", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         status: "active",
         current_period_end: new Date("2025-02-01"),
@@ -374,7 +375,7 @@ describe("SubscriptionModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       await service.cancelSubscription("sub-1", {
         cancelImmediately: true,
@@ -388,7 +389,7 @@ describe("SubscriptionModuleService", () => {
 
     it("cancels at period end by default", async () => {
       const periodEnd = new Date("2025-02-01");
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         status: "active",
         current_period_end: periodEnd,
@@ -396,7 +397,7 @@ describe("SubscriptionModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       await service.cancelSubscription("sub-1");
 
@@ -418,15 +419,15 @@ describe("SubscriptionModuleService", () => {
 
   describe("processBillingCycle", () => {
     it("processes an upcoming billing cycle", async () => {
-      jest.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
+      vi.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
         id: "bc-1",
         status: "upcoming",
         subscription_id: "sub-1",
         total: 2999,
       });
-      jest.spyOn(service, "updateBillingCycles").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
-      jest.spyOn(service, "renewSubscriptionPeriod").mockResolvedValue({});
+      vi.spyOn(service, "updateBillingCycles").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "renewSubscriptionPeriod").mockResolvedValue({});
 
       await service.processBillingCycle("bc-1");
 
@@ -448,17 +449,17 @@ describe("SubscriptionModuleService", () => {
 
   describe("handleFailedBilling", () => {
     it("marks subscription as past_due when max retries reached", async () => {
-      jest.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
+      vi.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
         id: "bc-1",
         subscription_id: "sub-1",
         attempt_count: 2,
       });
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         max_retry_attempts: 3,
       });
-      jest.spyOn(service, "updateBillingCycles").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "updateBillingCycles").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
       const updateSub = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({});
@@ -471,19 +472,19 @@ describe("SubscriptionModuleService", () => {
     });
 
     it("keeps billing cycle as upcoming when retries remain", async () => {
-      jest.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
+      vi.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
         id: "bc-1",
         subscription_id: "sub-1",
         attempt_count: 0,
       });
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         max_retry_attempts: 3,
       });
       const updateCycle = jest
         .spyOn(service, "updateBillingCycles")
         .mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       await service.handleFailedBilling("bc-1", "card declined");
 
@@ -495,7 +496,7 @@ describe("SubscriptionModuleService", () => {
 
   describe("renewSubscriptionPeriod", () => {
     it("renews the subscription period", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         current_period_end: new Date("2025-01-31"),
         billing_interval: "monthly",
@@ -504,7 +505,7 @@ describe("SubscriptionModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
       jest
         .spyOn(service, "createBillingCycleForSubscription")
         .mockResolvedValue({});
@@ -517,7 +518,7 @@ describe("SubscriptionModuleService", () => {
     });
 
     it("throws when no current period end", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         current_period_end: null,
       });
@@ -530,7 +531,7 @@ describe("SubscriptionModuleService", () => {
 
   describe("applyDiscountToSubscription", () => {
     it("applies a percentage discount", async () => {
-      jest.spyOn(service, "listSubscriptionDiscounts").mockResolvedValue([
+      vi.spyOn(service, "listSubscriptionDiscounts").mockResolvedValue([
         {
           id: "d1",
           code: "SAVE10",
@@ -541,7 +542,7 @@ describe("SubscriptionModuleService", () => {
           current_redemptions: 0,
         },
       ]);
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub-1",
         subtotal: 10000,
         metadata: {},
@@ -549,7 +550,7 @@ describe("SubscriptionModuleService", () => {
       const updateSub = jest
         .spyOn(service, "updateSubscriptions")
         .mockResolvedValue({});
-      jest.spyOn(service, "updateSubscriptionDiscounts").mockResolvedValue({});
+      vi.spyOn(service, "updateSubscriptionDiscounts").mockResolvedValue({});
 
       await service.applyDiscountToSubscription("sub-1", "SAVE10");
 
@@ -559,7 +560,7 @@ describe("SubscriptionModuleService", () => {
     });
 
     it("throws when discount code is invalid", async () => {
-      jest.spyOn(service, "listSubscriptionDiscounts").mockResolvedValue([]);
+      vi.spyOn(service, "listSubscriptionDiscounts").mockResolvedValue([]);
 
       await expect(
         service.applyDiscountToSubscription("sub-1", "INVALID"),
@@ -567,7 +568,7 @@ describe("SubscriptionModuleService", () => {
     });
 
     it("throws when discount has reached max redemptions", async () => {
-      jest.spyOn(service, "listSubscriptionDiscounts").mockResolvedValue([
+      vi.spyOn(service, "listSubscriptionDiscounts").mockResolvedValue([
         {
           id: "d1",
           max_redemptions: 5,
@@ -596,7 +597,7 @@ describe("SubscriptionModuleService", () => {
     it("returns billing cycles due before date", async () => {
       const pastDate = new Date("2025-01-01");
       const futureDate = new Date("2025-03-01");
-      jest.spyOn(service, "listBillingCycles").mockResolvedValue([
+      vi.spyOn(service, "listBillingCycles").mockResolvedValue([
         { id: "bc-1", billing_date: pastDate },
         { id: "bc-2", billing_date: futureDate },
       ]);

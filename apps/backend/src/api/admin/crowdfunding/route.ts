@@ -69,11 +69,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const tenant_id = cityosContext?.tenantId || "default";
     const creator_id = validation.data.creator_id || "admin";
 
-    const item = await mod.createCrowdfundCampaigns({
+    const raw = await mod.createCrowdfundCampaigns({
       ...validation.data,
       tenant_id,
       creator_id,
     });
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin crowdfunding");

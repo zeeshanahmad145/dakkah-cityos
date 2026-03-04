@@ -1,39 +1,37 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) =>
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) =>
     Object.assign(fn, { compensate }),
   ),
-  StepResponse: jest.fn((data, compensationData) => ({
-    ...data,
-    __compensation: compensationData,
-  })),
-  WorkflowResponse: jest.fn((data) => data),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 let calculateCommissionStep: any;
 
 beforeAll(async () => {
   await import("../../../src/workflows/commission-calculation.js");
-  const { createStep } = require("@medusajs/framework/workflows-sdk");
+  const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
   const calls = createStep.mock.calls;
   calculateCommissionStep = calls.find(
     (c: any) => c[0] === "calculate-vendor-commission-step",
   )?.[1];
 });
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
   body: {},
   auth_context: { actor_id: "admin_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -57,7 +55,7 @@ describe("Tenant Data Isolation", () => {
         { id: "prod_03", name: "Widget B", tenant_id: "tenant_B" },
       ];
 
-      const listProducts = jest.fn().mockImplementation((filters: any) => {
+      const listProducts = vi.fn().mockImplementation((filters: any) => {
         if (filters.tenant_id === "tenant_A") return tenantAProducts;
         if (filters.tenant_id === "tenant_B") return tenantBProducts;
         return [];
@@ -85,7 +83,7 @@ describe("Tenant Data Isolation", () => {
     });
 
     it("should scope queries to the requesting tenant", async () => {
-      const listProducts = jest.fn().mockResolvedValue([]);
+      const listProducts = vi.fn().mockResolvedValue([]);
       const container = mockContainer({ product: { listProducts } });
 
       const productService = container.resolve("product");
@@ -120,7 +118,7 @@ describe("Tenant Data Isolation", () => {
 
   describe("order data isolation", () => {
     it("should prevent tenant A from viewing tenant B orders", async () => {
-      const listOrders = jest.fn().mockImplementation((filters: any) => {
+      const listOrders = vi.fn().mockImplementation((filters: any) => {
         const allOrders = [
           { id: "order_01", tenant_id: "tenant_A", total: 5000 },
           { id: "order_02", tenant_id: "tenant_B", total: 3000 },
@@ -179,7 +177,7 @@ describe("Tenant Data Isolation", () => {
 
   describe("customer data isolation", () => {
     it("should isolate customer records between tenants", async () => {
-      const listCustomers = jest.fn().mockImplementation((filters: any) => {
+      const listCustomers = vi.fn().mockImplementation((filters: any) => {
         const customers = [
           { id: "cust_01", email: "alice@a.com", tenant_id: "tenant_A" },
           { id: "cust_02", email: "bob@b.com", tenant_id: "tenant_B" },
@@ -209,7 +207,7 @@ describe("Tenant Data Isolation", () => {
     });
 
     it("should not leak customer count across tenants", async () => {
-      const countCustomers = jest.fn().mockImplementation((filters: any) => {
+      const countCustomers = vi.fn().mockImplementation((filters: any) => {
         const all = [
           { tenant_id: "tenant_A" },
           { tenant_id: "tenant_A" },
@@ -258,12 +256,12 @@ describe("Tenant Data Isolation", () => {
     it("should calculate different commissions for different vendors via the real step", async () => {
       const containerVendorA = mockContainer({
         commission: {
-          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.1 }]),
+          listCommissionRules: vi.fn().mockResolvedValue([{ rate: 0.1 }]),
         },
       });
       const containerVendorB = mockContainer({
         commission: {
-          listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.25 }]),
+          listCommissionRules: vi.fn().mockResolvedValue([{ rate: 0.25 }]),
         },
       });
 

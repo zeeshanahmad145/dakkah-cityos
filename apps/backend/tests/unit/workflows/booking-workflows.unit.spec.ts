@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn }
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn }
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Booking Confirmation Workflow", () => {
@@ -18,7 +19,7 @@ describe("Booking Confirmation Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/booking-confirmation.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     reserveSlotStep = calls.find((c: any) => c[0] === "reserve-booking-slot-step")?.[1]
     confirmBookingStep = calls.find((c: any) => c[0] === "confirm-booking-step")?.[1]
@@ -36,14 +37,14 @@ describe("Booking Confirmation Workflow", () => {
 
   it("should reserve a booking slot", async () => {
     const booking = { id: "book_1", status: "reserved" }
-    const container = mockContainer({ booking: { createBookings: jest.fn().mockResolvedValue(booking) } })
+    const container = mockContainer({ booking: { createBookings: vi.fn().mockResolvedValue(booking) } })
     const result = await reserveSlotStep(validInput, { container })
     expect(result.booking.status).toBe("reserved")
   })
 
   it("should confirm a booking", async () => {
     const confirmed = { id: "book_1", status: "confirmed" }
-    const container = mockContainer({ booking: { updateBookings: jest.fn().mockResolvedValue(confirmed) } })
+    const container = mockContainer({ booking: { updateBookings: vi.fn().mockResolvedValue(confirmed) } })
     const result = await confirmBookingStep({ bookingId: "book_1" }, { container })
     expect(result.booking.status).toBe("confirmed")
   })
@@ -62,7 +63,7 @@ describe("Booking Confirmation Workflow", () => {
   it("should handle optional notes field", async () => {
     const inputWithNotes = { ...validInput, notes: "Please arrive early" }
     const booking = { id: "book_2", status: "reserved", notes: "Please arrive early" }
-    const container = mockContainer({ booking: { createBookings: jest.fn().mockResolvedValue(booking) } })
+    const container = mockContainer({ booking: { createBookings: vi.fn().mockResolvedValue(booking) } })
     const result = await reserveSlotStep(inputWithNotes, { container })
     expect(result.booking).toBeDefined()
   })
@@ -76,7 +77,7 @@ describe("Event Ticketing Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/event-ticketing.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     selectTicketsStep = calls.find((c: any) => c[0] === "select-event-tickets-step")?.[1]
     reserveTicketsStep = calls.find((c: any) => c[0] === "reserve-event-tickets-step")?.[1]
@@ -92,19 +93,19 @@ describe("Event Ticketing Workflow", () => {
   }
 
   it("should check ticket availability", async () => {
-    const container = mockContainer({ eventTicketing: { checkAvailability: jest.fn().mockResolvedValue({ available: true }) } })
+    const container = mockContainer({ eventTicketing: { checkAvailability: vi.fn().mockResolvedValue({ available: true }) } })
     const result = await selectTicketsStep(validInput, { container })
     expect(result.availability.available).toBe(true)
   })
 
   it("should throw when tickets not available", async () => {
-    const container = mockContainer({ eventTicketing: { checkAvailability: jest.fn().mockResolvedValue({ available: false }) } })
+    const container = mockContainer({ eventTicketing: { checkAvailability: vi.fn().mockResolvedValue({ available: false }) } })
     await expect(selectTicketsStep(validInput, { container })).rejects.toThrow("Tickets not available")
   })
 
   it("should reserve tickets with expiration", async () => {
     const reservation = { id: "res_1" }
-    const container = mockContainer({ eventTicketing: { createReservation: jest.fn().mockResolvedValue(reservation) } })
+    const container = mockContainer({ eventTicketing: { createReservation: vi.fn().mockResolvedValue(reservation) } })
     const result = await reserveTicketsStep(validInput, { container })
     expect(result.reservation.id).toBe("res_1")
   })

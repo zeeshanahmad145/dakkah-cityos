@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -58,13 +59,13 @@ describe("RestaurantModuleService", () => {
   let service: RestaurantModuleService;
 
   beforeEach(() => {
-    service = new RestaurantModuleService();
-    jest.clearAllMocks();
+    service = new RestaurantModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getMenuItems", () => {
     it("should return available menu items for a restaurant", async () => {
-      jest.spyOn(service, "listMenuItems").mockResolvedValue([
+      vi.spyOn(service, "listMenuItems").mockResolvedValue([
         { id: "mi_01", name: "Burger", is_available: true },
         { id: "mi_02", name: "Fries", is_available: true },
       ]);
@@ -85,7 +86,7 @@ describe("RestaurantModuleService", () => {
     });
 
     it("should return empty array when no items available", async () => {
-      jest.spyOn(service, "listMenuItems").mockResolvedValue([]);
+      vi.spyOn(service, "listMenuItems").mockResolvedValue([]);
 
       const result = await service.getMenuItems("rest_01");
       expect(result).toHaveLength(0);
@@ -120,11 +121,11 @@ describe("RestaurantModuleService", () => {
 
   describe("updateOrderStatus", () => {
     it("should transition from pending to confirmed", async () => {
-      jest.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
+      vi.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
         id: "ord_01",
         status: "pending",
       });
-      jest.spyOn(service, "updateKitchenOrders").mockResolvedValue({
+      vi.spyOn(service, "updateKitchenOrders").mockResolvedValue({
         id: "ord_01",
         status: "confirmed",
       });
@@ -134,11 +135,11 @@ describe("RestaurantModuleService", () => {
     });
 
     it("should transition from confirmed to preparing", async () => {
-      jest.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
+      vi.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
         id: "ord_01",
         status: "confirmed",
       });
-      jest.spyOn(service, "updateKitchenOrders").mockResolvedValue({
+      vi.spyOn(service, "updateKitchenOrders").mockResolvedValue({
         id: "ord_01",
         status: "preparing",
       });
@@ -148,7 +149,7 @@ describe("RestaurantModuleService", () => {
     });
 
     it("should reject invalid state transition", async () => {
-      jest.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
+      vi.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
         id: "ord_01",
         status: "pending",
       });
@@ -159,7 +160,7 @@ describe("RestaurantModuleService", () => {
     });
 
     it("should reject transition from preparing to cancelled", async () => {
-      jest.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
+      vi.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
         id: "ord_01",
         status: "preparing",
       });
@@ -170,11 +171,11 @@ describe("RestaurantModuleService", () => {
     });
 
     it("should allow transition from preparing to ready", async () => {
-      jest.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
+      vi.spyOn(service, "retrieveKitchenOrder").mockResolvedValue({
         id: "ord_01",
         status: "preparing",
       });
-      jest.spyOn(service, "updateKitchenOrders").mockResolvedValue({
+      vi.spyOn(service, "updateKitchenOrders").mockResolvedValue({
         id: "ord_01",
         status: "ready",
       });
@@ -186,7 +187,7 @@ describe("RestaurantModuleService", () => {
 
   describe("calculateDeliveryFee", () => {
     it("should return a delivery fee and estimated time", async () => {
-      jest.spyOn(service, "retrieveRestaurant").mockResolvedValue({
+      vi.spyOn(service, "retrieveRestaurant").mockResolvedValue({
         id: "rest_01",
         delivery_fee: 5,
       });
@@ -200,7 +201,7 @@ describe("RestaurantModuleService", () => {
     });
 
     it("should use default delivery fee when not set", async () => {
-      jest.spyOn(service, "retrieveRestaurant").mockResolvedValue({
+      vi.spyOn(service, "retrieveRestaurant").mockResolvedValue({
         id: "rest_01",
       });
 

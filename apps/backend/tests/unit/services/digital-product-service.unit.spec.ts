@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,8 +60,8 @@ describe("DigitalProductModuleService", () => {
   let service: DigitalProductModuleService;
 
   beforeEach(() => {
-    service = new DigitalProductModuleService();
-    jest.clearAllMocks();
+    service = new DigitalProductModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("purchaseLicense", () => {
@@ -114,7 +115,7 @@ describe("DigitalProductModuleService", () => {
 
   describe("verifyLicense", () => {
     it("returns valid for active license with remaining activations", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         {
           id: "lic-1",
           status: "active",
@@ -131,7 +132,7 @@ describe("DigitalProductModuleService", () => {
     });
 
     it("returns invalid for non-existent license", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
 
       const result = await service.verifyLicense("LIC-INVALID");
 
@@ -139,14 +140,14 @@ describe("DigitalProductModuleService", () => {
     });
 
     it("returns invalid for expired license", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         {
           id: "lic-1",
           status: "active",
           expires_at: new Date("2020-01-01"),
         },
       ]);
-      jest.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
+      vi.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
 
       const result = await service.verifyLicense("LIC-EXPIRED");
 

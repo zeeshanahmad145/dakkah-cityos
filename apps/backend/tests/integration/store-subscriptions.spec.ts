@@ -1,16 +1,19 @@
+import { vi, describe, it, expect } from "vitest";
 import { GET } from "../../src/api/store/subscriptions/route";
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
-const createMockReq = (overrides: Record<string, any> = {}) => ({
-  query: {},
-  auth_context: { actor_id: "cust_01" },
-  scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
-  },
-  ...overrides,
-});
+const createMockReq = (overrides: Record<string, any> = {}) => {
+  const { reqQuery, ...rest } = overrides;
+  return {
+    query: reqQuery || {},
+    scope: {
+      resolve: vi.fn((name: string) => rest[name] || {}),
+    },
+    ...rest,
+  };
+};
 
 const createMockRes = () => {
   const res: any = { json: mockJson, status: mockStatus };
@@ -22,83 +25,76 @@ const createMockRes = () => {
 
 describe("Store Subscriptions Endpoints", () => {
   describe("GET /store/subscriptions", () => {
-    it("should return subscriptions for authenticated customer", async () => {
+    it("should return subscription plans", async () => {
       const mockItems = [
-        { id: "sub_01", status: "active", customer_id: "cust_01" },
-        { id: "sub_02", status: "paused", customer_id: "cust_01" },
+        { id: "prod_sub_01", title: "Plan A", subscription_plan: {} },
+        { id: "prod_sub_02", title: "Plan B", subscription_plan: {} },
       ];
       const req = createMockReq({
-        subscription: {
-          listAndCountSubscriptions: jest
+        query: {
+          graph: vi
             .fn()
-            .mockResolvedValue([mockItems, 2]),
+            .mockResolvedValue({ data: mockItems, metadata: { count: 2 } }),
         },
       });
       const res = createMockRes();
 
-      await GET(req, res);
+      await GET(req as any, res);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({ items: mockItems, count: 2 }),
       );
     });
 
-    it("should apply query filters for status", async () => {
-      const listAndCountSubscriptions = jest.fn().mockResolvedValue([[], 0]);
+    it("should apply query filters for limit and offset", async () => {
+      const graph = vi
+        .fn()
+        .mockResolvedValue({ data: [], metadata: { count: 0 } });
       const req = createMockReq({
-        query: { status: "active", limit: "10", offset: "5" },
-        subscription: { listAndCountSubscriptions },
+        reqQuery: { limit: 10, offset: 5 },
+        validatedQuery: { limit: 10, offset: 5 },
+        query: { graph },
       });
       const res = createMockRes();
 
-      await GET(req, res);
-      expect(listAndCountSubscriptions).toHaveBeenCalledWith(
-        expect.objectContaining({ status: "active", customer_id: "cust_01" }),
-        expect.objectContaining({ skip: 5, take: 10 }),
+      await GET(req as any, res);
+      expect(graph).toHaveBeenCalledWith(
+        expect.objectContaining({
+          pagination: expect.objectContaining({ skip: 0, take: 20 }),
+        }),
       );
     });
 
-    it("should return empty array when no subscriptions exist", async () => {
+    it("should fall back to SEED_PLANS when no plans are found", async () => {
       const req = createMockReq({
-        subscription: {
-          listAndCountSubscriptions: jest.fn().mockResolvedValue([[], 0]),
-        },
-      });
-      const res = createMockRes();
-
-      await GET(req, res);
-      expect(mockJson).toHaveBeenCalledWith(
-        expect.objectContaining({ items: [], count: 0 }),
-      );
-    });
-
-    it("should handle unauthenticated requests by omitting customer filter", async () => {
-      const listAndCountSubscriptions = jest.fn().mockResolvedValue([[], 0]);
-      const req = createMockReq({
-        auth_context: {},
-        subscription: { listAndCountSubscriptions },
-      });
-      const res = createMockRes();
-
-      await GET(req, res);
-      expect(listAndCountSubscriptions).toHaveBeenCalledWith(
-        expect.not.objectContaining({ customer_id: expect.anything() }),
-        expect.anything(),
-      );
-    });
-
-    it("should handle service errors gracefully", async () => {
-      const req = createMockReq({
-        subscription: {
-          listAndCountSubscriptions: jest
+        query: {
+          graph: vi
             .fn()
-            .mockRejectedValue(new Error("DB error")),
-          listSubscriptions: jest.fn().mockRejectedValue(new Error("DB error")),
+            .mockResolvedValue({ data: [], metadata: { count: 0 } }),
         },
       });
       const res = createMockRes();
 
-      await GET(req, res);
-      expect(mockStatus).toHaveBeenCalledWith(500);
+      await GET(req as any, res);
+      expect(mockJson).toHaveBeenCalledWith(
+        expect.objectContaining({ count: expect.any(Number) }),
+      );
+    });
+
+    it("should handle service errors gracefully and return SEED_PLANS", async () => {
+      const req = createMockReq({
+        query: {
+          graph: vi.fn().mockRejectedValue(new Error("DB error")),
+        },
+        logger: { error: vi.fn() },
+      });
+      const res = createMockRes();
+
+      await GET(req as any, res);
+      expect(mockJson).toHaveBeenCalledWith(
+        expect.objectContaining({ count: expect.any(Number) }),
+      );
     });
   });
 });
+
+

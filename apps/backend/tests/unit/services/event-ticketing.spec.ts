@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -73,18 +74,18 @@ describe("EventTicketingModuleService", () => {
   let service: EventTicketingModuleService;
 
   beforeEach(() => {
-    service = new EventTicketingModuleService();
-    jest.clearAllMocks();
+    service = new EventTicketingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("selectSeat", () => {
     it("should reserve an available seat", async () => {
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         status: "published",
       });
-      jest.spyOn(service, "listTickets").mockResolvedValue([]);
-      jest.spyOn(service, "createTickets").mockResolvedValue({
+      vi.spyOn(service, "listTickets").mockResolvedValue([]);
+      vi.spyOn(service, "createTickets").mockResolvedValue({
         id: "tkt_01",
         seat_id: "seat_A1",
         customer_id: "cust_01",
@@ -96,7 +97,7 @@ describe("EventTicketingModuleService", () => {
     });
 
     it("should reject seat that is already reserved", async () => {
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         status: "published",
       });
@@ -112,7 +113,7 @@ describe("EventTicketingModuleService", () => {
     });
 
     it("should reject when event is not published", async () => {
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         status: "draft",
       });
@@ -128,17 +129,17 @@ describe("EventTicketingModuleService", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 7);
 
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_01",
         status: "issued",
         event_id: "evt_01",
         price: 10000,
       });
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         start_date: futureDate.toISOString(),
       });
-      jest.spyOn(service, "updateTickets").mockResolvedValue({});
+      vi.spyOn(service, "updateTickets").mockResolvedValue({});
 
       const result = await service.processRefund("tkt_01");
       expect(result.refundPercentage).toBe(100);
@@ -149,17 +150,17 @@ describe("EventTicketingModuleService", () => {
       const futureDate = new Date();
       futureDate.setHours(futureDate.getHours() + 48);
 
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_02",
         status: "issued",
         event_id: "evt_01",
         price: 10000,
       });
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         start_date: futureDate.toISOString(),
       });
-      jest.spyOn(service, "updateTickets").mockResolvedValue({});
+      vi.spyOn(service, "updateTickets").mockResolvedValue({});
 
       const result = await service.processRefund("tkt_02");
       expect(result.refundPercentage).toBe(50);
@@ -170,17 +171,17 @@ describe("EventTicketingModuleService", () => {
       const nearDate = new Date();
       nearDate.setHours(nearDate.getHours() + 12);
 
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_03",
         status: "issued",
         event_id: "evt_01",
         price: 10000,
       });
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         start_date: nearDate.toISOString(),
       });
-      jest.spyOn(service, "updateTickets").mockResolvedValue({});
+      vi.spyOn(service, "updateTickets").mockResolvedValue({});
 
       const result = await service.processRefund("tkt_03");
       expect(result.refundPercentage).toBe(0);
@@ -188,7 +189,7 @@ describe("EventTicketingModuleService", () => {
     });
 
     it("should reject refund for cancelled ticket", async () => {
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_04",
         status: "cancelled",
       });
@@ -216,18 +217,18 @@ describe("EventTicketingModuleService", () => {
           id: "tkt_01",
           customer_id: "cust_02",
         });
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         start_date: futureDate.toISOString(),
       });
-      jest.spyOn(service, "updateTickets").mockResolvedValue({});
+      vi.spyOn(service, "updateTickets").mockResolvedValue({});
 
       const result = await service.transferTicket("tkt_01", "cust_02");
       expect(result.customer_id).toBe("cust_02");
     });
 
     it("should reject transfer of cancelled ticket", async () => {
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_01",
         status: "cancelled",
       });
@@ -238,7 +239,7 @@ describe("EventTicketingModuleService", () => {
     });
 
     it("should reject transfer of used ticket", async () => {
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_01",
         status: "used",
       });
@@ -259,15 +260,15 @@ describe("EventTicketingModuleService", () => {
           event_id: "evt_01",
         })
         .mockResolvedValueOnce({ id: "tkt_01", status: "used" });
-      jest.spyOn(service, "updateTickets").mockResolvedValue({});
-      jest.spyOn(service, "createCheckIns").mockResolvedValue({});
+      vi.spyOn(service, "updateTickets").mockResolvedValue({});
+      vi.spyOn(service, "createCheckIns").mockResolvedValue({});
 
       const result = await service.checkIn("tkt_01");
       expect(result.status).toBe("used");
     });
 
     it("should reject check-in on already used ticket", async () => {
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_01",
         status: "used",
       });
@@ -278,7 +279,7 @@ describe("EventTicketingModuleService", () => {
     });
 
     it("should reject check-in on cancelled ticket", async () => {
-      jest.spyOn(service, "retrieveTicket").mockResolvedValue({
+      vi.spyOn(service, "retrieveTicket").mockResolvedValue({
         id: "tkt_01",
         status: "cancelled",
       });
@@ -291,18 +292,18 @@ describe("EventTicketingModuleService", () => {
 
   describe("joinWaitlist", () => {
     it("should add customer to waitlist when no capacity", async () => {
-      jest.spyOn(service, "retrieveEvent").mockResolvedValue({
+      vi.spyOn(service, "retrieveEvent").mockResolvedValue({
         id: "evt_01",
         status: "published",
       });
-      jest.spyOn(service, "getEventCapacity").mockResolvedValue({
+      vi.spyOn(service, "getEventCapacity").mockResolvedValue({
         total: 100,
         sold: 100,
         reserved: 0,
         available: 0,
       });
-      jest.spyOn(service, "listWaitlistEntries").mockResolvedValue([]);
-      jest.spyOn(service, "createWaitlistEntries").mockResolvedValue({
+      vi.spyOn(service, "listWaitlistEntries").mockResolvedValue([]);
+      vi.spyOn(service, "createWaitlistEntries").mockResolvedValue({
         id: "wl_01",
         customer_id: "cust_01",
         position: 1,

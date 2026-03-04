@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "prettier": "^3.2.5",
+    "ts-node": "10.9.2",
     "turbo": "^2.0.14"
   },
   "packageManager": "pnpm@10.12.3",

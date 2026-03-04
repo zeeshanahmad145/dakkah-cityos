@@ -42,7 +42,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       return res
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
-    const dispute = await service.createDisputes(parsed.data);
+    const raw = await service.createDisputes(parsed.data);
+    const dispute = Array.isArray(raw) ? raw[0] : raw;
     res.status(201).json({ dispute });
   } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-DISPUTES");

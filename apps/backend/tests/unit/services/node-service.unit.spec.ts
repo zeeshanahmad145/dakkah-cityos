@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -49,21 +50,21 @@ describe("NodeModuleService", () => {
   let service: NodeModuleService;
 
   beforeEach(() => {
-    service = new NodeModuleService();
-    jest.clearAllMocks();
+    service = new NodeModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("listNodesByTenant", () => {
     it("lists nodes filtered by tenant", async () => {
       const nodes = [{ id: "n1", tenant_id: "t1" }];
-      jest.spyOn(service, "listNodes").mockResolvedValue(nodes);
+      vi.spyOn(service, "listNodes").mockResolvedValue(nodes);
 
       const result = await service.listNodesByTenant("t1");
       expect(result).toEqual(nodes);
     });
 
     it("passes additional filters", async () => {
-      const listSpy = jest.spyOn(service, "listNodes").mockResolvedValue([]);
+      const listSpy = vi.spyOn(service, "listNodes").mockResolvedValue([]);
 
       await service.listNodesByTenant("t1", { type: "CITY" });
       expect(listSpy).toHaveBeenCalledWith({ tenant_id: "t1", type: "CITY" });
@@ -73,7 +74,7 @@ describe("NodeModuleService", () => {
   describe("listChildren", () => {
     it("returns children of a node", async () => {
       const children = [{ id: "n2", parent_id: "n1" }];
-      jest.spyOn(service, "listNodes").mockResolvedValue(children);
+      vi.spyOn(service, "listNodes").mockResolvedValue(children);
 
       const result = await service.listChildren("n1");
       expect(result).toEqual(children);
@@ -242,12 +243,12 @@ describe("NodeModuleService", () => {
     });
 
     it("throws for invalid hierarchy", async () => {
-      jest.spyOn(service, "retrieveNode").mockResolvedValue({
+      vi.spyOn(service, "retrieveNode").mockResolvedValue({
         id: "p1",
         type: "CITY",
         tenant_id: "t1",
       });
-      jest.spyOn(service, "listNodes").mockResolvedValue([]);
+      vi.spyOn(service, "listNodes").mockResolvedValue([]);
 
       await expect(
         service.createNodeWithValidation({
@@ -261,7 +262,7 @@ describe("NodeModuleService", () => {
     });
 
     it("throws when parent belongs to different tenant", async () => {
-      jest.spyOn(service, "retrieveNode").mockResolvedValue({
+      vi.spyOn(service, "retrieveNode").mockResolvedValue({
         id: "p1",
         type: "CITY",
         tenant_id: "other_tenant",

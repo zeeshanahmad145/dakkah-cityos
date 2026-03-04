@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,13 +57,13 @@ describe("MembershipModuleService", () => {
   let service: MembershipModuleService;
 
   beforeEach(() => {
-    service = new MembershipModuleService();
-    jest.clearAllMocks();
+    service = new MembershipModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("enrollMember", () => {
     it("enrolls a customer in a membership tier", async () => {
-      jest.spyOn(service, "listMemberships").mockResolvedValue([]);
+      vi.spyOn(service, "listMemberships").mockResolvedValue([]);
       jest
         .spyOn(service, "retrieveMembershipTier")
         .mockResolvedValue({ id: "tier-1", name: "Gold" });
@@ -140,13 +141,13 @@ describe("MembershipModuleService", () => {
 
   describe("checkAccess", () => {
     it("returns true when tier includes the feature", async () => {
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "active",
         tier_id: "tier-1",
         expires_at: new Date(Date.now() + 86400000).toISOString(),
       });
-      jest.spyOn(service, "retrieveMembershipTier").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembershipTier").mockResolvedValue({
         id: "tier-1",
         benefits: ["free_shipping", "priority_support"],
       });
@@ -156,13 +157,13 @@ describe("MembershipModuleService", () => {
     });
 
     it("returns true when tier has 'all' benefit", async () => {
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "active",
         tier_id: "tier-1",
         expires_at: new Date(Date.now() + 86400000).toISOString(),
       });
-      jest.spyOn(service, "retrieveMembershipTier").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembershipTier").mockResolvedValue({
         id: "tier-1",
         benefits: ["all"],
       });
@@ -172,7 +173,7 @@ describe("MembershipModuleService", () => {
     });
 
     it("returns false when membership is not active", async () => {
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "cancelled",
         tier_id: "tier-1",
@@ -184,7 +185,7 @@ describe("MembershipModuleService", () => {
     });
 
     it("returns false when membership is expired", async () => {
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "active",
         tier_id: "tier-1",
@@ -201,7 +202,7 @@ describe("MembershipModuleService", () => {
       const futureDate = new Date();
       futureDate.setFullYear(futureDate.getFullYear() + 1);
 
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "active",
         expires_at: futureDate.toISOString(),
@@ -221,7 +222,7 @@ describe("MembershipModuleService", () => {
     });
 
     it("renews an expired membership", async () => {
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "expired",
         expires_at: "2020-01-01",
@@ -241,7 +242,7 @@ describe("MembershipModuleService", () => {
     });
 
     it("throws when membership status prevents renewal", async () => {
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "cancelled",
         expires_at: "2020-01-01",

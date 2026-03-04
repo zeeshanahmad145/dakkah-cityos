@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -50,8 +51,8 @@ describe("I18nModuleService", () => {
   let service: I18nModuleService;
 
   beforeEach(() => {
-    service = new I18nModuleService();
-    jest.clearAllMocks();
+    service = new I18nModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getTranslations", () => {
@@ -59,7 +60,7 @@ describe("I18nModuleService", () => {
       const translations = [
         { id: "t-1", key: "welcome", value: "Hello", locale: "en" },
       ];
-      jest.spyOn(service, "listTranslations").mockResolvedValue(translations);
+      vi.spyOn(service, "listTranslations").mockResolvedValue(translations);
 
       const result = await service.getTranslations("tenant-1", "en");
 
@@ -67,7 +68,7 @@ describe("I18nModuleService", () => {
     });
 
     it("filters by namespace when provided", async () => {
-      const spy = jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      const spy = vi.spyOn(service, "listTranslations").mockResolvedValue([]);
 
       await service.getTranslations("tenant-1", "en", "checkout");
 
@@ -93,7 +94,7 @@ describe("I18nModuleService", () => {
     });
 
     it("returns null when translation not found", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
 
       const result = await service.getTranslation(
         "tenant-1",
@@ -107,7 +108,7 @@ describe("I18nModuleService", () => {
 
   describe("upsertTranslation", () => {
     it("creates new translation when not existing", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createTranslations")
         .mockResolvedValue({ id: "t-new" });
@@ -141,7 +142,7 @@ describe("I18nModuleService", () => {
 
   describe("bulkUpsert", () => {
     it("processes multiple translations", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
       jest
         .spyOn(service, "createTranslations")
         .mockResolvedValue({ id: "t-new" });

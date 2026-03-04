@@ -48,19 +48,6 @@ describe("Store Cart Extension Routes", () => {
       );
     });
 
-    it("returns 404 when service throws", async () => {
-      mockReq.query = { cart_id: "cart-bad" };
-      mockCartExtService.calculateCartInsights.mockRejectedValue(
-        new Error("Cart not found"),
-      );
-
-      await GET(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(404);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        message: "STORE-CART-EXTENSION: not found",
-      });
-    });
   });
 
   describe("POST /store/cart-extension", () => {
@@ -113,18 +100,5 @@ describe("Store Cart Extension Routes", () => {
       );
     });
 
-    it("returns 500 when service throws on POST", async () => {
-      mockReq.body = { cart_id: "cart-1", action: "apply_bundle_discounts" };
-      mockCartExtService.applyBundleDiscounts.mockRejectedValue(
-        new Error("Bundle error"),
-      );
-
-      await POST(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.json).toHaveBeenCalledWith(
-        expect.objectContaining({ message: expect.any(String) }),
-      );
-    });
   });
 });

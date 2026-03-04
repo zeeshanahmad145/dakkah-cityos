@@ -1,12 +1,13 @@
-jest.mock("../../../src/lib/logger", () => ({
-  subscriberLogger: { info: jest.fn(), error: jest.fn(), warn: jest.fn() },
-  createLogger: jest.fn(() => ({
-    info: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
+import { vi } from "vitest";
+vi.mock("../../../src/lib/logger", () => ({
+  subscriberLogger: { info: vi.fn(), error: vi.fn(), warn: vi.fn() },
+  createLogger: vi.fn(() => ({
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
   })),
 }));
-jest.mock("../../../src/lib/config", () => ({
+vi.mock("../../../src/lib/config", () => ({
   appConfig: {
     storefrontUrl: "https://store.test",
     urls: { storefront: "https://store.test" },
@@ -26,9 +27,9 @@ jest.mock("../../../src/lib/config", () => ({
     },
   },
 }));
-jest.mock("../../../src/lib/event-dispatcher", () => ({
-  dispatchEventToTemporal: jest.fn(),
-  getWorkflowForEvent: jest.fn(),
+vi.mock("../../../src/lib/event-dispatcher", () => ({
+  dispatchEventToTemporal: vi.fn(),
+  getWorkflowForEvent: vi.fn(),
 }));
 
 import companyCreatedHandler from "../../../src/subscribers/company-created";
@@ -53,25 +54,26 @@ import integrationSyncHandler from "../../../src/subscribers/integration-sync-su
 import { config as integrationSyncConfig } from "../../../src/subscribers/integration-sync-subscriber";
 import temporalEventBridge from "../../../src/subscribers/temporal-event-bridge";
 import { config as temporalConfig } from "../../../src/subscribers/temporal-event-bridge";
+import { appConfig } from "../../../src/lib/config";
 import {
   dispatchEventToTemporal,
   getWorkflowForEvent,
 } from "../../../src/lib/event-dispatcher";
 
-const mockCreateNotifications = jest.fn();
-const mockGraph = jest.fn();
-const mockRetrieveCompany = jest.fn();
-const mockRetrievePurchaseOrder = jest.fn();
-const mockRetrieveQuote = jest.fn();
+const mockCreateNotifications = vi.fn();
+const mockGraph = vi.fn();
+const mockRetrieveCompany = vi.fn();
+const mockRetrievePurchaseOrder = vi.fn();
+const mockRetrieveQuote = vi.fn();
 
 function makeContainer() {
   return {
-    resolve: jest.fn((dep: string) => {
+    resolve: vi.fn((dep: string) => {
       if (dep === "notification")
         return { createNotifications: mockCreateNotifications };
       if (dep === "query") return { graph: mockGraph };
       if (dep === "logger")
-        return { info: jest.fn(), error: jest.fn(), warn: jest.fn() };
+        return { info: vi.fn(), error: vi.fn(), warn: vi.fn() };
       if (dep === "company") return { retrieveCompany: mockRetrieveCompany };
       if (dep === "purchaseOrder")
         return { retrievePurchaseOrder: mockRetrievePurchaseOrder };
@@ -86,7 +88,7 @@ function makeArgs(data: any) {
 }
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("company-created subscriber", () => {
@@ -438,6 +440,7 @@ describe("temporal-event-bridge subscriber", () => {
   it("dispatches event to Temporal when workflow exists", async () => {
     (getWorkflowForEvent as jest.Mock).mockReturnValue({
       workflowId: "test-wf",
+      workflowFn: "usage_metering",
     });
     (dispatchEventToTemporal as jest.Mock).mockResolvedValue({
       dispatched: true,
@@ -457,14 +460,13 @@ describe("temporal-event-bridge subscriber", () => {
   });
 
   it("skips dispatch when Temporal is not configured", async () => {
-    const configModule = jest.requireMock("../../../src/lib/config");
-    const origIsConfigured = configModule.appConfig.temporal.isConfigured;
-    configModule.appConfig.temporal.isConfigured = false;
+    const origIsConfigured = appConfig.temporal.isConfigured;
+    appConfig.temporal.isConfigured = false;
     await temporalEventBridge({
       event: { name: "order.placed", data: {} },
       container: makeContainer(),
     });
-    configModule.appConfig.temporal.isConfigured = origIsConfigured;
+    appConfig.temporal.isConfigured = origIsConfigured;
 
     expect(dispatchEventToTemporal).not.toHaveBeenCalled();
   });

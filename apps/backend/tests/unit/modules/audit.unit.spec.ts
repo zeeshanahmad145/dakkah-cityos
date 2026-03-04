@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -47,8 +48,8 @@ describe("AuditModuleService", () => {
   let service: AuditModuleService;
 
   beforeEach(() => {
-    service = new AuditModuleService();
-    jest.clearAllMocks();
+    service = new AuditModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("logAction", () => {
@@ -124,7 +125,7 @@ describe("AuditModuleService", () => {
 
   describe("getAuditTrail", () => {
     it("returns logs filtered by tenant", async () => {
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         {
           id: "log-1",
           tenant_id: "t1",
@@ -160,7 +161,7 @@ describe("AuditModuleService", () => {
     });
 
     it("filters by date range", async () => {
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         { id: "log-1", created_at: "2025-01-10T00:00:00Z" },
         { id: "log-2", created_at: "2025-01-15T00:00:00Z" },
         { id: "log-3", created_at: "2025-02-01T00:00:00Z" },
@@ -205,7 +206,7 @@ describe("AuditModuleService", () => {
 
   describe("getResourceHistory", () => {
     it("returns audit logs for a specific resource", async () => {
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         { id: "log-1", resource_type: "product", resource_id: "prod-1" },
         { id: "log-2", resource_type: "product", resource_id: "prod-1" },
       ]);
@@ -220,7 +221,7 @@ describe("AuditModuleService", () => {
     });
 
     it("returns empty array when no history exists", async () => {
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([]);
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([]);
 
       const result = await service.getResourceHistory(
         "t1",
@@ -235,7 +236,7 @@ describe("AuditModuleService", () => {
   describe("getAuditSummary", () => {
     it("returns summary with event counts and top actors", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         {
           id: "l1",
           action: "create",
@@ -273,7 +274,7 @@ describe("AuditModuleService", () => {
         actor_id: "u1",
         created_at: now.toISOString(),
       }));
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue(deleteLogs);
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue(deleteLogs);
 
       const start = new Date(now.getTime() - 86400000);
       const end = new Date(now.getTime() + 86400000);
@@ -287,7 +288,7 @@ describe("AuditModuleService", () => {
     });
 
     it("returns zero events for empty date range", async () => {
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([]);
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([]);
 
       const result = await service.getAuditSummary("t1", {
         start: new Date(),
@@ -329,7 +330,7 @@ describe("AuditModuleService", () => {
 
     it("filters by date range", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         { id: "l1", created_at: now.toISOString() },
         { id: "l2", created_at: new Date("2020-01-01").toISOString() },
       ]);
@@ -354,7 +355,7 @@ describe("AuditModuleService", () => {
         actor_id: "u1",
         created_at: new Date(now.getTime() - 3600000).toISOString(),
       }));
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue(logs);
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue(logs);
 
       const result = await service.flagSuspiciousActivity("t1");
 
@@ -371,7 +372,7 @@ describe("AuditModuleService", () => {
         actor_id: "u1",
         created_at: new Date(now.getTime() - 3600000).toISOString(),
       }));
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue(logs);
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue(logs);
 
       const result = await service.flagSuspiciousActivity("t1");
 
@@ -382,7 +383,7 @@ describe("AuditModuleService", () => {
 
     it("returns zero flags when activity is normal", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         {
           id: "l1",
           action: "read",
@@ -399,7 +400,7 @@ describe("AuditModuleService", () => {
   describe("exportAuditReport", () => {
     it("generates JSON report with summary and logs", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         {
           id: "l1",
           action: "create",
@@ -419,7 +420,7 @@ describe("AuditModuleService", () => {
 
     it("generates CSV report with csv content", async () => {
       const now = new Date();
-      jest.spyOn(service, "listAuditLogs").mockResolvedValue([
+      vi.spyOn(service, "listAuditLogs").mockResolvedValue([
         {
           id: "l1",
           action: "create",

@@ -15,7 +15,7 @@ const createSchema = z
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve(
-      "notificationPreferencesModuleService",
+      "notificationPreferences",
     ) as unknown as any;
     const {
       limit = "20",
@@ -46,14 +46,15 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
     const moduleService = req.scope.resolve(
-      "notificationPreferencesModuleService",
+      "notificationPreferences",
     ) as unknown as any;
     const parsed = createSchema.safeParse(req.body);
     if (!parsed.success)
       return res
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
-    const item = await moduleService.createNotificationPreferences(parsed.data);
+    const raw = await moduleService.createNotificationPreferences(parsed.data);
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin notification-preferences");

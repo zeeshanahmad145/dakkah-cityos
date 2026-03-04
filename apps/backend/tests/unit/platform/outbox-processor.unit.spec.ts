@@ -1,7 +1,8 @@
-jest.mock(
+import { vi } from "vitest";
+vi.mock(
   "../../../src/lib/event-dispatcher",
   () => ({
-    dispatchEventToTemporal: jest.fn().mockResolvedValue(undefined),
+    dispatchEventToTemporal: vi.fn().mockResolvedValue(undefined),
   }),
   { virtual: true },
 );
@@ -125,7 +126,7 @@ describe("OutboxProcessor", () => {
   it("returns zero counts when no events", async () => {
     const container = {
       resolve: () => ({
-        listPendingEvents: jest.fn().mockResolvedValue([]),
+        listPendingEvents: vi.fn().mockResolvedValue([]),
       }),
     };
     const result = await processor.processOutbox(container);

@@ -1,14 +1,15 @@
+import { vi } from "vitest";
 import { GET, POST } from "../../src/api/store/bookings/route";
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
   body: {},
   auth_context: { actor_id: "cust_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -27,7 +28,7 @@ describe("Store Bookings Endpoints", () => {
       const mockBookings = [{ id: "book_01", status: "confirmed" }];
       const req = createMockReq({
         booking: {
-          listBookings: jest.fn().mockResolvedValue(mockBookings),
+          listBookings: vi.fn().mockResolvedValue(mockBookings),
           retrieveServiceProduct: jest
             .fn()
             .mockResolvedValue({ id: "svc_01", name: "Haircut" }),
@@ -53,10 +54,10 @@ describe("Store Bookings Endpoints", () => {
     });
 
     it("should filter by status when provided", async () => {
-      const listBookings = jest.fn().mockResolvedValue([]);
+      const listBookings = vi.fn().mockResolvedValue([]);
       const req = createMockReq({
         query: { status: "confirmed" },
-        booking: { listBookings, retrieveServiceProduct: jest.fn() },
+        booking: { listBookings, retrieveServiceProduct: vi.fn() },
       });
       const res = createMockRes();
 
@@ -80,12 +81,16 @@ describe("Store Bookings Endpoints", () => {
     };
 
     it("should create a booking successfully", async () => {
-      const mockBooking = { id: "book_01", service_product_id: "svc_01" };
+      const mockBooking = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ id: "book_01", service_product_id: "svc_01" };
       const req = createMockReq({
         body: validBody,
         booking: {
-          createBooking: jest.fn().mockResolvedValue(mockBooking),
-          retrieveServiceProduct: jest.fn().mockResolvedValue({ id: "svc_01" }),
+          createBooking: vi.fn().mockResolvedValue(mockBooking),
+          retrieveServiceProduct: vi.fn().mockResolvedValue({ id: "svc_01" }),
         },
       });
       const res = createMockRes();

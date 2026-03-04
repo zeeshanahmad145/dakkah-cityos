@@ -3,7 +3,7 @@ import Payout from "./models/payout";
 import PayoutTransactionLink from "./models/payout-transaction-link";
 import { createLogger } from "../../lib/logger";
 import { appConfig } from "../../lib/config";
-
+import Stripe from "stripe";
 const logger = createLogger("module:payout");
 
 type PayoutStatus =
@@ -85,10 +85,8 @@ let stripeInstance: any = null;
 
 function getStripe() {
   if (!stripeInstance) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const Stripe = require("stripe");
     stripeInstance = new Stripe(appConfig.stripe.secretKey ?? "", {
-      apiVersion: "2023-10-16",
+      apiVersion: "2023-10-16" as any,
     });
   }
   return stripeInstance;
@@ -167,7 +165,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
     stripeAccountId: string,
   ): Promise<PayoutRecord> {
     const stripe = getStripe();
-    const payout = await this.retrievePayout(payoutId) as any;
+    const payout = (await this.retrievePayout(payoutId)) as any;
 
     if (!stripeAccountId) {
       throw new Error(`No Stripe account ID provided for payout ${payoutId}`);
@@ -316,7 +314,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
     pending_amount: number;
     last_payout: PayoutRecord | null;
   }> {
-    const all = await this.listPayouts({ vendor_id: vendorId }) as any;
+    const all = (await this.listPayouts({ vendor_id: vendorId })) as any;
     const completed = all.filter((p) => p.status === "completed");
     const pending = all.filter(
       (p) => p.status === "pending" || p.status === "processing",
@@ -342,7 +340,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
     payoutId: string,
     stripeAccountId: string,
   ): Promise<PayoutRecord> {
-    const payout = await this.retrievePayout(payoutId) as any;
+    const payout = (await this.retrievePayout(payoutId)) as any;
     if (payout.status !== "failed")
       throw new Error(`Payout ${payoutId} is not in failed status`);
     if ((payout.retry_count ?? 0) >= 3)
@@ -360,7 +358,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
   }
 
   async cancelPayout(payoutId: string, reason: string): Promise<PayoutRecord> {
-    const payout = await this.retrievePayout(payoutId) as any;
+    const payout = (await this.retrievePayout(payoutId)) as any;
     if (!["pending", "on_hold"].includes(payout.status)) {
       throw new Error(`Cannot cancel payout in ${payout.status} status`);
     }
@@ -373,7 +371,7 @@ class PayoutModuleService extends Base implements PayoutServiceBase {
   }
 
   async holdPayout(payoutId: string, reason: string): Promise<PayoutRecord> {
-    const payout = await this.retrievePayout(payoutId) as any;
+    const payout = (await this.retrievePayout(payoutId)) as any;
     if (payout.status !== "pending")
       throw new Error("Can only hold pending payouts");
     return this.updatePayouts({

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -77,13 +78,13 @@ describe("AutomotiveModuleService", () => {
   let service: AutomotiveModuleService;
 
   beforeEach(() => {
-    service = new AutomotiveModuleService();
-    jest.clearAllMocks();
+    service = new AutomotiveModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("listVehicle", () => {
     it("creates a new vehicle listing", async () => {
-      jest.spyOn(service, "listVehicleListings").mockResolvedValue([]);
+      vi.spyOn(service, "listVehicleListings").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createVehicleListings")
         .mockResolvedValue({ id: "v1" });
@@ -153,7 +154,7 @@ describe("AutomotiveModuleService", () => {
 
   describe("appraise", () => {
     it("calculates vehicle appraisal value", async () => {
-      jest.spyOn(service, "retrieveVehicleListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveVehicleListing").mockResolvedValue({
         id: "v1",
         price: 30000,
         year: 2023,
@@ -175,7 +176,7 @@ describe("AutomotiveModuleService", () => {
       jest
         .spyOn(service, "retrieveVehicleListing")
         .mockResolvedValue({ id: "v1", status: "published" });
-      jest.spyOn(service, "listTestDrives").mockResolvedValue([]);
+      vi.spyOn(service, "listTestDrives").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createTestDrives")
         .mockResolvedValue({ id: "td-1" });
@@ -220,7 +221,7 @@ describe("AutomotiveModuleService", () => {
           mileage: 10000,
           condition: "used",
         });
-      jest.spyOn(service, "createTradeIns").mockResolvedValue({});
+      vi.spyOn(service, "createTradeIns").mockResolvedValue({});
 
       const result = await service.processTradeIn("v1", "v2");
 

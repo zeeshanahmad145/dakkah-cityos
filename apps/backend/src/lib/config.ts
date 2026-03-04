@@ -1,4 +1,4 @@
-const env = process.env
+const env = process.env;
 
 export const appConfig = {
   nodeEnv: env.NODE_ENV || "development",
@@ -46,44 +46,70 @@ export const appConfig = {
     org: env.SENTRY_ORG || "",
     project: env.SENTRY_PROJECT || "",
     isConfigured: !!env.SENTRY_DSN,
-    isApiConfigured: !!(env.SENTRY_AUTH_TOKEN && env.SENTRY_ORG && env.SENTRY_PROJECT),
+    isApiConfigured: !!(
+      env.SENTRY_AUTH_TOKEN &&
+      env.SENTRY_ORG &&
+      env.SENTRY_PROJECT
+    ),
   },
 
   temporal: {
-    endpoint: env.TEMPORAL_ENDPOINT || "",
+    address: env.TEMPORAL_ADDRESS || "",
+    /** @deprecated use .address */
+    get endpoint() {
+      return this.address;
+    },
     namespace: env.TEMPORAL_NAMESPACE || "",
     apiKey: env.TEMPORAL_API_KEY || "",
-    isConfigured: !!env.TEMPORAL_API_KEY,
+    taskQueue: env.TEMPORAL_TASK_QUEUE || "uce-commerce-financial",
+    isConfigured: !!(
+      env.TEMPORAL_ADDRESS &&
+      env.TEMPORAL_NAMESPACE &&
+      env.TEMPORAL_API_KEY
+    ),
   },
 
   payloadCms: {
-    url: env.PAYLOAD_CMS_URL_DEV || env.PAYLOAD_CMS_URL || "",
+    url: env.PAYLOAD_CMS_URL || env.PAYLOAD_CMS_URL_DEV || "",
     apiKey: env.PAYLOAD_API_KEY || "",
-    webhookSecret: env.PAYLOAD_CMS_WEBHOOK_SECRET || env.PAYLOAD_WEBHOOK_SECRET || "",
-    isConfigured: !!(env.PAYLOAD_CMS_URL_DEV || env.PAYLOAD_CMS_URL),
+    webhookSecret:
+      env.PAYLOAD_CMS_WEBHOOK_SECRET || env.PAYLOAD_WEBHOOK_SECRET || "",
+    isConfigured: !!(env.PAYLOAD_CMS_URL || env.PAYLOAD_CMS_URL_DEV),
   },
 
   erpnext: {
-    url: env.ERPNEXT_URL_DEV || "",
+    url: env.ERPNEXT_URL || env.ERPNEXT_URL_DEV || "",
     apiKey: env.ERPNEXT_API_KEY || "",
     apiSecret: env.ERPNEXT_API_SECRET || "",
+    company: env.ERPNEXT_COMPANY || "Dakkah",
     webhookSecret: env.ERPNEXT_WEBHOOK_SECRET || "",
-    isConfigured: !!(env.ERPNEXT_API_KEY && env.ERPNEXT_URL_DEV),
+    isConfigured: !!(
+      env.ERPNEXT_API_KEY &&
+      (env.ERPNEXT_URL || env.ERPNEXT_URL_DEV)
+    ),
   },
 
   fleetbase: {
-    url: env.FLEETBASE_URL_DEV || "",
+    url: env.FLEETBASE_API_URL || env.FLEETBASE_URL_DEV || "",
     apiKey: env.FLEETBASE_API_KEY || "",
     orgId: env.FLEETBASE_ORG_ID || "",
     webhookSecret: env.FLEETBASE_WEBHOOK_SECRET || "",
-    isConfigured: !!env.FLEETBASE_API_KEY,
+    isConfigured: !!(
+      env.FLEETBASE_API_KEY &&
+      (env.FLEETBASE_API_URL || env.FLEETBASE_URL_DEV)
+    ),
   },
 
   waltid: {
-    url: env.WALTID_URL_DEV || "",
-    apiKey: env.WALTID_API_KEY || "",
-    issuerDid: env.WALTID_ISSUER_DID || "",
-    isConfigured: !!env.WALTID_API_KEY,
+    issuerUrl: env.WALT_ID_ISSUER_URL || env.WALTID_URL_DEV || "",
+    /** @deprecated use .issuerUrl */
+    get url() {
+      return this.issuerUrl;
+    },
+    verifierUrl: env.WALT_ID_VERIFIER_URL || "",
+    apiKey: env.WALT_ID_API_KEY || env.WALTID_API_KEY || "",
+    issuerDid: env.WALT_ID_DID || env.WALTID_ISSUER_DID || "",
+    isConfigured: !!(env.WALT_ID_API_KEY || env.WALTID_API_KEY),
   },
 
   meilisearch: {
@@ -95,7 +121,8 @@ export const appConfig = {
     provider: env.STORAGE_PROVIDER || "vercel-blob",
     blobToken: env.BLOB_READ_WRITE_TOKEN || "",
     blobStoreUrl: env.VERCEL_BLOB_STORE_URL || "",
-    replitBucketId: env.REPLIT_BUCKET_ID || env.DEFAULT_OBJECT_STORAGE_BUCKET_ID || "",
+    replitBucketId:
+      env.REPLIT_BUCKET_ID || env.DEFAULT_OBJECT_STORAGE_BUCKET_ID || "",
     privateObjectDir: env.PRIVATE_OBJECT_DIR || "",
     publicObjectSearchPaths: env.PUBLIC_OBJECT_SEARCH_PATHS || "",
     isBlobConfigured: !!env.BLOB_READ_WRITE_TOKEN,
@@ -115,13 +142,21 @@ export const appConfig = {
   booking: {
     checkInWindowMinutes: parseInt(env.BOOKING_CHECKIN_WINDOW || "30", 10),
     noShowGracePeriodMinutes: parseInt(env.BOOKING_NOSHOW_GRACE || "15", 10),
-    cancellationHoursNotice: parseInt(env.BOOKING_CANCEL_NOTICE_HOURS || "24", 10),
+    cancellationHoursNotice: parseInt(
+      env.BOOKING_CANCEL_NOTICE_HOURS || "24",
+      10,
+    ),
   },
 
   vendor: {
     inactiveDaysWarning: parseInt(env.VENDOR_INACTIVE_WARNING_DAYS || "30", 10),
-    inactiveDaysDeactivate: parseInt(env.VENDOR_INACTIVE_DEACTIVATE_DAYS || "60", 10),
-    commissionPercentDefault: parseFloat(env.DEFAULT_COMMISSION_PERCENT || "10"),
+    inactiveDaysDeactivate: parseInt(
+      env.VENDOR_INACTIVE_DEACTIVATE_DAYS || "60",
+      10,
+    ),
+    commissionPercentDefault: parseFloat(
+      env.DEFAULT_COMMISSION_PERCENT || "10",
+    ),
   },
 
   b2b: {
@@ -135,6 +170,6 @@ export const appConfig = {
     enableEmailNotifications: env.ENABLE_EMAIL_NOTIFICATIONS !== "false",
     enableAdminNotifications: env.ENABLE_ADMIN_NOTIFICATIONS !== "false",
   },
-}
+};
 
-export type AppConfig = typeof appConfig
+export type AppConfig = typeof appConfig;

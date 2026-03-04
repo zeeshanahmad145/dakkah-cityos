@@ -20,37 +20,12 @@ const updateTenantSchema = z
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const query = req.scope.resolve("query") as unknown as any;
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
     const { id } = req.params;
-
-    const {
-      data: [tenant],
-    } = await query.graph({
-      entity: "tenant",
-      fields: [
-        "id",
-        "name",
-        "slug",
-        "domain",
-        "status",
-        "plan",
-        "owner_email",
-        "owner_name",
-        "settings",
-        "features",
-        "trial_ends_at",
-        "created_at",
-        "updated_at",
-        "billing.*",
-        "users.*",
-      ],
-      filters: { id },
-    });
-
+    const tenant = await tenantModuleService.retrieveTenant(id);
     if (!tenant) {
       return res.status(404).json({ message: "Tenant not found" });
     }
-
     res.json({ tenant });
   } catch (error: unknown) {
     handleApiError(res, error, "GET admin tenants id");
@@ -76,5 +51,19 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
     res.json({ tenant });
   } catch (error: unknown) {
     handleApiError(res, error, "PUT admin tenants id");
+  }
+}
+
+// POST mirrors PUT so the CRUD E2E generator (which always uses POST) can update tenants
+export const POST = PUT;
+
+export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
+  try {
+    const tenantModuleService = req.scope.resolve("tenant") as unknown as any;
+    const { id } = req.params;
+    await tenantModuleService.deleteTenants([id]);
+    res.status(204).send();
+  } catch (error: unknown) {
+    handleApiError(res, error, "DELETE admin tenants id");
   }
 }

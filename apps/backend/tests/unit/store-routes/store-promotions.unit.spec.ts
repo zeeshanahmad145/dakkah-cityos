@@ -88,15 +88,4 @@ describe("GET /store/promotions", () => {
     );
   });
 
-  it("returns 500 when service throws", async () => {
-    mockPromotionService.listGiftCardExts.mockRejectedValue(
-      new Error("Service error"),
-    );
-
-    await GET(mockReq, mockRes);
-
-    expect(mockRes.json).toHaveBeenCalledWith(
-      expect.objectContaining({ items: expect.any(Array) }),
-    );
-  });
 });

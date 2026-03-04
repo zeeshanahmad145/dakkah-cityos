@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -68,19 +69,19 @@ describe("SocialCommerceModuleService", () => {
   let service: SocialCommerceModuleService;
 
   beforeEach(() => {
-    service = new SocialCommerceModuleService();
-    jest.clearAllMocks();
+    service = new SocialCommerceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getPostAnalytics", () => {
     it("returns engagement analytics for a post", async () => {
-      jest.spyOn(service, "retrieveSocialPost").mockResolvedValue({
+      vi.spyOn(service, "retrieveSocialPost").mockResolvedValue({
         id: "post-1",
         engagement_count: 150,
         share_count: 30,
         view_count: 1000,
       });
-      jest.spyOn(service, "listSocialShares").mockResolvedValue([
+      vi.spyOn(service, "listSocialShares").mockResolvedValue([
         { id: "s1", shared_at: new Date() },
         { id: "s2", shared_at: new Date() },
       ]);

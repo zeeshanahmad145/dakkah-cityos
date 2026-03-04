@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 interface OutboxEvent {
   id: string
   type: string
@@ -144,21 +145,21 @@ class OutboxProcessor {
 }
 
 const createMockRepo = (): OutboxRepository => ({
-  findPending: jest.fn().mockResolvedValue([]),
-  markProcessing: jest.fn().mockResolvedValue(undefined),
-  markProcessed: jest.fn().mockResolvedValue(undefined),
-  markFailed: jest.fn().mockResolvedValue(undefined),
-  findByType: jest.fn().mockResolvedValue([]),
+  findPending: vi.fn().mockResolvedValue([]),
+  markProcessing: vi.fn().mockResolvedValue(undefined),
+  markProcessed: vi.fn().mockResolvedValue(undefined),
+  markFailed: vi.fn().mockResolvedValue(undefined),
+  findByType: vi.fn().mockResolvedValue([]),
 })
 
 const createMockHandler = (): EventHandler => ({
-  handle: jest.fn().mockResolvedValue(undefined),
+  handle: vi.fn().mockResolvedValue(undefined),
 })
 
 const createMockLogger = (): Logger => ({
-  info: jest.fn(),
-  error: jest.fn(),
-  warn: jest.fn(),
+  info: vi.fn(),
+  error: vi.fn(),
+  warn: vi.fn(),
 })
 
 const createEvent = (overrides: Partial<OutboxEvent> = {}): OutboxEvent => ({
@@ -179,7 +180,7 @@ describe("Outbox Processor", () => {
   let processor: OutboxProcessor
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     repo = createMockRepo()
     handler = createMockHandler()
     logger = createMockLogger()

@@ -1,5 +1,6 @@
-jest.mock("../../../src/lib/api-error-handler", () => ({
-  handleApiError: jest.fn((res, error, context) => {
+import { vi } from "vitest";
+vi.mock("../../../src/lib/api-error-handler", () => ({
+  handleApiError: vi.fn((res, error, context) => {
     const message = error instanceof Error ? error.message : String(error)
     if (message.includes("not found") || message.includes("Not found")) {
       return res.status(404).json({ message: `${context}: not found` })
@@ -18,9 +19,9 @@ import { GET as GET_CLAIMS } from "../../../src/api/admin/insurance/claims/route
 
 function makeMockRes() {
   const res: any = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    send: vi.fn().mockReturnThis(),
   }
   return res
 }
@@ -31,14 +32,18 @@ describe("GET /admin/insurance", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockModule = {
-      listInsurancePolicies: jest.fn().mockResolvedValue([]),
-      countInsurancePolicies: jest.fn().mockResolvedValue(0),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listInsurancePolicies: vi.fn().mockResolvedValue([]),
+      countInsurancePolicies: vi.fn().mockResolvedValue(0),
     }
     mockReq = {
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     }
     mockRes = makeMockRes()
   })
@@ -91,8 +96,12 @@ describe("POST /admin/insurance", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    mockModule = { createPolicy: jest.fn().mockResolvedValue({ id: "ins_new" }) }
+    vi.clearAllMocks()
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ createPolicy: vi.fn().mockResolvedValue({ id: "ins_new" }) }
     mockReq = {
       body: {
         customer_id: "c1",
@@ -102,7 +111,7 @@ describe("POST /admin/insurance", () => {
         starts_at: "2025-01-01",
         expires_at: "2026-01-01",
       },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     }
     mockRes = makeMockRes()
   })
@@ -156,37 +165,41 @@ describe("GET /admin/insurance/:id", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    mockModule = { listInsurancePlans: jest.fn() }
+    vi.clearAllMocks()
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ listInsurancePolicies: vi.fn() }
     mockReq = {
       params: { id: "ins_1" },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     }
     mockRes = makeMockRes()
   })
 
   it("returns insurance plan by id", async () => {
-    mockModule.listInsurancePlans.mockResolvedValue([{ id: "ins_1", name: "Basic" }])
+    mockModule.listInsurancePolicies.mockResolvedValue([{ id: "ins_1", name: "Basic" }])
     await GET_ID(mockReq, mockRes)
     expect(mockRes.json).toHaveBeenCalledWith({ item: { id: "ins_1", name: "Basic" } })
   })
 
   it("returns 404 when not found", async () => {
-    mockModule.listInsurancePlans.mockResolvedValue([])
+    mockModule.listInsurancePolicies.mockResolvedValue([])
     await GET_ID(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(404)
   })
 
   it("returns 500 on error", async () => {
-    mockModule.listInsurancePlans.mockRejectedValue(new Error("fail"))
+    mockModule.listInsurancePolicies.mockRejectedValue(new Error("fail"))
     await GET_ID(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(500)
   })
 
   it("queries with correct id filter", async () => {
-    mockModule.listInsurancePlans.mockResolvedValue([{ id: "ins_1" }])
+    mockModule.listInsurancePolicies.mockResolvedValue([{ id: "ins_1" }])
     await GET_ID(mockReq, mockRes)
-    expect(mockModule.listInsurancePlans).toHaveBeenCalledWith({ id: "ins_1" }, { take: 1 })
+    expect(mockModule.listInsurancePolicies).toHaveBeenCalledWith({ id: "ins_1" }, { take: 1 })
   })
 })
 
@@ -196,19 +209,23 @@ describe("POST /admin/insurance/:id (update)", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    mockModule = { updateInsurancePlans: jest.fn().mockResolvedValue({ id: "ins_1", name: "Updated" }) }
+    vi.clearAllMocks()
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ updateInsurancePolicies: vi.fn().mockResolvedValue({ id: "ins_1", name: "Updated" }) }
     mockReq = {
       params: { id: "ins_1" },
       body: { name: "Updated" },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     }
     mockRes = makeMockRes()
   })
 
   it("updates plan successfully", async () => {
     await POST_ID(mockReq, mockRes)
-    expect(mockModule.updateInsurancePlans).toHaveBeenCalledWith(
+    expect(mockModule.updateInsurancePolicies).toHaveBeenCalledWith(
       expect.objectContaining({ id: "ins_1", name: "Updated" })
     )
     expect(mockRes.json).toHaveBeenCalledWith({ item: { id: "ins_1", name: "Updated" } })
@@ -221,7 +238,7 @@ describe("POST /admin/insurance/:id (update)", () => {
   })
 
   it("returns 500 on service error", async () => {
-    mockModule.updateInsurancePlans.mockRejectedValue(new Error("fail"))
+    mockModule.updateInsurancePolicies.mockRejectedValue(new Error("fail"))
     await POST_ID(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(500)
   })
@@ -229,7 +246,7 @@ describe("POST /admin/insurance/:id (update)", () => {
   it("accepts partial update fields", async () => {
     mockReq.body = { coverage_amount: 2000, premium: 100 }
     await POST_ID(mockReq, mockRes)
-    expect(mockModule.updateInsurancePlans).toHaveBeenCalledWith(
+    expect(mockModule.updateInsurancePolicies).toHaveBeenCalledWith(
       expect.objectContaining({ coverage_amount: 2000, premium: 100 })
     )
   })
@@ -241,23 +258,27 @@ describe("DELETE /admin/insurance/:id", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    mockModule = { deleteInsurancePlans: jest.fn().mockResolvedValue(undefined) }
+    vi.clearAllMocks()
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ deleteInsurancePolicies: vi.fn().mockResolvedValue(undefined) }
     mockReq = {
       params: { id: "ins_1" },
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     }
     mockRes = makeMockRes()
   })
 
   it("deletes plan and returns 204", async () => {
     await DELETE_ID(mockReq, mockRes)
-    expect(mockModule.deleteInsurancePlans).toHaveBeenCalledWith(["ins_1"])
+    expect(mockModule.deleteInsurancePolicies).toHaveBeenCalledWith(["ins_1"])
     expect(mockRes.status).toHaveBeenCalledWith(204)
   })
 
   it("returns 500 on error", async () => {
-    mockModule.deleteInsurancePlans.mockRejectedValue(new Error("fail"))
+    mockModule.deleteInsurancePolicies.mockRejectedValue(new Error("fail"))
     await DELETE_ID(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(500)
   })
@@ -270,7 +291,7 @@ describe("DELETE /admin/insurance/:id", () => {
   it("passes id as array to delete", async () => {
     mockReq.params.id = "ins_special"
     await DELETE_ID(mockReq, mockRes)
-    expect(mockModule.deleteInsurancePlans).toHaveBeenCalledWith(["ins_special"])
+    expect(mockModule.deleteInsurancePolicies).toHaveBeenCalledWith(["ins_special"])
   })
 })
 
@@ -280,18 +301,22 @@ describe("GET /admin/insurance/claims", () => {
   let mockRes: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    mockModule = { listInsClaims: jest.fn().mockResolvedValue([]) }
+    vi.clearAllMocks()
+    mockModule = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+ listInsuranceClaims: vi.fn().mockResolvedValue([]) }
     mockReq = {
       query: {},
-      scope: { resolve: jest.fn().mockReturnValue(mockModule) },
+      scope: { resolve: vi.fn().mockReturnValue(mockModule) },
     }
     mockRes = makeMockRes()
   })
 
   it("returns claims list with count", async () => {
     const claims = [{ id: "claim_1" }, { id: "claim_2" }]
-    mockModule.listInsClaims.mockResolvedValue(claims)
+    mockModule.listInsuranceClaims.mockResolvedValue(claims)
     await GET_CLAIMS(mockReq, mockRes)
     expect(mockRes.json).toHaveBeenCalledWith({
       claims,
@@ -304,20 +329,20 @@ describe("GET /admin/insurance/claims", () => {
   it("filters by status", async () => {
     mockReq.query = { status: "pending" }
     await GET_CLAIMS(mockReq, mockRes)
-    expect(mockModule.listInsClaims).toHaveBeenCalledWith(
+    expect(mockModule.listInsuranceClaims).toHaveBeenCalledWith(
       { status: "pending" },
       expect.any(Object)
     )
   })
 
   it("returns 500 on error", async () => {
-    mockModule.listInsClaims.mockRejectedValue(new Error("fail"))
+    mockModule.listInsuranceClaims.mockRejectedValue(new Error("fail"))
     await GET_CLAIMS(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(500)
   })
 
   it("wraps single claim in array", async () => {
-    mockModule.listInsClaims.mockResolvedValue({ id: "claim_single" })
+    mockModule.listInsuranceClaims.mockResolvedValue({ id: "claim_single" })
     await GET_CLAIMS(mockReq, mockRes)
     expect(mockRes.json).toHaveBeenCalledWith(
       expect.objectContaining({ claims: [{ id: "claim_single" }] })

@@ -1,9 +1,14 @@
+import { vi } from "vitest";
 import integrationSyncHandler, {
   config,
 } from "../../../src/subscribers/integration-sync-subscriber";
 
 describe("integration-sync-subscriber", () => {
-  const mockContainer = {};
+  const mockContainer = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+};
 
   describe("config", () => {
     it("has an empty event array", () => {
@@ -38,8 +43,8 @@ describe("integration-sync-subscriber", () => {
     });
 
     it("completes without side effects", async () => {
-      const consoleSpy = jest.spyOn(console, "log").mockImplementation();
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+      const consoleSpy = vi.spyOn(console, "log").mockImplementation();
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
 
       await integrationSyncHandler({
         event: { name: "order.placed", data: { id: "order_1" } },

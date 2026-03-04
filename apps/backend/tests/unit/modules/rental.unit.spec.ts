@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -68,8 +69,8 @@ describe("RentalModuleService", () => {
   let service: RentalModuleService;
 
   beforeEach(() => {
-    service = new RentalModuleService();
-    jest.clearAllMocks();
+    service = new RentalModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("checkAvailability", () => {
@@ -77,7 +78,7 @@ describe("RentalModuleService", () => {
       jest
         .spyOn(service, "retrieveRentalProduct")
         .mockResolvedValue({ id: "item-1", status: "available" });
-      jest.spyOn(service, "listRentalAgreements").mockResolvedValue([]);
+      vi.spyOn(service, "listRentalAgreements").mockResolvedValue([]);
 
       const result = await service.checkAvailability(
         "item-1",
@@ -106,7 +107,7 @@ describe("RentalModuleService", () => {
       jest
         .spyOn(service, "retrieveRentalProduct")
         .mockResolvedValue({ id: "item-1", status: "available" });
-      jest.spyOn(service, "listRentalAgreements").mockResolvedValue([
+      vi.spyOn(service, "listRentalAgreements").mockResolvedValue([
         {
           start_date: "2099-01-05",
           end_date: "2099-01-15",
@@ -136,12 +137,12 @@ describe("RentalModuleService", () => {
 
   describe("createRental", () => {
     it("creates a rental agreement for available item", async () => {
-      jest.spyOn(service, "retrieveRentalProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveRentalProduct").mockResolvedValue({
         id: "item-1",
         status: "available",
         daily_rate: 50,
       });
-      jest.spyOn(service, "listRentalAgreements").mockResolvedValue([]);
+      vi.spyOn(service, "listRentalAgreements").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createRentalAgreements")
         .mockResolvedValue({ id: "agreement-1" });
@@ -218,7 +219,7 @@ describe("RentalModuleService", () => {
 
   describe("processReturn", () => {
     it("processes a return for an active rental", async () => {
-      jest.spyOn(service, "retrieveRentalAgreement").mockResolvedValue({
+      vi.spyOn(service, "retrieveRentalAgreement").mockResolvedValue({
         id: "rental-1",
         status: "active",
         rental_product_id: "item-1",
@@ -226,8 +227,8 @@ describe("RentalModuleService", () => {
       const createReturnSpy = jest
         .spyOn(service, "createRentalReturns")
         .mockResolvedValue({ id: "return-1" });
-      jest.spyOn(service, "updateRentalAgreements").mockResolvedValue({});
-      jest.spyOn(service, "updateRentalProducts").mockResolvedValue({});
+      vi.spyOn(service, "updateRentalAgreements").mockResolvedValue({});
+      vi.spyOn(service, "updateRentalProducts").mockResolvedValue({});
 
       const result = await service.processReturn(
         "rental-1",
@@ -245,7 +246,7 @@ describe("RentalModuleService", () => {
     });
 
     it("throws when rental is not active", async () => {
-      jest.spyOn(service, "retrieveRentalAgreement").mockResolvedValue({
+      vi.spyOn(service, "retrieveRentalAgreement").mockResolvedValue({
         id: "rental-1",
         status: "returned",
       });

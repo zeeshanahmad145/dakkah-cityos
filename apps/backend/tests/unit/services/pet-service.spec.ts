@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -58,19 +59,19 @@ describe("PetServiceModuleService", () => {
   let service: PetServiceModuleService;
 
   beforeEach(() => {
-    service = new PetServiceModuleService();
-    jest.clearAllMocks();
+    service = new PetServiceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("bookPetService", () => {
     it("should book a grooming service for a pet", async () => {
-      jest.spyOn(service, "retrievePetProfile").mockResolvedValue({
+      vi.spyOn(service, "retrievePetProfile").mockResolvedValue({
         id: "pet_01",
         name: "Max",
         species: "dog",
         owner_id: "owner_01",
       });
-      jest.spyOn(service, "createGroomingBookings").mockResolvedValue({
+      vi.spyOn(service, "createGroomingBookings").mockResolvedValue({
         id: "sb_01",
         pet_id: "pet_01",
         service_type: "grooming",
@@ -89,7 +90,7 @@ describe("PetServiceModuleService", () => {
     });
 
     it("should book boarding for pet with valid vaccinations", async () => {
-      jest.spyOn(service, "retrievePetProfile").mockResolvedValue({
+      vi.spyOn(service, "retrievePetProfile").mockResolvedValue({
         id: "pet_01",
         name: "Max",
         species: "dog",
@@ -102,7 +103,7 @@ describe("PetServiceModuleService", () => {
         .mockResolvedValue([
           { vaccineName: "Rabies", nextDue: futureVax.toISOString() },
         ]);
-      jest.spyOn(service, "createGroomingBookings").mockResolvedValue({
+      vi.spyOn(service, "createGroomingBookings").mockResolvedValue({
         id: "sb_01",
         pet_id: "pet_01",
         service_type: "boarding",
@@ -121,7 +122,7 @@ describe("PetServiceModuleService", () => {
     });
 
     it("should reject boarding for pet with expired vaccinations", async () => {
-      jest.spyOn(service, "retrievePetProfile").mockResolvedValue({
+      vi.spyOn(service, "retrievePetProfile").mockResolvedValue({
         id: "pet_01",
         name: "Max",
         species: "dog",
@@ -146,12 +147,12 @@ describe("PetServiceModuleService", () => {
     });
 
     it("should reject boarding for pet with no vaccinations", async () => {
-      jest.spyOn(service, "retrievePetProfile").mockResolvedValue({
+      vi.spyOn(service, "retrievePetProfile").mockResolvedValue({
         id: "pet_02",
         name: "Buddy",
         species: "dog",
       });
-      jest.spyOn(service, "trackVaccinations").mockResolvedValue([]);
+      vi.spyOn(service, "trackVaccinations").mockResolvedValue([]);
 
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 7);
@@ -172,13 +173,13 @@ describe("PetServiceModuleService", () => {
 
   describe("updateVaccinationRecord", () => {
     it("should create a vaccination record", async () => {
-      jest.spyOn(service, "retrievePetProfile").mockResolvedValue({
+      vi.spyOn(service, "retrievePetProfile").mockResolvedValue({
         id: "pet_01",
         name: "Max",
         species: "dog",
         owner_id: "owner_01",
       });
-      jest.spyOn(service, "createVetAppointments").mockResolvedValue({
+      vi.spyOn(service, "createVetAppointments").mockResolvedValue({
         id: "vac_01",
         pet_id: "pet_01",
         treatment: "Rabies",

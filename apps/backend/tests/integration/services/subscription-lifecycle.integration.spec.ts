@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -91,11 +92,15 @@ describe("Subscription Lifecycle Integration", () => {
   let service: SubscriptionModuleService;
 
   beforeEach(() => {
-    service = new SubscriptionModuleService();
-    jest.clearAllMocks();
+    service = new SubscriptionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   const mockPlan = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
     id: "plan_01",
     name: "Pro Monthly",
     price: 2999,
@@ -116,8 +121,8 @@ describe("Subscription Lifecycle Integration", () => {
           id: "sub_01",
           ...data,
         }));
-      jest.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.createSubscriptionFromPlan(
         "cust_01",
@@ -143,8 +148,8 @@ describe("Subscription Lifecycle Integration", () => {
           id: "sub_02",
           ...data,
         }));
-      jest.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "createSubscriptionItems").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.createSubscriptionFromPlan(
         "cust_01",
@@ -158,17 +163,17 @@ describe("Subscription Lifecycle Integration", () => {
 
   describe("activate subscription", () => {
     it("should activate a draft subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "draft",
         billing_interval: "monthly",
         billing_interval_count: 1,
       });
-      jest.spyOn(service, "updateSubscriptions").mockResolvedValue({
+      vi.spyOn(service, "updateSubscriptions").mockResolvedValue({
         id: "sub_01",
         status: "active",
       });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
       jest
         .spyOn(service, "createBillingCycleForSubscription")
         .mockResolvedValue({});
@@ -178,7 +183,7 @@ describe("Subscription Lifecycle Integration", () => {
     });
 
     it("should reject activating a non-draft subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "active",
       });
@@ -191,39 +196,39 @@ describe("Subscription Lifecycle Integration", () => {
 
   describe("pause and resume", () => {
     it("should pause an active subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "active",
       });
-      jest.spyOn(service, "updateSubscriptions").mockResolvedValue({
+      vi.spyOn(service, "updateSubscriptions").mockResolvedValue({
         id: "sub_01",
         status: "paused",
       });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.pauseSubscription("sub_01");
       expect(result.status).toBe("paused");
     });
 
     it("should resume a paused subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "paused",
         billing_interval: "monthly",
         billing_interval_count: 1,
       });
-      jest.spyOn(service, "updateSubscriptions").mockResolvedValue({
+      vi.spyOn(service, "updateSubscriptions").mockResolvedValue({
         id: "sub_01",
         status: "active",
       });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.resumeSubscription("sub_01");
       expect(result.status).toBe("active");
     });
 
     it("should reject pausing a cancelled subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "cancelled",
       });
@@ -234,23 +239,23 @@ describe("Subscription Lifecycle Integration", () => {
 
   describe("cancel subscription", () => {
     it("should cancel an active subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "active",
         current_period_end: new Date("2026-04-15"),
       });
-      jest.spyOn(service, "updateSubscriptions").mockResolvedValue({
+      vi.spyOn(service, "updateSubscriptions").mockResolvedValue({
         id: "sub_01",
         status: "cancelled",
       });
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.cancelSubscription("sub_01");
       expect(result.status).toBe("cancelled");
     });
 
     it("should reject cancelling an already cancelled subscription", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "canceled",
       });
@@ -263,7 +268,7 @@ describe("Subscription Lifecycle Integration", () => {
 
   describe("renew subscription period", () => {
     it("should advance billing cycle on renewal", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "active",
         billing_interval: "monthly",
@@ -282,7 +287,7 @@ describe("Subscription Lifecycle Integration", () => {
       jest
         .spyOn(service, "createBillingCycleForSubscription")
         .mockResolvedValue({});
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.renewSubscriptionPeriod("sub_01");
       expect(result).toBeDefined();
@@ -291,23 +296,23 @@ describe("Subscription Lifecycle Integration", () => {
 
   describe("handle failed billing", () => {
     it("should increment retry count on billing failure", async () => {
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "active",
         retry_count: 0,
       });
-      jest.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
+      vi.spyOn(service, "retrieveBillingCycle").mockResolvedValue({
         id: "bc_01",
         status: "pending",
       });
-      jest.spyOn(service, "updateBillingCycles").mockResolvedValue({});
+      vi.spyOn(service, "updateBillingCycles").mockResolvedValue({});
       jest
         .spyOn(service, "updateSubscriptions")
         .mockImplementation(async (data: any) => ({
           id: "sub_01",
           ...data,
         }));
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.handleFailedBilling(
         "sub_01",
@@ -326,7 +331,7 @@ describe("Subscription Lifecycle Integration", () => {
         name: "Enterprise",
         price: 9999,
       };
-      jest.spyOn(service, "retrieveSubscription").mockResolvedValue({
+      vi.spyOn(service, "retrieveSubscription").mockResolvedValue({
         id: "sub_01",
         status: "active",
         current_period_start: new Date("2026-03-01"),
@@ -342,14 +347,14 @@ describe("Subscription Lifecycle Integration", () => {
         .mockResolvedValue([
           { id: "si_01", product_id: "plan_01", quantity: 1 },
         ]);
-      jest.spyOn(service, "updateSubscriptionItems").mockResolvedValue({});
+      vi.spyOn(service, "updateSubscriptionItems").mockResolvedValue({});
       jest
         .spyOn(service, "updateSubscriptions")
         .mockImplementation(async (data: any) => ({
           id: "sub_01",
           ...data,
         }));
-      jest.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
+      vi.spyOn(service, "logSubscriptionEvent").mockResolvedValue({});
 
       const result = await service.changePlan("sub_01", "plan_02");
       expect(result).toBeDefined();

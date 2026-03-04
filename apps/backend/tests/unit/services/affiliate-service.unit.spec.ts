@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -77,13 +78,13 @@ describe("AffiliateModuleService", () => {
   let service: AffiliateModuleService;
 
   beforeEach(() => {
-    service = new AffiliateModuleService();
-    jest.clearAllMocks();
+    service = new AffiliateModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("registerAffiliate", () => {
     it("registers a new affiliate successfully", async () => {
-      jest.spyOn(service, "listAffiliates").mockResolvedValue([]);
+      vi.spyOn(service, "listAffiliates").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createAffiliates")
         .mockResolvedValue({ id: "aff-1", name: "Test Affiliate" });
@@ -155,7 +156,7 @@ describe("AffiliateModuleService", () => {
       jest
         .spyOn(service, "retrieveAffiliate")
         .mockResolvedValue({ id: "aff-1" });
-      jest.spyOn(service, "listAffiliateCommissions").mockResolvedValue([
+      vi.spyOn(service, "listAffiliateCommissions").mockResolvedValue([
         { amount: 50, created_at: "2025-01-15", status: "pending" },
         { amount: 30, created_at: "2025-01-20", status: "pending" },
         { amount: 20, created_at: "2025-01-10", status: "paid" },
@@ -177,7 +178,7 @@ describe("AffiliateModuleService", () => {
       jest
         .spyOn(service, "retrieveAffiliate")
         .mockResolvedValue({ id: "aff-1" });
-      jest.spyOn(service, "listReferralLinks").mockResolvedValue([
+      vi.spyOn(service, "listReferralLinks").mockResolvedValue([
         { click_count: 100, conversion_count: 10 },
         { click_count: 200, conversion_count: 30 },
       ]);

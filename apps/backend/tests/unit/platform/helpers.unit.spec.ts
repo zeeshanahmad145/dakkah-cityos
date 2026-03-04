@@ -1,4 +1,5 @@
-jest.mock("../../../src/lib/platform/registry", () => ({
+import { vi } from "vitest";
+vi.mock("../../../src/lib/platform/registry", () => ({
   PLATFORM_SYSTEMS_REGISTRY: [
     { id: "sys-1", name: "System 1", type: "internal", status: "active" },
     { id: "sys-2", name: "System 2", type: "external", status: "active" },

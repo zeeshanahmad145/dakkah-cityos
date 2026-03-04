@@ -148,7 +148,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       metadata?: Record<string, unknown>;
     };
 
-    const result = await invoiceModule.createInvoiceWithItems({
+    const raw = await invoiceModule.createInvoiceWithItems({
       company_id,
       customer_id,
       issue_date: new Date(issue_date),
@@ -162,6 +162,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       items,
       metadata,
     });
+
+    const result = Array.isArray(raw) ? raw[0] : raw;
 
     res.status(201).json({ invoice: result.invoice, items: result.items });
   } catch (error: unknown) {

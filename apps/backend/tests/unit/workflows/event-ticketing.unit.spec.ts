@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn }
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn }
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Event Ticketing Workflow", () => {
@@ -20,7 +21,7 @@ describe("Event Ticketing Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/event-ticketing.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     selectTicketsStep = calls.find((c: any) => c[0] === "select-event-tickets-step")?.[1]
     reserveTicketsStep = calls.find((c: any) => c[0] === "reserve-event-tickets-step")?.[1]
@@ -34,8 +35,8 @@ describe("Event Ticketing Workflow", () => {
       const ticketTypes = [{ id: "tt_1", name: "VIP", price: 100 }]
       const container = mockContainer({
         eventTicketing: {
-          checkAvailability: jest.fn().mockResolvedValue({ available: true }),
-          listTicketTypes: jest.fn().mockResolvedValue(ticketTypes),
+          checkAvailability: vi.fn().mockResolvedValue({ available: true }),
+          listTicketTypes: vi.fn().mockResolvedValue(ticketTypes),
         },
       })
       const result = await selectTicketsStep(
@@ -49,7 +50,7 @@ describe("Event Ticketing Workflow", () => {
     it("should throw when tickets are not available", async () => {
       const container = mockContainer({
         eventTicketing: {
-          checkAvailability: jest.fn().mockResolvedValue({ available: false }),
+          checkAvailability: vi.fn().mockResolvedValue({ available: false }),
         },
       })
       await expect(
@@ -63,7 +64,7 @@ describe("Event Ticketing Workflow", () => {
     it("should handle missing listTicketTypes gracefully", async () => {
       const container = mockContainer({
         eventTicketing: {
-          checkAvailability: jest.fn().mockResolvedValue({ available: true }),
+          checkAvailability: vi.fn().mockResolvedValue({ available: true }),
         },
       })
       const result = await selectTicketsStep(

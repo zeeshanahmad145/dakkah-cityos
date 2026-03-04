@@ -1,15 +1,16 @@
+import { vi } from "vitest";
 import { GET, POST } from "../../src/api/admin/vendors/route";
 
-jest.mock("../../src/workflows/vendor/create-vendor-workflow", () => ({
-  createVendorWorkflow: jest.fn(),
+vi.mock("../../src/workflows/vendor/create-vendor-workflow", () => ({
+  createVendorWorkflow: vi.fn(),
 }));
 
 const {
   createVendorWorkflow,
-} = require("../../src/workflows/vendor/create-vendor-workflow");
+} = (await import("../../src/workflows/vendor/create-vendor-workflow"));
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
@@ -17,7 +18,7 @@ const createMockReq = (overrides: Record<string, any> = {}) => ({
   params: {},
   cityosContext: { tenantId: "tenant_01", storeId: "store_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -38,7 +39,7 @@ describe("Admin Vendors Endpoints", () => {
         { id: "vendor_02", name: "Tech Inc", status: "pending" },
       ];
       const req = createMockReq({
-        vendor: { listVendors: jest.fn().mockResolvedValue(mockVendors) },
+        vendor: { listVendors: vi.fn().mockResolvedValue(mockVendors) },
       });
       const res = createMockRes();
 
@@ -60,7 +61,7 @@ describe("Admin Vendors Endpoints", () => {
     });
 
     it("should respect pagination params", async () => {
-      const listVendors = jest.fn().mockResolvedValue([]);
+      const listVendors = vi.fn().mockResolvedValue([]);
       const req = createMockReq({
         query: { limit: "5", offset: "10" },
         vendor: { listVendors },
@@ -91,10 +92,14 @@ describe("Admin Vendors Endpoints", () => {
 
     it("should create a vendor via workflow", async () => {
       const mockResult = {
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
         vendor: { id: "vendor_03", name: "New Vendor LLC" },
       };
       createVendorWorkflow.mockReturnValue({
-        run: jest.fn().mockResolvedValue({ result: mockResult }),
+        run: vi.fn().mockResolvedValue({ result: mockResult }),
       });
       const req = createMockReq({ body: validBody });
       const res = createMockRes();

@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   GET as listDisputes,
   POST as createDispute,
@@ -11,17 +12,17 @@ import { POST as escalateDispute } from "../../../src/api/admin/disputes/[id]/es
 import { POST as resolveDispute } from "../../../src/api/admin/disputes/[id]/resolve/route";
 
 const createMockService = () => ({
-  listDisputes: jest.fn(),
-  retrieveDispute: jest.fn(),
-  createDisputes: jest.fn(),
-  updateDisputes: jest.fn(),
-  deleteDisputes: jest.fn(),
-  escalate: jest.fn(),
-  resolve: jest.fn(),
+  listDisputes: vi.fn(),
+  retrieveDispute: vi.fn(),
+  createDisputes: vi.fn(),
+  updateDisputes: vi.fn(),
+  deleteDisputes: vi.fn(),
+  escalate: vi.fn(),
+  resolve: vi.fn(),
 });
 
 const createReq = (mockService: any, overrides: any = {}) => ({
-  scope: { resolve: jest.fn(() => mockService) },
+  scope: { resolve: vi.fn(() => mockService) },
   query: {},
   params: {},
   body: {},
@@ -29,7 +30,7 @@ const createReq = (mockService: any, overrides: any = {}) => ({
 });
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
@@ -38,7 +39,7 @@ describe("Admin Disputes Routes", () => {
 
   beforeEach(() => {
     mockService = createMockService();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("GET /admin/disputes", () => {

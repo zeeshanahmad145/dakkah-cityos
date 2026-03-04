@@ -299,6 +299,160 @@ export function registerActivities(container: any) {
     ): Promise<void> {
       await eventBus.emit?.(eventName, payload);
     },
+
+    // ─── New activities for extended workflows ────────────────────────────
+
+    /** Cancel an order and mark it failed in the kernel */
+    async cancelOrder(orderId: string, reason: string): Promise<void> {
+      await kernelService.transition({
+        entityType: "order",
+        entityId: orderId,
+        toState: "CANCELLED",
+        actorType: "system",
+        reason,
+      });
+      logger.info(`cancelOrder: ${orderId} → CANCELLED (${reason})`);
+    },
+
+    /** Post a settlement/refund/payout Journal Entry to ERPNext */
+    async postSettlementToERP(params: {
+      orderId: string;
+      amount: number;
+      currencyCode: string;
+      type: "settlement" | "refund" | "vendor_payout";
+    }): Promise<void> {
+      const erpUrl = process.env.ERPNEXT_URL;
+      const apiKey = process.env.ERPNEXT_API_KEY;
+      const apiSec = process.env.ERPNEXT_API_SECRET;
+      if (!erpUrl || !apiKey || !apiSec) {
+        logger.warn(
+          `ERPNext not configured — skipping postSettlementToERP for ${params.orderId}`,
+        );
+        return;
+      }
+      try {
+        const res = await fetch(`${erpUrl}/api/resource/Journal Entry`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${apiKey}:${apiSec}`,
+          },
+          body: JSON.stringify({
+            voucher_type: "Journal Entry",
+            posting_date: new Date().toISOString().split("T")[0],
+            accounts: [
+              {
+                account: "Platform Clearing",
+                debit_in_account_currency:
+                  params.type === "settlement" ? params.amount : 0,
+                credit_in_account_currency:
+                  params.type !== "settlement" ? params.amount : 0,
+                reference_name: params.orderId,
+              },
+            ],
+            user_remark: `UCE ${params.type}: ${params.orderId}`,
+          }),
+        });
+        if (!res.ok) logger.warn(`ERPNext JE failed: ${res.status}`);
+        else logger.info(`ERPNext JE posted: ${params.type} ${params.orderId}`);
+      } catch (err: any) {
+        logger.warn(`ERPNext posting error (non-fatal): ${err.message}`);
+      }
+    },
+
+    /** Issue a Verifiable Credential via walt.id */
+    async issueVerifiableCredential(params: {
+      subjectId: string;
+      type: string;
+      claims: Record<string, unknown>;
+    }): Promise<string> {
+      const issuerUrl = process.env.WALT_ID_ISSUER_URL;
+      const apiKey = process.env.WALT_ID_API_KEY;
+      const issuerDid = process.env.WALT_ID_DID;
+      if (!issuerUrl || !apiKey || !issuerDid) {
+        logger.warn("walt.id not configured — returning stub VC ID");
+        return `stub-vc-${params.subjectId}-${Date.now()}`;
+      }
+      try {
+        const res = await fetch(`${issuerUrl}/openid4vc/jwt/issue`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            issuerDid,
+            subjectDid: params.subjectId,
+            credentialConfigurationId: params.type,
+            credentialData: params.claims,
+          }),
+        });
+        if (!res.ok) throw new Error(`walt.id issue failed: ${res.status}`);
+        const body: any = await res.json();
+        logger.info(`VC issued: ${params.type} for ${params.subjectId}`);
+        return body.id || body.credential_id || `vc-${Date.now()}`;
+      } catch (err: any) {
+        logger.error(`issueVerifiableCredential error: ${err.message}`);
+        throw err;
+      }
+    },
+
+    /** Activate a vendor in the platform */
+    async activateVendor(vendorId: string): Promise<void> {
+      const store = container.resolve("store") as any;
+      await store
+        ?.updateStores?.({ id: vendorId, status: "active" } as any)
+        .catch(() => null);
+      await eventBus.emit?.("vendor.activated", { vendor_id: vendorId });
+      logger.info(`activateVendor: ${vendorId}`);
+    },
+
+    /** Sync a customer or vendor record to Payload CMS */
+    async syncCustomerToCms(
+      entityId: string,
+      type: "customer" | "vendor",
+    ): Promise<void> {
+      const cmsUrl = process.env.PAYLOAD_CMS_URL;
+      const apiKey = process.env.PAYLOAD_API_KEY;
+      if (!cmsUrl || !apiKey) {
+        logger.warn(
+          `Payload CMS not configured — skipping syncCustomerToCms(${entityId})`,
+        );
+        return;
+      }
+      try {
+        await fetch(`${cmsUrl}/api/${type}s`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `users API-Key ${apiKey}`,
+          },
+          body: JSON.stringify({
+            externalId: entityId,
+            syncedAt: new Date().toISOString(),
+          }),
+        });
+        logger.info(`Payload CMS sync: ${type} ${entityId}`);
+      } catch (err: any) {
+        logger.warn(`Payload CMS sync error (non-fatal): ${err.message}`);
+      }
+    },
+
+    /** Update fulfillment tracking state */
+    async updateFulfillmentTracking(params: {
+      fulfillmentId: string;
+      status: string;
+      metadata?: Record<string, unknown>;
+    }): Promise<void> {
+      await fulfillmentLegsService.updateFulfillmentLegs({
+        id: params.fulfillmentId,
+        status: params.status,
+        metadata: params.metadata,
+      } as any);
+      logger.info(
+        `fulfillmentTracking: ${params.fulfillmentId} → ${params.status}`,
+      );
+    },
   };
 }
 

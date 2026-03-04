@@ -1,14 +1,15 @@
+import { vi } from "vitest";
 import { GET, POST } from "../../../src/api/store/bookings/route.js";
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
   body: {},
   auth_context: {},
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -24,7 +25,7 @@ const createMockRes = () => {
 describe("Store Route Auth Boundaries", () => {
   describe("GET /store/bookings", () => {
     it("should return 401 for unauthenticated GET to /store/bookings", async () => {
-      const listBookings = jest.fn();
+      const listBookings = vi.fn();
       const req = createMockReq({
         booking: { listBookings },
       });
@@ -73,7 +74,7 @@ describe("Store Route Auth Boundaries", () => {
 
   describe("POST /store/bookings", () => {
     it("should return 401 for unauthenticated POST to /store/bookings", async () => {
-      const createBooking = jest.fn();
+      const createBooking = vi.fn();
       const req = createMockReq({
         body: {
           service_id: "svc_01",
@@ -128,7 +129,7 @@ describe("Store Route Auth Boundaries", () => {
 
   describe("protected store routes – authentication required", () => {
     it("should reject unauthenticated access with empty auth_context", async () => {
-      const listBookings = jest.fn();
+      const listBookings = vi.fn();
       const req = createMockReq({
         auth_context: {},
         booking: { listBookings },
@@ -146,7 +147,7 @@ describe("Store Route Auth Boundaries", () => {
     });
 
     it("should reject unauthenticated access with null actor_id", async () => {
-      const listBookings = jest.fn();
+      const listBookings = vi.fn();
       const req = createMockReq({
         auth_context: { actor_id: null },
         booking: { listBookings },
@@ -159,7 +160,7 @@ describe("Store Route Auth Boundaries", () => {
     });
 
     it("should reject unauthenticated access with undefined actor_id", async () => {
-      const listBookings = jest.fn();
+      const listBookings = vi.fn();
       const req = createMockReq({
         auth_context: { actor_id: undefined },
         booking: { listBookings },
@@ -172,7 +173,7 @@ describe("Store Route Auth Boundaries", () => {
     });
 
     it("should accept valid customer authentication token", async () => {
-      const listBookings = jest.fn().mockResolvedValue([]);
+      const listBookings = vi.fn().mockResolvedValue([]);
       const retrieveServiceProduct = jest
         .fn()
         .mockResolvedValue({ id: "svc_01" });
@@ -191,7 +192,7 @@ describe("Store Route Auth Boundaries", () => {
     });
 
     it("should ensure auth check runs before any service calls on POST", async () => {
-      const createBooking = jest.fn();
+      const createBooking = vi.fn();
       const resolveOrder: string[] = [];
       const req = createMockReq({
         body: {
@@ -211,7 +212,7 @@ describe("Store Route Auth Boundaries", () => {
 
   describe("request validation on protected routes", () => {
     it("should return 400 for booking with missing required fields", async () => {
-      const createBooking = jest.fn();
+      const createBooking = vi.fn();
       const req = createMockReq({
         auth_context: { actor_id: "cust_01" },
         body: { service_id: "" },
@@ -228,7 +229,7 @@ describe("Store Route Auth Boundaries", () => {
     });
 
     it("should return 400 for booking without customer_email", async () => {
-      const createBooking = jest.fn();
+      const createBooking = vi.fn();
       const req = createMockReq({
         auth_context: { actor_id: "cust_01" },
         body: { service_id: "svc_01", start_time: "2026-03-15T10:00:00Z" },
@@ -242,7 +243,7 @@ describe("Store Route Auth Boundaries", () => {
     });
 
     it("should validate that auth passes before validation runs", async () => {
-      const createBooking = jest.fn();
+      const createBooking = vi.fn();
       const req = createMockReq({
         body: {},
         booking: { createBooking },

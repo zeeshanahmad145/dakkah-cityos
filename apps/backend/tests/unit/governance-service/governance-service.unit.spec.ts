@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -37,12 +38,12 @@ describe("GovernanceModuleService", () => {
   let service: GovernanceModuleService;
 
   beforeEach(() => {
-    service = new GovernanceModuleService();
+    service = new GovernanceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
   });
 
   describe("resolveEffectivePolicies", () => {
     it("returns empty object when no authorities found", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
 
       const result = await service.resolveEffectivePolicies("tenant-1");
       expect(result).toEqual({});
@@ -64,7 +65,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("deep merges country policies over region policies", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "r1",
           type: "region",
@@ -92,7 +93,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("merges region + country + multiple authorities sorted by jurisdiction_level", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "r1",
           type: "region",
@@ -124,7 +125,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("wraps non-array authorities response (single object) in array", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue({
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue({
         id: "r1",
         type: "region",
         policies: { tax: { rate: 0.2 } },
@@ -135,14 +136,14 @@ describe("GovernanceModuleService", () => {
     });
 
     it("filters out falsy values when wrapping non-array response", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue(null);
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue(null);
 
       const result = await service.resolveEffectivePolicies("tenant-1");
       expect(result).toEqual({});
     });
 
     it("skips authorities that have no policies field", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         { id: "r1", type: "region" },
         {
           id: "c1",
@@ -157,7 +158,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("skips region with no policies but merges country policies", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         { id: "r1", type: "region" },
         {
           id: "c1",
@@ -172,7 +173,7 @@ describe("GovernanceModuleService", () => {
 
     describe("deepMerge behavior (tested indirectly)", () => {
       it("deeply merges nested objects", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -205,7 +206,7 @@ describe("GovernanceModuleService", () => {
       });
 
       it("arrays in source override arrays in target", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -229,7 +230,7 @@ describe("GovernanceModuleService", () => {
       });
 
       it("primitives in source override primitives in target", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -259,7 +260,7 @@ describe("GovernanceModuleService", () => {
       });
 
       it("source null overrides target object", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -281,7 +282,7 @@ describe("GovernanceModuleService", () => {
       });
 
       it("source object merges into target when both are objects", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -299,7 +300,7 @@ describe("GovernanceModuleService", () => {
       });
 
       it("array in source replaces object in target", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -317,7 +318,7 @@ describe("GovernanceModuleService", () => {
       });
 
       it("object in source replaces array in target", async () => {
-        jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+        vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
           {
             id: "r1",
             type: "region",
@@ -336,7 +337,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("authorities without jurisdiction_level default to 0 for sorting", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "a1",
           type: "authority",
@@ -444,7 +445,7 @@ describe("GovernanceModuleService", () => {
 
   describe("getCommercePolicy", () => {
     it("returns commerce key from effective policies", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "r1",
           type: "region",
@@ -460,7 +461,7 @@ describe("GovernanceModuleService", () => {
     });
 
     it("returns empty object when no commerce policy exists", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "r1",
           type: "region",
@@ -473,14 +474,14 @@ describe("GovernanceModuleService", () => {
     });
 
     it("returns empty object when no authorities exist", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([]);
 
       const result = await service.getCommercePolicy("tenant-1");
       expect(result).toEqual({});
     });
 
     it("returns merged commerce policies from multiple authority levels", async () => {
-      jest.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
+      vi.spyOn(service, "listGovernanceAuthorities").mockResolvedValue([
         {
           id: "r1",
           type: "region",

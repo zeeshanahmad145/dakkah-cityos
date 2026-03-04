@@ -90,6 +90,34 @@ function sentryRequestMiddleware(
   });
 }
 
+/**
+ * Phase 4b — Healthcare RBAC
+ * Ensures a customer can only access their own patient records.
+ * Applied to /store/healthcare routes that carry a :patient_id param.
+ */
+function ensurePatientOwnership(
+  req: MedusaRequest,
+  res: MedusaResponse,
+  next: MedusaNextFunction,
+) {
+  const patientId = (req.params as Record<string, string>)?.patient_id;
+  const actorId = (req as any).auth_context?.actor_id;
+
+  if (!actorId) {
+    res.status(401).json({ message: "Authentication required" });
+    return;
+  }
+
+  if (patientId && patientId !== actorId) {
+    res.status(403).json({
+      message: "Access denied: you may only access your own patient records",
+    });
+    return;
+  }
+
+  next();
+}
+
 export default defineMiddlewares({
   routes: [
     {
@@ -170,6 +198,31 @@ export default defineMiddlewares({
     },
     {
       matcher: "/store/volume-pricing/**",
+      middlewares: [storeCorsMiddleware],
+    },
+    // Phase 4a-4b: Healthcare RBAC + Travel CORS
+    {
+      matcher: "/store/healthcare",
+      middlewares: [storeCorsMiddleware],
+    },
+    {
+      matcher: "/store/healthcare/**",
+      middlewares: [storeCorsMiddleware],
+    },
+    {
+      matcher: "/store/healthcare/appointments/:patient_id*",
+      middlewares: [ensurePatientOwnership],
+    },
+    {
+      matcher: "/store/healthcare/records/:patient_id*",
+      middlewares: [ensurePatientOwnership],
+    },
+    {
+      matcher: "/store/travel",
+      middlewares: [storeCorsMiddleware],
+    },
+    {
+      matcher: "/store/travel/**",
       middlewares: [storeCorsMiddleware],
     },
   ],

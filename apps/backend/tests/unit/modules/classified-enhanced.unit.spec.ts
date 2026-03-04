@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,8 +57,8 @@ describe("ClassifiedModuleService – Enhanced", () => {
   let service: ClassifiedModuleService;
 
   beforeEach(() => {
-    service = new ClassifiedModuleService();
-    jest.clearAllMocks();
+    service = new ClassifiedModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("renewListing", () => {
@@ -103,7 +104,7 @@ describe("ClassifiedModuleService – Enhanced", () => {
   describe("searchListings", () => {
     it("returns published listings by default", async () => {
       const listings = [{ id: "cl-1", status: "published", price: 100 }];
-      jest.spyOn(service, "listClassifiedListings").mockResolvedValue(listings);
+      vi.spyOn(service, "listClassifiedListings").mockResolvedValue(listings);
 
       const result = await service.searchListings({});
 
@@ -126,7 +127,7 @@ describe("ClassifiedModuleService – Enhanced", () => {
     });
 
     it("filters by price range", async () => {
-      jest.spyOn(service, "listClassifiedListings").mockResolvedValue([
+      vi.spyOn(service, "listClassifiedListings").mockResolvedValue([
         { id: "cl-1", price: 50 },
         { id: "cl-2", price: 150 },
         { id: "cl-3", price: 250 },
@@ -150,7 +151,7 @@ describe("ClassifiedModuleService – Enhanced", () => {
       const flagSpy = jest
         .spyOn(service, "createListingFlags")
         .mockResolvedValue({ id: "flag-1" });
-      jest.spyOn(service, "updateClassifiedListings").mockResolvedValue({});
+      vi.spyOn(service, "updateClassifiedListings").mockResolvedValue({});
 
       const result = await service.flagListing(
         "cl-1",
@@ -177,11 +178,11 @@ describe("ClassifiedModuleService – Enhanced", () => {
   describe("expireOldListings", () => {
     it("expires listings past their expiry date", async () => {
       const past = new Date(Date.now() - 86400000).toISOString();
-      jest.spyOn(service, "listClassifiedListings").mockResolvedValue([
+      vi.spyOn(service, "listClassifiedListings").mockResolvedValue([
         { id: "cl-1", expires_at: past },
         { id: "cl-2", expires_at: past },
       ]);
-      jest.spyOn(service, "updateClassifiedListings").mockResolvedValue({});
+      vi.spyOn(service, "updateClassifiedListings").mockResolvedValue({});
 
       const result = await service.expireOldListings();
 

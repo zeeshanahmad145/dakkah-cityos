@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -61,14 +62,14 @@ describe("PromotionExtModuleService", () => {
   let service: PromotionExtModuleService;
 
   beforeEach(() => {
-    service = new PromotionExtModuleService();
-    jest.clearAllMocks();
+    service = new PromotionExtModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getActivePromotions", () => {
     it("returns active promotions filtered by tenant", async () => {
       const promotions = [{ id: "p1", is_active: true }];
-      jest.spyOn(service, "listGiftCardExts").mockResolvedValue(promotions);
+      vi.spyOn(service, "listGiftCardExts").mockResolvedValue(promotions);
 
       const result = await service.getActivePromotions("t1");
       expect(result).toEqual(promotions);
@@ -97,7 +98,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns invalid when promotion expired", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         is_active: true,
         expires_at: new Date(Date.now() - 100000),
         remaining_value: 100,
@@ -109,7 +110,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns invalid when budget exhausted", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         is_active: true,
         expires_at: null,
         remaining_value: 0,
@@ -121,7 +122,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns partial apply when budget less than total", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         is_active: true,
         expires_at: null,
         remaining_value: 50,
@@ -136,7 +137,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns valid when all rules pass", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         is_active: true,
         expires_at: null,
         remaining_value: 200,
@@ -151,7 +152,7 @@ describe("PromotionExtModuleService", () => {
 
   describe("calculateDiscount", () => {
     it("calculates discount across line items", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         is_active: true,
         remaining_value: 50,
       });
@@ -177,7 +178,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("caps discount at remaining value", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         is_active: true,
         remaining_value: 10,
       });
@@ -191,7 +192,7 @@ describe("PromotionExtModuleService", () => {
 
   describe("getPromotionUsageStats", () => {
     it("calculates usage statistics", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         initial_value: 100,
         remaining_value: 25,
         is_active: true,

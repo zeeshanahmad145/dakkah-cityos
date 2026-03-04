@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn };
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn };
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 describe("Fleet Dispatch Workflow", () => {
@@ -19,7 +20,7 @@ describe("Fleet Dispatch Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/fleet-dispatch.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     prepareOrderForDispatchStep = calls.find(
       (c: any) => c[0] === "prepare-order-dispatch-step",
@@ -66,7 +67,7 @@ describe("Fleet Dispatch Workflow", () => {
 
   it("should assign driver to order", async () => {
     const container = mockContainer({
-      fleetbaseService: { assignDriver: jest.fn().mockResolvedValue({}) },
+      fleetbaseService: { assignDriver: vi.fn().mockResolvedValue({}) },
     });
     const result = await assignDriverStep(
       { orderId: "o1", driverId: "d1" },
@@ -93,7 +94,7 @@ describe("Inventory Replenishment Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/inventory-replenishment.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     checkStockAlertStep = calls.find(
       (c: any) => c[0] === "check-stock-alert-step",
@@ -186,7 +187,7 @@ describe("Dispute Resolution Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/dispute-resolution.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     openDisputeStep = calls.find((c: any) => c[0] === "open-dispute-step")?.[1];
     reviewDisputeStep = calls.find(
@@ -200,7 +201,7 @@ describe("Dispute Resolution Workflow", () => {
   it("should open a dispute", async () => {
     const dispute = { id: "d_1", status: "open" };
     const container = mockContainer({
-      dispute: { createDisputes: jest.fn().mockResolvedValue(dispute) },
+      dispute: { createDisputes: vi.fn().mockResolvedValue(dispute) },
     });
     const result = await openDisputeStep(
       {
@@ -218,7 +219,7 @@ describe("Dispute Resolution Workflow", () => {
   it("should review a dispute", async () => {
     const updated = { id: "d_1", status: "under_review" };
     const container = mockContainer({
-      dispute: { updateDisputes: jest.fn().mockResolvedValue(updated) },
+      dispute: { updateDisputes: vi.fn().mockResolvedValue(updated) },
     });
     const result = await reviewDisputeStep({ disputeId: "d_1" }, { container });
     expect(result.dispute.status).toBe("under_review");
@@ -227,7 +228,7 @@ describe("Dispute Resolution Workflow", () => {
   it("should resolve a dispute", async () => {
     const resolved = { id: "d_1", status: "resolved", resolution: "refund" };
     const container = mockContainer({
-      dispute: { updateDisputes: jest.fn().mockResolvedValue(resolved) },
+      dispute: { updateDisputes: vi.fn().mockResolvedValue(resolved) },
     });
     const result = await resolveDisputeStep(
       { disputeId: "d_1", resolution: "refund" },

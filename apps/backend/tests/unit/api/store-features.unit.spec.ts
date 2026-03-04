@@ -1,19 +1,20 @@
-jest.mock("../../../src/lib/api-error-handler", () => ({
-  handleApiError: jest.fn((res, error, context) => {
+import { vi } from "vitest";
+vi.mock("../../../src/lib/api-error-handler", () => ({
+  handleApiError: vi.fn((res, error, context) => {
     return res.status(500).json({ message: `${context} failed` });
   }),
 }));
 
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 import { GET } from "../../../src/api/store/features/route";
 
 function makeMockRes() {
   const res: any = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    send: vi.fn().mockReturnThis(),
   };
   return res;
 }
@@ -23,7 +24,7 @@ describe("GET /store/features", () => {
   let mockRes: any;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockReq = {
       headers: { authorization: "Bearer token_123" },
       query: {},
@@ -121,7 +122,7 @@ describe("GET /store/features", () => {
     };
     mockFetch.mockResolvedValue({
       ok: true,
-      json: jest.fn().mockResolvedValue({ features: adminFeatures }),
+      json: vi.fn().mockResolvedValue({ features: adminFeatures }),
     });
     await GET(mockReq, mockRes);
     const features = mockRes.json.mock.calls[0][0].features;

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -54,8 +55,8 @@ describe("NodeModuleService – Hierarchy", () => {
   let service: NodeModuleService;
 
   beforeEach(() => {
-    service = new NodeModuleService();
-    jest.clearAllMocks();
+    service = new NodeModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getNodePath", () => {
@@ -92,7 +93,7 @@ describe("NodeModuleService – Hierarchy", () => {
     });
 
     it("returns single-element path for root node", async () => {
-      jest.spyOn(service, "retrieveNode").mockResolvedValueOnce({
+      vi.spyOn(service, "retrieveNode").mockResolvedValueOnce({
         id: "n1",
         name: "Metro City",
         type: "CITY",
@@ -106,7 +107,7 @@ describe("NodeModuleService – Hierarchy", () => {
     });
 
     it("returns empty path when node not found", async () => {
-      jest.spyOn(service, "retrieveNode").mockResolvedValueOnce(null);
+      vi.spyOn(service, "retrieveNode").mockResolvedValueOnce(null);
 
       const result = await service.getNodePath("nonexistent");
       expect(result).toHaveLength(0);
@@ -139,7 +140,7 @@ describe("NodeModuleService – Hierarchy", () => {
     });
 
     it("returns empty array when node has no children", async () => {
-      jest.spyOn(service, "listNodes").mockResolvedValue([]);
+      vi.spyOn(service, "listNodes").mockResolvedValue([]);
 
       const result = await service.getNodeDescendants("n1");
       expect(result).toHaveLength(0);
@@ -148,7 +149,7 @@ describe("NodeModuleService – Hierarchy", () => {
 
   describe("validateNodePlacement", () => {
     it("returns valid for correct parent-child relationship", async () => {
-      jest.spyOn(service, "retrieveNode").mockResolvedValue({
+      vi.spyOn(service, "retrieveNode").mockResolvedValue({
         id: "n1",
         type: "CITY",
       });
@@ -158,7 +159,7 @@ describe("NodeModuleService – Hierarchy", () => {
     });
 
     it("returns invalid for wrong parent type", async () => {
-      jest.spyOn(service, "retrieveNode").mockResolvedValue({
+      vi.spyOn(service, "retrieveNode").mockResolvedValue({
         id: "n1",
         type: "ZONE",
       });

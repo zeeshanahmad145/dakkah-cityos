@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -74,27 +75,27 @@ describe("BookingModuleService", () => {
   let service: BookingModuleService;
 
   beforeEach(() => {
-    service = new BookingModuleService();
-    jest.clearAllMocks();
+    service = new BookingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createBooking", () => {
     it("creates a booking when slot is available", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         duration_minutes: 60,
         location_type: "in_person",
         location_address: "123 Main St",
       });
-      jest.spyOn(service, "isSlotAvailable").mockResolvedValue(true);
+      vi.spyOn(service, "isSlotAvailable").mockResolvedValue(true);
       jest
         .spyOn(service, "generateBookingNumber")
         .mockResolvedValue("BK-TEST-1234");
       const createSpy = jest
         .spyOn(service, "createBookings")
         .mockResolvedValue({ id: "bk-1", booking_number: "BK-TEST-1234" });
-      jest.spyOn(service, "createBookingItems").mockResolvedValue({});
-      jest.spyOn(service, "scheduleReminders").mockResolvedValue(undefined);
+      vi.spyOn(service, "createBookingItems").mockResolvedValue({});
+      vi.spyOn(service, "scheduleReminders").mockResolvedValue(undefined);
 
       const result = await service.createBooking({
         serviceProductId: "svc-1",
@@ -114,11 +115,11 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when slot is not available", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         duration_minutes: 60,
       });
-      jest.spyOn(service, "isSlotAvailable").mockResolvedValue(false);
+      vi.spyOn(service, "isSlotAvailable").mockResolvedValue(false);
 
       await expect(
         service.createBooking({
@@ -133,14 +134,14 @@ describe("BookingModuleService", () => {
 
   describe("cancelBooking", () => {
     it("cancels a pending booking", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "pending",
         service_product_id: "svc-1",
         start_time: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
         total: 10000,
       });
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         cancellation_policy_hours: 24,
       });
@@ -150,7 +151,7 @@ describe("BookingModuleService", () => {
           id: "bk-1",
           status: "cancelled",
         });
-      jest.spyOn(service, "cancelReminders").mockResolvedValue(undefined);
+      vi.spyOn(service, "cancelReminders").mockResolvedValue(undefined);
 
       const result = await service.cancelBooking(
         "bk-1",
@@ -169,7 +170,7 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when booking is already completed", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "completed",
       });
@@ -180,7 +181,7 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when booking is already cancelled", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "cancelled",
       });
@@ -193,7 +194,7 @@ describe("BookingModuleService", () => {
 
   describe("confirmBooking", () => {
     it("confirms a pending booking", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "pending",
       });
@@ -215,7 +216,7 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when booking is not pending", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "confirmed",
       });
@@ -228,7 +229,7 @@ describe("BookingModuleService", () => {
 
   describe("completeBooking", () => {
     it("completes a confirmed booking", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "confirmed",
       });
@@ -251,7 +252,7 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when booking cannot be completed from current status", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "cancelled",
       });
@@ -264,7 +265,7 @@ describe("BookingModuleService", () => {
 
   describe("markNoShow", () => {
     it("marks a confirmed booking as no-show", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "confirmed",
       });
@@ -281,7 +282,7 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when booking is not confirmed", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "pending",
       });

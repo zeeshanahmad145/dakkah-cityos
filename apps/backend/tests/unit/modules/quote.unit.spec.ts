@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -62,8 +63,8 @@ describe("QuoteModuleService", () => {
   let service: QuoteModuleService;
 
   beforeEach(() => {
-    service = new QuoteModuleService();
-    jest.clearAllMocks();
+    service = new QuoteModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("generateQuoteNumber", () => {
@@ -79,7 +80,7 @@ describe("QuoteModuleService", () => {
     });
 
     it("starts at 0001 when no quotes exist", async () => {
-      jest.spyOn(service, "listQuotes").mockResolvedValue([]);
+      vi.spyOn(service, "listQuotes").mockResolvedValue([]);
 
       const result = await service.generateQuoteNumber();
 
@@ -90,7 +91,7 @@ describe("QuoteModuleService", () => {
 
   describe("calculateQuoteTotals", () => {
     it("calculates totals from line items", async () => {
-      jest.spyOn(service, "listQuoteItems").mockResolvedValue([
+      vi.spyOn(service, "listQuoteItems").mockResolvedValue([
         {
           id: "qi-1",
           unit_price: "1000",
@@ -125,7 +126,7 @@ describe("QuoteModuleService", () => {
     });
 
     it("handles empty line items", async () => {
-      jest.spyOn(service, "listQuoteItems").mockResolvedValue([]);
+      vi.spyOn(service, "listQuoteItems").mockResolvedValue([]);
       const updateQuoteSpy = jest
         .spyOn(service, "updateQuotes")
         .mockResolvedValue({});
@@ -175,7 +176,7 @@ describe("QuoteModuleService", () => {
 
   describe("applyCustomDiscount", () => {
     it("applies a percentage discount", async () => {
-      jest.spyOn(service, "retrieveQuote").mockResolvedValue({
+      vi.spyOn(service, "retrieveQuote").mockResolvedValue({
         id: "q-1",
         subtotal: "10000",
         tax_total: "900",
@@ -196,7 +197,7 @@ describe("QuoteModuleService", () => {
     });
 
     it("applies a fixed discount", async () => {
-      jest.spyOn(service, "retrieveQuote").mockResolvedValue({
+      vi.spyOn(service, "retrieveQuote").mockResolvedValue({
         id: "q-1",
         subtotal: "10000",
         tax_total: "900",
@@ -219,11 +220,11 @@ describe("QuoteModuleService", () => {
 
   describe("createCartFromQuote", () => {
     it("converts quote items to cart items", async () => {
-      jest.spyOn(service, "retrieveQuote").mockResolvedValue({
+      vi.spyOn(service, "retrieveQuote").mockResolvedValue({
         id: "q-1",
         quote_number: "Q-2026-0001",
       });
-      jest.spyOn(service, "listQuoteItems").mockResolvedValue([
+      vi.spyOn(service, "listQuoteItems").mockResolvedValue([
         {
           id: "qi-1",
           variant_id: "var-1",

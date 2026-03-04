@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { GET as listStockAlerts } from "../../../src/api/admin/inventory-ext/stock-alerts/route";
 import { GET as listTransfers } from "../../../src/api/admin/inventory-ext/transfers/route";
 import {
@@ -6,18 +7,18 @@ import {
 } from "../../../src/api/admin/shipping-ext/carriers/route";
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
 describe("Admin Inventory Extension Routes", () => {
   describe("GET /admin/inventory-ext/stock-alerts", () => {
     const createMockService = () => ({
-      listStockAlerts: jest.fn(),
+      listStockAlerts: vi.fn(),
     });
 
     const createReq = (mockService: any, overrides: any = {}) => ({
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: {},
       body: {},
@@ -103,11 +104,11 @@ describe("Admin Inventory Extension Routes", () => {
 
   describe("GET /admin/inventory-ext/transfers", () => {
     const createMockService = () => ({
-      listWarehouseTransfers: jest.fn(),
+      listWarehouseTransfers: vi.fn(),
     });
 
     const createReq = (mockService: any, overrides: any = {}) => ({
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: {},
       body: {},
@@ -156,12 +157,12 @@ describe("Admin Inventory Extension Routes", () => {
 describe("Admin Shipping Extension Routes", () => {
   describe("GET /admin/shipping-ext/carriers", () => {
     const createMockService = () => ({
-      listCarrierConfigs: jest.fn(),
-      createCarrierConfigs: jest.fn(),
+      listCarrierConfigs: vi.fn(),
+      createCarrierConfigs: vi.fn(),
     });
 
     const createReq = (mockService: any, overrides: any = {}) => ({
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: {},
       body: {},
@@ -221,12 +222,12 @@ describe("Admin Shipping Extension Routes", () => {
 
   describe("POST /admin/shipping-ext/carriers", () => {
     const createMockService = () => ({
-      listCarrierConfigs: jest.fn(),
-      createCarrierConfigs: jest.fn(),
+      listCarrierConfigs: vi.fn(),
+      createCarrierConfigs: vi.fn(),
     });
 
     const createReq = (mockService: any, overrides: any = {}) => ({
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: {},
       body: {},

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,13 +60,13 @@ describe("LoyaltyModuleService", () => {
   let service: LoyaltyModuleService;
 
   beforeEach(() => {
-    service = new LoyaltyModuleService();
-    jest.clearAllMocks();
+    service = new LoyaltyModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("earnPoints", () => {
     it("should add points to active account", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc_01",
         status: "active",
         points_balance: 100,
@@ -73,11 +74,11 @@ describe("LoyaltyModuleService", () => {
         tenant_id: "t1",
         program_id: "p1",
       });
-      jest.spyOn(service, "updateLoyaltyAccounts").mockResolvedValue({});
+      vi.spyOn(service, "updateLoyaltyAccounts").mockResolvedValue({});
       jest
         .spyOn(service, "createPointTransactions")
         .mockResolvedValue({ id: "tx_01" });
-      jest.spyOn(service, "calculateTier").mockResolvedValue("silver");
+      vi.spyOn(service, "calculateTier").mockResolvedValue("silver");
 
       const result = await service.earnPoints({
         accountId: "acc_01",
@@ -87,7 +88,7 @@ describe("LoyaltyModuleService", () => {
     });
 
     it("should throw when account is not active", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc_01",
         status: "suspended",
         points_balance: 100,

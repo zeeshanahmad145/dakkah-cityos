@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -65,8 +66,8 @@ describe("ParkingModuleService", () => {
   let service: ParkingModuleService;
 
   beforeEach(() => {
-    service = new ParkingModuleService();
-    jest.clearAllMocks();
+    service = new ParkingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("checkIn", () => {
@@ -96,7 +97,7 @@ describe("ParkingModuleService", () => {
     });
 
     it("throws when already checked in", async () => {
-      jest.spyOn(service, "retrieveParkingSession").mockResolvedValue({
+      vi.spyOn(service, "retrieveParkingSession").mockResolvedValue({
         id: "s1",
         status: "active",
         checked_in_at: new Date(),
@@ -109,7 +110,7 @@ describe("ParkingModuleService", () => {
   describe("checkOut", () => {
     it("calculates fee based on duration", async () => {
       const startTime = new Date(Date.now() - 2.9 * 60 * 60 * 1000);
-      jest.spyOn(service, "retrieveParkingSession").mockResolvedValue({
+      vi.spyOn(service, "retrieveParkingSession").mockResolvedValue({
         id: "s1",
         status: "active",
         checked_in_at: startTime,
@@ -118,7 +119,7 @@ describe("ParkingModuleService", () => {
       jest
         .spyOn(service, "retrieveParkingZone")
         .mockResolvedValue({ id: "z1", hourly_rate: 10 });
-      jest.spyOn(service, "updateParkingSessions").mockResolvedValue({});
+      vi.spyOn(service, "updateParkingSessions").mockResolvedValue({});
 
       const result = await service.checkOut("s1");
 

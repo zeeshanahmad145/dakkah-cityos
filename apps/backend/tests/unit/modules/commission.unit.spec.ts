@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -47,13 +48,13 @@ describe("CommissionModuleService", () => {
   let service: CommissionModuleService;
 
   beforeEach(() => {
-    service = new CommissionModuleService();
-    jest.clearAllMocks();
+    service = new CommissionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("calculateCommission", () => {
     it("calculates percentage-based commission", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule-1",
           commission_type: "percentage",
@@ -78,7 +79,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("calculates flat-rate commission", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule-1",
           commission_type: "flat",
@@ -102,7 +103,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("calculates tiered percentage commission", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule-1",
           commission_type: "tiered_percentage",
@@ -130,7 +131,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("throws when no commission rule found", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([]);
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([]);
 
       await expect(
         service.calculateCommission({
@@ -145,7 +146,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("defaults to percentage calculation for unknown commission type", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule-1",
           commission_type: "unknown_type",
@@ -170,7 +171,7 @@ describe("CommissionModuleService", () => {
 
   describe("createCommissionTransaction", () => {
     it("creates a transaction with calculated commission", async () => {
-      jest.spyOn(service, "calculateCommission").mockResolvedValue({
+      vi.spyOn(service, "calculateCommission").mockResolvedValue({
         commissionAmount: 100,
         commissionRate: 10,
         commissionFlat: null,
@@ -204,7 +205,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("includes store ID when provided", async () => {
-      jest.spyOn(service, "calculateCommission").mockResolvedValue({
+      vi.spyOn(service, "calculateCommission").mockResolvedValue({
         commissionAmount: 50,
         commissionRate: 5,
         commissionFlat: null,
@@ -232,7 +233,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("handles tiered commission in transaction creation", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule-1",
           commission_type: "tiered_percentage",

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -80,8 +81,8 @@ describe("FitnessModuleService", () => {
   let service: FitnessModuleService;
 
   beforeEach(() => {
-    service = new FitnessModuleService();
-    jest.clearAllMocks();
+    service = new FitnessModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createMembership", () => {
@@ -127,7 +128,7 @@ describe("FitnessModuleService", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 30);
 
-      jest.spyOn(service, "listGymMemberships").mockResolvedValue([
+      vi.spyOn(service, "listGymMemberships").mockResolvedValue([
         {
           id: "mem-1",
           status: "active",
@@ -146,7 +147,7 @@ describe("FitnessModuleService", () => {
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - 10);
 
-      jest.spyOn(service, "listGymMemberships").mockResolvedValue([
+      vi.spyOn(service, "listGymMemberships").mockResolvedValue([
         {
           id: "mem-1",
           status: "active",
@@ -162,7 +163,7 @@ describe("FitnessModuleService", () => {
     });
 
     it("returns inactive when no memberships exist", async () => {
-      jest.spyOn(service, "listGymMemberships").mockResolvedValue([]);
+      vi.spyOn(service, "listGymMemberships").mockResolvedValue([]);
 
       const result = await service.checkMembershipStatus("member-1");
 
@@ -173,11 +174,11 @@ describe("FitnessModuleService", () => {
 
   describe("getClassAvailability", () => {
     it("returns correct availability counts", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "class-1",
         max_capacity: 20,
       });
-      jest.spyOn(service, "listClassBookings").mockResolvedValue([
+      vi.spyOn(service, "listClassBookings").mockResolvedValue([
         { id: "b1", status: "booked" },
         { id: "b2", status: "booked" },
         { id: "b3", status: "checked_in" },
@@ -192,11 +193,11 @@ describe("FitnessModuleService", () => {
     });
 
     it("reports full when at capacity", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "class-1",
         max_capacity: 2,
       });
-      jest.spyOn(service, "listClassBookings").mockResolvedValue([
+      vi.spyOn(service, "listClassBookings").mockResolvedValue([
         { id: "b1", status: "booked" },
         { id: "b2", status: "booked" },
       ]);
@@ -208,10 +209,10 @@ describe("FitnessModuleService", () => {
     });
 
     it("defaults to capacity of 20 when not specified", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "class-1",
       });
-      jest.spyOn(service, "listClassBookings").mockResolvedValue([]);
+      vi.spyOn(service, "listClassBookings").mockResolvedValue([]);
 
       const result = await service.getClassAvailability("class-1");
 

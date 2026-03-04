@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   GET as listWishlists,
   POST as createWishlist,
@@ -9,15 +10,15 @@ import {
 } from "../../../src/api/admin/wishlists/[id]/route";
 
 const createMockService = () => ({
-  listAndCountWishlists: jest.fn(),
-  retrieveWishlist: jest.fn(),
-  createWishlists: jest.fn(),
-  updateWishlists: jest.fn(),
-  deleteWishlists: jest.fn(),
+  listAndCountWishlists: vi.fn(),
+  retrieveWishlist: vi.fn(),
+  createWishlists: vi.fn(),
+  updateWishlists: vi.fn(),
+  deleteWishlists: vi.fn(),
 });
 
 const createReq = (mockService: any, overrides: any = {}) => ({
-  scope: { resolve: jest.fn(() => mockService) },
+  scope: { resolve: vi.fn(() => mockService) },
   query: {},
   params: {},
   body: {},
@@ -25,7 +26,7 @@ const createReq = (mockService: any, overrides: any = {}) => ({
 });
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
@@ -34,7 +35,7 @@ describe("Admin Wishlists Routes", () => {
 
   beforeEach(() => {
     mockService = createMockService();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("GET /admin/wishlists", () => {

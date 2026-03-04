@@ -21,7 +21,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("insurance") as unknown as any;
     const { id } = req.params;
-    const [item] = await mod.listInsuranceClaims({ id }, { take: 1 });
+    const [item] = await mod.listInsurancePolicies({ id }, { take: 1 });
     if (!item) return res.status(404).json({ message: "Not found" });
     return res.json({ item });
   } catch (error: unknown) {
@@ -38,7 +38,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       return res
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
-    const item = await mod.updateInsuranceClaims({ id, ...parsed.data });
+    const item = await mod.updateInsurancePolicies({ id, ...parsed.data });
     return res.json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin insurance id");
@@ -49,7 +49,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("insurance") as unknown as any;
     const { id } = req.params;
-    await mod.deleteInsuranceClaims([id]);
+    await mod.deleteInsurancePolicies([id]);
     return res.status(204).send();
   } catch (error: unknown) {
     handleApiError(res, error, "DELETE admin insurance id");

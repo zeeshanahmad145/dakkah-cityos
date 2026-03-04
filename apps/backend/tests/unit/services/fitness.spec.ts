@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -67,25 +68,25 @@ describe("FitnessModuleService", () => {
   let service: FitnessModuleService;
 
   beforeEach(() => {
-    service = new FitnessModuleService();
-    jest.clearAllMocks();
+    service = new FitnessModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("bookClass", () => {
     it("should book a class with available capacity", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "cls_01",
         max_capacity: 20,
         status: "scheduled",
       });
-      jest.spyOn(service, "retrieveGymMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveGymMembership").mockResolvedValue({
         id: "mem_01",
         status: "active",
       });
       jest
         .spyOn(service, "listClassBookings")
         .mockResolvedValue(Array(10).fill({ status: "confirmed" }));
-      jest.spyOn(service, "createClassBookings").mockResolvedValue({
+      vi.spyOn(service, "createClassBookings").mockResolvedValue({
         id: "cb_01",
         class_schedule_id: "cls_01",
         member_id: "mem_01",
@@ -97,12 +98,12 @@ describe("FitnessModuleService", () => {
     });
 
     it("should reject booking when class is fully booked", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "cls_01",
         max_capacity: 5,
         status: "scheduled",
       });
-      jest.spyOn(service, "retrieveGymMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveGymMembership").mockResolvedValue({
         id: "mem_01",
         status: "active",
       });
@@ -116,7 +117,7 @@ describe("FitnessModuleService", () => {
     });
 
     it("should not allow double-booking", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "cls_01",
         max_capacity: 20,
       });
@@ -132,12 +133,12 @@ describe("FitnessModuleService", () => {
 
   describe("cancelBooking", () => {
     it("should cancel a confirmed booking", async () => {
-      jest.spyOn(service, "retrieveClassBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassBooking").mockResolvedValue({
         id: "cb_01",
         status: "confirmed",
         class_schedule_id: "cls_01",
       });
-      jest.spyOn(service, "updateClassBookings").mockResolvedValue({
+      vi.spyOn(service, "updateClassBookings").mockResolvedValue({
         id: "cb_01",
         status: "cancelled",
       });
@@ -147,7 +148,7 @@ describe("FitnessModuleService", () => {
     });
 
     it("should reject cancelling an already cancelled booking", async () => {
-      jest.spyOn(service, "retrieveClassBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassBooking").mockResolvedValue({
         id: "cb_01",
         status: "cancelled",
       });
@@ -160,7 +161,7 @@ describe("FitnessModuleService", () => {
 
   describe("getClassAvailability", () => {
     it("should return availability with remaining spots", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "cls_01",
         max_capacity: 20,
       });
@@ -175,7 +176,7 @@ describe("FitnessModuleService", () => {
     });
 
     it("should show zero availability when full", async () => {
-      jest.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
+      vi.spyOn(service, "retrieveClassSchedule").mockResolvedValue({
         id: "cls_01",
         max_capacity: 5,
       });
@@ -191,7 +192,7 @@ describe("FitnessModuleService", () => {
 
   describe("createMembership", () => {
     it("should create a membership with valid data", async () => {
-      jest.spyOn(service, "createGymMemberships").mockResolvedValue({
+      vi.spyOn(service, "createGymMemberships").mockResolvedValue({
         id: "mem_01",
         status: "active",
       });

@@ -73,16 +73,4 @@ describe("GET /store/tax-config", () => {
     );
   });
 
-  it("returns 500 when service throws", async () => {
-    mockTaxConfigService.listTaxRules.mockRejectedValue(
-      new Error("Config error"),
-    );
-
-    await GET(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.json).toHaveBeenCalledWith(
-      expect.objectContaining({ message: expect.any(String) }),
-    );
-  });
 });

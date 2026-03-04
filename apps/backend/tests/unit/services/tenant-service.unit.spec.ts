@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -89,8 +90,8 @@ describe("TenantModuleService", () => {
   let service: TenantModuleService;
 
   beforeEach(() => {
-    service = new TenantModuleService();
-    jest.clearAllMocks();
+    service = new TenantModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("retrieveTenantBySlug", () => {
@@ -104,7 +105,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns null when no tenant found", async () => {
-      jest.spyOn(service, "listTenants").mockResolvedValue([]);
+      vi.spyOn(service, "listTenants").mockResolvedValue([]);
 
       const result = await service.retrieveTenantBySlug("nonexistent");
       expect(result).toBeNull();
@@ -128,7 +129,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns null when no tenant found", async () => {
-      jest.spyOn(service, "listTenants").mockResolvedValue([]);
+      vi.spyOn(service, "listTenants").mockResolvedValue([]);
 
       const result = await service.retrieveTenantByDomain("unknown.com");
       expect(result).toBeNull();
@@ -166,7 +167,7 @@ describe("TenantModuleService", () => {
     });
 
     it("falls back to domain when slug not found", async () => {
-      jest.spyOn(service, "retrieveTenantBySlug").mockResolvedValue(null);
+      vi.spyOn(service, "retrieveTenantBySlug").mockResolvedValue(null);
       jest
         .spyOn(service, "retrieveTenantByDomain")
         .mockResolvedValue({ id: "t2" });
@@ -179,8 +180,8 @@ describe("TenantModuleService", () => {
     });
 
     it("falls back to handle when slug and domain not found", async () => {
-      jest.spyOn(service, "retrieveTenantBySlug").mockResolvedValue(null);
-      jest.spyOn(service, "retrieveTenantByDomain").mockResolvedValue(null);
+      vi.spyOn(service, "retrieveTenantBySlug").mockResolvedValue(null);
+      vi.spyOn(service, "retrieveTenantByDomain").mockResolvedValue(null);
       jest
         .spyOn(service, "retrieveTenantByHandle")
         .mockResolvedValue({ id: "t3" });
@@ -201,7 +202,7 @@ describe("TenantModuleService", () => {
 
   describe("getTenantWithGovernance", () => {
     it("returns tenant with governance fields", async () => {
-      jest.spyOn(service, "retrieveTenant").mockResolvedValue({
+      vi.spyOn(service, "retrieveTenant").mockResolvedValue({
         id: "t1",
         name: "Test",
         country_id: "SA",
@@ -218,7 +219,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns null when tenant not found", async () => {
-      jest.spyOn(service, "retrieveTenant").mockResolvedValue(null);
+      vi.spyOn(service, "retrieveTenant").mockResolvedValue(null);
 
       const result = await service.getTenantWithGovernance("nonexistent");
       expect(result).toBeNull();
@@ -227,7 +228,7 @@ describe("TenantModuleService", () => {
 
   describe("activateTenant", () => {
     it("sets tenant status to active", async () => {
-      const spy = jest.spyOn(service, "updateTenants").mockResolvedValue({});
+      const spy = vi.spyOn(service, "updateTenants").mockResolvedValue({});
 
       await service.activateTenant("t1");
 
@@ -243,7 +244,7 @@ describe("TenantModuleService", () => {
 
   describe("suspendTenant", () => {
     it("suspends tenant with reason", async () => {
-      const spy = jest.spyOn(service, "updateTenants").mockResolvedValue({});
+      const spy = vi.spyOn(service, "updateTenants").mockResolvedValue({});
 
       await service.suspendTenant("t1", "Non-payment");
 
@@ -306,9 +307,9 @@ describe("TenantModuleService", () => {
       const createSpy = jest
         .spyOn(service, "createTenants")
         .mockResolvedValue({ id: "t1" });
-      jest.spyOn(service, "createTenantSettings").mockResolvedValue({});
-      jest.spyOn(service, "createTenantBillings").mockResolvedValue({});
-      jest.spyOn(service, "createTenantUsers").mockResolvedValue({});
+      vi.spyOn(service, "createTenantSettings").mockResolvedValue({});
+      vi.spyOn(service, "createTenantBillings").mockResolvedValue({});
+      vi.spyOn(service, "createTenantUsers").mockResolvedValue({});
 
       await service.createTenantWithSetup({
         name: "Store",
@@ -340,7 +341,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns null when no billing", async () => {
-      jest.spyOn(service, "listTenantBillings").mockResolvedValue([]);
+      vi.spyOn(service, "listTenantBillings").mockResolvedValue([]);
 
       const result = await service.getTenantBilling("t1");
       expect(result).toBeNull();
@@ -349,7 +350,7 @@ describe("TenantModuleService", () => {
 
   describe("updateSubscription", () => {
     it("updates billing with new plan", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue({ id: "b1" });
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue({ id: "b1" });
       const spy = jest
         .spyOn(service, "updateTenantBillings")
         .mockResolvedValue({});
@@ -373,7 +374,7 @@ describe("TenantModuleService", () => {
     });
 
     it("throws when billing not found", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue(null);
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue(null);
 
       await expect(
         service.updateSubscription("t1", "plan-1", "Pro", "monthly", 100),
@@ -383,7 +384,7 @@ describe("TenantModuleService", () => {
 
   describe("recordUsage", () => {
     it("records usage and updates billing totals", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue({
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue({
         id: "b1",
         usage_price_per_unit: 5,
         current_usage: 10,
@@ -415,7 +416,7 @@ describe("TenantModuleService", () => {
     });
 
     it("throws when billing not found", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue(null);
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue(null);
 
       await expect(service.recordUsage("t1", "api_calls", 100)).rejects.toThrow(
         "Billing not found",
@@ -425,7 +426,7 @@ describe("TenantModuleService", () => {
 
   describe("getUsageSummary", () => {
     it("returns summarized usage by type", async () => {
-      jest.spyOn(service, "listTenantUsageRecords").mockResolvedValue([
+      vi.spyOn(service, "listTenantUsageRecords").mockResolvedValue([
         {
           usage_type: "api_calls",
           quantity: 50,
@@ -457,7 +458,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns empty summary when no records", async () => {
-      jest.spyOn(service, "listTenantUsageRecords").mockResolvedValue([]);
+      vi.spyOn(service, "listTenantUsageRecords").mockResolvedValue([]);
 
       const result = await service.getUsageSummary(
         "t1",
@@ -470,7 +471,7 @@ describe("TenantModuleService", () => {
 
   describe("generateInvoice", () => {
     it("generates invoice with base price and usage", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue({
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue({
         id: "b1",
         base_price: 5000,
         plan_name: "Pro",
@@ -483,7 +484,7 @@ describe("TenantModuleService", () => {
       jest
         .spyOn(service, "retrieveTenant")
         .mockResolvedValue({ id: "t1", handle: "mystore" });
-      jest.spyOn(service, "getUsageSummary").mockResolvedValue({
+      vi.spyOn(service, "getUsageSummary").mockResolvedValue({
         api_calls: { quantity: 100, cost: 500 },
       });
       const createSpy = jest
@@ -504,7 +505,7 @@ describe("TenantModuleService", () => {
     });
 
     it("throws when billing not found", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue(null);
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue(null);
 
       await expect(service.generateInvoice("t1")).rejects.toThrow(
         "Billing not found",
@@ -514,7 +515,7 @@ describe("TenantModuleService", () => {
 
   describe("hasPermission", () => {
     it("returns true for super-admin", async () => {
-      jest.spyOn(service, "listTenantUsers").mockResolvedValue([
+      vi.spyOn(service, "listTenantUsers").mockResolvedValue([
         {
           role: "super-admin",
           permissions: {},
@@ -526,7 +527,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns true for tenant-admin on non-transfer actions", async () => {
-      jest.spyOn(service, "listTenantUsers").mockResolvedValue([
+      vi.spyOn(service, "listTenantUsers").mockResolvedValue([
         {
           role: "tenant-admin",
           permissions: {},
@@ -538,7 +539,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns false for tenant-admin on transfer_ownership", async () => {
-      jest.spyOn(service, "listTenantUsers").mockResolvedValue([
+      vi.spyOn(service, "listTenantUsers").mockResolvedValue([
         {
           role: "tenant-admin",
           permissions: {},
@@ -555,14 +556,14 @@ describe("TenantModuleService", () => {
     });
 
     it("returns false when user not found", async () => {
-      jest.spyOn(service, "listTenantUsers").mockResolvedValue([]);
+      vi.spyOn(service, "listTenantUsers").mockResolvedValue([]);
 
       const result = await service.hasPermission("t1", "u1", "orders", "read");
       expect(result).toBe(false);
     });
 
     it("returns true when user has specific permission", async () => {
-      jest.spyOn(service, "listTenantUsers").mockResolvedValue([
+      vi.spyOn(service, "listTenantUsers").mockResolvedValue([
         {
           role: "viewer",
           permissions: { orders: ["read"] },
@@ -574,7 +575,7 @@ describe("TenantModuleService", () => {
     });
 
     it("returns true when user has wildcard permission", async () => {
-      jest.spyOn(service, "listTenantUsers").mockResolvedValue([
+      vi.spyOn(service, "listTenantUsers").mockResolvedValue([
         {
           role: "viewer",
           permissions: { orders: ["*"] },
@@ -593,7 +594,7 @@ describe("TenantModuleService", () => {
 
   describe("checkTenantLimits", () => {
     it("returns within limits when billing not found", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue(null);
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue(null);
 
       const result = await service.checkTenantLimits("t1");
       expect(result.withinLimits).toBe(true);
@@ -601,7 +602,7 @@ describe("TenantModuleService", () => {
     });
 
     it("reports order limit violation", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue({
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue({
         max_orders_per_month: 100,
         current_usage: 150,
       });
@@ -612,7 +613,7 @@ describe("TenantModuleService", () => {
     });
 
     it("reports team member limit violation", async () => {
-      jest.spyOn(service, "getTenantBilling").mockResolvedValue({
+      vi.spyOn(service, "getTenantBilling").mockResolvedValue({
         max_team_members: 5,
         current_usage: 0,
       });

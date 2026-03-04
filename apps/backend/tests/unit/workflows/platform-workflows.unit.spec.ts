@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn };
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn };
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 describe("Tenant Provisioning Workflow", () => {
@@ -19,7 +20,7 @@ describe("Tenant Provisioning Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/tenant-provisioning.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     createTenantStep = calls.find(
       (c: any) => c[0] === "create-tenant-record-step",
@@ -38,7 +39,7 @@ describe("Tenant Provisioning Workflow", () => {
   it("should create a tenant with provisioning status", async () => {
     const tenant = { id: "t_1", status: "provisioning" };
     const container = mockContainer({
-      tenant: { createTenants: jest.fn().mockResolvedValue(tenant) },
+      tenant: { createTenants: vi.fn().mockResolvedValue(tenant) },
     });
     const result = await createTenantStep(
       {
@@ -83,7 +84,7 @@ describe("Tenant Provisioning Workflow", () => {
   it("should configure tenant to active status", async () => {
     const configured = { id: "t_1", status: "active" };
     const container = mockContainer({
-      tenant: { updateTenants: jest.fn().mockResolvedValue(configured) },
+      tenant: { updateTenants: vi.fn().mockResolvedValue(configured) },
     });
     const result = await configureTenantStep(
       { tenantId: "t_1", domain: "acme.com", plan: "pro" },
@@ -101,7 +102,7 @@ describe("Hierarchy Sync Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/hierarchy-sync.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     detectChangeStep = calls.find(
       (c: any) => c[0] === "detect-hierarchy-change-step",
@@ -120,7 +121,7 @@ describe("Hierarchy Sync Workflow", () => {
   it("should detect hierarchy change", async () => {
     const node = { id: "n_1", parent_id: "p_old" };
     const container = mockContainer({
-      node: { retrieveNode: jest.fn().mockResolvedValue(node) },
+      node: { retrieveNode: vi.fn().mockResolvedValue(node) },
     });
     const result = await detectChangeStep(
       { nodeId: "n_1", changeType: "move", parentId: "p_new", tenantId: "t1" },
@@ -157,7 +158,7 @@ describe("Hierarchy Sync Workflow", () => {
   it("should create audit entry for hierarchy change", async () => {
     const entry = { id: "audit_1" };
     const container = mockContainer({
-      audit: { createAuditEntries: jest.fn().mockResolvedValue(entry) },
+      audit: { createAuditEntries: vi.fn().mockResolvedValue(entry) },
     });
     const result = await auditHierarchyChangeStep(
       { nodeId: "n_1", changeType: "move", tenantId: "t1" },
@@ -175,7 +176,7 @@ describe("Content Moderation Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/content-moderation.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     submitContentStep = calls.find(
       (c: any) => c[0] === "submit-content-for-moderation-step",

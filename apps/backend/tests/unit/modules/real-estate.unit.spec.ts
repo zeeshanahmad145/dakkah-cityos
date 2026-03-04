@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -62,13 +63,13 @@ describe("RealEstateModuleService", () => {
   let service: RealEstateModuleService;
 
   beforeEach(() => {
-    service = new RealEstateModuleService();
-    jest.clearAllMocks();
+    service = new RealEstateModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("publishProperty", () => {
     it("publishes a property with a price", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop-1",
         status: "draft",
         price: 500000,
@@ -85,7 +86,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("throws when property is already published", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop-1",
         status: "published",
         price: 500000,
@@ -97,7 +98,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("throws when property has no price", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop-1",
         status: "draft",
         price: null,
@@ -115,7 +116,7 @@ describe("RealEstateModuleService", () => {
       jest
         .spyOn(service, "retrievePropertyListing")
         .mockResolvedValue({ id: "prop-1", status: "published" });
-      jest.spyOn(service, "listViewingAppointments").mockResolvedValue([]);
+      vi.spyOn(service, "listViewingAppointments").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createViewingAppointments")
         .mockResolvedValue({ id: "view-1" });
@@ -172,7 +173,7 @@ describe("RealEstateModuleService", () => {
 
   describe("makeOffer", () => {
     it("creates an offer on a published property", async () => {
-      jest.spyOn(service, "retrievePropertyListing").mockResolvedValue({
+      vi.spyOn(service, "retrievePropertyListing").mockResolvedValue({
         id: "prop-1",
         status: "published",
         price: 500000,
@@ -237,7 +238,7 @@ describe("RealEstateModuleService", () => {
 
   describe("getMarketAnalysis", () => {
     it("returns market analysis with listings", async () => {
-      jest.spyOn(service, "listPropertyListings").mockResolvedValue([
+      vi.spyOn(service, "listPropertyListings").mockResolvedValue([
         { price: 300000, published_at: "2025-01-01" },
         { price: 500000, published_at: "2025-06-01" },
         { price: 400000, published_at: "2025-03-01" },
@@ -252,7 +253,7 @@ describe("RealEstateModuleService", () => {
     });
 
     it("returns zeros when no listings found", async () => {
-      jest.spyOn(service, "listPropertyListings").mockResolvedValue([]);
+      vi.spyOn(service, "listPropertyListings").mockResolvedValue([]);
 
       const result = await service.getMarketAnalysis({});
 

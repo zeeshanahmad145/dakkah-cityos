@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -83,8 +84,8 @@ describe("RestaurantModuleService", () => {
   let service: RestaurantModuleService;
 
   beforeEach(() => {
-    service = new RestaurantModuleService();
-    jest.clearAllMocks();
+    service = new RestaurantModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createReservation", () => {
@@ -93,7 +94,7 @@ describe("RestaurantModuleService", () => {
       jest
         .spyOn(service, "retrieveRestaurant")
         .mockResolvedValue({ id: "r1", seating_capacity: 100 });
-      jest.spyOn(service, "listTableReservations").mockResolvedValue([]);
+      vi.spyOn(service, "listTableReservations").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createTableReservations")
         .mockResolvedValue({ id: "res-1" });
@@ -184,8 +185,8 @@ describe("RestaurantModuleService", () => {
 
   describe("getRevenueReport", () => {
     it("calculates revenue report correctly", async () => {
-      jest.spyOn(service, "retrieveRestaurant").mockResolvedValue({ id: "r1" });
-      jest.spyOn(service, "listKitchenOrders").mockResolvedValue([
+      vi.spyOn(service, "retrieveRestaurant").mockResolvedValue({ id: "r1" });
+      vi.spyOn(service, "listKitchenOrders").mockResolvedValue([
         { total_amount: 100, placed_at: "2025-01-15", status: "delivered" },
         { total_amount: 200, placed_at: "2025-01-20", status: "delivered" },
         { total_amount: 50, placed_at: "2025-01-25", status: "cancelled" },

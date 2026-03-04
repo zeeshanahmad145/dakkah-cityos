@@ -53,6 +53,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     return res
       .status(400)
       .json({ message: "Validation failed", errors: validation.error.issues });
-  const item = await mod.createClassifiedListings(validation.data);
+  const raw = await mod.createClassifiedListings(validation.data);
+    const item = Array.isArray(raw) ? raw[0] : raw;
   return res.status(201).json({ item });
 }

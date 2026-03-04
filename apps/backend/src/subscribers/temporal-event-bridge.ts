@@ -1,21 +1,24 @@
-import type { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
-import { dispatchEventToTemporal, getWorkflowForEvent } from "../lib/event-dispatcher"
-import { createLogger } from "../lib/logger"
-import { appConfig } from "../lib/config"
-const logger = createLogger("subscribers:temporal-event-bridge")
+import type { SubscriberArgs, SubscriberConfig } from "@medusajs/framework";
+import {
+  dispatchEventToTemporal,
+  getWorkflowForEvent,
+} from "../lib/event-dispatcher";
+import { createLogger } from "../lib/logger";
+import { appConfig } from "../lib/config";
+const logger = createLogger("subscribers:temporal-event-bridge");
 
 export default async function temporalEventBridge({
   event,
   container,
 }: SubscriberArgs<any>) {
-  const eventName = event.name
+  const eventName = event.name;
 
   if (!appConfig.temporal.isConfigured) {
-    return
+    return;
   }
 
-  if (!getWorkflowForEvent(eventName)?.workflowId) {
-    return
+  if (!getWorkflowForEvent(eventName)?.workflowFn) {
+    return;
   }
 
   const nodeContext = {
@@ -23,19 +26,25 @@ export default async function temporalEventBridge({
     nodeId: event.data?.node_id,
     source: "medusa-subscriber",
     timestamp: new Date().toISOString(),
-  }
+  };
 
   try {
-    const result = await dispatchEventToTemporal(eventName, event.data, nodeContext)
+    const result = await dispatchEventToTemporal(
+      eventName,
+      event.data,
+      nodeContext,
+    );
 
     if (result.dispatched) {
-      logger.info(`[TemporalBridge] Dispatched ${eventName} → runId: ${result.runId}`)
+      logger.info(
+        `[TemporalBridge] Dispatched ${eventName} → runId: ${result.runId}`,
+      );
     }
   } catch (err: any) {
     logger.warn(
       `[TemporalBridge] Failed to dispatch ${eventName}:`,
-      err.message
-    )
+      err.message,
+    );
   }
 }
 
@@ -106,4 +115,4 @@ export const config: SubscriberConfig = {
     "vendor_product.updated",
     "vendor.stripe_connected",
   ],
-}
+};

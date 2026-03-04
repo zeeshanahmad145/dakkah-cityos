@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   GET as listPages,
   POST as createPage,
@@ -9,15 +10,15 @@ import {
 } from "../../../src/api/admin/cms/pages/[id]/route";
 
 const createMockService = () => ({
-  listCmsPages: jest.fn(),
-  retrieveCmsPage: jest.fn(),
-  createCmsPages: jest.fn(),
-  updateCmsPages: jest.fn(),
-  deleteCmsPages: jest.fn(),
+  listCmsPages: vi.fn(),
+  retrieveCmsPage: vi.fn(),
+  createCmsPages: vi.fn(),
+  updateCmsPages: vi.fn(),
+  deleteCmsPages: vi.fn(),
 });
 
 const createReq = (mockService: any, overrides: any = {}) => ({
-  scope: { resolve: jest.fn(() => mockService) },
+  scope: { resolve: vi.fn(() => mockService) },
   query: {},
   params: {},
   body: {},
@@ -25,7 +26,7 @@ const createReq = (mockService: any, overrides: any = {}) => ({
 });
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
@@ -34,7 +35,7 @@ describe("Admin CMS Pages Routes", () => {
 
   beforeEach(() => {
     mockService = createMockService();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("GET /admin/cms/pages", () => {

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -55,8 +56,8 @@ describe("ParkingModuleService", () => {
   let service: ParkingModuleService;
 
   beforeEach(() => {
-    service = new ParkingModuleService();
-    jest.clearAllMocks();
+    service = new ParkingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("calculateParkingFee", () => {
@@ -98,7 +99,7 @@ describe("ParkingModuleService", () => {
 
   describe("reserveSpotAdvanced", () => {
     it("should reserve a spot in an available zone", async () => {
-      jest.spyOn(service, "retrieveParkingZone").mockResolvedValue({
+      vi.spyOn(service, "retrieveParkingZone").mockResolvedValue({
         id: "zone_01",
         status: "active",
         total_spots: 50,
@@ -107,7 +108,7 @@ describe("ParkingModuleService", () => {
       jest
         .spyOn(service, "listParkingSessions")
         .mockResolvedValue(Array(10).fill({ status: "active" }));
-      jest.spyOn(service, "createParkingSessions").mockResolvedValue({
+      vi.spyOn(service, "createParkingSessions").mockResolvedValue({
         id: "ses_01",
         zone_id: "zone_01",
         status: "active",
@@ -126,7 +127,7 @@ describe("ParkingModuleService", () => {
     });
 
     it("should reject when no spots available", async () => {
-      jest.spyOn(service, "retrieveParkingZone").mockResolvedValue({
+      vi.spyOn(service, "retrieveParkingZone").mockResolvedValue({
         id: "zone_01",
         status: "active",
         total_spots: 5,
@@ -153,7 +154,7 @@ describe("ParkingModuleService", () => {
 
   describe("calculateFee", () => {
     it("should return hourly rate and total for a zone", async () => {
-      jest.spyOn(service, "retrieveParkingZone").mockResolvedValue({
+      vi.spyOn(service, "retrieveParkingZone").mockResolvedValue({
         id: "zone_01",
         hourly_rate: 5,
       });
@@ -164,7 +165,7 @@ describe("ParkingModuleService", () => {
     });
 
     it("should use default rate when not set", async () => {
-      jest.spyOn(service, "retrieveParkingZone").mockResolvedValue({
+      vi.spyOn(service, "retrieveParkingZone").mockResolvedValue({
         id: "zone_01",
       });
 

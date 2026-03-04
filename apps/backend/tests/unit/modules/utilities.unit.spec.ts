@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -71,8 +72,8 @@ describe("UtilitiesModuleService", () => {
   let service: UtilitiesModuleService;
 
   beforeEach(() => {
-    service = new UtilitiesModuleService();
-    jest.clearAllMocks();
+    service = new UtilitiesModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getActiveAccounts", () => {
@@ -81,7 +82,7 @@ describe("UtilitiesModuleService", () => {
         { id: "acc-1", utility_type: "electricity", status: "active" },
         { id: "acc-2", utility_type: "water", status: "active" },
       ];
-      jest.spyOn(service, "listUtilityAccounts").mockResolvedValue(accounts);
+      vi.spyOn(service, "listUtilityAccounts").mockResolvedValue(accounts);
 
       const result = await service.getActiveAccounts("tenant-1");
 
@@ -107,7 +108,7 @@ describe("UtilitiesModuleService", () => {
       jest
         .spyOn(service, "retrieveUtilityAccount")
         .mockResolvedValue({ id: "acc-1" });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         { reading_value: 100, reading_date: "2025-01-01", unit: "kWh" },
         { reading_value: 200, reading_date: "2025-01-15", unit: "kWh" },
         { reading_value: 350, reading_date: "2025-02-01", unit: "kWh" },
@@ -127,7 +128,7 @@ describe("UtilitiesModuleService", () => {
       jest
         .spyOn(service, "retrieveUtilityAccount")
         .mockResolvedValue({ id: "acc-1" });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([]);
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([]);
 
       const result = await service.calculateUsageCharges(
         "acc-1",
@@ -143,7 +144,7 @@ describe("UtilitiesModuleService", () => {
       jest
         .spyOn(service, "retrieveUtilityAccount")
         .mockResolvedValue({ id: "acc-1" });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         { reading_value: 100, reading_date: "2025-01-01", unit: "kWh" },
         { reading_value: 200, reading_date: "2025-02-01", unit: "kWh" },
       ]);
@@ -162,12 +163,12 @@ describe("UtilitiesModuleService", () => {
 
   describe("generateBill", () => {
     it("generates a bill for a billing period", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         tenant_id: "tenant-1",
         provider_name: "PowerCo",
       });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         { reading_value: 100, reading_date: "2025-01-01", unit: "kWh" },
         { reading_value: 200, reading_date: "2025-01-31", unit: "kWh" },
       ]);
@@ -189,7 +190,7 @@ describe("UtilitiesModuleService", () => {
 
   describe("processPayment", () => {
     it("marks bill as paid when full amount is paid", async () => {
-      jest.spyOn(service, "retrieveUtilityBill").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityBill").mockResolvedValue({
         id: "bill-1",
         amount: "500",
         status: "generated",
@@ -200,7 +201,7 @@ describe("UtilitiesModuleService", () => {
       const updateSpy = jest
         .spyOn(service, "updateUtilityBills")
         .mockResolvedValue({});
-      jest.spyOn(service, "createUsageRecords").mockResolvedValue({});
+      vi.spyOn(service, "createUsageRecords").mockResolvedValue({});
 
       const result = await service.processPayment("bill-1", 500);
 
@@ -211,7 +212,7 @@ describe("UtilitiesModuleService", () => {
     });
 
     it("throws when payment exceeds bill amount", async () => {
-      jest.spyOn(service, "retrieveUtilityBill").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityBill").mockResolvedValue({
         id: "bill-1",
         amount: "500",
       });
@@ -224,18 +225,18 @@ describe("UtilitiesModuleService", () => {
 
   describe("getUsageSummary", () => {
     it("returns usage summary for an account", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         account_number: "ACC001",
         utility_type: "electricity",
         provider_name: "PowerCo",
         status: "active",
       });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         { reading_value: 100, reading_date: "2025-01-01", unit: "kWh" },
         { reading_value: 600, reading_date: "2025-06-01", unit: "kWh" },
       ]);
-      jest.spyOn(service, "listUtilityBills").mockResolvedValue([
+      vi.spyOn(service, "listUtilityBills").mockResolvedValue([
         { amount: "250", status: "paid" },
         { amount: "300", status: "generated" },
       ]);
@@ -249,15 +250,15 @@ describe("UtilitiesModuleService", () => {
     });
 
     it("handles empty readings and bills", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         account_number: "ACC001",
         utility_type: "electricity",
         provider_name: "PowerCo",
         status: "active",
       });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([]);
-      jest.spyOn(service, "listUtilityBills").mockResolvedValue([]);
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([]);
+      vi.spyOn(service, "listUtilityBills").mockResolvedValue([]);
 
       const result = await service.getUsageSummary("acc-1");
 

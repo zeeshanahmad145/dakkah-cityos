@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -80,13 +81,13 @@ describe("HealthcareModuleService", () => {
   let service: HealthcareModuleService;
 
   beforeEach(() => {
-    service = new HealthcareModuleService();
-    jest.clearAllMocks();
+    service = new HealthcareModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("cancelAppointment", () => {
     it("cancels a scheduled appointment", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt-1",
         status: "scheduled",
       });
@@ -110,7 +111,7 @@ describe("HealthcareModuleService", () => {
     });
 
     it("throws when appointment is not scheduled", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt-1",
         status: "completed",
       });
@@ -123,7 +124,7 @@ describe("HealthcareModuleService", () => {
 
   describe("createPrescription", () => {
     it("creates a prescription linked to an appointment", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt-1",
         patient_id: "patient-1",
       });
@@ -228,7 +229,7 @@ describe("HealthcareModuleService", () => {
 
   describe("submitInsuranceClaim", () => {
     it("submits a claim with valid data", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt-1",
         patient_id: "patient-1",
       });
@@ -285,7 +286,7 @@ describe("HealthcareModuleService", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 7);
 
-      jest.spyOn(service, "listHealthcareAppointments").mockResolvedValue([
+      vi.spyOn(service, "listHealthcareAppointments").mockResolvedValue([
         {
           id: "apt-1",
           status: "scheduled",
@@ -300,7 +301,7 @@ describe("HealthcareModuleService", () => {
       jest
         .spyOn(service, "listPrescriptions")
         .mockResolvedValue([{ id: "rx-1" }, { id: "rx-2" }]);
-      jest.spyOn(service, "listLabOrders").mockResolvedValue([
+      vi.spyOn(service, "listLabOrders").mockResolvedValue([
         { id: "lab-1", status: "pending" },
         { id: "lab-2", status: "completed" },
         { id: "lab-3", status: "in_progress" },

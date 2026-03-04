@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn }
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn }
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Tenant Provisioning Workflow", () => {
@@ -19,7 +20,7 @@ describe("Tenant Provisioning Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/tenant-provisioning.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     createTenantStep = calls.find((c: any) => c[0] === "create-tenant-record-step")?.[1]
     provisionResourcesStep = calls.find((c: any) => c[0] === "provision-tenant-resources-step")?.[1]
@@ -29,7 +30,7 @@ describe("Tenant Provisioning Workflow", () => {
 
   describe("createTenantStep", () => {
     it("should create a tenant with provisioning status", async () => {
-      const createTenants = jest.fn().mockResolvedValue({ id: "tenant_1" })
+      const createTenants = vi.fn().mockResolvedValue({ id: "tenant_1" })
       const container = mockContainer({ tenant: { createTenants } })
       const input = {
         name: "Acme Corp",
@@ -46,7 +47,7 @@ describe("Tenant Provisioning Workflow", () => {
     })
 
     it("should pass domain and admin_email to tenant module", async () => {
-      const createTenants = jest.fn().mockResolvedValue({ id: "tenant_2" })
+      const createTenants = vi.fn().mockResolvedValue({ id: "tenant_2" })
       const container = mockContainer({ tenant: { createTenants } })
       await createTenantStep(
         { name: "Test", domain: "test.io", adminEmail: "a@b.com", plan: "free", region: "eu" },
@@ -60,8 +61,8 @@ describe("Tenant Provisioning Workflow", () => {
 
   describe("provisionResourcesStep", () => {
     it("should provision resources with default currency", async () => {
-      const createStoreConfig = jest.fn().mockResolvedValue({ id: "store_1" })
-      const createRoles = jest.fn().mockImplementation((role) => Promise.resolve(role))
+      const createStoreConfig = vi.fn().mockResolvedValue({ id: "store_1" })
+      const createRoles = vi.fn().mockImplementation((role) => Promise.resolve(role))
       const container = mockContainer({ tenant: { createStoreConfig, createRoles } })
       const result = await provisionResourcesStep(
         { tenantId: "tenant_1", region: "us-east", name: "Acme", domain: "acme.com" },
@@ -74,7 +75,7 @@ describe("Tenant Provisioning Workflow", () => {
     })
 
     it("should use provided currency when specified", async () => {
-      const container = mockContainer({ tenant: { createStoreConfig: jest.fn().mockResolvedValue({}), createRoles: jest.fn().mockResolvedValue({}) } })
+      const container = mockContainer({ tenant: { createStoreConfig: vi.fn().mockResolvedValue({}), createRoles: vi.fn().mockResolvedValue({}) } })
       const result = await provisionResourcesStep(
         { tenantId: "tenant_1", region: "eu-west", currency: "eur", name: "Euro Shop", domain: "euro.com" },
         { container }
@@ -84,7 +85,7 @@ describe("Tenant Provisioning Workflow", () => {
 
     it("should create default roles (owner, admin, manager, staff)", async () => {
       const createdRoles: any[] = []
-      const createRoles = jest.fn().mockImplementation((role) => {
+      const createRoles = vi.fn().mockImplementation((role) => {
         createdRoles.push(role)
         return Promise.resolve(role)
       })
@@ -113,7 +114,7 @@ describe("Tenant Provisioning Workflow", () => {
 
   describe("seedTenantDataStep", () => {
     it("should set enterprise plan defaults with unlimited products and staff", async () => {
-      const createTenantSettings = jest.fn()
+      const createTenantSettings = vi.fn()
       const container = mockContainer({ tenant: { createTenantSettings } })
       const result = await seedTenantDataStep(
         { tenantId: "tenant_1", plan: "enterprise", features: ["multi_vendor"] },
@@ -126,7 +127,7 @@ describe("Tenant Provisioning Workflow", () => {
     })
 
     it("should set business plan defaults with higher limits", async () => {
-      const container = mockContainer({ tenant: { createTenantSettings: jest.fn() } })
+      const container = mockContainer({ tenant: { createTenantSettings: vi.fn() } })
       const result = await seedTenantDataStep(
         { tenantId: "tenant_1", plan: "business" },
         { container }
@@ -137,7 +138,7 @@ describe("Tenant Provisioning Workflow", () => {
     })
 
     it("should set free plan defaults with restrictive limits", async () => {
-      const container = mockContainer({ tenant: { createTenantSettings: jest.fn() } })
+      const container = mockContainer({ tenant: { createTenantSettings: vi.fn() } })
       const result = await seedTenantDataStep(
         { tenantId: "tenant_1", plan: "free" },
         { container }
@@ -149,7 +150,7 @@ describe("Tenant Provisioning Workflow", () => {
     })
 
     it("should include enabled features in seeded data", async () => {
-      const container = mockContainer({ tenant: { createTenantSettings: jest.fn() } })
+      const container = mockContainer({ tenant: { createTenantSettings: vi.fn() } })
       const result = await seedTenantDataStep(
         { tenantId: "tenant_1", plan: "business", features: ["loyalty", "subscriptions"] },
         { container }
@@ -160,7 +161,7 @@ describe("Tenant Provisioning Workflow", () => {
 
   describe("configureTenantStep", () => {
     it("should update tenant status to active", async () => {
-      const updateTenants = jest.fn().mockResolvedValue({ id: "tenant_1", status: "active" })
+      const updateTenants = vi.fn().mockResolvedValue({ id: "tenant_1", status: "active" })
       const container = mockContainer({ tenant: { updateTenants } })
       const result = await configureTenantStep(
         { tenantId: "tenant_1", domain: "acme.com", plan: "business" },
@@ -173,7 +174,7 @@ describe("Tenant Provisioning Workflow", () => {
     })
 
     it("should include configured_at timestamp", async () => {
-      const updateTenants = jest.fn().mockResolvedValue({ id: "tenant_1", status: "active" })
+      const updateTenants = vi.fn().mockResolvedValue({ id: "tenant_1", status: "active" })
       const container = mockContainer({ tenant: { updateTenants } })
       await configureTenantStep(
         { tenantId: "tenant_1", domain: "x.com", plan: "free" },

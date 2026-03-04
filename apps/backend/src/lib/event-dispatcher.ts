@@ -1,273 +1,373 @@
-import { startWorkflow } from "./temporal-client";
+/**
+ * Event Dispatcher — UCE Canonical Workflow Bridge
+ *
+ * Maps Medusa business events to UCE canonical workflow function names.
+ * All task queues are the 4 isolated UCE queues defined in canonical-workflows.ts.
+ *
+ * When an event fires, temporal-event-bridge.ts calls dispatchEventToTemporal()
+ * which calls startCanonicalWorkflow(workflowFn, params, idempotencyKey).
+ *
+ * ┌────────────────────────────────────────────────────────────────────────────┐
+ * │ TASK QUEUES                                                                │
+ * │  uce-commerce-financial  — money, ledger, refunds, payouts               │
+ * │  uce-commerce-dispatch   — fulfillment, logistics                         │
+ * │  uce-commerce-recurring  — subscriptions, metering                        │
+ * │  uce-commerce-fulfilment — bookings, KYC, onboarding                     │
+ * └────────────────────────────────────────────────────────────────────────────┘
+ */
+import { startCanonicalWorkflow } from "./temporal-client";
 import { createLogger } from "../lib/logger";
+
 const logger = createLogger("lib:event-dispatcher");
 
+/**
+ * Canonical workflow mapping.
+ * workflowFn must exactly match an exported function name in canonical-workflows.ts.
+ * taskQueue must be one of the 4 UCE isolated queues.
+ */
 const EVENT_WORKFLOW_MAP: Record<
   string,
-  { workflowId: string; taskQueue: string }
+  { workflowFn: string; taskQueue: string; idempotencyKey: (d: any) => string }
 > = {
+  // ── Financial workflows ──────────────────────────────────────────────────
   "order.placed": {
-    workflowId: "xsystem.unified-order-orchestrator",
-    taskQueue: "commerce-queue",
+    workflowFn: "one_time_goods",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.id || d.order_id,
   },
   "order.cancelled": {
-    workflowId: "xsystem.order-cancellation-saga",
-    taskQueue: "commerce-queue",
+    workflowFn: "order_cancellation",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.id || d.order_id,
   },
   "payment.initiated": {
-    workflowId: "xsystem.multi-gateway-payment",
-    taskQueue: "commerce-queue",
-  },
-  "refund.requested": {
-    workflowId: "xsystem.refund-compensation-saga",
-    taskQueue: "commerce-queue",
-  },
-  "return.initiated": {
-    workflowId: "xsystem.returns-processing",
-    taskQueue: "commerce-queue",
-  },
-  "store.created": {
-    workflowId: "commerce.store-setup",
-    taskQueue: "commerce-queue",
-  },
-  "store.updated": {
-    workflowId: "commerce.store-config-sync",
-    taskQueue: "commerce-queue",
-  },
-  "product.created": {
-    workflowId: "commerce.product-catalog-sync",
-    taskQueue: "commerce-queue",
-  },
-  "product.updated": {
-    workflowId: "commerce.sync-product-to-cms",
-    taskQueue: "commerce-queue",
-  },
-  "product.deleted": {
-    workflowId: "commerce.product-catalog-remove",
-    taskQueue: "commerce-queue",
-  },
-  "vendor_product.created": {
-    workflowId: "commerce.vendor-product-catalog-sync",
-    taskQueue: "commerce-queue",
-  },
-  "vendor_product.updated": {
-    workflowId: "commerce.vendor-product-update-sync",
-    taskQueue: "commerce-queue",
-  },
-  "vendor_product.deactivated": {
-    workflowId: "commerce.vendor-product-deactivation",
-    taskQueue: "commerce-queue",
-  },
-  "auction.started": {
-    workflowId: "xsystem.auction-lifecycle",
-    taskQueue: "commerce-queue",
-  },
-  "restaurant-order.placed": {
-    workflowId: "xsystem.restaurant-order-orchestrator",
-    taskQueue: "commerce-queue",
-  },
-
-  "booking.created": {
-    workflowId: "xsystem.service-booking-orchestrator",
-    taskQueue: "commerce-booking-queue",
-  },
-  "booking.confirmed": {
-    workflowId: "xsystem.booking-confirmation-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-  "booking.no_show": {
-    workflowId: "xsystem.booking-no-show-processing",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.created": {
-    workflowId: "xsystem.subscription-lifecycle",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.cancelled": {
-    workflowId: "xsystem.subscription-cancellation-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.payment_failed": {
-    workflowId: "xsystem.subscription-payment-failure",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.renewal_upcoming": {
-    workflowId: "xsystem.subscription-renewal-notification",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.trial_ending": {
-    workflowId: "xsystem.trial-ending-notification",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.trial_converted": {
-    workflowId: "xsystem.trial-conversion-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.trial_expired": {
-    workflowId: "xsystem.trial-expiration-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.plan_changed": {
-    workflowId: "xsystem.subscription-plan-change-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.paused": {
-    workflowId: "xsystem.subscription-pause-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-  "subscription.resumed": {
-    workflowId: "xsystem.subscription-resume-sync",
-    taskQueue: "commerce-booking-queue",
-  },
-
-  "tenant.provisioned": {
-    workflowId: "xsystem.tenant-setup-saga",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "tenant.updated": {
-    workflowId: "xsystem.tenant-config-sync",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "node.created": {
-    workflowId: "xsystem.node-provisioning",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "node.updated": {
-    workflowId: "xsystem.node-update-propagation",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "node.deleted": {
-    workflowId: "xsystem.node-decommission",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "customer.created": {
-    workflowId: "xsystem.customer-onboarding",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "customer.updated": {
-    workflowId: "xsystem.customer-profile-sync",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.registered": {
-    workflowId: "xsystem.vendor-onboarding-verification",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.created": {
-    workflowId: "commerce.vendor-onboarding",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.approved": {
-    workflowId: "xsystem.vendor-ecosystem-setup",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.suspended": {
-    workflowId: "xsystem.vendor-suspension-cascade",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.deactivated": {
-    workflowId: "xsystem.vendor-deactivation-cascade",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.inactivity_warning": {
-    workflowId: "xsystem.vendor-inactivity-notification",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.application_submitted": {
-    workflowId: "xsystem.vendor-application-processing",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "vendor.stripe_connected": {
-    workflowId: "xsystem.vendor-stripe-setup-sync",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "dispute.opened": {
-    workflowId: "xsystem.vendor-dispute-resolution",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "kyc.requested": {
-    workflowId: "xsystem.kyc-verification",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "kyc.completed": {
-    workflowId: "xsystem.kyc-credential-issuance",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "membership.created": {
-    workflowId: "xsystem.membership-credential-issuance",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "governance.policy.changed": {
-    workflowId: "xsystem.governance-policy-propagation",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "payout.initiated": {
-    workflowId: "xsystem.payout-processing",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "payout.completed": {
-    workflowId: "xsystem.payout-reconciliation",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "payout.failed": {
-    workflowId: "xsystem.payout-failure-handling",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "invoice.created": {
-    workflowId: "xsystem.invoice-processing",
-    taskQueue: "xsystem-platform-queue",
-  },
-  "invoice.overdue": {
-    workflowId: "xsystem.invoice-overdue-processing",
-    taskQueue: "xsystem-platform-queue",
+    workflowFn: "one_time_goods",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.order_id || d.id,
   },
   "payment.completed": {
-    workflowId: "xsystem.payment-reconciliation",
-    taskQueue: "xsystem-platform-queue",
+    workflowFn: "one_time_goods",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.order_id || d.id,
+  },
+  "refund.requested": {
+    workflowFn: "refund_compensation",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.order_id || d.id,
+  },
+  "return.initiated": {
+    workflowFn: "refund_compensation",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.order_id || d.id,
+  },
+  "invoice.created": {
+    workflowFn: "refund_compensation",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.invoice_id || d.id,
+  },
+  "invoice.overdue": {
+    workflowFn: "refund_compensation",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => `overdue:${d.invoice_id || d.id}`,
+  },
+  "payout.initiated": {
+    workflowFn: "payout_processing",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) =>
+      `payout:${d.vendor_id}:${d.period_end || Date.now()}`,
+  },
+  "payout.failed": {
+    workflowFn: "payout_processing",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => `payout-retry:${d.vendor_id}:${Date.now()}`,
+  },
+  "dispute.opened": {
+    workflowFn: "milestone_escrow",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => `dispute:${d.order_id || d.contract_id || d.id}`,
+  },
+  "auction.started": {
+    workflowFn: "auction_settlement",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => d.auction_id || d.id,
   },
   "inventory.updated": {
-    workflowId: "xsystem.inventory-reconciliation",
-    taskQueue: "xsystem-platform-queue",
+    workflowFn: "one_time_goods",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => `inv:${d.variant_id || d.product_id || d.id}`,
   },
 
+  // ── Dispatch workflows ───────────────────────────────────────────────────
   "fulfillment.created": {
-    workflowId: "xsystem.fulfillment-dispatch",
-    taskQueue: "xsystem-logistics-queue",
+    workflowFn: "on_demand_dispatch",
+    taskQueue: "uce-commerce-dispatch",
+    idempotencyKey: (d) => d.fulfillment_id || d.id,
   },
   "fulfillment.shipped": {
-    workflowId: "xsystem.shipment-tracking-start",
-    taskQueue: "xsystem-logistics-queue",
+    workflowFn: "fulfillment_tracking",
+    taskQueue: "uce-commerce-dispatch",
+    idempotencyKey: (d) => `track:${d.fulfillment_id || d.id}`,
   },
   "fulfillment.delivered": {
-    workflowId: "xsystem.delivery-confirmation",
-    taskQueue: "xsystem-logistics-queue",
+    workflowFn: "fulfillment_tracking",
+    taskQueue: "uce-commerce-dispatch",
+    idempotencyKey: (d) => `track:${d.fulfillment_id || d.id}`,
   },
   "vendor_order.shipped": {
-    workflowId: "xsystem.vendor-order-shipment-tracking",
-    taskQueue: "xsystem-logistics-queue",
+    workflowFn: "fulfillment_tracking",
+    taskQueue: "uce-commerce-dispatch",
+    idempotencyKey: (d) => `vtrack:${d.order_id || d.id}`,
+  },
+  "restaurant-order.placed": {
+    workflowFn: "on_demand_dispatch",
+    taskQueue: "uce-commerce-dispatch",
+    idempotencyKey: (d) => d.id || d.order_id,
   },
 
+  // ── Recurring workflows ──────────────────────────────────────────────────
+  "subscription.created": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => d.subscription_id || d.id,
+  },
+  "subscription.cancelled": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `cancel:${d.subscription_id || d.id}`,
+  },
+  "subscription.payment_failed": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `retry:${d.subscription_id || d.id}:${Date.now()}`,
+  },
+  "subscription.renewal_upcoming": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `renewal:${d.subscription_id || d.id}`,
+  },
+  "subscription.trial_ending": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `trial-end:${d.subscription_id || d.id}`,
+  },
+  "subscription.trial_converted": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `trial-conv:${d.subscription_id || d.id}`,
+  },
+  "subscription.trial_expired": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `trial-exp:${d.subscription_id || d.id}`,
+  },
+  "subscription.plan_changed": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `plan-change:${d.subscription_id || d.id}`,
+  },
+  "subscription.paused": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `pause:${d.subscription_id || d.id}`,
+  },
+  "subscription.resumed": {
+    workflowFn: "subscription_billing",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `resume:${d.subscription_id || d.id}`,
+  },
+
+  // ── Fulfilment / Onboarding workflows ────────────────────────────────────
+  "booking.created": {
+    workflowFn: "booking_service",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => d.booking_id || d.id,
+  },
+  "booking.confirmed": {
+    workflowFn: "booking_service",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `confirm:${d.booking_id || d.id}`,
+  },
+  "booking.no_show": {
+    workflowFn: "booking_service",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `noshow:${d.booking_id || d.id}`,
+  },
+  "kyc.requested": {
+    workflowFn: "kyc_verification",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `kyc:${d.customer_id || d.id}`,
+  },
+  "kyc.completed": {
+    workflowFn: "kyc_verification",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `kyc-vc:${d.customer_id || d.id}`,
+  },
+  "membership.created": {
+    workflowFn: "kyc_verification",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `membership:${d.customer_id || d.id}`,
+  },
+  "vendor.registered": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `vendor:${d.vendor_id || d.id}`,
+  },
+  "vendor.created": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `vendor:${d.vendor_id || d.id}`,
+  },
+  "vendor.application_submitted": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `vendor-app:${d.vendor_id || d.id}`,
+  },
+  "vendor.suspended": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `suspend:${d.vendor_id || d.id}`,
+  },
+  "vendor.deactivated": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `deactivate:${d.vendor_id || d.id}`,
+  },
+  "vendor.stripe_connected": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `stripe:${d.vendor_id || d.id}`,
+  },
+  "customer.created": {
+    workflowFn: "customer_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => d.customer_id || d.id,
+  },
+  "customer.updated": {
+    workflowFn: "customer_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `update:${d.customer_id || d.id}`,
+  },
+  "trade_in.submitted": {
+    workflowFn: "trade_in_valuation",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => d.trade_in_id || d.id,
+  },
+
+  // ── Sync / maintenance (use recurring queue) ─────────────────────────────
+  "product.created": {
+    workflowFn: "usage_metering", // proxy: lightweight sync via metering queue
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `prod-sync:${d.id}`,
+  },
+  "product.updated": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `prod-sync:${d.id}`,
+  },
+  "product.deleted": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `prod-del:${d.id}`,
+  },
+  "vendor_product.created": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `vprod-sync:${d.id}`,
+  },
+  "vendor_product.updated": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `vprod-update:${d.id}`,
+  },
+  "vendor_product.deactivated": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `vprod-deact:${d.id}`,
+  },
+  "governance.policy.changed": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `gov:${d.policy_id || d.id || Date.now()}`,
+  },
+  "store.created": {
+    workflowFn: "customer_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `store:${d.id}`,
+  },
+  "store.updated": {
+    workflowFn: "customer_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `store-update:${d.id}`,
+  },
+  "tenant.provisioned": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `tenant:${d.tenant_id || d.id}`,
+  },
+  "tenant.updated": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `tenant-upd:${d.tenant_id || d.id}`,
+  },
+  "node.created": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `node:${d.node_id || d.id}`,
+  },
+  "node.updated": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `node-upd:${d.node_id || d.id}`,
+  },
+  "node.deleted": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `node-del:${d.node_id || d.id}`,
+  },
+  "vendor.inactivity_warning": {
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `inactive:${d.vendor_id || d.id}`,
+  },
+  "workflow.dynamic.start": {
+    workflowFn: "one_time_goods", // Dynamic workflows funnel to financial queue
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => `dyn:${d.workflow_id || d.id || Date.now()}`,
+  },
   "sync.products.scheduled": {
-    workflowId: "xsystem.scheduled-product-sync",
-    taskQueue: "core-maintenance-queue",
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `sched-sync:${Date.now()}`,
   },
   "sync.retry.scheduled": {
-    workflowId: "xsystem.retry-failed-syncs",
-    taskQueue: "core-maintenance-queue",
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `sched-retry:${Date.now()}`,
   },
   "sync.hierarchy.scheduled": {
-    workflowId: "xsystem.scheduled-hierarchy-reconciliation",
-    taskQueue: "core-maintenance-queue",
+    workflowFn: "usage_metering",
+    taskQueue: "uce-commerce-recurring",
+    idempotencyKey: (d) => `sched-hier:${Date.now()}`,
   },
-
-  "workflow.dynamic.start": {
-    workflowId: "dynamic-agent-orchestrator",
-    taskQueue: "cityos-dynamic-queue",
+  "payout.completed": {
+    workflowFn: "payout_processing",
+    taskQueue: "uce-commerce-financial",
+    idempotencyKey: (d) => `payout-done:${d.vendor_id}:${Date.now()}`,
+  },
+  "vendor.approved": {
+    workflowFn: "vendor_onboarding",
+    taskQueue: "uce-commerce-fulfilment",
+    idempotencyKey: (d) => `approved:${d.vendor_id || d.id}`,
   },
 };
 
 export function getWorkflowForEvent(
   eventType: string,
-): { workflowId: string; taskQueue: string } | null {
+): {
+  workflowFn: string;
+  taskQueue: string;
+  idempotencyKey: (d: any) => string;
+} | null {
   return EVENT_WORKFLOW_MAP[eventType] || null;
 }
 
@@ -281,7 +381,6 @@ export async function dispatchEventToTemporal(
   nodeContext?: any,
 ): Promise<{ dispatched: boolean; runId?: string; error?: string }> {
   const mapping = getWorkflowForEvent(eventType);
-
   if (!mapping) {
     return {
       dispatched: false,
@@ -289,18 +388,19 @@ export async function dispatchEventToTemporal(
     };
   }
 
+  const idempotencyKey = mapping.idempotencyKey(payload);
+
   try {
-    const result = await startWorkflow(
-      mapping.workflowId,
-      payload,
-      nodeContext || {},
+    const result = await startCanonicalWorkflow(
+      mapping.workflowFn,
+      { ...payload, _eventType: eventType, _nodeContext: nodeContext },
+      idempotencyKey,
       mapping.taskQueue,
     );
-    return { dispatched: true, runId: result.runId };
+    return { dispatched: true, runId: result.workflowId };
   } catch (err: any) {
     logger.warn(
-      `[EventDispatcher] Failed to dispatch ${eventType} to Temporal:`,
-      err.message,
+      `[EventDispatcher] Failed to dispatch ${eventType} → ${mapping.workflowFn}: ${err.message}`,
     );
     return { dispatched: false, error: err.message };
   }
@@ -314,31 +414,21 @@ export async function processOutboxEvents(container: any): Promise<{
   let processed = 0;
   let failed = 0;
   const errors: string[] = [];
-
   try {
-    const eventOutboxService = container.resolve("eventOutbox") as unknown as any;
+    const eventOutboxService = container.resolve("eventOutbox") as any;
     const pendingEvents = await eventOutboxService.listPendingEvents(
       undefined,
       50,
     );
-
     for (const event of pendingEvents) {
       const mapping = getWorkflowForEvent(event.event_type);
-      if (!mapping) {
-        continue;
-      }
-
+      if (!mapping) continue;
       try {
         const envelope = eventOutboxService.buildEnvelope(event);
-        await startWorkflow(
-          mapping.workflowId,
-          envelope.payload,
-          {
-            tenantId: event.tenant_id,
-            nodeId: event.node_id,
-            correlationId: event.correlation_id,
-            channel: event.channel,
-          },
+        await startCanonicalWorkflow(
+          mapping.workflowFn,
+          { ...envelope.payload, _eventType: event.event_type },
+          mapping.idempotencyKey(envelope.payload),
           mapping.taskQueue,
         );
         await eventOutboxService.markPublished(event.id);
@@ -352,7 +442,6 @@ export async function processOutboxEvents(container: any): Promise<{
   } catch (err: any) {
     errors.push(`Outbox processing error: ${err.message}`);
   }
-
   return { processed, failed, errors };
 }
 
@@ -367,13 +456,12 @@ export async function dispatchCrossSystemEvent(
     payload,
     nodeContext,
   );
-
   if (!temporalResult.dispatched) {
     logger.info(
       `[EventDispatcher] No Temporal workflow for ${eventType}, attempting outbox fallback`,
     );
     try {
-      const eventOutboxService = container.resolve("eventOutbox") as unknown as any;
+      const eventOutboxService = container.resolve("eventOutbox") as any;
       await eventOutboxService.createEvent({
         event_type: eventType,
         payload,
@@ -391,9 +479,8 @@ export async function dispatchCrossSystemEvent(
       return { temporal: false, integrations: [] };
     }
   }
-
   logger.info(
-    `[EventDispatcher] Dispatched ${eventType} to Temporal: runId=${temporalResult.runId}`,
+    `[EventDispatcher] Dispatched ${eventType} → ${getWorkflowForEvent(eventType)?.workflowFn}: runId=${temporalResult.runId}`,
   );
   return { temporal: true, integrations: ["temporal"] };
 }

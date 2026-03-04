@@ -19,7 +19,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       string,
       string | undefined
     >;
-    const items = await moduleService.listCartExtensions(
+    const items = await moduleService.listCartMetadatas(
       {},
       { skip: Number(offset), take: Number(limit) },
     );
@@ -39,13 +39,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const moduleService = req.scope.resolve("cartExtension") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success)
-      return res
-        .status(400)
-        .json({
-          message: "Validation failed",
-          errors: validation.error.issues,
-        });
-    const item = await moduleService.createCartExtensions(validation.data);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: validation.error.issues,
+      });
+    const raw = await moduleService.createCartMetadatas(validation.data);
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin cart-extension");

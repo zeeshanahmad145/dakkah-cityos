@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,8 +60,8 @@ describe("InsuranceModuleService", () => {
   let service: InsuranceModuleService;
 
   beforeEach(() => {
-    service = new InsuranceModuleService();
-    jest.clearAllMocks();
+    service = new InsuranceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createPolicy", () => {
@@ -142,7 +143,7 @@ describe("InsuranceModuleService", () => {
 
   describe("fileInsuranceClaim", () => {
     it("files a claim on an active policy", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "active",
         coverage_amount: 10000,
@@ -174,7 +175,7 @@ describe("InsuranceModuleService", () => {
     });
 
     it("throws when policy is not active", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "cancelled",
         coverage_amount: 10000,
@@ -186,7 +187,7 @@ describe("InsuranceModuleService", () => {
     });
 
     it("throws when claim amount exceeds coverage limit", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "active",
         coverage_amount: 5000,
@@ -212,7 +213,7 @@ describe("InsuranceModuleService", () => {
 
   describe("processInsuranceClaim", () => {
     it("approves a pending claim with payout equal to claim amount", async () => {
-      jest.spyOn(service, "retrieveInsClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsClaim").mockResolvedValue({
         id: "clm_1",
         status: "pending",
         claim_amount: 3000,
@@ -242,7 +243,7 @@ describe("InsuranceModuleService", () => {
     });
 
     it("rejects a claim with zero payout", async () => {
-      jest.spyOn(service, "retrieveInsClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsClaim").mockResolvedValue({
         id: "clm_1",
         status: "pending",
         claim_amount: 3000,
@@ -271,7 +272,7 @@ describe("InsuranceModuleService", () => {
     });
 
     it("throws when claim is not in a reviewable state", async () => {
-      jest.spyOn(service, "retrieveInsClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsClaim").mockResolvedValue({
         id: "clm_1",
         status: "approved",
       });
@@ -284,7 +285,7 @@ describe("InsuranceModuleService", () => {
 
   describe("cancelPolicy", () => {
     it("cancels an active policy with reason", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "active",
       });
@@ -308,7 +309,7 @@ describe("InsuranceModuleService", () => {
     });
 
     it("throws when policy is already cancelled", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "cancelled",
       });
@@ -321,14 +322,14 @@ describe("InsuranceModuleService", () => {
 
   describe("getPolicyDetails", () => {
     it("returns policy details with claims and remaining coverage", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "active",
         coverage_amount: 10000,
         end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       });
 
-      jest.spyOn(service, "listInsClaims").mockResolvedValue([
+      vi.spyOn(service, "listInsClaims").mockResolvedValue([
         { id: "clm_1", claim_amount: 2000, payout_amount: 2000 },
         { id: "clm_2", claim_amount: 1000, payout_amount: 1000 },
       ]);
@@ -342,14 +343,14 @@ describe("InsuranceModuleService", () => {
     });
 
     it("marks expired policies correctly", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_1",
         status: "active",
         coverage_amount: 5000,
         end_date: new Date("2020-01-01"),
       });
 
-      jest.spyOn(service, "listInsClaims").mockResolvedValue([]);
+      vi.spyOn(service, "listInsClaims").mockResolvedValue([]);
 
       const result = await service.getPolicyDetails("pol_1");
 

@@ -797,15 +797,6 @@
           ],
           "mappedType": "enum"
         },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
         "make": {
           "name": "make",
           "type": "text",
@@ -925,44 +916,8 @@
           ],
           "mappedType": "enum"
         },
-        "price": {
-          "name": "price",
-          "type": "numeric",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "decimal"
-        },
-        "currency_code": {
-          "name": "currency_code",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "text"
-        },
         "features": {
           "name": "features",
-          "type": "jsonb",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "json"
-        },
-        "images": {
-          "name": "images",
           "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
@@ -988,23 +943,6 @@
           "nullable": true,
           "mappedType": "text"
         },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "default": "'draft'",
-          "enumItems": [
-            "draft",
-            "active",
-            "reserved",
-            "sold",
-            "withdrawn"
-          ],
-          "mappedType": "enum"
-        },
         "view_count": {
           "name": "view_count",
           "type": "integer",
@@ -1022,15 +960,6 @@
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "mappedType": "json"
-        },
-        "raw_price": {
-          "name": "raw_price",
-          "type": "jsonb",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
           "mappedType": "json"
         },
         "created_at": {

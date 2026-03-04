@@ -1,14 +1,15 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => {
-    return { run: jest.fn(), config, fn };
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => {
+    return { run: vi.fn(), config, fn };
   }),
-  createStep: jest.fn((_name, fn) => fn),
-  StepResponse: jest.fn((data) => data),
-  WorkflowResponse: jest.fn((data) => data),
+  createStep: vi.fn((_name, fn) => fn),
+  StepResponse: class { constructor(data) { Object.assign(this, data); } },
+  WorkflowResponse: vi.fn((data) => data),
 }));
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 });
 
 describe("Loyalty Reward Workflow", () => {
@@ -18,7 +19,7 @@ describe("Loyalty Reward Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/loyalty-reward.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     calculatePointsStep = calls.find(
       (c: any) => c[0] === "calculate-loyalty-points-step",
@@ -55,7 +56,7 @@ describe("Loyalty Reward Workflow", () => {
   it("should credit loyalty points", async () => {
     const tx = { id: "lt_1" };
     const container = mockContainer({
-      loyalty: { createLoyaltyTransactions: jest.fn().mockResolvedValue(tx) },
+      loyalty: { createLoyaltyTransactions: vi.fn().mockResolvedValue(tx) },
     });
     const result = await creditPointsStep(
       { customerId: "c1", points: 100, orderId: "o1" },
@@ -77,7 +78,7 @@ describe("Subscription Renewal Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/subscription-renewal.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     checkSubscriptionStep = calls.find(
       (c: any) => c[0] === "check-subscription-status-step",
@@ -93,7 +94,7 @@ describe("Subscription Renewal Workflow", () => {
   it("should check active subscription status", async () => {
     const sub = { id: "sub_1", status: "active" };
     const container = mockContainer({
-      subscription: { retrieveSubscription: jest.fn().mockResolvedValue(sub) },
+      subscription: { retrieveSubscription: vi.fn().mockResolvedValue(sub) },
     });
     const result = await checkSubscriptionStep(
       {
@@ -111,7 +112,7 @@ describe("Subscription Renewal Workflow", () => {
   it("should throw if subscription not active", async () => {
     const sub = { id: "sub_1", status: "canceled" };
     const container = mockContainer({
-      subscription: { retrieveSubscription: jest.fn().mockResolvedValue(sub) },
+      subscription: { retrieveSubscription: vi.fn().mockResolvedValue(sub) },
     });
     await expect(
       checkSubscriptionStep(
@@ -130,7 +131,7 @@ describe("Subscription Renewal Workflow", () => {
   it("should charge renewal payment", async () => {
     const payment = { id: "pay_1" };
     const container = mockContainer({
-      payment: { capturePayment: jest.fn().mockResolvedValue(payment) },
+      payment: { capturePayment: vi.fn().mockResolvedValue(payment) },
     });
     const result = await chargeRenewalStep(
       {
@@ -154,8 +155,8 @@ describe("Subscription Renewal Workflow", () => {
     };
     const container = mockContainer({
       subscription: {
-        updateSubscriptions: jest.fn().mockResolvedValue(updated),
-        retrieveSubscription: jest.fn().mockResolvedValue(existing),
+        updateSubscriptions: vi.fn().mockResolvedValue(updated),
+        retrieveSubscription: vi.fn().mockResolvedValue(existing),
       },
     });
     const result = await updateSubscriptionStep(
@@ -173,7 +174,7 @@ describe("Auction Lifecycle Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/auction-lifecycle.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     createAuctionStep = calls.find(
       (c: any) => c[0] === "create-auction-step",
@@ -187,7 +188,7 @@ describe("Auction Lifecycle Workflow", () => {
   it("should create an auction in draft status", async () => {
     const auction = { id: "auc_1", status: "draft" };
     const container = mockContainer({
-      auction: { createAuctions: jest.fn().mockResolvedValue(auction) },
+      auction: { createAuctions: vi.fn().mockResolvedValue(auction) },
     });
     const result = await createAuctionStep(
       {
@@ -206,7 +207,7 @@ describe("Auction Lifecycle Workflow", () => {
   it("should open an auction to active status", async () => {
     const opened = { id: "auc_1", status: "active" };
     const container = mockContainer({
-      auction: { updateAuctions: jest.fn().mockResolvedValue(opened) },
+      auction: { updateAuctions: vi.fn().mockResolvedValue(opened) },
     });
     const result = await openAuctionStep({ auctionId: "auc_1" }, { container });
     expect(result.auction.status).toBe("active");
@@ -215,7 +216,7 @@ describe("Auction Lifecycle Workflow", () => {
   it("should close an auction", async () => {
     const closed = { id: "auc_1", status: "closed" };
     const container = mockContainer({
-      auction: { updateAuctions: jest.fn().mockResolvedValue(closed) },
+      auction: { updateAuctions: vi.fn().mockResolvedValue(closed) },
     });
     const result = await closeAuctionStep(
       { auctionId: "auc_1" },
@@ -232,7 +233,7 @@ describe("Campaign Activation Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/campaign-activation.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     createCampaignStep = calls.find(
       (c: any) => c[0] === "create-campaign-step",
@@ -294,7 +295,7 @@ describe("Trade-In Evaluation Workflow", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/trade-in-evaluation.js");
-    const { createStep } = require("@medusajs/framework/workflows-sdk");
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"));
     const calls = createStep.mock.calls;
     submitTradeInStep = calls.find(
       (c: any) => c[0] === "submit-trade-in-step",

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -83,13 +84,13 @@ describe("TravelModuleService", () => {
   let service: TravelModuleService;
 
   beforeEach(() => {
-    service = new TravelModuleService();
-    jest.clearAllMocks();
+    service = new TravelModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createBooking", () => {
     it("creates a booking with valid data", async () => {
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         max_occupancy: 4,
         base_price: 100,
@@ -97,7 +98,7 @@ describe("TravelModuleService", () => {
       jest
         .spyOn(service, "listRooms")
         .mockResolvedValue([{ id: "room-1", status: "available" }]);
-      jest.spyOn(service, "listAmenities").mockResolvedValue([]);
+      vi.spyOn(service, "listAmenities").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createTravelReservations")
         .mockResolvedValue({ id: "res-1", status: "confirmed" });
@@ -118,7 +119,7 @@ describe("TravelModuleService", () => {
     });
 
     it("throws when travelers exceed max occupancy", async () => {
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         max_occupancy: 2,
       });
@@ -160,7 +161,7 @@ describe("TravelModuleService", () => {
     it("cancels with 100% refund when check-in is far away", async () => {
       const futureCheckIn = new Date();
       futureCheckIn.setDate(futureCheckIn.getDate() + 30);
-      jest.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
+      vi.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
         id: "res-1",
         status: "confirmed",
         check_in: futureCheckIn,
@@ -179,13 +180,13 @@ describe("TravelModuleService", () => {
     it("cancels with 50% refund when check-in is within 3 days", async () => {
       const soonCheckIn = new Date();
       soonCheckIn.setDate(soonCheckIn.getDate() + 2);
-      jest.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
+      vi.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
         id: "res-1",
         status: "confirmed",
         check_in: soonCheckIn,
         total_price: 400,
       });
-      jest.spyOn(service, "updateTravelReservations").mockResolvedValue({});
+      vi.spyOn(service, "updateTravelReservations").mockResolvedValue({});
 
       const result = await service.cancelBooking("res-1");
 
@@ -194,7 +195,7 @@ describe("TravelModuleService", () => {
     });
 
     it("throws when booking is already cancelled", async () => {
-      jest.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
+      vi.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
         id: "res-1",
         status: "cancelled",
       });
@@ -205,7 +206,7 @@ describe("TravelModuleService", () => {
     });
 
     it("throws when booking is checked out", async () => {
-      jest.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
+      vi.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
         id: "res-1",
         status: "checked_out",
       });
@@ -218,7 +219,7 @@ describe("TravelModuleService", () => {
 
   describe("getItinerary", () => {
     it("returns full itinerary with property and amenities", async () => {
-      jest.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
+      vi.spyOn(service, "retrieveTravelReservation").mockResolvedValue({
         id: "res-1",
         room_type_id: "rt-1",
         guest_id: "guest-1",
@@ -229,14 +230,14 @@ describe("TravelModuleService", () => {
         total_price: 800,
         special_requests: "Late checkout",
       });
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         name: "Deluxe Suite",
         description: "Luxury room",
         max_occupancy: 4,
         property_id: "prop-1",
       });
-      jest.spyOn(service, "retrieveTravelProperty").mockResolvedValue({
+      vi.spyOn(service, "retrieveTravelProperty").mockResolvedValue({
         id: "prop-1",
         name: "Grand Hotel",
         location: "Paris",
@@ -262,7 +263,7 @@ describe("TravelModuleService", () => {
 
   describe("calculatePackagePrice", () => {
     it("calculates price with no discount for small groups", async () => {
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         base_price: 100,
       });
@@ -276,7 +277,7 @@ describe("TravelModuleService", () => {
     });
 
     it("applies 5% discount for 3+ travelers", async () => {
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         base_price: 100,
       });
@@ -289,7 +290,7 @@ describe("TravelModuleService", () => {
     });
 
     it("applies 10% discount for 5+ travelers", async () => {
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         base_price: 100,
       });
@@ -302,11 +303,11 @@ describe("TravelModuleService", () => {
     });
 
     it("includes extras cost with per-traveler pricing", async () => {
-      jest.spyOn(service, "retrieveRoomType").mockResolvedValue({
+      vi.spyOn(service, "retrieveRoomType").mockResolvedValue({
         id: "rt-1",
         base_price: 100,
       });
-      jest.spyOn(service, "retrieveAmenity").mockResolvedValue({
+      vi.spyOn(service, "retrieveAmenity").mockResolvedValue({
         id: "a1",
         price: 20,
       });

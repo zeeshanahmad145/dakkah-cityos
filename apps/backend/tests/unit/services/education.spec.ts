@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -67,39 +68,39 @@ describe("EducationModuleService", () => {
   let service: EducationModuleService;
 
   beforeEach(() => {
-    service = new EducationModuleService();
-    jest.clearAllMocks();
+    service = new EducationModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("enrollStudent", () => {
     it("should enroll a student in an available course", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({
         id: "course_01",
         status: "published",
         max_students: 30,
         enrolled_count: 10,
       });
-      jest.spyOn(service, "listEnrollments").mockResolvedValue([]);
-      jest.spyOn(service, "createEnrollments").mockResolvedValue({
+      vi.spyOn(service, "listEnrollments").mockResolvedValue([]);
+      vi.spyOn(service, "createEnrollments").mockResolvedValue({
         id: "enr_01",
         course_id: "course_01",
         student_id: "stud_01",
         status: "active",
       });
-      jest.spyOn(service, "updateCourses").mockResolvedValue({});
+      vi.spyOn(service, "updateCourses").mockResolvedValue({});
 
       const result = await service.enrollStudent("course_01", "stud_01");
       expect(result.status).toBe("active");
     });
 
     it("should reject enrollment when course is full", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({
         id: "course_01",
         status: "published",
         max_students: 5,
         enrolled_count: 5,
       });
-      jest.spyOn(service, "listEnrollments").mockResolvedValue([]);
+      vi.spyOn(service, "listEnrollments").mockResolvedValue([]);
 
       await expect(
         service.enrollStudent("course_01", "stud_01"),
@@ -107,7 +108,7 @@ describe("EducationModuleService", () => {
     });
 
     it("should reject enrollment for unpublished course", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({
         id: "course_01",
         status: "draft",
         max_students: 30,
@@ -119,7 +120,7 @@ describe("EducationModuleService", () => {
     });
 
     it("should reject duplicate enrollment", async () => {
-      jest.spyOn(service, "retrieveCourse").mockResolvedValue({
+      vi.spyOn(service, "retrieveCourse").mockResolvedValue({
         id: "course_01",
         status: "published",
         max_students: 30,
@@ -137,7 +138,7 @@ describe("EducationModuleService", () => {
 
   describe("trackProgress", () => {
     it("should track lesson completion and update progress", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "enr_01",
         course_id: "course_01",
         student_id: "stud_01",
@@ -148,7 +149,7 @@ describe("EducationModuleService", () => {
       jest
         .spyOn(service, "listLessons")
         .mockResolvedValue(Array(10).fill({ id: "lesson_x" }));
-      jest.spyOn(service, "updateEnrollments").mockResolvedValue({
+      vi.spyOn(service, "updateEnrollments").mockResolvedValue({
         id: "enr_01",
         progress: 60,
       });
@@ -158,7 +159,7 @@ describe("EducationModuleService", () => {
     });
 
     it("should return existing enrollment if lesson already completed", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "enr_01",
         course_id: "course_01",
         status: "active",
@@ -171,7 +172,7 @@ describe("EducationModuleService", () => {
     });
 
     it("should reject progress on inactive enrollment", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "enr_01",
         status: "cancelled",
         completed_lessons: [],
@@ -185,27 +186,27 @@ describe("EducationModuleService", () => {
 
   describe("issueCertificate", () => {
     it("should issue certificate for completed course", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "enr_01",
         course_id: "course_01",
         student_id: "stud_01",
         status: "active",
         progress: 100,
       });
-      jest.spyOn(service, "listCertificates").mockResolvedValue([]);
-      jest.spyOn(service, "createCertificates").mockResolvedValue({
+      vi.spyOn(service, "listCertificates").mockResolvedValue([]);
+      vi.spyOn(service, "createCertificates").mockResolvedValue({
         id: "cert_01",
         enrollment_id: "enr_01",
         status: "issued",
       });
-      jest.spyOn(service, "updateEnrollments").mockResolvedValue({});
+      vi.spyOn(service, "updateEnrollments").mockResolvedValue({});
 
       const result = await service.issueCertificate("enr_01");
       expect(result).toBeDefined();
     });
 
     it("should reject certificate for incomplete course", async () => {
-      jest.spyOn(service, "retrieveEnrollment").mockResolvedValue({
+      vi.spyOn(service, "retrieveEnrollment").mockResolvedValue({
         id: "enr_01",
         course_id: "course_01",
         progress: 75,

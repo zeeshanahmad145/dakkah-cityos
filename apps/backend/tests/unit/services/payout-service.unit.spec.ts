@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -48,18 +49,18 @@ jest.mock("@medusajs/framework/utils", () => {
 });
 
 const mockStripe = {
-  transfers: { create: jest.fn() },
+  transfers: { create: vi.fn() },
   accounts: {
-    create: jest.fn(),
-    createLoginLink: jest.fn(),
-    retrieve: jest.fn(),
+    create: vi.fn(),
+    createLoginLink: vi.fn(),
+    retrieve: vi.fn(),
   },
-  accountLinks: { create: jest.fn() },
+  accountLinks: { create: vi.fn() },
 };
 
-jest.mock("stripe", () => {
-  return jest.fn().mockImplementation(() => mockStripe);
-});
+vi.mock("../../../src/lib/config", () => ({ appConfig: { stripe: { secretKey: "sk_test_123" } } }));
+
+vi.mock("stripe", () => ({ default: class { constructor() { return mockStripe; } } }));
 
 import PayoutModuleService from "../../../src/modules/payout/service";
 
@@ -67,7 +68,7 @@ describe("PayoutModuleService", () => {
   let service: PayoutModuleService;
 
   beforeEach(() => {
-    service = new PayoutModuleService();
+    service = new PayoutModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
   });
 
   describe("createVendorPayout", () => {
@@ -75,7 +76,7 @@ describe("PayoutModuleService", () => {
       const createSpy = jest
         .spyOn(service, "createPayouts")
         .mockResolvedValue({ id: "po-1" });
-      jest.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
+      vi.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
 
       const result = await service.createVendorPayout({
         vendorId: "v-1",
@@ -104,7 +105,7 @@ describe("PayoutModuleService", () => {
       const createSpy = jest
         .spyOn(service, "createPayouts")
         .mockResolvedValue({ id: "po-1" });
-      jest.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
+      vi.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
 
       await service.createVendorPayout({
         vendorId: "v-1",
@@ -124,7 +125,7 @@ describe("PayoutModuleService", () => {
     });
 
     it("creates transaction links for each transaction", async () => {
-      jest.spyOn(service, "createPayouts").mockResolvedValue({ id: "po-1" });
+      vi.spyOn(service, "createPayouts").mockResolvedValue({ id: "po-1" });
       const linkSpy = jest
         .spyOn(service, "createPayoutTransactionLinks")
         .mockResolvedValue([]);
@@ -162,7 +163,7 @@ describe("PayoutModuleService", () => {
       const createSpy = jest
         .spyOn(service, "createPayouts")
         .mockResolvedValue({ id: "po-1" });
-      jest.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
+      vi.spyOn(service, "createPayoutTransactionLinks").mockResolvedValue([]);
 
       await service.createVendorPayout({
         vendorId: "v-1",
@@ -197,7 +198,7 @@ describe("PayoutModuleService", () => {
           payout_number: "PO-2025-001",
           vendor_id: "v-1",
         });
-      jest.spyOn(service, "updatePayouts").mockResolvedValue({});
+      vi.spyOn(service, "updatePayouts").mockResolvedValue({});
       mockStripe.transfers.create.mockResolvedValue({ id: "tr-1" });
 
       const result = await service.retryFailedPayout("po-1", "acct_123");
@@ -311,7 +312,7 @@ describe("PayoutModuleService", () => {
 
   describe("processStripeConnectPayout", () => {
     it("processes payout via Stripe and updates status", async () => {
-      jest.spyOn(service, "retrievePayout").mockResolvedValue({
+      vi.spyOn(service, "retrievePayout").mockResolvedValue({
         id: "po-1",
         net_amount: 1000,
         payout_number: "PO-2025-001",
@@ -342,7 +343,7 @@ describe("PayoutModuleService", () => {
     });
 
     it("updates payout to failed on Stripe error", async () => {
-      jest.spyOn(service, "retrievePayout").mockResolvedValue({
+      vi.spyOn(service, "retrievePayout").mockResolvedValue({
         id: "po-1",
         net_amount: 1000,
         payout_number: "PO-2025-001",
@@ -369,7 +370,7 @@ describe("PayoutModuleService", () => {
     });
 
     it("throws when no stripe account ID provided", async () => {
-      jest.spyOn(service, "retrievePayout").mockResolvedValue({ id: "po-1" });
+      vi.spyOn(service, "retrievePayout").mockResolvedValue({ id: "po-1" });
 
       await expect(
         service.processStripeConnectPayout("po-1", ""),

@@ -5,6 +5,7 @@ import { handleApiError } from "../../../lib/api-error-handler";
 
 const createAuctionSchema = z
   .object({
+    product_id: z.string().optional(),
     title: z.string(),
     description: z.string().optional(),
     auction_type: z.enum(["english", "dutch", "sealed", "reserve"]),
@@ -18,7 +19,7 @@ const createAuctionSchema = z
     seller_id: z.string(),
     category_id: z.string().optional(),
   })
-  .strict();
+  .passthrough();
 
 interface CityOSContext {
   tenantId?: string;

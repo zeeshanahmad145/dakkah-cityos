@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -71,13 +72,13 @@ describe("CharityModuleService", () => {
   let service: CharityModuleService;
 
   beforeEach(() => {
-    service = new CharityModuleService();
-    jest.clearAllMocks();
+    service = new CharityModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("processDonation", () => {
     it("processes a valid donation", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         status: "active",
         raised_amount: 500,
@@ -116,7 +117,7 @@ describe("CharityModuleService", () => {
     });
 
     it("throws when campaign is not active", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         status: "completed",
       });
@@ -127,7 +128,7 @@ describe("CharityModuleService", () => {
     });
 
     it("throws when campaign has ended", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         status: "active",
         end_date: "2020-01-01",
@@ -141,7 +142,7 @@ describe("CharityModuleService", () => {
 
   describe("getCampaignProgress", () => {
     it("calculates campaign progress correctly", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         raised_amount: 7500,
         goal_amount: 10000,
@@ -159,7 +160,7 @@ describe("CharityModuleService", () => {
     });
 
     it("caps percentage at 100 when goal is exceeded", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         raised_amount: 15000,
         goal_amount: 10000,
@@ -172,7 +173,7 @@ describe("CharityModuleService", () => {
     });
 
     it("returns null days remaining when no end date", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         raised_amount: 0,
         goal_amount: 10000,
@@ -246,7 +247,7 @@ describe("CharityModuleService", () => {
 
   describe("issueTaxReceipt", () => {
     it("issues a tax receipt for a completed donation", async () => {
-      jest.spyOn(service, "retrieveDonation").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonation").mockResolvedValue({
         id: "don-1",
         campaign_id: "camp-1",
         donor_id: "donor-1",
@@ -254,7 +255,7 @@ describe("CharityModuleService", () => {
         status: "completed",
         donated_at: new Date(),
       });
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         id: "camp-1",
         charity_org_id: "org-1",
         title: "Clean Water Fund",
@@ -274,7 +275,7 @@ describe("CharityModuleService", () => {
     });
 
     it("throws for non-completed donations", async () => {
-      jest.spyOn(service, "retrieveDonation").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonation").mockResolvedValue({
         id: "don-1",
         status: "pending",
       });

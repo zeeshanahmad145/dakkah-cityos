@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -76,13 +77,13 @@ describe("HealthcareModuleService", () => {
   let service: HealthcareModuleService;
 
   beforeEach(() => {
-    service = new HealthcareModuleService();
-    jest.clearAllMocks();
+    service = new HealthcareModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("verifyInsurance", () => {
     it("should verify when active insurance claims exist for provider", async () => {
-      jest.spyOn(service, "listInsuranceClaims").mockResolvedValue([
+      vi.spyOn(service, "listInsuranceClaims").mockResolvedValue([
         {
           id: "claim_01",
           insurance_provider_id: "prov_01",
@@ -90,7 +91,7 @@ describe("HealthcareModuleService", () => {
           status: "approved",
         },
       ]);
-      jest.spyOn(service, "retrievePractitioner").mockResolvedValue({
+      vi.spyOn(service, "retrievePractitioner").mockResolvedValue({
         id: "prov_01",
         name: "Dr. Smith",
       });
@@ -101,8 +102,8 @@ describe("HealthcareModuleService", () => {
     });
 
     it("should not verify when no matching claims exist", async () => {
-      jest.spyOn(service, "listInsuranceClaims").mockResolvedValue([]);
-      jest.spyOn(service, "retrievePractitioner").mockResolvedValue({
+      vi.spyOn(service, "listInsuranceClaims").mockResolvedValue([]);
+      vi.spyOn(service, "retrievePractitioner").mockResolvedValue({
         id: "prov_01",
         name: "Dr. Smith",
       });
@@ -120,13 +121,13 @@ describe("HealthcareModuleService", () => {
 
   describe("createPrescription", () => {
     it("should create a valid prescription", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt_01",
         patient_id: "pat_01",
         practitioner_id: "prov_01",
         status: "completed",
       });
-      jest.spyOn(service, "createPrescriptions").mockResolvedValue({
+      vi.spyOn(service, "createPrescriptions").mockResolvedValue({
         id: "rx_01",
         medications: "Amoxicillin",
         dosage: "500mg",
@@ -141,7 +142,7 @@ describe("HealthcareModuleService", () => {
     });
 
     it("should reject prescription without medications", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt_01",
         status: "completed",
       });
@@ -156,7 +157,7 @@ describe("HealthcareModuleService", () => {
     });
 
     it("should reject prescription without dosage", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt_01",
         status: "completed",
       });
@@ -171,7 +172,7 @@ describe("HealthcareModuleService", () => {
     });
 
     it("should reject prescription without prescriber ID", async () => {
-      jest.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
+      vi.spyOn(service, "retrieveHealthcareAppointment").mockResolvedValue({
         id: "apt_01",
         status: "completed",
       });
@@ -191,12 +192,12 @@ describe("HealthcareModuleService", () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 3);
 
-      jest.spyOn(service, "retrievePractitioner").mockResolvedValue({
+      vi.spyOn(service, "retrievePractitioner").mockResolvedValue({
         id: "prov_01",
         name: "Dr. Smith",
       });
-      jest.spyOn(service, "checkProviderAvailability").mockResolvedValue(true);
-      jest.spyOn(service, "createHealthcareAppointments").mockResolvedValue({
+      vi.spyOn(service, "checkProviderAvailability").mockResolvedValue(true);
+      vi.spyOn(service, "createHealthcareAppointments").mockResolvedValue({
         id: "apt_01",
         practitioner_id: "prov_01",
         patient_id: "pat_01",
@@ -212,11 +213,11 @@ describe("HealthcareModuleService", () => {
     });
 
     it("should reject appointment when provider is not available", async () => {
-      jest.spyOn(service, "retrievePractitioner").mockResolvedValue({
+      vi.spyOn(service, "retrievePractitioner").mockResolvedValue({
         id: "prov_01",
         name: "Dr. Smith",
       });
-      jest.spyOn(service, "checkProviderAvailability").mockResolvedValue(false);
+      vi.spyOn(service, "checkProviderAvailability").mockResolvedValue(false);
 
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 3);

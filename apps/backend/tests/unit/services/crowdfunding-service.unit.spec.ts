@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -83,8 +84,8 @@ describe("CrowdfundingModuleService", () => {
   let service: CrowdfundingModuleService;
 
   beforeEach(() => {
-    service = new CrowdfundingModuleService();
-    jest.clearAllMocks();
+    service = new CrowdfundingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("launchCampaign", () => {
@@ -156,14 +157,14 @@ describe("CrowdfundingModuleService", () => {
   describe("getCampaignDashboard", () => {
     it("returns dashboard metrics", async () => {
       const endDate = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
-      jest.spyOn(service, "retrieveCrowdfundCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveCrowdfundCampaign").mockResolvedValue({
         id: "camp-1",
         goal_amount: 10000,
         current_amount: 5000,
         backer_count: 50,
         end_date: endDate,
       });
-      jest.spyOn(service, "listRewardTiers").mockResolvedValue([{ id: "t1" }]);
+      vi.spyOn(service, "listRewardTiers").mockResolvedValue([{ id: "t1" }]);
       jest
         .spyOn(service, "listPledges")
         .mockResolvedValue([{ id: "p1", amount: 100, pledged_at: new Date() }]);
@@ -180,13 +181,13 @@ describe("CrowdfundingModuleService", () => {
 
   describe("claimReward", () => {
     it("claims reward when campaign is funded", async () => {
-      jest.spyOn(service, "retrievePledge").mockResolvedValue({
+      vi.spyOn(service, "retrievePledge").mockResolvedValue({
         id: "p1",
         status: "active",
         reward_tier_id: "t1",
         campaign_id: "camp-1",
       });
-      jest.spyOn(service, "retrieveCrowdfundCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveCrowdfundCampaign").mockResolvedValue({
         id: "camp-1",
         goal_amount: 10000,
         current_amount: 15000,
@@ -194,7 +195,7 @@ describe("CrowdfundingModuleService", () => {
       jest
         .spyOn(service, "retrieveRewardTier")
         .mockResolvedValue({ id: "t1", limit: 100, claimed_count: 5 });
-      jest.spyOn(service, "updateRewardTiers").mockResolvedValue({});
+      vi.spyOn(service, "updateRewardTiers").mockResolvedValue({});
       const updateSpy = jest
         .spyOn(service, "updatePledges")
         .mockResolvedValue({ id: "p1", status: "reward_claimed" });
@@ -208,13 +209,13 @@ describe("CrowdfundingModuleService", () => {
     });
 
     it("throws when campaign has not met its funding goal", async () => {
-      jest.spyOn(service, "retrievePledge").mockResolvedValue({
+      vi.spyOn(service, "retrievePledge").mockResolvedValue({
         id: "p1",
         status: "active",
         reward_tier_id: "t1",
         campaign_id: "camp-1",
       });
-      jest.spyOn(service, "retrieveCrowdfundCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveCrowdfundCampaign").mockResolvedValue({
         id: "camp-1",
         goal_amount: 10000,
         current_amount: 5000,

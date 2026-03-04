@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -61,8 +62,8 @@ describe("LegalModuleService", () => {
   let service: LegalModuleService;
 
   beforeEach(() => {
-    service = new LegalModuleService();
-    jest.clearAllMocks();
+    service = new LegalModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createCase", () => {
@@ -109,11 +110,11 @@ describe("LegalModuleService", () => {
 
   describe("updateCaseStatus", () => {
     it("should transition from open to in_progress", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case_01",
         status: "open",
       });
-      jest.spyOn(service, "updateLegalCases").mockResolvedValue({
+      vi.spyOn(service, "updateLegalCases").mockResolvedValue({
         id: "case_01",
         status: "in_progress",
       });
@@ -123,7 +124,7 @@ describe("LegalModuleService", () => {
     });
 
     it("should reject invalid transition from closed to open", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case_01",
         status: "closed",
       });
@@ -134,11 +135,11 @@ describe("LegalModuleService", () => {
     });
 
     it("should allow reopening a closed case", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case_01",
         status: "closed",
       });
-      jest.spyOn(service, "updateLegalCases").mockResolvedValue({
+      vi.spyOn(service, "updateLegalCases").mockResolvedValue({
         id: "case_01",
         status: "reopened",
       });
@@ -150,11 +151,11 @@ describe("LegalModuleService", () => {
 
   describe("addDocument", () => {
     it("should add a document to an open case", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case_01",
         status: "open",
       });
-      jest.spyOn(service, "createRetainerAgreements").mockResolvedValue({
+      vi.spyOn(service, "createRetainerAgreements").mockResolvedValue({
         id: "doc_01",
         case_id: "case_01",
         title: "Contract Agreement",
@@ -170,7 +171,7 @@ describe("LegalModuleService", () => {
     });
 
     it("should reject adding document to closed case", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case_01",
         status: "closed",
       });
@@ -199,12 +200,12 @@ describe("LegalModuleService", () => {
 
   describe("getBillingSummary", () => {
     it("should return billing summary for a case", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case_01",
         status: "in_progress",
         hourly_rate: 250,
       });
-      jest.spyOn(service, "listLegalConsultations").mockResolvedValue([
+      vi.spyOn(service, "listLegalConsultations").mockResolvedValue([
         { duration_hours: 2, type: "consultation" },
         { duration_hours: 3, type: "filing" },
       ]);

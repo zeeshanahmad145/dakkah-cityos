@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,8 +57,8 @@ describe("NotificationPreferencesModuleService", () => {
   let service: NotificationPreferencesModuleService;
 
   beforeEach(() => {
-    service = new NotificationPreferencesModuleService();
-    jest.clearAllMocks();
+    service = new NotificationPreferencesModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getByCustomer", () => {
@@ -87,7 +88,7 @@ describe("NotificationPreferencesModuleService", () => {
     });
 
     it("returns empty array when no preferences exist", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
 
       const result = await service.getByCustomer("cust-1", "tenant-1");
 
@@ -97,7 +98,7 @@ describe("NotificationPreferencesModuleService", () => {
 
   describe("updatePreference", () => {
     it("updates an existing preference", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         {
           id: "pref-1",
           channel: "email",
@@ -124,7 +125,7 @@ describe("NotificationPreferencesModuleService", () => {
     });
 
     it("creates a new preference when none exists", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createNotificationPreferences")
         .mockResolvedValue({ id: "pref-new" });
@@ -187,7 +188,7 @@ describe("NotificationPreferencesModuleService", () => {
     });
 
     it("updates all preferences for a valid channel", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         { id: "pref-1", channel: "email" },
         { id: "pref-2", channel: "email" },
       ]);
@@ -252,7 +253,7 @@ describe("NotificationPreferencesModuleService", () => {
 
   describe("bulkOptOut", () => {
     it("opts out of all channels when none specified", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         { id: "p1", channel: "email" },
         { id: "p2", channel: "sms" },
         { id: "p3", channel: "push" },
@@ -268,7 +269,7 @@ describe("NotificationPreferencesModuleService", () => {
     });
 
     it("opts out of specific channels only", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         { id: "p1", channel: "email" },
         { id: "p2", channel: "sms" },
         { id: "p3", channel: "push" },

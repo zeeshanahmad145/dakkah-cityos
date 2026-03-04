@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -75,13 +76,13 @@ describe("UtilitiesModuleService – Enhanced", () => {
   let service: UtilitiesModuleService;
 
   beforeEach(() => {
-    service = new UtilitiesModuleService();
-    jest.clearAllMocks();
+    service = new UtilitiesModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getActiveAccounts", () => {
     it("returns active accounts for a tenant", async () => {
-      jest.spyOn(service, "listUtilityAccounts").mockResolvedValue([
+      vi.spyOn(service, "listUtilityAccounts").mockResolvedValue([
         { id: "acc-1", status: "active" },
         { id: "acc-2", status: "active" },
       ]);
@@ -103,7 +104,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
     });
 
     it("returns empty array when no accounts exist", async () => {
-      jest.spyOn(service, "listUtilityAccounts").mockResolvedValue([]);
+      vi.spyOn(service, "listUtilityAccounts").mockResolvedValue([]);
 
       const result = await service.getActiveAccounts("t-1");
       expect(result).toHaveLength(0);
@@ -115,7 +116,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
       jest
         .spyOn(service, "retrieveUtilityAccount")
         .mockResolvedValue({ id: "acc-1" });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         { reading_value: 100, reading_date: "2025-01-01", unit: "kWh" },
         { reading_value: 200, reading_date: "2025-01-15", unit: "kWh" },
         { reading_value: 350, reading_date: "2025-01-31", unit: "kWh" },
@@ -137,7 +138,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
       jest
         .spyOn(service, "retrieveUtilityAccount")
         .mockResolvedValue({ id: "acc-1" });
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([]);
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([]);
 
       const result = await service.calculateUsageCharges(
         "acc-1",
@@ -151,11 +152,11 @@ describe("UtilitiesModuleService – Enhanced", () => {
 
   describe("generateBillingSummary", () => {
     it("generates billing summary for a given month", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         account_number: "AN-001",
       });
-      jest.spyOn(service, "listUtilityBills").mockResolvedValue([
+      vi.spyOn(service, "listUtilityBills").mockResolvedValue([
         { id: "b-1", amount: 150, status: "paid" },
         { id: "b-2", amount: 200, status: "generated" },
       ]);
@@ -168,11 +169,11 @@ describe("UtilitiesModuleService – Enhanced", () => {
     });
 
     it("returns zero totals when no bills exist", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         account_number: "AN-001",
       });
-      jest.spyOn(service, "listUtilityBills").mockResolvedValue([]);
+      vi.spyOn(service, "listUtilityBills").mockResolvedValue([]);
 
       const result = await service.generateBillingSummary("acc-1", 2025, 1);
       expect(result.billCount).toBe(0);
@@ -182,7 +183,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
 
   describe("detectAnomalousUsage", () => {
     it("detects anomalous usage when recent consumption exceeds threshold", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         account_number: "AN-001",
       });
@@ -212,7 +213,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
     });
 
     it("returns not anomalous when usage is within threshold", async () => {
-      jest.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveUtilityAccount").mockResolvedValue({
         id: "acc-1",
         account_number: "AN-001",
       });
@@ -252,7 +253,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
             utility_type: "electricity",
           },
         ]);
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         {
           reading_value: 500,
           reading_date: new Date("2025-01-01").toISOString(),
@@ -283,7 +284,7 @@ describe("UtilitiesModuleService – Enhanced", () => {
             utility_type: "electricity",
           },
         ]);
-      jest.spyOn(service, "listMeterReadings").mockResolvedValue([
+      vi.spyOn(service, "listMeterReadings").mockResolvedValue([
         {
           reading_value: 500,
           reading_date: new Date("2025-01-01").toISOString(),

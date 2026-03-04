@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -20,13 +21,13 @@ jest.mock("@medusajs/framework/utils", () => {
         async retrieveEventOutbox(_id: string): Promise<any> {
           return null;
         }
-        async createEventOutboxs(_data: any): Promise<any> {
+        async createEventOutboxes(_data: any): Promise<any> {
           return {};
         }
-        async updateEventOutboxs(_data: any): Promise<any> {
+        async updateEventOutboxes(_data: any): Promise<any> {
           return {};
         }
-        async deleteEventOutboxs(_id: string): Promise<any> {
+        async deleteEventOutboxes(_id: string): Promise<any> {
           return {};
         }
       },
@@ -56,18 +57,18 @@ describe("EventModuleService", () => {
   let service: EventModuleService;
 
   beforeEach(() => {
-    service = new EventModuleService();
-    jest.clearAllMocks();
+    service = new EventModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("retryFailedEvents", () => {
     it("retries events under the retry limit", async () => {
-      jest.spyOn(service, "listEventOutboxes").mockResolvedValue([
+      vi.spyOn(service, "listEventOutboxes").mockResolvedValue([
         { id: "e1", retry_count: 1, status: "failed" },
         { id: "e2", retry_count: 0, status: "failed" },
       ]);
       const updateSpy = jest
-        .spyOn(service, "updateEventOutboxs")
+        .spyOn(service, "updateEventOutboxes")
         .mockResolvedValue({ id: "e1" });
 
       const result = await service.retryFailedEvents(undefined, 3);
@@ -81,12 +82,12 @@ describe("EventModuleService", () => {
     });
 
     it("skips events at or over the retry limit", async () => {
-      jest.spyOn(service, "listEventOutboxes").mockResolvedValue([
+      vi.spyOn(service, "listEventOutboxes").mockResolvedValue([
         { id: "e1", retry_count: 3, status: "failed" },
         { id: "e2", retry_count: 5, status: "failed" },
         { id: "e3", retry_count: 1, status: "failed" },
       ]);
-      jest.spyOn(service, "updateEventOutboxs").mockResolvedValue({ id: "e3" });
+      vi.spyOn(service, "updateEventOutboxes").mockResolvedValue({ id: "e3" });
 
       const result = await service.retryFailedEvents(undefined, 3);
 
@@ -116,7 +117,7 @@ describe("EventModuleService", () => {
       const recentDate = new Date();
       recentDate.setDate(recentDate.getDate() - 5);
 
-      jest.spyOn(service, "listEventOutboxes").mockResolvedValue([
+      vi.spyOn(service, "listEventOutboxes").mockResolvedValue([
         { id: "e1", status: "published", published_at: oldDate.toISOString() },
         {
           id: "e2",
@@ -125,7 +126,7 @@ describe("EventModuleService", () => {
         },
       ]);
       const deleteSpy = jest
-        .spyOn(service, "deleteEventOutboxs")
+        .spyOn(service, "deleteEventOutboxes")
         .mockResolvedValue({});
 
       const result = await service.purgeOldEvents(30);
@@ -144,7 +145,7 @@ describe("EventModuleService", () => {
 
   describe("getEventStats", () => {
     it("returns aggregated stats by status and event type", async () => {
-      jest.spyOn(service, "listEventOutboxes").mockResolvedValue([
+      vi.spyOn(service, "listEventOutboxes").mockResolvedValue([
         { id: "e1", status: "pending", event_type: "order.created" },
         { id: "e2", status: "published", event_type: "order.created" },
         { id: "e3", status: "failed", event_type: "payment.failed" },
@@ -163,7 +164,7 @@ describe("EventModuleService", () => {
     });
 
     it("returns zeros when no events exist", async () => {
-      jest.spyOn(service, "listEventOutboxes").mockResolvedValue([]);
+      vi.spyOn(service, "listEventOutboxes").mockResolvedValue([]);
 
       const result = await service.getEventStats("tenant-1");
 
@@ -174,7 +175,7 @@ describe("EventModuleService", () => {
 
   describe("batchPublish", () => {
     it("publishes multiple events", async () => {
-      jest.spyOn(service, "updateEventOutboxs").mockResolvedValue({ id: "e1" });
+      vi.spyOn(service, "updateEventOutboxes").mockResolvedValue({ id: "e1" });
 
       const result = await service.batchPublish(["e1", "e2", "e3"]);
 
@@ -190,7 +191,7 @@ describe("EventModuleService", () => {
 
     it("captures errors for individual events", async () => {
       jest
-        .spyOn(service, "updateEventOutboxs")
+        .spyOn(service, "updateEventOutboxes")
         .mockResolvedValueOnce({ id: "e1" })
         .mockRejectedValueOnce(new Error("Not found"));
 

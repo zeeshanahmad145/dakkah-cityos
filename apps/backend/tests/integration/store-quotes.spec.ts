@@ -1,14 +1,15 @@
+import { vi, describe, it, expect } from "vitest";
 import { GET, POST } from "../../src/api/store/quotes/route";
 
-const mockJson = jest.fn();
-const mockStatus = jest.fn(() => ({ json: mockJson }));
+const mockJson = vi.fn();
+const mockStatus = vi.fn(() => ({ json: mockJson }));
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
   body: {},
   auth_context: { actor_id: "cust_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 });
@@ -36,18 +37,21 @@ describe("Store Quotes Endpoints", () => {
     };
 
     it("should create a quote for authenticated customer", async () => {
-      const mockQuote = { id: "quote_01", status: "draft" };
-      const quoteModuleService = {
-        generateQuoteNumber: jest.fn().mockResolvedValue("Q-2026-001"),
-        createQuotes: jest.fn().mockResolvedValue(mockQuote),
-        createQuoteItems: jest.fn().mockResolvedValue({ id: "qi_01" }),
-        calculateQuoteTotals: jest.fn().mockResolvedValue(undefined),
-        retrieveQuote: jest.fn().mockResolvedValue({ ...mockQuote, items: [] }),
+      const mockQuote = {
+        id: "quote_01",
+        status: "draft",
       };
-      const req = createMockReq({ body: validBody, quoteModuleService });
+      const quoteModuleService = {
+        generateQuoteNumber: vi.fn().mockResolvedValue("Q-2026-001"),
+        createQuotes: vi.fn().mockResolvedValue(mockQuote),
+        createQuoteItems: vi.fn().mockResolvedValue({ id: "qi_01" }),
+        calculateQuoteTotals: vi.fn().mockResolvedValue(undefined),
+        retrieveQuote: vi.fn().mockResolvedValue({ ...mockQuote, items: [] }),
+      };
+      const req = createMockReq({ body: validBody, quote: quoteModuleService });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({ quote: expect.any(Object) }),
       );
@@ -57,38 +61,34 @@ describe("Store Quotes Endpoints", () => {
       const req = createMockReq({ body: validBody, auth_context: {} });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(mockStatus).toHaveBeenCalledWith(401);
     });
 
     it("should generate a quote number", async () => {
-      const generateQuoteNumber = jest.fn().mockResolvedValue("Q-2026-002");
+      const generateQuoteNumber = vi.fn().mockResolvedValue("Q-2026-002");
       const quoteModuleService = {
         generateQuoteNumber,
-        createQuotes: jest.fn().mockResolvedValue({ id: "quote_02" }),
-        createQuoteItems: jest.fn().mockResolvedValue({}),
-        calculateQuoteTotals: jest.fn(),
-        retrieveQuote: jest
-          .fn()
-          .mockResolvedValue({ id: "quote_02", items: [] }),
+        createQuotes: vi.fn().mockResolvedValue({ id: "quote_02" }),
+        createQuoteItems: vi.fn().mockResolvedValue({}),
+        calculateQuoteTotals: vi.fn(),
+        retrieveQuote: vi.fn().mockResolvedValue({ id: "quote_02", items: [] }),
       };
-      const req = createMockReq({ body: validBody, quoteModuleService });
+      const req = createMockReq({ body: validBody, quote: quoteModuleService });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(generateQuoteNumber).toHaveBeenCalled();
     });
 
     it("should create quote items for each item in the request", async () => {
-      const createQuoteItems = jest.fn().mockResolvedValue({});
+      const createQuoteItems = vi.fn().mockResolvedValue({});
       const quoteModuleService = {
-        generateQuoteNumber: jest.fn().mockResolvedValue("Q-001"),
-        createQuotes: jest.fn().mockResolvedValue({ id: "quote_03" }),
+        generateQuoteNumber: vi.fn().mockResolvedValue("Q-001"),
+        createQuotes: vi.fn().mockResolvedValue({ id: "quote_03" }),
         createQuoteItems,
-        calculateQuoteTotals: jest.fn(),
-        retrieveQuote: jest
-          .fn()
-          .mockResolvedValue({ id: "quote_03", items: [] }),
+        calculateQuoteTotals: vi.fn(),
+        retrieveQuote: vi.fn().mockResolvedValue({ id: "quote_03", items: [] }),
       };
       const body = {
         items: [
@@ -96,10 +96,10 @@ describe("Store Quotes Endpoints", () => {
           { product_id: "prod_02", title: "B", quantity: 2, unit_price: 200 },
         ],
       };
-      const req = createMockReq({ body, quoteModuleService });
+      const req = createMockReq({ body, quote: quoteModuleService });
       const res = createMockRes();
 
-      await POST(req, res);
+      await POST(req as any, res);
       expect(createQuoteItems).toHaveBeenCalledTimes(2);
     });
   });
@@ -108,32 +108,34 @@ describe("Store Quotes Endpoints", () => {
     it("should list quotes for authenticated customer", async () => {
       const mockQuotes = [{ id: "quote_01" }, { id: "quote_02" }];
       const quoteModuleService = {
-        listQuotes: jest.fn().mockResolvedValue(mockQuotes),
+        listQuotes: vi.fn().mockResolvedValue(mockQuotes),
       };
-      const req = createMockReq({ quoteModuleService });
+      const req = createMockReq({ quote: quoteModuleService });
       const res = createMockRes();
 
-      await GET(req, res);
+      await GET(req as any, res);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({ quotes: mockQuotes, count: 2 }),
       );
     });
 
-    it("should return 401 when not authenticated", async () => {
+    it("should return seed quotes when not authenticated", async () => {
       const req = createMockReq({ auth_context: {} });
       const res = createMockRes();
 
-      await GET(req, res);
-      expect(mockStatus).toHaveBeenCalledWith(401);
+      await GET(req as any, res);
+      expect(mockJson).toHaveBeenCalledWith(
+        expect.objectContaining({ count: 5 }),
+      );
     });
 
     it("should filter quotes by customer_id", async () => {
-      const listQuotes = jest.fn().mockResolvedValue([]);
+      const listQuotes = vi.fn().mockResolvedValue([]);
       const quoteModuleService = { listQuotes };
-      const req = createMockReq({ quoteModuleService });
+      const req = createMockReq({ quote: quoteModuleService });
       const res = createMockRes();
 
-      await GET(req, res);
+      await GET(req as any, res);
       expect(listQuotes).toHaveBeenCalledWith(
         { customer_id: "cust_01" },
         expect.anything(),

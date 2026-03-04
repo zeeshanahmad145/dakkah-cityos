@@ -32,7 +32,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
       take: Number(limit),
       order: { created_at: "DESC" },
     });
-    const count = await mod.listInsurancePolicies(filters);
+    const count = await mod.countInsurancePolicies(filters);
     return res.json({
       items: Array.isArray(items) ? items : [],
       count,
@@ -49,15 +49,13 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const mod = req.scope.resolve("insurance") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success) {
-      return res
-        .status(400)
-        .json({
-          message: "Validation failed",
-          errors: validation.error.issues,
-        });
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: validation.error.issues,
+      });
     }
     const data = validation.data;
-    const item = await mod.createPolicy({
+    const raw = await mod.createPolicy({
       customerId: data.customer_id,
       productId: data.product_id,
       planType: data.type,
@@ -66,6 +64,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       startDate: new Date(data.starts_at),
       metadata: data.metadata,
     });
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin insurance");

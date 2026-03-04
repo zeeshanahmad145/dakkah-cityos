@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -52,8 +53,8 @@ describe("ReviewModuleService", () => {
   let service: ReviewModuleService;
 
   beforeEach(() => {
-    service = new ReviewModuleService();
-    jest.clearAllMocks();
+    service = new ReviewModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createReview", () => {
@@ -64,7 +65,7 @@ describe("ReviewModuleService", () => {
         is_approved: false,
         helpful_count: 0,
       };
-      jest.spyOn(service, "createReviews").mockResolvedValue(created);
+      vi.spyOn(service, "createReviews").mockResolvedValue(created);
 
       const result = await service.createReview({
         rating: 5,
@@ -108,7 +109,7 @@ describe("ReviewModuleService", () => {
     });
 
     it("allows vendor review without product_id", async () => {
-      jest.spyOn(service, "createReviews").mockResolvedValue({ id: "r1" });
+      vi.spyOn(service, "createReviews").mockResolvedValue({ id: "r1" });
 
       const result = await service.createReview({
         rating: 4,
@@ -122,7 +123,7 @@ describe("ReviewModuleService", () => {
 
   describe("listProductReviews", () => {
     it("lists approved reviews by default", async () => {
-      const listSpy = jest.spyOn(service, "listReviews").mockResolvedValue([]);
+      const listSpy = vi.spyOn(service, "listReviews").mockResolvedValue([]);
 
       await service.listProductReviews("p1");
       expect(listSpy).toHaveBeenCalledWith(
@@ -132,7 +133,7 @@ describe("ReviewModuleService", () => {
     });
 
     it("includes unapproved when approved_only is false", async () => {
-      const listSpy = jest.spyOn(service, "listReviews").mockResolvedValue([]);
+      const listSpy = vi.spyOn(service, "listReviews").mockResolvedValue([]);
 
       await service.listProductReviews("p1", { approved_only: false });
       expect(listSpy).toHaveBeenCalledWith(
@@ -144,7 +145,7 @@ describe("ReviewModuleService", () => {
 
   describe("listVendorReviews", () => {
     it("lists approved vendor reviews", async () => {
-      const listSpy = jest.spyOn(service, "listReviews").mockResolvedValue([]);
+      const listSpy = vi.spyOn(service, "listReviews").mockResolvedValue([]);
 
       await service.listVendorReviews("v1");
       expect(listSpy).toHaveBeenCalledWith(
@@ -156,7 +157,7 @@ describe("ReviewModuleService", () => {
 
   describe("getProductRatingSummary", () => {
     it("returns zero summary when no reviews", async () => {
-      jest.spyOn(service, "listReviews").mockResolvedValue([]);
+      vi.spyOn(service, "listReviews").mockResolvedValue([]);
 
       const result = await service.getProductRatingSummary("p1");
       expect(result.average_rating).toBe(0);

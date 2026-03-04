@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { GET as getBookingSettings } from "../../../src/api/admin/settings/bookings/route";
 import {
   GET as listI18n,
@@ -16,7 +17,7 @@ import { POST as handleFleetbaseWebhook } from "../../../src/api/admin/webhooks/
 import { POST as handlePayloadWebhook } from "../../../src/api/admin/webhooks/payload/route";
 import { POST as handleStripeWebhook } from "../../../src/api/admin/webhooks/stripe/route";
 
-jest.mock("../../../src/lib/temporal-client", () => ({
+vi.mock("../../../src/lib/temporal-client", () => ({
   checkTemporalHealth: jest
     .fn()
     .mockResolvedValue({ healthy: true, namespace: "default" }),
@@ -25,19 +26,19 @@ jest.mock("../../../src/lib/temporal-client", () => ({
     .mockResolvedValue({ workflowId: "wf_1", runId: "run_1" }),
 }));
 
-jest.mock("../../../src/lib/event-dispatcher", () => ({
-  getWorkflowForEvent: jest.fn().mockReturnValue(null),
+vi.mock("../../../src/lib/event-dispatcher", () => ({
+  getWorkflowForEvent: vi.fn().mockReturnValue(null),
 }));
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
 describe("Admin Booking Settings Route", () => {
   it("should return booking configuration", async () => {
     const req = {
-      scope: { resolve: jest.fn() },
+      scope: { resolve: vi.fn() },
       query: {},
       params: {},
       body: {},
@@ -57,10 +58,14 @@ describe("Admin I18n Routes", () => {
     it("should list translations with pagination", async () => {
       const items = [{ id: "t_1", key: "hello", value: "مرحبا" }];
       const mockService = {
-        listTranslations: jest.fn().mockResolvedValue(items),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+        listTranslations: vi.fn().mockResolvedValue(items),
       };
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { limit: "20", offset: "0" },
         params: {},
         body: {},
@@ -76,10 +81,14 @@ describe("Admin I18n Routes", () => {
   describe("POST /admin/i18n", () => {
     it("should create translation with valid data", async () => {
       const mockService = {
-        createTranslations: jest.fn().mockResolvedValue({ id: "t_1" }),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+        createTranslations: vi.fn().mockResolvedValue({ id: "t_1" }),
       };
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {
@@ -97,7 +106,7 @@ describe("Admin I18n Routes", () => {
 
     it("should reject invalid i18n data", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: { locale: "ar" },
@@ -116,10 +125,14 @@ describe("Admin Notification Preferences Routes", () => {
   it("should list notification preferences", async () => {
     const items = [{ id: "np_1", channel: "email", enabled: true }];
     const mockService = {
-      listNotificationPreferences: jest.fn().mockResolvedValue(items),
+      baseRepository: { serialize: vi.fn(), transaction: vi.fn() },
+      __joinerConfig: vi.fn(),
+      listInsuranceClaims: vi.fn().mockResolvedValue([]), updateInsuranceClaims: vi.fn().mockResolvedValue([]), deleteInsuranceClaims: vi.fn().mockResolvedValue([]), listInsurancePolicies: vi.fn().mockResolvedValue([]), countInsurancePolicies: vi.fn().mockResolvedValue([]), generateQuoteNumber: vi.fn().mockResolvedValue([]), listCommissions: vi.fn().mockResolvedValue([]), createCommissions: vi.fn().mockResolvedValue([]), createCommissionTiers: vi.fn().mockResolvedValue([]), updateSubscriptions: vi.fn().mockResolvedValue([]), markHelpful: vi.fn().mockResolvedValue([]), listCompanyUsers: vi.fn().mockResolvedValue([]), updateVendors: vi.fn().mockResolvedValue([]), updatePayouts: vi.fn().mockResolvedValue([]), updateTenantUsers: vi.fn().mockResolvedValue([]), updateBookings: vi.fn().mockResolvedValue([]), listClassSchedules: vi.fn().mockResolvedValue([]), listTrainerProfiles: vi.fn().mockResolvedValue([]), listCourses: vi.fn().mockResolvedValue([]), 
+
+      listNotificationPreferences: vi.fn().mockResolvedValue(items),
     };
     const req = {
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: { limit: "20", offset: "0" },
       params: {},
       body: {},
@@ -133,7 +146,7 @@ describe("Admin Notification Preferences Routes", () => {
 
   it("should reject invalid notification preference", async () => {
     const req = {
-      scope: { resolve: jest.fn() },
+      scope: { resolve: vi.fn() },
       query: {},
       params: {},
       body: { channel: "invalid" },
@@ -148,7 +161,7 @@ describe("Admin Temporal Routes", () => {
   describe("GET /admin/temporal", () => {
     it("should return temporal health status", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: {},
@@ -164,7 +177,7 @@ describe("Admin Temporal Routes", () => {
   describe("POST /admin/temporal/trigger", () => {
     it("should trigger a temporal workflow", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: { workflowId: "test-workflow", input: { key: "value" } },
@@ -176,7 +189,7 @@ describe("Admin Temporal Routes", () => {
 
     it("should reject invalid trigger request", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: { workflowId: "" },
@@ -192,7 +205,7 @@ describe("Admin Webhook Routes", () => {
   describe("POST /admin/webhooks/erpnext", () => {
     it("should process erpnext webhook", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         headers: {},
         query: {},
         params: {},
@@ -207,7 +220,7 @@ describe("Admin Webhook Routes", () => {
   describe("POST /admin/webhooks/fleetbase", () => {
     it("should process fleetbase webhook", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         headers: {},
         query: {},
         params: {},
@@ -222,7 +235,7 @@ describe("Admin Webhook Routes", () => {
   describe("POST /admin/webhooks/payload", () => {
     it("should process payload webhook", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         headers: {},
         query: {},
         params: {},
@@ -237,7 +250,7 @@ describe("Admin Webhook Routes", () => {
   describe("POST /admin/webhooks/stripe", () => {
     it("should process stripe webhook without secret verification", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         headers: {},
         query: {},
         params: {},

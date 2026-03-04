@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -49,8 +50,8 @@ describe("ChannelModuleService", () => {
   let service: ChannelModuleService;
 
   beforeEach(() => {
-    service = new ChannelModuleService();
-    jest.clearAllMocks();
+    service = new ChannelModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getChannelForRequest", () => {
@@ -87,7 +88,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns null when no channels found and no nodeId", async () => {
-      jest.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
 
       const result = await service.getChannelForRequest("t1", "web");
       expect(result).toBeNull();
@@ -150,7 +151,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns null when no match", async () => {
-      jest.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
+      vi.spyOn(service, "listSalesChannelMappings").mockResolvedValue([]);
 
       const result = await service.getChannelByCode("nonexistent");
       expect(result).toBeNull();
@@ -168,7 +169,7 @@ describe("ChannelModuleService", () => {
 
   describe("validateChannelAccess", () => {
     it("returns true for active channel belonging to tenant", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch_1",
         tenant_id: "t1",
         is_active: true,
@@ -179,7 +180,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns false when tenant mismatch", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch_1",
         tenant_id: "t2",
         is_active: true,
@@ -190,7 +191,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns false when channel inactive", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch_1",
         tenant_id: "t1",
         is_active: false,
@@ -212,7 +213,7 @@ describe("ChannelModuleService", () => {
 
   describe("getChannelCapabilities", () => {
     it("returns capabilities for web channel", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch_1",
         channel_type: "web",
       });
@@ -224,7 +225,7 @@ describe("ChannelModuleService", () => {
     });
 
     it("returns api-specific capabilities", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch_1",
         channel_type: "api",
       });
@@ -247,11 +248,11 @@ describe("ChannelModuleService", () => {
 
   describe("syncChannelSettings", () => {
     it("merges settings into existing config", async () => {
-      jest.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
+      vi.spyOn(service, "retrieveSalesChannelMapping").mockResolvedValue({
         id: "ch_1",
         config: { existing: true },
       });
-      jest.spyOn(service, "updateSalesChannelMappings").mockResolvedValue({});
+      vi.spyOn(service, "updateSalesChannelMappings").mockResolvedValue({});
 
       const result = await service.syncChannelSettings("ch_1", {
         newSetting: "val",

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -47,7 +48,7 @@ describe("VolumePricingModuleService", () => {
   let service: VolumePricingModuleService;
 
   beforeEach(() => {
-    service = new VolumePricingModuleService();
+    service = new VolumePricingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
   });
 
   describe("calculateDiscount", () => {
@@ -124,7 +125,7 @@ describe("VolumePricingModuleService", () => {
       jest
         .spyOn(service, "retrieveVolumePricing")
         .mockResolvedValue({ id: "vp-1", pricing_type: "percentage" });
-      jest.spyOn(service, "listVolumePricingTiers").mockResolvedValue([
+      vi.spyOn(service, "listVolumePricingTiers").mockResolvedValue([
         { min_quantity: 1, max_quantity: 9, discount_percentage: 5 },
         { min_quantity: 10, max_quantity: 49, discount_percentage: 10 },
         { min_quantity: 50, max_quantity: null, discount_percentage: 20 },
@@ -138,7 +139,7 @@ describe("VolumePricingModuleService", () => {
 
   describe("findApplicableRules", () => {
     it("returns rules sorted by priority", async () => {
-      jest.spyOn(service, "listVolumePricings").mockResolvedValue([
+      vi.spyOn(service, "listVolumePricings").mockResolvedValue([
         { id: "vp-1", priority: 1 },
         { id: "vp-2", priority: 10 },
         { id: "vp-3", priority: 5 },
@@ -152,7 +153,7 @@ describe("VolumePricingModuleService", () => {
     });
 
     it("returns empty array when no rules match", async () => {
-      jest.spyOn(service, "listVolumePricings").mockResolvedValue([]);
+      vi.spyOn(service, "listVolumePricings").mockResolvedValue([]);
 
       const result = await service.findApplicableRules({ tenantId: "t-1" });
 
@@ -160,7 +161,7 @@ describe("VolumePricingModuleService", () => {
     });
 
     it("returns empty array when list returns null", async () => {
-      jest.spyOn(service, "listVolumePricings").mockResolvedValue(null);
+      vi.spyOn(service, "listVolumePricings").mockResolvedValue(null);
 
       const result = await service.findApplicableRules({ tenantId: "t-1" });
 
@@ -202,7 +203,7 @@ describe("VolumePricingModuleService", () => {
     });
 
     it("returns original pricing when no rules apply", async () => {
-      jest.spyOn(service, "findApplicableRules").mockResolvedValue([]);
+      vi.spyOn(service, "findApplicableRules").mockResolvedValue([]);
 
       const result = await service.getBestVolumePrice({
         productId: "p-1",
@@ -222,7 +223,7 @@ describe("VolumePricingModuleService", () => {
       jest
         .spyOn(service, "findApplicableRules")
         .mockResolvedValue([{ id: "vp-1" }]);
-      jest.spyOn(service, "calculateDiscount").mockResolvedValue({
+      vi.spyOn(service, "calculateDiscount").mockResolvedValue({
         discountPerUnit: 0n,
         discountTotal: 0n,
         finalUnitPrice: 1000n,

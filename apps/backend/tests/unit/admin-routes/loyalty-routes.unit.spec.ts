@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   GET as listPrograms,
   POST as createProgram,
@@ -9,15 +10,15 @@ import {
 } from "../../../src/api/admin/loyalty/programs/[id]/route";
 
 const createMockService = () => ({
-  listLoyaltyPrograms: jest.fn(),
-  retrieveLoyaltyProgram: jest.fn(),
-  createLoyaltyPrograms: jest.fn(),
-  updateLoyaltyPrograms: jest.fn(),
-  deleteLoyaltyPrograms: jest.fn(),
+  listLoyaltyPrograms: vi.fn(),
+  retrieveLoyaltyProgram: vi.fn(),
+  createLoyaltyPrograms: vi.fn(),
+  updateLoyaltyPrograms: vi.fn(),
+  deleteLoyaltyPrograms: vi.fn(),
 });
 
 const createReq = (mockService: any, overrides: any = {}) => ({
-  scope: { resolve: jest.fn(() => mockService) },
+  scope: { resolve: vi.fn(() => mockService) },
   query: {},
   params: {},
   body: {},
@@ -25,7 +26,7 @@ const createReq = (mockService: any, overrides: any = {}) => ({
 });
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
@@ -34,7 +35,7 @@ describe("Admin Loyalty Programs Routes", () => {
 
   beforeEach(() => {
     mockService = createMockService();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe("GET /admin/loyalty/programs", () => {

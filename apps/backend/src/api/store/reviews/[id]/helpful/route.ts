@@ -6,6 +6,10 @@ const markHelpfulSchema = z.object({});
 
 // POST /store/reviews/:id/helpful - Mark a review as helpful
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
+  if (!req.auth_context?.actor_id) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   const reviewService = req.scope.resolve("review") as unknown as any;
   const { id } = req.params;
 

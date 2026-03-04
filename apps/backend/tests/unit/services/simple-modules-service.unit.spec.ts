@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -164,8 +165,8 @@ describe("AdvertisingModuleService", () => {
   let service: AdvertisingModuleService;
 
   beforeEach(() => {
-    service = new AdvertisingModuleService();
-    jest.clearAllMocks();
+    service = new AdvertisingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createCampaign", () => {
@@ -249,8 +250,8 @@ describe("AffiliateModuleService", () => {
   let service: AffiliateModuleService;
 
   beforeEach(() => {
-    service = new AffiliateModuleService();
-    jest.clearAllMocks();
+    service = new AffiliateModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("generateReferralCode", () => {
@@ -269,7 +270,7 @@ describe("AffiliateModuleService", () => {
 
   describe("trackReferral", () => {
     it("throws for invalid referral code", async () => {
-      jest.spyOn(service, "listReferralLinks").mockResolvedValue([]);
+      vi.spyOn(service, "listReferralLinks").mockResolvedValue([]);
 
       await expect(service.trackReferral("INVALID", "order_1")).rejects.toThrow(
         "Invalid referral code",
@@ -280,7 +281,7 @@ describe("AffiliateModuleService", () => {
       jest
         .spyOn(service, "listReferralLinks")
         .mockResolvedValue([{ id: "rl_1", conversion_count: 0 }]);
-      jest.spyOn(service, "updateReferralLinks").mockResolvedValue({});
+      vi.spyOn(service, "updateReferralLinks").mockResolvedValue({});
       jest
         .spyOn(service, "createClickTrackings")
         .mockResolvedValue({ id: "ct_1" });
@@ -292,7 +293,7 @@ describe("AffiliateModuleService", () => {
 
   describe("calculateCommission", () => {
     it("calculates total commission for period", async () => {
-      jest.spyOn(service, "listAffiliateCommissions").mockResolvedValue([
+      vi.spyOn(service, "listAffiliateCommissions").mockResolvedValue([
         { amount: 50, created_at: new Date("2025-06-15") },
         { amount: 30, created_at: new Date("2025-06-20") },
         { amount: 100, created_at: new Date("2025-05-01") },
@@ -312,8 +313,8 @@ describe("AnalyticsModuleService", () => {
   let service: AnalyticsModuleService;
 
   beforeEach(() => {
-    service = new AnalyticsModuleService();
-    jest.clearAllMocks();
+    service = new AnalyticsModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getEventCounts", () => {
@@ -336,7 +337,7 @@ describe("AnalyticsModuleService", () => {
 
   describe("getSalesMetrics", () => {
     it("calculates revenue and average order value", async () => {
-      jest.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
+      vi.spyOn(service, "listAnalyticsEvents").mockResolvedValue([
         { created_at: new Date("2025-06-15"), revenue: 100 },
         { created_at: new Date("2025-06-20"), revenue: 200 },
       ]);
@@ -352,7 +353,7 @@ describe("AnalyticsModuleService", () => {
 
   describe("getDashboard", () => {
     it("throws when dashboard not found", async () => {
-      jest.spyOn(service, "listDashboards").mockResolvedValue([]);
+      vi.spyOn(service, "listDashboards").mockResolvedValue([]);
 
       await expect(service.getDashboard("t1", "overview")).rejects.toThrow(
         'Dashboard "overview" not found',
@@ -365,8 +366,8 @@ describe("AuctionModuleService", () => {
   let service: AuctionModuleService;
 
   beforeEach(() => {
-    service = new AuctionModuleService();
-    jest.clearAllMocks();
+    service = new AuctionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("placeBid", () => {
@@ -387,7 +388,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("throws when auction has ended", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         status: "active",
         ends_at: new Date(Date.now() - 100000),
       });
@@ -398,17 +399,17 @@ describe("AuctionModuleService", () => {
     });
 
     it("places bid successfully", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         status: "active",
         ends_at: new Date(Date.now() + 100000),
         starting_price: 10,
         bid_increment: 5,
       });
-      jest.spyOn(service, "listBids").mockResolvedValue([]);
+      vi.spyOn(service, "listBids").mockResolvedValue([]);
       jest
         .spyOn(service, "createBids")
         .mockResolvedValue({ id: "bid_1", amount: 15 });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.placeBid("a1", "b1", 15);
       expect(result.id).toBe("bid_1");
@@ -417,14 +418,14 @@ describe("AuctionModuleService", () => {
 
   describe("closeAuction", () => {
     it("returns sold status when reserve met", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         status: "active",
         reserve_price: 100,
       });
       jest
         .spyOn(service, "listBids")
         .mockResolvedValue([{ id: "bid_1", amount: 150, bidder_id: "b1" }]);
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
       jest
         .spyOn(service, "createAuctionResults")
         .mockResolvedValue({ winner_id: "b1" });
@@ -434,14 +435,14 @@ describe("AuctionModuleService", () => {
     });
 
     it("returns ended with no winner when reserve not met", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         status: "active",
         reserve_price: 500,
       });
       jest
         .spyOn(service, "listBids")
         .mockResolvedValue([{ id: "bid_1", amount: 100, bidder_id: "b1" }]);
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.closeAuction("a1");
       expect(result.winner).toBeNull();
@@ -453,8 +454,8 @@ describe("AuditModuleService", () => {
   let service: AuditModuleService;
 
   beforeEach(() => {
-    service = new AuditModuleService();
-    jest.clearAllMocks();
+    service = new AuditModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getAuditTrail", () => {
@@ -488,13 +489,13 @@ describe("AutomotiveModuleService", () => {
   let service: AutomotiveModuleService;
 
   beforeEach(() => {
-    service = new AutomotiveModuleService();
-    jest.clearAllMocks();
+    service = new AutomotiveModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("submitTradeIn", () => {
     it("throws when duplicate trade-in exists", async () => {
-      jest.spyOn(service, "listTradeIns").mockResolvedValue([{ id: "ti_1" }]);
+      vi.spyOn(service, "listTradeIns").mockResolvedValue([{ id: "ti_1" }]);
 
       await expect(service.submitTradeIn("v1", "c1")).rejects.toThrow(
         "trade-in request already exists",
@@ -556,8 +557,8 @@ describe("CharityModuleService", () => {
   let service: CharityModuleService;
 
   beforeEach(() => {
-    service = new CharityModuleService();
-    jest.clearAllMocks();
+    service = new CharityModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("processDonation", () => {
@@ -578,13 +579,13 @@ describe("CharityModuleService", () => {
     });
 
     it("processes donation and updates campaign", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         status: "active",
         end_date: null,
         raised_amount: 500,
         donor_count: 5,
       });
-      jest.spyOn(service, "createDonations").mockResolvedValue({ id: "d1" });
+      vi.spyOn(service, "createDonations").mockResolvedValue({ id: "d1" });
       const updateSpy = jest
         .spyOn(service, "updateDonationCampaigns")
         .mockResolvedValue({});
@@ -598,7 +599,7 @@ describe("CharityModuleService", () => {
 
   describe("getCampaignProgress", () => {
     it("calculates progress percentage", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         raised_amount: 500,
         goal_amount: 1000,
         donor_count: 10,
@@ -611,7 +612,7 @@ describe("CharityModuleService", () => {
     });
 
     it("caps percentage at 100", async () => {
-      jest.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveDonationCampaign").mockResolvedValue({
         raised_amount: 1500,
         goal_amount: 1000,
         donor_count: 20,
@@ -628,8 +629,8 @@ describe("ClassifiedModuleService", () => {
   let service: ClassifiedModuleService;
 
   beforeEach(() => {
-    service = new ClassifiedModuleService();
-    jest.clearAllMocks();
+    service = new ClassifiedModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("publishListing", () => {
@@ -677,8 +678,8 @@ describe("ClassifiedModuleService", () => {
       jest
         .spyOn(service, "retrieveClassifiedListing")
         .mockResolvedValue({ flag_count: 0 });
-      jest.spyOn(service, "createListingFlags").mockResolvedValue({ id: "f1" });
-      jest.spyOn(service, "updateClassifiedListings").mockResolvedValue({});
+      vi.spyOn(service, "createListingFlags").mockResolvedValue({ id: "f1" });
+      vi.spyOn(service, "updateClassifiedListings").mockResolvedValue({});
 
       const result = await service.flagListing("l1", "Inappropriate content");
       expect(result.id).toBe("f1");

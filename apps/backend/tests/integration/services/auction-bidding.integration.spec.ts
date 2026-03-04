@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -55,8 +56,8 @@ describe("Auction Bidding Integration", () => {
   let service: AuctionModuleService;
 
   beforeEach(() => {
-    service = new AuctionModuleService();
-    jest.clearAllMocks();
+    service = new AuctionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   const futureDate = new Date();
@@ -77,15 +78,15 @@ describe("Auction Bidding Integration", () => {
       jest
         .spyOn(service, "retrieveAuctionListing")
         .mockResolvedValue(activeAuction);
-      jest.spyOn(service, "getHighestBid").mockResolvedValue(null);
-      jest.spyOn(service, "createBids").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue(null);
+      vi.spyOn(service, "createBids").mockResolvedValue({
         id: "bid_01",
         auction_id: "auc_01",
         bidder_id: "user_01",
         amount: 150,
         status: "active",
       });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.placeBid("auc_01", "user_01", 150);
       expect(result.id).toBe("bid_01");
@@ -96,18 +97,18 @@ describe("Auction Bidding Integration", () => {
       jest
         .spyOn(service, "retrieveAuctionListing")
         .mockResolvedValue(activeAuction);
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_01",
         amount: 200,
       });
-      jest.spyOn(service, "createBids").mockResolvedValue({
+      vi.spyOn(service, "createBids").mockResolvedValue({
         id: "bid_02",
         auction_id: "auc_01",
         bidder_id: "user_02",
         amount: 220,
         status: "active",
       });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.placeBid("auc_01", "user_02", 220);
       expect(result.amount).toBe(220);
@@ -119,7 +120,7 @@ describe("Auction Bidding Integration", () => {
       jest
         .spyOn(service, "retrieveAuctionListing")
         .mockResolvedValue(activeAuction);
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_01",
         amount: 200,
       });
@@ -144,7 +145,7 @@ describe("Auction Bidding Integration", () => {
 
   describe("bid on closed auction", () => {
     it("should reject bid on ended auction", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         ...activeAuction,
         status: "ended",
       });
@@ -157,7 +158,7 @@ describe("Auction Bidding Integration", () => {
     it("should reject bid on auction past end time", async () => {
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - 1);
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         ...activeAuction,
         ends_at: pastDate.toISOString(),
       });
@@ -173,13 +174,13 @@ describe("Auction Bidding Integration", () => {
       jest
         .spyOn(service, "retrieveAuctionListing")
         .mockResolvedValue(activeAuction);
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_05",
         bidder_id: "user_03",
         amount: 600,
       });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
-      jest.spyOn(service, "createAuctionResults").mockResolvedValue({
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "createAuctionResults").mockResolvedValue({
         auction_id: "auc_01",
         winning_bid_id: "bid_05",
         winner_id: "user_03",
@@ -196,12 +197,12 @@ describe("Auction Bidding Integration", () => {
       jest
         .spyOn(service, "retrieveAuctionListing")
         .mockResolvedValue(activeAuction);
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_06",
         bidder_id: "user_04",
         amount: 300,
       });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.closeAuction("auc_01");
       expect(result.winner).toBeNull();
@@ -212,8 +213,8 @@ describe("Auction Bidding Integration", () => {
       jest
         .spyOn(service, "retrieveAuctionListing")
         .mockResolvedValue(activeAuction);
-      jest.spyOn(service, "getHighestBid").mockResolvedValue(null);
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "getHighestBid").mockResolvedValue(null);
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.closeAuction("auc_01");
       expect(result.winner).toBeNull();
@@ -224,11 +225,11 @@ describe("Auction Bidding Integration", () => {
     it("should extend end time when bid placed in last 5 minutes", async () => {
       const nearEnd = new Date();
       nearEnd.setMinutes(nearEnd.getMinutes() + 3);
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         ...activeAuction,
         ends_at: nearEnd.toISOString(),
       });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const bidTime = new Date();
       const result = await service.checkAntiSniping("auc_01", bidTime);
@@ -239,7 +240,7 @@ describe("Auction Bidding Integration", () => {
     it("should not extend end time when bid placed with time remaining", async () => {
       const farEnd = new Date();
       farEnd.setMinutes(farEnd.getMinutes() + 30);
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         ...activeAuction,
         ends_at: farEnd.toISOString(),
       });

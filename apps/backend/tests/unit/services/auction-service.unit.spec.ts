@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -57,13 +58,13 @@ describe("AuctionModuleService", () => {
   let service: AuctionModuleService;
 
   beforeEach(() => {
-    service = new AuctionModuleService();
-    jest.clearAllMocks();
+    service = new AuctionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("placeBid", () => {
     it("places a valid bid on an active auction", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         ends_at: new Date(Date.now() + 86400000),
@@ -71,16 +72,16 @@ describe("AuctionModuleService", () => {
         bid_increment: 10,
       });
 
-      jest.spyOn(service, "getHighestBid").mockResolvedValue(null);
+      vi.spyOn(service, "getHighestBid").mockResolvedValue(null);
 
-      const createBidSpy = jest.spyOn(service, "createBids").mockResolvedValue({
+      const createBidSpy = vi.spyOn(service, "createBids").mockResolvedValue({
         id: "bid_1",
         auction_id: "auc_1",
         amount: 100,
         status: "active",
       });
 
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.placeBid("auc_1", "user_1", 100);
 
@@ -104,7 +105,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("throws when auction is not active", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "ended",
       });
@@ -115,7 +116,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("throws when auction has ended", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         ends_at: new Date("2020-01-01"),
@@ -127,7 +128,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("throws when bid is below minimum increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         ends_at: new Date(Date.now() + 86400000),
@@ -135,7 +136,7 @@ describe("AuctionModuleService", () => {
         bid_increment: 10,
       });
 
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_1",
         amount: 200,
       });
@@ -146,7 +147,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("accepts bid at exactly the minimum increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         ends_at: new Date(Date.now() + 86400000),
@@ -154,16 +155,16 @@ describe("AuctionModuleService", () => {
         bid_increment: 10,
       });
 
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_1",
         amount: 200,
       });
 
-      jest.spyOn(service, "createBids").mockResolvedValue({
+      vi.spyOn(service, "createBids").mockResolvedValue({
         id: "bid_2",
         amount: 210,
       });
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.placeBid("auc_1", "user_1", 210);
       expect(result.amount).toBe(210);
@@ -172,19 +173,19 @@ describe("AuctionModuleService", () => {
 
   describe("closeAuction", () => {
     it("closes auction with winner when reserve is met", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         reserve_price: 500,
       });
 
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_1",
         bidder_id: "user_1",
         amount: 600,
       });
 
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const createResultSpy = jest
         .spyOn(service, "createAuctionResults")
@@ -207,13 +208,13 @@ describe("AuctionModuleService", () => {
     });
 
     it("closes auction without winner when reserve is not met", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         reserve_price: 1000,
       });
 
-      jest.spyOn(service, "getHighestBid").mockResolvedValue({
+      vi.spyOn(service, "getHighestBid").mockResolvedValue({
         id: "bid_1",
         amount: 500,
       });
@@ -231,14 +232,14 @@ describe("AuctionModuleService", () => {
     });
 
     it("closes auction without winner when no bids", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         reserve_price: 0,
       });
 
-      jest.spyOn(service, "getHighestBid").mockResolvedValue(null);
-      jest.spyOn(service, "updateAuctionListings").mockResolvedValue({});
+      vi.spyOn(service, "getHighestBid").mockResolvedValue(null);
+      vi.spyOn(service, "updateAuctionListings").mockResolvedValue({});
 
       const result = await service.closeAuction("auc_1");
       expect(result.winner).toBeNull();
@@ -246,7 +247,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("throws when auction is not active", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "ended",
       });
@@ -259,7 +260,7 @@ describe("AuctionModuleService", () => {
 
   describe("getHighestBid", () => {
     it("returns the highest bid from all bids", async () => {
-      jest.spyOn(service, "listBids").mockResolvedValue([
+      vi.spyOn(service, "listBids").mockResolvedValue([
         { id: "bid_1", amount: 100 },
         { id: "bid_3", amount: 300 },
         { id: "bid_2", amount: 200 },
@@ -271,7 +272,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("returns null when no bids exist", async () => {
-      jest.spyOn(service, "listBids").mockResolvedValue([]);
+      vi.spyOn(service, "listBids").mockResolvedValue([]);
 
       const result = await service.getHighestBid("auc_1");
       expect(result).toBeNull();
@@ -280,7 +281,7 @@ describe("AuctionModuleService", () => {
 
   describe("validateBidIncrement", () => {
     it("returns valid true when bid meets 5% minimum increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         current_price: 1000,
       });
@@ -291,7 +292,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("returns valid false when bid is below minimum increment", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         current_price: 1000,
       });
@@ -304,7 +305,7 @@ describe("AuctionModuleService", () => {
   describe("isAuctionActive", () => {
     it("returns true for active auction within date range", async () => {
       const now = new Date();
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "active",
         starts_at: new Date(now.getTime() - 86400000),
@@ -316,7 +317,7 @@ describe("AuctionModuleService", () => {
     });
 
     it("returns false for non-active status", async () => {
-      jest.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveAuctionListing").mockResolvedValue({
         id: "auc_1",
         status: "ended",
       });

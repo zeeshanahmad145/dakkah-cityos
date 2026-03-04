@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -58,19 +59,19 @@ describe("WalletModuleService", () => {
   let service: WalletModuleService;
 
   beforeEach(() => {
-    service = new WalletModuleService();
-    jest.clearAllMocks();
+    service = new WalletModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("creditWallet", () => {
     it("should credit wallet and return transaction", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         balance: 500,
         status: "active",
       });
-      jest.spyOn(service, "updateWallets").mockResolvedValue({});
-      jest.spyOn(service, "createWalletTransactions").mockResolvedValue({
+      vi.spyOn(service, "updateWallets").mockResolvedValue({});
+      vi.spyOn(service, "createWalletTransactions").mockResolvedValue({
         id: "tx_01",
         type: "credit",
         amount: 200,
@@ -88,7 +89,7 @@ describe("WalletModuleService", () => {
     });
 
     it("should reject credit on inactive wallet", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         balance: 500,
         status: "frozen",
@@ -101,13 +102,13 @@ describe("WalletModuleService", () => {
 
   describe("debitWallet", () => {
     it("should debit wallet successfully", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         balance: 1000,
         status: "active",
       });
-      jest.spyOn(service, "updateWallets").mockResolvedValue({});
-      jest.spyOn(service, "createWalletTransactions").mockResolvedValue({
+      vi.spyOn(service, "updateWallets").mockResolvedValue({});
+      vi.spyOn(service, "createWalletTransactions").mockResolvedValue({
         id: "tx_02",
         type: "debit",
         amount: -300,
@@ -119,7 +120,7 @@ describe("WalletModuleService", () => {
     });
 
     it("should throw on insufficient balance", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         balance: 100,
         status: "active",
@@ -139,7 +140,7 @@ describe("WalletModuleService", () => {
 
   describe("transferBetweenWallets", () => {
     it("should transfer between active wallets", async () => {
-      const retrieveSpy = jest.spyOn(service, "retrieveWallet");
+      const retrieveSpy = vi.spyOn(service, "retrieveWallet");
       retrieveSpy.mockResolvedValueOnce({
         id: "wal_01",
         balance: 1000,
@@ -150,8 +151,8 @@ describe("WalletModuleService", () => {
         balance: 200,
         status: "active",
       });
-      jest.spyOn(service, "debitWallet").mockResolvedValue({ id: "tx_d" });
-      jest.spyOn(service, "creditWallet").mockResolvedValue({ id: "tx_c" });
+      vi.spyOn(service, "debitWallet").mockResolvedValue({ id: "tx_d" });
+      vi.spyOn(service, "creditWallet").mockResolvedValue({ id: "tx_c" });
 
       const result = await service.transferBetweenWallets(
         "wal_01",
@@ -189,11 +190,11 @@ describe("WalletModuleService", () => {
 
   describe("freezeWallet", () => {
     it("should freeze an active wallet", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         status: "active",
       });
-      jest.spyOn(service, "updateWallets").mockResolvedValue({
+      vi.spyOn(service, "updateWallets").mockResolvedValue({
         id: "wal_01",
         status: "frozen",
       });
@@ -203,7 +204,7 @@ describe("WalletModuleService", () => {
     });
 
     it("should reject freezing already frozen wallet", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         status: "frozen",
       });
@@ -216,7 +217,7 @@ describe("WalletModuleService", () => {
 
   describe("getBalance", () => {
     it("should return balance info", async () => {
-      jest.spyOn(service, "retrieveWallet").mockResolvedValue({
+      vi.spyOn(service, "retrieveWallet").mockResolvedValue({
         id: "wal_01",
         balance: 1500,
         currency: "usd",

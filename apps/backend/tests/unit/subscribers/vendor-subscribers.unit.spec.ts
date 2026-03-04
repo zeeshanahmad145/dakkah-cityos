@@ -1,7 +1,8 @@
-jest.mock("../../../src/lib/logger", () => ({
-  subscriberLogger: { info: jest.fn(), error: jest.fn(), warn: jest.fn() },
+import { vi } from "vitest";
+vi.mock("../../../src/lib/logger", () => ({
+  subscriberLogger: { info: vi.fn(), error: vi.fn(), warn: vi.fn() },
 }));
-jest.mock("../../../src/lib/config", () => ({
+vi.mock("../../../src/lib/config", () => ({
   appConfig: {
     storefrontUrl: "https://store.test",
     urls: { storefront: "https://store.test" },
@@ -18,17 +19,17 @@ import { config as approvedConfig } from "../../../src/subscribers/vendor-approv
 import vendorSuspendedHandler from "../../../src/subscribers/vendor-suspended";
 import { config as suspendedConfig } from "../../../src/subscribers/vendor-suspended";
 
-const mockCreateNotifications = jest.fn();
-const mockGraph = jest.fn();
+const mockCreateNotifications = vi.fn();
+const mockGraph = vi.fn();
 
 function makeContainer() {
   return {
-    resolve: jest.fn((dep: string) => {
+    resolve: vi.fn((dep: string) => {
       if (dep === "notification")
         return { createNotifications: mockCreateNotifications };
       if (dep === "query") return { graph: mockGraph };
       if (dep === "logger")
-        return { info: jest.fn(), error: jest.fn(), warn: jest.fn() };
+        return { info: vi.fn(), error: vi.fn(), warn: vi.fn() };
       return {};
     }),
   };
@@ -45,7 +46,7 @@ const fullVendor = {
 };
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
   mockGraph.mockResolvedValue({ data: [fullVendor] });
 });
 

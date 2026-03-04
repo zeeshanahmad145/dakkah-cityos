@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -71,8 +72,8 @@ describe("LegalModuleService", () => {
   let service: LegalModuleService;
 
   beforeEach(() => {
-    service = new LegalModuleService();
-    jest.clearAllMocks();
+    service = new LegalModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("addDocument", () => {
@@ -126,7 +127,7 @@ describe("LegalModuleService", () => {
 
   describe("getBillingSummary", () => {
     it("calculates billing summary correctly", async () => {
-      jest.spyOn(service, "retrieveLegalCase").mockResolvedValue({
+      vi.spyOn(service, "retrieveLegalCase").mockResolvedValue({
         id: "case-1",
         hourly_rate: 300,
         paid_amount: 500,

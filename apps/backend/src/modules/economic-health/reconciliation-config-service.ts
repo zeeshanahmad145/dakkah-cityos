@@ -1,4 +1,4 @@
-import { MedusaService } from "@medusajs/framework/utils";
+import { MedusaService, Module } from "@medusajs/framework/utils";
 import { ReconciliationConfig } from "./models/reconciliation-config";
 import { createLogger } from "../../lib/logger";
 
@@ -80,4 +80,9 @@ class ReconciliationConfigModuleService extends MedusaService({
   }
 }
 
-export default ReconciliationConfigModuleService;
+export const RECONCILIATION_CONFIG_MODULE = "reconciliationConfig";
+export { ReconciliationConfigModuleService };
+
+export default Module(RECONCILIATION_CONFIG_MODULE, {
+  service: ReconciliationConfigModuleService,
+});

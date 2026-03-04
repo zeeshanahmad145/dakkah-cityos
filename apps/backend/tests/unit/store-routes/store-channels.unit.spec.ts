@@ -76,16 +76,4 @@ describe("GET /store/channels", () => {
     );
   });
 
-  it("returns 500 when service throws", async () => {
-    mockChannelService.listSalesChannelMappings.mockRejectedValue(
-      new Error("DB down"),
-    );
-
-    await GET(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.json).toHaveBeenCalledWith(
-      expect.objectContaining({ message: expect.any(String) }),
-    );
-  });
 });

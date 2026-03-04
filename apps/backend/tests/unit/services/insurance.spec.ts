@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -61,20 +62,20 @@ describe("InsuranceModuleService", () => {
   let service: InsuranceModuleService;
 
   beforeEach(() => {
-    service = new InsuranceModuleService();
-    jest.clearAllMocks();
+    service = new InsuranceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("cancelPolicy", () => {
     it("should cancel an active policy", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_01",
         status: "active",
         premium: 1200,
         start_date: new Date("2026-01-01"),
         end_date: new Date("2027-01-01"),
       });
-      jest.spyOn(service, "updateInsPolicys").mockResolvedValue({
+      vi.spyOn(service, "updateInsPolicys").mockResolvedValue({
         id: "pol_01",
         status: "cancelled",
       });
@@ -84,7 +85,7 @@ describe("InsuranceModuleService", () => {
     });
 
     it("should reject cancelling an already cancelled policy", async () => {
-      jest.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
+      vi.spyOn(service, "retrieveInsPolicy").mockResolvedValue({
         id: "pol_01",
         status: "cancelled",
       });

@@ -1,5 +1,6 @@
-const mockJson = jest.fn()
-const mockStatus = jest.fn(() => ({ json: mockJson }))
+import { vi } from "vitest";
+const mockJson = vi.fn()
+const mockStatus = vi.fn(() => ({ json: mockJson }))
 
 const createMockReq = (overrides: Record<string, any> = {}) => ({
   query: {},
@@ -7,7 +8,7 @@ const createMockReq = (overrides: Record<string, any> = {}) => ({
   params: {},
   auth_context: { actor_id: "cust_01" },
   scope: {
-    resolve: jest.fn((name: string) => overrides[name] || {}),
+    resolve: vi.fn((name: string) => overrides[name] || {}),
   },
   ...overrides,
 })

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -63,8 +64,8 @@ describe("DigitalProductModuleService", () => {
   let service: DigitalProductModuleService;
 
   beforeEach(() => {
-    service = new DigitalProductModuleService();
-    jest.clearAllMocks();
+    service = new DigitalProductModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("generateTimedDownloadLink", () => {
@@ -72,7 +73,7 @@ describe("DigitalProductModuleService", () => {
       jest
         .spyOn(service, "retrieveDigitalAsset")
         .mockResolvedValue({ id: "asset-1" });
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         {
           id: "lic-1",
           status: "active",
@@ -97,7 +98,7 @@ describe("DigitalProductModuleService", () => {
       jest
         .spyOn(service, "retrieveDigitalAsset")
         .mockResolvedValue({ id: "asset-1" });
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
 
       await expect(
         service.generateTimedDownloadLink("asset-1", "cust-1"),
@@ -108,7 +109,7 @@ describe("DigitalProductModuleService", () => {
       jest
         .spyOn(service, "retrieveDigitalAsset")
         .mockResolvedValue({ id: "asset-1" });
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         {
           id: "lic-1",
           status: "active",
@@ -125,7 +126,7 @@ describe("DigitalProductModuleService", () => {
 
   describe("trackDownloadWithLimits", () => {
     it("tracks download and returns remaining count", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         {
           id: "lic-1",
           status: "active",
@@ -133,7 +134,7 @@ describe("DigitalProductModuleService", () => {
           max_downloads: 100,
         },
       ]);
-      jest.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
+      vi.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
 
       const result = await service.trackDownloadWithLimits("asset-1", "cust-1");
 
@@ -143,7 +144,7 @@ describe("DigitalProductModuleService", () => {
     });
 
     it("returns limit reached when at max downloads", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         {
           id: "lic-1",
           status: "active",
@@ -159,7 +160,7 @@ describe("DigitalProductModuleService", () => {
     });
 
     it("throws when no active license exists", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
 
       await expect(
         service.trackDownloadWithLimits("asset-1", "cust-1"),
@@ -169,11 +170,11 @@ describe("DigitalProductModuleService", () => {
 
   describe("revokeAccessWithReason", () => {
     it("revokes all active licenses with a reason", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([
         { id: "lic-1", status: "active", metadata: {} },
         { id: "lic-2", status: "active", metadata: {} },
       ]);
-      jest.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
+      vi.spyOn(service, "updateDownloadLicenses").mockResolvedValue({});
 
       const result = await service.revokeAccessWithReason(
         "asset-1",
@@ -186,7 +187,7 @@ describe("DigitalProductModuleService", () => {
     });
 
     it("throws when no active license to revoke", async () => {
-      jest.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
+      vi.spyOn(service, "listDownloadLicenses").mockResolvedValue([]);
 
       await expect(
         service.revokeAccessWithReason("asset-1", "cust-1"),

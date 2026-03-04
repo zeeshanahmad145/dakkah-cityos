@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -103,8 +104,8 @@ describe("CompanyModuleService", () => {
   let service: CompanyModuleService;
 
   beforeEach(() => {
-    service = new CompanyModuleService();
-    jest.clearAllMocks();
+    service = new CompanyModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("hasAvailableCredit", () => {
@@ -206,7 +207,7 @@ describe("CompanyModuleService", () => {
     });
 
     it("checks remaining spending limit", async () => {
-      jest.spyOn(service, "retrieveCompanyUser").mockResolvedValue({
+      vi.spyOn(service, "retrieveCompanyUser").mockResolvedValue({
         spending_limit: "500",
         current_period_spend: "300",
       });
@@ -234,7 +235,7 @@ describe("CompanyModuleService", () => {
 
   describe("getPotentialApprovers", () => {
     it("filters users by approval limit", async () => {
-      jest.spyOn(service, "listCompanyUsers").mockResolvedValue([
+      vi.spyOn(service, "listCompanyUsers").mockResolvedValue([
         { id: "u1", approval_limit: "1000" },
         { id: "u2", approval_limit: "100" },
         { id: "u3", approval_limit: null },
@@ -348,7 +349,7 @@ describe("CompanyModuleService", () => {
 
   describe("validateTaxExemption", () => {
     it("returns true for verified non-expired exemption", async () => {
-      jest.spyOn(service, "retrieveTaxExemption").mockResolvedValue({
+      vi.spyOn(service, "retrieveTaxExemption").mockResolvedValue({
         status: "verified",
         expiration_date: null,
       });
@@ -357,11 +358,11 @@ describe("CompanyModuleService", () => {
     });
 
     it("returns false and marks expired", async () => {
-      jest.spyOn(service, "retrieveTaxExemption").mockResolvedValue({
+      vi.spyOn(service, "retrieveTaxExemption").mockResolvedValue({
         status: "verified",
         expiration_date: new Date(Date.now() - 100000),
       });
-      jest.spyOn(service, "updateTaxExemptions").mockResolvedValue({});
+      vi.spyOn(service, "updateTaxExemptions").mockResolvedValue({});
 
       expect(await service.validateTaxExemption("e1")).toBe(false);
     });
@@ -385,22 +386,22 @@ describe("CompanyModuleService", () => {
         applicable_categories: null,
         usage_count: 0,
       };
-      jest.spyOn(service, "listTaxExemptions").mockResolvedValue([exemption]);
-      jest.spyOn(service, "updateTaxExemptions").mockResolvedValue({});
+      vi.spyOn(service, "listTaxExemptions").mockResolvedValue([exemption]);
+      vi.spyOn(service, "updateTaxExemptions").mockResolvedValue({});
 
       const result = await service.getApplicableTaxExemption("c1");
       expect(result).toEqual(exemption);
     });
 
     it("returns null when no matching exemption", async () => {
-      jest.spyOn(service, "listTaxExemptions").mockResolvedValue([]);
+      vi.spyOn(service, "listTaxExemptions").mockResolvedValue([]);
 
       const result = await service.getApplicableTaxExemption("c1");
       expect(result).toBeNull();
     });
 
     it("skips exemptions that don't match region", async () => {
-      jest.spyOn(service, "listTaxExemptions").mockResolvedValue([
+      vi.spyOn(service, "listTaxExemptions").mockResolvedValue([
         {
           id: "e1",
           expiration_date: null,
@@ -416,20 +417,20 @@ describe("CompanyModuleService", () => {
 
   describe("processApprovalAction", () => {
     const setupApprovalMocks = (steps: any[], currentStep: number) => {
-      jest.spyOn(service, "retrieveApprovalRequest").mockResolvedValue({
+      vi.spyOn(service, "retrieveApprovalRequest").mockResolvedValue({
         id: "req_1",
         workflow_id: "wf_1",
         current_step: currentStep,
         entity_type: "purchase_order",
         entity_id: "po_1",
       });
-      jest.spyOn(service, "retrieveApprovalWorkflow").mockResolvedValue({
+      vi.spyOn(service, "retrieveApprovalWorkflow").mockResolvedValue({
         id: "wf_1",
         steps,
       });
-      jest.spyOn(service, "createApprovalActions").mockResolvedValue({});
-      jest.spyOn(service, "updateApprovalRequests").mockResolvedValue({});
-      jest.spyOn(service, "updatePurchaseOrders").mockResolvedValue({});
+      vi.spyOn(service, "createApprovalActions").mockResolvedValue({});
+      vi.spyOn(service, "updateApprovalRequests").mockResolvedValue({});
+      vi.spyOn(service, "updatePurchaseOrders").mockResolvedValue({});
     };
 
     it("rejects and updates PO status", async () => {
@@ -481,13 +482,13 @@ describe("CompanyModuleService", () => {
 
   describe("submitPOForApproval", () => {
     it("auto-approves when no workflow exists", async () => {
-      jest.spyOn(service, "retrievePurchaseOrder").mockResolvedValue({
+      vi.spyOn(service, "retrievePurchaseOrder").mockResolvedValue({
         id: "po_1",
         status: "draft",
         company_id: "c1",
         requires_approval: false,
       });
-      jest.spyOn(service, "listApprovalWorkflows").mockResolvedValue([]);
+      vi.spyOn(service, "listApprovalWorkflows").mockResolvedValue([]);
       jest
         .spyOn(service, "updatePurchaseOrders")
         .mockResolvedValue({ status: "approved" });

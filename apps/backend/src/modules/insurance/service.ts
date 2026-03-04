@@ -69,7 +69,6 @@ class InsuranceModuleService extends MedusaService({
 
     return (this as unknown as InsuranceServiceBase).createInsPolicys({
       customer_id: data.customerId,
-      product_id: data.productId,
       plan_type: data.planType,
       coverage_amount: data.coverageAmount,
       premium: data.premium,

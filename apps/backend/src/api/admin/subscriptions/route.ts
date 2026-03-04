@@ -70,10 +70,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const subscriptionModule = req.scope.resolve("subscription") as unknown as any;
     const cityosContext = req.cityosContext as CityOSContext | undefined;
 
-    const subscription = await subscriptionModule.createSubscriptions({
+    const raw = await subscriptionModule.createSubscriptions({
       ...parsed.data,
       tenant_id: cityosContext?.tenantId || "default",
     });
+
+    const subscription = Array.isArray(raw) ? raw[0] : raw;
 
     res.status(201).json({ subscription });
   } catch (error) {

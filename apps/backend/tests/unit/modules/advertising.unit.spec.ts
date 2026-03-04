@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -65,8 +66,8 @@ describe("AdvertisingModuleService", () => {
   let service: AdvertisingModuleService;
 
   beforeEach(() => {
-    service = new AdvertisingModuleService();
-    jest.clearAllMocks();
+    service = new AdvertisingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createCampaign", () => {
@@ -172,7 +173,7 @@ describe("AdvertisingModuleService", () => {
 
   describe("calculateCTR", () => {
     it("calculates click-through rate correctly", async () => {
-      jest.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
         id: "camp-1",
         impressions: 1000,
         clicks: 50,
@@ -186,7 +187,7 @@ describe("AdvertisingModuleService", () => {
     });
 
     it("returns zero CTR when no impressions", async () => {
-      jest.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
         id: "camp-1",
         impressions: 0,
         clicks: 0,
@@ -199,7 +200,7 @@ describe("AdvertisingModuleService", () => {
 
   describe("adjustBudget", () => {
     it("adjusts budget for a non-completed campaign", async () => {
-      jest.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
         id: "camp-1",
         status: "active",
         spent: 200,
@@ -219,7 +220,7 @@ describe("AdvertisingModuleService", () => {
     });
 
     it("throws when new budget is less than spent amount", async () => {
-      jest.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
         id: "camp-1",
         status: "active",
         spent: 3000,
@@ -231,7 +232,7 @@ describe("AdvertisingModuleService", () => {
     });
 
     it("throws when campaign is completed", async () => {
-      jest.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
         id: "camp-1",
         status: "completed",
         spent: 0,
@@ -251,7 +252,7 @@ describe("AdvertisingModuleService", () => {
 
   describe("getROIReport", () => {
     it("returns ROI metrics for a campaign", async () => {
-      jest.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
+      vi.spyOn(service, "retrieveAdCampaign").mockResolvedValue({
         id: "camp-1",
         impressions: 10000,
         clicks: 500,

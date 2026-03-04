@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -74,13 +75,13 @@ describe("WarrantyModuleService", () => {
   let service: WarrantyModuleService;
 
   beforeEach(() => {
-    service = new WarrantyModuleService();
-    jest.clearAllMocks();
+    service = new WarrantyModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("extendWarranty", () => {
     it("extends warranty expiry by the given months", async () => {
-      jest.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
         id: "w-1",
         status: "registered",
         expiry_date: new Date("2025-06-01"),
@@ -116,7 +117,7 @@ describe("WarrantyModuleService", () => {
     });
 
     it("throws when warranty is voided", async () => {
-      jest.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
         id: "w-1",
         status: "voided",
         expiry_date: new Date("2025-06-01"),
@@ -128,7 +129,7 @@ describe("WarrantyModuleService", () => {
     });
 
     it("throws when warranty is already claimed", async () => {
-      jest.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
         id: "w-1",
         status: "claimed",
         expiry_date: new Date("2025-06-01"),
@@ -144,7 +145,7 @@ describe("WarrantyModuleService", () => {
     it("returns warranties with computed expired status", async () => {
       const pastDate = new Date("2020-01-01");
       const futureDate = new Date("2030-01-01");
-      jest.spyOn(service, "listWarrantyClaims").mockResolvedValue([
+      vi.spyOn(service, "listWarrantyClaims").mockResolvedValue([
         {
           id: "w-1",
           product_id: "p1",
@@ -174,7 +175,7 @@ describe("WarrantyModuleService", () => {
     });
 
     it("preserves non-registered statuses without overriding", async () => {
-      jest.spyOn(service, "listWarrantyClaims").mockResolvedValue([
+      vi.spyOn(service, "listWarrantyClaims").mockResolvedValue([
         {
           id: "w-1",
           product_id: "p1",
@@ -196,7 +197,7 @@ describe("WarrantyModuleService", () => {
 
   describe("scheduleRepair", () => {
     it("schedules a repair for an approved claim with existing repair order", async () => {
-      jest.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
         id: "claim-1",
         status: "approved",
       });
@@ -224,11 +225,11 @@ describe("WarrantyModuleService", () => {
     });
 
     it("creates a new repair order when none exists", async () => {
-      jest.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
         id: "claim-1",
         status: "approved",
       });
-      jest.spyOn(service, "listRepairOrders").mockResolvedValue([]);
+      vi.spyOn(service, "listRepairOrders").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createRepairOrders")
         .mockResolvedValue({ id: "ro-new" });
@@ -250,7 +251,7 @@ describe("WarrantyModuleService", () => {
     });
 
     it("throws when claim is not approved", async () => {
-      jest.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
+      vi.spyOn(service, "retrieveWarrantyClaim").mockResolvedValue({
         id: "claim-1",
         status: "registered",
       });

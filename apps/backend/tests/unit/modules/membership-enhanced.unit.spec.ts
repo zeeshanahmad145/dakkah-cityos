@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,13 +57,13 @@ describe("MembershipModuleService – Enhanced", () => {
   let service: MembershipModuleService;
 
   beforeEach(() => {
-    service = new MembershipModuleService();
-    jest.clearAllMocks();
+    service = new MembershipModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("enrollMember", () => {
     it("enrolls a customer in a membership successfully", async () => {
-      jest.spyOn(service, "listMemberships").mockResolvedValue([]);
+      vi.spyOn(service, "listMemberships").mockResolvedValue([]);
       jest
         .spyOn(service, "retrieveMembershipTier")
         .mockResolvedValue({ id: "tier-1" });
@@ -136,7 +137,7 @@ describe("MembershipModuleService – Enhanced", () => {
     it("renews an active membership extending end date", async () => {
       const futureDate = new Date();
       futureDate.setFullYear(futureDate.getFullYear() + 1);
-      jest.spyOn(service, "retrieveMembership").mockResolvedValue({
+      vi.spyOn(service, "retrieveMembership").mockResolvedValue({
         id: "mem-1",
         status: "active",
         expires_at: futureDate.toISOString(),

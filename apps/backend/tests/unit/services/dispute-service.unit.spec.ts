@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,12 +57,12 @@ describe("DisputeModuleService", () => {
   let service: DisputeModuleService;
 
   beforeEach(() => {
-    service = new DisputeModuleService();
+    service = new DisputeModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
   });
 
   describe("openDispute", () => {
     it("creates a dispute when no active dispute exists", async () => {
-      jest.spyOn(service, "listDisputes").mockResolvedValue([]);
+      vi.spyOn(service, "listDisputes").mockResolvedValue([]);
       const createDisputeSpy = jest
         .spyOn(service, "createDisputes")
         .mockResolvedValue({ id: "d-1", status: "open" });
@@ -104,8 +105,8 @@ describe("DisputeModuleService", () => {
     });
 
     it("creates an initial message with the description", async () => {
-      jest.spyOn(service, "listDisputes").mockResolvedValue([]);
-      jest.spyOn(service, "createDisputes").mockResolvedValue({ id: "d-1" });
+      vi.spyOn(service, "listDisputes").mockResolvedValue([]);
+      vi.spyOn(service, "createDisputes").mockResolvedValue({ id: "d-1" });
       const msgSpy = jest
         .spyOn(service, "createDisputeMessages")
         .mockResolvedValue({ id: "m-1" });
@@ -128,11 +129,11 @@ describe("DisputeModuleService", () => {
     });
 
     it("uses provided priority when specified", async () => {
-      jest.spyOn(service, "listDisputes").mockResolvedValue([]);
+      vi.spyOn(service, "listDisputes").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createDisputes")
         .mockResolvedValue({ id: "d-1" });
-      jest.spyOn(service, "createDisputeMessages").mockResolvedValue({});
+      vi.spyOn(service, "createDisputeMessages").mockResolvedValue({});
 
       await service.openDispute({
         orderId: "o-1",
@@ -157,7 +158,7 @@ describe("DisputeModuleService", () => {
       const createSpy = jest
         .spyOn(service, "createDisputeMessages")
         .mockResolvedValue({ id: "m-2" });
-      jest.spyOn(service, "updateDisputes").mockResolvedValue({});
+      vi.spyOn(service, "updateDisputes").mockResolvedValue({});
 
       const result = await service.addMessage({
         disputeId: "d-1",
@@ -291,7 +292,7 @@ describe("DisputeModuleService", () => {
       jest
         .spyOn(service, "retrieveDispute")
         .mockResolvedValue({ id: "d-1", status: "open" });
-      jest.spyOn(service, "updateDisputes").mockResolvedValue({});
+      vi.spyOn(service, "updateDisputes").mockResolvedValue({});
       const msgSpy = jest
         .spyOn(service, "createDisputeMessages")
         .mockResolvedValue({});
@@ -314,7 +315,7 @@ describe("DisputeModuleService", () => {
         .spyOn(service, "retrieveDispute")
         .mockResolvedValueOnce({ id: "d-1", status: "under_review" })
         .mockResolvedValueOnce({ id: "d-1", status: "resolved" });
-      jest.spyOn(service, "updateDisputes").mockResolvedValue({});
+      vi.spyOn(service, "updateDisputes").mockResolvedValue({});
 
       const result = await service.resolve({
         disputeId: "d-1",
@@ -342,7 +343,7 @@ describe("DisputeModuleService", () => {
 
   describe("getDisputeTimeline", () => {
     it("returns timeline with events sorted by timestamp", async () => {
-      jest.spyOn(service, "retrieveDispute").mockResolvedValue({
+      vi.spyOn(service, "retrieveDispute").mockResolvedValue({
         id: "d-1",
         status: "escalated",
         priority: "high",

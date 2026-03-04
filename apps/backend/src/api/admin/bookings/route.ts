@@ -69,10 +69,12 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const bookingModule = req.scope.resolve("booking") as unknown as any;
     const cityosContext = req.cityosContext as CityOSContext | undefined;
 
-    const booking = await bookingModule.createBookings({
+    const raw = await bookingModule.createBookings({
       ...parsed.data,
       tenant_id: cityosContext?.tenantId || "default",
     });
+
+    const booking = Array.isArray(raw) ? raw[0] : raw;
 
     res.status(201).json({ booking });
   } catch (error) {

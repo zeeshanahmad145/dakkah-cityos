@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -74,8 +75,8 @@ describe("FinancialProductModuleService", () => {
   let service: FinancialProductModuleService;
 
   beforeEach(() => {
-    service = new FinancialProductModuleService();
-    jest.clearAllMocks();
+    service = new FinancialProductModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("calculateRepaymentSchedule", () => {
@@ -118,7 +119,7 @@ describe("FinancialProductModuleService", () => {
 
   describe("applyForProduct", () => {
     it("creates a loan application with valid data", async () => {
-      jest.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
         id: "prod-1",
         min_amount: 1000,
         max_amount: 50000,
@@ -143,7 +144,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("throws when amount is below minimum", async () => {
-      jest.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
         id: "prod-1",
         min_amount: 5000,
         max_amount: 50000,
@@ -155,7 +156,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("throws when amount exceeds maximum", async () => {
-      jest.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
         id: "prod-1",
         min_amount: 1000,
         max_amount: 50000,
@@ -172,14 +173,14 @@ describe("FinancialProductModuleService", () => {
 
   describe("assessApplication", () => {
     it("returns eligible for a valid application", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         customer_id: "cust-1",
         amount: 5000,
         term_months: 12,
         product_id: "prod-1",
       });
-      jest.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanProduct").mockResolvedValue({
         id: "prod-1",
         min_amount: 1000,
         max_amount: 50000,
@@ -193,7 +194,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("deducts score for missing customer info", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         customer_id: null,
         amount: 5000,
@@ -207,7 +208,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("deducts score for invalid amount", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         customer_id: "cust-1",
         amount: 0,
@@ -223,7 +224,7 @@ describe("FinancialProductModuleService", () => {
 
   describe("approveApplication", () => {
     it("approves a pending application", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         status: "pending",
       });
@@ -245,7 +246,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("throws when already approved", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         status: "approved",
       });
@@ -256,7 +257,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("throws when trying to approve a rejected application", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         status: "rejected",
       });
@@ -269,7 +270,7 @@ describe("FinancialProductModuleService", () => {
 
   describe("rejectApplication", () => {
     it("rejects a pending application with a reason", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         status: "pending",
       });
@@ -294,7 +295,7 @@ describe("FinancialProductModuleService", () => {
     });
 
     it("throws when trying to reject an approved application", async () => {
-      jest.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoanApplication").mockResolvedValue({
         id: "app-1",
         status: "approved",
       });

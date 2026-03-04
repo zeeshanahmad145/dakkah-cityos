@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -57,13 +58,13 @@ describe("ReviewModuleService – Enhanced", () => {
   let service: ReviewModuleService;
 
   beforeEach(() => {
-    service = new ReviewModuleService();
-    jest.clearAllMocks();
+    service = new ReviewModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getReviewAnalytics", () => {
     it("returns analytics with rating distribution and response rate", async () => {
-      jest.spyOn(service, "listReviews").mockResolvedValue([
+      vi.spyOn(service, "listReviews").mockResolvedValue([
         {
           rating: 5,
           is_verified_purchase: true,
@@ -81,7 +82,7 @@ describe("ReviewModuleService – Enhanced", () => {
     });
 
     it("returns zero metrics when no reviews exist", async () => {
-      jest.spyOn(service, "listReviews").mockResolvedValue([]);
+      vi.spyOn(service, "listReviews").mockResolvedValue([]);
 
       const result = await service.getReviewAnalytics("vendor-1");
       expect(result.totalReviews).toBe(0);
@@ -89,7 +90,7 @@ describe("ReviewModuleService – Enhanced", () => {
     });
 
     it("calculates response rate correctly", async () => {
-      jest.spyOn(service, "listReviews").mockResolvedValue([
+      vi.spyOn(service, "listReviews").mockResolvedValue([
         { rating: 5, metadata: { vendor_response: "Thank you" } },
         { rating: 4, metadata: { vendor_response: "Appreciated" } },
         { rating: 3, metadata: null },
@@ -103,12 +104,12 @@ describe("ReviewModuleService – Enhanced", () => {
 
   describe("flagInappropriateReview", () => {
     it("flags a review and returns flag count", async () => {
-      jest.spyOn(service, "retrieveReview").mockResolvedValue({
+      vi.spyOn(service, "retrieveReview").mockResolvedValue({
         id: "r1",
         flags: [],
         metadata: {},
       });
-      jest.spyOn(service, "updateReviews").mockResolvedValue({});
+      vi.spyOn(service, "updateReviews").mockResolvedValue({});
 
       const result = await service.flagInappropriateReview(
         "r1",
@@ -120,7 +121,7 @@ describe("ReviewModuleService – Enhanced", () => {
     });
 
     it("triggers moderation after 3 flags", async () => {
-      jest.spyOn(service, "retrieveReview").mockResolvedValue({
+      vi.spyOn(service, "retrieveReview").mockResolvedValue({
         id: "r1",
         metadata: {
           flags: [
@@ -129,7 +130,7 @@ describe("ReviewModuleService – Enhanced", () => {
           ],
         },
       });
-      jest.spyOn(service, "updateReviews").mockResolvedValue({});
+      vi.spyOn(service, "updateReviews").mockResolvedValue({});
 
       const result = await service.flagInappropriateReview(
         "r1",
@@ -142,7 +143,7 @@ describe("ReviewModuleService – Enhanced", () => {
     });
 
     it("throws when reporter already flagged the review", async () => {
-      jest.spyOn(service, "retrieveReview").mockResolvedValue({
+      vi.spyOn(service, "retrieveReview").mockResolvedValue({
         id: "r1",
         metadata: {
           flags: [{ reporterId: "reporter-1", reason: "spam" }],
@@ -164,7 +165,7 @@ describe("ReviewModuleService – Enhanced", () => {
   describe("getReviewTrends", () => {
     it("returns monthly trends for the specified period", async () => {
       const now = new Date();
-      jest.spyOn(service, "listReviews").mockResolvedValue([
+      vi.spyOn(service, "listReviews").mockResolvedValue([
         { rating: 5, created_at: now.toISOString() },
         { rating: 4, created_at: now.toISOString() },
         { rating: 2, created_at: now.toISOString() },
@@ -176,7 +177,7 @@ describe("ReviewModuleService – Enhanced", () => {
     });
 
     it("defaults to 6 months when not specified", async () => {
-      jest.spyOn(service, "listReviews").mockResolvedValue([]);
+      vi.spyOn(service, "listReviews").mockResolvedValue([]);
 
       const result = await service.getReviewTrends("vendor-1");
       expect(result.periodMonths).toBe(6);

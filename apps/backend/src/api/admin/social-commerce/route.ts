@@ -53,10 +53,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const cityosContext = req.cityosContext;
     const tenant_id = cityosContext?.tenantId || "default";
 
-    const item = await mod.createLiveStreams({
+    const raw = await mod.createLiveStreams({
       ...parsed.data,
       tenant_id,
     });
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin social-commerce");

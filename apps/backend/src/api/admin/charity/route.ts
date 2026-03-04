@@ -66,7 +66,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
           message: "Validation failed",
           errors: validation.error.issues,
         });
-    const item = await mod.createCharityOrgs(validation.data);
+    const raw = await mod.createCharityOrgs(validation.data);
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin charity");

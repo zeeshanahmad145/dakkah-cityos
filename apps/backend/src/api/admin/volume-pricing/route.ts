@@ -151,7 +151,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     } = parsed.data;
 
     // Create the rule
-    const rule = await volumePricingModule.createVolumePricings({
+    const raw = await volumePricingModule.createVolumePricings({
       name,
       description,
       applies_to,
@@ -169,6 +169,8 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
         "01KGZ2JRYX607FWMMYQNQRKVWS",
       metadata,
     });
+
+    const rule = Array.isArray(raw) ? raw[0] : raw;
 
     // Create tiers
     const createdTiers = await Promise.all(

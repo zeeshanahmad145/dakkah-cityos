@@ -55,10 +55,11 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const cityosContext = req.cityosContext;
     const tenant_id = cityosContext?.tenantId || "default";
 
-    const item = await mod.createRentalProducts({
+    const raw = await mod.createRentalProducts({
       ...parsed.data,
       tenant_id,
     });
+    const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });
   } catch (error: unknown) {
     handleApiError(res, error, "POST admin rentals");

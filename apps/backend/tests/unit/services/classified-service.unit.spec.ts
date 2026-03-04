@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -68,8 +69,8 @@ describe("ClassifiedModuleService", () => {
   let service: ClassifiedModuleService;
 
   beforeEach(() => {
-    service = new ClassifiedModuleService();
-    jest.clearAllMocks();
+    service = new ClassifiedModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("searchListings", () => {
@@ -86,7 +87,7 @@ describe("ClassifiedModuleService", () => {
     });
 
     it("filters by price range", async () => {
-      jest.spyOn(service, "listClassifiedListings").mockResolvedValue([
+      vi.spyOn(service, "listClassifiedListings").mockResolvedValue([
         { id: "l1", price: 50 },
         { id: "l2", price: 150 },
         { id: "l3", price: 250 },
@@ -121,7 +122,7 @@ describe("ClassifiedModuleService", () => {
     it("expires listings past their expiry date", async () => {
       const pastDate = new Date("2024-01-01");
       const futureDate = new Date("2026-12-31");
-      jest.spyOn(service, "listClassifiedListings").mockResolvedValue([
+      vi.spyOn(service, "listClassifiedListings").mockResolvedValue([
         { id: "l1", expires_at: pastDate },
         { id: "l2", expires_at: futureDate },
       ]);

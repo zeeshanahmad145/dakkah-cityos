@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -59,13 +60,13 @@ describe("PersonaModuleService", () => {
   let service: PersonaModuleService;
 
   beforeEach(() => {
-    service = new PersonaModuleService();
-    jest.clearAllMocks();
+    service = new PersonaModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("resolvePersona", () => {
     it("returns the highest priority persona for a user", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([
         {
           id: "a1",
           scope: "tenant-default",
@@ -92,7 +93,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("returns null when no assignments exist", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([]);
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([]);
 
       const result = await service.resolvePersona("tenant-1", "user-1");
 
@@ -100,7 +101,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("filters out expired assignments", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([
         {
           id: "a1",
           scope: "user-default",
@@ -118,7 +119,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("session scope takes precedence over user-default", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([
         {
           id: "a1",
           scope: "user-default",
@@ -214,7 +215,7 @@ describe("PersonaModuleService", () => {
 
   describe("getPersonaCapabilities", () => {
     it("includes read and write for non-read-only persona", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({
         id: "p1",
         config: { permissions: ["view_dashboard"], features: ["analytics"] },
         constraints: {},
@@ -228,7 +229,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("includes only read for read-only persona", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({
         id: "p1",
         config: {},
         constraints: { read_only: true },
@@ -250,7 +251,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("returns not eligible when user already has the persona", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({ id: "p1" });
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({ id: "p1" });
       jest
         .spyOn(service, "listPersonaAssignments")
         .mockResolvedValueOnce([{ id: "a1", status: "active" }]);
@@ -262,7 +263,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("returns eligible for valid assignment", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({ id: "p1" });
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({ id: "p1" });
       jest
         .spyOn(service, "listPersonaAssignments")
         .mockResolvedValueOnce([])
@@ -276,7 +277,7 @@ describe("PersonaModuleService", () => {
 
   describe("resolvePersonaPrecedence", () => {
     it("returns effective persona based on scope priority", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([
         {
           id: "a1",
           scope: "tenant-default",
@@ -295,7 +296,7 @@ describe("PersonaModuleService", () => {
           scope_reference: "sess-1",
         },
       ]);
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({
         id: "p2",
         name: "Session Persona",
       });
@@ -306,7 +307,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("returns null effective persona when no assignments exist", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([]);
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([]);
 
       const result = await service.resolvePersonaPrecedence("u1", "t-1");
       expect(result.effectivePersona).toBeNull();
@@ -314,7 +315,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("filters expired assignments", async () => {
-      jest.spyOn(service, "listPersonaAssignments").mockResolvedValue([
+      vi.spyOn(service, "listPersonaAssignments").mockResolvedValue([
         {
           id: "a1",
           scope: "user-default",
@@ -333,7 +334,7 @@ describe("PersonaModuleService", () => {
 
   describe("getPersonaRecommendations", () => {
     it("returns recommendations based on persona preferences", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({
         id: "p1",
         name: "Shopper",
         config: { preferences: { electronics: 0.9, books: 0.7 } },
@@ -348,7 +349,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("adds kid-safe recommendation for kid-safe persona", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({
         id: "p1",
         name: "Child",
         config: {},
@@ -364,7 +365,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("adds local content recommendation for geo-scoped persona", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue({
+      vi.spyOn(service, "retrievePersona").mockResolvedValue({
         id: "p1",
         name: "Local",
         config: {},
@@ -399,7 +400,7 @@ describe("PersonaModuleService", () => {
           },
           metadata: {},
         });
-      jest.spyOn(service, "updatePersonas").mockResolvedValue({ id: "p1" });
+      vi.spyOn(service, "updatePersonas").mockResolvedValue({ id: "p1" });
 
       const result = await service.mergePersonaProfiles("p1", "p2");
       expect(result.mergedConstraints.kidSafe).toBe(true);
@@ -408,7 +409,7 @@ describe("PersonaModuleService", () => {
     });
 
     it("throws when primary persona not found", async () => {
-      jest.spyOn(service, "retrievePersona").mockResolvedValue(null);
+      vi.spyOn(service, "retrievePersona").mockResolvedValue(null);
 
       await expect(service.mergePersonaProfiles("p1", "p2")).rejects.toThrow(
         "Primary persona p1 not found",

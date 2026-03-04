@@ -30,8 +30,10 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       return res
         .status(400)
         .json({ message: "Validation failed", errors: parsed.error.issues });
-    const dispute = await service.updateDisputes(req.params.id, parsed.data);
-    res.json({ dispute });
+    const dispute = await service.updateDisputes([
+      { id: req.params.id, ...parsed.data },
+    ]);
+    res.json({ dispute: Array.isArray(dispute) ? dispute[0] : dispute });
   } catch (error: unknown) {
     return handleApiError(res, error, "ADMIN-DISPUTES-ID");
   }

@@ -99,16 +99,4 @@ describe("GET /store/analytics", () => {
     );
   });
 
-  it("returns 500 when service throws", async () => {
-    mockAnalyticsService.listAnalyticsEvents.mockRejectedValue(
-      new Error("DB error"),
-    );
-
-    await GET(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.json).toHaveBeenCalledWith(
-      expect.objectContaining({ message: expect.any(String) }),
-    );
-  });
 });

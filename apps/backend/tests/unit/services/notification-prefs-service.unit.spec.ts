@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,13 +57,13 @@ describe("NotificationPreferencesModuleService", () => {
   let service: NotificationPreferencesModuleService;
 
   beforeEach(() => {
-    service = new NotificationPreferencesModuleService();
-    jest.clearAllMocks();
+    service = new NotificationPreferencesModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getEffectivePreferences", () => {
     it("returns defaults when no user overrides exist", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
 
       const result = await service.getEffectivePreferences(
         "cust-1",
@@ -105,7 +106,7 @@ describe("NotificationPreferencesModuleService", () => {
 
   describe("updateChannelPreference", () => {
     it("updates all preferences for a valid channel", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         { id: "p1", channel: "email", enabled: true },
         { id: "p2", channel: "email", enabled: true },
       ]);
@@ -134,7 +135,7 @@ describe("NotificationPreferencesModuleService", () => {
 
   describe("shouldNotify", () => {
     it("returns true when channel/category is enabled", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
 
       const result = await service.shouldNotify(
         "cust-1",
@@ -147,7 +148,7 @@ describe("NotificationPreferencesModuleService", () => {
     });
 
     it("returns false when channel/category is disabled by default", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([]);
 
       const result = await service.shouldNotify(
         "cust-1",
@@ -179,7 +180,7 @@ describe("NotificationPreferencesModuleService", () => {
 
   describe("bulkOptOut", () => {
     it("opts out of all channels when none specified", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         { id: "p1", channel: "email", enabled: true },
         { id: "p2", channel: "sms", enabled: true },
         { id: "p3", channel: "push", enabled: true },
@@ -196,7 +197,7 @@ describe("NotificationPreferencesModuleService", () => {
     });
 
     it("opts out of only specified channels", async () => {
-      jest.spyOn(service, "listNotificationPreferences").mockResolvedValue([
+      vi.spyOn(service, "listNotificationPreferences").mockResolvedValue([
         { id: "p1", channel: "email", enabled: true },
         { id: "p2", channel: "sms", enabled: true },
         { id: "p3", channel: "push", enabled: true },

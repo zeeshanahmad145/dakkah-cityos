@@ -44,7 +44,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;
 
-    const rules = await commissionModule.listCommissions(filters, {
+    const rules = await commissionModule.listCommissionRules(filters, {
       skip: offset,
       take: limit,
     });
@@ -72,7 +72,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const commissionModule = req.scope.resolve("commission") as unknown as any;
     const cityosContext = req.cityosContext as CityOSContext | undefined;
 
-    const rule = await commissionModule.createCommissions({
+    const raw = await commissionModule.createCommissionRules({
       ...parsed.data,
       commission_type: parsed.data.type,
       commission_percentage:
@@ -82,7 +82,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       status: parsed.data.is_active ? "active" : "inactive",
       tenant_id: cityosContext?.tenantId || "default",
     });
-
+    const rule = Array.isArray(raw) ? raw[0] : raw;
     res.status(201).json({ rule });
   } catch (error) {
     handleApiError(res, error, "POST admin commissions");

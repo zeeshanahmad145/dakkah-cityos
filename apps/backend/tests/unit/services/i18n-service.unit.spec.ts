@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -49,14 +50,14 @@ describe("I18nModuleService", () => {
   let service: I18nModuleService;
 
   beforeEach(() => {
-    service = new I18nModuleService();
-    jest.clearAllMocks();
+    service = new I18nModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getTranslations", () => {
     it("returns published translations for tenant and locale", async () => {
       const translations = [{ id: "t1", key: "hello", value: "مرحبا" }];
-      jest.spyOn(service, "listTranslations").mockResolvedValue(translations);
+      vi.spyOn(service, "listTranslations").mockResolvedValue(translations);
 
       const result = await service.getTranslations("t1", "ar");
       expect(result).toEqual(translations);
@@ -77,14 +78,14 @@ describe("I18nModuleService", () => {
   describe("getTranslation", () => {
     it("returns first matching translation", async () => {
       const translation = { id: "t1", key: "hello", value: "Hello" };
-      jest.spyOn(service, "listTranslations").mockResolvedValue([translation]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([translation]);
 
       const result = await service.getTranslation("t1", "en", "hello");
       expect(result).toEqual(translation);
     });
 
     it("returns null when not found", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
 
       const result = await service.getTranslation("t1", "en", "missing");
       expect(result).toBeNull();
@@ -109,7 +110,7 @@ describe("I18nModuleService", () => {
     });
 
     it("creates new translation when not existing", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createTranslations")
         .mockResolvedValue({ id: "t2" });
@@ -129,7 +130,7 @@ describe("I18nModuleService", () => {
 
   describe("bulkUpsert", () => {
     it("processes multiple translations", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
       jest
         .spyOn(service, "createTranslations")
         .mockResolvedValue({ id: "new" });
@@ -159,7 +160,7 @@ describe("I18nModuleService", () => {
     });
 
     it("returns empty array when no translations", async () => {
-      jest.spyOn(service, "listTranslations").mockResolvedValue([]);
+      vi.spyOn(service, "listTranslations").mockResolvedValue([]);
 
       const result = await service.getSupportedLocales("t1");
       expect(result).toEqual([]);

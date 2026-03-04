@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -62,8 +63,8 @@ describe("CMSContentModuleService", () => {
   let service: CMSContentModuleService;
 
   beforeEach(() => {
-    service = new CMSContentModuleService();
-    jest.clearAllMocks();
+    service = new CMSContentModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("resolve", () => {
@@ -82,7 +83,7 @@ describe("CMSContentModuleService", () => {
     });
 
     it("returns null when page not found", async () => {
-      jest.spyOn(service, "listCmsPages").mockResolvedValue([]);
+      vi.spyOn(service, "listCmsPages").mockResolvedValue([]);
 
       const result = await service.resolve({
         slug: "nonexistent",
@@ -93,7 +94,7 @@ describe("CMSContentModuleService", () => {
     });
 
     it("prefers region-specific page when country code matches", async () => {
-      jest.spyOn(service, "listCmsPages").mockResolvedValue([
+      vi.spyOn(service, "listCmsPages").mockResolvedValue([
         { id: "p1", slug: "about", country_code: "GB", region_zone: null },
         { id: "p2", slug: "about", country_code: "US", region_zone: null },
       ]);
@@ -108,7 +109,7 @@ describe("CMSContentModuleService", () => {
     });
 
     it("falls back to generic page when no region match", async () => {
-      jest.spyOn(service, "listCmsPages").mockResolvedValue([
+      vi.spyOn(service, "listCmsPages").mockResolvedValue([
         { id: "p1", slug: "about", country_code: null, region_zone: null },
         { id: "p2", slug: "about", country_code: "GB", region_zone: null },
       ]);
@@ -198,7 +199,7 @@ describe("CMSContentModuleService", () => {
     });
 
     it("returns null when no navigation found", async () => {
-      jest.spyOn(service, "listCmsNavigations").mockResolvedValue([]);
+      vi.spyOn(service, "listCmsNavigations").mockResolvedValue([]);
 
       const result = await service.getNavigation({
         tenantId: "t1",
@@ -209,7 +210,7 @@ describe("CMSContentModuleService", () => {
     });
 
     it("prefers localized navigation", async () => {
-      jest.spyOn(service, "listCmsNavigations").mockResolvedValue([
+      vi.spyOn(service, "listCmsNavigations").mockResolvedValue([
         { id: "nav-1", location: "header", locale: "en" },
         { id: "nav-2", location: "header", locale: "fr" },
       ]);
@@ -226,7 +227,7 @@ describe("CMSContentModuleService", () => {
 
   describe("duplicatePage", () => {
     it("creates a copy of an existing page", async () => {
-      jest.spyOn(service, "retrieveCmsPage").mockResolvedValue({
+      vi.spyOn(service, "retrieveCmsPage").mockResolvedValue({
         id: "p1",
         tenant_id: "t1",
         title: "About Us",

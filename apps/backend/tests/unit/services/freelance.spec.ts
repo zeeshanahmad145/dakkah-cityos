@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -79,19 +80,19 @@ describe("FreelanceModuleService", () => {
   let service: FreelanceModuleService;
 
   beforeEach(() => {
-    service = new FreelanceModuleService();
-    jest.clearAllMocks();
+    service = new FreelanceModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("submitProposal", () => {
     it("should submit a valid proposal", async () => {
-      jest.spyOn(service, "retrieveGigListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveGigListing").mockResolvedValue({
         id: "gig_01",
         status: "open",
         budget: 5000,
       });
-      jest.spyOn(service, "listProposals").mockResolvedValue([]);
-      jest.spyOn(service, "createProposals").mockResolvedValue({
+      vi.spyOn(service, "listProposals").mockResolvedValue([]);
+      vi.spyOn(service, "createProposals").mockResolvedValue({
         id: "prop_01",
         gig_listing_id: "gig_01",
         freelancer_id: "fl_01",
@@ -107,7 +108,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("should reject proposal on closed gig", async () => {
-      jest.spyOn(service, "retrieveGigListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveGigListing").mockResolvedValue({
         id: "gig_01",
         status: "closed",
         budget: 5000,
@@ -133,7 +134,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("should reject duplicate proposal", async () => {
-      jest.spyOn(service, "retrieveGigListing").mockResolvedValue({
+      vi.spyOn(service, "retrieveGigListing").mockResolvedValue({
         id: "gig_01",
         status: "open",
         budget: 5000,
@@ -178,18 +179,18 @@ describe("FreelanceModuleService", () => {
 
   describe("releaseMilestonePayment", () => {
     it("should release payment for approved milestone", async () => {
-      jest.spyOn(service, "retrieveMilestone").mockResolvedValue({
+      vi.spyOn(service, "retrieveMilestone").mockResolvedValue({
         id: "ms_01",
         status: "approved",
         amount: 2000,
         contract_id: "con_01",
       });
-      jest.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
+      vi.spyOn(service, "retrieveFreelanceContract").mockResolvedValue({
         id: "con_01",
         freelancer_id: "fl_01",
         status: "active",
       });
-      jest.spyOn(service, "updateMilestones").mockResolvedValue({});
+      vi.spyOn(service, "updateMilestones").mockResolvedValue({});
 
       const result = await service.releaseMilestonePayment("ms_01");
       expect(result).toBeDefined();
@@ -197,7 +198,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("should reject release for unapproved milestone", async () => {
-      jest.spyOn(service, "retrieveMilestone").mockResolvedValue({
+      vi.spyOn(service, "retrieveMilestone").mockResolvedValue({
         id: "ms_01",
         status: "pending",
         amount: 2000,
@@ -207,7 +208,7 @@ describe("FreelanceModuleService", () => {
     });
 
     it("should reject release for already paid milestone", async () => {
-      jest.spyOn(service, "retrieveMilestone").mockResolvedValue({
+      vi.spyOn(service, "retrieveMilestone").mockResolvedValue({
         id: "ms_01",
         status: "paid",
         amount: 2000,

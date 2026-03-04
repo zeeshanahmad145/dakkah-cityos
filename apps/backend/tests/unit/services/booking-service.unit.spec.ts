@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -74,8 +75,8 @@ describe("BookingModuleService", () => {
   let service: BookingModuleService;
 
   beforeEach(() => {
-    service = new BookingModuleService();
-    jest.clearAllMocks();
+    service = new BookingModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("generateBookingNumber", () => {
@@ -99,7 +100,7 @@ describe("BookingModuleService", () => {
         effective_to: "2025-12-31",
         weekly_schedule: {},
       };
-      jest.spyOn(service, "listAvailabilities").mockResolvedValue([avail]);
+      vi.spyOn(service, "listAvailabilities").mockResolvedValue([avail]);
 
       const result = await service.getAvailabilityForDate(
         "service",
@@ -110,7 +111,7 @@ describe("BookingModuleService", () => {
     });
 
     it("returns null when no availability found", async () => {
-      jest.spyOn(service, "listAvailabilities").mockResolvedValue([]);
+      vi.spyOn(service, "listAvailabilities").mockResolvedValue([]);
 
       const result = await service.getAvailabilityForDate(
         "service",
@@ -121,7 +122,7 @@ describe("BookingModuleService", () => {
     });
 
     it("falls back to first availability when date filters skip all", async () => {
-      jest.spyOn(service, "listAvailabilities").mockResolvedValue([
+      vi.spyOn(service, "listAvailabilities").mockResolvedValue([
         {
           id: "av-1",
           effective_from: "2026-01-01",
@@ -144,7 +145,7 @@ describe("BookingModuleService", () => {
 
   describe("filterSlotsWithExceptions", () => {
     it("returns all slots when no exceptions", async () => {
-      jest.spyOn(service, "listAvailabilityExceptions").mockResolvedValue([]);
+      vi.spyOn(service, "listAvailabilityExceptions").mockResolvedValue([]);
 
       const slots = [
         {
@@ -160,7 +161,7 @@ describe("BookingModuleService", () => {
     });
 
     it("removes slots blocked by all_day exception", async () => {
-      jest.spyOn(service, "listAvailabilityExceptions").mockResolvedValue([
+      vi.spyOn(service, "listAvailabilityExceptions").mockResolvedValue([
         {
           start_date: "2025-06-15T00:00:00",
           end_date: "2025-06-15T23:59:59",
@@ -185,7 +186,7 @@ describe("BookingModuleService", () => {
     it("filters slots within time_off exception range", async () => {
       const dateStr = "2025-06-15";
 
-      jest.spyOn(service, "listAvailabilityExceptions").mockResolvedValue([
+      vi.spyOn(service, "listAvailabilityExceptions").mockResolvedValue([
         {
           start_date: `${dateStr}T09:00:00Z`,
           end_date: `${dateStr}T12:00:00Z`,
@@ -215,13 +216,13 @@ describe("BookingModuleService", () => {
 
   describe("isSlotAvailable", () => {
     it("returns true when slot is available", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         min_advance_booking_hours: 0,
         max_advance_booking_days: 60,
         max_capacity: 10,
       });
-      jest.spyOn(service, "listBookings").mockResolvedValue([]);
+      vi.spyOn(service, "listBookings").mockResolvedValue([]);
 
       const futureStart = new Date(Date.now() + 24 * 60 * 60 * 1000);
       const futureEnd = new Date(futureStart.getTime() + 60 * 60 * 1000);
@@ -234,7 +235,7 @@ describe("BookingModuleService", () => {
     });
 
     it("returns false when slot is too soon", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         min_advance_booking_hours: 24,
         max_advance_booking_days: 60,
@@ -248,7 +249,7 @@ describe("BookingModuleService", () => {
     });
 
     it("returns false when capacity is full", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         min_advance_booking_hours: 0,
         max_advance_booking_days: 60,
@@ -258,7 +259,7 @@ describe("BookingModuleService", () => {
       const futureStart = new Date(Date.now() + 24 * 60 * 60 * 1000);
       const futureEnd = new Date(futureStart.getTime() + 60 * 60 * 1000);
 
-      jest.spyOn(service, "listBookings").mockResolvedValue([
+      vi.spyOn(service, "listBookings").mockResolvedValue([
         {
           start_time: futureStart.toISOString(),
           end_time: futureEnd.toISOString(),
@@ -277,7 +278,7 @@ describe("BookingModuleService", () => {
 
   describe("createBooking", () => {
     it("creates a booking with calculated end time", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         duration_minutes: 60,
         location_type: "in_person",
@@ -286,15 +287,15 @@ describe("BookingModuleService", () => {
         max_advance_booking_days: 60,
         max_capacity: 10,
       });
-      jest.spyOn(service, "isSlotAvailable").mockResolvedValue(true);
+      vi.spyOn(service, "isSlotAvailable").mockResolvedValue(true);
       jest
         .spyOn(service, "generateBookingNumber")
         .mockResolvedValue("BK-TEST-1234");
       const createSpy = jest
         .spyOn(service, "createBookings")
         .mockResolvedValue({ id: "bk-1" });
-      jest.spyOn(service, "createBookingItems").mockResolvedValue({});
-      jest.spyOn(service, "scheduleReminders").mockResolvedValue(undefined);
+      vi.spyOn(service, "createBookingItems").mockResolvedValue({});
+      vi.spyOn(service, "scheduleReminders").mockResolvedValue(undefined);
 
       const startTime = new Date(Date.now() + 48 * 60 * 60 * 1000);
       await service.createBooking({
@@ -313,14 +314,14 @@ describe("BookingModuleService", () => {
     });
 
     it("throws when slot is not available", async () => {
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         id: "svc-1",
         duration_minutes: 60,
         min_advance_booking_hours: 0,
         max_advance_booking_days: 60,
         max_capacity: 10,
       });
-      jest.spyOn(service, "isSlotAvailable").mockResolvedValue(false);
+      vi.spyOn(service, "isSlotAvailable").mockResolvedValue(false);
 
       await expect(
         service.createBooking({
@@ -419,14 +420,14 @@ describe("BookingModuleService", () => {
 
   describe("cancelBooking", () => {
     it("cancels a booking and cancels reminders", async () => {
-      jest.spyOn(service, "retrieveBooking").mockResolvedValue({
+      vi.spyOn(service, "retrieveBooking").mockResolvedValue({
         id: "bk-1",
         status: "confirmed",
         service_product_id: "svc-1",
         start_time: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
         total: 5000,
       });
-      jest.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
+      vi.spyOn(service, "retrieveServiceProduct").mockResolvedValue({
         cancellation_policy_hours: 24,
       });
       const updateSpy = jest
@@ -484,7 +485,7 @@ describe("BookingModuleService", () => {
 
   describe("cancelReminders", () => {
     it("cancels all scheduled reminders for a booking", async () => {
-      jest.spyOn(service, "listBookingReminders").mockResolvedValue([
+      vi.spyOn(service, "listBookingReminders").mockResolvedValue([
         { id: "rem-1", status: "scheduled" },
         { id: "rem-2", status: "scheduled" },
       ]);
@@ -500,7 +501,7 @@ describe("BookingModuleService", () => {
 
   describe("getPendingReminders", () => {
     it("returns reminders scheduled before given date", async () => {
-      jest.spyOn(service, "listBookingReminders").mockResolvedValue([
+      vi.spyOn(service, "listBookingReminders").mockResolvedValue([
         { id: "rem-1", scheduled_for: "2025-01-01T10:00:00" },
         { id: "rem-2", scheduled_for: "2025-03-01T10:00:00" },
       ]);
@@ -516,7 +517,7 @@ describe("BookingModuleService", () => {
       const periodStart = new Date("2025-01-01");
       const periodEnd = new Date("2025-01-31");
 
-      jest.spyOn(service, "listBookings").mockResolvedValue([
+      vi.spyOn(service, "listBookings").mockResolvedValue([
         { id: "b1", status: "completed", start_time: "2025-01-10T10:00:00" },
         { id: "b2", status: "cancelled", start_time: "2025-01-15T10:00:00" },
         { id: "b3", status: "no_show", start_time: "2025-01-20T10:00:00" },
@@ -537,7 +538,7 @@ describe("BookingModuleService", () => {
     });
 
     it("returns zero rates when no bookings", async () => {
-      jest.spyOn(service, "listBookings").mockResolvedValue([]);
+      vi.spyOn(service, "listBookings").mockResolvedValue([]);
 
       const result = await service.getProviderStatistics(
         "prov-1",
@@ -566,7 +567,7 @@ describe("BookingModuleService", () => {
       const future2 = new Date(Date.now() + 24 * 60 * 60 * 1000);
       const past = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-      jest.spyOn(service, "listBookings").mockResolvedValue([
+      vi.spyOn(service, "listBookings").mockResolvedValue([
         { id: "b1", start_time: future1.toISOString() },
         { id: "b2", start_time: future2.toISOString() },
         { id: "b3", start_time: past.toISOString() },

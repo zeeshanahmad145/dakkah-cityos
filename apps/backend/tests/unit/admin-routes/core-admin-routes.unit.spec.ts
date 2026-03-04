@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   GET as listVendors,
   POST as createVendor,
@@ -19,34 +20,34 @@ import {
   POST as createCommissionTier,
 } from "../../../src/api/admin/commissions/tiers/route";
 
-jest.mock("../../../src/workflows/vendor/create-vendor-workflow", () => ({
-  createVendorWorkflow: jest.fn(() => ({
-    run: jest.fn(),
+vi.mock("../../../src/workflows/vendor/create-vendor-workflow", () => ({
+  createVendorWorkflow: vi.fn(() => ({
+    run: vi.fn(),
   })),
 }));
 
-jest.mock(
+vi.mock(
   "../../../src/workflows/subscription/create-subscription-workflow",
   () => ({
-    createSubscriptionWorkflow: jest.fn(() => ({
-      run: jest.fn(),
+    createSubscriptionWorkflow: vi.fn(() => ({
+      run: vi.fn(),
     })),
   }),
 );
 
 const createRes = () => {
-  const res: any = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+  const res: any = { status: vi.fn().mockReturnThis(), json: vi.fn() };
   return res;
 };
 
 describe("Admin Vendors Routes", () => {
   const createMockVendorService = () => ({
-    listVendors: jest.fn(),
+    listVendors: vi.fn(),
   });
 
   const createReq = (mockService: any, overrides: any = {}) =>
     ({
-      scope: { resolve: jest.fn(() => mockService) },
+      scope: { resolve: vi.fn(() => mockService) },
       query: {},
       params: {},
       body: {},
@@ -109,7 +110,7 @@ describe("Admin Vendors Routes", () => {
   describe("POST /admin/vendors", () => {
     it("should return 403 without tenant context", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: {
@@ -135,7 +136,7 @@ describe("Admin Vendors Routes", () => {
 
     it("should return 400 for invalid body", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: { handle: "a" },
@@ -156,7 +157,7 @@ describe("Admin Vendors Routes", () => {
     it("should create vendor with valid body via workflow", async () => {
       const {
         createVendorWorkflow,
-      } = require("../../../src/workflows/vendor/create-vendor-workflow");
+      } = (await import("../../../src/workflows/vendor/create-vendor-workflow"));
       const mockRun = jest
         .fn()
         .mockResolvedValue({ result: { vendor: { id: "vnd_new" } } });
@@ -175,7 +176,7 @@ describe("Admin Vendors Routes", () => {
         },
       };
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: validBody,
@@ -194,12 +195,12 @@ describe("Admin Vendors Routes", () => {
 
 describe("Admin Bookings Routes", () => {
   const createMockQuery = () => ({
-    graph: jest.fn(),
+    graph: vi.fn(),
   });
 
   const createMockBookingService = () => ({
-    listBookings: jest.fn(),
-    createBookings: jest.fn(),
+    listBookings: vi.fn(),
+    createBookings: vi.fn(),
   });
 
   describe("GET /admin/bookings", () => {
@@ -208,7 +209,7 @@ describe("Admin Bookings Routes", () => {
       const bookings = [{ id: "book_1" }];
       mockService.listBookings.mockResolvedValue(bookings);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {},
@@ -233,7 +234,7 @@ describe("Admin Bookings Routes", () => {
       const mockService = createMockBookingService();
       mockService.listBookings.mockResolvedValue([]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { status: "confirmed" },
         params: {},
         body: {},
@@ -252,7 +253,7 @@ describe("Admin Bookings Routes", () => {
       const mockService = createMockBookingService();
       mockService.listBookings.mockResolvedValue([]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { provider_id: "prov_1" },
         params: {},
         body: {},
@@ -271,7 +272,7 @@ describe("Admin Bookings Routes", () => {
       const mockService = createMockBookingService();
       mockService.listBookings.mockResolvedValue([]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { from: "2025-01-01", to: "2025-12-31" },
         params: {},
         body: {},
@@ -293,7 +294,7 @@ describe("Admin Bookings Routes", () => {
       const booking = { id: "book_new" };
       mockService.createBookings.mockResolvedValue(booking);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {
@@ -326,7 +327,7 @@ describe("Admin Bookings Routes", () => {
 
 describe("Admin Subscriptions Routes", () => {
   const createMockSubService = () => ({
-    listSubscriptions: jest.fn(),
+    listSubscriptions: vi.fn(),
   });
 
   describe("GET /admin/subscriptions", () => {
@@ -335,7 +336,7 @@ describe("Admin Subscriptions Routes", () => {
       const subscriptions = [{ id: "sub_1" }];
       mockService.listSubscriptions.mockResolvedValue(subscriptions);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {},
@@ -361,7 +362,7 @@ describe("Admin Subscriptions Routes", () => {
       const mockService = createMockSubService();
       mockService.listSubscriptions.mockResolvedValue([]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { status: "active" },
         params: {},
         body: {},
@@ -381,7 +382,7 @@ describe("Admin Subscriptions Routes", () => {
       const mockService = createMockSubService();
       mockService.listSubscriptions.mockResolvedValue([]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { customer_id: "cust_1" },
         params: {},
         body: {},
@@ -401,7 +402,7 @@ describe("Admin Subscriptions Routes", () => {
       const mockService = createMockSubService();
       mockService.listSubscriptions.mockResolvedValue([]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {},
@@ -417,7 +418,7 @@ describe("Admin Subscriptions Routes", () => {
   describe("POST /admin/subscriptions", () => {
     it("should return 400 with validation errors for invalid body", async () => {
       const req = {
-        scope: { resolve: jest.fn() },
+        scope: { resolve: vi.fn() },
         query: {},
         params: {},
         body: {},
@@ -439,8 +440,8 @@ describe("Admin Subscriptions Routes", () => {
 
 describe("Admin Tenants Routes", () => {
   const createMockTenantService = () => ({
-    listAndCountTenants: jest.fn(),
-    createTenants: jest.fn(),
+    listAndCountTenants: vi.fn(),
+    createTenants: vi.fn(),
   });
 
   describe("GET /admin/tenants", () => {
@@ -449,7 +450,7 @@ describe("Admin Tenants Routes", () => {
       const tenants = [{ id: "ten_1", name: "Main Tenant" }];
       mockService.listAndCountTenants.mockResolvedValue([tenants, 1]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {},
@@ -474,7 +475,7 @@ describe("Admin Tenants Routes", () => {
       const mockService = createMockTenantService();
       mockService.listAndCountTenants.mockResolvedValue([[], 0]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: { status: "active" },
         params: {},
         body: {},
@@ -495,7 +496,7 @@ describe("Admin Tenants Routes", () => {
       // Mocking returning undefined for count
       mockService.listAndCountTenants.mockResolvedValue([tenants, undefined]);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: {},
@@ -516,7 +517,7 @@ describe("Admin Tenants Routes", () => {
       const tenant = { id: "ten_new", name: "New Tenant" };
       mockService.createTenants.mockResolvedValue(tenant);
       const req = {
-        scope: { resolve: jest.fn(() => mockService) },
+        scope: { resolve: vi.fn(() => mockService) },
         query: {},
         params: {},
         body: { name: "New Tenant", slug: "new-tenant" },
@@ -537,11 +538,11 @@ describe("Admin Tenants Routes", () => {
 
 describe("Admin Commission Tiers Routes", () => {
   const createMockQuery = () => ({
-    graph: jest.fn(),
+    graph: vi.fn(),
   });
 
   const createMockCommissionService = () => ({
-    createCommissionTiers: jest.fn(),
+    createCommissionTiers: vi.fn(),
   });
 
   describe("GET /admin/commissions/tiers", () => {
@@ -550,7 +551,7 @@ describe("Admin Commission Tiers Routes", () => {
       const tiers = [{ id: "tier_1", name: "Basic", rate: 10 }];
       mockQuery.graph.mockResolvedValue({ data: tiers });
       const req = {
-        scope: { resolve: jest.fn(() => mockQuery) },
+        scope: { resolve: vi.fn(() => mockQuery) },
         query: {},
         params: {},
         body: {},
@@ -580,8 +581,8 @@ describe("Admin Commission Tiers Routes", () => {
       let callCount = 0;
       const req = {
         scope: {
-          resolve: jest.fn((name: string) => {
-            if (name === "commissionModuleService") return mockService;
+          resolve: vi.fn((name: string) => {
+            if (name === "commission") return mockService;
             return mockQuery;
           }),
         },
@@ -606,8 +607,8 @@ describe("Admin Commission Tiers Routes", () => {
       const mockQuery = createMockQuery();
       const req = {
         scope: {
-          resolve: jest.fn((name: string) => {
-            if (name === "commissionModuleService") return {};
+          resolve: vi.fn((name: string) => {
+            if (name === "commission") return {};
             return mockQuery;
           }),
         },
@@ -631,8 +632,8 @@ describe("Admin Commission Tiers Routes", () => {
       const mockQuery = createMockQuery();
       const req = {
         scope: {
-          resolve: jest.fn((name: string) => {
-            if (name === "commissionModuleService") return {};
+          resolve: vi.fn((name: string) => {
+            if (name === "commission") return {};
             return mockQuery;
           }),
         },
@@ -661,8 +662,8 @@ describe("Admin Commission Tiers Routes", () => {
 
       const req = {
         scope: {
-          resolve: jest.fn((name: string) => {
-            if (name === "commissionModuleService") return mockService;
+          resolve: vi.fn((name: string) => {
+            if (name === "commission") return mockService;
             return mockQuery;
           }),
         },

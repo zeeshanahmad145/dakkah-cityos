@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -63,13 +64,13 @@ describe("PromotionExtModuleService", () => {
   let service: PromotionExtModuleService;
 
   beforeEach(() => {
-    service = new PromotionExtModuleService();
-    jest.clearAllMocks();
+    service = new PromotionExtModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("getActivePromotions", () => {
     it("returns active promotions for a tenant", async () => {
-      jest.spyOn(service, "listGiftCardExts").mockResolvedValue([
+      vi.spyOn(service, "listGiftCardExts").mockResolvedValue([
         { id: "promo-1", is_active: true },
         { id: "promo-2", is_active: true },
       ]);
@@ -79,7 +80,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns empty array when no promotions exist", async () => {
-      jest.spyOn(service, "listGiftCardExts").mockResolvedValue([]);
+      vi.spyOn(service, "listGiftCardExts").mockResolvedValue([]);
 
       const result = await service.getActivePromotions("t-1");
       expect(result).toHaveLength(0);
@@ -88,7 +89,7 @@ describe("PromotionExtModuleService", () => {
 
   describe("validatePromotionRules", () => {
     it("returns valid for an active promotion with budget", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         id: "promo-1",
         is_active: true,
         remaining_value: 5000,
@@ -102,7 +103,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns invalid for inactive promotion", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         id: "promo-1",
         is_active: false,
         remaining_value: 5000,
@@ -114,7 +115,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns invalid for expired promotion", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         id: "promo-1",
         is_active: true,
         remaining_value: 5000,
@@ -127,7 +128,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("returns partial apply when budget is less than cart total", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         id: "promo-1",
         is_active: true,
         remaining_value: 500,
@@ -192,7 +193,7 @@ describe("PromotionExtModuleService", () => {
 
   describe("getCustomerEligiblePromotions", () => {
     it("returns eligible promotions for customer", async () => {
-      jest.spyOn(service, "listGiftCardExts").mockResolvedValue([
+      vi.spyOn(service, "listGiftCardExts").mockResolvedValue([
         { id: "p1", is_active: true, remaining_value: 100, metadata: {} },
         { id: "p2", is_active: true, remaining_value: 0, metadata: {} },
       ]);
@@ -206,7 +207,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("excludes customer from excluded list", async () => {
-      jest.spyOn(service, "listGiftCardExts").mockResolvedValue([
+      vi.spyOn(service, "listGiftCardExts").mockResolvedValue([
         {
           id: "p1",
           is_active: true,
@@ -225,12 +226,12 @@ describe("PromotionExtModuleService", () => {
 
   describe("trackRedemption", () => {
     it("tracks a redemption successfully", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         id: "p1",
         is_active: true,
         metadata: { redemptions: [] },
       });
-      jest.spyOn(service, "updateGiftCardExts").mockResolvedValue({});
+      vi.spyOn(service, "updateGiftCardExts").mockResolvedValue({});
 
       const result = await service.trackRedemption("p1", "order-1", "cust-1");
       expect(result.promotionId).toBe("p1");
@@ -239,7 +240,7 @@ describe("PromotionExtModuleService", () => {
     });
 
     it("throws when promotion is not active", async () => {
-      jest.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
+      vi.spyOn(service, "retrieveGiftCardExt").mockResolvedValue({
         id: "p1",
         is_active: false,
         metadata: {},

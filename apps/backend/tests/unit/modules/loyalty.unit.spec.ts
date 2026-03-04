@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -68,13 +69,13 @@ describe("LoyaltyModuleService", () => {
   let service: LoyaltyModuleService;
 
   beforeEach(() => {
-    service = new LoyaltyModuleService();
-    jest.clearAllMocks();
+    service = new LoyaltyModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("earnPoints", () => {
     it("awards points to an active account", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         status: "active",
         points_balance: 100,
@@ -87,7 +88,7 @@ describe("LoyaltyModuleService", () => {
       const createTxSpy = jest
         .spyOn(service, "createPointTransactions")
         .mockResolvedValue({ id: "tx-1" });
-      jest.spyOn(service, "calculateTier").mockResolvedValue("silver");
+      vi.spyOn(service, "calculateTier").mockResolvedValue("silver");
 
       const result = await service.earnPoints({
         accountId: "acc-1",
@@ -111,7 +112,7 @@ describe("LoyaltyModuleService", () => {
     });
 
     it("throws when account is not active", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         status: "suspended",
       });
@@ -124,7 +125,7 @@ describe("LoyaltyModuleService", () => {
 
   describe("redeemPoints", () => {
     it("redeems points from an active account", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         status: "active",
         points_balance: 200,
@@ -158,7 +159,7 @@ describe("LoyaltyModuleService", () => {
     });
 
     it("throws when insufficient points", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         status: "active",
         points_balance: 30,
@@ -170,7 +171,7 @@ describe("LoyaltyModuleService", () => {
     });
 
     it("throws when account is not active", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         status: "frozen",
       });
@@ -183,13 +184,13 @@ describe("LoyaltyModuleService", () => {
 
   describe("calculateTier", () => {
     it("calculates correct tier based on lifetime points", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         lifetime_points: 5000,
         tier: "bronze",
         program_id: "prog-1",
       });
-      jest.spyOn(service, "retrieveLoyaltyProgram").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyProgram").mockResolvedValue({
         id: "prog-1",
         tiers: [
           { name: "bronze", min_points: 0 },
@@ -198,7 +199,7 @@ describe("LoyaltyModuleService", () => {
           { name: "platinum", min_points: 10000 },
         ],
       });
-      jest.spyOn(service, "updateLoyaltyAccounts").mockResolvedValue({});
+      vi.spyOn(service, "updateLoyaltyAccounts").mockResolvedValue({});
 
       const result = await service.calculateTier("acc-1");
 
@@ -206,13 +207,13 @@ describe("LoyaltyModuleService", () => {
     });
 
     it("returns current tier when no tiers configured", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         lifetime_points: 5000,
         tier: "member",
         program_id: "prog-1",
       });
-      jest.spyOn(service, "retrieveLoyaltyProgram").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyProgram").mockResolvedValue({
         id: "prog-1",
         tiers: null,
       });
@@ -225,7 +226,7 @@ describe("LoyaltyModuleService", () => {
 
   describe("calculatePoints", () => {
     it("calculates points for an order amount", async () => {
-      jest.spyOn(service, "retrieveLoyaltyProgram").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyProgram").mockResolvedValue({
         id: "prog-1",
         points_per_currency_unit: 2,
         multiplier: 1.5,
@@ -245,7 +246,7 @@ describe("LoyaltyModuleService", () => {
 
   describe("getBalance", () => {
     it("returns account balance details", async () => {
-      jest.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
+      vi.spyOn(service, "retrieveLoyaltyAccount").mockResolvedValue({
         id: "acc-1",
         points_balance: 250,
         lifetime_points: 1200,

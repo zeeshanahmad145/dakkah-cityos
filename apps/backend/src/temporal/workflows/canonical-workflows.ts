@@ -654,12 +654,405 @@ export async function trade_in_valuation(params: {
  *   const queue = WORKFLOW_TASK_QUEUES["subscription_billing"] // "uce-commerce-recurring"
  */
 export const WORKFLOW_TASK_QUEUES: Record<string, string> = {
+  // Financial
   one_time_goods: "uce-commerce-financial",
   auction_settlement: "uce-commerce-financial",
   milestone_escrow: "uce-commerce-financial",
+  order_cancellation: "uce-commerce-financial",
+  refund_compensation: "uce-commerce-financial",
+  payout_processing: "uce-commerce-financial",
+  // Dispatch
   on_demand_dispatch: "uce-commerce-dispatch",
+  fulfillment_tracking: "uce-commerce-dispatch",
+  // Recurring
   subscription_billing: "uce-commerce-recurring",
   usage_metering: "uce-commerce-recurring",
+  // Fulfilment / Onboarding
   booking_service: "uce-commerce-fulfilment",
   trade_in_valuation: "uce-commerce-fulfilment",
+  kyc_verification: "uce-commerce-fulfilment",
+  vendor_onboarding: "uce-commerce-fulfilment",
+  customer_onboarding: "uce-commerce-fulfilment",
 };
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TASK QUEUE: uce-commerce-financial (continued)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * order_cancellation — Cancel an order: reverse ledger, refund PSP, notify
+ * Retry: financial profile (5 attempts)
+ */
+export async function order_cancellation(params: {
+  orderId: string;
+  customerId: string;
+  reason: string;
+  grossAmount: number;
+  currencyCode: string;
+  vendorId?: string;
+}): Promise<void> {
+  let cancelled = false;
+  setHandler(cancelSignal, () => {
+    cancelled = true;
+  });
+  try {
+    await financialActs.kernelTransition({
+      entityType: "order",
+      entityId: params.orderId,
+      toState: "CANCELLING",
+    });
+    // Reverse clearing entry
+    await financialActs.postJournal({
+      entries: [
+        {
+          accountType: "clearing",
+          accountId: "platform",
+          debit: params.grossAmount,
+          credit: 0,
+          currencyCode: params.currencyCode,
+          referenceType: "order_cancellation",
+          referenceId: params.orderId,
+        },
+        {
+          accountType: "customer",
+          accountId: params.customerId,
+          debit: 0,
+          credit: params.grossAmount,
+          currencyCode: params.currencyCode,
+          referenceType: "order_cancellation",
+          referenceId: params.orderId,
+        },
+      ],
+    });
+    await financialActs.cancelOrder(params.orderId, params.reason);
+    await financialActs.emitEvent("order.refund_initiated", {
+      order_id: params.orderId,
+      amount: params.grossAmount,
+      reason: params.reason,
+    });
+    await financialActs.kernelTransition({
+      entityType: "order",
+      entityId: params.orderId,
+      toState: "CANCELLED",
+    });
+  } catch (err) {
+    await handleDeadLetter("order_cancellation", params.orderId, params, err);
+    throw err;
+  }
+}
+
+/**
+ * refund_compensation — Partial/full refund saga with ledger reversal + ERP
+ * Supports full and partial amounts.
+ */
+export async function refund_compensation(params: {
+  orderId: string;
+  customerId: string;
+  refundAmount: number;
+  grossAmount: number;
+  currencyCode: string;
+  vendorId?: string;
+  reason: string;
+  isPartial: boolean;
+}): Promise<void> {
+  try {
+    await financialActs.postJournal({
+      entries: [
+        {
+          accountType: "refund",
+          accountId: params.orderId,
+          debit: params.refundAmount,
+          credit: 0,
+          currencyCode: params.currencyCode,
+          referenceType: "refund",
+          referenceId: params.orderId,
+        },
+        {
+          accountType: "customer",
+          accountId: params.customerId,
+          debit: 0,
+          credit: params.refundAmount,
+          currencyCode: params.currencyCode,
+          referenceType: "refund",
+          referenceId: params.orderId,
+        },
+      ],
+    });
+    if (params.vendorId) {
+      // Clawback vendor payout for refunded amount
+      await financialActs.freezeScope({
+        scopeType: "vendor_payout",
+        scopeId: `${params.orderId}:${params.vendorId}`,
+        reason: "refund_clawback",
+        releaseCondition: "refund_settled",
+      });
+    }
+    await financialActs.postSettlementToERP({
+      orderId: params.orderId,
+      amount: params.refundAmount,
+      currencyCode: params.currencyCode,
+      type: "refund",
+    });
+    await financialActs.emitEvent("refund.processed", {
+      order_id: params.orderId,
+      refund_amount: params.refundAmount,
+      is_partial: params.isPartial,
+    });
+  } catch (err) {
+    await handleDeadLetter("refund_compensation", params.orderId, params, err);
+    throw err;
+  }
+}
+
+/**
+ * payout_processing — Calculate vendor payout → post ledger → submit to ERP
+ * Retry: financial profile
+ */
+export async function payout_processing(params: {
+  vendorId: string;
+  periodStart: string;
+  periodEnd: string;
+  grossAmount: number;
+  platformFee: number;
+  currencyCode: string;
+}): Promise<void> {
+  try {
+    const netAmount = params.grossAmount - params.platformFee;
+    await financialActs.postJournal({
+      entries: [
+        {
+          accountType: "clearing",
+          accountId: "platform",
+          debit: netAmount,
+          credit: 0,
+          currencyCode: params.currencyCode,
+          referenceType: "payout",
+          referenceId: `payout:${params.vendorId}:${params.periodEnd}`,
+        },
+        {
+          accountType: "payout",
+          accountId: params.vendorId,
+          debit: 0,
+          credit: netAmount,
+          currencyCode: params.currencyCode,
+          referenceType: "payout",
+          referenceId: `payout:${params.vendorId}:${params.periodEnd}`,
+        },
+      ],
+    });
+    await financialActs.postSettlementToERP({
+      orderId: `payout:${params.vendorId}:${params.periodEnd}`,
+      amount: netAmount,
+      currencyCode: params.currencyCode,
+      type: "vendor_payout",
+    });
+    await financialActs.emitEvent("payout.completed", {
+      vendor_id: params.vendorId,
+      net_amount: netAmount,
+      period_end: params.periodEnd,
+    });
+  } catch (err) {
+    await handleDeadLetter(
+      "payout_processing",
+      `${params.vendorId}:${params.periodEnd}`,
+      params,
+      err,
+    );
+    throw err;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TASK QUEUE: uce-commerce-dispatch (continued)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * fulfillment_tracking — Track a shipment through its lifecycle states
+ * Handles: pending → picked_up → in_transit → delivered | failed
+ */
+export async function fulfillment_tracking(params: {
+  fulfillmentId: string;
+  orderId: string;
+  vendorId: string;
+  estimatedDelivery?: string;
+}): Promise<void> {
+  let delivered = false;
+  let failed = false;
+  setHandler(evidenceSignal, (ev: any) => {
+    if (ev.evidenceType === "delivery_confirmed") delivered = true;
+    if (ev.evidenceType === "delivery_failed") failed = true;
+  });
+  try {
+    await dispatchActs.kernelTransition({
+      entityType: "fulfillment",
+      entityId: params.fulfillmentId,
+      toState: "TRACKING",
+    });
+    // Wait up to 14 days for delivery confirmation
+    await condition(() => delivered || failed, "14d");
+    const finalState = delivered ? "DELIVERED" : "FAILED";
+    await dispatchActs.kernelTransition({
+      entityType: "fulfillment",
+      entityId: params.fulfillmentId,
+      toState: finalState,
+    });
+    await dispatchActs.emitEvent(`fulfillment.${finalState.toLowerCase()}`, {
+      fulfillment_id: params.fulfillmentId,
+      order_id: params.orderId,
+    });
+    if (delivered) {
+      await dispatchActs.settleOrder({
+        orderId: params.orderId,
+        grossAmount: 0, // Settlement done in one_time_goods — just finalize state
+        vendorId: params.vendorId,
+        currencyCode: "SAR",
+      });
+    }
+  } catch (err) {
+    await handleDeadLetter(
+      "fulfillment_tracking",
+      params.fulfillmentId,
+      params,
+      err,
+    );
+    throw err;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TASK QUEUE: uce-commerce-fulfilment (continued)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * kyc_verification — KYC check → walt.id VC issuance
+ * Non-retryable if document invalid.
+ */
+export async function kyc_verification(params: {
+  customerId: string;
+  documentType: string;
+  documentRef: string;
+  contractId?: string;
+}): Promise<void> {
+  try {
+    await financialActs.kernelTransition({
+      entityType: "customer",
+      entityId: params.customerId,
+      toState: "KYC_PENDING",
+    });
+    const vcId = await financialActs.issueVerifiableCredential({
+      subjectId: params.customerId,
+      type: "KYCCredential",
+      claims: {
+        document_type: params.documentType,
+        document_ref: params.documentRef,
+        verified_at: new Date().toISOString(),
+      },
+    });
+    await financialActs.kernelTransition({
+      entityType: "customer",
+      entityId: params.customerId,
+      toState: "KYC_VERIFIED",
+    });
+    await financialActs.emitEvent("kyc.completed", {
+      customer_id: params.customerId,
+      vc_id: vcId,
+      document_type: params.documentType,
+    });
+  } catch (err: any) {
+    if (err?.cause?.type === "InvalidDocument") {
+      await financialActs.kernelTransition({
+        entityType: "customer",
+        entityId: params.customerId,
+        toState: "KYC_REJECTED",
+      });
+      await financialActs.emitEvent("kyc.rejected", {
+        customer_id: params.customerId,
+      });
+      return;
+    }
+    await handleDeadLetter("kyc_verification", params.customerId, params, err);
+    throw err;
+  }
+}
+
+/**
+ * vendor_onboarding — Vendor setup → verification → platform activation
+ */
+export async function vendor_onboarding(params: {
+  vendorId: string;
+  tenantId: string;
+  companyName: string;
+  email: string;
+  categoryId?: string;
+}): Promise<void> {
+  let approved = false;
+  let rejected = false;
+  setHandler(evidenceSignal, (ev: any) => {
+    if (ev.evidenceType === "kyc_approved") approved = true;
+    if (ev.evidenceType === "kyc_rejected") rejected = true;
+  });
+  try {
+    await financialActs.kernelTransition({
+      entityType: "vendor",
+      entityId: params.vendorId,
+      toState: "PENDING_VERIFICATION",
+    });
+    // Wait for admin/KYC review (up to 30 days)
+    await condition(() => approved || rejected, "30d");
+    if (rejected) {
+      await financialActs.kernelTransition({
+        entityType: "vendor",
+        entityId: params.vendorId,
+        toState: "REJECTED",
+      });
+      await financialActs.emitEvent("vendor.rejected", {
+        vendor_id: params.vendorId,
+      });
+      return;
+    }
+    await financialActs.activateVendor(params.vendorId);
+    await financialActs.syncCustomerToCms(params.vendorId, "vendor");
+    await financialActs.kernelTransition({
+      entityType: "vendor",
+      entityId: params.vendorId,
+      toState: "ACTIVE",
+    });
+    await financialActs.emitEvent("vendor.approved", {
+      vendor_id: params.vendorId,
+    });
+  } catch (err) {
+    await handleDeadLetter("vendor_onboarding", params.vendorId, params, err);
+    throw err;
+  }
+}
+
+/**
+ * customer_onboarding — Create customer, sync to CMS, emit welcome
+ */
+export async function customer_onboarding(params: {
+  customerId: string;
+  email: string;
+  name: string;
+  tenantId?: string;
+}): Promise<void> {
+  try {
+    await financialActs.kernelTransition({
+      entityType: "customer",
+      entityId: params.customerId,
+      toState: "ACTIVE",
+    });
+    await financialActs.syncCustomerToCms(params.customerId, "customer");
+    await financialActs.emitEvent("customer.welcomed", {
+      customer_id: params.customerId,
+      email: params.email,
+    });
+  } catch (err) {
+    await handleDeadLetter(
+      "customer_onboarding",
+      params.customerId,
+      params,
+      err,
+    );
+    throw err;
+  }
+}

@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -56,13 +57,13 @@ describe("CommissionModuleService", () => {
   let service: CommissionModuleService;
 
   beforeEach(() => {
-    service = new CommissionModuleService();
-    jest.clearAllMocks();
+    service = new CommissionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("calculateCommission", () => {
     it("calculates percentage commission correctly", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule_1",
           commission_type: "percentage",
@@ -89,7 +90,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("calculates flat commission correctly", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule_2",
           commission_type: "flat",
@@ -115,7 +116,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("calculates tiered percentage commission", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule_3",
           commission_type: "tiered_percentage",
@@ -145,7 +146,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("throws when no commission rule is found", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([]);
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([]);
 
       await expect(
         service.calculateCommission({
@@ -160,7 +161,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("handles tiered commission when no tier matches", async () => {
-      jest.spyOn(service, "listCommissionRules").mockResolvedValue([
+      vi.spyOn(service, "listCommissionRules").mockResolvedValue([
         {
           id: "rule_4",
           commission_type: "tiered_percentage",
@@ -187,7 +188,7 @@ describe("CommissionModuleService", () => {
 
   describe("createCommissionTransaction", () => {
     it("creates a transaction with calculated commission", async () => {
-      jest.spyOn(service, "calculateCommission").mockResolvedValue({
+      vi.spyOn(service, "calculateCommission").mockResolvedValue({
         commissionAmount: 100,
         commissionRate: 10,
         commissionFlat: null,
@@ -225,7 +226,7 @@ describe("CommissionModuleService", () => {
 
   describe("getVendorCommissionSummary", () => {
     it("aggregates commission amounts by status", async () => {
-      jest.spyOn(service, "listCommissionTransactions").mockResolvedValue([
+      vi.spyOn(service, "listCommissionTransactions").mockResolvedValue([
         {
           id: "ctx_1",
           commission_amount: 100,
@@ -258,7 +259,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("returns zeros when no transactions exist", async () => {
-      jest.spyOn(service, "listCommissionTransactions").mockResolvedValue([]);
+      vi.spyOn(service, "listCommissionTransactions").mockResolvedValue([]);
 
       const result = await service.getVendorCommissionSummary({
         vendorId: "vendor_1",
@@ -292,7 +293,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("returns zero processed count when no transactions found", async () => {
-      jest.spyOn(service, "listCommissionTransactions").mockResolvedValue([]);
+      vi.spyOn(service, "listCommissionTransactions").mockResolvedValue([]);
 
       const result = await service.processCommissionPayout(["nonexistent"]);
 
@@ -302,7 +303,7 @@ describe("CommissionModuleService", () => {
 
   describe("adjustCommission", () => {
     it("adjusts commission amount on an existing transaction", async () => {
-      jest.spyOn(service, "listCommissionTransactions").mockResolvedValue([
+      vi.spyOn(service, "listCommissionTransactions").mockResolvedValue([
         {
           id: "ctx_1",
           vendor_id: "vendor_1",
@@ -315,7 +316,7 @@ describe("CommissionModuleService", () => {
         },
       ]);
 
-      jest.spyOn(service, "updateCommissionTransactions").mockResolvedValue({});
+      vi.spyOn(service, "updateCommissionTransactions").mockResolvedValue({});
       const createSpy = jest
         .spyOn(service, "createCommissionTransactions")
         .mockResolvedValue({
@@ -338,7 +339,7 @@ describe("CommissionModuleService", () => {
     });
 
     it("throws when transaction is not found", async () => {
-      jest.spyOn(service, "listCommissionTransactions").mockResolvedValue([]);
+      vi.spyOn(service, "listCommissionTransactions").mockResolvedValue([]);
 
       await expect(
         service.adjustCommission({
@@ -352,7 +353,7 @@ describe("CommissionModuleService", () => {
 
   describe("getTopEarningVendors", () => {
     it("returns vendors sorted by total commission", async () => {
-      jest.spyOn(service, "listCommissionTransactions").mockResolvedValue([
+      vi.spyOn(service, "listCommissionTransactions").mockResolvedValue([
         { vendor_id: "v1", commission_amount: 100 },
         { vendor_id: "v2", commission_amount: 300 },
         { vendor_id: "v1", commission_amount: 200 },

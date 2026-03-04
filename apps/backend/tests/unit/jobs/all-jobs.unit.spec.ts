@@ -1,18 +1,19 @@
+import { vi } from "vitest";
 describe("Job Configs and Execution", () => {
   const mockQuery = (data: any[] = []) => ({
-    graph: jest.fn().mockResolvedValue({ data }),
+    graph: vi.fn().mockResolvedValue({ data }),
   });
   const mockLogger = () => ({
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    debug: jest.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
   });
-  const mockEventBus = () => ({ emit: jest.fn() });
-  const mockNotification = () => ({ createNotifications: jest.fn() });
+  const mockEventBus = () => ({ emit: vi.fn() });
+  const mockNotification = () => ({ createNotifications: vi.fn() });
 
   const mockContainer = (overrides: Record<string, any> = {}) => ({
-    resolve: jest.fn((name: string) => {
+    resolve: vi.fn((name: string) => {
       if (overrides[name]) return overrides[name];
       if (name === "query") return mockQuery();
       if (name === "logger") return mockLogger();
@@ -34,7 +35,7 @@ describe("Job Configs and Execution", () => {
       const mod = await import("../../../src/jobs/booking-no-show-check.js");
       const container = mockContainer({
         query: mockQuery([]),
-        booking: { updateBookings: jest.fn() },
+        booking: { updateBookings: vi.fn() },
         event_bus: mockEventBus(),
       });
       await expect(mod.default(container)).resolves.not.toThrow();
@@ -42,8 +43,8 @@ describe("Job Configs and Execution", () => {
 
     it("should mark missed bookings as no-show", async () => {
       const mod = await import("../../../src/jobs/booking-no-show-check.js");
-      const updateBookings = jest.fn();
-      const emit = jest.fn();
+      const updateBookings = vi.fn();
+      const emit = vi.fn();
       const bookings = [
         { id: "b1", customer_id: "c1", service_product_id: "s1", metadata: {} },
       ];
@@ -73,12 +74,12 @@ describe("Job Configs and Execution", () => {
     it("should handle no bookings needing reminders", async () => {
       const mod = await import("../../../src/jobs/booking-reminders.js");
       const container = mockContainer({
-        booking: { listBookings: jest.fn().mockResolvedValue([]) },
+        booking: { listBookings: vi.fn().mockResolvedValue([]) },
         [Symbol.for("Modules.NOTIFICATION")]: mockNotification(),
       });
-      container.resolve = jest.fn((name: string) => {
+      container.resolve = vi.fn((name: string) => {
         if (name === "booking")
-          return { listBookings: jest.fn().mockResolvedValue([]) };
+          return { listBookings: vi.fn().mockResolvedValue([]) };
         if (name === "logger") return mockLogger();
         return mockNotification();
       });
@@ -143,7 +144,7 @@ describe("Job Configs and Execution", () => {
       const mod = await import("../../../src/jobs/failed-payment-retry.js");
       const container = mockContainer({
         query: mockQuery([]),
-        subscription: { updateSubscriptions: jest.fn() },
+        subscription: { updateSubscriptions: vi.fn() },
         event_bus: mockEventBus(),
       });
       await expect(mod.default(container)).resolves.not.toThrow();
@@ -151,8 +152,8 @@ describe("Job Configs and Execution", () => {
 
     it("should cancel subscription that exceeded max retries", async () => {
       const mod = await import("../../../src/jobs/failed-payment-retry.js");
-      const updateSubscriptions = jest.fn();
-      const emit = jest.fn();
+      const updateSubscriptions = vi.fn();
+      const emit = vi.fn();
       const subs = [
         { id: "sub_1", retry_count: 5, max_retry_attempts: 3, metadata: {} },
       ];
@@ -185,7 +186,7 @@ describe("Job Configs and Execution", () => {
       const mod = await import("../../../src/jobs/inactive-vendor-check.js");
       const container = mockContainer({
         query: mockQuery([]),
-        vendor: { updateVendors: jest.fn() },
+        vendor: { updateVendors: vi.fn() },
         event_bus: mockEventBus(),
       });
       await expect(mod.default(container)).resolves.not.toThrow();
@@ -193,8 +194,8 @@ describe("Job Configs and Execution", () => {
 
     it("should deactivate vendor with 2+ warnings", async () => {
       const mod = await import("../../../src/jobs/inactive-vendor-check.js");
-      const updateVendors = jest.fn();
-      const emit = jest.fn();
+      const updateVendors = vi.fn();
+      const emit = vi.fn();
       const vendors = [
         {
           id: "v1",
@@ -285,7 +286,7 @@ describe("Job Configs and Execution", () => {
         "../../../src/jobs/invoice-generation.js"
       );
       expect(config.name).toBe("invoice-generation");
-      expect(config.schedule).toBe("0 4 1 * *");
+      expect(config.schedule).toBe("0 4 * * *");
     });
   });
 

@@ -1,12 +1,13 @@
-jest.mock("@medusajs/framework/workflows-sdk", () => ({
-  createWorkflow: jest.fn((config, fn) => ({ run: jest.fn(), config, fn })),
-  createStep: jest.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
-  StepResponse: jest.fn((data, compensationData) => ({ ...data, __compensation: compensationData })),
-  WorkflowResponse: jest.fn((data) => data),
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/workflows-sdk", () => ({
+  createWorkflow: vi.fn((config, fn) => ({ run: vi.fn(), config, fn })),
+  createStep: vi.fn((_name, fn, compensate) => Object.assign(fn, { compensate })),
+  StepResponse: class { constructor(data, comp) { Object.assign(this, data); this.__compensation = comp; } },
+  WorkflowResponse: vi.fn((data) => data),
 }))
 
 const mockContainer = (overrides: Record<string, any> = {}) => ({
-  resolve: jest.fn((name: string) => overrides[name] || {}),
+  resolve: vi.fn((name: string) => overrides[name] || {}),
 })
 
 describe("Commission Calculation Accuracy", () => {
@@ -14,7 +15,7 @@ describe("Commission Calculation Accuracy", () => {
 
   beforeAll(async () => {
     await import("../../../src/workflows/commission-calculation.js")
-    const { createStep } = require("@medusajs/framework/workflows-sdk")
+    const { createStep } = (await import("@medusajs/framework/workflows-sdk"))
     const calls = createStep.mock.calls
     calculateCommissionStep = calls.find((c: any) => c[0] === "calculate-vendor-commission-step")?.[1]
   })
@@ -29,7 +30,7 @@ describe("Commission Calculation Accuracy", () => {
   })
 
   const makeContainer = (rate: number) => mockContainer({
-    commission: { listCommissionRules: jest.fn().mockResolvedValue([{ rate }]) },
+    commission: { listCommissionRules: vi.fn().mockResolvedValue([{ rate }]) },
   })
 
   describe("exact commission split calculations", () => {
@@ -153,7 +154,7 @@ describe("Commission Calculation Accuracy", () => {
   describe("default rate behavior", () => {
     it("should use default 10% rate when no commission rules exist", async () => {
       const container = mockContainer({
-        commission: { listCommissionRules: jest.fn().mockResolvedValue([]) },
+        commission: { listCommissionRules: vi.fn().mockResolvedValue([]) },
       })
       const result = await calculateCommissionStep(makeInput(10000), { container })
       expect(result.rate).toBe(0.1)
@@ -163,7 +164,7 @@ describe("Commission Calculation Accuracy", () => {
 
     it("should use first rule's rate when multiple rules are returned", async () => {
       const container = mockContainer({
-        commission: { listCommissionRules: jest.fn().mockResolvedValue([{ rate: 0.25 }, { rate: 0.1 }]) },
+        commission: { listCommissionRules: vi.fn().mockResolvedValue([{ rate: 0.25 }, { rate: 0.1 }]) },
       })
       const result = await calculateCommissionStep(makeInput(10000), { container })
       expect(result.rate).toBe(0.25)
@@ -173,7 +174,7 @@ describe("Commission Calculation Accuracy", () => {
     })
 
     it("should query commission rules with the correct vendor_id", async () => {
-      const listCommissionRules = jest.fn().mockResolvedValue([{ rate: 0.1 }])
+      const listCommissionRules = vi.fn().mockResolvedValue([{ rate: 0.1 }])
       const container = mockContainer({
         commission: { listCommissionRules },
       })

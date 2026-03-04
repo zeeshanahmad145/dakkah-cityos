@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -70,14 +71,14 @@ describe("InventoryExtensionModuleService", () => {
   let service: InventoryExtensionModuleService;
 
   beforeEach(() => {
-    service = new InventoryExtensionModuleService();
-    jest.clearAllMocks();
+    service = new InventoryExtensionModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createReservation", () => {
     it("creates a reservation with active status", async () => {
       const created = { id: "res_1", status: "active", quantity: 5 };
-      jest.spyOn(service, "createReservationHolds").mockResolvedValue(created);
+      vi.spyOn(service, "createReservationHolds").mockResolvedValue(created);
 
       const result = await service.createReservation({
         tenant_id: "t1",
@@ -95,7 +96,7 @@ describe("InventoryExtensionModuleService", () => {
         .spyOn(service, "retrieveReservationHold")
         .mockResolvedValueOnce({ id: "res_1", status: "active" })
         .mockResolvedValueOnce({ id: "res_1", status: "released" });
-      jest.spyOn(service, "updateReservationHolds").mockResolvedValue({});
+      vi.spyOn(service, "updateReservationHolds").mockResolvedValue({});
 
       const result = await service.releaseReservation("res_1");
       expect(result.status).toBe("released");
@@ -115,7 +116,7 @@ describe("InventoryExtensionModuleService", () => {
   describe("expireReservations", () => {
     it("expires reservations past their expiry date", async () => {
       const pastDate = new Date(Date.now() - 100000);
-      jest.spyOn(service, "listReservationHolds").mockResolvedValue([
+      vi.spyOn(service, "listReservationHolds").mockResolvedValue([
         { id: "res_1", status: "active", expires_at: pastDate },
         {
           id: "res_2",
@@ -123,7 +124,7 @@ describe("InventoryExtensionModuleService", () => {
           expires_at: new Date(Date.now() + 100000),
         },
       ]);
-      jest.spyOn(service, "updateReservationHolds").mockResolvedValue({});
+      vi.spyOn(service, "updateReservationHolds").mockResolvedValue({});
 
       const result = await service.expireReservations();
       expect(result.expired_count).toBe(1);
@@ -131,7 +132,7 @@ describe("InventoryExtensionModuleService", () => {
     });
 
     it("returns zero when no expired reservations", async () => {
-      jest.spyOn(service, "listReservationHolds").mockResolvedValue([]);
+      vi.spyOn(service, "listReservationHolds").mockResolvedValue([]);
 
       const result = await service.expireReservations();
       expect(result.expired_count).toBe(0);
@@ -140,9 +141,9 @@ describe("InventoryExtensionModuleService", () => {
 
   describe("checkStockAlerts", () => {
     it("creates out_of_stock alert when quantity is zero", async () => {
-      jest.spyOn(service, "listStockAlerts").mockResolvedValue([]);
+      vi.spyOn(service, "listStockAlerts").mockResolvedValue([]);
       const newAlert = { id: "alert_1", alert_type: "out_of_stock" };
-      jest.spyOn(service, "createStockAlerts").mockResolvedValue(newAlert);
+      vi.spyOn(service, "createStockAlerts").mockResolvedValue(newAlert);
 
       const result = await service.checkStockAlerts("t1", "v1", 0);
       expect(result).toHaveLength(1);
@@ -153,7 +154,7 @@ describe("InventoryExtensionModuleService", () => {
       jest
         .spyOn(service, "listStockAlerts")
         .mockResolvedValue([{ id: "alert_1", alert_type: "out_of_stock" }]);
-      jest.spyOn(service, "updateStockAlerts").mockResolvedValue({});
+      vi.spyOn(service, "updateStockAlerts").mockResolvedValue({});
 
       const result = await service.checkStockAlerts("t1", "v1", 0);
       expect(result).toHaveLength(0);
@@ -178,7 +179,7 @@ describe("InventoryExtensionModuleService", () => {
   describe("getActiveAlerts", () => {
     it("returns unresolved alerts by default", async () => {
       const alerts = [{ id: "a1", is_resolved: false }];
-      jest.spyOn(service, "listStockAlerts").mockResolvedValue(alerts);
+      vi.spyOn(service, "listStockAlerts").mockResolvedValue(alerts);
 
       const result = await service.getActiveAlerts("t1");
       expect(result).toEqual(alerts);

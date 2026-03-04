@@ -1,4 +1,5 @@
-jest.mock("@medusajs/framework/utils", () => {
+import { vi } from "vitest";
+vi.mock("@medusajs/framework/utils", () => {
   const chainable = () => {
     const chain: any = {
       primaryKey: () => chain,
@@ -71,8 +72,8 @@ describe("GroceryModuleService", () => {
   let service: GroceryModuleService;
 
   beforeEach(() => {
-    service = new GroceryModuleService();
-    jest.clearAllMocks();
+    service = new GroceryModuleService({ baseRepository: { serialize: vi.fn(), transaction: vi.fn(), manager: {} } });
+    vi.clearAllMocks();
   });
 
   describe("createDeliverySlot", () => {
@@ -127,7 +128,7 @@ describe("GroceryModuleService", () => {
 
   describe("bookDeliverySlot", () => {
     it("books a slot and decrements capacity", async () => {
-      jest.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
+      vi.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
         id: "slot-1",
         status: "available",
         capacity_remaining: 5,
@@ -152,7 +153,7 @@ describe("GroceryModuleService", () => {
     });
 
     it("marks slot as full when last capacity is used", async () => {
-      jest.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
+      vi.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
         id: "slot-1",
         status: "available",
         capacity_remaining: 1,
@@ -175,7 +176,7 @@ describe("GroceryModuleService", () => {
     });
 
     it("throws when slot is not available", async () => {
-      jest.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
+      vi.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
         id: "slot-1",
         status: "full",
         capacity_remaining: 0,
@@ -187,7 +188,7 @@ describe("GroceryModuleService", () => {
     });
 
     it("throws when slot is fully booked (capacity 0 but status available)", async () => {
-      jest.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
+      vi.spyOn(service, "retrieveDeliverySlot").mockResolvedValue({
         id: "slot-1",
         status: "available",
         capacity_remaining: 0,
@@ -202,7 +203,7 @@ describe("GroceryModuleService", () => {
   describe("getAvailableSlots", () => {
     it("filters slots by zone, date, and availability", async () => {
       const targetDate = new Date("2025-03-01");
-      jest.spyOn(service, "listDeliverySlots").mockResolvedValue([
+      vi.spyOn(service, "listDeliverySlots").mockResolvedValue([
         {
           id: "s1",
           slot_date: targetDate,
@@ -235,7 +236,7 @@ describe("GroceryModuleService", () => {
       jest
         .spyOn(service, "retrieveFreshProduct")
         .mockResolvedValue({ id: "prod-1" });
-      jest.spyOn(service, "listBatchTrackings").mockResolvedValue([]);
+      vi.spyOn(service, "listBatchTrackings").mockResolvedValue([]);
       const createSpy = jest
         .spyOn(service, "createBatchTrackings")
         .mockResolvedValue({ id: "batch-1" });

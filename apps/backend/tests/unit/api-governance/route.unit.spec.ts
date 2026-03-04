@@ -1,5 +1,6 @@
-jest.mock("../../../src/lib/api-error-handler", () => ({
-  handleApiError: jest.fn((res, _error, context) => {
+import { vi } from "vitest";
+vi.mock("../../../src/lib/api-error-handler", () => ({
+  handleApiError: vi.fn((res, _error, context) => {
     return res.status(500).json({ message: `${context} failed` });
   }),
 }));
@@ -16,21 +17,21 @@ describe("GET /store/cityos/governance", () => {
 
   beforeEach(() => {
     mockGovernanceModule = {
-      resolveEffectivePolicies: jest.fn(),
-      listGovernanceAuthorities: jest.fn(),
+      resolveEffectivePolicies: vi.fn(),
+      listGovernanceAuthorities: vi.fn(),
     };
 
     mockReq = {
       nodeContext: { tenantId: "tenant_123" },
       query: {},
       scope: {
-        resolve: jest.fn().mockReturnValue(mockGovernanceModule),
+        resolve: vi.fn().mockReturnValue(mockGovernanceModule),
       },
     };
 
     mockRes = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn().mockReturnThis(),
     };
   });
 
