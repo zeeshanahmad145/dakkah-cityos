@@ -6,13 +6,13 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "POD Product 1772649864032",
-    "tenant_id": "test-tenant-1",
+    "title": "POD 1772652757882",
     "product_type": "t-shirt",
     "base_price": 30,
-    "currency_code": "SAR"
+    "currency_code": "SAR",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "name": "Updated POD"
+    "title": "Updated POD"
   }
 });

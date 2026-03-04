@@ -6,11 +6,11 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "customer_id": "cust-1772649864032",
+    "customer_id": "cust-1772652757882",
     "channel": "email",
     "category": "transactional",
-    "enabled": true
+    "enabled": true,
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
     "enabled": false

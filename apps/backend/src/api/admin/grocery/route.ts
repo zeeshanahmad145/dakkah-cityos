@@ -5,7 +5,7 @@ import { handleApiError } from "../../../lib/api-error-handler";
 const createSchema = z
   .object({
     tenant_id: z.string(),
-    product_id: z.string(),
+    product_id: z.string().optional(),
     storage_type: z.enum(["ambient", "chilled", "frozen", "live"]),
     shelf_life_days: z.number(),
     optimal_temp_min: z.number().optional(),

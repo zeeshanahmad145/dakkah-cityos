@@ -6,7 +6,7 @@ generateCrudTests({
   "entityKey": "commission_rule",
   "listKey": "commission_rules",
   "createPayload": {
-    "name": "Commission Rule 1772649864032",
+    "name": "Rule 1772652757882",
     "type": "percentage",
     "value": 10,
     "is_active": true,

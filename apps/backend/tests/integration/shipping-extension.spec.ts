@@ -6,15 +6,15 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Shipping Rate 1772649864032",
-    "tenant_id": "test-tenant-1",
-    "carrier_id": "carrier-1",
+    "name": "Ship 1772652757882",
+    "carrier_name": "Aramex",
     "min_amount": 0,
     "max_amount": 1000,
     "rate": 25,
-    "currency_code": "SAR"
+    "currency_code": "SAR",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "name": "Updated Rate"
+    "name": "Updated Shipping"
   }
 });

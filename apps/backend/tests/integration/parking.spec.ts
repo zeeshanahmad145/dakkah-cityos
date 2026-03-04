@@ -6,10 +6,13 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Parking 1772649864032",
-    "tenant_id": "test-tenant-1",
+    "name": "Parking 1772652757882",
     "total_spots": 50,
-    "zone": "A"
+    "zone": "A",
+    "tenant_id": "test-tenant-1",
+    "city": "Jeddah",
+    "price_per_hour": 10,
+    "currency_code": "SAR"
   },
   "updatePayload": {
     "name": "Updated Parking"

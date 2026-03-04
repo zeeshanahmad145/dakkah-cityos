@@ -6,11 +6,13 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "title": "Promo Ext 1772649864032",
-    "tenant_id": "test-tenant-1",
-    "bundle_type": "fixed"
+    "name": "Promo 1772652757882",
+    "bundle_type": "fixed",
+    "discount_type": "percentage",
+    "discount_value": 10,
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "title": "Updated Promo Ext"
+    "name": "Updated Promo"
   }
 });

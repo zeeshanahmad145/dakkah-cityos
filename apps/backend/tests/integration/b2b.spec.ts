@@ -6,7 +6,9 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Test B2B 1772649864032",
+    "handle": "b2b-1772652757882",
+    "name": "Test B2B 1772652757882",
+    "email": "b2b1772652757882@test.com",
     "tenant_id": "test-tenant-1"
   },
   "updatePayload": {

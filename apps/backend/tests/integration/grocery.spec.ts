@@ -6,11 +6,13 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "product_id": "prod-1772649864032",
     "storage_type": "ambient",
     "unit_type": "piece",
-    "shelf_life_days": 7
+    "shelf_life_days": 7,
+    "name": "Grocery 1772652757882",
+    "price": 10,
+    "currency_code": "SAR",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
     "shelf_life_days": 14

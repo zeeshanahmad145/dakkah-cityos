@@ -4,6 +4,7 @@ import { handleApiError } from "../../../lib/api-error-handler";
 
 const createSchema = z
   .object({
+    handle: z.string().optional(),
     name: z.string(),
     description: z.string().optional(),
     category: z.string().optional(),
@@ -44,12 +45,10 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
     const mod = req.scope.resolve("company") as unknown as any;
     const validation = createSchema.safeParse(req.body);
     if (!validation.success)
-      return res
-        .status(400)
-        .json({
-          message: "Validation failed",
-          errors: validation.error.issues,
-        });
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: validation.error.issues,
+      });
     const raw = await mod.createCompanies(validation.data);
     const item = Array.isArray(raw) ? raw[0] : raw;
     return res.status(201).json({ item });

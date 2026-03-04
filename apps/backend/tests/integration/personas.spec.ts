@@ -6,9 +6,10 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Persona 1772649864032",
-    "tenant_id": "test-tenant-1",
-    "type": "buyer"
+    "name": "Persona 1772652757882",
+    "handle": "persona-1772652757882",
+    "type": "buyer",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
     "name": "Updated Persona"

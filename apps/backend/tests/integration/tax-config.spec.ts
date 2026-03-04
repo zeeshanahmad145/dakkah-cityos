@@ -6,10 +6,12 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "region_id": "region-1772649864032",
+    "region_id": "region-1772652757882",
     "tax_rate": 15,
-    "tax_type": "vat"
+    "tax_type": "vat",
+    "name": "Tax 1772652757882",
+    "tenant_id": "test-tenant-1",
+    "country_code": "SA"
   },
   "updatePayload": {
     "tax_rate": 10
