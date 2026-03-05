@@ -6,11 +6,11 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "name": "Test Charity 2",
-    "category": "health"
+    "name": "Charity 1772666195974",
+    "category": "education",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "name": "Updated Charity 2"
+    "name": "Updated Charity"
   }
 });

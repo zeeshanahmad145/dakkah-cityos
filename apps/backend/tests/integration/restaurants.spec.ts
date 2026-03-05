@@ -6,13 +6,14 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Test Restaurant",
-    "address_line1": "Test Street 1",
+    "name": "Rest 1772666195974",
+    "handle": "rest-1772666195974",
+    "email": "rest1772666195974@test.com",
+    "address_line1": "123 Main",
     "city": "Riyadh",
-    "postal_code": "11564",
+    "postal_code": "12345",
     "country_code": "SA",
-    "tenant_id": "test-tenant-1",
-    "handle": "rest-45524914"
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
     "name": "Updated Restaurant"

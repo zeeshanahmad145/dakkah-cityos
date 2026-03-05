@@ -4,11 +4,12 @@ generateCrudTests({
   "moduleName": "Companies",
   "basePath": "/admin/companies",
   "entityKey": "company",
-  "listKey": "items",
+  "listKey": "companies",
   "createPayload": {
-    "name": "Test Company 44441689",
-    "email": "company-44441689@example.com",
-    "customer_id": "cust-44441689"
+    "name": "Company 1772666195974",
+    "handle": "co-1772666195974",
+    "tenant_id": "test-tenant-1",
+    "email": "co1772666195974@test.com"
   },
   "updatePayload": {
     "name": "Updated Company"

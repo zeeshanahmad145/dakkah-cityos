@@ -1,22 +1,18 @@
 import { generateCrudTests } from "./utils/crud-test-generator";
 
-const TS = Date.now().toString().slice(-8);
-
 generateCrudTests({
-  moduleName: "Invoices",
-  basePath: "/admin/invoices",
-  entityKey: "invoice",
-  listKey: "invoices",
-  createPayload: {
-    company_id: `company-${TS}`,
-    customer_id: "test-customer-1",
-    issue_date: new Date().toISOString(),
-    due_date: new Date(Date.now() + 30 * 86400000).toISOString(),
-    currency_code: "SAR",
-    items: [{ title: "Service Fee", quantity: 1, unit_price: 5000 }],
+  "moduleName": "Invoices",
+  "basePath": "/admin/invoices",
+  "entityKey": "item",
+  "listKey": "items",
+  "createPayload": {
+    "customer_id": "c-1772666195974",
+    "amount": 1000,
+    "currency_code": "SAR",
+    "tenant_id": "test-tenant-1",
+    "due_date": "2026-04-30"
   },
-  updatePayload: {
-    notes: "Updated invoice notes",
-    status: "sent",
-  },
+  "updatePayload": {
+    "amount": 900
+  }
 });

@@ -6,10 +6,10 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "variant_id": "var-44441689",
+    "variant_id": "var-1772667436466",
     "quantity": 10,
-    "reason": "manual"
+    "tenant_id": "test-tenant-1",
+    "reason": "reservation"
   },
   "updatePayload": {
     "quantity": 20

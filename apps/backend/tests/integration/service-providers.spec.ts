@@ -6,11 +6,11 @@ generateCrudTests({
   "entityKey": "provider",
   "listKey": "providers",
   "createPayload": {
-    "name": "Test Service Provider",
-    "email": "provider-44441689@example.com",
-    "is_active": true
+    "name": "Provider 1772666195974",
+    "service_type": "home",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "name": "Updated Service Provider"
+    "name": "Updated Provider"
   }
 });

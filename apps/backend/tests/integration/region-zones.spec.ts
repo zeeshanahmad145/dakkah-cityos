@@ -6,10 +6,10 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "residency_zone": "GCC",
-    "medusa_region_id": "region-45138994"
+    "medusa_region_id": "mregion-1772666195974",
+    "residency_zone": "GCC"
   },
   "updatePayload": {
-    "name": "Updated Region Zone"
+    "residency_zone": "MENA"
   }
 });

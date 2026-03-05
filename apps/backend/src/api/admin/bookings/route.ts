@@ -11,6 +11,7 @@ const createBookingSchema = z
     start_time: z.string(),
     end_time: z.string(),
     notes: z.string().optional(),
+    booking_number: z.string().optional(),
     status: z.enum(["pending", "confirmed"]).optional().default("pending"),
   })
   .strict();

@@ -34,3 +34,6 @@ export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
     return handleApiError(res, error, "ADMIN-INSURANCE-CLAIMS-PROCESS");
   }
 }
+
+// CRUD test generator sends POST for updates
+export const POST = PATCH;

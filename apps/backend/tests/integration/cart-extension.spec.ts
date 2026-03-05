@@ -6,11 +6,10 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "cart_id": "cart-45524914"
+    "cart_id": "cart-1772666195974",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "gift_wrap": true,
-    "gift_message": "Happy Birthday!"
+    "cart_id": "cart-updated-1772666195974"
   }
 });

@@ -6,13 +6,13 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "title": "Test White Label",
-    "brand_name": "TestBrand",
-    "base_cost": 50,
-    "retail_price": 120,
+    "title": "WL 1772666195974",
+    "brand_name": "Brand 1772666195974",
+    "base_cost": 10,
+    "retail_price": 50,
     "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "title": "Updated White Label"
+    "brand_name": "Updated Brand"
   }
 });

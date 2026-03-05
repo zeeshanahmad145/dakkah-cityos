@@ -6,14 +6,13 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "customer_id": "test-customer-1",
-    "coverage_amount": 100000,
+    "customer_id": "c-1772666195974",
     "premium_amount": 500,
-    "currency": "SAR",
-    "starts_at": "2026-03-04T17:14:01.697Z",
-    "expires_at": "2027-03-04T17:14:01.697Z"
+    "coverage_amount": 50000,
+    "starts_at": "2026-04-01T00:00:00Z",
+    "expires_at": "2027-04-01T00:00:00Z"
   },
   "updatePayload": {
-    "status": "active"
+    "premium_amount": 450
   }
 });

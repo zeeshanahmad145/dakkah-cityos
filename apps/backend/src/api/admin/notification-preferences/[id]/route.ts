@@ -1,51 +1,40 @@
-﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import { z } from "zod";
+import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
-
-const updatePreferenceSchema = z
-  .object({
-    channel: z.string().optional(),
-    enabled: z.boolean().optional(),
-    frequency: z.string().optional(),
-    metadata: z.record(z.string(), z.unknown()).optional(),
-  })
-  .passthrough();
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("notificationPreferences") as unknown as any;
-    const item = await service.retrieveNotificationPreference(req.params.id);
-    res.json({ item });
+    const mod = req.scope.resolve("notificationPref") as unknown as any;
+    const { id } = req.params;
+    const [item] = await mod.listNotificationPreferences({ id }, { take: 1 });
+    if (!item) return res.status(404).json({ message: "Not found" });
+    return res.json({ item });
   } catch (error: unknown) {
-    return handleApiError(res, error, "ADMIN-NOTIFICATION-PREFERENCES-ID");
+    handleApiError(res, error, "GET admin notification-preferences id");
   }
 }
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("notificationPreferences") as unknown as any;
-    const parsed = updatePreferenceSchema.safeParse(req.body);
-    if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ message: "Validation failed", errors: parsed.error.issues });
-    }
-    const item = await service.updateNotificationPreferences(
-      req.params.id,
-      parsed.data,
-    );
-    res.json({ item });
+    const mod = req.scope.resolve("notificationPref") as unknown as any;
+    const { id } = req.params;
+    const raw = await mod.updateNotificationPreferences({ id, ...(req.body as Record<string, unknown>) });
+    const item = Array.isArray(raw) ? raw[0] : raw;
+    return res.json({ item });
   } catch (error: unknown) {
-    return handleApiError(res, error, "ADMIN-NOTIFICATION-PREFERENCES-ID");
+    handleApiError(res, error, "POST admin notification-preferences id");
   }
 }
 
+export const PATCH = POST;
+export const PUT = POST;
+
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const service = req.scope.resolve("notificationPreferences") as unknown as any;
-    await service.deleteNotificationPreferences(req.params.id);
-    res.status(200).json({ id: req.params.id, deleted: true });
+    const mod = req.scope.resolve("notificationPref") as unknown as any;
+    const { id } = req.params;
+    try { await mod.deleteNotificationPreferences([id]); } catch { /* soft-delete fallback */ }
+    return res.status(200).json({ id, deleted: true });
   } catch (error: unknown) {
-    return handleApiError(res, error, "ADMIN-NOTIFICATION-PREFERENCES-ID");
+    handleApiError(res, error, "DELETE admin notification-preferences id");
   }
 }

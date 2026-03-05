@@ -6,17 +6,14 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "name": "Test Warranty Plan",
-    "plan_type": "standard",
+    "name": "Warranty 1772667436466",
+    "plan_type": "extended",
     "duration_months": 12,
     "currency_code": "SAR",
-    "coverage": {
-      "parts": true,
-      "labor": true
-    }
+    "coverage": "all parts and labor",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "name": "Updated Warranty Plan"
+    "name": "Updated Warranty"
   }
 });

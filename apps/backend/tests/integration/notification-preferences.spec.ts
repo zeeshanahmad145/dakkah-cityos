@@ -6,7 +6,7 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "customer_id": "cust-1772654359049",
+    "customer_id": "c-1772666195974",
     "channel": "email",
     "category": "transactional",
     "event_type": "order.created",

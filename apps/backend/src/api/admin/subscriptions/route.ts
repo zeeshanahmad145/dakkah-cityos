@@ -7,6 +7,7 @@ const createSubscriptionSchema = z
   .object({
     customer_id: z.string(),
     plan_id: z.string(),
+    billing_interval: z.enum(["monthly", "quarterly", "yearly", "weekly"]).optional().default("monthly"),
     status: z
       .enum(["active", "trialing", "paused"])
       .optional()

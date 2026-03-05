@@ -6,14 +6,12 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "wallet_id": "wal-45524914",
-    "amount": 1000,
+    "wallet_id": "wlt-1772666195974",
     "type": "credit",
-    "reference": "ref-45524914"
+    "amount": 100,
+    "reference": "ref-1772666195974"
   },
   "updatePayload": {
-    "amount": 2000,
-    "type": "debit",
-    "reference": "ref2-45524914"
+    "amount": 200
   }
 });

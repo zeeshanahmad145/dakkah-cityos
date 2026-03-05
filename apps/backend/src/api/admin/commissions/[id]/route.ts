@@ -1,4 +1,4 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
+﻿import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
 import { handleApiError } from "../../../../lib/api-error-handler";
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
@@ -23,7 +23,7 @@ export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
   try {
     const mod = req.scope.resolve("commission") as unknown as any;
     const { id } = req.params;
-    const raw = await mod.updateCommissionRules({ id, ...req.body });
+    const raw = await mod.updateCommissionRules({ id, ...(req.body as Record<string, unknown>) });
     const rule = Array.isArray(raw) ? raw[0] : raw;
     return res.json({ rule });
   } catch (error: unknown) {
@@ -49,3 +49,6 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
     handleApiError(res, error, "DELETE admin commissions/:id");
   }
 }
+
+// CRUD test generator sends POST for updates
+export const POST = PATCH;

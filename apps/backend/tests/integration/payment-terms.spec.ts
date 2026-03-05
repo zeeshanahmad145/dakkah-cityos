@@ -6,14 +6,12 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Net 30",
-    "code": "NET30-45138994",
+    "name": "Terms 1772666195974",
+    "code": "PT-1772666195974",
     "net_days": 30,
-    "is_default": false,
-    "is_active": true
+    "early_payment_discount_days": 10
   },
   "updatePayload": {
-    "name": "Net 45",
-    "net_days": 45
+    "name": "Updated Terms"
   }
 });

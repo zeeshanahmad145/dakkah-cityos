@@ -6,13 +6,15 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "code": "GIFT-1772654359049",
-    "amount": 50,
+    "name": "GC 1772667436466",
+    "description": "Gift card",
+    "code": "GC1772667436466",
+    "initial_value": 100,
+    "remaining_value": 100,
     "currency_code": "SAR",
-    "tenant_id": "test-tenant-1",
-    "gift_card_type": "digital"
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "amount": 60
+    "name": "Updated Gift Card"
   }
 });

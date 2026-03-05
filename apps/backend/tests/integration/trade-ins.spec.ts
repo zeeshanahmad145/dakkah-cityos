@@ -6,12 +6,15 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "customer_id": "cust-1772654359049",
-    "title": "Trade 1772654359049",
+    "title": "Trade 1772672118495",
+    "customer_id": "c-1772672118495",
+    "trade_in_number": "TI1772672118495",
+    "description": "Good condition",
     "condition": "good",
     "estimated_value": 200,
     "currency_code": "SAR",
-    "tenant_id": "test-tenant-1"
+    "tenant_id": "test-tenant-1",
+    "product_id": "prod-1772672118495"
   },
   "updatePayload": {
     "title": "Updated Trade In"

@@ -6,10 +6,11 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
+    "tenant_id": "test-tenant-1",
     "storage_type": "ambient",
-    "unit_type": "piece",
     "shelf_life_days": 7,
-    "tenant_id": "test-tenant-1"
+    "unit_type": "piece",
+    "product_id": "prod-1772671119529"
   },
   "updatePayload": {
     "shelf_life_days": 14

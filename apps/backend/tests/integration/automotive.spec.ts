@@ -6,23 +6,17 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "seller_id": "test-seller-1",
-    "listing_type": "sale",
-    "title": "Test Vehicle",
+    "title": "Car 1772666195974",
+    "year": 2024,
     "make": "Toyota",
     "model_name": "Camry",
-    "year": 2023,
-    "price": 100000,
+    "listing_type": "sale",
+    "price": 80000,
     "currency_code": "SAR",
-    "fuel_type": "petrol",
-    "transmission": "automatic",
-    "body_type": "sedan",
-    "condition": "new",
-    "status": "active"
+    "seller_id": "seller-1772666195974",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "title": "Updated Vehicle",
-    "price": 95000
+    "title": "Updated Car"
   }
 });

@@ -6,17 +6,12 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Vol Price 45524914",
+    "name": "Vol 1772672118495",
     "applies_to": "product",
     "pricing_type": "tiered",
-    "tiers": [
-      {
-        "min_quantity": 1,
-        "price": 1000
-      }
-    ]
+    "min_quantity": 5
   },
   "updatePayload": {
-    "name": "Updated Volume Pricing"
+    "name": "Updated Vol"
   }
 });

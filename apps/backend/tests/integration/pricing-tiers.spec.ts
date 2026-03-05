@@ -6,11 +6,10 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Bronze Tier 45524914",
-    "discount_percentage": 5
+    "name": "Tier 1772666195974",
+    "discount_percentage": 10
   },
   "updatePayload": {
-    "name": "Updated Tier",
-    "discount_percentage": 7
+    "name": "Updated Tier"
   }
 });

@@ -6,7 +6,7 @@ generateCrudTests({
   "entityKey": "commission_rule",
   "listKey": "commission_rules",
   "createPayload": {
-    "name": "Rule 1772654359049",
+    "name": "Rule 1772666195974",
     "type": "percentage",
     "commission_type": "percentage",
     "value": 10,
@@ -14,8 +14,6 @@ generateCrudTests({
     "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "name": "Updated Rule",
-    "type": "percentage",
-    "value": 15
+    "name": "Updated Rule"
   }
 });

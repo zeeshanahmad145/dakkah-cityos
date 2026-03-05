@@ -6,14 +6,12 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "tenant_id": "test-tenant-1",
-    "title": "Test CMS Content",
-    "slug": "cms-45524914",
-    "type": "page",
-    "status": "draft"
+    "title": "Page 1772666195974",
+    "slug": "pg-1772666195974",
+    "content": "Test",
+    "tenant_id": "test-tenant-1"
   },
   "updatePayload": {
-    "title": "Updated CMS Content",
-    "status": "published"
+    "title": "Updated Page"
   }
 });

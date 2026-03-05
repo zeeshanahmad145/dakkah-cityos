@@ -6,12 +6,12 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "title": "Test Campaign 46629043",
-    "description": "Test crowdfunding campaign",
-    "campaign_type": "donation",
-    "goal_amount": 100000,
+    "title": "Campaign 1772666195974",
+    "description": "Fund us",
+    "goal_amount": 10000,
     "currency_code": "SAR",
-    "ends_at": "2026-04-03T17:50:29.043Z"
+    "campaign_type": "equity",
+    "ends_at": "2026-06-01T00:00:00Z"
   },
   "updatePayload": {
     "title": "Updated Campaign"

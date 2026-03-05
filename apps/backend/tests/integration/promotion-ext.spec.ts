@@ -6,9 +6,9 @@ generateCrudTests({
   "entityKey": "item",
   "listKey": "items",
   "createPayload": {
-    "name": "Promo 1772654359049",
-    "title": "Promo 1772654359049",
-    "handle": "promo-1772654359049",
+    "name": "Promo 1772666195974",
+    "title": "Promo 1772666195974",
+    "handle": "prm-1772666195974",
     "bundle_type": "fixed",
     "discount_type": "percentage",
     "discount_value": 10,

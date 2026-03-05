@@ -4,12 +4,11 @@ generateCrudTests({
   "moduleName": "Commissions",
   "basePath": "/admin/commissions",
   "entityKey": "rule",
-  "listKey": "commissions",
+  "listKey": "rules",
   "createPayload": {
-    "name": "Test Commission",
+    "name": "Com 1772667436466",
     "type": "percentage",
-    "rate": 15,
-    "is_active": true
+    "rate": 10
   },
   "updatePayload": {
     "name": "Updated Commission"
