@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
 
-export const Route = createFileRoute("/$tenant/$locale/account/benefits/")({
+export const Route = createFileRoute("/$tenant/$locale/account/benefits")({
   component: BenefitsPage,
   head: () => ({
     meta: [
@@ -81,7 +81,6 @@ function BenefitsPage() {
           )}
         </div>
       </div>
-
       <div className="max-w-5xl mx-auto px-4 py-8">
         {benefits.length === 0 ? (
           <div className="text-center py-20">

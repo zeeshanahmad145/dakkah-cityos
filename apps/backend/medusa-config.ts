@@ -154,19 +154,19 @@ module.exports = defineConfig({
         ]
       : []),
     // Meilisearch Module - only enabled if configured
-    ...(process.env.MEILISEARCH_HOST
-      ? [
-          {
-            resolve: "./src/modules/meilisearch",
-            options: {
-              host: process.env.MEILISEARCH_HOST,
-              apiKey: process.env.MEILISEARCH_API_KEY || "masterKey",
-              productIndexName:
-                process.env.MEILISEARCH_PRODUCT_INDEX_NAME || "products",
-            },
-          },
-        ]
-      : []),
+    // ...(process.env.MEILISEARCH_HOST
+    //   ? [
+    //       {
+    //         resolve: "./src/modules/meilisearch",
+    //         options: {
+    //           host: process.env.MEILISEARCH_HOST,
+    //           apiKey: process.env.MEILISEARCH_API_KEY || "masterKey",
+    //           productIndexName:
+    //             process.env.MEILISEARCH_PRODUCT_INDEX_NAME || "products",
+    //         },
+    //       },
+    //     ]
+    //   : []),
     {
       resolve: "./src/modules/tenant",
       key: "tenant",

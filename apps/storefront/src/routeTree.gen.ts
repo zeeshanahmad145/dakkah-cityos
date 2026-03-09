@@ -44,6 +44,8 @@ import { Route as TenantLocaleTravelIndexRouteImport } from './routes/$tenant/$l
 import { Route as TenantLocaleTradeInIndexRouteImport } from './routes/$tenant/$locale/trade-in/index'
 import { Route as TenantLocaleSubscriptionsIndexRouteImport } from './routes/$tenant/$locale/subscriptions/index'
 import { Route as TenantLocaleSocialCommerceIndexRouteImport } from './routes/$tenant/$locale/social-commerce/index'
+import { Route as TenantLocaleSimulateIndexRouteImport } from './routes/$tenant/$locale/simulate/index'
+import { Route as TenantLocaleSearchIndexRouteImport } from './routes/$tenant/$locale/search/index'
 import { Route as TenantLocaleReturnsIndexRouteImport } from './routes/$tenant/$locale/returns/index'
 import { Route as TenantLocaleRestaurantsIndexRouteImport } from './routes/$tenant/$locale/restaurants/index'
 import { Route as TenantLocaleRentalsIndexRouteImport } from './routes/$tenant/$locale/rentals/index'
@@ -322,6 +324,7 @@ import { Route as TenantLocaleAffiliateIdRouteImport } from './routes/$tenant/$l
 import { Route as TenantLocaleAccountWishlistRouteImport } from './routes/$tenant/$locale/account/wishlist'
 import { Route as TenantLocaleAccountWalletRouteImport } from './routes/$tenant/$locale/account/wallet'
 import { Route as TenantLocaleAccountVerificationRouteImport } from './routes/$tenant/$locale/account/verification'
+import { Route as TenantLocaleAccountUsageRouteImport } from './routes/$tenant/$locale/account/usage'
 import { Route as TenantLocaleAccountStoreCreditsRouteImport } from './routes/$tenant/$locale/account/store-credits'
 import { Route as TenantLocaleAccountSettingsRouteImport } from './routes/$tenant/$locale/account/settings'
 import { Route as TenantLocaleAccountReviewsRouteImport } from './routes/$tenant/$locale/account/reviews'
@@ -335,6 +338,7 @@ import { Route as TenantLocaleAccountInstallmentsRouteImport } from './routes/$t
 import { Route as TenantLocaleAccountDownloadsRouteImport } from './routes/$tenant/$locale/account/downloads'
 import { Route as TenantLocaleAccountDisputesRouteImport } from './routes/$tenant/$locale/account/disputes'
 import { Route as TenantLocaleAccountConsentsRouteImport } from './routes/$tenant/$locale/account/consents'
+import { Route as TenantLocaleAccountBenefitsRouteImport } from './routes/$tenant/$locale/account/benefits'
 import { Route as TenantLocaleAccountAddressesRouteImport } from './routes/$tenant/$locale/account/addresses'
 import { Route as TenantLocaleVendorProductsIndexRouteImport } from './routes/$tenant/$locale/vendor/products/index'
 import { Route as TenantLocaleVendorPayoutsIndexRouteImport } from './routes/$tenant/$locale/vendor/payouts/index'
@@ -520,6 +524,17 @@ const TenantLocaleSocialCommerceIndexRoute =
     path: '/social-commerce/',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
+const TenantLocaleSimulateIndexRoute =
+  TenantLocaleSimulateIndexRouteImport.update({
+    id: '/simulate/',
+    path: '/simulate/',
+    getParentRoute: () => TenantLocaleRoute,
+  } as any)
+const TenantLocaleSearchIndexRoute = TenantLocaleSearchIndexRouteImport.update({
+  id: '/search/',
+  path: '/search/',
+  getParentRoute: () => TenantLocaleRoute,
+} as any)
 const TenantLocaleReturnsIndexRoute =
   TenantLocaleReturnsIndexRouteImport.update({
     id: '/returns/',
@@ -2140,6 +2155,12 @@ const TenantLocaleAccountVerificationRoute =
     path: '/account/verification',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
+const TenantLocaleAccountUsageRoute =
+  TenantLocaleAccountUsageRouteImport.update({
+    id: '/account/usage',
+    path: '/account/usage',
+    getParentRoute: () => TenantLocaleRoute,
+  } as any)
 const TenantLocaleAccountStoreCreditsRoute =
   TenantLocaleAccountStoreCreditsRouteImport.update({
     id: '/account/store-credits',
@@ -2216,6 +2237,12 @@ const TenantLocaleAccountConsentsRoute =
   TenantLocaleAccountConsentsRouteImport.update({
     id: '/account/consents',
     path: '/account/consents',
+    getParentRoute: () => TenantLocaleRoute,
+  } as any)
+const TenantLocaleAccountBenefitsRoute =
+  TenantLocaleAccountBenefitsRouteImport.update({
+    id: '/account/benefits',
+    path: '/account/benefits',
     getParentRoute: () => TenantLocaleRoute,
   } as any)
 const TenantLocaleAccountAddressesRoute =
@@ -2376,6 +2403,7 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/wishlist': typeof TenantLocaleWishlistRoute
   '/$tenant/$locale/': typeof TenantLocaleIndexRoute
   '/$tenant/$locale/account/addresses': typeof TenantLocaleAccountAddressesRoute
+  '/$tenant/$locale/account/benefits': typeof TenantLocaleAccountBenefitsRoute
   '/$tenant/$locale/account/consents': typeof TenantLocaleAccountConsentsRoute
   '/$tenant/$locale/account/disputes': typeof TenantLocaleAccountDisputesRoute
   '/$tenant/$locale/account/downloads': typeof TenantLocaleAccountDownloadsRoute
@@ -2389,6 +2417,7 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/account/reviews': typeof TenantLocaleAccountReviewsRoute
   '/$tenant/$locale/account/settings': typeof TenantLocaleAccountSettingsRoute
   '/$tenant/$locale/account/store-credits': typeof TenantLocaleAccountStoreCreditsRoute
+  '/$tenant/$locale/account/usage': typeof TenantLocaleAccountUsageRoute
   '/$tenant/$locale/account/verification': typeof TenantLocaleAccountVerificationRoute
   '/$tenant/$locale/account/wallet': typeof TenantLocaleAccountWalletRoute
   '/$tenant/$locale/account/wishlist': typeof TenantLocaleAccountWishlistRoute
@@ -2667,6 +2696,8 @@ export interface FileRoutesByFullPath {
   '/$tenant/$locale/rentals': typeof TenantLocaleRentalsIndexRoute
   '/$tenant/$locale/restaurants': typeof TenantLocaleRestaurantsIndexRoute
   '/$tenant/$locale/returns': typeof TenantLocaleReturnsIndexRoute
+  '/$tenant/$locale/search': typeof TenantLocaleSearchIndexRoute
+  '/$tenant/$locale/simulate': typeof TenantLocaleSimulateIndexRoute
   '/$tenant/$locale/social-commerce': typeof TenantLocaleSocialCommerceIndexRoute
   '/$tenant/$locale/subscriptions': typeof TenantLocaleSubscriptionsIndexRoute
   '/$tenant/$locale/trade-in/': typeof TenantLocaleTradeInIndexRoute
@@ -2719,6 +2750,7 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/wishlist': typeof TenantLocaleWishlistRoute
   '/$tenant/$locale': typeof TenantLocaleIndexRoute
   '/$tenant/$locale/account/addresses': typeof TenantLocaleAccountAddressesRoute
+  '/$tenant/$locale/account/benefits': typeof TenantLocaleAccountBenefitsRoute
   '/$tenant/$locale/account/consents': typeof TenantLocaleAccountConsentsRoute
   '/$tenant/$locale/account/disputes': typeof TenantLocaleAccountDisputesRoute
   '/$tenant/$locale/account/downloads': typeof TenantLocaleAccountDownloadsRoute
@@ -2732,6 +2764,7 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/account/reviews': typeof TenantLocaleAccountReviewsRoute
   '/$tenant/$locale/account/settings': typeof TenantLocaleAccountSettingsRoute
   '/$tenant/$locale/account/store-credits': typeof TenantLocaleAccountStoreCreditsRoute
+  '/$tenant/$locale/account/usage': typeof TenantLocaleAccountUsageRoute
   '/$tenant/$locale/account/verification': typeof TenantLocaleAccountVerificationRoute
   '/$tenant/$locale/account/wallet': typeof TenantLocaleAccountWalletRoute
   '/$tenant/$locale/account/wishlist': typeof TenantLocaleAccountWishlistRoute
@@ -3009,6 +3042,8 @@ export interface FileRoutesByTo {
   '/$tenant/$locale/rentals': typeof TenantLocaleRentalsIndexRoute
   '/$tenant/$locale/restaurants': typeof TenantLocaleRestaurantsIndexRoute
   '/$tenant/$locale/returns': typeof TenantLocaleReturnsIndexRoute
+  '/$tenant/$locale/search': typeof TenantLocaleSearchIndexRoute
+  '/$tenant/$locale/simulate': typeof TenantLocaleSimulateIndexRoute
   '/$tenant/$locale/social-commerce': typeof TenantLocaleSocialCommerceIndexRoute
   '/$tenant/$locale/subscriptions': typeof TenantLocaleSubscriptionsIndexRoute
   '/$tenant/$locale/trade-in': typeof TenantLocaleTradeInIndexRoute
@@ -3064,6 +3099,7 @@ export interface FileRoutesById {
   '/$tenant/$locale/wishlist': typeof TenantLocaleWishlistRoute
   '/$tenant/$locale/': typeof TenantLocaleIndexRoute
   '/$tenant/$locale/account/addresses': typeof TenantLocaleAccountAddressesRoute
+  '/$tenant/$locale/account/benefits': typeof TenantLocaleAccountBenefitsRoute
   '/$tenant/$locale/account/consents': typeof TenantLocaleAccountConsentsRoute
   '/$tenant/$locale/account/disputes': typeof TenantLocaleAccountDisputesRoute
   '/$tenant/$locale/account/downloads': typeof TenantLocaleAccountDownloadsRoute
@@ -3077,6 +3113,7 @@ export interface FileRoutesById {
   '/$tenant/$locale/account/reviews': typeof TenantLocaleAccountReviewsRoute
   '/$tenant/$locale/account/settings': typeof TenantLocaleAccountSettingsRoute
   '/$tenant/$locale/account/store-credits': typeof TenantLocaleAccountStoreCreditsRoute
+  '/$tenant/$locale/account/usage': typeof TenantLocaleAccountUsageRoute
   '/$tenant/$locale/account/verification': typeof TenantLocaleAccountVerificationRoute
   '/$tenant/$locale/account/wallet': typeof TenantLocaleAccountWalletRoute
   '/$tenant/$locale/account/wishlist': typeof TenantLocaleAccountWishlistRoute
@@ -3355,6 +3392,8 @@ export interface FileRoutesById {
   '/$tenant/$locale/rentals/': typeof TenantLocaleRentalsIndexRoute
   '/$tenant/$locale/restaurants/': typeof TenantLocaleRestaurantsIndexRoute
   '/$tenant/$locale/returns/': typeof TenantLocaleReturnsIndexRoute
+  '/$tenant/$locale/search/': typeof TenantLocaleSearchIndexRoute
+  '/$tenant/$locale/simulate/': typeof TenantLocaleSimulateIndexRoute
   '/$tenant/$locale/social-commerce/': typeof TenantLocaleSocialCommerceIndexRoute
   '/$tenant/$locale/subscriptions/': typeof TenantLocaleSubscriptionsIndexRoute
   '/$tenant/$locale/trade-in/': typeof TenantLocaleTradeInIndexRoute
@@ -3411,6 +3450,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/wishlist'
     | '/$tenant/$locale/'
     | '/$tenant/$locale/account/addresses'
+    | '/$tenant/$locale/account/benefits'
     | '/$tenant/$locale/account/consents'
     | '/$tenant/$locale/account/disputes'
     | '/$tenant/$locale/account/downloads'
@@ -3424,6 +3464,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/account/reviews'
     | '/$tenant/$locale/account/settings'
     | '/$tenant/$locale/account/store-credits'
+    | '/$tenant/$locale/account/usage'
     | '/$tenant/$locale/account/verification'
     | '/$tenant/$locale/account/wallet'
     | '/$tenant/$locale/account/wishlist'
@@ -3702,6 +3743,8 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/rentals'
     | '/$tenant/$locale/restaurants'
     | '/$tenant/$locale/returns'
+    | '/$tenant/$locale/search'
+    | '/$tenant/$locale/simulate'
     | '/$tenant/$locale/social-commerce'
     | '/$tenant/$locale/subscriptions'
     | '/$tenant/$locale/trade-in/'
@@ -3754,6 +3797,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/wishlist'
     | '/$tenant/$locale'
     | '/$tenant/$locale/account/addresses'
+    | '/$tenant/$locale/account/benefits'
     | '/$tenant/$locale/account/consents'
     | '/$tenant/$locale/account/disputes'
     | '/$tenant/$locale/account/downloads'
@@ -3767,6 +3811,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/account/reviews'
     | '/$tenant/$locale/account/settings'
     | '/$tenant/$locale/account/store-credits'
+    | '/$tenant/$locale/account/usage'
     | '/$tenant/$locale/account/verification'
     | '/$tenant/$locale/account/wallet'
     | '/$tenant/$locale/account/wishlist'
@@ -4044,6 +4089,8 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/rentals'
     | '/$tenant/$locale/restaurants'
     | '/$tenant/$locale/returns'
+    | '/$tenant/$locale/search'
+    | '/$tenant/$locale/simulate'
     | '/$tenant/$locale/social-commerce'
     | '/$tenant/$locale/subscriptions'
     | '/$tenant/$locale/trade-in'
@@ -4098,6 +4145,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/wishlist'
     | '/$tenant/$locale/'
     | '/$tenant/$locale/account/addresses'
+    | '/$tenant/$locale/account/benefits'
     | '/$tenant/$locale/account/consents'
     | '/$tenant/$locale/account/disputes'
     | '/$tenant/$locale/account/downloads'
@@ -4111,6 +4159,7 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/account/reviews'
     | '/$tenant/$locale/account/settings'
     | '/$tenant/$locale/account/store-credits'
+    | '/$tenant/$locale/account/usage'
     | '/$tenant/$locale/account/verification'
     | '/$tenant/$locale/account/wallet'
     | '/$tenant/$locale/account/wishlist'
@@ -4389,6 +4438,8 @@ export interface FileRouteTypes {
     | '/$tenant/$locale/rentals/'
     | '/$tenant/$locale/restaurants/'
     | '/$tenant/$locale/returns/'
+    | '/$tenant/$locale/search/'
+    | '/$tenant/$locale/simulate/'
     | '/$tenant/$locale/social-commerce/'
     | '/$tenant/$locale/subscriptions/'
     | '/$tenant/$locale/trade-in/'
@@ -4661,6 +4712,20 @@ declare module '@tanstack/react-router' {
       path: '/social-commerce'
       fullPath: '/$tenant/$locale/social-commerce'
       preLoaderRoute: typeof TenantLocaleSocialCommerceIndexRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
+    '/$tenant/$locale/simulate/': {
+      id: '/$tenant/$locale/simulate/'
+      path: '/simulate'
+      fullPath: '/$tenant/$locale/simulate'
+      preLoaderRoute: typeof TenantLocaleSimulateIndexRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
+    '/$tenant/$locale/search/': {
+      id: '/$tenant/$locale/search/'
+      path: '/search'
+      fullPath: '/$tenant/$locale/search'
+      preLoaderRoute: typeof TenantLocaleSearchIndexRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
     '/$tenant/$locale/returns/': {
@@ -6609,6 +6674,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TenantLocaleAccountVerificationRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
+    '/$tenant/$locale/account/usage': {
+      id: '/$tenant/$locale/account/usage'
+      path: '/account/usage'
+      fullPath: '/$tenant/$locale/account/usage'
+      preLoaderRoute: typeof TenantLocaleAccountUsageRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
     '/$tenant/$locale/account/store-credits': {
       id: '/$tenant/$locale/account/store-credits'
       path: '/account/store-credits'
@@ -6698,6 +6770,13 @@ declare module '@tanstack/react-router' {
       path: '/account/consents'
       fullPath: '/$tenant/$locale/account/consents'
       preLoaderRoute: typeof TenantLocaleAccountConsentsRouteImport
+      parentRoute: typeof TenantLocaleRoute
+    }
+    '/$tenant/$locale/account/benefits': {
+      id: '/$tenant/$locale/account/benefits'
+      path: '/account/benefits'
+      fullPath: '/$tenant/$locale/account/benefits'
+      preLoaderRoute: typeof TenantLocaleAccountBenefitsRouteImport
       parentRoute: typeof TenantLocaleRoute
     }
     '/$tenant/$locale/account/addresses': {
@@ -6945,6 +7024,7 @@ interface TenantLocaleRouteChildren {
   TenantLocaleWishlistRoute: typeof TenantLocaleWishlistRoute
   TenantLocaleIndexRoute: typeof TenantLocaleIndexRoute
   TenantLocaleAccountAddressesRoute: typeof TenantLocaleAccountAddressesRoute
+  TenantLocaleAccountBenefitsRoute: typeof TenantLocaleAccountBenefitsRoute
   TenantLocaleAccountConsentsRoute: typeof TenantLocaleAccountConsentsRoute
   TenantLocaleAccountDisputesRoute: typeof TenantLocaleAccountDisputesRoute
   TenantLocaleAccountDownloadsRoute: typeof TenantLocaleAccountDownloadsRoute
@@ -6958,6 +7038,7 @@ interface TenantLocaleRouteChildren {
   TenantLocaleAccountReviewsRoute: typeof TenantLocaleAccountReviewsRoute
   TenantLocaleAccountSettingsRoute: typeof TenantLocaleAccountSettingsRoute
   TenantLocaleAccountStoreCreditsRoute: typeof TenantLocaleAccountStoreCreditsRoute
+  TenantLocaleAccountUsageRoute: typeof TenantLocaleAccountUsageRoute
   TenantLocaleAccountVerificationRoute: typeof TenantLocaleAccountVerificationRoute
   TenantLocaleAccountWalletRoute: typeof TenantLocaleAccountWalletRoute
   TenantLocaleAccountWishlistRoute: typeof TenantLocaleAccountWishlistRoute
@@ -7235,6 +7316,8 @@ interface TenantLocaleRouteChildren {
   TenantLocaleRentalsIndexRoute: typeof TenantLocaleRentalsIndexRoute
   TenantLocaleRestaurantsIndexRoute: typeof TenantLocaleRestaurantsIndexRoute
   TenantLocaleReturnsIndexRoute: typeof TenantLocaleReturnsIndexRoute
+  TenantLocaleSearchIndexRoute: typeof TenantLocaleSearchIndexRoute
+  TenantLocaleSimulateIndexRoute: typeof TenantLocaleSimulateIndexRoute
   TenantLocaleSocialCommerceIndexRoute: typeof TenantLocaleSocialCommerceIndexRoute
   TenantLocaleSubscriptionsIndexRoute: typeof TenantLocaleSubscriptionsIndexRoute
   TenantLocaleTravelIndexRoute: typeof TenantLocaleTravelIndexRoute
@@ -7282,6 +7365,7 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleWishlistRoute: TenantLocaleWishlistRoute,
   TenantLocaleIndexRoute: TenantLocaleIndexRoute,
   TenantLocaleAccountAddressesRoute: TenantLocaleAccountAddressesRoute,
+  TenantLocaleAccountBenefitsRoute: TenantLocaleAccountBenefitsRoute,
   TenantLocaleAccountConsentsRoute: TenantLocaleAccountConsentsRoute,
   TenantLocaleAccountDisputesRoute: TenantLocaleAccountDisputesRoute,
   TenantLocaleAccountDownloadsRoute: TenantLocaleAccountDownloadsRoute,
@@ -7296,6 +7380,7 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleAccountReviewsRoute: TenantLocaleAccountReviewsRoute,
   TenantLocaleAccountSettingsRoute: TenantLocaleAccountSettingsRoute,
   TenantLocaleAccountStoreCreditsRoute: TenantLocaleAccountStoreCreditsRoute,
+  TenantLocaleAccountUsageRoute: TenantLocaleAccountUsageRoute,
   TenantLocaleAccountVerificationRoute: TenantLocaleAccountVerificationRoute,
   TenantLocaleAccountWalletRoute: TenantLocaleAccountWalletRoute,
   TenantLocaleAccountWishlistRoute: TenantLocaleAccountWishlistRoute,
@@ -7593,6 +7678,8 @@ const TenantLocaleRouteChildren: TenantLocaleRouteChildren = {
   TenantLocaleRentalsIndexRoute: TenantLocaleRentalsIndexRoute,
   TenantLocaleRestaurantsIndexRoute: TenantLocaleRestaurantsIndexRoute,
   TenantLocaleReturnsIndexRoute: TenantLocaleReturnsIndexRoute,
+  TenantLocaleSearchIndexRoute: TenantLocaleSearchIndexRoute,
+  TenantLocaleSimulateIndexRoute: TenantLocaleSimulateIndexRoute,
   TenantLocaleSocialCommerceIndexRoute: TenantLocaleSocialCommerceIndexRoute,
   TenantLocaleSubscriptionsIndexRoute: TenantLocaleSubscriptionsIndexRoute,
   TenantLocaleTravelIndexRoute: TenantLocaleTravelIndexRoute,

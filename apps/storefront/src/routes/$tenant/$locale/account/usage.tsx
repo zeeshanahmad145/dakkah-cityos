@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { t } from "@/lib/i18n"
 
-export const Route = createFileRoute("/$tenant/$locale/account/usage/")({
+export const Route = createFileRoute("/$tenant/$locale/account/usage")({
   component: UsageDashboardPage,
   head: () => ({
     meta: [
@@ -78,7 +78,6 @@ function UsageDashboardPage() {
           </div>
         </div>
       </div>
-
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Period selector */}
         <div className="flex gap-3 mb-6">
