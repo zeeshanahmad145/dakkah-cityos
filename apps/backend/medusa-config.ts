@@ -694,7 +694,8 @@ module.exports = defineConfig({
                   },
                 },
               ]
-            : [
+            : process.env.REPLIT_DOMAINS
+            ? [
                 {
                   resolve: "./src/modules/file-replit",
                   id: "replit-file",
@@ -702,6 +703,17 @@ module.exports = defineConfig({
                     bucket_id:
                       "replit-objstore-d0367ca5-bb93-42b5-b2e7-53122f51e3cb",
                     backend_url: process.env.MEDUSA_BACKEND_URL,
+                  },
+                },
+              ]
+            : [
+                // VPS / bare-metal: use local filesystem storage
+                {
+                  resolve: "@medusajs/medusa/file-local",
+                  id: "local-file",
+                  options: {
+                    upload_dir: "uploads",
+                    backend_url: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
                   },
                 },
               ]),

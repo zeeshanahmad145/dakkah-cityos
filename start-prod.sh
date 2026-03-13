@@ -1,32 +1,39 @@
+  GNU nano 7.2                                                                              start-prod.sh
 #!/bin/bash
 
-cd /home/runner/workspace/apps/backend
-NODE_OPTIONS="--max-old-space-size=512" npx medusa start &
+PROJECT_DIR="/root/srv/apps/marketplace/dakkah-cityos"
+
+kill_port() {
+  local port=$1
+  local pids
+  pids=$(lsof -ti :"$port" 2>/dev/null)
+  if [ -n "$pids" ]; then
+    echo "Killing processes on port $port: $pids"
+    echo "$pids" | xargs kill -9 2>/dev/null || true
+  fi
+}
+
+kill_port 9000
+kill_port 5173
+
+echo "Starting Medusa backend..."
+cd $PROJECT_DIR/apps/backend
+NODE_ENV=production NODE_OPTIONS="--max-old-space-size=1024" npx medusa start &
 BACKEND_PID=$!
 
-echo "Waiting for Medusa backend to start..."
+echo "Waiting for backend..."
 for i in $(seq 1 60); do
-  if curl -s http://localhost:9000/health > /dev/null 2>&1; then
-    echo "Medusa backend is ready on port 9000"
+  if curl -s http://localhost:9000/health > /dev/null; then
+    echo "Backend ready"
     break
   fi
   sleep 2
 done
 
-cd /home/runner/workspace/apps/storefront
-echo "Starting storefront on port 5000..."
-HOST=0.0.0.0 PORT=5173 NITRO_HOST=0.0.0.0 NITRO_PORT=5173 NODE_OPTIONS="--max-old-space-size=1024" node .output/server/index.mjs &
+echo "Starting storefront..."
+cd $PROJECT_DIR/apps/storefront
+HOST=0.0.0.0 PORT=5173 node .output/server/index.mjs &
 STOREFRONT_PID=$!
 
-echo "Waiting for storefront to start..."
-for i in $(seq 1 30); do
-  if curl -s http://localhost:5173 > /dev/null 2>&1; then
-    echo "Storefront is ready on port 5173"
-    break
-  fi
-  sleep 1
-done
+wait $BACKEND_PID $STOREFRONT_PID
 
-cd /home/runner/workspace
-echo "Starting proxy on port 5000..."
-exec node prod-proxy.js
