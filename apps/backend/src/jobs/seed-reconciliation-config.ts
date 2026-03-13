@@ -67,5 +67,6 @@ export default async function seedReconciliationConfig(
 // Run as a Medusa scheduled job on startup (once)
 export const config = {
   name: "seed-reconciliation-config",
-  schedule: "@once", // Run once on startup — Medusa "@once" semantics
+  schedule: "0 0 * * *",
+  // schedule: "@once", // Run once on startup — Medusa "@once" semantics
 };
