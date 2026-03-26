@@ -1,7 +1,7 @@
 const http = require("http");
 
-const BACKEND = { host: "127.0.0.1", port: 9000 };
-const STOREFRONT = { host: "127.0.0.1", port: 5173 };
+const BACKEND = { host: "localhost", port: 9000 };
+const STOREFRONT = { host: "localhost", port: 5173 };
 const LISTEN_PORT = 5000;
 
 const API_PREFIXES = ["/platform", "/store", "/admin", "/commerce", "/auth", "/webhooks"];
@@ -10,7 +10,7 @@ let backendReady = false;
 let storefrontReady = false;
 
 function checkBackend() {
-  const req = http.get({ hostname: "127.0.0.1", port: 9000, path: "/health", timeout: 2000 }, (res) => {
+  const req = http.get({ hostname: BACKEND.host, port: 9000, path: "/health", timeout: 2000 }, (res) => {
     backendReady = res.statusCode === 200;
   });
   req.on("error", () => { backendReady = false; });
@@ -18,7 +18,7 @@ function checkBackend() {
 }
 
 function checkStorefront() {
-  const req = http.get({ hostname: "127.0.0.1", port: 5173, path: "/", timeout: 2000 }, (res) => {
+  const req = http.get({ hostname: STOREFRONT.host, port: 5173, path: "/", timeout: 2000 }, (res) => {
     storefrontReady = res.statusCode < 500;
     res.resume();
   });

@@ -16,7 +16,7 @@
     "build": "medusa build",
     "seed": "medusa exec ./src/scripts/seed.ts",
     "start": "medusa start",
-    "dev": "medusa develop",
+    "dev": "npx medusa develop",
     "dev:tee": "medusa develop 2>&1 | tee -a ../backend.log",
     "worker": "npx tsx src/temporal/worker-standalone.ts",
     "worker:financial": "cross-env TEMPORAL_TASK_QUEUE=uce-commerce-financial npx tsx src/temporal/worker-standalone.ts",
@@ -36,11 +36,12 @@
     "storage:scaffold:fix": "npx tsx src/scripts/storage-scaffold.ts --fix"
   },
   "dependencies": {
+    "@replit/object-storage": "1.0.0",
     "@google-cloud/storage": "^7.19.0",
     "@medusajs/admin-sdk": "2.13.1",
     "@medusajs/admin-shared": "2.13.1",
     "@medusajs/cache-redis": "2.13.1",
-    "@medusajs/cli": "2.13.1",
+    "@medusajs/cli": "2.13.5",
     "@medusajs/dashboard": "2.13.1",
     "@medusajs/draft-order": "2.13.1",
     "@medusajs/event-bus-redis": "2.13.1",
